@@ -218,11 +218,11 @@ public class MainMenuBar : Gtk.MenuBar {
 
 	private void add_terminal_window(Gtk.Menu submenu){
 
-		var item = new Gtk.MenuItem.with_label (_("Open Terminal Here"));
+		var item = new Gtk.MenuItem.with_label (_("Toggle Terminal Pane"));
 		submenu.add(item);
 
 		item.activate.connect (() => {
-			view.open_terminal();
+			pane.terminal.toggle();
 		});
 
 		if (add_accel){

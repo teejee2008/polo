@@ -284,7 +284,7 @@ public class MainWindow : Gtk.Window {
 		layout_box = new LayoutBox();
 		pane_nav.pack2(layout_box, true, false); // resize, no shrink
 	}
-
+	
 	private void initialize_views(){
 
 		TreeModelCache.enable();

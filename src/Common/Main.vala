@@ -440,6 +440,7 @@ public class Main : GLib.Object {
 		Tools["udisksctl"] = new Tool("udisksctl","udisksctl","Mount and unmount devices");
 		Tools["cryptsetup"] = new Tool("cryptsetup","cryptsetup","Unlock encrypted LUKS devices");
 		Tools["xdg-mime"] = new Tool("xdg-mime","xdg-mime","Set file type associations");
+		Tools["fish"] = new Tool("fish","Fish Shell","Terminal Shell");
 		
 		check_all_tools();
 		

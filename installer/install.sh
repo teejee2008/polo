@@ -4,11 +4,11 @@ app_name='polo'
 app_fullname='Polo'
 start_command='polo-gtk'
 
-generic_depends=(ffmpeg mediainfo rsync pv p7zip p7zip-full tar gzip bzip2 xz-utils)
+generic_depends=(ffmpeg mediainfo rsync pv p7zip p7zip-full tar gzip bzip2 xz-utils fish)
 
-debian_depends=(ffmpeg mediainfo rsync pv p7zip p7zip-full tar gzip bzip2 xz-utils)
+debian_depends=(ffmpeg mediainfo rsync pv p7zip p7zip-full tar gzip bzip2 xz-utils fish)
 redhat_depends=()
-arch_depends=(ffmpeg mediainfo rsync pv p7zip tar xz gzip bzip2)
+arch_depends=(ffmpeg mediainfo rsync pv p7zip tar xz gzip bzip2 fish)
 
 generic_recommends=()
 debian_recommends=()

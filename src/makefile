@@ -25,7 +25,7 @@ all:
 	#build binaries
 
 	#polo-gtk
-	valac -X -D'GETTEXT_PACKAGE="${app_name}"' --Xcc="-lm" -X -Wl,-rpath,/usr/share/${app_name}/libs ${define_symbols} --thread Common/*.vala Gtk/*.vala Utility/*.vala Utility/Gtk/*.vala -o "${app_name}-gtk" --pkg glib-2.0 --pkg gio-unix-2.0 --pkg posix --pkg gtk+-3.0 --pkg gee-0.8 --pkg libsoup-2.4 --pkg json-glib-1.0 --pkg libxml-2.0
+	valac -X -D'GETTEXT_PACKAGE="${app_name}"' --Xcc="-lm" -X -Wl,-rpath,/usr/share/${app_name}/libs ${define_symbols} --thread Common/*.vala Gtk/*.vala Utility/*.vala Utility/Gtk/*.vala -o "${app_name}-gtk" --pkg glib-2.0 --pkg gio-unix-2.0 --pkg posix --pkg gtk+-3.0 --pkg gee-0.8 --pkg libsoup-2.4 --pkg json-glib-1.0 --pkg libxml-2.0 --pkg $(vte_version)
 
 	#valac -X -D'GETTEXT_PACKAGE="${app_name}"' --Xcc="-lm" -X -Wl,-rpath,/usr/share/${app_name}/libs --thread "IconThemeBrowser.vala" -o "aptik-icon-theme-browser-gtk" --pkg glib-2.0 --pkg gio-unix-2.0 --pkg posix --pkg gtk+-3.0 --pkg gee-0.8
 

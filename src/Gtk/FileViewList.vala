@@ -3649,6 +3649,7 @@ public class FileViewList : Gtk.Box {
 		if (selected_items.size != 1){ return; }
 
 		log_debug("action.open_terminal()");
+
 		open_terminal_window("", current_item.file_path, selected_items[0].file_path, false);
 	}
 
