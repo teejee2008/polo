@@ -1,0 +1,508 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR Tony George (teejee2008@gmail.com)
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: polo 1.6\n"
+"Report-Msgid-Bugs-To: teejee2008@gmail.com\n"
+"POT-Creation-Date: 2015-11-09 15:24+0530\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: CreateArchiveWindow.vala:1651
+msgid ""
+"<b>Compression Method</b>\n"
+"\n"
+"<b>Store</b> - Store files without compression\n"
+"\n"
+"<b>LZMA</b> - Good compression and very fast decompression\n"
+"\n"
+"<b>LZMA2</b> - Modified version of LZMA with better compression ratio for "
+"partially-compressible data, and better multi-threading support\n"
+"\n"
+"<b>PPMd</b> - Very good compression for text files (better than LZMA)\n"
+"\n"
+"<b>Deflate</b> - Very fast compression and decompression"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1930 CreateArchiveWindow.vala:1941
+#: CreateArchiveWindow.vala:1952 CreateArchiveWindow.vala:1963
+#: CreateArchiveWindow.vala:1976 CreateArchiveWindow.vala:1987
+#: CreateArchiveWindow.vala:1998 CreateArchiveWindow.vala:2009
+msgid "???"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1891
+msgid "A light-weight archive manager for Linux"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1626
+msgid "AES128"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1628
+msgid "AES192"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1620 CreateArchiveWindow.vala:1630
+msgid "AES256"
+msgstr ""
+
+#: ViewArchiveWindow.vala:194
+msgid "Add directories to this archive"
+msgstr ""
+
+#: ViewArchiveWindow.vala:193
+msgid "Add directory"
+msgstr ""
+
+#: ViewArchiveWindow.vala:182
+msgid "Add file(s)"
+msgstr ""
+
+#: ViewArchiveWindow.vala:183
+msgid "Add files to this archive"
+msgstr ""
+
+#: Main.vala:210
+msgid "App config loaded"
+msgstr ""
+
+#: Main.vala:188
+msgid "App config saved"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1738
+msgid "Application Info"
+msgstr ""
+
+#: Polo.vala:49
+msgid "Aptik Battery Monitor needs admin access to function correctly."
+msgstr ""
+
+#: CreateArchiveWindow.vala:1659
+msgid ""
+"Archive data will be encrypted with a key derived from the passphrase. "
+"Passphrase will be required for extracting files from the archive"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1663
+msgid ""
+"Archive header will also be encrypted along with data. Passphrase will be "
+"required to read information about files in the archive like file name, "
+"size, etc."
+msgstr ""
+
+#: AboutWindow.vala:330
+#, c-format
+msgid "Artists"
+msgstr ""
+
+#: AboutWindow.vala:314
+#, c-format
+msgid "Authors"
+msgstr ""
+
+#: CreateArchiveWindow.vala:648 CreateArchiveWindow.vala:656
+#: CreateArchiveWindow.vala:677
+msgid "BZip2"
+msgstr ""
+
+#: AboutWindow.vala:285
+msgid "Back"
+msgstr ""
+
+#: CreateArchiveWindow.vala:2202
+msgid "Background"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1264
+msgid "Block Size"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1780 CreateArchiveWindow.vala:1781
+msgid "Cancel"
+msgstr ""
+
+#: CreateArchiveWindow.vala:2734
+msgid "Cancelled"
+msgstr ""
+
+#: AboutWindow.vala:295
+msgid "Close"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1695
+msgid "Commands"
+msgstr ""
+
+#: Main.vala:152
+msgid "Commands listed below are not available on this system"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1769 CreateArchiveWindow.vala:1770
+msgid "Compress"
+msgstr ""
+
+#: ViewArchiveWindow.vala:404
+msgid "Compressed"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1992
+msgid "Compressed:"
+msgstr ""
+
+#: CreateArchiveWindow.vala:246
+msgid "Compression"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1655
+msgid ""
+"Concatenate files with TAR before compression (recommended)\n"
+"\n"
+"\302\247 File formats such as 7-Zip cannot store some file properties like "
+"ownership and group information on Linux file systems. Using TAR will "
+"preserve this information.\n"
+"\n"
+"\302\247 Formats such as GZip, BZip2 and XZ can compress only single files. "
+"Using TAR will archive the selected files and folders into a single file "
+"before compression."
+msgstr ""
+
+#: CreateArchiveWindow.vala:1558
+msgid "Confirm Password"
+msgstr ""
+
+#: CreateArchiveWindow.vala:636 CreateArchiveWindow.vala:671
+msgid "Copy"
+msgstr ""
+
+#: ViewArchiveWindow.vala:172
+msgid "Create a new archive"
+msgstr ""
+
+#: ViewArchiveWindow.vala:161
+msgid "Create new archive"
+msgstr ""
+
+#: AboutWindow.vala:272 AboutWindow.vala:289
+msgid "Credits"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1970
+msgid "Data:"
+msgstr ""
+
+#: CreateArchiveWindow.vala:651 CreateArchiveWindow.vala:661
+#: CreateArchiveWindow.vala:673
+msgid "Deflate"
+msgstr ""
+
+#: CreateArchiveWindow.vala:675
+msgid "Deflate64"
+msgstr ""
+
+#: CreateArchiveWindow.vala:976
+msgid "Dictionary"
+msgstr ""
+
+#: DonationWindow.vala:55
+msgid ""
+"Did you find this software useful?\n"
+"\n"
+"You can buy me a cup of coffee to show your support. Or just drop me an "
+"email and say Hi. This application is completely free and will continue to "
+"remain that way. Your contributions will help in keeping this project alive "
+"and improving it further.\n"
+"\n"
+"If you want to buy me a coffee, you can send me $2 using the Google Wallet "
+"app on your phone. You can even send it through email. GMail has a new "
+"feature to attach money to emails from your Google Wallet.\n"
+"\n"
+"Feel free to send me an email if you find any issues in this application or "
+"if you need any changes. Suggestions and feedback are always welcome.\n"
+"\n"
+"Thanks,\n"
+"Tony George\n"
+"(teejeetech@gmail.com)"
+msgstr ""
+
+#: AboutWindow.vala:346
+#, c-format
+msgid "Documenters"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1717 DonationWindow.vala:36
+msgid "Donate"
+msgstr ""
+
+#: AboutWindow.vala:354
+#, c-format
+msgid "Donations"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1935
+msgid "Elapsed:"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1526
+msgid "Encrypt archive"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1574
+msgid "Encrypt file names"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1508
+msgid "Encryption"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1549
+msgid "Enter Password"
+msgstr ""
+
+#: Utility.vala:100
+msgid "Error"
+msgstr ""
+
+#: Utility.vala:1647
+msgid "Failed to set ownership"
+msgstr ""
+
+#: CreateArchiveWindow.vala:753
+msgid "Fast"
+msgstr ""
+
+#: CreateArchiveWindow.vala:750
+msgid "Fastest"
+msgstr ""
+
+#: PoloGtk.vala:126
+msgid "File not found"
+msgstr ""
+
+#: CreateArchiveWindow.vala:289
+msgid "FileName"
+msgstr ""
+
+#: CreateArchiveWindow.vala:508
+msgid "Files"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1924
+msgid "Files:"
+msgstr ""
+
+#: CreateArchiveWindow.vala:2688 CreateArchiveWindow.vala:2728
+msgid "Finished"
+msgstr ""
+
+#: CreateArchiveWindow.vala:558
+msgid "Format"
+msgstr ""
+
+#: CreateArchiveWindow.vala:639 CreateArchiveWindow.vala:679
+msgid "LZMA"
+msgstr ""
+
+#: CreateArchiveWindow.vala:642 CreateArchiveWindow.vala:666
+msgid "LZMA2"
+msgstr ""
+
+#: CreateArchiveWindow.vala:711
+msgid "Level"
+msgstr ""
+
+#: CreateArchiveWindow.vala:417
+msgid "Location"
+msgstr ""
+
+#: CreateArchiveWindow.vala:759
+msgid "Maximum"
+msgstr ""
+
+#: CreateArchiveWindow.vala:610 CreateArchiveWindow.vala:1588
+msgid "Method"
+msgstr ""
+
+#: Main.vala:107
+msgid "Missing Dependencies"
+msgstr ""
+
+#: Utility.vala:1225
+msgid "Missing Icon"
+msgstr ""
+
+#: ViewArchiveWindow.vala:442
+msgid "Modified"
+msgstr ""
+
+#: ViewArchiveWindow.vala:308
+msgid "Name"
+msgstr ""
+
+#: ViewArchiveWindow.vala:160
+msgid "New"
+msgstr ""
+
+#: CreateArchiveWindow.vala:756
+msgid "Normal"
+msgstr ""
+
+#: CreateArchiveWindow.vala:2284 CreateArchiveWindow.vala:2720
+#: DonationWindow.vala:89
+msgid "OK"
+msgstr ""
+
+#: ViewArchiveWindow.vala:149
+msgid "Open"
+msgstr ""
+
+#: ViewArchiveWindow.vala:150
+msgid "Open an existing archive file"
+msgstr ""
+
+#: Polo.vala:79 PoloGtk.vala:175
+#: CreateArchiveWindow.vala:189
+msgid "Options"
+msgstr ""
+
+#: CreateArchiveWindow.vala:645 CreateArchiveWindow.vala:681
+msgid "PPMd"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1374
+msgid "Passes"
+msgstr ""
+
+#: CreateArchiveWindow.vala:2215 CreateArchiveWindow.vala:2216
+#: CreateArchiveWindow.vala:2241 CreateArchiveWindow.vala:2529
+msgid "Pause"
+msgstr ""
+
+#: Main.vala:153
+msgid "Please install required packages and try running again"
+msgstr ""
+
+#: Polo.vala:50
+msgid "Please run the application as admin ('sudo polo')"
+msgstr ""
+
+#: Polo.vala:81
+msgid "Print stats to standard output"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1981
+msgid "Processed:"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1906
+msgid "Progress"
+msgstr ""
+
+#: CreateArchiveWindow.vala:2003
+msgid "Ratio:"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1946
+msgid "Remaining:"
+msgstr ""
+
+#: ViewArchiveWindow.vala:204
+msgid "Remove"
+msgstr ""
+
+#: ViewArchiveWindow.vala:205
+msgid "Remove selected items"
+msgstr ""
+
+#: CreateArchiveWindow.vala:2245
+msgid "Resume"
+msgstr ""
+
+#: CreateArchiveWindow.vala:2203
+msgid "Run in background with lower priority"
+msgstr ""
+
+#: ViewArchiveWindow.vala:171
+msgid "Save"
+msgstr ""
+
+#: DonationWindow.vala:75
+msgid "Send Email (teejeetech@gmail.com)"
+msgstr ""
+
+#: DonationWindow.vala:68
+msgid "Sending Money with Google Wallet"
+msgstr ""
+
+#: Polo.vala:82
+msgid "Show all options"
+msgstr ""
+
+#: ViewArchiveWindow.vala:366
+msgid "Size"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1957
+msgid "Speed:"
+msgstr ""
+
+#: CreateArchiveWindow.vala:2254 CreateArchiveWindow.vala:2255
+#: CreateArchiveWindow.vala:2279 CreateArchiveWindow.vala:2533
+msgid "Stop"
+msgstr ""
+
+#: Utility.vala:955
+msgid "Stopped"
+msgstr ""
+
+#: CreateArchiveWindow.vala:738
+msgid "Store"
+msgstr ""
+
+#: Polo.vala:77 PoloGtk.vala:170
+msgid "Syntax"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1461
+msgid "TAR Before Compression"
+msgstr ""
+
+#: AboutWindow.vala:322
+#, c-format
+msgid "Third Party Tools"
+msgstr ""
+
+#: AboutWindow.vala:338
+#, c-format
+msgid "Translators"
+msgstr ""
+
+#: CreateArchiveWindow.vala:762
+msgid "Ultra"
+msgstr ""
+
+#: DonationWindow.vala:82
+msgid "Visit Website"
+msgstr ""
+
+#: Utility.vala:100
+msgid "Warning"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1125
+msgid "Word Size"
+msgstr ""
+
+#: CreateArchiveWindow.vala:1624
+msgid "ZipCrypto"
+msgstr ""

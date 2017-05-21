@@ -1,0 +1,9 @@
+#!/bin/bash
+
+bzr commit -m "$1"
+git add -A # stage all changes for commit
+git commit -m "$1"
+
+
+
+

@@ -1,0 +1,13 @@
+[Desktop Entry]
+Name=Polo
+Name[en_US]=Polo
+Comment=Polo File Manager
+GenericName=File Manager
+Exec=polo-gtk %F
+Icon=polo
+Terminal=false
+Type=Application
+X-KDE-StartupNotify=false
+Categories=System;Utility;Core;GTK;FileTools;FileManager;
+StartupNotify=true
+MimeType=inode/directory;

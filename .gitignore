@@ -1,0 +1,7 @@
+src/polo
+src/polo-gtk*
+installer/amd64
+installer/i386
+installer/*.deb
+installer/*.run
+.bzr/

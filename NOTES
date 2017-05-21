@@ -1,0 +1,7 @@
+
+* In TEST mode, the archive is extracted to a temporary directory. 7zip has a switch (-so) for writing output to stdout. This can be used to send the extracted data to /dev/null. However, in this case 7zip does not report any progress. So this is currently not used.
+
+7z x '/home/teejee/aam/samples/atom.7z' -so '-w/tmp/polo/0t9VJHWD/14616630804292682152/rrsv6Nh3' -y -bb1 -p -- > /dev/null
+
+* 7zip cannot handle LZOP files (both single or tarred). TAR can list TAR.LZO files. LZO files can be listed only with 'lzop -l'. LZO can store multiple files but cannot store paths (directories).
+

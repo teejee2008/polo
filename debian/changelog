@@ -1,0 +1,97 @@
+polo (17.5.1) xenial; urgency=low
+
+  * Beta 6
+
+ -- Tony George <tony.george.kol@gmail.com>  Sat, 20 May 2017 10:00:00 +0530
+
+
+polo (17.5) xenial; urgency=low
+
+  * Beta 5
+
+  * Trash support
+  * Archive support
+  * Fixed various issues
+
+ -- Tony George <tony.george.kol@gmail.com>  Sun, 07 May 2017 10:00:00 +0530
+
+
+polo (17.4) xenial; urgency=low
+
+  * Beta 4
+
+  * hide navigation buttons in path bar by default
+  * add type-ahead selection for list view
+  * speed-up folder reload by caching thumbnails and icons
+  * added support for .hidden files
+  * update views automatically when folder contents change
+  * update device list automatically when devices change
+  * added a first-run wizard to select default layout
+  * display an empty view with message when device is unmounted
+  * added shortcuts CTRL+L, CTRL+Left, CTRL+Right, CTRL+Up
+  * added a 'Go' submenu to menu bar
+  * fixed: hide swap volumes in device list
+  * fixed: hide loop devices created by snap packages
+  * fixed: maintain sidebar width on resizing window
+  * fixed: don't upscale thumbnails for small image files
+  * fixed: random crash on opening folders with pictures
+  * fixed: only one item is deleted if multiple items are selected 
+  * fixed various issues
+
+ -- Tony George <tony.george.kol@gmail.com>  Fri, 14 Apr 2017 10:00:00 +0530
+ 
+polo (17.3.3) xenial; urgency=low
+
+  * Beta 3
+
+  * added sidebar and middle toolbar
+  * added popovers for disk and bookmark dropdowns
+  * use tabs inside panes instead of panes inside tabs
+  * pathbar: added options to show & hide icons
+  * pathbar: added option for global pathbar
+  * properties: new tabs for filesystem, permissions and mediainfo
+  * properties: show Exif tags in mediainfo tab
+  * fixed various issues
+
+ -- Tony George <tony.george.kol@gmail.com>  Fri, 24 Mar 2017 10:00:00 +0530
+ 
+polo (17.3.2) xenial; urgency=low
+
+  * Beta 2
+
+  * speed optimizations: added caches for view initialization
+  * speed optimizations: 4-8x faster app startup and tab creation
+  * view-media: added option to exclude directories
+  * view-list: fixed crash on browsing directories
+  * view-list: fixed column re-ordering issues
+  * settings: fixed issue with selection of default layout and view
+  * settings: added option: single click to activate
+  * settings: options to disable emblems, thumbnails and transparency
+  * tabs: tabs can be right-clicked and renamed
+  * thumbnails: generate thumbnails for videos using ffmpeg
+
+ -- Tony George <tony.george.kol@gmail.com>  Sat, 11 Mar 2017 10:00:00 +0530
+
+polo (17.3.1) xenial; urgency=low
+
+  * Beta 1 Update
+  
+  * toolbar: added toggle for view mode
+  * view-list: use simple icons instead of thumbnails for faster load
+  * view-media: added media view for browsing photos and videos
+  * view-icons: ellipsize file names exceeding 20 chars
+  * thumbnails: save MTime and URI metadata
+  * thumbnails: generate new thumbnail if MTime is older than file
+  * properties: allow property text to be selected and copied
+  * settings: fixed: settings window could not be restored if minimized,
+	leaving main window non-responsive
+  * settings: fixed: issue with height of column list
+  * settings: fixed: some options were not working
+
+ -- Tony George <tony.george.kol@gmail.com>  Sun, 05 Mar 2017 10:00:00 +0530
+
+polo (17.3) xenial; urgency=low
+
+  * Beta 1
+
+ -- Tony George <tony.george.kol@gmail.com>  Sat, 04 Mar 2017 10:00:00 +0530

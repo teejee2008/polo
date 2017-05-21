@@ -1,0 +1,318 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   xmlns:dc="http://purl.org/dc/elements/1.1/"
+   xmlns:cc="http://creativecommons.org/ns#"
+   xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+   xmlns:svg="http://www.w3.org/2000/svg"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   sodipodi:docname="window-minimize-symbolic.svg"
+   inkscape:export-filename="/home/sam/dev/RESOURCES/gnome-icon-theme-symbolic/src/gnome-stencils.png"
+   inkscape:export-xdpi="90"
+   inkscape:export-ydpi="90"
+   height="16"
+   id="svg7384"
+   version="1.1"
+   inkscape:version="0.91 r13725"
+   width="16">
+  <metadata
+     id="metadata90">
+    <rdf:RDF>
+      <cc:Work
+         rdf:about="">
+        <dc:format>image/svg+xml</dc:format>
+        <dc:type
+           rdf:resource="http://purl.org/dc/dcmitype/StillImage" />
+        <dc:title>elementary Symbolic Icon Theme</dc:title>
+      </cc:Work>
+    </rdf:RDF>
+  </metadata>
+  <sodipodi:namedview
+     inkscape:bbox-nodes="true"
+     inkscape:bbox-paths="true"
+     bordercolor="#666666"
+     borderopacity="1"
+     inkscape:current-layer="layer12"
+     inkscape:cx="-4.79368"
+     inkscape:cy="13.543726"
+     gridtolerance="10"
+     inkscape:guide-bbox="true"
+     guidetolerance="10"
+     id="namedview88"
+     inkscape:object-nodes="true"
+     inkscape:object-paths="false"
+     objecttolerance="10"
+     pagecolor="#3a3b39"
+     inkscape:pageopacity="1"
+     inkscape:pageshadow="2"
+     showborder="true"
+     showgrid="true"
+     showguides="true"
+     inkscape:snap-bbox="true"
+     inkscape:snap-bbox-edge-midpoints="true"
+     inkscape:snap-bbox-midpoints="true"
+     inkscape:snap-global="true"
+     inkscape:snap-grids="true"
+     inkscape:snap-nodes="true"
+     inkscape:snap-others="false"
+     inkscape:snap-to-guides="true"
+     inkscape:window-height="1149"
+     inkscape:window-maximized="1"
+     inkscape:window-width="1920"
+     inkscape:window-x="0"
+     inkscape:window-y="27"
+     inkscape:zoom="16">
+    <inkscape:grid
+       dotted="false"
+       empspacing="4"
+       enabled="true"
+       id="grid4866"
+       originx="-52.0002px"
+       originy="-29px"
+       snapvisiblegridlinesonly="true"
+       spacingx="1px"
+       spacingy="1px"
+       type="xygrid"
+       visible="true" />
+    <inkscape:grid
+       color="#000000"
+       dotted="true"
+       empcolor="#000000"
+       empopacity="0.25098039"
+       empspacing="4"
+       enabled="true"
+       id="grid13609"
+       opacity="0.1254902"
+       originx="-52.0002px"
+       originy="-29px"
+       snapvisiblegridlinesonly="true"
+       spacingx="0.5px"
+       spacingy="0.5px"
+       type="xygrid"
+       visible="true" />
+  </sodipodi:namedview>
+  <title
+     id="title9167">elementary Symbolic Icon Theme</title>
+  <defs
+     id="defs7386">
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter7554">
+      <feBlend
+         id="feBlend7556"
+         in2="BackgroundImage"
+         mode="darken" />
+    </filter>
+    <filter
+       color-interpolation-filters="sRGB"
+       id="filter7554-7">
+      <feBlend
+         id="feBlend7556-6"
+         in2="BackgroundImage"
+         mode="darken" />
+    </filter>
+  </defs>
+  <g
+     inkscape:groupmode="layer"
+     id="layer9"
+     label="status"
+     inkscape:label="status"
+     style="display:inline"
+     transform="translate(-293.0004,-188)" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer10"
+     inkscape:label="devices"
+     style="display:inline"
+     transform="translate(-293.0004,-188)" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer13"
+     inkscape:label="places"
+     style="display:inline"
+     transform="translate(-293.0004,-188)" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer14"
+     inkscape:label="mimes"
+     transform="translate(-293.0004,-188)" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer15"
+     inkscape:label="emblems"
+     style="display:inline"
+     transform="translate(-293.0004,-188)" />
+  <g
+     inkscape:groupmode="layer"
+     id="g71291"
+     inkscape:label="emotes"
+     style="display:inline"
+     transform="translate(-293.0004,-188)" />
+  <g
+     inkscape:groupmode="layer"
+     id="layer12"
+     inkscape:label="actions"
+     style="display:inline"
+     transform="translate(-293.0004,-188)">
+    <path
+       inkscape:connector-curvature="0"
+       d="m 297.0002,195 0,2 8,0 0,-2 z"
+       id="path3288-51"
+       sodipodi:nodetypes="ccccc"
+       style="color:#bebebe;display:inline;overflow:visible;visibility:visible;fill:#bebebe;fill-opacity:1;fill-rule:nonzero;stroke:none;stroke-width:1;marker:none;enable-background:accumulate" />
+    <text
+       id="text4087-2-6-5-74"
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-weight:normal;opacity:0.8;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="613.99213"
+       y="426.85062"><tspan
+         id="tspan4089-7-2-9-8"
+         sodipodi:role="line"
+         x="613.99213"
+         y="426.85062" /></text>
+    <text
+       id="text4087-2-6-5-59-7"
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-weight:normal;opacity:0.8;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="-1401.6903"
+       y="1250.8955"><tspan
+         id="tspan4089-7-2-9-4-2"
+         sodipodi:role="line"
+         x="-1401.6903"
+         y="1250.8955" /></text>
+    <flowRoot
+       id="flowRoot38698-5"
+       xml:space="preserve"
+       style="font-size:12px;font-style:normal;font-variant:normal;font-weight:normal;font-stretch:normal;line-height:125%;letter-spacing:0px;word-spacing:0px;fill:#000000;fill-opacity:1;stroke:none;font-family:Ubuntu;-inkscape-font-specification:Ubuntu"
+       transform="translate(194.20795,-502.35545)"><flowRegion
+         id="flowRegion38700-5"><rect
+           height="23"
+           id="rect38702-7"
+           width="40"
+           x="531"
+           y="299" /></flowRegion><flowPara
+         id="flowPara38704-8" /></flowRoot>    <text
+       id="text4087-2-6-5-1-8"
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-weight:normal;opacity:0.8;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="-474.76328"
+       y="195.66692"><tspan
+         id="tspan4089-7-2-9-7-0"
+         sodipodi:role="line"
+         x="-474.76328"
+         y="195.66692" /></text>
+    <text
+       id="text4087-2-6-5-7-3"
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-weight:normal;opacity:0.8;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="417.86267"
+       y="-261.33307"><tspan
+         id="tspan4089-7-2-9-1-7"
+         sodipodi:role="line"
+         x="417.86267"
+         y="-261.33307" /></text>
+    <text
+       id="text4087-2-6-5-5-8"
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-weight:normal;opacity:0.8;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="444.34619"
+       y="-306.36404"><tspan
+         id="tspan4089-7-2-9-6-3"
+         sodipodi:role="line"
+         x="444.34619"
+         y="-306.36404" /></text>
+    <text
+       id="text4087-2-6-5-3-8"
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-weight:normal;opacity:0.8;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="-1204.1372"
+       y="-314.33307"><tspan
+         id="tspan4089-7-2-9-18-8"
+         sodipodi:role="line"
+         x="-1204.1372"
+         y="-314.33307" /></text>
+    <text
+       id="text4087-2-6-5-4-3"
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-weight:normal;opacity:0.8;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="410.17053"
+       y="-616.33313"><tspan
+         id="tspan4089-7-2-9-9-6"
+         sodipodi:role="line"
+         x="410.17053"
+         y="-616.33313" /></text>
+    <text
+       id="text4087-2-6-5-7-1-2"
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-weight:normal;opacity:0.8;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="2052.7522"
+       y="76.335953"><tspan
+         id="tspan4089-7-2-9-1-8-9"
+         sodipodi:role="line"
+         x="2052.7522"
+         y="76.335953" /></text>
+    <text
+       id="text4087-2-6-5-5-5-3"
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-weight:normal;opacity:0.8;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="2079.2356"
+       y="31.304977"><tspan
+         id="tspan4089-7-2-9-6-9-2"
+         sodipodi:role="line"
+         x="2079.2356"
+         y="31.304977" /></text>
+    <text
+       id="text4087-2-6-5-75-9"
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-weight:normal;opacity:0.8;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="430.75208"
+       y="23.335953"><tspan
+         id="tspan4089-7-2-9-3-0"
+         sodipodi:role="line"
+         x="430.75208"
+         y="23.335953" /></text>
+    <text
+       id="text4087-2-6-5-4-8-7"
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-weight:normal;opacity:0.8;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="2045.0601"
+       y="-278.66403"><tspan
+         id="tspan4089-7-2-9-9-8-7"
+         sodipodi:role="line"
+         x="2045.0601"
+         y="-278.66403" /></text>
+    <text
+       id="text4087-2-6-5-45-4"
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-weight:normal;opacity:0.8;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="-605.79694"
+       y="-29.818359"><tspan
+         id="tspan4089-7-2-9-75-9"
+         sodipodi:role="line"
+         x="-605.79694"
+         y="-29.818359" /></text>
+    <text
+       id="text4087-2-6-5-59-0-8"
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-weight:normal;opacity:0.8;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="-2621.4795"
+       y="794.22656"><tspan
+         id="tspan4089-7-2-9-4-4-0"
+         sodipodi:role="line"
+         x="-2621.4795"
+         y="794.22656" /></text>
+    <text
+       id="text4087-2-6-5-0-2"
+       xml:space="preserve"
+       style="font-size:14px;font-style:normal;font-weight:normal;opacity:0.8;fill:#000000;fill-opacity:1;stroke:none;font-family:Bitstream Vera Sans"
+       x="-726.19531"
+       y="896.87628"><tspan
+         id="tspan4089-7-2-9-13-8"
+         sodipodi:role="line"
+         x="-726.19531"
+         y="896.87628" /></text>
+  </g>
+</svg>
