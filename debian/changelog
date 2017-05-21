@@ -1,11 +1,11 @@
-polo (17.5.1) xenial; urgency=low
+polo-file-manager (17.5.1) xenial; urgency=low
 
   * Beta 6
 
  -- Tony George <tony.george.kol@gmail.com>  Sat, 20 May 2017 10:00:00 +0530
 
 
-polo (17.5) xenial; urgency=low
+polo-file-manager (17.5) xenial; urgency=low
 
   * Beta 5
 
@@ -16,7 +16,7 @@ polo (17.5) xenial; urgency=low
  -- Tony George <tony.george.kol@gmail.com>  Sun, 07 May 2017 10:00:00 +0530
 
 
-polo (17.4) xenial; urgency=low
+polo-file-manager (17.4) xenial; urgency=low
 
   * Beta 4
 
@@ -40,7 +40,7 @@ polo (17.4) xenial; urgency=low
 
  -- Tony George <tony.george.kol@gmail.com>  Fri, 14 Apr 2017 10:00:00 +0530
  
-polo (17.3.3) xenial; urgency=low
+polo-file-manager (17.3.3) xenial; urgency=low
 
   * Beta 3
 
@@ -55,7 +55,7 @@ polo (17.3.3) xenial; urgency=low
 
  -- Tony George <tony.george.kol@gmail.com>  Fri, 24 Mar 2017 10:00:00 +0530
  
-polo (17.3.2) xenial; urgency=low
+polo-file-manager (17.3.2) xenial; urgency=low
 
   * Beta 2
 
@@ -72,7 +72,7 @@ polo (17.3.2) xenial; urgency=low
 
  -- Tony George <tony.george.kol@gmail.com>  Sat, 11 Mar 2017 10:00:00 +0530
 
-polo (17.3.1) xenial; urgency=low
+polo-file-manager (17.3.1) xenial; urgency=low
 
   * Beta 1 Update
   
@@ -90,7 +90,7 @@ polo (17.3.1) xenial; urgency=low
 
  -- Tony George <tony.george.kol@gmail.com>  Sun, 05 Mar 2017 10:00:00 +0530
 
-polo (17.3) xenial; urgency=low
+polo-file-manager (17.3) xenial; urgency=low
 
   * Beta 1
 

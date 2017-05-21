@@ -1,6 +1,7 @@
 #!/bin/bash
 
 app_name='polo'
+pkg_name='polo-file-manager'
 app_fullname='Polo File Manager'
 tgz="../../pbuilder/"
 dsc="../../builds/${app_name}*.dsc"
@@ -50,7 +51,7 @@ cp -p --no-preserve=ownership -t ${arch}/extracted/usr/share/${app_name}/libs ${
 cp -p --no-preserve=ownership -t ${arch}/extracted/usr/share/${app_name}/libs ${libs}/${arch}/libjson-glib-1.0.so.0
 chmod --recursive 0755 ${arch}/extracted/usr/share/${app_name}
 
-makeself ${arch}/extracted ./${app_name}-${VERSION}-${arch}.run "${app_fullname} (${arch})" ./install.sh 
+makeself ${arch}/extracted ./${pkg_name}-${VERSION}-${arch}.run "${app_fullname} (${arch})" ./install.sh 
 
 #check for errors
 if [ $? -ne 0 ]; then
@@ -59,7 +60,7 @@ if [ $? -ne 0 ]; then
 	exit 1
 fi
 
-cp -p --no-preserve=ownership ./${arch}/${app_name}*.deb ./${app_name}-${VERSION}-${arch}.deb 
+cp -p --no-preserve=ownership ./${arch}/${app_name}*.deb ./${pkg_name}-${VERSION}-${arch}.deb 
 
 done
 

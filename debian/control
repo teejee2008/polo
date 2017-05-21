@@ -1,4 +1,4 @@
-Source: polo
+Source: polo-file-manager
 Section: utils
 Priority: extra
 Maintainer: Tony George <tony.george.kol@gmail.com>
@@ -8,7 +8,7 @@ Homepage: http://teejeetech.blogspot.in/
 #Vcs-Git: git://git.debian.org/collab-maint/hello.git
 #Vcs-Browser: http://git.debian.org/?p=collab-maint/hello.git;a=summary
 
-Package: polo
+Package: polo-file-manager
 Architecture: any
 Depends: ${shlibs:Depends}, ${misc:Depends}, rsync, ffmpeg, mediainfo, p7zip, p7zip-full, p7zip-rar, tar, gzip | pigz, bzip2 | pbzip2, xz-utils
 Recommends: libimage-exiftool-perl
