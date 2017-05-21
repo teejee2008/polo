@@ -62,7 +62,7 @@ public class MainHeaderBar : Gtk.HeaderBar {
 	}
 
 	private Gtk.ButtonBox crumbs;
-	private Gtk.ScrolledWindow scrolled;
+	//private Gtk.ScrolledWindow scrolled;
 	private ViewPopover view_popover;
 	private Gtk.MenuButton btn_menu;
 	
@@ -93,6 +93,19 @@ public class MainHeaderBar : Gtk.HeaderBar {
 
 	private void init_ui() {
 
+		// scrolled
+		/*var scrolled = new Gtk.ScrolledWindow(null, null);
+		scrolled.hscrollbar_policy = PolicyType.NEVER; // clips child without showing scrollbar
+		scrolled.vscrollbar_policy = PolicyType.NEVER;
+		//scrolled.hexpand = true;
+		this.pack_start(scrolled);
+		
+		var bbox = new Gtk.ButtonBox(Gtk.Orientation.HORIZONTAL);
+		bbox.set_layout(Gtk.ButtonBoxStyle.EXPAND);
+		bbox.set_homogeneous(false);
+		bbox.margin = 0;
+		scrolled.add(bbox);*/
+		
 		add_back();
 
 		add_next();
@@ -237,11 +250,9 @@ public class MainHeaderBar : Gtk.HeaderBar {
 	private void add_crumbs(){
 		
 		// scrolled
-		scrolled = new Gtk.ScrolledWindow(null, null);
-		//scrolled.hexpand = true;
+		var scrolled = new Gtk.ScrolledWindow(null, null);
 		scrolled.hscrollbar_policy = PolicyType.NEVER; // clips child without showing scrollbar
 		scrolled.vscrollbar_policy = PolicyType.NEVER;
-		//scrolled.set_shadow_type(ShadowType.ETCHED_IN);
 		this.pack_start(scrolled);
 		
 		crumbs = new Gtk.ButtonBox(Gtk.Orientation.HORIZONTAL);
