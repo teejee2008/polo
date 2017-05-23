@@ -121,30 +121,11 @@ public class TermBox : Gtk.Box {
 		term.scroll_on_output = true;
 		term.scrollback_lines = 100000;
 
-		// colors -----------------------------
-		
-		//#if VTE_291
-		
-		var color = Gdk.RGBA();
-		color.parse("#DCDCDC");
-		term.set_color_foreground(color);
+		set_font_size(App.term_font_size);
 
-		color.parse("#2C2C2C");
-		term.set_color_background(color);
-		
-		//#else
-		
-		//Gdk.Color color;
-		//Gdk.Color.parse("#FFFFFF", out color);
-		//term.set_color_foreground(color);
+		//set_color_foreground(App.term_fg_color);
 
-		//Gdk.Color.parse("#404040", out color);
-		//term.set_color_background(color);
-
-		//#endif
-		
-		// grab focus
-		term.grab_focus();
+		set_color_background(App.term_bg_color);
 
 		// connect signal for shift+F10
         term.popup_menu.connect(() => {
@@ -235,16 +216,72 @@ public class TermBox : Gtk.Box {
 			
 			if (view.is_normal_directory){
 				change_directory(view.current_item.file_path);
+				reset();
 			}
+
+			term.grab_focus();
 		}
 	}
 
 	public void change_directory(string dir_path){
+
+		log_debug("TermBox: change_directory()");
+		
 		feed_command("cd '%s'".printf(escape_single_quote(dir_path)));
 	}
 
-	public void clear_output(){
-		feed_command("clear");
+	public void reset(){
+
+		log_debug("TermBox: reset()");
+		
+		feed_command("tput reset");
+	}
+
+	public void open_settings(){
+
+		log_debug("TermBox: open_settings()");
+		
+		feed_command("fish_config");
+	}
+
+	public void set_font_size(int size_pts){
+		term.font_desc = Pango.FontDescription.from_string("normal %d".printf(size_pts));
+	}
+
+	public void set_color_foreground(string color){
+
+		log_debug("TermBox: set_color_foreground(): %s".printf(color));
+		
+		var rgba = Gdk.RGBA();
+		rgba.parse(color);
+		//term.set_color_foreground(rgba);
+	}
+	
+	public void set_color_background(string color){
+		
+		log_debug("TermBox: set_color_background(): %s".printf(color));
+		
+		var rgba = Gdk.RGBA();
+		rgba.parse(color);
+		term.set_color_background(rgba);
+	}
+
+	public void chroot(string path){
+
+		var cmd = "sudo polo-chroot '%s' \n".printf(escape_single_quote(path));
+		
+		feed_command(cmd);
+	}
+
+	public void unchroot(string path){
+
+		feed_command("exit");
+
+		foreach(string txt in new string[] { "dev", "dev/pts", "proc", "run", "sys" }){
+			string dest = path_combine(path, txt);
+			var cmd = "sudo umount '%s'".printf(escape_single_quote(dest));
+			feed_command(cmd);
+		}
 	}
 }
 

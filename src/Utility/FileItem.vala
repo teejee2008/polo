@@ -581,6 +581,16 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 	}
 
+	public bool is_sys_root {
+		get{
+			return children.has_key("bin")
+				&& children.has_key("dev")
+				&& children.has_key("proc")
+				&& children.has_key("run")
+				&& children.has_key("sys");
+		}
+	}
+
 	public bool has_child(string base_name) {
 		return this.children.keys.contains(base_name);
 	}

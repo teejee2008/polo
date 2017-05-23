@@ -475,6 +475,16 @@ public class MainWindow : Gtk.Window {
 		}
 	}
 
+	public Gee.ArrayList<TermBox> terminals {
+		owned get {
+			var list = new Gee.ArrayList<TermBox>();
+			foreach(var pane in panes){
+				list.add(pane.terminal);
+			}
+			return list;
+		}
+	}
+	
 	public Gee.ArrayList<FileViewPane> panes {
 		owned get {
 			var list = new Gee.ArrayList<FileViewPane>();

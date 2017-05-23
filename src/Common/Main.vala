@@ -152,6 +152,10 @@ public class Main : GLib.Object {
 	public bool tabs_bottom = false;
 	public bool tabs_close_visible = true;
 
+	public int term_font_size = 11;
+	public string term_fg_color = "#DCDCDC";
+	public string term_bg_color = "#2C2C2C";
+
 	public static string REQUIRED_COLUMNS = "name,indicator,spacer";
 	public static string REQUIRED_COLUMNS_END = "spacer";
 	public static string DEFAULT_COLUMNS = "name,indicator,size,modified,filetype,spacer";
@@ -557,6 +561,10 @@ public class Main : GLib.Object {
 		config.set_string_member("tabs_bottom", tabs_bottom.to_string());
 		config.set_string_member("tabs_close_visible", tabs_close_visible.to_string());
 
+		config.set_string_member("term_font_size", term_font_size.to_string());
+		config.set_string_member("term_fg_color", term_fg_color);
+		config.set_string_member("term_bg_color", term_bg_color);
+
 		config.set_string_member("selected_columns", selected_columns);
 		config.set_string_member("maximise_on_startup", maximise_on_startup.to_string());
 		//config.set_string_member("single_click_activate", single_click_activate.to_string());
@@ -696,6 +704,10 @@ public class Main : GLib.Object {
 
 		tabs_bottom = json_get_bool(config, "tabs_bottom", tabs_bottom);
 		tabs_close_visible = json_get_bool(config, "tabs_close_visible", tabs_close_visible);
+
+		term_font_size = json_get_int(config, "term_font_size", term_font_size);
+		term_fg_color = json_get_string(config, "term_fg_color", term_fg_color);
+		term_bg_color = json_get_string(config, "term_bg_color", term_bg_color);
 		
 		selected_columns = json_get_string(config, "selected_columns", selected_columns);
 		selected_columns = selected_columns.replace(" ",""); // remove spaces

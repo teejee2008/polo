@@ -1,0 +1,41 @@
+#!/bin/sh
+
+path=`pwd`
+if [ -d "$1" ]; then
+path="$1"
+fi
+
+echo "path: $path"
+
+for i in dev dev/pts proc run sys; do 
+  if [ ! -d "$path/$i" ]; then
+    echo "Error: Missing directory: $path/$i"; 
+    echo "Path to chroot must have system directories: /dev, /proc, /run, /sys"
+    exit 1;
+  fi
+done
+
+sudo echo ""
+if [ $? -ne 0 ]; then echo "Error"; exit 1; fi
+
+sudo mount --rbind /dev  "$path/dev"
+sudo mount --rbind /run  "$path/run"
+sudo mount --rbind /sys  "$path/sys"
+sudo mount -t proc proc  "$path/proc"
+sudo cp /etc/resolv.conf "$path/etc/resolv.conf"
+
+tput reset
+echo "====================================================="
+echo "Entering chroot environment... (Type 'exit' to exit")
+echo "====================================================="
+sudo chroot "$path"
+
+sudo umount --force --recursive "$path/dev"
+sudo umount --force --recursive "$path/run"
+sudo umount --force --recursive "$path/sys"
+sudo umount --force --recursive "$path/proc"
+
+echo "==============================="
+echo "Exited chroot environment"
+echo "===============================\n"
+exit $?
