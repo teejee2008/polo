@@ -239,6 +239,14 @@ public class TermBox : Gtk.Box {
 		log_debug("TermBox: copy()");
 		
 		term.copy_primary();
+
+		Gdk.Display display = this.get_display ();
+		var clipboard = Gtk.Clipboard.get_for_display (display, Gdk.SELECTION_PRIMARY);
+		string txt = clipboard.wait_for_text();
+		if (txt != null){
+			clipboard = Gtk.Clipboard.get_for_display (display, Gdk.SELECTION_CLIPBOARD);
+			clipboard.set_text(txt, -1);
+		}
 	}
 
 	public void paste(){
@@ -248,7 +256,9 @@ public class TermBox : Gtk.Box {
 		Gdk.Display display = this.get_display ();
 		Gtk.Clipboard clipboard = Gtk.Clipboard.get_for_display (display, Gdk.SELECTION_CLIPBOARD);
 		string txt = clipboard.wait_for_text();
-		feed_command(txt, false);
+		if (txt != null){
+			feed_command(txt, false);
+		}
 	}
 
 	public void reset(){
