@@ -1,508 +1,2448 @@
 # SOME DESCRIPTIVE TITLE.
-# Copyright (C) YEAR Tony George (teejee2008@gmail.com)
-# This file is distributed under the same license as the PACKAGE package.
+# Copyright (C) YEAR Tony George (teejeetech@gmail.com)
+# This file is distributed under the same license as the polo package.
 # FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
 #
 #, fuzzy
 msgid ""
 msgstr ""
 "Project-Id-Version: polo 1.6\n"
-"Report-Msgid-Bugs-To: teejee2008@gmail.com\n"
-"POT-Creation-Date: 2015-11-09 15:24+0530\n"
+"Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
+"POT-Creation-Date: 2017-05-24 18:15+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "Language: \n"
 "MIME-Version: 1.0\n"
-"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Type: text/plain; charset=CHARSET\n"
 "Content-Transfer-Encoding: 8bit\n"
 
-#: CreateArchiveWindow.vala:1651
-msgid ""
-"<b>Compression Method</b>\n"
-"\n"
-"<b>Store</b> - Store files without compression\n"
-"\n"
-"<b>LZMA</b> - Good compression and very fast decompression\n"
-"\n"
-"<b>LZMA2</b> - Modified version of LZMA with better compression ratio for "
-"partially-compressible data, and better multi-threading support\n"
-"\n"
-"<b>PPMd</b> - Very good compression for text files (better than LZMA)\n"
-"\n"
-"<b>Deflate</b> - Very fast compression and decompression"
+#: Gtk/PropertiesWindow.vala:475
+msgid "(empty)"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1930 CreateArchiveWindow.vala:1941
-#: CreateArchiveWindow.vala:1952 CreateArchiveWindow.vala:1963
-#: CreateArchiveWindow.vala:1976 CreateArchiveWindow.vala:1987
-#: CreateArchiveWindow.vala:1998 CreateArchiveWindow.vala:2009
+#: Gtk/FileContextMenu.vala:991
+msgid "..."
+msgstr ""
+
+#: Gtk/ViewPopover.vala:242
+msgid "1"
+msgstr ""
+
+#: Gtk/ViewPopover.vala:247
+msgid "2"
+msgstr ""
+
+#: Gtk/ViewPopover.vala:252
+msgid "2H"
+msgstr ""
+
+#: Gtk/ViewPopover.vala:257
+msgid "4"
+msgstr ""
+
+#: Gtk/ProgressPanelArchiveTask.vala:151 Gtk/ProgressPanelArchiveTask.vala:161
+#: Gtk/ProgressPanelArchiveTask.vala:171 Gtk/ProgressPanelArchiveTask.vala:181
+#: Gtk/ProgressPanelArchiveTask.vala:194 Gtk/ProgressPanelArchiveTask.vala:205
+#: Gtk/ProgressPanelArchiveTask.vala:216 Gtk/ProgressPanelArchiveTask.vala:227
 msgid "???"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1891
-msgid "A light-weight archive manager for Linux"
+#: Gtk/MainWindow.vala:663
+msgid "A modern, light-weight file manager for Linux"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1626
+#: Gtk/CreateArchiveWindow.vala:1927
 msgid "AES128"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1628
+#: Gtk/CreateArchiveWindow.vala:1929
 msgid "AES192"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1620 CreateArchiveWindow.vala:1630
+#: Gtk/CreateArchiveWindow.vala:1920 Gtk/CreateArchiveWindow.vala:1931
 msgid "AES256"
 msgstr ""
 
-#: ViewArchiveWindow.vala:194
-msgid "Add directories to this archive"
+#: Gtk/FileViewToolbar.vala:602
+msgid "About"
 msgstr ""
 
-#: ViewArchiveWindow.vala:193
-msgid "Add directory"
+#: Gtk/FileViewList.vala:841
+msgid "Access"
 msgstr ""
 
-#: ViewArchiveWindow.vala:182
-msgid "Add file(s)"
+#: Gtk/PropertiesWindow.vala:319
+msgid "Accessed"
 msgstr ""
 
-#: ViewArchiveWindow.vala:183
-msgid "Add files to this archive"
+#: Gtk/Sidebar.vala:514
+msgid "Add bookmark"
 msgstr ""
 
-#: Main.vala:210
+#: Gtk/Sidebar.vala:515
+msgid "Add bookmark for this location"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:641
+msgid "Admin Window"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:797 Gtk/CreateArchiveWindow.vala:1748
+msgid "Advanced options"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:1118 Gtk/PropertiesWindow.vala:1182
+msgid "All"
+msgstr ""
+
+#: Gtk/Settings.vala:2208
+msgid ""
+"Allows X-window apps running inside the chroot environment to use the host "
+"display"
+msgstr ""
+
+#: Gtk/Settings.vala:2194
+msgid "Allows network connection to be used inside the chroot environment"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:856
+msgid "Analyze disk usage"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3521
+msgid "Another file exists with this name"
+msgstr ""
+
+#: Common/Main.vala:750 Common/Main.vala:830 Common/Main.vala:919
 msgid "App config loaded"
 msgstr ""
 
-#: Main.vala:188
+#: Common/Main.vala:604 Common/Main.vala:795 Common/Main.vala:875
 msgid "App config saved"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1738
+#: Gtk/FileViewToolbar.vala:603
 msgid "Application Info"
 msgstr ""
 
-#: Polo.vala:49
-msgid "Aptik Battery Monitor needs admin access to function correctly."
-msgstr ""
-
-#: CreateArchiveWindow.vala:1659
+#: Gtk/Settings.vala:1408
 msgid ""
-"Archive data will be encrypted with a key derived from the passphrase. "
-"Passphrase will be required for extracting files from the archive"
+"Application will be started during system startup and will run minimized in "
+"system tray."
 msgstr ""
 
-#: CreateArchiveWindow.vala:1663
-msgid ""
-"Archive header will also be encrypted along with data. Passphrase will be "
-"required to read information about files in the archive like file name, "
-"size, etc."
+#: Gtk/PropertiesWindow.vala:941 Gtk/PropertiesWindow.vala:959
+msgid "Apply recursively to directory contents"
 msgstr ""
 
-#: AboutWindow.vala:330
-#, c-format
-msgid "Artists"
+#: Gtk/PropertiesWindow.vala:506
+msgid "Available"
 msgstr ""
 
-#: AboutWindow.vala:314
-#, c-format
-msgid "Authors"
-msgstr ""
-
-#: CreateArchiveWindow.vala:648 CreateArchiveWindow.vala:656
-#: CreateArchiveWindow.vala:677
+#: Gtk/CreateArchiveWindow.vala:668 Gtk/CreateArchiveWindow.vala:677
+#: Gtk/CreateArchiveWindow.vala:713
 msgid "BZip2"
 msgstr ""
 
-#: AboutWindow.vala:285
+#: Gtk/FileViewToolbar.vala:190 Gtk/MainMenubar.vala:580 Gtk/Pathbar.vala:996
+#: Gtk/Settings.vala:472 Gtk/Settings.vala:807
 msgid "Back"
 msgstr ""
 
-#: CreateArchiveWindow.vala:2202
-msgid "Background"
+#: Gtk/TermContextMenu.vala:308
+msgid "Background Color"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1264
+#: Gtk/CreateArchiveWindow.vala:1446
 msgid "Block Size"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1780 CreateArchiveWindow.vala:1781
+#: Gtk/PropertiesWindow.vala:239
+msgid "Blocks"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:323 Gtk/Pathbar.vala:178 Gtk/Settings.vala:625
+#: Gtk/Settings.vala:767 Gtk/Settings.vala:984 Gtk/Sidebar.vala:351
+msgid "Bookmarks"
+msgstr ""
+
+#: Gtk/WizardWindow.vala:193
+msgid "Buttons"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:733
+msgid "Calculate directory sizes"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:2035 Gtk/FileConflictDialog.vala:265
+#: Gtk/ProgressPanelFileTask.vala:153 Gtk/SimpleProgressWindow.vala:139
 msgid "Cancel"
 msgstr ""
 
-#: CreateArchiveWindow.vala:2734
-msgid "Cancelled"
+#: Gtk/FileViewTab.vala:373 Gtk/LayoutBox.vala:491 Gtk/MainWindow.vala:132
+msgid "Cancel File Operations?"
 msgstr ""
 
-#: AboutWindow.vala:295
+#: Gtk/FileConflictDialog.vala:266
+msgid "Cancel this file operation"
+msgstr ""
+
+#: Gtk/ProgressPanelArchiveTask.vala:803 Gtk/ProgressPanelArchiveTask.vala:830
+msgid "Cancelled by user"
+msgstr ""
+
+#: Gtk/FileViewList.vala:4324
+msgid "Cannot create archive in this location"
+msgstr ""
+
+#: Gtk/FileViewList.vala:4182 Gtk/FileViewList.vala:4221
+#: Gtk/FileViewList.vala:4253
+msgid "Cannot extract to this location"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:541 Gtk/MainHeaderBar.vala:289
+msgid "Change Application Settings"
+msgstr ""
+
+#: Gtk/TermContextMenu.vala:148
+msgid "Change Directory"
+msgstr ""
+
+#: Gtk/Settings.vala:1817 Gtk/Settings.vala:2005
+msgid "Change column spacing"
+msgstr ""
+
+#: Gtk/TermContextMenu.vala:149
+msgid "Change directory to current path"
+msgstr ""
+
+#: Gtk/Settings.vala:1553
+msgid "Change font size"
+msgstr ""
+
+#: Gtk/Settings.vala:1587 Gtk/Settings.vala:1744 Gtk/Settings.vala:1932
+msgid "Change icon size"
+msgstr ""
+
+#: Gtk/Settings.vala:1628 Gtk/Settings.vala:1782 Gtk/Settings.vala:1970
+msgid "Change row spacing"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:333
+msgid "Changed"
+msgstr ""
+
+#: Gtk/Settings.vala:680
+msgid ""
+"Changes will take effect after application is restarted.\n"
+"Your session will be maintained.\n"
+"\n"
+"Restart now?"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:697
+msgid "Check external tools"
+msgstr ""
+
+#: Gtk/TermContextMenu.vala:186
+msgid "Chroot"
+msgstr ""
+
+#: Gtk/Settings.vala:2205
+msgid "Chroot: Enable GUI Apps"
+msgstr ""
+
+#: Gtk/Settings.vala:2191
+msgid "Chroot: Enable network"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:1816
+msgid "Cipher"
+msgstr ""
+
+#: Gtk/WizardWindow.vala:82
+msgid "Classic Icons (Single-pane + Sidebar + IconView)"
+msgstr ""
+
+#: Gtk/WizardWindow.vala:95
+msgid "Classic List (Single-pane + Sidebar + ListView)"
+msgstr ""
+
+#: Gtk/TermContextMenu.vala:167
+msgid "Clear"
+msgstr ""
+
+#: Gtk/TermContextMenu.vala:168
+msgid "Clear the terminal output"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:663
+msgid ""
+"Clear the thumbnails in system cache. New thumbnails will be generated when "
+"folders are browsed using any file manager."
+msgstr ""
+
+#: Gtk/MainMenubar.vala:662
+msgid "Clear thumbnail cache"
+msgstr ""
+
+#: Gtk/Pathbar.vala:617
+msgid "Click to edit path"
+msgstr ""
+
+#: Gtk/Sidebar.vala:799
+msgid "Click to mount device and open in active pane"
+msgstr ""
+
+#: Gtk/Sidebar.vala:796
+msgid "Click to open in active pane"
+msgstr ""
+
+#: Gtk/WizardWindow.vala:151
+msgid "Click to select"
+msgstr ""
+
+#: Gtk/FileViewTab.vala:271 Gtk/Settings.vala:907
 msgid "Close"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1695
-msgid "Commands"
+#: Gtk/Settings.vala:1101
+msgid "Close button"
 msgstr ""
 
-#: Main.vala:152
+#: Gtk/Pathbar.vala:1137
+msgid "Close this pane"
+msgstr ""
+
+#: Gtk/MainHeaderBar.vala:331 Gtk/ProgressPanelArchiveTask.vala:526
+msgid "Close this window"
+msgstr ""
+
+#: Gtk/MainWindow.vala:133
+msgid ""
+"Closing the application will cancel running file operations.\n"
+"Do you want to cancel?"
+msgstr ""
+
+#: Gtk/FileViewTab.vala:374
+msgid ""
+"Closing this pane will cancel file operations running in this pane.\n"
+"Do you want to cancel?"
+msgstr ""
+
+#: Gtk/LayoutBox.vala:492
+msgid ""
+"Closing this tab will cancel file operations running in this tab.\n"
+"Do you want to cancel?"
+msgstr ""
+
+#: Gtk/Settings.vala:1810
+msgid "Col spacing"
+msgstr ""
+
+#: Gtk/WizardWindow.vala:111
+msgid "Commander (Dual-pane + ListView)"
+msgstr ""
+
+#: Gtk/WizardWindow.vala:124
+msgid "Commander Icons (Dual-pane + IconView)"
+msgstr ""
+
+#: Common/Main.vala:427
 msgid "Commands listed below are not available on this system"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1769 CreateArchiveWindow.vala:1770
+#: Gtk/FileContextMenu.vala:966
+msgid "Compare"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:967
+msgid "Compare file with file of same name in other pane"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:118 Gtk/CreateArchiveWindow.vala:2042
+#: Gtk/FileContextMenu.vala:1280
 msgid "Compress"
 msgstr ""
 
-#: ViewArchiveWindow.vala:404
-msgid "Compressed"
+#: Gtk/FileContextMenu.vala:1281
+msgid "Compress selected items and create new archive"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1992
+#: Gtk/ProgressPanelArchiveTask.vala:210
 msgid "Compressed:"
 msgstr ""
 
-#: CreateArchiveWindow.vala:246
-msgid "Compression"
+#: Gtk/ProgressPanelArchiveTask.vala:92
+msgid "Compressing"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1655
-msgid ""
-"Concatenate files with TAR before compression (recommended)\n"
-"\n"
-"\302\247 File formats such as 7-Zip cannot store some file properties like "
-"ownership and group information on Linux file systems. Using TAR will "
-"preserve this information.\n"
-"\n"
-"\302\247 Formats such as GZip, BZip2 and XZ can compress only single files. "
-"Using TAR will archive the selected files and folders into a single file "
-"before compression."
+#: Gtk/PasswordDialog.vala:128
+msgid "Confirm Passphrase"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1558
-msgid "Confirm Password"
+#: Gtk/Settings.vala:1420
+msgid "Confirm before deleting files"
 msgstr ""
 
-#: CreateArchiveWindow.vala:636 CreateArchiveWindow.vala:671
+#: Gtk/Settings.vala:1432
+msgid "Confirm before trashing files"
+msgstr ""
+
+#: Gtk/FileViewList.vala:876
+msgid "Content Type"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:200
+msgid "Contents"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:656 Gtk/CreateArchiveWindow.vala:707
+#: Gtk/CreateArchiveWindow.vala:722 Gtk/FileContextMenu.vala:742
+#: Gtk/MainMenubar.vala:301 Gtk/TermContextMenu.vala:106
 msgid "Copy"
 msgstr ""
 
-#: ViewArchiveWindow.vala:172
-msgid "Create a new archive"
+#: Gtk/MiddleToolbar.vala:197
+msgid ""
+"Copy\n"
+"\n"
+"Copy the items selected in active pane"
 msgstr ""
 
-#: ViewArchiveWindow.vala:161
-msgid "Create new archive"
+#: Gtk/FileContextMenu.vala:1075
+msgid "Copy Across"
 msgstr ""
 
-#: AboutWindow.vala:272 AboutWindow.vala:289
-msgid "Credits"
+#: Gtk/MiddleToolbar.vala:314
+msgid ""
+"Copy Across\n"
+"\n"
+"Copy selected items from active pane to opposite pane"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1970
+#: Gtk/FileContextMenu.vala:1237
+msgid "Copy Path(s)"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1039
+msgid "Copy To..."
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1238
+msgid "Copy file path to clipboard"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:743
+msgid "Copy selected items"
+msgstr ""
+
+#: Gtk/TermContextMenu.vala:107
+msgid "Copy selected text to clipboard"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1040
+msgid "Copy to another location"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1076
+msgid "Copy to other pane"
+msgstr ""
+
+#: Gtk/ProgressPanelFileTask.vala:63
+msgid "Copying items..."
+msgstr ""
+
+#: Gtk/FileViewList.vala:2635
+msgid "Could not find path"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3250
+msgid "Could not find the opposite pane!"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3541
+msgid "Create Directory"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3573 Gtk/FileViewList.vala:3608
+msgid "Create File"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:207 Gtk/MiddleToolbar.vala:352
+msgid "Create New File"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:193 Gtk/MiddleToolbar.vala:371
+msgid "Create New Folder"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3375
+msgid "Create copies of selected items?"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:682
+msgid "Create new file from template"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:549
+msgid "Create new file in this location"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:529
+msgid "Create new folder in this location"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:301
+msgid "Created"
+msgstr ""
+
+#: Gtk/ProgressPanelFileTask.vala:84
+msgid "Creating hard links..."
+msgstr ""
+
+#: Gtk/ProgressPanelFileTask.vala:81
+msgid "Creating symbolic links..."
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:720 Gtk/MainMenubar.vala:287
+msgid "Cut"
+msgstr ""
+
+#: Gtk/MiddleToolbar.vala:178
+msgid ""
+"Cut\n"
+"\n"
+"Cut the items selected in active pane"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:721
+msgid "Cut selected items"
+msgstr ""
+
+#: Gtk/Settings.vala:391 Gtk/Settings.vala:947
+msgid "Dark theme"
+msgstr ""
+
+#: Gtk/ProgressPanelArchiveTask.vala:188
 msgid "Data:"
 msgstr ""
 
-#: CreateArchiveWindow.vala:651 CreateArchiveWindow.vala:661
-#: CreateArchiveWindow.vala:673
+#: Gtk/MainMenubar.vala:722
+msgid "Debug: List Devices"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:709
+msgid "Debug: List FileItem Objects"
+msgstr ""
+
+#: Gtk/Settings.vala:1263
+msgid "Default File Manager"
+msgstr ""
+
+#: Gtk/Settings.vala:1196
+msgid "Default View"
+msgstr ""
+
+#: Gtk/Settings.vala:1206
+msgid "Default view mode to use for new panes"
+msgstr ""
+
+#: Gtk/Settings.vala:1125
+msgid "Defaults"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:671 Gtk/CreateArchiveWindow.vala:683
+#: Gtk/CreateArchiveWindow.vala:709
 msgid "Deflate"
 msgstr ""
 
-#: CreateArchiveWindow.vala:675
+#: Gtk/CreateArchiveWindow.vala:711
 msgid "Deflate64"
 msgstr ""
 
-#: CreateArchiveWindow.vala:976
+#: Gtk/FileContextMenu.vala:828 Gtk/MainMenubar.vala:343 Gtk/TrashBar.vala:85
+msgid "Delete"
+msgstr ""
+
+#: Gtk/MiddleToolbar.vala:275
+msgid ""
+"Delete\n"
+"\n"
+"Delete files permanently (without sending to recycle bin)"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:829 Gtk/TrashBar.vala:89
+msgid "Delete selected items permanently"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3452
+msgid "Delete selected items?"
+msgstr ""
+
+#: Gtk/ProgressPanelFileTask.vala:76
+msgid "Deleting items..."
+msgstr ""
+
+#: Gtk/Sidebar.vala:343
+msgid "Desktop"
+msgstr ""
+
+#: Gtk/FileViewList.vala:4221 Gtk/FileViewList.vala:4253
+msgid "Destination directory does not exist"
+msgstr ""
+
+#: Gtk/FileViewList.vala:4324
+msgid "Destination path is inside an archive (!)"
+msgstr ""
+
+#: Gtk/FileViewList.vala:4182
+msgid "Destination path is inside an archive!"
+msgstr ""
+
+#: Gtk/FileConflictDialog.vala:229
+msgid "Details"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:467
+msgid "Device"
+msgstr ""
+
+#: Gtk/Sidebar.vala:1077
+msgid "Device Locked"
+msgstr ""
+
+#: Gtk/Sidebar.vala:1011
+msgid "Device Unmounted"
+msgstr ""
+
+#: Gtk/FileViewList.vala:2630
+msgid "Device was unmounted"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:351 Gtk/Settings.vala:643 Gtk/Settings.vala:787
+#: Gtk/Settings.vala:1002 Gtk/Sidebar.vala:366
+msgid "Devices"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:1109
 msgid "Dictionary"
 msgstr ""
 
-#: DonationWindow.vala:55
-msgid ""
-"Did you find this software useful?\n"
-"\n"
-"You can buy me a cup of coffee to show your support. Or just drop me an "
-"email and say Hi. This application is completely free and will continue to "
-"remain that way. Your contributions will help in keeping this project alive "
-"and improving it further.\n"
-"\n"
-"If you want to buy me a coffee, you can send me $2 using the Google Wallet "
-"app on your phone. You can even send it through email. GMail has a new "
-"feature to attach money to emails from your Google Wallet.\n"
-"\n"
-"Feel free to send me an email if you find any issues in this application or "
-"if you need any changes. Suggestions and feedback are always welcome.\n"
-"\n"
-"Thanks,\n"
-"Tony George\n"
-"(teejeetech@gmail.com)"
+#: Gtk/FileViewList.vala:3549
+msgid "Directory exists"
 msgstr ""
 
-#: AboutWindow.vala:346
-#, c-format
-msgid "Documenters"
+#: Gtk/FileContextMenu.vala:855
+msgid "Disk Usage"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1717 DonationWindow.vala:36
+#: Gtk/Sidebar.vala:338
+msgid "Documents"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:582
 msgid "Donate"
 msgstr ""
 
-#: AboutWindow.vala:354
-#, c-format
-msgid "Donations"
+#: Gtk/Sidebar.vala:339
+msgid "Downloads"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1935
+#: Gtk/Settings.vala:1722 Gtk/Settings.vala:1910 Gtk/Settings.vala:2099
+msgid "Draw semi-transparent icons and thumbnails for hidden items"
+msgstr ""
+
+#: Gtk/Settings.vala:1692 Gtk/Settings.vala:1880 Gtk/Settings.vala:2069
+msgid ""
+"Draw tiny emblems on the icon or thumbnail image to indicate folder "
+"contents, symlinks and read-only permissions.\n"
+"\n"
+"Disable this for faster loading of directories."
+msgstr ""
+
+#: Gtk/Settings.vala:591 Gtk/ViewPopover.vala:248
+msgid "Dual"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:443
+msgid "Dual Horizontal"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:495
+msgid "Dual Pane Mode"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:433
+msgid "Dual Vertical"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:252
+msgid "Edit"
+msgstr ""
+
+#: Gtk/FileViewTab.vala:238
+msgid "Edit Tab Name"
+msgstr ""
+
+#: Gtk/FileViewList.vala:427
+#, c-format
+msgid "Effective permissions for current user"
+msgstr ""
+
+#: Gtk/ProgressPanelArchiveTask.vala:156
 msgid "Elapsed:"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1526
-msgid "Encrypt archive"
+#: Gtk/Settings.vala:1689 Gtk/Settings.vala:1877 Gtk/Settings.vala:2066
+msgid "Emblems"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1574
+#: Gtk/TrashBar.vala:157
+msgid "Empty Trash"
+msgstr ""
+
+#: Gtk/TrashBar.vala:162
+msgid "Empty trash can"
+msgstr ""
+
+#: Gtk/Settings.vala:661
+msgid "Enabled (R)"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:1690
+msgid "Encrypt"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:1859 Gtk/CreateArchiveWindow.vala:1860
 msgid "Encrypt file names"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1508
-msgid "Encryption"
+#: Gtk/PropertiesWindow.vala:228
+msgid "Encrypted"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1549
+#: Gtk/FileViewList.vala:4163
+#, c-format
+msgid "Encrypted archive"
+msgstr ""
+
+#: Gtk/PasswordDialog.vala:97
+msgid "Enter Passphrase"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:1698 Gtk/FileViewList.vala:4169
 msgid "Enter Password"
 msgstr ""
 
-#: Utility.vala:100
+#: Gtk/FileViewList.vala:3549 Gtk/FileViewList.vala:3581
+#: Gtk/FileViewList.vala:3620
+msgid "Enter another name"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3541
+msgid "Enter directory name"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3573 Gtk/FileViewList.vala:3608
+msgid "Enter file name"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3502
+msgid "Enter new name"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3521
+msgid "Enter unique name for selected file"
+msgstr ""
+
+#: Gtk/ProgressPanelFileTask.vala:308
 msgid "Error"
 msgstr ""
 
-#: Utility.vala:1647
-msgid "Failed to set ownership"
+#: Gtk/PropertiesWindow.vala:641 Gtk/PropertiesWindow.vala:647
+#: Gtk/PropertiesWindow.vala:653
+msgid "Execute"
 msgstr ""
 
-#: CreateArchiveWindow.vala:753
+#: Gtk/MainMenubar.vala:235
+msgid "Exit"
+msgstr ""
+
+#: Common/Main.vala:962
+msgid "Exiting Application"
+msgstr ""
+
+#: Gtk/ToolsWindow.vala:43
+msgid "External Tools"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:696
+msgid "External tools"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1323
+msgid "Extract Across"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1344
+msgid "Extract Here"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1302
+msgid "Extract To.."
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1303
+msgid "Extract archives to another location"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1345
+msgid "Extract archives to new folders in this location"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1324
+msgid "Extract archives to the opposite pane"
+msgstr ""
+
+#: Gtk/ProgressPanelArchiveTask.vala:95
+msgid "Extracting"
+msgstr ""
+
+#: Gtk/ProgressPanelArchiveTask.vala:591
+msgid "Extraction path not specified"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:851 Gtk/CreateArchiveWindow.vala:870
 msgid "Fast"
 msgstr ""
 
-#: CreateArchiveWindow.vala:750
+#: Gtk/CreateArchiveWindow.vala:848 Gtk/CreateArchiveWindow.vala:867
 msgid "Fastest"
 msgstr ""
 
-#: PoloGtk.vala:126
+#: Gtk/FileContextMenu.vala:548 Gtk/MainMenubar.vala:120
+msgid "File"
+msgstr ""
+
+#: Gtk/FileConflictDialog.vala:75
+msgid "File Conflict"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3581 Gtk/FileViewList.vala:3620
+msgid "File exists"
+msgstr ""
+
+#: Gtk/ProgressPanelArchiveTask.vala:746
+msgid "File is not an archive or format is unsupported"
+msgstr ""
+
+#: Gtk/PoloGtk.vala:106
 msgid "File not found"
 msgstr ""
 
-#: CreateArchiveWindow.vala:289
-msgid "FileName"
+#: Gtk/FileViewList.vala:434
+#, c-format
+msgid "File type"
 msgstr ""
 
-#: CreateArchiveWindow.vala:508
-msgid "Files"
+#: Gtk/PropertiesWindow.vala:706
+msgid ""
+"File will be executed with the priviledges of the file's group instead of "
+"priviledges of user who is executing the file.\n"
+"\n"
+"Useful for executable files. Allows anybody who has permission to execute "
+"the file, to run it with the group's priviledges."
 msgstr ""
 
-#: CreateArchiveWindow.vala:1924
+#: Gtk/PropertiesWindow.vala:703
+msgid ""
+"File will be executed with the priviledges of the file's owner instead of "
+"priviledges of user who is executing the file.\n"
+"\n"
+"Useful for executable files. Allows anybody who has permission to execute "
+"the file, to run it with the owner's priviledges."
+msgstr ""
+
+#: Gtk/ProgressPanelArchiveTask.vala:146
 msgid "Files:"
 msgstr ""
 
-#: CreateArchiveWindow.vala:2688 CreateArchiveWindow.vala:2728
-msgid "Finished"
+#: Gtk/PropertiesWindow.vala:449 Gtk/PropertiesWindow.vala:477
+#: Gtk/Sidebar.vala:336
+msgid "Filesystem"
 msgstr ""
 
-#: CreateArchiveWindow.vala:558
+#: Gtk/TermContextMenu.vala:358
+msgid "Fish Config"
+msgstr ""
+
+#: Gtk/ColumnSelectionBox.vala:338 Gtk/ColumnSelectionBox.vala:373
+msgid "Fixed Column"
+msgstr ""
+
+#: Gtk/Settings.vala:739 Gtk/WizardWindow.vala:209
+msgid "Flat Buttons"
+msgstr ""
+
+#: Gtk/DeviceContextMenu.vala:212
+msgid "Flush Read Buffer"
+msgstr ""
+
+#: Gtk/DeviceContextMenu.vala:213
+msgid "Flushes the read buffer for device"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:528
+msgid "Folder"
+msgstr ""
+
+#: Gtk/FileViewList.vala:2640
+msgid "Folder is empty"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1218
+msgid "Follow Symlink Path"
+msgstr ""
+
+#: Gtk/TermContextMenu.vala:236
+msgid "Font Size"
+msgstr ""
+
+#: Gtk/Settings.vala:1546
+msgid "Font scale"
+msgstr ""
+
+#: Gtk/TermContextMenu.vala:282
+msgid "Foreground Color"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:489
 msgid "Format"
 msgstr ""
 
-#: CreateArchiveWindow.vala:639 CreateArchiveWindow.vala:679
+#: Gtk/FileViewToolbar.vala:211 Gtk/MainMenubar.vala:594
+msgid "Forward"
+msgstr ""
+
+#: Gtk/ToolsWindow.vala:154
+msgid "Found"
+msgstr ""
+
+#: Gtk/Sidebar.vala:1161 Gtk/Statusbar.vala:363
+#, c-format
+msgid "Free"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:511
+msgid "Fullscreen Mode"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:135
+msgid "General"
+msgstr ""
+
+#: Gtk/FileViewList.vala:2689 Gtk/FileViewList.vala:2690
+msgid "Generating thumbnails..."
+msgstr ""
+
+#: Gtk/Settings.vala:693 Gtk/Settings.vala:1058
+msgid "Global"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:543
+msgid "Go"
+msgstr ""
+
+#: Gtk/Pathbar.vala:1056
+msgid "Go Up"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3006
+msgid "Go to location"
+msgstr ""
+
+#: Gtk/FileViewList.vala:751 Gtk/PropertiesWindow.vala:629
+#: Gtk/PropertiesWindow.vala:855
+msgid "Group"
+msgstr ""
+
+#: Gtk/Settings.vala:227
+#, c-format
+msgid "HeaderBar"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:275
+msgid "Headers"
+msgstr ""
+
+#: Gtk/Settings.vala:574
+msgid "Hidden"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:1804 Gtk/FileContextMenu.vala:1173
+#: Gtk/PasswordDialog.vala:197
+msgid "Hide"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1174
+msgid "Hide selected items"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:252 Gtk/Settings.vala:540 Gtk/Sidebar.vala:337
+msgid "Home"
+msgstr ""
+
+#: Gtk/ViewPopover.vala:253
+msgid "Horizontal"
+msgstr ""
+
+#: Gtk/Settings.vala:1483
+#, c-format
+msgid "Icon View"
+msgstr ""
+
+#: Gtk/Settings.vala:1580 Gtk/Settings.vala:1737 Gtk/Settings.vala:1925
+msgid "Icon size"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:481 Gtk/Settings.vala:1228 Gtk/Settings.vala:1676
+#: Gtk/Settings.vala:1864 Gtk/Settings.vala:2054 Gtk/ViewPopover.vala:166
+#, c-format
+msgid "Icons"
+msgstr ""
+
+#: Gtk/ColumnSelectionBox.vala:163 Gtk/FileContextMenu.vala:1469
+#: Gtk/ViewPopover.vala:407
+msgid "Indicator"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:882
+msgid "Insane"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3250
+msgid "Internal Error"
+msgstr ""
+
+#: Gtk/FileConflictDialog.vala:353
+msgid "Item Name"
+msgstr ""
+
+#: Gtk/Settings.vala:183 Gtk/Settings.vala:257
+#, c-format
+msgid "Items"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:1009
+msgid "Key"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:659 Gtk/CreateArchiveWindow.vala:715
 msgid "LZMA"
 msgstr ""
 
-#: CreateArchiveWindow.vala:642 CreateArchiveWindow.vala:666
+#: Gtk/CreateArchiveWindow.vala:662 Gtk/CreateArchiveWindow.vala:701
 msgid "LZMA2"
 msgstr ""
 
-#: CreateArchiveWindow.vala:711
+#: Gtk/CreateArchiveWindow.vala:689
+msgid "LZO"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:475
+msgid "Label"
+msgstr ""
+
+#: Gtk/Settings.vala:448
+msgid "Labels beside icons"
+msgstr ""
+
+#: Gtk/Settings.vala:374
+msgid "Large icons"
+msgstr ""
+
+#: Gtk/FileViewList.vala:431
+#, c-format
+msgid "Last modified date"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:479
+msgid "Layout"
+msgstr ""
+
+#: Gtk/LayoutBox.vala:511
+msgid "Layout Cannot be Changed"
+msgstr ""
+
+#: Gtk/LayoutBox.vala:512
+msgid "Layout cannot be changed while file operations are running"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:773
 msgid "Level"
 msgstr ""
 
-#: CreateArchiveWindow.vala:417
+#: Gtk/PropertiesWindow.vala:175
+msgid "Link Target"
+msgstr ""
+
+#: Gtk/FileViewList.vala:422
+#, c-format
+msgid "Link to"
+msgstr ""
+
+#: Gtk/WizardWindow.vala:178
+msgid "Links"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:474 Gtk/Settings.vala:1226 Gtk/ViewPopover.vala:159
+msgid "List"
+msgstr ""
+
+#: Gtk/Settings.vala:1458 Gtk/Settings.vala:2137
+#, c-format
+msgid "List View"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:406 Gtk/PropertiesWindow.vala:169
 msgid "Location"
 msgstr ""
 
-#: CreateArchiveWindow.vala:759
+#: Gtk/Sidebar.vala:677
+msgid "Location not found"
+msgstr ""
+
+#: Gtk/Settings.vala:1039
+msgid "Lock button"
+msgstr ""
+
+#: Gtk/FileViewList.vala:946
+msgid "MD5"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:583
+msgid "Make a donation"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:470
+msgid "Mapped"
+msgstr ""
+
+#: Gtk/TermContextMenu.vala:375
+msgid "Maximize"
+msgstr ""
+
+#: Gtk/Settings.vala:1180
+msgid "Maximize on startup"
+msgstr ""
+
+#: Gtk/TermContextMenu.vala:376
+msgid "Maximize the terminal to fill tab"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:857 Gtk/CreateArchiveWindow.vala:876
 msgid "Maximum"
 msgstr ""
 
-#: CreateArchiveWindow.vala:610 CreateArchiveWindow.vala:1588
+#: Gtk/FileViewToolbar.vala:495 Gtk/Settings.vala:1232 Gtk/ViewPopover.vala:180
+msgid "Media"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:1002
+msgid "MediaInfo"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:616 Gtk/PropertiesWindow.vala:222
 msgid "Method"
 msgstr ""
 
-#: Main.vala:107
+#: Gtk/PropertiesWindow.vala:287
+msgid "Mime"
+msgstr ""
+
+#: Gtk/FileViewList.vala:437
+#, c-format
+msgid "Mime type"
+msgstr ""
+
+#: Gtk/MainHeaderBar.vala:316
+msgid "Minimize"
+msgstr ""
+
+#: Gtk/Settings.vala:1393
+msgid ""
+"Minimize to system tray when window is closed instead of exiting the "
+"application. Opening another folder will be much faster, as the application "
+"would already be running in the background."
+msgstr ""
+
+#: Gtk/Settings.vala:1390
+msgid "Minimize to tray"
+msgstr ""
+
+#: Gtk/ToolsWindow.vala:154
+msgid "Missing"
+msgstr ""
+
+#: Gtk/MainWindow.vala:417
 msgid "Missing Dependencies"
 msgstr ""
 
-#: Utility.vala:1225
-msgid "Missing Icon"
-msgstr ""
-
-#: ViewArchiveWindow.vala:442
+#: Gtk/FileConflictDialog.vala:545 Gtk/FileConflictDialog.vala:557
+#: Gtk/FileViewList.vala:614 Gtk/PropertiesWindow.vala:305
+#, c-format
 msgid "Modified"
 msgstr ""
 
-#: ViewArchiveWindow.vala:308
+#: Gtk/FileContextMenu.vala:992
+msgid "More options"
+msgstr ""
+
+#: Gtk/DeviceContextMenu.vala:143 Gtk/PropertiesWindow.vala:480
+msgid "Mount"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:900
+msgid "Mount ISO"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:901
+msgid "Mount the ISO file as a read-only disk"
+msgstr ""
+
+#: Gtk/DeviceContextMenu.vala:144
+msgid "Mount this volume"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3926
+#, c-format
+msgid "Mounted ISO"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1093
+msgid "Move Across"
+msgstr ""
+
+#: Gtk/MiddleToolbar.vala:295
+msgid ""
+"Move Across\n"
+"\n"
+"Move selected items from active pane to opposite pane"
+msgstr ""
+
+#: Gtk/ColumnSelectionBox.vala:259
+msgid "Move Down"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1057
+msgid "Move To..."
+msgstr ""
+
+#: Gtk/ColumnSelectionBox.vala:242
+msgid "Move Up"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:807
+msgid "Move files to recycle bin"
+msgstr ""
+
+#: Gtk/ColumnSelectionBox.vala:260
+msgid "Move selected item down"
+msgstr ""
+
+#: Gtk/ColumnSelectionBox.vala:243
+msgid "Move selected item up"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1058
+msgid "Move to another location"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1094
+msgid "Move to other pane"
+msgstr ""
+
+#: Gtk/ProgressPanelFileTask.vala:72
+msgid "Moving items to trash..."
+msgstr ""
+
+#: Gtk/ProgressPanelFileTask.vala:66
+msgid "Moving items..."
+msgstr ""
+
+#: Gtk/ColumnSelectionBox.vala:317 Gtk/ColumnSelectionBox.vala:352
+msgid "Multiple items selected"
+msgstr ""
+
+#: Gtk/Sidebar.vala:341
+msgid "Music"
+msgstr ""
+
+#: Gtk/FileViewList.vala:428
+msgid "NTD = Rename Trash Delete"
+msgstr ""
+
+#: Gtk/ColumnSelectionBox.vala:143 Gtk/CreateArchiveWindow.vala:261
+#: Gtk/FileViewList.vala:450 Gtk/PropertiesWindow.vala:157
 msgid "Name"
 msgstr ""
 
-#: ViewArchiveWindow.vala:160
+#: Gtk/FileContextMenu.vala:486
 msgid "New"
 msgstr ""
 
-#: CreateArchiveWindow.vala:756
+#: Gtk/MainMenubar.vala:179
+msgid "New Admin Window"
+msgstr ""
+
+#: Gtk/FileViewTab.vala:305 Gtk/MainMenubar.vala:151
+msgid "New Tab"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:165
+msgid "New Window"
+msgstr ""
+
+#: Gtk/Pathbar.vala:1026 Gtk/Settings.vala:489 Gtk/Settings.vala:827
+msgid "Next"
+msgstr ""
+
+#: Gtk/MediaBar.vala:135 Gtk/PropertiesWindow.vala:227
+#: Gtk/PropertiesWindow.vala:232
+msgid "No"
+msgstr ""
+
+#: Gtk/FileViewList.vala:4319
+msgid "No Files Selected"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3518
+msgid "No Permission"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:854 Gtk/CreateArchiveWindow.vala:873
 msgid "Normal"
 msgstr ""
 
-#: CreateArchiveWindow.vala:2284 CreateArchiveWindow.vala:2720
-#: DonationWindow.vala:89
+#: Gtk/ProgressPanelFileTask.vala:379
+msgid "Not Responding"
+msgstr ""
+
+#: Gtk/FileConflictDialog.vala:245 Gtk/ProgressPanelArchiveTask.vala:532
 msgid "OK"
 msgstr ""
 
-#: ViewArchiveWindow.vala:149
+#: Gtk/DeviceContextMenu.vala:120 Gtk/FileContextMenu.vala:228
+#: Gtk/FileContextMenu.vala:293 Gtk/MainMenubar.vala:566
 msgid "Open"
 msgstr ""
 
-#: ViewArchiveWindow.vala:150
-msgid "Open an existing archive file"
+#: Gtk/Pathbar.vala:342
+msgid "Open Device"
 msgstr ""
 
-#: Polo.vala:79 PoloGtk.vala:175
-#: CreateArchiveWindow.vala:189
+#: Gtk/MainHeaderBar.vala:189
+msgid "Open Home folder"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:622
+msgid "Open Location..."
+msgstr ""
+
+#: Gtk/Settings.vala:887
+msgid "Open Opposite"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:922
+msgid "Open Original Location"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:673
+msgid "Open Style Wizard"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:699
+msgid "Open Templates Folder"
+msgstr ""
+
+#: Gtk/MiddleToolbar.vala:390
+msgid "Open Terminal Here"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:945
+msgid "Open Trash Directory"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:315 Gtk/FileContextMenu.vala:345
+msgid "Open With"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:571
+msgid "Open a terminal window"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:464
+msgid "Open as Admin"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:465
+msgid "Open folder as administrator"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:423
+msgid "Open folder in new tab"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:444
+msgid "Open folder in new window"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:422
+msgid "Open in New Tab"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:443
+msgid "Open in New Window"
+msgstr ""
+
+#: Gtk/DeviceContextMenu.vala:121
+msgid "Open in active pane"
+msgstr ""
+
+#: Gtk/MiddleToolbar.vala:455
+msgid "Open left-pane location in right pane"
+msgstr ""
+
+#: Gtk/MainHeaderBar.vala:304
+msgid "Open menu"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:604
+msgid "Open new tab"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:623
+msgid "Open new window"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:253
+msgid "Open personal folder"
+msgstr ""
+
+#: Gtk/MiddleToolbar.vala:435
+msgid "Open right-pane location in left pane"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:294
+msgid "Open selected item"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:700
+msgid "Open templates folder"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:512 Gtk/Statusbar.vala:456
+msgid "Open terminal window"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:946
+msgid "Open the actual location of trashed item in a new tab"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:212 Gtk/MainHeaderBar.vala:157
+msgid "Open the next visited location"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:923
+msgid "Open the original location of trashed item in a new tab"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:233 Gtk/MainHeaderBar.vala:173
+msgid "Open the parent location"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:191 Gtk/MainHeaderBar.vala:141
+msgid "Open the previous visited location"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1219
+msgid "Open the symbolic link's target location"
+msgstr ""
+
+#: Gtk/Pathbar.vala:1090
+msgid "Open this directory path in opposite pane"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:642
+msgid "Open window as administrator"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:280
+msgid "Open with default application"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:316
+msgid "Open with other applications"
+msgstr ""
+
+#: Gtk/PoloGtk.vala:144 Gtk/Settings.vala:1133 Gtk/Settings.vala:2178
+#, c-format
 msgid "Options"
 msgstr ""
 
-#: CreateArchiveWindow.vala:645 CreateArchiveWindow.vala:681
+#: Gtk/FileViewList.vala:1026
+msgid "Original Location"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:633
+msgid "Others"
+msgstr ""
+
+#: Gtk/FileViewList.vala:706 Gtk/PropertiesWindow.vala:797
+msgid "Owner"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:665 Gtk/CreateArchiveWindow.vala:717
 msgid "PPMd"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1374
+#: Gtk/FileViewList.vala:659 Gtk/PropertiesWindow.vala:251
+msgid "Packed"
+msgstr ""
+
+#: Gtk/Settings.vala:1998
+msgid "Padding"
+msgstr ""
+
+#: Gtk/ViewPopover.vala:232
+msgid "Panes"
+msgstr ""
+
+#: Gtk/FileViewList.vala:4264
+msgid "Partial extraction not supported for solid archives"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:1568
 msgid "Passes"
 msgstr ""
 
-#: CreateArchiveWindow.vala:2215 CreateArchiveWindow.vala:2216
-#: CreateArchiveWindow.vala:2241 CreateArchiveWindow.vala:2529
+#: Gtk/FileViewList.vala:4166
+#, c-format
+msgid "Password was wrong! Try again or Cancel"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:315 Gtk/TermContextMenu.vala:127
+msgid "Paste"
+msgstr ""
+
+#: Gtk/MiddleToolbar.vala:216
+msgid ""
+"Paste\n"
+"\n"
+"Paste items in active pane"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1148
+msgid "Paste Hardlinks"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:764
+msgid "Paste Here"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1111
+msgid "Paste Symlinks"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1130
+msgid "Paste Symlinks (relative)"
+msgstr ""
+
+#: Gtk/TermContextMenu.vala:128
+msgid "Paste clipboard contents"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1149
+msgid ""
+"Paste hard links to selected items in this directory.\n"
+"\n"
+"Hard links to a file point to the same data on disk. So the files can appear "
+"in multiple directories without taking up additional space."
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:765
+msgid "Paste selected items in this directory"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1112
+msgid ""
+"Paste symbolic links to selected items in this directory. Absolute path will "
+"be used for symlink target."
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1131
+msgid ""
+"Paste symbolic links to selected items in this directory. Relative paths "
+"will be used for symlink target.\n"
+"\n"
+"This is useful if the files are on a removable disk, since absolute paths "
+"will change if disk is mounted at another path."
+msgstr ""
+
+#: Gtk/FileConflictDialog.vala:407
+msgid "Path"
+msgstr ""
+
+#: Gtk/Pathbar.vala:303
+msgid "Path not found"
+msgstr ""
+
+#: Gtk/Settings.vala:241
+#, c-format
+msgid "PathBar"
+msgstr ""
+
+#: Gtk/ProgressPanelArchiveTask.vala:471 Gtk/ProgressPanelArchiveTask.vala:474
+#: Gtk/ProgressPanelArchiveTask.vala:495 Gtk/ProgressPanelArchiveTask.vala:496
+#: Gtk/ProgressPanelArchiveTask.vala:626
 msgid "Pause"
 msgstr ""
 
-#: Main.vala:153
+#: Gtk/FileViewList.vala:796 Gtk/PropertiesWindow.vala:609
+#: Gtk/PropertiesWindow.vala:611
+#, c-format
+msgid "Permissions"
+msgstr ""
+
+#: Gtk/Sidebar.vala:340
+msgid "Pictures"
+msgstr ""
+
+#: Gtk/Settings.vala:966 Gtk/Sidebar.vala:333
+msgid "Places"
+msgstr ""
+
+#: Common/Main.vala:428
 msgid "Please install required packages and try running again"
 msgstr ""
 
-#: Polo.vala:50
-msgid "Please run the application as admin ('sudo polo')"
+#: Gtk/MainMenubar.vala:685
+msgid "Polo will be restarted with a fresh session"
 msgstr ""
 
-#: Polo.vala:81
-msgid "Print stats to standard output"
+#: Gtk/ColumnSelectionBox.vala:338 Gtk/ColumnSelectionBox.vala:373
+msgid "Position of fixed columns cannot be changed"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1981
+#: Gtk/MainMenubar.vala:399
+msgid "Preferences"
+msgstr ""
+
+#: Gtk/ProgressPanelFileTask.vala:115
+msgid "Preparing..."
+msgstr ""
+
+#: Gtk/ProgressPanelArchiveTask.vala:199
 msgid "Processed:"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1906
-msgid "Progress"
+#: Gtk/FileContextMenu.vala:1383 Gtk/MiddleToolbar.vala:333
+#: Gtk/PropertiesWindow.vala:68
+msgid "Properties"
 msgstr ""
 
-#: CreateArchiveWindow.vala:2003
+#: Gtk/PropertiesWindow.vala:700
+msgid ""
+"Protects files in shared directory from being deleted by other users. Only "
+"the owner of the file, owner of the directory or root user will be able to "
+"rename or delete the file.\n"
+"\n"
+"This is useful for shared directories. Only the owners of files will be able "
+"to rename or delete files created by them. They will not be able to modify "
+"files created by other users."
+msgstr ""
+
+#: Gtk/Sidebar.vala:344
+msgid "Public"
+msgstr ""
+
+#: Gtk/ViewPopover.vala:258
+msgid "Quad"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:453
+msgid "Quad Pane"
+msgstr ""
+
+#: Gtk/FileViewList.vala:428
+msgid "RWX = Read Write Execute"
+msgstr ""
+
+#: Gtk/ProgressPanelArchiveTask.vala:221
 msgid "Ratio:"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1946
+#: Gtk/PropertiesWindow.vala:637 Gtk/PropertiesWindow.vala:643
+#: Gtk/PropertiesWindow.vala:649
+msgid "Read"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:483
+msgid "ReadOnly"
+msgstr ""
+
+#: Gtk/ProgressPanelArchiveTask.vala:98
+msgid "Reading"
+msgstr ""
+
+#: Gtk/ToolsWindow.vala:108
+msgid "Refresh"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:272 Gtk/MainMenubar.vala:441 Gtk/Settings.vala:523
+msgid "Reload"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:273
+msgid "Reload current location"
+msgstr ""
+
+#: Gtk/ProgressPanelArchiveTask.vala:166
 msgid "Remaining:"
 msgstr ""
 
-#: ViewArchiveWindow.vala:204
+#: Gtk/Settings.vala:1378
+msgid "Remember last session"
+msgstr ""
+
+#: Gtk/Sidebar.vala:960
 msgid "Remove"
 msgstr ""
 
-#: ViewArchiveWindow.vala:205
-msgid "Remove selected items"
+#: Gtk/Sidebar.vala:509
+msgid "Remove bookmark"
 msgstr ""
 
-#: CreateArchiveWindow.vala:2245
+#: Gtk/Sidebar.vala:510
+msgid "Remove bookmark for this location"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:784 Gtk/FileViewList.vala:3502
+#: Gtk/MainMenubar.vala:357 Gtk/Sidebar.vala:891
+msgid "Rename"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:785 Gtk/MiddleToolbar.vala:235
+msgid "Rename selected item"
+msgstr ""
+
+#: Gtk/FileConflictDialog.vala:126
+msgid "Replace All"
+msgstr ""
+
+#: Gtk/FileConflictDialog.vala:93
+msgid "Replace Existing Files?"
+msgstr ""
+
+#: Gtk/FileConflictDialog.vala:158
+msgid "Replace Older"
+msgstr ""
+
+#: Gtk/FileConflictDialog.vala:127
+msgid "Replace all existing files"
+msgstr ""
+
+#: Gtk/FileConflictDialog.vala:159
+msgid "Replace older files only"
+msgstr ""
+
+#: Gtk/FileConflictDialog.vala:246
+msgid "Replace the selected files"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3369
+msgid "Requested operation is not possible"
+msgstr ""
+
+#: Gtk/ToolsWindow.vala:98
+msgid "Required for"
+msgstr ""
+
+#: Gtk/Settings.vala:392 Gtk/Settings.vala:948
+msgid "Requires theme support. Use the 'darker' variant of Gtk theme."
+msgstr ""
+
+#: Gtk/ColumnSelectionBox.vala:213 Gtk/Settings.vala:1659
+#: Gtk/Settings.vala:1847 Gtk/Settings.vala:2037
+msgid "Reset"
+msgstr ""
+
+#: Gtk/FileViewTab.vala:255
+msgid "Reset Tab Name"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:684
+msgid "Reset session and restart"
+msgstr ""
+
+#: Gtk/ColumnSelectionBox.vala:214
+msgid "Reset to default columns"
+msgstr ""
+
+#: Gtk/ProgressPanelFileTask.vala:324
+msgid "Resolving conflicts..."
+msgstr ""
+
+#: Gtk/Settings.vala:679
+msgid "Restart Application ?"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1259 Gtk/TrashBar.vala:121
+msgid "Restore"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1260
+msgid "Restore item to the original location"
+msgstr ""
+
+#: Gtk/TrashBar.vala:125
+msgid "Restore selected items to original locations"
+msgstr ""
+
+#: Gtk/ProgressPanelFileTask.vala:69
+msgid "Restoring items..."
+msgstr ""
+
+#: Gtk/MainWindow.vala:786
+msgid "Restoring session..."
+msgstr ""
+
+#: Gtk/ProgressPanelArchiveTask.vala:500 Gtk/ProgressPanelArchiveTask.vala:501
 msgid "Resume"
 msgstr ""
 
-#: CreateArchiveWindow.vala:2203
-msgid "Run in background with lower priority"
+#: Gtk/Settings.vala:1621 Gtk/Settings.vala:1775 Gtk/Settings.vala:1963
+msgid "Row spacing"
 msgstr ""
 
-#: ViewArchiveWindow.vala:171
-msgid "Save"
+#: Gtk/Settings.vala:1405
+msgid "Run at startup"
 msgstr ""
 
-#: DonationWindow.vala:75
-msgid "Send Email (teejeetech@gmail.com)"
+#: Gtk/FileContextMenu.vala:879
+msgid "Run in Terminal"
 msgstr ""
 
-#: DonationWindow.vala:68
-msgid "Sending Money with Google Wallet"
+#: Gtk/FileContextMenu.vala:880
+msgid "Run the selected script in a terminal window"
 msgstr ""
 
-#: Polo.vala:82
-msgid "Show all options"
+#: Gtk/AdminBar.vala:55
+msgid "Running with Admin Priviledges (!)"
 msgstr ""
 
-#: ViewArchiveWindow.vala:366
+#: Gtk/FileConflictDialog.vala:248 Gtk/MainMenubar.vala:371
+msgid "Select All"
+msgstr ""
+
+#: Gtk/ViewPopover.vala:478
+msgid "Select Columns"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3265
+msgid "Select Copy Destination"
+msgstr ""
+
+#: Gtk/FileViewList.vala:4214
+msgid "Select Destination"
+msgstr ""
+
+#: Gtk/ProgressPanelArchiveTask.vala:778
+msgid "Select Extraction Location"
+msgstr ""
+
+#: Gtk/WizardWindow.vala:76
+msgid "Select Layout Style"
+msgstr ""
+
+#: Gtk/ViewPopover.vala:479
+msgid "Select ListView Columns"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3265
+msgid "Select Move Destination"
+msgstr ""
+
+#: Gtk/FileConflictDialog.vala:254 Gtk/MainMenubar.vala:385
+msgid "Select None"
+msgstr ""
+
+#: Gtk/FileConflictDialog.vala:251
+msgid "Select Older"
+msgstr ""
+
+#: Gtk/WizardWindow.vala:172
+msgid "Select Pathbar Style"
+msgstr ""
+
+#: Gtk/FileConflictDialog.vala:249
+msgid "Select all files in list"
+msgstr ""
+
+#: Gtk/FileConflictDialog.vala:277
+msgid "Select files to replace:"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:674
+msgid "Select layout and style"
+msgstr ""
+
+#: Gtk/FileConflictDialog.vala:252
+msgid "Select older files in list"
+msgstr ""
+
+#: Gtk/ColumnSelectionBox.vala:317 Gtk/ColumnSelectionBox.vala:352
+msgid "Select single item to move"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:368
+msgid "Set Default"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:398
+msgid "Set as Default and Open With"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:369
+msgid "Set default application for file type"
+msgstr ""
+
+#: Gtk/Settings.vala:1660 Gtk/Settings.vala:1848 Gtk/Settings.vala:2038
+msgid "Set default values"
+msgstr ""
+
+#: Gtk/Settings.vala:1273
+msgid "Sets the default application for opening folders"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:540 Gtk/SettingsWindow.vala:49
+#: Gtk/TermContextMenu.vala:207
+msgid "Settings"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:1727 Gtk/CreateArchiveWindow.vala:1807
+#: Gtk/PasswordDialog.vala:109 Gtk/PasswordDialog.vala:197
+#: Gtk/Settings.vala:355 Gtk/Settings.vala:928
+msgid "Show"
+msgstr ""
+
+#: Gtk/Settings.vala:985
+msgid "Show 'Bookmarks' section in sidebar"
+msgstr ""
+
+#: Gtk/Settings.vala:1003
+msgid "Show 'Devices' section in sidebar"
+msgstr ""
+
+#: Gtk/Settings.vala:967
+msgid "Show 'Places' section in sidebar"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:456 Gtk/ViewPopover.vala:311
+msgid "Show Hidden"
+msgstr ""
+
+#: Gtk/Settings.vala:1040
+msgid "Show Lock button for encrypted devices"
+msgstr ""
+
+#: Gtk/ViewPopover.vala:354
+msgid "Show Sidebar"
+msgstr ""
+
+#: Gtk/Settings.vala:1021
+msgid "Show Unmount button for mounted devices"
+msgstr ""
+
+#: Gtk/Settings.vala:662
+msgid ""
+"Show combined HeaderBar instead of Toolbar and Pathbars [Restart Required]"
+msgstr ""
+
+#: Gtk/Settings.vala:428
+msgid "Show labels"
+msgstr ""
+
+#: Gtk/Settings.vala:449
+msgid "Show labels beside icons"
+msgstr ""
+
+#: Gtk/Settings.vala:429
+msgid "Show labels for toolbar items"
+msgstr ""
+
+#: Gtk/Settings.vala:694
+msgid "Show single pathbar for active pane"
+msgstr ""
+
+#: Gtk/Settings.vala:1059
+msgid "Show single statusbar for active pane"
+msgstr ""
+
+#: Gtk/Settings.vala:1102
+msgid "Show tab close button (requires application restart)"
+msgstr ""
+
+#: Gtk/Settings.vala:1082
+msgid "Show tabs at the bottom of the window"
+msgstr ""
+
+#: Gtk/FileConflictDialog.vala:230
+msgid "Show the list of files"
+msgstr ""
+
+#: Gtk/Settings.vala:929
+msgid "Show the sidebar panel"
+msgstr ""
+
+#: Gtk/Settings.vala:356
+msgid "Show the toolbar"
+msgstr ""
+
+#: Gtk/Settings.vala:1707 Gtk/Settings.vala:1895 Gtk/Settings.vala:2084
+msgid ""
+"Show thumbnail previews in place of icons.\n"
+"\n"
+"Disable this for faster loading of directories."
+msgstr ""
+
+#: Gtk/Settings.vala:295
+#, c-format
+msgid "Sidebar"
+msgstr ""
+
+#: Gtk/ViewPopover.vala:243
+msgid "Single"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:423
+msgid "Single Pane"
+msgstr ""
+
+#: Gtk/Settings.vala:1344
+msgid "Single click to activate"
+msgstr ""
+
+#: Gtk/Settings.vala:1361
+msgid "Single window mode"
+msgstr ""
+
+#: Gtk/FileConflictDialog.vala:544 Gtk/FileConflictDialog.vala:556
+#: Gtk/FileViewList.vala:571 Gtk/PropertiesWindow.vala:187
+#: Gtk/PropertiesWindow.vala:492 Gtk/Sidebar.vala:1154 Gtk/Statusbar.vala:356
+#, c-format
 msgid "Size"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1957
+#: Gtk/FileConflictDialog.vala:197
+msgid "Skip All"
+msgstr ""
+
+#: Gtk/FileConflictDialog.vala:198
+msgid "Skip existing files"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:233
+msgid "Solid"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1367 Gtk/MainMenubar.vala:526
+#: Gtk/ViewPopover.vala:386
+msgid "Sort By"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1493 Gtk/ViewPopover.vala:433
+msgid "Sort Descending"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3368 Gtk/FileViewList.vala:3374
+msgid "Source and destination are same"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:658
+msgid "Special bits"
+msgstr ""
+
+#: Gtk/ProgressPanelArchiveTask.vala:176
 msgid "Speed:"
 msgstr ""
 
-#: CreateArchiveWindow.vala:2254 CreateArchiveWindow.vala:2255
-#: CreateArchiveWindow.vala:2279 CreateArchiveWindow.vala:2533
+#: Gtk/CreateArchiveWindow.vala:1962
+msgid "Split"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:1978
+msgid "Split archive into volumes of specified size (in MB)"
+msgstr ""
+
+#: Gtk/Settings.vala:1160
+#, c-format
+msgid "Startup & Windows"
+msgstr ""
+
+#: Gtk/ToolsWindow.vala:89
+msgid "Status"
+msgstr ""
+
+#: Gtk/Settings.vala:320
+#, c-format
+msgid "Statusbar"
+msgstr ""
+
+#: Gtk/MediaBar.vala:141
+msgid "Stay in current view"
+msgstr ""
+
+#: Gtk/ProgressPanelArchiveTask.vala:510 Gtk/ProgressPanelArchiveTask.vala:513
 msgid "Stop"
 msgstr ""
 
-#: Utility.vala:955
-msgid "Stopped"
-msgstr ""
-
-#: CreateArchiveWindow.vala:738
+#: Gtk/CreateArchiveWindow.vala:835 Gtk/CreateArchiveWindow.vala:864
 msgid "Store"
 msgstr ""
 
-#: Polo.vala:77 PoloGtk.vala:170
+#: Gtk/WizardWindow.vala:52
+msgid "Style Wizard"
+msgstr ""
+
+#: Gtk/Settings.vala:867
+msgid "Swap"
+msgstr ""
+
+#: Gtk/MiddleToolbar.vala:415 Gtk/Pathbar.vala:1114
+msgid "Swap directory path with opposite pane"
+msgstr ""
+
+#: Gtk/MediaBar.vala:89
+msgid "Switch to media browser view mode"
+msgstr ""
+
+#: Gtk/MediaBar.vala:60
+msgid "Switch to media browser view?"
+msgstr ""
+
+#: Gtk/FileViewList.vala:991
+msgid "Symlink Target"
+msgstr ""
+
+#: Gtk/DeviceContextMenu.vala:189
+msgid "Sync Pending Writes"
+msgstr ""
+
+#: Gtk/PoloGtk.vala:142
 msgid "Syntax"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1461
-msgid "TAR Before Compression"
+#: Gtk/FileContextMenu.vala:603
+msgid "Tab"
 msgstr ""
 
-#: AboutWindow.vala:322
+#: Gtk/Settings.vala:331
 #, c-format
-msgid "Third Party Tools"
+msgid "Tabs"
 msgstr ""
 
-#: AboutWindow.vala:338
+#: Gtk/Settings.vala:1081
+msgid "Tabs at bottom"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:570 Gtk/FileViewToolbar.vala:511
+#: Gtk/Settings.vala:557 Gtk/Settings.vala:2170
+msgid "Terminal"
+msgstr ""
+
+#: Gtk/ProgressPanelArchiveTask.vala:101
+msgid "Testing"
+msgstr ""
+
+#: Gtk/ProgressPanelFileTask.vala:380
+msgid ""
+"The data transfer seems to have stopped. Check if device is working "
+"correctly and if connection with the device is reliable."
+msgstr ""
+
+#: Gtk/FileViewList.vala:4319
+msgid "There are no files selected for compression"
+msgstr ""
+
+#: Gtk/ProgressPanelArchiveTask.vala:757
+msgid "There were errors while processing the archive."
+msgstr ""
+
+#: Gtk/Settings.vala:1704 Gtk/Settings.vala:1892 Gtk/Settings.vala:2081
+msgid "Thumbnails"
+msgstr ""
+
+#: Gtk/Settings.vala:1508
 #, c-format
-msgid "Translators"
+msgid "Tile View"
 msgstr ""
 
-#: CreateArchiveWindow.vala:762
+#: Gtk/FileViewToolbar.vala:488 Gtk/Settings.vala:1230 Gtk/ViewPopover.vala:173
+msgid "Tiles"
+msgstr ""
+
+#: Gtk/Statusbar.vala:425
+msgid "Toggle Middle Toolbar"
+msgstr ""
+
+#: Gtk/Statusbar.vala:421
+msgid "Toggle Sidebar"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:221
+msgid "Toggle Terminal Pane"
+msgstr ""
+
+#: Gtk/Statusbar.vala:491
+msgid "Toggle dual-pane view"
+msgstr ""
+
+#: Gtk/Settings.vala:163
+#, c-format
+msgid "Toolbar"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:639
+msgid "Tools"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:1102 Gtk/PropertiesWindow.vala:1166
+msgid "Touch"
+msgstr ""
+
+#: Gtk/Settings.vala:1719 Gtk/Settings.vala:1907 Gtk/Settings.vala:2096
+msgid "Transparency"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:806 Gtk/FileViewPane.vala:135
+#: Gtk/MainMenubar.vala:329 Gtk/Sidebar.vala:345
+msgid "Trash"
+msgstr ""
+
+#: Gtk/MiddleToolbar.vala:255
+msgid ""
+"Trash\n"
+"\n"
+"Move files to recycle bin"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3387
+msgid "Trash selected items?"
+msgstr ""
+
+#: Gtk/FileViewList.vala:1061
+msgid "Trashed On"
+msgstr ""
+
+#: Gtk/Settings.vala:2142
+msgid "Tree navigation"
+msgstr ""
+
+#: Gtk/FileConflictDialog.vala:543 Gtk/FileConflictDialog.vala:555
+#: Gtk/FileViewList.vala:911 Gtk/PropertiesWindow.vala:215
+#: Gtk/PropertiesWindow.vala:283
+#, c-format
+msgid "Type"
+msgstr ""
+
+#: Gtk/Settings.vala:153
+msgid "UI"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:473
+msgid "UUID"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:860 Gtk/CreateArchiveWindow.vala:879
 msgid "Ultra"
 msgstr ""
 
-#: DonationWindow.vala:82
-msgid "Visit Website"
+#: Gtk/FileConflictDialog.vala:255
+msgid "Un-select all files in list"
 msgstr ""
 
-#: Utility.vala:100
-msgid "Warning"
+#: Gtk/TermContextMenu.vala:394
+msgid "UnMaximize"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1125
+#: Gtk/TermContextMenu.vala:395
+msgid "UnMaximize the terminal"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1196
+msgid "Unhide"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1197
+msgid "Unhide selected items"
+msgstr ""
+
+#: Gtk/DeviceContextMenu.vala:166
+msgid "Unmount"
+msgstr ""
+
+#: Gtk/Sidebar.vala:1033
+msgid "Unmount and lock device"
+msgstr ""
+
+#: Gtk/Settings.vala:1020
+msgid "Unmount button"
+msgstr ""
+
+#: Gtk/Sidebar.vala:989
+msgid "Unmount device"
+msgstr ""
+
+#: Gtk/DeviceContextMenu.vala:167
+msgid "Unmount this volume"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:263
+msgid "Unpacked"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:232 Gtk/MainMenubar.vala:608 Gtk/Settings.vala:506
+#: Gtk/Settings.vala:847
+msgid "Up"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:1107
+msgid "Update last access time to current system time"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:1123
+msgid "Update last access time to current system time for directory contents"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:1171
+msgid "Update last modified time to current system time"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:1187
+msgid "Update last modified time to current system time for directory contents"
+msgstr ""
+
+#: Gtk/Settings.vala:715
+msgid "Use Buttons"
+msgstr ""
+
+#: Gtk/Settings.vala:716
+msgid "Use buttons for path instead of links"
+msgstr ""
+
+#: Gtk/Settings.vala:740
+msgid "Use flat buttons (without borders) for path"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:499 Gtk/Sidebar.vala:1156 Gtk/Statusbar.vala:358
+#, c-format
+msgid "Used"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:625
+msgid "User"
+msgstr ""
+
+#: Gtk/ToolsWindow.vala:76
+msgid "Utility"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:1010
+msgid "Value"
+msgstr ""
+
+#: Gtk/Sidebar.vala:342
+msgid "Videos"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:297 Gtk/MainMenubar.vala:412
+#: Gtk/MainMenubar.vala:487 Gtk/Settings.vala:608 Gtk/ViewPopover.vala:148
+msgid "View"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1384
+msgid "View file properties"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:622
+msgid "Window"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:1280
 msgid "Word Size"
 msgstr ""
 
-#: CreateArchiveWindow.vala:1624
+#: Gtk/PropertiesWindow.vala:639 Gtk/PropertiesWindow.vala:645
+#: Gtk/PropertiesWindow.vala:651
+msgid "Write"
+msgstr ""
+
+#: Gtk/DeviceContextMenu.vala:190
+msgid "Write any data waiting to be written to the device"
+msgstr ""
+
+#: Gtk/MediaBar.vala:83 Gtk/PropertiesWindow.vala:227
+#: Gtk/PropertiesWindow.vala:232
+msgid "Yes"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3518
+msgid "You do not have permission to rename this item"
+msgstr ""
+
+#: Gtk/PropertiesWindow.vala:979
+msgid "You don't have permission to change some permissions"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:695
+msgid "ZPAQ"
+msgstr ""
+
+#: Gtk/CreateArchiveWindow.vala:1925
 msgid "ZipCrypto"
+msgstr ""
+
+#: Gtk/Settings.vala:1448
+msgid "Zoom"
+msgstr ""
+
+#: Gtk/Statusbar.vala:145
+msgid "dirs"
+msgstr ""
+
+#: Gtk/FileConflictDialog.vala:99
+msgid "file(s) exist at the destination"
+msgstr ""
+
+#: Gtk/Statusbar.vala:164
+msgid "files"
+msgstr ""
+
+#: Gtk/Statusbar.vala:265
+msgid "free"
+msgstr ""
+
+#: Gtk/Statusbar.vala:188
+msgid "hidden"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3453
+msgid "selected item(s) will be deleted permanently"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3388
+msgid "selected item(s) will be moved to trash"
 msgstr ""
