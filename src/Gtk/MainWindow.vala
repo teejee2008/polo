@@ -673,6 +673,22 @@ public class MainWindow : Gtk.Window {
 		dialog.show_all();
 	}
 
+	public void rebuild_font_cache(){
+		string cmd = "fc-cache -f -v";
+		layout_box.panel1.run_script_in_new_terminal_tab(cmd, _("Rebuilding Font Cache..."));
+	}
+
+	public void clear_thumbnail_cache(){
+
+		string cmd = "";
+		
+		foreach(string dir in new string[] { "normal", "large", "fail" }){
+			cmd += "rm -rfv '%s/.cache/thumbnails/%s'\n".printf(escape_single_quote(App.user_home), dir);
+			cmd += "mkdir -pv '%s/.cache/thumbnails/%s'\n".printf(escape_single_quote(App.user_home), dir);
+		}
+		
+		layout_box.panel1.run_script_in_new_terminal_tab(cmd, _("Cleaning Thumbnail Cache..."));
+	}
 
 	public void save_session(){
 

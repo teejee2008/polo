@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
-"POT-Creation-Date: 2017-05-24 18:15+0530\n"
+"POT-Creation-Date: 2017-05-24 21:44+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -114,11 +114,11 @@ msgstr ""
 msgid "Another file exists with this name"
 msgstr ""
 
-#: Common/Main.vala:750 Common/Main.vala:830 Common/Main.vala:919
+#: Common/Main.vala:753 Common/Main.vala:833 Common/Main.vala:922
 msgid "App config loaded"
 msgstr ""
 
-#: Common/Main.vala:604 Common/Main.vala:795 Common/Main.vala:875
+#: Common/Main.vala:605 Common/Main.vala:798 Common/Main.vala:878
 msgid "App config saved"
 msgstr ""
 
@@ -150,7 +150,7 @@ msgstr ""
 msgid "Back"
 msgstr ""
 
-#: Gtk/TermContextMenu.vala:308
+#: Gtk/TermContextMenu.vala:306
 msgid "Background Color"
 msgstr ""
 
@@ -171,7 +171,7 @@ msgstr ""
 msgid "Buttons"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:733
+#: Gtk/MainMenubar.vala:746
 msgid "Calculate directory sizes"
 msgstr ""
 
@@ -205,7 +205,7 @@ msgstr ""
 msgid "Change Application Settings"
 msgstr ""
 
-#: Gtk/TermContextMenu.vala:148
+#: Gtk/TermContextMenu.vala:150
 msgid "Change Directory"
 msgstr ""
 
@@ -213,7 +213,7 @@ msgstr ""
 msgid "Change column spacing"
 msgstr ""
 
-#: Gtk/TermContextMenu.vala:149
+#: Gtk/TermContextMenu.vala:151
 msgid "Change directory to current path"
 msgstr ""
 
@@ -241,11 +241,11 @@ msgid ""
 "Restart now?"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:697
+#: Gtk/MainMenubar.vala:710
 msgid "Check external tools"
 msgstr ""
 
-#: Gtk/TermContextMenu.vala:186
+#: Gtk/TermContextMenu.vala:188
 msgid "Chroot"
 msgstr ""
 
@@ -269,22 +269,26 @@ msgstr ""
 msgid "Classic List (Single-pane + Sidebar + ListView)"
 msgstr ""
 
-#: Gtk/TermContextMenu.vala:167
+#: Gtk/MainMenubar.vala:664
+msgid "Clean thumbnail cache"
+msgstr ""
+
+#: Gtk/MainWindow.vala:690
+msgid "Cleaning Thumbnail Cache..."
+msgstr ""
+
+#: Gtk/TermContextMenu.vala:169
 msgid "Clear"
 msgstr ""
 
-#: Gtk/TermContextMenu.vala:168
+#: Gtk/TermContextMenu.vala:170
 msgid "Clear the terminal output"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:663
+#: Gtk/MainMenubar.vala:665
 msgid ""
 "Clear the thumbnails in system cache. New thumbnails will be generated when "
 "folders are browsed using any file manager."
-msgstr ""
-
-#: Gtk/MainMenubar.vala:662
-msgid "Clear thumbnail cache"
 msgstr ""
 
 #: Gtk/Pathbar.vala:617
@@ -349,7 +353,7 @@ msgstr ""
 msgid "Commander Icons (Dual-pane + IconView)"
 msgstr ""
 
-#: Common/Main.vala:427
+#: Common/Main.vala:428
 msgid "Commands listed below are not available on this system"
 msgstr ""
 
@@ -400,7 +404,7 @@ msgstr ""
 
 #: Gtk/CreateArchiveWindow.vala:656 Gtk/CreateArchiveWindow.vala:707
 #: Gtk/CreateArchiveWindow.vala:722 Gtk/FileContextMenu.vala:742
-#: Gtk/MainMenubar.vala:301 Gtk/TermContextMenu.vala:106
+#: Gtk/MainMenubar.vala:301 Gtk/TermContextMenu.vala:108
 msgid "Copy"
 msgstr ""
 
@@ -438,7 +442,7 @@ msgstr ""
 msgid "Copy selected items"
 msgstr ""
 
-#: Gtk/TermContextMenu.vala:107
+#: Gtk/TermContextMenu.vala:109
 msgid "Copy selected text to clipboard"
 msgstr ""
 
@@ -529,11 +533,11 @@ msgstr ""
 msgid "Data:"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:722
+#: Gtk/MainMenubar.vala:735
 msgid "Debug: List Devices"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:709
+#: Gtk/MainMenubar.vala:722
 msgid "Debug: List FileItem Objects"
 msgstr ""
 
@@ -770,7 +774,7 @@ msgstr ""
 msgid "Exit"
 msgstr ""
 
-#: Common/Main.vala:962
+#: Common/Main.vala:965
 msgid "Exiting Application"
 msgstr ""
 
@@ -778,7 +782,7 @@ msgstr ""
 msgid "External Tools"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:696
+#: Gtk/MainMenubar.vala:709
 msgid "External tools"
 msgstr ""
 
@@ -874,7 +878,7 @@ msgstr ""
 msgid "Filesystem"
 msgstr ""
 
-#: Gtk/TermContextMenu.vala:358
+#: Gtk/TermContextMenu.vala:382
 msgid "Fish Config"
 msgstr ""
 
@@ -906,15 +910,15 @@ msgstr ""
 msgid "Follow Symlink Path"
 msgstr ""
 
-#: Gtk/TermContextMenu.vala:236
-msgid "Font Size"
+#: Gtk/TermContextMenu.vala:244
+msgid "Font"
 msgstr ""
 
 #: Gtk/Settings.vala:1546
 msgid "Font scale"
 msgstr ""
 
-#: Gtk/TermContextMenu.vala:282
+#: Gtk/TermContextMenu.vala:280
 msgid "Foreground Color"
 msgstr ""
 
@@ -1130,7 +1134,7 @@ msgstr ""
 msgid "Mapped"
 msgstr ""
 
-#: Gtk/TermContextMenu.vala:375
+#: Gtk/TermContextMenu.vala:401
 msgid "Maximize"
 msgstr ""
 
@@ -1138,7 +1142,7 @@ msgstr ""
 msgid "Maximize on startup"
 msgstr ""
 
-#: Gtk/TermContextMenu.vala:376
+#: Gtk/TermContextMenu.vala:402
 msgid "Maximize the terminal to fill tab"
 msgstr ""
 
@@ -1359,10 +1363,6 @@ msgstr ""
 msgid "Open Original Location"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:673
-msgid "Open Style Wizard"
-msgstr ""
-
 #: Gtk/FileContextMenu.vala:699
 msgid "Open Templates Folder"
 msgstr ""
@@ -1437,6 +1437,10 @@ msgstr ""
 
 #: Gtk/FileContextMenu.vala:294
 msgid "Open selected item"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:686
+msgid "Open style wizard"
 msgstr ""
 
 #: Gtk/FileContextMenu.vala:700
@@ -1533,7 +1537,7 @@ msgstr ""
 msgid "Password was wrong! Try again or Cancel"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:315 Gtk/TermContextMenu.vala:127
+#: Gtk/MainMenubar.vala:315 Gtk/TermContextMenu.vala:129
 msgid "Paste"
 msgstr ""
 
@@ -1560,7 +1564,7 @@ msgstr ""
 msgid "Paste Symlinks (relative)"
 msgstr ""
 
-#: Gtk/TermContextMenu.vala:128
+#: Gtk/TermContextMenu.vala:130
 msgid "Paste clipboard contents"
 msgstr ""
 
@@ -1624,11 +1628,11 @@ msgstr ""
 msgid "Places"
 msgstr ""
 
-#: Common/Main.vala:428
+#: Common/Main.vala:429
 msgid "Please install required packages and try running again"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:685
+#: Gtk/MainMenubar.vala:698
 msgid "Polo will be restarted with a fresh session"
 msgstr ""
 
@@ -1695,6 +1699,20 @@ msgstr ""
 
 #: Gtk/ProgressPanelArchiveTask.vala:98
 msgid "Reading"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:675
+msgid "Rebuild font cache"
+msgstr ""
+
+#: Gtk/MainWindow.vala:678
+msgid "Rebuilding Font Cache..."
+msgstr ""
+
+#: Gtk/MainMenubar.vala:676
+msgid ""
+"Rebuilds the system font cache, so that newly installed fonts become visible "
+"to applications"
 msgstr ""
 
 #: Gtk/ToolsWindow.vala:108
@@ -1775,7 +1793,7 @@ msgid "Requires theme support. Use the 'darker' variant of Gtk theme."
 msgstr ""
 
 #: Gtk/ColumnSelectionBox.vala:213 Gtk/Settings.vala:1659
-#: Gtk/Settings.vala:1847 Gtk/Settings.vala:2037
+#: Gtk/Settings.vala:1847 Gtk/Settings.vala:2037 Gtk/TermContextMenu.vala:358
 msgid "Reset"
 msgstr ""
 
@@ -1783,7 +1801,7 @@ msgstr ""
 msgid "Reset Tab Name"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:684
+#: Gtk/MainMenubar.vala:697
 msgid "Reset session and restart"
 msgstr ""
 
@@ -1815,7 +1833,7 @@ msgstr ""
 msgid "Restoring items..."
 msgstr ""
 
-#: Gtk/MainWindow.vala:786
+#: Gtk/MainWindow.vala:802
 msgid "Restoring session..."
 msgstr ""
 
@@ -1863,6 +1881,10 @@ msgstr ""
 msgid "Select Extraction Location"
 msgstr ""
 
+#: Gtk/TermContextMenu.vala:252
+msgid "Select Font"
+msgstr ""
+
 #: Gtk/WizardWindow.vala:76
 msgid "Select Layout Style"
 msgstr ""
@@ -1895,7 +1917,7 @@ msgstr ""
 msgid "Select files to replace:"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:674
+#: Gtk/MainMenubar.vala:687
 msgid "Select layout and style"
 msgstr ""
 
@@ -1928,7 +1950,7 @@ msgid "Sets the default application for opening folders"
 msgstr ""
 
 #: Gtk/FileViewToolbar.vala:540 Gtk/SettingsWindow.vala:49
-#: Gtk/TermContextMenu.vala:207
+#: Gtk/TermContextMenu.vala:211
 msgid "Settings"
 msgstr ""
 
@@ -2274,11 +2296,11 @@ msgstr ""
 msgid "Un-select all files in list"
 msgstr ""
 
-#: Gtk/TermContextMenu.vala:394
+#: Gtk/TermContextMenu.vala:420
 msgid "UnMaximize"
 msgstr ""
 
-#: Gtk/TermContextMenu.vala:395
+#: Gtk/TermContextMenu.vala:421
 msgid "UnMaximize the terminal"
 msgstr ""
 

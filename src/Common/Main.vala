@@ -152,7 +152,8 @@ public class Main : GLib.Object {
 	public bool tabs_bottom = false;
 	public bool tabs_close_visible = true;
 
-	public int term_font_size = 11;
+	public const string TERM_FONT_DESC = "11";
+	public Pango.FontDescription term_font;
 	public string term_fg_color = "#DCDCDC";
 	public string term_bg_color = "#2C2C2C";
 	public bool term_enable_network = true;
@@ -565,7 +566,7 @@ public class Main : GLib.Object {
 		config.set_string_member("tabs_bottom", tabs_bottom.to_string());
 		config.set_string_member("tabs_close_visible", tabs_close_visible.to_string());
 
-		config.set_string_member("term_font_size", term_font_size.to_string());
+		config.set_string_member("term_font", term_font.to_string());
 		config.set_string_member("term_fg_color", term_fg_color);
 		config.set_string_member("term_bg_color", term_bg_color);
 		config.set_string_member("term_enable_network", term_enable_network.to_string());
@@ -713,7 +714,9 @@ public class Main : GLib.Object {
 		tabs_bottom = json_get_bool(config, "tabs_bottom", tabs_bottom);
 		tabs_close_visible = json_get_bool(config, "tabs_close_visible", tabs_close_visible);
 
-		term_font_size = json_get_int(config, "term_font_size", term_font_size);
+		var term_font_string = json_get_string(config, "term_font", TERM_FONT_DESC);
+		term_font = Pango.FontDescription.from_string(term_font_string);
+		
 		term_fg_color = json_get_string(config, "term_fg_color", term_fg_color);
 		term_bg_color = json_get_string(config, "term_bg_color", term_bg_color);
 		term_enable_network = json_get_bool(config, "term_enable_network", term_enable_network);
@@ -964,18 +967,6 @@ public class Main : GLib.Object {
 
 	/* Core */
 
-	public void clear_thumbnail_cache(){
-		
-		foreach(string dir in new string[] { "normal", "large", "fail" }){
-			
-			string cmd = "rm -rfv '%s/.cache/thumbnails/%s'".printf(escape_single_quote(App.user_home), dir);
-			Posix.system(cmd);
-			
-			cmd = "mkdir -pv '%s/.cache/thumbnails/%s'".printf(escape_single_quote(App.user_home), dir);
-			Posix.system(cmd);
-		}
-	}
-
 	public static Gee.ArrayList<Device> get_devices(){
 
 		var list = new Gee.ArrayList<Device>();
@@ -998,79 +989,6 @@ public class Main : GLib.Object {
 
 		return list;
 	}
-
-/*
-	public void compress(FileItem _archive, bool wait = false) {
-		archive_task.compress(_archive, wait);
-	}
-
-	public void extract(FileItem _archive, bool wait = false) {
-		archive_task.extract(_archive, wait);
-	}
-
-	public void test(FileItem _archive, bool wait = false) {
-		// create a unique temporary extraction directory
-		archive_task.extraction_path = "%s/%s".printf(App.temp_dir,random_string());
-		dir_create(archive_task.extraction_path);
-
-		// begin
-		archive_task.test(_archive, wait);
-	}
-
-	public void open(FileItem archive, bool wait = false) {
-
-	}
-
-	public void open_info(FileItem _archive, bool wait = false) {
-		archive_task.archive = _archive;
-		archive_task.open_info(_archive, wait);
-	}
-
-	
-	public void set_extraction_path_from_args(){
-
-		// set extraction path
-
-		if (arg_same_path){
-			// select a subfolder in source path for extraction
-			archive_task.extraction_path = "%s/%s".printf(
-				file_parent(archive.file_path),
-				file_basename(archive.file_path).split(".")[0]);
-
-			// since user has not specified the directory we need to
-			// make sure that files are not overwritten accidentally
-			// in existing directories 
-
-			// create a unique extraction directory
-			int count = 0;
-			string outpath = archive_task.extraction_path;
-			while (dir_exists(outpath)||file_exists(outpath)){
-				log_debug("dir_exists: %s".printf(outpath));
-				outpath = "%s (%d)".printf(archive_task.extraction_path, ++count);
-			}
-			log_debug("create_dir: %s".printf(outpath));
-			archive_task.extraction_path = outpath;
-		}
-		else if (arg_prompt_outpath){
-			// do nothing
-		}
-		else {
-			// set path specified on command line
-			archive_task.extraction_path = arg_outpath;
-		}
-	}
-
-	public FileItem new_archive() {
-		var archive = new FileItem();
-		archive_task.action = ArchiveAction.CREATE;
-		return archive;
-	}
-
-	public string get_random_password(){
-		string stdout, stderr;
-		exec_script_sync("head /dev/urandom | tr -dc 'a-zA-Z0-9-_!@#$%^&*()_+{}|:<>?=' | head -c 20", out stdout, out stderr, true);
-		return stdout;
-	}*/
 }
 
 public enum AppMode {

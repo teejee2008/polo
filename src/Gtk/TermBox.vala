@@ -72,6 +72,10 @@ public class TermBox : Gtk.Box {
 	private bool cancelled = false;
 	private bool is_running = false;
 	private TermContextMenu menu_term;
+
+	public const int DEF_FONT_SIZE = 11;
+	public const string DEF_COLOR_FG = "#DCDCDC";
+	public const string DEF_COLOR_BG = "#2C2C2C";
 	
 	public TermBox(FileViewPane parent_pane){
 		//base(Gtk.Orientation.VERTICAL, 6); // issue with vala
@@ -121,11 +125,12 @@ public class TermBox : Gtk.Box {
 		term.scroll_on_output = true;
 		term.scrollback_lines = 100000;
 
-		set_font_size(App.term_font_size);
-
-		//set_color_foreground(App.term_fg_color);
-
+		set_font_desc(App.term_font);
+		set_color_foreground(App.term_fg_color);
 		set_color_background(App.term_bg_color);
+
+		//set_color_foreground("#000000FF");
+		//set_color_background("#FFFFFFFF");
 
 		// connect signal for shift+F10
         term.popup_menu.connect(() => {
@@ -279,13 +284,17 @@ public class TermBox : Gtk.Box {
 		term.font_desc = Pango.FontDescription.from_string("normal %d".printf(size_pts));
 	}
 
+	public void set_font_desc(Pango.FontDescription font_desc){
+		term.set_font(font_desc);
+	}
+
 	public void set_color_foreground(string color){
 
 		log_debug("TermBox: set_color_foreground(): %s".printf(color));
 		
 		var rgba = Gdk.RGBA();
 		rgba.parse(color);
-		//term.set_color_foreground(rgba);
+		term.set_color_foreground(rgba);
 	}
 	
 	public void set_color_background(string color){
@@ -295,6 +304,12 @@ public class TermBox : Gtk.Box {
 		var rgba = Gdk.RGBA();
 		rgba.parse(color);
 		term.set_color_background(rgba);
+	}
+
+	public void set_defaults(){
+		set_font_size(DEF_FONT_SIZE);
+		set_color_foreground(DEF_COLOR_FG);
+		set_color_background(DEF_COLOR_BG);
 	}
 
 	public void chroot(string path){

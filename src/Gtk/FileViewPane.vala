@@ -251,7 +251,7 @@ public class FileViewPane : Gtk.Box {
 		int pos_height_half = (int) (pos_height / 2);
 		paned_term.set_position(pos_height_half);
 	}
-	
+
 	// helpers
 
 	public int tab_index{

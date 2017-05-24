@@ -521,7 +521,7 @@ public class Sidebar : Gtk.Box {
 		}
 	}
 
-	private SidebarItem add_device(Device dev){
+	private SidebarItem? add_device(Device dev){
 
 		if (dev.is_snap_volume || dev.is_swap_volume){
 			return null;

@@ -644,6 +644,8 @@ public class MainMenuBar : Gtk.MenuBar {
 
 		add_clear_thumbnail_cache(submenu);
 
+		add_rebuild_font_cache(submenu);
+
 		add_calculate_dir_sizes(submenu);
 
 		add_external_tools(submenu);
@@ -659,18 +661,29 @@ public class MainMenuBar : Gtk.MenuBar {
 
 	private void add_clear_thumbnail_cache(Gtk.Menu menu){
 
-		var item = new Gtk.MenuItem.with_label (_("Clear thumbnail cache"));
+		var item = new Gtk.MenuItem.with_label (_("Clean thumbnail cache"));
 		item.set_tooltip_text(_("Clear the thumbnails in system cache. New thumbnails will be generated when folders are browsed using any file manager."));
 		menu.add(item);
 
 		item.activate.connect (() => {
-			App.clear_thumbnail_cache();
+			window.clear_thumbnail_cache();
+		});
+	}
+
+	private void add_rebuild_font_cache(Gtk.Menu menu){
+
+		var item = new Gtk.MenuItem.with_label(_("Rebuild font cache"));
+		item.set_tooltip_text(_("Rebuilds the system font cache, so that newly installed fonts become visible to applications"));
+		menu.add(item);
+
+		item.activate.connect (() => {
+			window.rebuild_font_cache();
 		});
 	}
 
 	private void add_wizard(Gtk.Menu menu){
 
-		var item = new Gtk.MenuItem.with_label (_("Open Style Wizard"));
+		var item = new Gtk.MenuItem.with_label (_("Open style wizard"));
 		item.set_tooltip_text(_("Select layout and style"));
 		menu.add(item);
 

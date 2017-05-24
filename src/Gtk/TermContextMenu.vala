@@ -81,16 +81,18 @@ public class TermContextMenu : Gtk.Menu {
 		gtk_menu_add_separator(this); //---------------------------
 
 		add_change_directory(this, sg_icon, sg_label);
+		
+		add_clear_output(this, sg_icon, sg_label);
 
 		add_chroot(this, sg_icon, sg_label);
-
-		add_clear_output(this, sg_icon, sg_label);
 
 		gtk_menu_add_separator(this); //---------------------------
 
 		add_maximize(this, sg_icon, sg_label);
 
 		add_minimize(this, sg_icon, sg_label);
+
+		gtk_menu_add_separator(this); //---------------------------
 
 		add_settings(this, sg_icon, sg_label);
 				
@@ -197,6 +199,8 @@ public class TermContextMenu : Gtk.Menu {
 			pane.terminal.chroot(view.current_item.file_path);
 		});
 	}
+
+	//-------------
 	
 	private void add_settings(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
@@ -218,59 +222,53 @@ public class TermContextMenu : Gtk.Menu {
 		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
 		var sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
 
-		add_font_size(sub_menu, sg_icon_sub, sg_label_sub);
-
-		//add_foreground_color(sub_menu, sg_icon_sub, sg_label_sub);
+		add_font(sub_menu, sg_icon_sub, sg_label_sub);
 		
-		//add_background_color(sub_menu, sg_icon_sub, sg_label_sub);
+		add_foreground_color(sub_menu, sg_icon_sub, sg_label_sub);
+		
+		add_background_color(sub_menu, sg_icon_sub, sg_label_sub);
+
+		gtk_menu_add_separator(sub_menu); //---------------------------
+		
+		add_set_defaults(sub_menu, sg_icon_sub, sg_label_sub);
 
 		add_fish_config(sub_menu, sg_icon_sub, sg_label_sub);
 	}
 	
-	private void add_font_size(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+	private void add_font(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
-		log_debug("TermContextMenu: add_font_size()");
+		log_debug("TermContextMenu: add_font()");
 
 		var menu_item = gtk_menu_add_item(
 			menu,
-			_("Font Size"),
+			_("Font"),
 			"",
-			null,
+			IconManager.lookup_image("font-x-generic",16),
 			sg_icon,
 			sg_label);
+			
+		menu_item.activate.connect(()=>{
 
-		var sub_menu = new Gtk.Menu();
-		menu_item.set_submenu(sub_menu);
+			var dlg = new Gtk.FontChooserDialog(_("Select Font"), window);
 
-		Gtk.RadioMenuItem item_prev = null;
-		for(int i = 8; i <= 18; i++){
-			var submenu_item = add_font_size_option(sub_menu, i, item_prev);
-			item_prev = submenu_item;
-		}
-	}
+			dlg.set_filter_func ((family, face)=>{
+				return family.is_monospace()
+				&& (face.describe().get_style() == Pango.Style.NORMAL)
+				&& (face.describe().get_weight() == Pango.Weight.NORMAL);
+			});
 
-	private Gtk.RadioMenuItem add_font_size_option(Gtk.Menu sub_menu, int font_size, Gtk.RadioMenuItem? item_prev){
-
-		var submenu_item = gtk_menu_add_radio_item(
-				sub_menu,
-				"%d".printf(font_size),
-				"",
-				item_prev);
-
-		if (font_size == App.term_font_size){
-			submenu_item.active = true;
-		}
-		
-		submenu_item.toggled.connect(()=>{
-			if (submenu_item.active){
-				App.term_font_size = font_size;
+			dlg.set_font_desc(App.term_font);
+			
+			if (dlg.run() == Gtk.ResponseType.OK){
+				
+				App.term_font = dlg.get_font_desc();
 				foreach(var term in window.terminals){
-					term.set_font_size(font_size);
+					term.set_font_desc(App.term_font);
 				}
 			}
-		});
 
-		return submenu_item;
+			dlg.destroy();
+		});
 	}
 
 	private void add_foreground_color(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
@@ -281,7 +279,7 @@ public class TermContextMenu : Gtk.Menu {
 			menu,
 			_("Foreground Color"),
 			"",
-			null,
+			IconManager.lookup_image("preferences-color",16),
 			sg_icon,
 			sg_label);
 
@@ -307,7 +305,7 @@ public class TermContextMenu : Gtk.Menu {
 			menu,
 			_("Background Color"),
 			"",
-			null,
+			IconManager.lookup_image("preferences-color",16),
 			sg_icon,
 			sg_label);
 
@@ -341,12 +339,38 @@ public class TermContextMenu : Gtk.Menu {
 			string alpha = dlg.use_alpha.to_string();
 			string col = dlg.rgba.to_string();
 			
-			color_hex = rgba_to_hex(dlg.rgba, dlg.use_alpha, true);
+			color_hex = rgba_to_hex(dlg.rgba, false, true);
+
+			log_debug("selected: %s".printf(color_hex));
 		}
 		
 		dlg.close();
 
 		return color_hex;
+	}
+
+	private void add_set_defaults(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		log_debug("TermContextMenu: add_foreground_color()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Reset"),
+			"",
+			IconManager.lookup_image("edit-undo",16),
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect(()=>{
+
+			App.term_font = Pango.FontDescription.from_string(App.TERM_FONT_DESC);
+			App.term_fg_color = TermBox.DEF_COLOR_FG;
+			App.term_bg_color = TermBox.DEF_COLOR_BG;
+
+			foreach(var term in window.terminals){
+				term.set_defaults();
+			}
+		});
 	}
 
 	private void add_fish_config(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
@@ -357,7 +381,7 @@ public class TermContextMenu : Gtk.Menu {
 			menu,
 			_("Fish Config"),
 			"",
-			null,
+			IconManager.lookup_image("preferences-system", 16),
 			sg_icon,
 			sg_label);
 
@@ -365,6 +389,8 @@ public class TermContextMenu : Gtk.Menu {
 			pane.terminal.open_settings();
 		});
 	}
+
+	// ---------------
 	
 	private void add_maximize(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
