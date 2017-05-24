@@ -155,6 +155,8 @@ public class Main : GLib.Object {
 	public int term_font_size = 11;
 	public string term_fg_color = "#DCDCDC";
 	public string term_bg_color = "#2C2C2C";
+	public bool term_enable_network = true;
+	public bool term_enable_gui = true;
 
 	public static string REQUIRED_COLUMNS = "name,indicator,spacer";
 	public static string REQUIRED_COLUMNS_END = "spacer";
@@ -166,6 +168,8 @@ public class Main : GLib.Object {
 	public PanelLayout panel_layout = PanelLayout.SINGLE;
 	public bool maximise_on_startup = true;
 	public bool single_instance_mode = true;
+	public bool minimize_to_tray = true;
+	public bool autostart = true;
 	
 	// defaults
 	public static double LV_FONT_SCALE = 1.0;
@@ -564,12 +568,16 @@ public class Main : GLib.Object {
 		config.set_string_member("term_font_size", term_font_size.to_string());
 		config.set_string_member("term_fg_color", term_fg_color);
 		config.set_string_member("term_bg_color", term_bg_color);
+		config.set_string_member("term_enable_network", term_enable_network.to_string());
+		config.set_string_member("term_enable_gui", term_enable_gui.to_string());
 
 		config.set_string_member("selected_columns", selected_columns);
 		config.set_string_member("maximise_on_startup", maximise_on_startup.to_string());
 		//config.set_string_member("single_click_activate", single_click_activate.to_string());
 		config.set_string_member("restore_last_session", restore_last_session.to_string());
 		config.set_string_member("single_instance_mode", single_instance_mode.to_string());
+		config.set_string_member("minimize_to_tray", minimize_to_tray.to_string());
+		config.set_string_member("autostart", autostart.to_string());
 
 		config.set_string_member("confirm_delete", confirm_delete.to_string());
 		config.set_string_member("confirm_trash", confirm_trash.to_string());
@@ -708,6 +716,8 @@ public class Main : GLib.Object {
 		term_font_size = json_get_int(config, "term_font_size", term_font_size);
 		term_fg_color = json_get_string(config, "term_fg_color", term_fg_color);
 		term_bg_color = json_get_string(config, "term_bg_color", term_bg_color);
+		term_enable_network = json_get_bool(config, "term_enable_network", term_enable_network);
+		term_enable_gui = json_get_bool(config, "term_enable_gui", term_enable_gui);
 		
 		selected_columns = json_get_string(config, "selected_columns", selected_columns);
 		selected_columns = selected_columns.replace(" ",""); // remove spaces
@@ -716,6 +726,8 @@ public class Main : GLib.Object {
 		//single_click_activate = json_get_bool(config, "single_click_activate", single_click_activate);
 		restore_last_session = json_get_bool(config, "restore_last_session", restore_last_session);
 		single_instance_mode = json_get_bool(config, "single_instance_mode", single_instance_mode);
+		minimize_to_tray = json_get_bool(config, "minimize_to_tray", minimize_to_tray);
+		autostart = json_get_bool(config, "autostart", autostart);
 
 		confirm_delete = json_get_bool(config, "confirm_delete", confirm_delete);
 		confirm_trash = json_get_bool(config, "confirm_trash", confirm_trash);

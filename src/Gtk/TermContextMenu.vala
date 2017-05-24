@@ -74,6 +74,12 @@ public class TermContextMenu : Gtk.Menu {
 			selected_item = selected_items[0];
 		}
 
+		add_copy(this, sg_icon, sg_label);
+
+		add_paste(this, sg_icon, sg_label);
+
+		gtk_menu_add_separator(this); //---------------------------
+
 		add_change_directory(this, sg_icon, sg_label);
 
 		add_chroot(this, sg_icon, sg_label);
@@ -86,13 +92,51 @@ public class TermContextMenu : Gtk.Menu {
 
 		add_minimize(this, sg_icon, sg_label);
 
-		gtk_menu_add_separator(this); //---------------------------
-		
 		add_settings(this, sg_icon, sg_label);
 				
 		show_all();
 	}
 
+	private void add_copy(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		log_debug("TermContextMenu: add_copy()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Copy"),
+			_("Copy selected text to clipboard"),
+			IconManager.lookup_image("edit-copy", 16),
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			pane.terminal.copy();
+		});
+
+		menu_item.sensitive = true;
+	}
+
+	private void add_paste(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		log_debug("TermContextMenu: add_change_directory()");
+
+		if (!view.is_normal_directory || (view.current_item == null)) { return; }
+		
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Paste"),
+			_("Paste clipboard contents"),
+			IconManager.lookup_image("edit-paste", 16),
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			pane.terminal.paste();
+		});
+
+		menu_item.sensitive = true;
+	}
+	
 	private void add_change_directory(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
 		log_debug("TermContextMenu: add_change_directory()");
@@ -149,54 +193,11 @@ public class TermContextMenu : Gtk.Menu {
 
 		if (!view.is_normal_directory || (view.current_item == null)) { return; }
 		
-		var sub_menu = new Gtk.Menu();
-		menu_item.set_submenu(sub_menu);
-
-		sub_menu.reserve_toggle_size = false;
-
-		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
-		var sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
-
-		add_chroot_enter(sub_menu, sg_icon_sub, sg_label_sub);
-
-		add_chroot_exit(sub_menu, sg_icon_sub, sg_label_sub);
-	}
-
-	private void add_chroot_enter(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
-
-		log_debug("TermContextMenu: add_chroot_enter()");
-
-		var menu_item = gtk_menu_add_item(
-			menu,
-			_("Enter"),
-			"",
-			null,
-			sg_icon,
-			sg_label);
-
 		menu_item.activate.connect(()=>{
 			pane.terminal.chroot(view.current_item.file_path);
 		});
 	}
-
-	private void add_chroot_exit(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
-
-		log_debug("TermContextMenu: add_chroot_exit()");
-
-		var menu_item = gtk_menu_add_item(
-			menu,
-			_("Exit"),
-			"",
-			null,
-			sg_icon,
-			sg_label);
-
-		menu_item.activate.connect(()=>{
-			pane.terminal.unchroot(view.current_item.file_path);
-		});
-	}
 	
-
 	private void add_settings(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
 		log_debug("TermContextMenu: add_settings()");

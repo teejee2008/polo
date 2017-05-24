@@ -120,15 +120,17 @@ public class Settings : Gtk.Box {
 
 		switcher.set_stack(stack);
 
-		init_zoom_options();
+		init_tab_zoom();
 
-		init_toolbar_options();
+		init_tab_ui();
 
 		//init_pathbar_options();
 
-		init_list_view_options();
+		init_tab_list_view();
 
-		init_default_options();
+		init_tab_defaults();
+
+		//init_tab_terminal();
 
 		//init_action_buttons();
 
@@ -144,7 +146,7 @@ public class Settings : Gtk.Box {
 
 	// toolbar ------------------------
 
-	private void init_toolbar_options() {
+	private void init_tab_ui() {
 
 		var hbox = new Box(Orientation.HORIZONTAL, 12);
 		hbox.margin_left = 6;
@@ -1116,7 +1118,7 @@ public class Settings : Gtk.Box {
 
 	// Defaults ------------------------
 
-	private void init_default_options() {
+	private void init_tab_defaults() {
 
 		var box = new Box(Orientation.HORIZONTAL, 24);
 		box.margin_left = 6;
@@ -1141,17 +1143,36 @@ public class Settings : Gtk.Box {
 		
 		add_option_view_mode(vbox_options, sg_label, sg_combo);
 
-		add_option_maximize_on_startup(vbox_options);
-
 		//add_option_single_click_browse(vbox_options);
 
 		add_option_restore_last_session(vbox_options);
 
-		add_option_single_instance_mode(vbox_options);
-
 		add_option_confirm_delete(vbox_options);
 
 		add_option_confirm_trash(vbox_options);
+
+		// ---------------------------------------------------------------
+		
+		vbox_options = new Gtk.Box(Gtk.Orientation.VERTICAL, 6);
+		vbox_options.homogeneous = false;
+		box.add(vbox_options);
+
+		label = new Gtk.Label("<b>%s:</b>".printf(_("Startup & Windows")));
+		label.set_use_markup(true);
+		label.xalign = (float) 0.0;
+		label.margin_bottom = 12;
+		vbox_options.add(label);
+
+		sg_label = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		sg_combo = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+
+		add_option_maximize_on_startup(vbox_options);
+		
+		add_option_single_instance_mode(vbox_options);
+		
+		add_option_minimize_to_tray(vbox_options);
+
+		add_option_autostart(vbox_options);
 	}
 
 	private void add_option_maximize_on_startup(Gtk.Box box){
@@ -1364,6 +1385,36 @@ public class Settings : Gtk.Box {
 		});
 	}
 
+	private void add_option_minimize_to_tray(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Minimize to tray"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("Minimize to system tray when window is closed instead of exiting the application. Opening another folder will be much faster, as the application would already be running in the background."));
+
+		chk.active = App.minimize_to_tray;
+
+		chk.toggled.connect(()=>{
+			App.minimize_to_tray = chk.active;
+		});
+	}
+
+
+	private void add_option_autostart(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Run at startup"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("Application will be started during system startup and will run minimized in system tray."));
+		
+		chk.active = App.autostart;
+
+		chk.toggled.connect(()=>{
+			App.autostart = chk.active;
+		});
+	}
+
+
 	private void add_option_confirm_delete(Gtk.Box box){
 
 		var chk = new Gtk.CheckButton.with_label(_("Confirm before deleting files"));
@@ -1390,7 +1441,7 @@ public class Settings : Gtk.Box {
 
 	// zoom options -----------------------------------
 
-	private void init_zoom_options() {
+	private void init_tab_zoom() {
 
 		var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12);
 		box.margin_left = 6;
@@ -2077,7 +2128,7 @@ public class Settings : Gtk.Box {
 
 	// list view options -----------------------------------
 
-	private void init_list_view_options() {
+	private void init_tab_list_view() {
 		
 		var box = new ColumnSelectionBox(parent_window, false);
 		box.refresh_list_view_columns();
@@ -2110,6 +2161,58 @@ public class Settings : Gtk.Box {
 		init_ui();
 	}
 
+	// Defaults ------------------------
+
+	private void init_tab_terminal() {
+
+		var box = new Box(Orientation.HORIZONTAL, 24);
+		box.margin_left = 6;
+		stack.add_titled (box, _("Terminal"), _("Terminal"));
+
+		// options ---------------------------------
+
+		var vbox_options = new Gtk.Box(Gtk.Orientation.VERTICAL, 6);
+		vbox_options.homogeneous = false;
+		box.add(vbox_options);
+
+		var label = new Gtk.Label("<b>%s:</b>".printf(_("Options")));
+		label.set_use_markup(true);
+		label.xalign = (float) 0.0;
+		label.margin_bottom = 12;
+		vbox_options.add(label);
+
+		add_option_network(vbox_options);
+		
+		add_option_gui(vbox_options);
+	}
+
+	private void add_option_network(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Chroot: Enable network"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("Allows network connection to be used inside the chroot environment"));
+
+		chk.active = App.term_enable_network;
+
+		chk.toggled.connect(()=>{
+			App.term_enable_network = chk.active;
+		});
+	}
+
+	private void add_option_gui(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Chroot: Enable GUI Apps"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("Allows X-window apps running inside the chroot environment to use the host display"));
+
+		chk.active = App.term_enable_gui;
+
+		chk.toggled.connect(()=>{
+			App.term_enable_gui = chk.active;
+		});
+	}
 }
 
 

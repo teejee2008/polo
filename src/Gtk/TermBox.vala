@@ -187,8 +187,12 @@ public class TermBox : Gtk.Box {
 		//process_quit(child_pid);
 	}
 
-	public void feed_command(string command){
-		term.feed_child("%s\n".printf(command), -1);
+	public void feed_command(string command, bool newline = true){
+		string txt = command;
+		if (newline){
+			txt += "\n";
+		}
+		term.feed_child(txt, -1);
 	}
 
 	public void refresh(){
@@ -230,6 +234,23 @@ public class TermBox : Gtk.Box {
 		feed_command("cd '%s'".printf(escape_single_quote(dir_path)));
 	}
 
+	public void copy(){
+
+		log_debug("TermBox: copy()");
+		
+		term.copy_primary();
+	}
+
+	public void paste(){
+
+		log_debug("TermBox: paste()");
+		
+		Gdk.Display display = this.get_display ();
+		Gtk.Clipboard clipboard = Gtk.Clipboard.get_for_display (display, Gdk.SELECTION_CLIPBOARD);
+		string txt = clipboard.wait_for_text();
+		feed_command(txt, false);
+	}
+
 	public void reset(){
 
 		log_debug("TermBox: reset()");
@@ -268,7 +289,10 @@ public class TermBox : Gtk.Box {
 
 	public void chroot(string path){
 
-		var cmd = "sudo polo-chroot '%s' \n".printf(escape_single_quote(path));
+		var cmd = "sudo polo-chroot '%s' \n".printf(
+			//App.term_enable_network ? "--enable-network" : "",
+			//App.term_enable_gui ? "--enable-gui" : "",
+			escape_single_quote(path));
 		
 		feed_command(cmd);
 	}

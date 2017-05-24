@@ -1,13 +1,11 @@
-#!/bin/sh
+#!/bin/bash
 
-path=`pwd`
-if [ -d "$1" ]; then
-path="$1"
+path=`pwd` 
+if [ -d "$1" ]; then 
+path="$1" 
 fi
 
-echo "path: $path"
-
-for i in dev dev/pts proc run sys; do 
+for i in dev proc run sys; do 
   if [ ! -d "$path/$i" ]; then
     echo "Error: Missing directory: $path/$i"; 
     echo "Path to chroot must have system directories: /dev, /proc, /run, /sys"
@@ -22,12 +20,18 @@ sudo mount --rbind /dev  "$path/dev"
 sudo mount --rbind /run  "$path/run"
 sudo mount --rbind /sys  "$path/sys"
 sudo mount -t proc proc  "$path/proc"
+
 sudo cp /etc/resolv.conf "$path/etc/resolv.conf"
 
 tput reset
+
 echo "====================================================="
-echo "Entering chroot environment... (Type 'exit' to exit")
+echo "Entering chroot environment... Type 'exit' to quit"
 echo "====================================================="
+echo " - Network and X-Window apps are enabled"
+
+sudo chroot "$path" "export DISPLAY=:0.0"
+xhost +
 sudo chroot "$path"
 
 sudo umount --force --recursive "$path/dev"
@@ -37,5 +41,6 @@ sudo umount --force --recursive "$path/proc"
 
 echo "==============================="
 echo "Exited chroot environment"
-echo "===============================\n"
+echo "==============================="
+echo ""
 exit $?
