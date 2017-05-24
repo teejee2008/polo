@@ -2532,6 +2532,7 @@ public class FileViewList : Gtk.Box {
 		case FileMonitorEvent.MOVED_IN:
 			if(!current_item.has_child(file_basename(src.get_path()))){
 				append_item_to_treeview_by_file_path(src.get_path());
+				remove_overlay();
 			}
 			break;
 		case FileMonitorEvent.CHANGED:
