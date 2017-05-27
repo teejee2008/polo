@@ -70,6 +70,8 @@ public class Main : GLib.Object {
 
 	public AppLock session_lock;
 
+	public SysInfo sysinfo;
+
 	public Gee.HashMap<string,Tool> Tools = new Gee.HashMap<string,Tool>();
 
 	public string temp_dir = "";
@@ -158,6 +160,11 @@ public class Main : GLib.Object {
 	public string term_bg_color = "#2C2C2C";
 	public bool term_enable_network = true;
 	public bool term_enable_gui = true;
+
+	public string kvm_vga = "std";
+	public string kvm_cpu = "host";
+	public int kvm_smp = 1;
+	public int kvm_mem = 2048;
 
 	public static string REQUIRED_COLUMNS = "name,indicator,spacer";
 	public static string REQUIRED_COLUMNS_END = "spacer";
@@ -286,6 +293,8 @@ public class Main : GLib.Object {
 
 		user_dirs = new XdgUserDirectories(user_name);
 
+		sysinfo = new SysInfo();
+		
 		SystemUser.query_users();
 		SystemGroup.query_groups();
 

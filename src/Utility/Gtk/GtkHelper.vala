@@ -518,7 +518,8 @@ namespace TeeJee.GtkHelper{
 	
 	// menu
 	
-	public void gtk_menu_add_separator(Gtk.Menu menu){
+	public Gtk.SeparatorMenuItem gtk_menu_add_separator(Gtk.Menu menu){
+		
 		Gdk.RGBA gray = Gdk.RGBA();
 		gray.parse ("rgba(200,200,200,1)");
 		
@@ -526,6 +527,8 @@ namespace TeeJee.GtkHelper{
 		var menu_item = new Gtk.SeparatorMenuItem();
 		menu_item.override_color (StateFlags.NORMAL, gray);
 		menu.append(menu_item);
+
+		return menu_item;
 	}
 
 	public Gtk.MenuItem gtk_menu_add_item(

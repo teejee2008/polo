@@ -145,6 +145,19 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	public string password = "";
 	public string keyfile = "";
 
+	public bool is_package {
+		get {
+
+			foreach(var ext in package_extensions){
+				if (file_path.has_suffix(ext)) {
+					return true;
+				}
+			}
+
+			return false;
+		}
+	}
+
 	public FileItem? archive_base_item; // for use by archived items
 	//public string source_archive_path = ""; // for use by archived items
 
@@ -240,11 +253,15 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		".bz2", ".bzip2",
 		".gz", ".gzip",
 		".zip", ".rar", ".cab", ".arj", ".z", ".taz", ".cpio",
-		//".rpm", ".deb",
+		".rpm", ".deb",
 		".lzh", ".lha",
 		".chm", ".chw", ".hxs",
 		".iso", ".dmg", ".xar", ".hfs", ".ntfs", ".fat", ".vhd", ".mbr",
 		".wim", ".swm", ".squashfs", ".cramfs", ".scap"
+	};
+
+	public static string[] package_extensions = {
+		".rpm", ".deb"
 	};
 
 	// static  ------------------

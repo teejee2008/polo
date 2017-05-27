@@ -130,6 +130,8 @@ public class Settings : Gtk.Box {
 
 		init_tab_defaults();
 
+		init_tab_advanced();
+
 		//init_tab_terminal();
 
 		//init_action_buttons();
@@ -2163,11 +2165,11 @@ public class Settings : Gtk.Box {
 
 	// Defaults ------------------------
 
-	private void init_tab_terminal() {
+	private void init_tab_advanced() {
 
 		var box = new Box(Orientation.HORIZONTAL, 24);
 		box.margin_left = 6;
-		stack.add_titled (box, _("Terminal"), _("Terminal"));
+		stack.add_titled (box, _("Advanced"), _("Advanced"));
 
 		// options ---------------------------------
 
@@ -2175,17 +2177,79 @@ public class Settings : Gtk.Box {
 		vbox_options.homogeneous = false;
 		box.add(vbox_options);
 
-		var label = new Gtk.Label("<b>%s:</b>".printf(_("Options")));
+		var label = new Gtk.Label("<b>%s:</b>".printf(_("Virtual Machine")));
 		label.set_use_markup(true);
 		label.xalign = (float) 0.0;
 		label.margin_bottom = 12;
 		vbox_options.add(label);
 
-		add_option_network(vbox_options);
+		var sg_label = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		var sg_option = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
 		
-		add_option_gui(vbox_options);
+		add_option_kvm_vga(vbox_options, sg_label, sg_option);
+
+		//add_kvm_memory(vbox_options, sg_label, sg_option);
 	}
 
+	private void add_option_kvm_vga(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
+
+		var hbox = new Box(Orientation.HORIZONTAL, 12);
+		box.add(hbox);
+
+		// label
+		var label = new Label(_("Graphics Card"));
+		label.xalign = (float) 0.0;
+		hbox.add(label);
+		sg_label.add_widget(label);
+
+		// cmb_app
+		var combo = new ComboBox();
+		hbox.add (combo);
+		sg_option.add_widget(combo);
+
+		// render text
+		var cell_text = new CellRendererText();
+		combo.pack_start(cell_text, false);
+		combo.set_cell_data_func (cell_text, (cell_text, cell, model, iter) => {
+			string text;
+			model.get (iter, 0, out text, -1);
+			(cell as Gtk.CellRendererText).text = text;
+		});
+
+		// add items
+		int index = -1;
+		var store = new Gtk.ListStore(1, typeof(string));
+		TreeIter iter;
+		foreach(string txt in new string[]{ "cirrus", "std", "vmware", "qxl" }){
+			index++;
+			store.append(out iter);
+			store.set (iter, 0, txt, 1, txt, -1);
+			if (txt == App.kvm_vga){
+				combo.active = index;
+			}
+		}
+		combo.set_model(store);
+
+		combo.changed.connect(() => {
+			App.kvm_vga = gtk_combobox_get_value(combo, 0, App.kvm_vga);
+		});
+	}
+
+	private void add_kvm_memory(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
+
+		var hbox = new Box(Orientation.VERTICAL, 6);
+		box.add(hbox);
+
+		var label = new Label(_("RAM (MB)"));
+		label.xalign = 0.0f;
+		hbox.add(label);
+		sg_label.add_widget(label);
+
+		var spin = new Gtk.SpinButton.with_range (0, 10, 1);
+		hbox.add (spin);
+		sg_option.add_widget(spin);
+	}
+	
 	private void add_option_network(Gtk.Box box){
 
 		var chk = new Gtk.CheckButton.with_label(_("Chroot: Enable network"));

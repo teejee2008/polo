@@ -363,7 +363,7 @@ public class TermContextMenu : Gtk.Menu {
 
 		menu_item.activate.connect(()=>{
 
-			App.term_font = Pango.FontDescription.from_string(App.TERM_FONT_DESC);
+			App.term_font = Pango.FontDescription.from_string(Main.TERM_FONT_DESC);
 			App.term_fg_color = TermBox.DEF_COLOR_FG;
 			App.term_bg_color = TermBox.DEF_COLOR_BG;
 

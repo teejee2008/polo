@@ -2460,6 +2460,7 @@ public class FileViewList : Gtk.Box {
 
 		foreach(var mon in monitors){
 			if (mon.file_item.file_path == item.file_path){
+				log_debug("monitor exists: %s".printf(item.file_path));
 				return;
 			}
 		}
@@ -2467,9 +2468,12 @@ public class FileViewList : Gtk.Box {
 		var mon = new FileItemMonitor();
 		monitors.add(mon);
 
+		log_debug("monitor added: %s".printf(item.file_path));
+		
 		mon.file_item = item;
 		mon.monitor = mon.file_item.monitor_for_changes(out mon.cancellable);
 		mon.monitor.changed.connect(directory_changed);
+		log_debug("monitor connected: %s".printf(item.file_path));
 	}
 
 	private void remove_monitor(FileItem item){
@@ -2480,11 +2484,13 @@ public class FileViewList : Gtk.Box {
 				obj = mon;
 				mon.cancellable.cancel();
 				mon.monitor.changed.disconnect(directory_changed);
+				log_debug("monitor disconnected: %s".printf(item.file_path));
 			}
 		}
 
 		if (obj != null){
 			monitors.remove(obj);
+			log_debug("monitor removed: %s".printf(item.file_path));
 		}
 	}
 
@@ -2500,6 +2506,8 @@ public class FileViewList : Gtk.Box {
 				mon.cancellable.cancel();
 			}
 			mon.monitor.changed.disconnect(directory_changed);
+			log_debug("monitor disconnected: %s".printf(mon.file_item.file_path));
+			log_debug("monitor removed: %s".printf(mon.file_item.file_path));
 		}
 		
 		monitors.clear();
@@ -2532,8 +2540,8 @@ public class FileViewList : Gtk.Box {
 		case FileMonitorEvent.MOVED_IN:
 			if(!current_item.has_child(file_basename(src.get_path()))){
 				append_item_to_treeview_by_file_path(src.get_path());
-				remove_overlay();
 			}
+			remove_overlay();
 			break;
 		case FileMonitorEvent.CHANGED:
 			//if(!current_item.has_child(file_basename(src.get_path()))){
@@ -2594,7 +2602,7 @@ public class FileViewList : Gtk.Box {
 			return;
 		}
 
-		cancel_monitors();
+		//cancel_monitors();
 		
 		if (clear_view){
 			store = null;
@@ -2629,16 +2637,19 @@ public class FileViewList : Gtk.Box {
 	public void set_overlay_on_unmount(){
 		add_overlay(_("Device was unmounted"), true);
 		pane.statusbar.refresh();
+		cancel_monitors();
 	}
 
 	public void set_overlay_on_invalid_path(){
 		add_overlay(_("Could not find path") + " '%s'".printf(current_path_saved), true);
 		pane.statusbar.refresh();
+		cancel_monitors();
 	}
 
 	public void set_overlay_on_empty(){
 		add_overlay(_("Folder is empty"), false);
 		//pane.statusbar.refresh(); // not needed
+		//cancel_monitors();// do not cancel
 	}
 
 	// update thumbnails ------------
@@ -3106,7 +3117,7 @@ public class FileViewList : Gtk.Box {
 		if (item.is_archive && item.is_trashed_item){
 			// ignore; do not open
 		}
-		else if ((item.file_type == FileType.DIRECTORY) || item.is_archive){
+		else if ((item.file_type == FileType.DIRECTORY) || (item.is_archive && !item.is_package)){
 			set_view_item(item);
 		}
 		else if (item.content_type.contains("executable")){
@@ -3662,7 +3673,7 @@ public class FileViewList : Gtk.Box {
 		if (baobab == null){ return; }
 
 		var selected_items = get_selected_items();
-		if (selected_items.size > 0){
+		if ((selected_items.size > 0) && (selected_items[0].is_directory)){
 			open(selected_items[0], baobab);
 		}
 		else{
@@ -3902,6 +3913,7 @@ public class FileViewList : Gtk.Box {
 		start_view_redraw();
 	}
 
+
 	public void mount_iso(){
 		
 		err_log_clear();
@@ -3956,6 +3968,49 @@ public class FileViewList : Gtk.Box {
 			log_error("There are no mount points for the loop device");
 		}
 	}
+
+	public void boot_iso(){
+		
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+
+		string cmd = "kvm -enable-kvm";
+		cmd += " -cpu %s".printf(App.kvm_cpu);
+		cmd += " -smp %d".printf(App.kvm_smp);
+		cmd += " -vga %s".printf(App.kvm_vga);
+		cmd += " -m %dM".printf(App.kvm_mem);
+		//cmd += " -net nic,model=virtio -net user";
+		cmd += " -netdev user,id=vmnic -device virtio-net,netdev=vmnic";
+		cmd += " -smb '%s'".printf(App.user_dirs.user_public);
+		cmd += " -boot d -cdrom '%s'".printf(escape_single_quote(item.file_path));
+		
+		exec_script_async(cmd);
+	}
+
+	public void write_iso(){
+		
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+		
+		DesktopApp? etcher_app = DesktopApp.get_app_by_filename("appimagekit-Etcher.desktop");
+
+		if (etcher_app == null){
+			
+			string title = _("'Etcher' Not Found");
+			string msg = _("Polo uses the third-party application 'Etcher' to write ISO files to USB. Do you want me to download and install it for you?");
+			int resp = gtk_messagebox_yes_no(title, msg, window, true);
+
+			if (resp == Gtk.ResponseType.YES){
+				window.install_etcher();
+			}
+		}
+		else{
+			open(item, etcher_app);
+		}
+	}
+
 
 	public void hide_selected(){
 

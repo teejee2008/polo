@@ -51,6 +51,8 @@ public class MainWindow : Gtk.Window {
 
 	public FileMonitor? open_task_monitor = null;
 
+	public bool refresh_apps_pending = false;
+	
 	// window
 	private int def_width = 700;
 	private int def_height = 500;
@@ -688,6 +690,32 @@ public class MainWindow : Gtk.Window {
 		}
 		
 		layout_box.panel1.run_script_in_new_terminal_tab(cmd, _("Cleaning Thumbnail Cache..."));
+	}
+
+	public void install_etcher(){
+
+		string fmt = """https://resin-production-downloads.s3.amazonaws.com/etcher/1.0.0/Etcher-1.0.0-linux-%s.zip""";
+		var url = fmt.printf((App.sysinfo.arch == 64) ? "x64" : "x86");
+		
+		fmt = "Etcher-1.0.0-linux-%s.zip";
+		var zip_name = fmt.printf((App.sysinfo.arch == 64) ? "x64" : "x86");
+		
+		fmt = "Etcher-1.0.0-linux-%s.AppImage";
+		var ins_name = fmt.printf((App.sysinfo.arch == 64) ? "x64" : "x86");
+		
+		string cmd = "cd '%s'\n".printf(escape_single_quote(TEMP_DIR));
+		cmd += "aria2c -x 10 '%s' \n".printf(url);
+		cmd += "if [ ! -f %s ]; then echo 'Error' ; exit 1; fi \n".printf(zip_name);
+		cmd += "7z e %s \n".printf(zip_name);
+		cmd += "if [ ! -f %s ]; then echo 'Error' ; exit 1; fi \n".printf(ins_name);
+		cmd += "chmod a+x %s \n".printf(ins_name);
+		cmd += "./%s \n".printf(ins_name);
+
+		log_debug("cmd=\n"+cmd);
+
+		refresh_apps_pending = true;
+		
+		layout_box.panel1.run_script_in_new_terminal_tab(cmd, _("Installing Etcher..."));
 	}
 
 	public void save_session(){

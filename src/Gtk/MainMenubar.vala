@@ -657,6 +657,8 @@ public class MainMenuBar : Gtk.MenuBar {
 		add_test_action(submenu);
 
 		add_test_action2(submenu);
+		
+		add_test_action3(submenu);
 	}
 
 	private void add_clear_thumbnail_cache(Gtk.Menu menu){
@@ -741,6 +743,21 @@ public class MainMenuBar : Gtk.MenuBar {
 		});
 	}
 
+	private void add_test_action3(Gtk.Menu menu){
+
+		if (!LOG_DEBUG){ return; }
+
+		var item = new Gtk.MenuItem.with_label (_("Debug: Monitors"));
+		item.set_tooltip_text("");
+		menu.add(item);
+
+		item.activate.connect (() => {
+			gtk_messagebox("Objects=%lld".printf(pane.view.monitors.size),"", window, false);
+		});
+	}
+
+
+	
 	private void add_calculate_dir_sizes(Gtk.Menu menu){
 
 		var item = new Gtk.MenuItem.with_label (_("Calculate directory sizes"));
