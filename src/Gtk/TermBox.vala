@@ -180,6 +180,11 @@ public class TermBox : Gtk.Box {
 				null
 			);
 
+			term.child_exited.connect((status)=>{
+				log_debug("TermBox: child_exited(): pid=%d, status=%d".printf(child_pid, status));
+				start_shell();
+			});
+
 			log_debug("TermBox: start_shell(): started");
 		}
 		catch (Error e) {
