@@ -696,6 +696,8 @@ public class MainMenuBar : Gtk.MenuBar {
 
 	private void add_reset_session(Gtk.Menu menu){
 
+		if (!App.session_lock.lock_acquired){ return; }
+
 		var item = new Gtk.MenuItem.with_label (_("Reset session and restart"));
 		item.set_tooltip_text(_("Polo will be restarted with a fresh session"));
 		menu.add(item);

@@ -30,21 +30,22 @@ public class SysInfo : GLib.Object {
 
 	public int arch = 64;
 	public int mem_total_mb = 0;
+	public string hostname = "";
 	
 	public SysInfo(){
 		query();
 	}
 
 	public void query(){
-
-		
-		
+		query_arch();
+		query_host_name();
+		print();
 	}
 
 	public void query_arch(){
 
 		string std_out, std_err;
-		exec_sync("", out std_out, out std_err);
+		exec_sync("uname -m", out std_out, out std_err);
 
 		if (std_out.replace("\n","").strip().down() == "x86_64"){
 			arch = 64;
@@ -54,17 +55,17 @@ public class SysInfo : GLib.Object {
 		}
 	}
 
-	public void query_mem(){
+	public void query_host_name(){
 
 		string std_out, std_err;
-		exec_sync("", out std_out, out std_err);
+		exec_sync("echo $(hostname)", out std_out, out std_err);
 
-		if (std_out.replace("\n","").strip().down() == "x86_64"){
-			arch = 64;
-		}
-		else{
-			arch = 32;
-		}
+		hostname = std_out;
+	}
+
+	public void print(){
+		log_msg("Architecture: %d-bit".printf(arch));
+		log_msg("Host Name: %s".printf(hostname));
 	}
 }
 

@@ -120,15 +120,15 @@ public class Settings : Gtk.Box {
 
 		switcher.set_stack(stack);
 
-		init_tab_zoom();
+		init_tab_view();
 
 		init_tab_ui();
 
 		//init_pathbar_options();
 
-		init_tab_list_view();
+		init_tab_columns();
 
-		init_tab_defaults();
+		init_tab_general();
 
 		init_tab_advanced();
 
@@ -162,15 +162,7 @@ public class Settings : Gtk.Box {
 
 		// --------------
 
-		var label = new Gtk.Label("<b>%s:</b>".printf(_("Toolbar")));
-		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
-		vbox.add(label);
-
-		// items
-		var vbox_items = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		vbox_items.homogeneous = false;
-		vbox.add(vbox_items);
+		var vbox_items = add_group(vbox, _("Toolbar"), 0);
 
 		add_toolbar_option_visible(vbox_items);
 		
@@ -182,15 +174,7 @@ public class Settings : Gtk.Box {
 
 		// -------------
 
-		label = new Gtk.Label("<i>%s:</i>".printf(_("Items")));
-		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
-		vbox.add(label);
-
-		// items
-		vbox_items = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		vbox_items.homogeneous = false;
-		vbox.add(vbox_items);
+		vbox_items = add_sub_group(vbox, _("Items"), 0);
 
 		add_toolbar_item_back(vbox_items);
 
@@ -226,29 +210,13 @@ public class Settings : Gtk.Box {
 
 		// --------
 
-		label = new Gtk.Label("<b>%s:</b>".printf(_("HeaderBar")));
-		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
-		vbox.add(label);
+		vbox_items = add_group(vbox, _("Headerbar"), 0);
 
-		// items
-		vbox_items = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		vbox_items.homogeneous = false;
-		vbox.add(vbox_items);
-		
 		add_headerbar_option_enable(vbox_items);
 
 		// --------
 
-		label = new Gtk.Label("<b>%s:</b>".printf(_("PathBar")));
-		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
-		vbox.add(label);
-
-		// items
-		vbox_items = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		vbox_items.homogeneous = false;
-		vbox.add(vbox_items);
+		vbox_items = add_group(vbox, _("Pathbar"), 0);
 
 		add_pathbar_option_unified(vbox_items);
 
@@ -256,15 +224,7 @@ public class Settings : Gtk.Box {
 
 		// -----------------------------
 
-		label = new Gtk.Label("<i>%s:</i>".printf(_("Items")));
-		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
-		vbox.add(label);
-
-		// items
-		vbox_items = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		vbox_items.homogeneous = false;
-		vbox.add(vbox_items);
+		vbox_items = add_sub_group(vbox, _("Items"), 0);
 
 		add_pathbar_item_bookmarks(vbox_items);
 
@@ -294,14 +254,7 @@ public class Settings : Gtk.Box {
 
 		// Sidebar -------------------------------
 
-		label = new Gtk.Label("<b>%s:</b>".printf(_("Sidebar")));
-		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
-		vbox.add(label);
-
-		// items
-		vbox_items = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		vbox.add(vbox_items);
+		vbox_items = add_group(vbox, _("Sidebar"), 0);
 
 		add_sidebar_option_visible(vbox_items);
 
@@ -319,27 +272,13 @@ public class Settings : Gtk.Box {
 
 		// Statusbar -------------------------------
 
-		label = new Gtk.Label("<b>%s:</b>".printf(_("Statusbar")));
-		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
-		vbox.add(label);
+		vbox_items = add_group(vbox, _("Statusbar"), 0);
 
-		label.margin_top = 12;
-
-		add_statusbar_option_unified(vbox);
+		add_statusbar_option_unified(vbox_items);
 
 		// Tabs -------------------------------------
 
-		label = new Gtk.Label("<b>%s:</b>".printf(_("Tabs")));
-		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
-		vbox.add(label);
-
-		label.margin_top = 12;
-
-		// items
-		vbox_items = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		vbox.add(vbox_items);
+		vbox_items = add_group(vbox, _("Tabs"), 0);
 
 		add_tabbar_option_close(vbox_items);
 		
@@ -347,7 +286,7 @@ public class Settings : Gtk.Box {
 
 		// buffer ---------------------------------------
 
-		label = new Gtk.Label("");
+		var label = new Gtk.Label("");
 		label.hexpand = true;
 		hbox.add(label);
 	}
@@ -1120,61 +1059,55 @@ public class Settings : Gtk.Box {
 
 	// Defaults ------------------------
 
-	private void init_tab_defaults() {
+	private void init_tab_general() {
 
 		var box = new Box(Orientation.HORIZONTAL, 24);
 		box.margin_left = 6;
-		stack.add_titled (box, _("Defaults"), _("Defaults"));
+		stack.add_titled (box, _("General"), _("General"));
 
-		// options ---------------------------------
+		// column 1 ---------------------------------
 
-		var vbox_options = new Gtk.Box(Gtk.Orientation.VERTICAL, 6);
-		vbox_options.homogeneous = false;
-		box.add(vbox_options);
+		var vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 12);
+		vbox.homogeneous = false;
+		box.add(vbox);
+		
+		// ---------------------------------
 
-		var label = new Gtk.Label("<b>%s:</b>".printf(_("Options")));
-		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
-		label.margin_bottom = 12;
-		vbox_options.add(label);
-
+		var vbox_group = add_group(vbox, _("Defaults"), 6);
+		
 		var sg_label = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
-		var sg_combo = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
-
-		add_option_folder_handler(vbox_options, sg_label, sg_combo);
+		var sg_option = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
 		
-		add_option_view_mode(vbox_options, sg_label, sg_combo);
-
-		//add_option_single_click_browse(vbox_options);
-
-		add_option_restore_last_session(vbox_options);
-
-		add_option_confirm_delete(vbox_options);
-
-		add_option_confirm_trash(vbox_options);
-
-		// ---------------------------------------------------------------
+		add_option_folder_handler(vbox_group, sg_label, sg_option);
 		
-		vbox_options = new Gtk.Box(Gtk.Orientation.VERTICAL, 6);
-		vbox_options.homogeneous = false;
-		box.add(vbox_options);
+		add_option_view_mode(vbox_group, sg_label, sg_option);
 
-		label = new Gtk.Label("<b>%s:</b>".printf(_("Startup & Windows")));
-		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
-		label.margin_bottom = 12;
-		vbox_options.add(label);
+		//add_option_single_click_browse(vbox_items);
+
+		// --------------------------------
+		
+		vbox_group = add_group(vbox, _("Confirmation"), 0);
+		
+		add_option_confirm_delete(vbox_group);
+
+		add_option_confirm_trash(vbox_group);
+
+		// ----------------------------------------
+		
+		vbox_group = add_group(vbox, _("Session & Startup"), 0);
 
 		sg_label = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
-		sg_combo = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		sg_option = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
 
-		add_option_maximize_on_startup(vbox_options);
-		
-		add_option_single_instance_mode(vbox_options);
-		
-		add_option_minimize_to_tray(vbox_options);
+		add_option_maximize_on_startup(vbox_group);
 
-		add_option_autostart(vbox_options);
+		add_option_restore_last_session(vbox_group);
+		
+		add_option_single_instance_mode(vbox_group);
+		
+		//add_option_minimize_to_tray(vbox_group);
+
+		//add_option_autostart(vbox_group);
 	}
 
 	private void add_option_maximize_on_startup(Gtk.Box box){
@@ -1189,13 +1122,15 @@ public class Settings : Gtk.Box {
 		});
 	}
 
-	private void add_option_view_mode(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_combo){
+	private void add_option_view_mode(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
 
 		var hbox = new Box(Orientation.HORIZONTAL,6);
 		box.add(hbox);
 
+		hbox.margin_bottom = 6;
+
 		// label
-		var label = new Label(_("Default View"));
+		var label = new Label(_("View Mode"));
 		label.xalign = (float) 0.0;
 		label.margin_left = 6;
 		label.margin_right = 6;
@@ -1207,7 +1142,7 @@ public class Settings : Gtk.Box {
 		var combo = new ComboBox();
 		combo.set_tooltip_text(_("Default view mode to use for new panes"));
 		hbox.add (combo);
-		sg_combo.add_widget(combo);
+		sg_option.add_widget(combo);
 
 		// render text
 		var cell_text = new CellRendererText();
@@ -1256,13 +1191,13 @@ public class Settings : Gtk.Box {
 		});
 	}
 
-	private void add_option_folder_handler(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_combo){
+	private void add_option_folder_handler(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
 
 		var hbox = new Box(Orientation.HORIZONTAL,6);
 		box.add(hbox);
 
 		// label
-		var label = new Label(_("Default File Manager"));
+		var label = new Label(_("File Manager"));
 		label.xalign = (float) 0.0;
 		label.margin_left = 6;
 		label.margin_right = 6;
@@ -1274,7 +1209,7 @@ public class Settings : Gtk.Box {
 		var combo = new ComboBox();
 		combo.set_tooltip_text(_("Sets the default application for opening folders"));
 		hbox.add (combo);
-		sg_combo.add_widget(combo);
+		sg_option.add_widget(combo);
 
 		// app icon --------
 		
@@ -1401,7 +1336,6 @@ public class Settings : Gtk.Box {
 		});
 	}
 
-
 	private void add_option_autostart(Gtk.Box box){
 
 		var chk = new Gtk.CheckButton.with_label(_("Run at startup"));
@@ -1415,7 +1349,6 @@ public class Settings : Gtk.Box {
 			App.autostart = chk.active;
 		});
 	}
-
 
 	private void add_option_confirm_delete(Gtk.Box box){
 
@@ -1443,25 +1376,19 @@ public class Settings : Gtk.Box {
 
 	// zoom options -----------------------------------
 
-	private void init_tab_zoom() {
+	private void init_tab_view() {
 
 		var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12);
 		box.margin_left = 6;
-		stack.add_titled (box, _("Zoom"), _("Zoom"));
+		stack.add_titled (box, _("View"), _("View"));
 
 		var sg_label = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
 		var sg_scale = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
 
-		// list view ------------------------
+		// ------------------------
 
-		var vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 12);
+		var vbox = add_group(box, _("List View"), 12);
 		box.add(vbox);
-
-		var label = new Gtk.Label("<b>%s:</b>".printf(_("List View")));
-		label.set_use_markup(true);
-		label.xalign = 0.0f;
-		//label.margin_bottom = 12;
-		vbox.add(label);
 
 		add_scale_listview_icon_size(vbox, sg_label, sg_scale);
 
@@ -1477,16 +1404,10 @@ public class Settings : Gtk.Box {
 		separator.margin_left = 12;
 		box.add(separator);
 
-		// icon view ------------------------
+		// ------------------------
 
-		vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 12);
+		vbox = add_group(box, _("Icon View"), 12);
 		box.add(vbox);
-
-		label = new Gtk.Label("<b>%s:</b>".printf(_("Icon View")));
-		label.set_use_markup(true);
-		label.xalign = 0.0f;
-		//label.margin_bottom = 12;
-		vbox.add(label);
 
 		add_scale_iconview_icon_size(vbox, sg_label, sg_scale);
 
@@ -1502,16 +1423,10 @@ public class Settings : Gtk.Box {
 		separator.margin_left = 12;
 		box.add(separator);
 
-		// tile view ------------------------
+		// ------------------------
 
-		vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 12);
+		vbox = add_group(box, _("Tile View"), 12);
 		box.add(vbox);
-
-		label = new Gtk.Label("<b>%s:</b>".printf(_("Tile View")));
-		label.set_use_markup(true);
-		label.xalign = 0.0f;
-		//label.margin_bottom = 12;
-		vbox.add(label);
 
 		add_scale_tileview_icon_size(vbox, sg_label, sg_scale);
 
@@ -1669,21 +1584,17 @@ public class Settings : Gtk.Box {
 		});
 	}
 
+
 	private void add_options_listview_icons(Gtk.Box box) {
 
-		var hbox = new Box(Orientation.VERTICAL, 6);
-		hbox.margin_bottom = 12;
-		box.add(hbox);
+		var vbox = add_sub_group(box, _("Icons"), 0);
+		box.add(vbox);
 
-		var label = new Gtk.Label("<b>%s:</b>".printf(_("Icons")));
-		label.set_use_markup(true);
-		label.xalign = 0.0f;
-		//label.margin_bottom = 12;
-		hbox.add(label);
-
-		add_option_listview_emblems(hbox);
-		add_option_listview_thumbs(hbox);
-		add_option_listview_transparency(hbox);
+		add_option_listview_emblems(vbox);
+		
+		add_option_listview_thumbs(vbox);
+		
+		add_option_listview_transparency(vbox);
 	}
 
 	private void add_option_listview_emblems(Gtk.Box box){
@@ -1730,6 +1641,7 @@ public class Settings : Gtk.Box {
 			window.refresh_treemodels();
 		});
 	}
+
 
 	private void add_scale_iconview_icon_size(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_scale) {
 
@@ -1857,21 +1769,17 @@ public class Settings : Gtk.Box {
 		});
 	}
 
+
 	private void add_options_iconview_icons(Gtk.Box box) {
 
-		var hbox = new Box(Orientation.VERTICAL, 6);
-		hbox.margin_bottom = 12;
-		box.add(hbox);
+		var vbox = add_sub_group(box, _("Icons"), 0);
+		box.add(vbox);
 
-		var label = new Gtk.Label("<b>%s:</b>".printf(_("Icons")));
-		label.set_use_markup(true);
-		label.xalign = 0.0f;
-		//label.margin_bottom = 12;
-		hbox.add(label);
-
-		add_option_iconview_emblems(hbox);
-		add_option_iconview_thumbs(hbox);
-		add_option_iconview_transparency(hbox);
+		add_option_iconview_emblems(vbox);
+		
+		add_option_iconview_thumbs(vbox);
+		
+		add_option_iconview_transparency(vbox);
 	}
 
 	private void add_option_iconview_emblems(Gtk.Box box){
@@ -1918,6 +1826,7 @@ public class Settings : Gtk.Box {
 			window.refresh_treemodels();
 		});
 	}
+
 
 	private void add_scale_tileview_icon_size(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_scale) {
 
@@ -2047,20 +1956,17 @@ public class Settings : Gtk.Box {
 		});
 	}
 
+
 	private void add_options_tileview_icons(Gtk.Box box) {
 
-		var hbox = new Box(Orientation.VERTICAL, 6);
-		hbox.margin_bottom = 12;
-		box.add(hbox);
+		var vbox = add_sub_group(box, _("Icons"), 0);
+		box.add(vbox);
 
-		var label = new Gtk.Label("<b>%s:</b>".printf(_("Icons")));
-		label.set_use_markup(true);
-		label.xalign = 0.0f;
-		hbox.add(label);
-
-		add_option_tileview_emblems(hbox);
-		add_option_tileview_thumbs(hbox);
-		add_option_tileview_transparency(hbox);
+		add_option_tileview_emblems(vbox);
+		
+		add_option_tileview_thumbs(vbox);
+		
+		add_option_tileview_transparency(vbox);
 	}
 
 	private void add_option_tileview_emblems(Gtk.Box box){
@@ -2108,6 +2014,7 @@ public class Settings : Gtk.Box {
 		});
 	}
 
+
 	private int listview_icon_size{
 		get{
 			int index = (int) scale_listview_icon_size.get_value();
@@ -2130,13 +2037,13 @@ public class Settings : Gtk.Box {
 
 	// list view options -----------------------------------
 
-	private void init_tab_list_view() {
+	private void init_tab_columns() {
 		
 		var box = new ColumnSelectionBox(parent_window, false);
 		box.refresh_list_view_columns();
 		box.margin_left = 6;
 		
-		stack.add_titled (box, _("List View"), _("List View"));
+		stack.add_titled (box, _("Columns"), _("Columns"));
 	}
 
 	private void add_option_tree_navigation(Gtk.Container box){
@@ -2277,6 +2184,44 @@ public class Settings : Gtk.Box {
 			App.term_enable_gui = chk.active;
 		});
 	}
+
+	// helpers --------------
+
+	private Gtk.Box add_group(Gtk.Box box, string header_text, int spacing){
+		
+		var vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, spacing);
+		vbox.homogeneous = false;
+		box.add(vbox);
+
+		if (header_text.length > 0){
+			var label = new Gtk.Label("<b>%s</b>".printf(header_text.replace("&amp;","&").replace("&","&amp;")));
+			label.set_use_markup(true);
+			label.xalign = (float) 0.0;
+			vbox.add(label);
+			label.margin_bottom = 6;
+			vbox.margin_bottom = 6; // add box bottom padding only if group has a header
+		}
+		
+		return vbox;
+	}
+
+	private Gtk.Box add_sub_group(Gtk.Box box, string header_text, int spacing){
+		
+		var vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, spacing);
+		vbox.homogeneous = false;
+		box.add(vbox);
+
+		if (header_text.length > 0){
+			var label = new Gtk.Label("<i>%s</i>".printf(header_text));
+			label.set_use_markup(true);
+			label.xalign = (float) 0.0;
+			vbox.add(label);
+			label.margin_bottom = 6;
+			vbox.margin_bottom = 6; // add box bottom padding only if group has a header
+		}
+		
+		return vbox;
+	} 
 }
 
 

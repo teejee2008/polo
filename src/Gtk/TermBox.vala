@@ -185,6 +185,8 @@ public class TermBox : Gtk.Box {
 				start_shell();
 			});
 
+			reset();
+
 			log_debug("TermBox: start_shell(): started");
 		}
 		catch (Error e) {
@@ -195,6 +197,13 @@ public class TermBox : Gtk.Box {
 	public void terminate_child(){
 		//btn_cancel.sensitive = false;
 		//process_quit(child_pid);
+	}
+
+	public bool has_running_process {
+		get{
+			var children = get_process_children(child_pid);
+			return (children.length > 0);
+		}
 	}
 
 	public void feed_command(string command, bool newline = true){
@@ -239,9 +248,20 @@ public class TermBox : Gtk.Box {
 
 	public void change_directory(string dir_path){
 
+		//if (has_running_process){
+		//	show_running_process_message();
+		//	return;
+		//}
+		
 		log_debug("TermBox: change_directory()");
 		
 		feed_command("cd '%s'".printf(escape_single_quote(dir_path)));
+	}
+
+	private void show_running_process_message(){
+		// TODO: Add check to ignore background process
+		gtk_messagebox(_("Terminal is busy"),
+			_("This action cannot be executed while a process is running"), window, true);
 	}
 
 	public void copy(){
