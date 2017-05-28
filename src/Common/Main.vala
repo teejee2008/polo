@@ -76,7 +76,7 @@ public class Main : GLib.Object {
 
 	public string temp_dir = "";
 	public string current_dir = "";
-	public string share_dir = "/usr/share";
+	public string share_dir = "/usr/share/polo";
 	public string app_conf_path = "";
 	public string app_conf_folders = "";
 	public string app_conf_session = "";
@@ -380,6 +380,14 @@ public class Main : GLib.Object {
 		fs_root = new FileItem.from_path_and_type("/", FileType.DIRECTORY, true);
 
 		//load_mimetype_list();
+
+		string src_path = path_combine(share_dir, "files/fish_prompt.fish");
+		string dst_path = path_combine(user_home, ".config/fish/functions/fish_prompt.fish");
+		if (!file_exists(dst_path)){
+			file_copy(src_path, dst_path);
+			chown(dst_path, user_name, user_name, false, null);
+			chmod(dst_path, "u+rw", null);
+		}
 
 		init_tools_list();
 
