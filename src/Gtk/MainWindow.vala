@@ -457,7 +457,7 @@ public class MainWindow : Gtk.Window {
 
 			layout_box.refresh_for_active_pane();
 
-			menubar.enable_accelerators(); // enable
+			//menubar.enable_accelerators(); // enable
 		}
 	}
 

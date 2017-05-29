@@ -143,6 +143,8 @@ public class TermBox : Gtk.Box {
 		term.button_press_event.connect((w, event) => {
 
 			window.active_pane = pane;
+			
+			window.menubar.disable_accelerators();
 
 			term.grab_focus();
 			

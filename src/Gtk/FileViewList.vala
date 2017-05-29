@@ -256,6 +256,8 @@ public class FileViewList : Gtk.Box {
 
 			window.active_pane = pane;
 
+			window.menubar.enable_accelerators();
+
 			if (current_item == null) { return false; }
 
 			if (event.button == 3) {
@@ -340,6 +342,8 @@ public class FileViewList : Gtk.Box {
 		iconview.button_press_event.connect((w, event) => {
 
 			window.active_pane = pane;
+
+			window.menubar.enable_accelerators();
 
 			if (current_item == null) { return false; }
 

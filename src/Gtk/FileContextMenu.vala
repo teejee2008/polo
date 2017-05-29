@@ -978,6 +978,8 @@ public class FileContextMenu : Gtk.Menu {
 		
 		add_copy_across(sub_menu, sg_icon_sub, sg_label_sub);
 
+		gtk_menu_add_separator(sub_menu); //--------------------------------
+
 		add_move_to(sub_menu, sg_icon_sub, sg_label_sub);
 		
 		add_move_across(sub_menu, sg_icon_sub, sg_label_sub);

@@ -62,6 +62,7 @@ public class MainMenuBar : Gtk.MenuBar {
 	private Gtk.Menu? menu = null;
 	private bool menu_mode = false;
 	private bool add_accel = true;
+	private bool refreshed_once = false;
 	
 	public MainMenuBar(bool _menu_mode){
 		
@@ -73,15 +74,26 @@ public class MainMenuBar : Gtk.MenuBar {
 	}
 
 	public void enable_accelerators(){
+		if (add_accel && refreshed_once) { return; }
 		add_accel = true;
+		refreshed_once = true;
+		log_debug("MainMenuBar: keyboard shortcuts enabled");
 		refresh();
 	}
 
 	public void disable_accelerators(){
+		if (!add_accel) { return; }
 		add_accel = false;
+		log_debug("MainMenuBar: keyboard shortcuts disbaled");
 		refresh();
 	}
 
+	public bool accelerators_enabled {
+		get{
+			return add_accel;
+		}
+	}
+	
 	public Gtk.Menu? get_menu(){
 		return menu;
 	}
