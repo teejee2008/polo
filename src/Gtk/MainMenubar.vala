@@ -120,6 +120,7 @@ public class MainMenuBar : Gtk.MenuBar {
 		add_menu_view(menu_shell);
 		add_menu_go(menu_shell);
 		add_menu_tools(menu_shell);
+		add_menu_help(menu_shell);
 		
 		menu_shell.show_all();
 	}
@@ -695,6 +696,21 @@ public class MainMenuBar : Gtk.MenuBar {
 		});
 	}
 
+	private void add_calculate_dir_sizes(Gtk.Menu menu){
+
+		var item = new Gtk.MenuItem.with_label (_("Calculate directory sizes"));
+		//item.set_tooltip_text("");
+		menu.add(item);
+
+		item.activate.connect (() => {
+			view.calculate_directory_sizes();
+		});
+
+		if (add_accel){
+			add_action_accel(item, "<Control>e");
+		}
+	}
+	
 	private void add_wizard(Gtk.Menu menu){
 
 		var item = new Gtk.MenuItem.with_label (_("Open style wizard"));
@@ -771,20 +787,88 @@ public class MainMenuBar : Gtk.MenuBar {
 	}
 
 
-	
-	private void add_calculate_dir_sizes(Gtk.Menu menu){
+	private void add_menu_help(Gtk.MenuShell menu_shell){
 
-		var item = new Gtk.MenuItem.with_label (_("Calculate directory sizes"));
-		//item.set_tooltip_text("");
+		log_debug("MainMenuBar: add_menu_help()");
+		
+		var menu_item = new Gtk.MenuItem.with_label(_("Help"));
+		menu_shell.add(menu_item);
+
+		var submenu = new Gtk.Menu();
+		menu_item.set_submenu(submenu);
+
+		add_homepage(submenu);
+
+		add_issue_tracker(submenu);
+
+		add_wiki(submenu);
+
+		add_shortcuts(submenu);
+		
+		add_donate(submenu);
+
+		add_about(submenu);
+
+	}
+
+	private void add_homepage(Gtk.Menu menu){
+
+		var item = new Gtk.MenuItem.with_label (_("Homepage"));
 		menu.add(item);
 
 		item.activate.connect (() => {
-			view.calculate_directory_sizes();
+			xdg_open("http://teejeetech.in");
 		});
+	}
 
-		if (add_accel){
-			add_action_accel(item, "<Control>e");
-		}
+	private void add_issue_tracker(Gtk.Menu menu){
+
+		var item = new Gtk.MenuItem.with_label (_("Issue Tracker"));
+		menu.add(item);
+
+		item.activate.connect (() => {
+			xdg_open("https://github.com/teejee2008/polo/issues");
+		});
+	}
+
+	private void add_wiki(Gtk.Menu menu){
+
+		var item = new Gtk.MenuItem.with_label (_("Wiki"));
+		menu.add(item);
+
+		item.activate.connect (() => {
+			xdg_open("https://github.com/teejee2008/polo/wiki");
+		});
+	}
+
+	private void add_shortcuts(Gtk.Menu menu){
+
+		var item = new Gtk.MenuItem.with_label (_("Keyboard Shortcuts"));
+		menu.add(item);
+
+		item.activate.connect (() => {
+			//window.open_shortcuts_window();
+		});
+	}
+	
+	private void add_donate(Gtk.Menu menu){
+
+		var item = new Gtk.MenuItem.with_label (_("Donate"));
+		menu.add(item);
+
+		item.activate.connect (() => {
+			window.open_donate_window();
+		});
+	}
+
+	private void add_about(Gtk.Menu menu){
+
+		var item = new Gtk.MenuItem.with_label (_("About"));
+		menu.add(item);
+
+		item.activate.connect (() => {
+			window.open_about_window();
+		});
 	}
 }
 

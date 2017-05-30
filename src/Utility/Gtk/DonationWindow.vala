@@ -55,7 +55,7 @@ public class DonationWindow : Dialog {
 		// label
 		var label = new Gtk.Label("");
 
-		string msg = _("This application was created for my own use. I work on it during my free time based on my requirements and interest. I'm distributing it in the hope that it will be useful to someone.\n\n▰ Use the issue tracker to report issues, ask questions and request features.\n\n▰ You can leave a donation via PayPal if you wish to say thanks. Users who donate get early access to new releases before they become public. They also get priority for issues and feature requests.\n\n▰ This application comes with absolutely no warranty. See the terms of the GNU General Public License v2 for more details.\n\nThanks,\nTony George");
+		string msg = _("This application was created for my own use. I work on it during my free time based on my requirements and interest. I'm distributing it in the hope that it will be useful to someone.\n\n▰ You can leave a donation via PayPal if you wish to say thanks\n\n▰ Use the issue tracker to report issues, ask questions and request features\n\n▰ This application comes with absolutely no warranty. See the terms of the GNU General Public License v2 for more details.\n\nThanks,\nTony George");
 		
 		label.label = msg;
 		label.wrap = true;
