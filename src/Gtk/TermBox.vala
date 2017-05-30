@@ -103,7 +103,6 @@ public class TermBox : Gtk.Box {
 		//sw_ppa
 		var scrolled = new Gtk.ScrolledWindow(null, null);
 		scrolled.set_shadow_type (ShadowType.ETCHED_IN);
-		scrolled.add (term);
 		scrolled.expand = true;
 		this.add(scrolled);
 
@@ -144,7 +143,7 @@ public class TermBox : Gtk.Box {
 
 			window.active_pane = pane;
 			
-			window.menubar.disable_accelerators();
+			window.disable_accelerators();
 
 			term.grab_focus();
 			

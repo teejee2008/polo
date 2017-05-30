@@ -150,8 +150,6 @@ public class FileViewList : Gtk.Box {
 
 		log_debug("view_mode = App.view_mode; %s".printf(view_mode.to_string()));
 
-		//menu_file = new FileContextMenu(pane);
-
 		overlay = new Gtk.Overlay();
 		this.add(overlay);
 
@@ -162,17 +160,7 @@ public class FileViewList : Gtk.Box {
 
 		init_iconview();
 
-		//if (use_flowbox_mediaview){
-		//	init_mediaview();
-		//}
-
-		//set_view_path(App.user_home);
-
 		show_all();
-
-		//start_thumbnail_cycler();
-
-		//refresh();
 	}
 
 	private void init_treeview() {
@@ -256,7 +244,7 @@ public class FileViewList : Gtk.Box {
 
 			window.active_pane = pane;
 
-			window.menubar.enable_accelerators();
+			window.enable_accelerators();
 
 			if (current_item == null) { return false; }
 
@@ -343,7 +331,7 @@ public class FileViewList : Gtk.Box {
 
 			window.active_pane = pane;
 
-			window.menubar.enable_accelerators();
+			window.enable_accelerators();
 
 			if (current_item == null) { return false; }
 
@@ -484,7 +472,7 @@ public class FileViewList : Gtk.Box {
 
 			cell_name.editable = false;
 
-			window.menubar.enable_accelerators();
+			window.enable_accelerators();
 		});
 
 		// render icon
@@ -3505,7 +3493,7 @@ public class FileViewList : Gtk.Box {
 
 		if (view_mode == ViewMode.LIST){
 
-			window.menubar.disable_accelerators();
+			window.disable_accelerators();
 
 			cell_name.editable = true;
 			TreeModel model;

@@ -492,6 +492,8 @@ public class MainMenuBar : Gtk.MenuBar {
 		var item = new Gtk.MenuItem.with_label (_("Layout"));
 		submenu.add(item);
 
+		if (window.toolbar == null){ return; }
+
 		item.set_submenu(window.toolbar.build_layout_menu());
 	}
 
@@ -499,6 +501,8 @@ public class MainMenuBar : Gtk.MenuBar {
 
 		var item = new Gtk.MenuItem.with_label (_("View"));
 		submenu.add(item);
+
+		if (window.toolbar == null){ return; }
 
 		item.set_submenu(window.toolbar.build_view_menu());
 	}
@@ -543,6 +547,8 @@ public class MainMenuBar : Gtk.MenuBar {
 			if (view == null) { return; }
 			view.reload();
 		});
+
+		if (pane == null) { return; }
 
 		var sort_menu = new SortMenu(pane);
 		item.set_submenu(sort_menu);

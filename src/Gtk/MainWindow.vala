@@ -52,7 +52,7 @@ public class MainWindow : Gtk.Window {
 	public FileMonitor? open_task_monitor = null;
 
 	public bool refresh_apps_pending = false;
-	
+
 	// window
 	private int def_width = 700;
 	private int def_height = 500;
@@ -162,7 +162,7 @@ public class MainWindow : Gtk.Window {
 		add (vbox_main);
 
 		init_hotkeys();
-
+		
 		init_menubar();
 
 		init_headerbar();
@@ -207,8 +207,6 @@ public class MainWindow : Gtk.Window {
 
 		statusbar.refresh();
 
-		//reset_sidebar_width();
-
 		layout_box.refresh_for_active_pane();
 
 		gtk_set_busy(false, this);
@@ -237,6 +235,8 @@ public class MainWindow : Gtk.Window {
 			menubar = new MainMenuBar(true);
 			//vbox_main.add(menubar);
 		}
+
+		menubar.refresh();
 	}
 
 	private void init_headerbar(){
@@ -383,16 +383,27 @@ public class MainWindow : Gtk.Window {
 		gtk_set_busy(false, this);
 	}
 
-	private void init_hotkeys() {
+	private void init_hotkeys() { 
 
 		Hotkeys.init();
 		this.add_accel_group(Hotkeys.accel_group);
 
-		//Hotkeys.bind("<Control>c", (grp, acc, keyval, mod) =>{ active_pane.view.copy(); return true; });
-		//Hotkeys.bind("<Control>x", (grp, acc, keyval, mod) =>{ active_pane.view.cut(); return true; });
-		//Hotkeys.bind("<Control>v", (grp, acc, keyval, mod) =>{ active_pane.view.paste(); return true; });
+		//enable_accelerators();
+		//this.accel_group.connect("<Control>x", Gdk.ModifierType.CONTROL_MASK, Gtk.AccelFlags.VISIBLE, () => view.cut());
+		
+		//Hotkeys.bind("<Control>c", (grp, acc, keyval, mod) =>{ active_pane.view.copy(); return true; }); 
+		//Hotkeys.bind("<Control>x", (grp, acc, keyval, mod) =>{ active_pane.view.cut(); return true; }); 
+		//Hotkeys.bind("<Control>v", (grp, acc, keyval, mod) =>{ active_pane.view.paste(); return true; }); 
 	}
 
+	public void enable_accelerators(){
+		menubar.enable_accelerators(); 
+	}
+
+	public void disable_accelerators(){
+		menubar.disable_accelerators(); 
+	}
+	
 	private void init_statusbar(){
 		statusbar = new Statusbar(null);
 		vbox_main.add(statusbar);

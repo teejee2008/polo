@@ -595,7 +595,7 @@ public class Pathbar : Gtk.Box {
 			gtk_show(ebox_edit_buffer);
 			update_crumbs();
 
-			window.menubar.enable_accelerators();
+			window.enable_accelerators();
 		});
 
 		txt.focus_out_event.connect((event) => {
@@ -1159,7 +1159,7 @@ public class Pathbar : Gtk.Box {
 
 	public void edit_location(){
 
-		window.menubar.disable_accelerators();
+		window.disable_accelerators();
 
 		path_edit_mode = true;
 		txt_path.text = view.current_path_saved;
