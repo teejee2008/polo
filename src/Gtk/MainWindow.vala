@@ -33,6 +33,15 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
+public enum AccelContext {
+	TERM,
+	NORMAL,
+	TRASH,
+	ARCHIVE,
+	EDIT,
+	NONE
+}
+
 public class MainWindow : Gtk.Window {
 
 	private Gtk.Box vbox_main;
@@ -209,6 +218,8 @@ public class MainWindow : Gtk.Window {
 
 		layout_box.refresh_for_active_pane();
 
+		menubar.delayed_init();
+
 		gtk_set_busy(false, this);
 
 		window_is_ready = true;
@@ -236,7 +247,6 @@ public class MainWindow : Gtk.Window {
 			//vbox_main.add(menubar);
 		}
 
-		menubar.refresh();
 	}
 
 	private void init_headerbar(){
@@ -396,14 +406,57 @@ public class MainWindow : Gtk.Window {
 		//Hotkeys.bind("<Control>v", (grp, acc, keyval, mod) =>{ active_pane.view.paste(); return true; }); 
 	}
 
-	public void enable_accelerators(){
-		menubar.enable_accelerators(); 
+	public void update_accelerators_for_active_pane(){
+		
+		if (active_pane == null){ return; }
+		if (active_pane.view == null){ return; }
+		if (active_pane.view.current_item == null){ return; }
+
+		if (active_pane.view.current_item.is_trash || active_pane.view.current_item.is_trashed_item){
+			update_accelerators_for_context(AccelContext.TRASH);
+		}
+		else if (active_pane.view.current_item.is_archive || active_pane.view.current_item.is_archived_item){
+			update_accelerators_for_context(AccelContext.ARCHIVE);
+		}
+		else {
+			update_accelerators_for_context(AccelContext.NORMAL);
+		}
 	}
 
-	public void disable_accelerators(){
-		menubar.disable_accelerators(); 
+	public void update_accelerators_for_terminal(){
+		update_accelerators_for_context(AccelContext.TERM);
+	}
+
+	public void update_accelerators_for_edit(){
+		update_accelerators_for_context(AccelContext.EDIT);
 	}
 	
+	public void update_accelerators_for_context(AccelContext context){
+
+		menubar.context_none();
+		
+		switch(context){
+		case AccelContext.TERM:
+			menubar.context_term();
+			break;
+		case AccelContext.NORMAL:
+			menubar.context_normal();
+			break;
+		case AccelContext.TRASH:
+			menubar.context_trash();
+			break;
+		case AccelContext.ARCHIVE:
+			menubar.context_archive();
+			break;
+		case AccelContext.EDIT:
+			menubar.context_edit();
+			break;
+		case AccelContext.NONE:
+			menubar.context_none();
+			break;
+		}
+	}
+
 	private void init_statusbar(){
 		statusbar = new Statusbar(null);
 		vbox_main.add(statusbar);
@@ -468,7 +521,9 @@ public class MainWindow : Gtk.Window {
 
 			layout_box.refresh_for_active_pane();
 
-			//menubar.enable_accelerators(); // enable
+			menubar.active_pane_changed();
+
+			this.update_accelerators_for_active_pane();
 		}
 	}
 
@@ -605,7 +660,6 @@ public class MainWindow : Gtk.Window {
 			is_fullscreen = true;
 		}
 
-		menubar.refresh();
 	}
 	
 	// actions

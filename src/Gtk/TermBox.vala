@@ -143,12 +143,11 @@ public class TermBox : Gtk.Box {
 
 			window.active_pane = pane;
 			
-			window.disable_accelerators();
+			window.update_accelerators_for_terminal();
 
 			term.grab_focus();
 			
 			if (event.button == 3) {
-				//if (current_item == null) { return false; }
 				menu_term = new TermContextMenu(pane);
 				return menu_term.show_menu(event);
 			}
@@ -230,6 +229,7 @@ public class TermBox : Gtk.Box {
 		
 		if (this.visible){
 			gtk_hide(this);
+			window.update_accelerators_for_active_pane();
 		}
 		else{
 			gtk_show(this);
@@ -244,6 +244,8 @@ public class TermBox : Gtk.Box {
 			}
 
 			term.grab_focus();
+
+			window.update_accelerators_for_terminal();
 		}
 	}
 

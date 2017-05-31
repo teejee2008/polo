@@ -244,11 +244,10 @@ public class FileViewList : Gtk.Box {
 
 			window.active_pane = pane;
 
-			window.enable_accelerators();
-
-			if (current_item == null) { return false; }
+			window.update_accelerators_for_active_pane();
 
 			if (event.button == 3) {
+				if (current_item == null) { return false; }
 				menu_file = new FileContextMenu(pane);
 				return menu_file.show_menu(event);
 			}
@@ -331,11 +330,10 @@ public class FileViewList : Gtk.Box {
 
 			window.active_pane = pane;
 
-			window.enable_accelerators();
-
-			if (current_item == null) { return false; }
+			window.update_accelerators_for_active_pane();
 
 			if (event.button == 3) {
+				if (current_item == null) { return false; }
 				menu_file = new FileContextMenu(pane);
 				return menu_file.show_menu(event);
 			}
@@ -472,7 +470,7 @@ public class FileViewList : Gtk.Box {
 
 			cell_name.editable = false;
 
-			window.enable_accelerators();
+			window.update_accelerators_for_active_pane();
 		});
 
 		// render icon
@@ -3493,7 +3491,7 @@ public class FileViewList : Gtk.Box {
 
 		if (view_mode == ViewMode.LIST){
 
-			window.disable_accelerators();
+			window.update_accelerators_for_edit();
 
 			cell_name.editable = true;
 			TreeModel model;
