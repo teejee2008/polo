@@ -136,11 +136,13 @@ public class FileContextMenu : Gtk.Menu {
 
 		gtk_menu_add_separator(this); //----------------------
 
+		add_disk_usage(this, sg_icon, sg_label);
+		
 		add_archive_actions(this, sg_icon, sg_label);
 
 		add_iso_actions(this, sg_icon, sg_label);
 
-		add_disk_usage(this, sg_icon, sg_label);
+		add_kvm_actions(this, sg_icon, sg_label);
 
 		gtk_menu_add_separator(this); // -----------------------------
 
@@ -1382,6 +1384,7 @@ public class FileContextMenu : Gtk.Menu {
 		});
 	}
 
+
 	private void add_iso_actions(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
 		if (selected_item == null){ return; }
@@ -1399,7 +1402,7 @@ public class FileContextMenu : Gtk.Menu {
 			sg_label);
 			
 		var sub_menu = new Gtk.Menu();
-		sub_menu.reserve_toggle_size = false;
+		//sub_menu.reserve_toggle_size = false;
 		menu_item.submenu = sub_menu;
 
 		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
@@ -1477,6 +1480,114 @@ public class FileContextMenu : Gtk.Menu {
 		menu_item.sensitive = true;
 	}
 
+
+	private void add_kvm_actions(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		log_debug("FileContextMenu: add_kvm_actions()");
+	
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("KVM"),
+			"",
+			null,//IconManager.lookup_image("media-cdrom",16),
+			sg_icon,
+			sg_label);
+			
+		var sub_menu = new Gtk.Menu();
+		//sub_menu.reserve_toggle_size = false;
+		menu_item.submenu = sub_menu;
+
+		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		var sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		
+		add_create_disk(sub_menu, sg_icon_sub, sg_label_sub);
+
+		add_create_disk_derived(sub_menu, sg_icon_sub, sg_label_sub);
+
+		add_install_disk(sub_menu, sg_icon_sub, sg_label_sub);
+
+		add_boot_disk(sub_menu, sg_icon_sub, sg_label_sub);
+		
+		//add_write_iso(sub_menu, sg_icon_sub, sg_label_sub);
+	}
+	
+	private void add_create_disk(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		log_debug("FileContextMenu: add_create_disk()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Create Disk..."),
+			_("Create a virtual hard disk"),
+			null,//get_shared_icon("media-cdrom","",16),
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			view.kvm_create_disk();
+		});
+	}
+
+	private void add_create_disk_derived(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		log_debug("FileContextMenu: add_create_disk_derived()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Create Derived Disk..."),
+			_("Create a virtual hard disk that uses selected disk as the base"),
+			null,//get_shared_icon("media-cdrom","",16),
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			if (selected_item == null){ return; }
+			view.kvm_create_derived_disk();
+		});
+
+		menu_item.sensitive = (selected_item != null) && (selected_item.file_extension == ".qcow2");
+	}
+
+	private void add_boot_disk(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		log_debug("FileContextMenu: add_boot_disk()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Boot Disk"),
+			_("Boot the selected disk in a virtual machine"),
+			null,//get_shared_icon("media-cdrom","",16),
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			if (selected_item == null){ return; }
+			view.kvm_boot_disk();
+		});
+
+		menu_item.sensitive = (selected_item != null) && (selected_item.file_extension == ".qcow2");
+	}
+
+	private void add_install_disk(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		log_debug("FileContextMenu: add_install_disk()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Install from ISO..."),
+			_("Boot from an ISO file with the selected disk attached"),
+			null,//get_shared_icon("media-cdrom","",16),
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			if (selected_item == null){ return; }
+			view.kvm_install_iso();
+		});
+
+		menu_item.sensitive = (selected_item != null) && (selected_item.file_extension == ".qcow2");
+	}
+	
 	private void add_sort_column(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
 		var menu_item = gtk_menu_add_item(

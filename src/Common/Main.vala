@@ -165,6 +165,7 @@ public class Main : GLib.Object {
 	public string kvm_cpu = "host";
 	public int kvm_smp = 1;
 	public int kvm_mem = 2048;
+	public string kvm_format = ".qcow2";
 
 	public static string REQUIRED_COLUMNS = "name,indicator,spacer";
 	public static string REQUIRED_COLUMNS_END = "spacer";

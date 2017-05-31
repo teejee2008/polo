@@ -3974,6 +3974,8 @@ public class FileViewList : Gtk.Box {
 		cmd += " -netdev user,id=vmnic -device virtio-net,netdev=vmnic";
 		cmd += " -smb '%s'".printf(App.user_dirs.user_public);
 		cmd += " -boot d -cdrom '%s'".printf(escape_single_quote(item.file_path));
+
+		log_debug(cmd);
 		
 		exec_script_async(cmd);
 	}
@@ -4002,6 +4004,85 @@ public class FileViewList : Gtk.Box {
 	}
 
 
+	public void kvm_create_disk(){
+		
+		err_log_clear();
+
+		var win = new KvmCreateDiskWindow(window, current_item.file_path, "");
+	}
+
+	public void kvm_create_derived_disk(){
+		
+		err_log_clear();
+
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+
+		var win = new KvmCreateDiskWindow(window, current_item.file_path, item.file_path);
+	}
+
+	public void kvm_boot_disk(){
+		
+		err_log_clear();
+
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+
+		string cmd = "kvm -enable-kvm";
+		cmd += " -cpu %s".printf(App.kvm_cpu);
+		cmd += " -smp %d".printf(App.kvm_smp);
+		cmd += " -vga %s".printf(App.kvm_vga);
+		cmd += " -m %dM".printf(App.kvm_mem);
+		//cmd += " -net nic,model=virtio -net user";
+		cmd += " -netdev user,id=vmnic -device virtio-net,netdev=vmnic";
+		cmd += " -smb '%s'".printf(App.user_dirs.user_public);
+		cmd += " -hda '%s'".printf(escape_single_quote(item.file_path));
+
+		log_debug(cmd);
+		
+		exec_script_async(cmd);
+	}
+
+	public void kvm_install_iso(){
+		
+		err_log_clear();
+
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+
+		string message = _("Select ISO File");
+
+		var filters = new Gee.ArrayList<Gtk.FileFilter>();
+		var filter = create_file_filter("All Files", { "*" });
+		filters.add(filter);
+		filter = create_file_filter("ISO Image File (*.iso)", { "*.iso" });
+		filters.add(filter);
+		var default_filter = filter;
+
+		var selected_files = gtk_select_files(window, true, false, filters, default_filter, message);
+		if (selected_files.size == 0){ return; }
+		string iso_file = selected_files[0];
+
+		string cmd = "kvm -enable-kvm";
+		cmd += " -cpu %s".printf(App.kvm_cpu);
+		cmd += " -smp %d".printf(App.kvm_smp);
+		cmd += " -vga %s".printf(App.kvm_vga);
+		cmd += " -m %dM".printf(App.kvm_mem);
+		//cmd += " -net nic,model=virtio -net user";
+		cmd += " -netdev user,id=vmnic -device virtio-net,netdev=vmnic";
+		cmd += " -smb '%s'".printf(App.user_dirs.user_public);
+		cmd += " -boot d -cdrom '%s'".printf(escape_single_quote(iso_file));
+		cmd += " -hda '%s'".printf(escape_single_quote(item.file_path));
+
+		log_debug(cmd);
+		
+		exec_script_async(cmd);
+	}
+
+	
 	public void hide_selected(){
 
 		if (!is_normal_directory){ return; }
