@@ -976,7 +976,7 @@ public class PropertiesWindow : Gtk.Window {
 		hbox.margin_top = 6;
 		box.add(hbox);
 
-		var label = new Label(_("You don't have permission to change some permissions"));
+		var label = new Gtk.Label(_("You don't have permission to change some permissions"));
 		label.xalign = 0.5f;
 		label.hexpand = true;
 		label.margin = 6;
@@ -1002,14 +1002,14 @@ public class PropertiesWindow : Gtk.Window {
 		stack.add_titled (vbox, _("MediaInfo"), _("MediaInfo"));
 
 		//tv_info
-		var treeview = new TreeView();
+		var treeview = new Gtk.TreeView();
 		treeview.get_selection().mode = SelectionMode.SINGLE;
 		treeview.headers_visible = false;
 		treeview.expand = true;
 		treeview.insert_column_with_attributes (-1, _("Key"), new CellRendererText(), "text", 0);
 		treeview.insert_column_with_attributes (-1, _("Value"), new CellRendererText(), "text", 1);
 
-		var scrolled = new ScrolledWindow(null, null);
+		var scrolled = new Gtk.ScrolledWindow(null, null);
 		scrolled.set_shadow_type (ShadowType.ETCHED_IN);
 		scrolled.hscrollbar_policy = PolicyType.AUTOMATIC;
 		scrolled.vscrollbar_policy = PolicyType.AUTOMATIC;

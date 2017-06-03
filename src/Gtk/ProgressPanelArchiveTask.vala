@@ -256,7 +256,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		drawing_area.set_size_request(-1, 40);
 		drawing_area.hexpand = true;
 		
-		var sw_progress = new ScrolledWindow(null, null);
+		var sw_progress = new Gtk.ScrolledWindow(null, null);
 		sw_progress.set_shadow_type (ShadowType.ETCHED_IN);
 		sw_progress.hscrollbar_policy = PolicyType.NEVER;
 		sw_progress.vscrollbar_policy = PolicyType.NEVER;

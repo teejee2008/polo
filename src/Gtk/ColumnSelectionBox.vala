@@ -112,7 +112,7 @@ public class ColumnSelectionBox : Gtk.Box {
 		log_debug("ColumnSelectionBox: init_treeview_columns()");
 		
 		// treeview
-		treeview = new TreeView();
+		treeview = new Gtk.TreeView();
 		treeview.get_selection().mode = SelectionMode.SINGLE;
 		treeview.headers_clickable = false;
 		treeview.rubber_banding = false;
@@ -122,7 +122,7 @@ public class ColumnSelectionBox : Gtk.Box {
 		treeview.headers_visible = false;
 
 		// scrolled
-		var scrolled = new ScrolledWindow(null, null);
+		var scrolled = new Gtk.ScrolledWindow(null, null);
 		scrolled.set_shadow_type (ShadowType.ETCHED_IN);
 		scrolled.hscrollbar_policy = PolicyType.AUTOMATIC;
 		scrolled.vscrollbar_policy = PolicyType.AUTOMATIC;

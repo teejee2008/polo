@@ -812,14 +812,14 @@ namespace TeeJee.GtkHelper{
 		Gtk.SelectionMode selection_mode = Gtk.SelectionMode.SINGLE){
 			
 		// TreeView
-		var treeview = new TreeView();
+		var treeview = new Gtk.TreeView();
 		treeview.get_selection().mode = selection_mode;
 		treeview.set_rules_hint (true);
 		treeview.show_expanders = true;
 		treeview.enable_tree_lines = true;
 
 		// ScrolledWindow
-		var scrollwin = new ScrolledWindow(null, null);
+		var scrollwin = new Gtk.ScrolledWindow(null, null);
 		scrollwin.set_shadow_type (ShadowType.ETCHED_IN);
 		scrollwin.add (treeview);
 		scrollwin.expand = true;

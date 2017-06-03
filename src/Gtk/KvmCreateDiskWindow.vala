@@ -175,7 +175,7 @@ public class KvmCreateDiskWindow : Gtk.Window {
 		//});
 
 		//cmb_archive_ext
-		var combo = new ComboBox();
+		var combo = new Gtk.ComboBox();
 		hbox2.add(combo);
 		cmb_extension = combo;
 		

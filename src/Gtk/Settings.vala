@@ -1147,7 +1147,7 @@ public class Settings : Gtk.Box {
 		hbox.margin_bottom = 6;
 
 		// label
-		var label = new Label(_("View Mode"));
+		var label = new Gtk.Label(_("View Mode"));
 		label.xalign = (float) 0.0;
 		label.margin_left = 6;
 		label.margin_right = 6;
@@ -1156,7 +1156,7 @@ public class Settings : Gtk.Box {
 		sg_label.add_widget(label);
 
 		// cmb_app
-		var combo = new ComboBox();
+		var combo = new Gtk.ComboBox();
 		combo.set_tooltip_text(_("Default view mode to use for new panes"));
 		hbox.add (combo);
 		sg_option.add_widget(combo);
@@ -1214,7 +1214,7 @@ public class Settings : Gtk.Box {
 		box.add(hbox);
 
 		// label
-		var label = new Label(_("File Manager"));
+		var label = new Gtk.Label(_("File Manager"));
 		label.xalign = (float) 0.0;
 		label.margin_left = 6;
 		label.margin_right = 6;
@@ -1223,7 +1223,7 @@ public class Settings : Gtk.Box {
 		sg_label.add_widget(label);
 
 		// cmb_app
-		var combo = new ComboBox();
+		var combo = new Gtk.ComboBox();
 		combo.set_tooltip_text(_("Sets the default application for opening folders"));
 		hbox.add (combo);
 		sg_option.add_widget(combo);
@@ -1474,7 +1474,7 @@ public class Settings : Gtk.Box {
 		var hbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		box.add(hbox);
 
-		var label = new Label(_("Font scale"));
+		var label = new Gtk.Label(_("Font scale"));
 		label.xalign = 0.0f;
 		//label.margin_left = 6;
 		hbox.add(label);
@@ -1508,7 +1508,7 @@ public class Settings : Gtk.Box {
 		var hbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		box.add(hbox);
 
-		var label = new Label(_("Icon size"));
+		var label = new Gtk.Label(_("Icon size"));
 		label.xalign = 0.0f;
 		//label.margin_left = 6;
 		hbox.add(label);
@@ -1549,7 +1549,7 @@ public class Settings : Gtk.Box {
 		var hbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		box.add(hbox);
 
-		var label = new Label(_("Row spacing"));
+		var label = new Gtk.Label(_("Row spacing"));
 		label.xalign = 0.0f;
 		//label.margin_left = 6;
 		hbox.add(label);
@@ -1662,7 +1662,7 @@ public class Settings : Gtk.Box {
 		var hbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		box.add(hbox);
 
-		var label = new Label(_("Icon size"));
+		var label = new Gtk.Label(_("Icon size"));
 		label.xalign = 0.0f;
 		//label.margin_left = 6;
 		hbox.add(label);
@@ -1700,7 +1700,7 @@ public class Settings : Gtk.Box {
 		var hbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		box.add(hbox);
 
-		var label = new Label(_("Row spacing"));
+		var label = new Gtk.Label(_("Row spacing"));
 		label.xalign = 0.0f;
 		//label.margin_left = 6;
 		hbox.add(label);
@@ -1735,7 +1735,7 @@ public class Settings : Gtk.Box {
 		var hbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		box.add(hbox);
 
-		var label = new Label(_("Col spacing"));
+		var label = new Gtk.Label(_("Col spacing"));
 		label.xalign = 0.0f;
 		//label.margin_left = 6;
 		hbox.add(label);
@@ -1847,7 +1847,7 @@ public class Settings : Gtk.Box {
 		var hbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		box.add(hbox);
 
-		var label = new Label(_("Icon size"));
+		var label = new Gtk.Label(_("Icon size"));
 		label.xalign = 0.0f;
 		//label.margin_left = 6;
 		hbox.add(label);
@@ -1885,7 +1885,7 @@ public class Settings : Gtk.Box {
 		var hbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		box.add(hbox);
 
-		var label = new Label(_("Row spacing"));
+		var label = new Gtk.Label(_("Row spacing"));
 		label.xalign = 0.0f;
 		//label.margin_left = 6;
 		hbox.add(label);
@@ -1920,7 +1920,7 @@ public class Settings : Gtk.Box {
 		var hbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		box.add(hbox);
 
-		var label = new Label(_("Padding"));
+		var label = new Gtk.Label(_("Padding"));
 		label.xalign = 0.0f;
 		//label.margin_left = 6;
 		hbox.add(label);
@@ -2126,13 +2126,13 @@ public class Settings : Gtk.Box {
 		box.add(hbox);
 
 		// label
-		var label = new Label(_("CPU"));
+		var label = new Gtk.Label(_("CPU"));
 		label.xalign = 0.0f;
 		//label.margin_right = 12;
 		hbox.add(label);
 
 		// cmb_app
-		var combo = new ComboBox();
+		var combo = new Gtk.ComboBox();
 		hbox.add (combo);
 		
 		// render text
@@ -2174,13 +2174,13 @@ public class Settings : Gtk.Box {
 		box.add(hbox);
 
 		// label
-		var label = new Label(_("Graphics"));
+		var label = new Gtk.Label(_("Graphics"));
 		label.xalign = 0.0f;
 		//label.margin_right = 12;
 		hbox.add(label);
 
 		// cmb_app
-		var combo = new ComboBox();
+		var combo = new Gtk.ComboBox();
 		hbox.add (combo);
 
 		// render text
@@ -2243,7 +2243,7 @@ public class Settings : Gtk.Box {
 		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 12);
 		box.add(hbox);
 
-		var label = new Label(_("RAM (MB)"));
+		var label = new Gtk.Label(_("RAM (MB)"));
 		label.xalign = 0.0f;
 		label.margin_right = 12;
 		hbox.add(label);

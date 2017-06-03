@@ -280,7 +280,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		});
 
 		//cmb_archive_ext
-		var combo = new ComboBox();
+		var combo = new Gtk.ComboBox();
 		hbox.add(combo);
 		cmb_archive_ext = combo;
 		
@@ -494,7 +494,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		
 		// cmb_format
 		
-		var combo = new ComboBox();
+		var combo = new Gtk.ComboBox();
 		hbox.add(combo);
 		cmb_format = combo;
 
@@ -621,7 +621,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		
 		// cmb_method
 
-		var combo = new ComboBox();
+		var combo = new Gtk.ComboBox();
 		hbox.add(combo);
 		cmb_method = combo;
 
@@ -778,7 +778,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		
 		// cmb_level
 		
-		var combo = new ComboBox();
+		var combo = new Gtk.ComboBox();
 		hbox.add(combo);
 		cmb_level = combo;
 
@@ -1114,7 +1114,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		
 		// cmb_dict_size
 		
-		var combo = new ComboBox();
+		var combo = new Gtk.ComboBox();
 		hbox.add(combo);
 		cmb_dict_size = combo;
 
@@ -1285,7 +1285,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		
 		// cmb_word_size
 		
-		var combo = new ComboBox();
+		var combo = new Gtk.ComboBox();
 		hbox.add(combo);
 		cmb_word_size = combo;
 
@@ -1451,7 +1451,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		
 		// cmb_block_size
 		
-		var combo = new ComboBox();
+		var combo = new Gtk.ComboBox();
 		hbox.add(combo);
 		cmb_block_size = combo;
 
@@ -1820,7 +1820,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		size_label.add_widget(label);
 		
 		// cmb_encrypt_method
-		var combo = new ComboBox();
+		var combo = new Gtk.ComboBox();
 		hbox.add(combo);
 		cmb_encrypt_method = combo;
 
