@@ -105,7 +105,7 @@ public class ToolsWindow : Gtk.Dialog {
 		tv_refresh();
 
 		//btn_refresh
-        btn_refresh = new Gtk.Button.with_label(("   " + _("Refresh") + "   ");
+        btn_refresh = new Gtk.Button.with_label("   " + _("Refresh") + "   ");
 		vbox_actions.add(btn_refresh);
 		btn_refresh.clicked.connect(()=>{
 			gtk_set_busy(true,this);

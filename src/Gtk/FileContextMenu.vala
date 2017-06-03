@@ -663,7 +663,7 @@ public class FileContextMenu : Gtk.Menu {
 		templates_path = App.user_dirs.user_templates;
 		bool ok2 = add_templates_from_folder(menu, sg_icon, sg_label, templates_path);
 
-		bool item_added = ok1 && ok2;
+		bool item_added = ok1 || ok2;
 		if (!item_added){
 			menu.remove(sep);
 		}
@@ -1252,12 +1252,12 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Archive"),
 			"",
-			null,//IconManager.lookup_image("package-x-generic",16),
+			IconManager.lookup_image("package-x-generic",16),
 			sg_icon,
 			sg_label);
 			
 		var sub_menu = new Gtk.Menu();
-		sub_menu.reserve_toggle_size = false;
+		//sub_menu.reserve_toggle_size = false;
 		menu_item.submenu = sub_menu;
 
 		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
@@ -1280,7 +1280,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Compress"),
 			_("Compress selected items and create new archive"),
-			IconManager.lookup_image("package-x-generic",16),
+			null,//IconManager.lookup_image("package-x-generic",16),
 			sg_icon,
 			sg_label);
 
@@ -1302,7 +1302,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Extract To.."),
 			_("Extract archives to another location"),
-			IconManager.lookup_image("package-x-generic",16),
+			null,//IconManager.lookup_image("package-x-generic",16),
 			sg_icon,
 			sg_label);
 
@@ -1323,7 +1323,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Extract Across"),
 			_("Extract archives to the opposite pane"),
-			IconManager.lookup_image("package-x-generic",16),
+			null,//IconManager.lookup_image("package-x-generic",16),
 			sg_icon,
 			sg_label);
 
@@ -1344,7 +1344,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Extract Here"),
 			_("Extract archives to new folders in this location"),
-			IconManager.lookup_image("package-x-generic",16),
+			null,//IconManager.lookup_image("package-x-generic",16),
 			sg_icon,
 			sg_label);
 
@@ -1427,7 +1427,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Mount"),
 			_("Mount the ISO file as a read-only disk"),
-			null,//get_shared_icon("media-cdrom","",16),
+			null, //get_shared_icon("media-cdrom","",16),
 			sg_icon,
 			sg_label);
 
@@ -1491,7 +1491,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("KVM"),
 			"",
-			null,//IconManager.lookup_image("media-cdrom",16),
+			IconManager.lookup_image("kvm",16),
 			sg_icon,
 			sg_label);
 			

@@ -76,7 +76,7 @@ public class DonationWindow : Dialog {
 		string username = get_username();
 		
 		//btn_donate_paypal
-		var button = new Gtk.Button.with_label((_("Donate with PayPal"));
+		var button = new Gtk.Button.with_label(_("Donate with PayPal"));
 		button.set_tooltip_text("Donate to: teejeetech@gmail.com");
 		bbox.add(button);
 		button.clicked.connect(() => {
@@ -84,7 +84,7 @@ public class DonationWindow : Dialog {
 		});
 
 		//btn_donate_wallet
-		button = new Gtk.Button.with_label((_("Become a Patron"));
+		button = new Gtk.Button.with_label(_("Become a Patron"));
 		button.set_tooltip_text("https://www.patreon.com/bePatron?u=3059450");
 		bbox.add(button);
 		button.clicked.connect(() => {
@@ -97,7 +97,7 @@ public class DonationWindow : Dialog {
 		hbox.add(bbox);
 		
 		//tracker
-		button = new Gtk.Button.with_label((_("Tracker"));
+		button = new Gtk.Button.with_label(_("Tracker"));
 		button.set_tooltip_text("https://github.com/teejee2008/polo/issues");
 		bbox.add(button);
 		button.clicked.connect(() => {
@@ -105,7 +105,7 @@ public class DonationWindow : Dialog {
 		});
 
 		//btn_visit
-		button = new Gtk.Button.with_label((_("Website"));
+		button = new Gtk.Button.with_label(_("Website"));
 		button.set_tooltip_text("http://www.teejeetech.in");
 		bbox.add(button);
 		button.clicked.connect(() => {
@@ -113,7 +113,7 @@ public class DonationWindow : Dialog {
 		});
 
 		//btn_visit
-		button = new Gtk.Button.with_label((_("Close"));
+		button = new Gtk.Button.with_label(_("Close"));
 		hbox.add(button);
 		button.clicked.connect(() => {
 			this.destroy();

@@ -318,12 +318,12 @@ public class AboutWindow : Dialog {
 		hbox_action = (Box) get_action_area();
 
 		//btn_license
-		btn_license = new Gtk.Button.with_label(("  " + _("License"));
+		btn_license = new Gtk.Button.with_label("  " + _("License"));
 		btn_license.set_image (new Image.from_stock ("gtk-about", IconSize.MENU));
 		hbox_action.add(btn_license);
 
 		//btn_credits
-		btn_credits = new Gtk.Button.with_label(("  " + _("Credits"));
+		btn_credits = new Gtk.Button.with_label("  " + _("Credits"));
 		btn_credits.set_image (new Image.from_stock ("gtk-about", IconSize.MENU));
 		hbox_action.add(btn_credits);
 
@@ -392,7 +392,7 @@ public class AboutWindow : Dialog {
 		});
 
 		//btn_close
-		btn_close = new Gtk.Button.with_label(("  " + _("Close"));
+		btn_close = new Gtk.Button.with_label("  " + _("Close"));
 		btn_close.set_image (new Image.from_stock ("gtk-close", IconSize.MENU));
 		hbox_action.add(btn_close);
 
