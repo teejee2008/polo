@@ -43,12 +43,42 @@ namespace TeeJee.FileSystem{
 	// path helpers ----------------------------
 	
 	public string file_parent(string file_path){
+		
 		return File.new_for_path(file_path).get_parent().get_path();
 	}
 
 	public string file_basename(string file_path){
+		
 		return File.new_for_path(file_path).get_basename();
 	}
+
+	public string file_get_title(string file_path){
+		
+		string file_name = File.new_for_path(file_path).get_basename();
+
+		int end = file_name.length - file_get_extension(file_path).length;
+		return file_name[0:end];
+	}
+
+	public string file_get_extension(string file_path){
+		
+		string file_name = File.new_for_path(file_path).get_basename();
+
+		string[] parts = file_name.split(".");
+
+		if (parts.length == 1){
+			// no extension
+			return "";
+		}
+		else if ((parts.length > 2) && (parts[parts.length-2].length <= 4) && (parts[parts.length-1].length <= 4)){
+			// 2-part extension
+			return ".%s.%s".printf(parts[parts.length-2], parts[parts.length-1]);
+		}
+		else{
+			return ".%s".printf(parts[parts.length - 1]);
+		}
+	}
+
 
 	public string path_combine(string part1, string part2){
 		return GLib.Path.build_path("/", part1, part2);

@@ -1171,7 +1171,6 @@ public class FileViewList : Gtk.Box {
 		update_column_headers();
 	}
 
-
 	private Gee.ArrayList<FileItem> treeview_set_sort_func(Gee.ArrayList<FileItem> list){
 
 		switch (sort_column_index) {
@@ -1472,7 +1471,6 @@ public class FileViewList : Gtk.Box {
 		sort();
 	}
 
-		
 	public FileViewColumn get_sort_column_index(){
 		return (FileViewColumn) sort_column_index;
 	}
@@ -1480,7 +1478,6 @@ public class FileViewList : Gtk.Box {
 	public bool get_sort_column_desc(){
 		return sort_column_desc;
 	}
-
 
 	public void set_sort_column_by_index(FileViewColumn col_index){
 		log_debug("set_sort_column_by_index(): %s".printf(col_index.to_string()));
@@ -3965,19 +3962,8 @@ public class FileViewList : Gtk.Box {
 		if (selected_items.size == 0){ return; }
 		var item = selected_items[0];
 
-		string cmd = "kvm -enable-kvm";
-		cmd += " -cpu %s".printf(App.kvm_cpu);
-		cmd += " -smp %d".printf(App.kvm_smp);
-		cmd += " -vga %s".printf(App.kvm_vga);
-		cmd += " -m %dM".printf(App.kvm_mem);
-		//cmd += " -net nic,model=virtio -net user";
-		cmd += " -netdev user,id=vmnic -device virtio-net,netdev=vmnic";
-		cmd += " -smb '%s'".printf(App.user_dirs.user_public);
-		cmd += " -boot d -cdrom '%s'".printf(escape_single_quote(item.file_path));
-
-		log_debug(cmd);
-		
-		exec_script_async(cmd);
+		var task = new KvmTask();
+		task.boot_iso(item.file_path, App.get_kvm_config());
 	}
 
 	public void write_iso(){
@@ -4008,7 +3994,7 @@ public class FileViewList : Gtk.Box {
 		
 		err_log_clear();
 
-		var win = new KvmCreateDiskWindow(window, current_item.file_path, "");
+		var win = new KvmCreateDiskWindow(window, current_item.file_path, "", "");
 	}
 
 	public void kvm_create_derived_disk(){
@@ -4019,7 +4005,18 @@ public class FileViewList : Gtk.Box {
 		if (selected_items.size == 0){ return; }
 		var item = selected_items[0];
 
-		var win = new KvmCreateDiskWindow(window, current_item.file_path, item.file_path);
+		var win = new KvmCreateDiskWindow(window, current_item.file_path, item.file_path, "");
+	}
+
+	public void kvm_create_merged_disk(){
+		
+		err_log_clear();
+
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+
+		var win = new KvmCreateDiskWindow(window, current_item.file_path, "", item.file_path);
 	}
 
 	public void kvm_boot_disk(){
@@ -4030,19 +4027,8 @@ public class FileViewList : Gtk.Box {
 		if (selected_items.size == 0){ return; }
 		var item = selected_items[0];
 
-		string cmd = "kvm -enable-kvm";
-		cmd += " -cpu %s".printf(App.kvm_cpu);
-		cmd += " -smp %d".printf(App.kvm_smp);
-		cmd += " -vga %s".printf(App.kvm_vga);
-		cmd += " -m %dM".printf(App.kvm_mem);
-		//cmd += " -net nic,model=virtio -net user";
-		cmd += " -netdev user,id=vmnic -device virtio-net,netdev=vmnic";
-		cmd += " -smb '%s'".printf(App.user_dirs.user_public);
-		cmd += " -hda '%s'".printf(escape_single_quote(item.file_path));
-
-		log_debug(cmd);
-		
-		exec_script_async(cmd);
+		var task = new KvmTask();
+		task.boot_disk(item.file_path, App.get_kvm_config());
 	}
 
 	public void kvm_install_iso(){
@@ -4066,20 +4052,8 @@ public class FileViewList : Gtk.Box {
 		if (selected_files.size == 0){ return; }
 		string iso_file = selected_files[0];
 
-		string cmd = "kvm -enable-kvm";
-		cmd += " -cpu %s".printf(App.kvm_cpu);
-		cmd += " -smp %d".printf(App.kvm_smp);
-		cmd += " -vga %s".printf(App.kvm_vga);
-		cmd += " -m %dM".printf(App.kvm_mem);
-		//cmd += " -net nic,model=virtio -net user";
-		cmd += " -netdev user,id=vmnic -device virtio-net,netdev=vmnic";
-		cmd += " -smb '%s'".printf(App.user_dirs.user_public);
-		cmd += " -boot d -cdrom '%s'".printf(escape_single_quote(iso_file));
-		cmd += " -hda '%s'".printf(escape_single_quote(item.file_path));
-
-		log_debug(cmd);
-		
-		exec_script_async(cmd);
+		var task = new KvmTask();
+		task.boot_iso_attach_disk(iso_file, item.file_path, App.get_kvm_config());
 	}
 
 	

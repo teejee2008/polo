@@ -2078,41 +2078,96 @@ public class Settings : Gtk.Box {
 		box.margin_left = 6;
 		stack.add_titled (box, _("Advanced"), _("Advanced"));
 
-		// options ---------------------------------
+		// column 1 ---------------------------------
 
-		var vbox_options = new Gtk.Box(Gtk.Orientation.VERTICAL, 6);
-		vbox_options.homogeneous = false;
-		box.add(vbox_options);
-
-		var label = new Gtk.Label("<b>%s:</b>".printf(_("Virtual Machine")));
-		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
-		label.margin_bottom = 12;
-		vbox_options.add(label);
+		var vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 12);
+		vbox.homogeneous = false;
+		box.add(vbox);
+		
+		// ---------------------------------
+		
+		var vbox_group = add_group(vbox, _("Virtual Machine"), 6);
 
 		var sg_label = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
 		var sg_option = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
-		
-		add_option_kvm_vga(vbox_options, sg_label, sg_option);
 
-		//add_kvm_memory(vbox_options, sg_label, sg_option);
+		add_option_kvm_cpu(vbox_group, sg_label, sg_option);
+
+		add_option_kvm_smp(vbox_group, sg_label, sg_option);
+		
+		add_option_kvm_vga(vbox_group, sg_label, sg_option);
+
+		add_option_kvm_memory(vbox_group, sg_label, sg_option);
+
+		// ---------------------------------
+		
+		vbox_group = add_group(vbox, "", 0);
+		
+		add_option_kvm_enable(vbox_group);
 	}
 
+	private void add_option_kvm_cpu(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
+
+		var hbox = new Box(Orientation.HORIZONTAL, 12);
+		box.add(hbox);
+
+		// label
+		var label = new Label(_("CPU"));
+		label.xalign = 0.0f;
+		//label.margin_right = 12;
+		hbox.add(label);
+
+		// cmb_app
+		var combo = new ComboBox();
+		hbox.add (combo);
+		
+		// render text
+		var cell_text = new CellRendererText();
+		combo.pack_start(cell_text, false);
+		combo.set_cell_data_func (cell_text, (cell_text, cell, model, iter) => {
+			string text;
+			model.get (iter, 0, out text, -1);
+			(cell as Gtk.CellRendererText).text = text;
+		});
+
+		// add items
+		int index = -1;
+		var store = new Gtk.ListStore(1, typeof(string));
+		TreeIter iter;
+		foreach(string txt in new string[]{ "host" }){
+			index++;
+			store.append(out iter);
+			store.set (iter, 0, txt, 1, txt, -1);
+			if (txt == App.kvm_cpu){
+				combo.active = index;
+			}
+		}
+		combo.set_model(store);
+
+		combo.changed.connect(() => {
+			App.kvm_cpu = gtk_combobox_get_value(combo, 0, App.kvm_cpu);
+		});
+
+		combo.sensitive = false;
+		
+		sg_label.add_widget(label);
+		sg_option.add_widget(combo);
+	}
+	
 	private void add_option_kvm_vga(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
 
 		var hbox = new Box(Orientation.HORIZONTAL, 12);
 		box.add(hbox);
 
 		// label
-		var label = new Label(_("Graphics Card"));
-		label.xalign = (float) 0.0;
+		var label = new Label(_("Graphics"));
+		label.xalign = 0.0f;
+		//label.margin_right = 12;
 		hbox.add(label);
-		sg_label.add_widget(label);
 
 		// cmb_app
 		var combo = new ComboBox();
 		hbox.add (combo);
-		sg_option.add_widget(combo);
 
 		// render text
 		var cell_text = new CellRendererText();
@@ -2140,21 +2195,71 @@ public class Settings : Gtk.Box {
 		combo.changed.connect(() => {
 			App.kvm_vga = gtk_combobox_get_value(combo, 0, App.kvm_vga);
 		});
+
+		sg_label.add_widget(label);
+		sg_option.add_widget(combo);
 	}
 
-	private void add_kvm_memory(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
+	private void add_option_kvm_smp(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
 
-		var hbox = new Box(Orientation.VERTICAL, 6);
+		var hbox = new Box(Orientation.HORIZONTAL, 12);
+		box.add(hbox);
+		
+		var label = new Gtk.Label(_("CPU Cores"));
+		label.xalign = 0.0f;
+		//label.margin_right = 12;
+		hbox.add(label);
+
+		var spin = new Gtk.SpinButton.with_range(1, 32, 1);
+		spin.value = App.kvm_smp;
+		spin.digits = 0;
+		spin.xalign = 0.5f;
+		hbox.add(spin);
+
+		spin.value_changed.connect(()=>{
+			App.kvm_smp = (int) spin.get_value();
+		});
+
+		sg_label.add_widget(label);
+		sg_option.add_widget(spin);
+	}
+
+	private void add_option_kvm_memory(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
+
+		var hbox = new Box(Orientation.HORIZONTAL, 12);
 		box.add(hbox);
 
 		var label = new Label(_("RAM (MB)"));
 		label.xalign = 0.0f;
+		label.margin_right = 12;
 		hbox.add(label);
-		sg_label.add_widget(label);
 
-		var spin = new Gtk.SpinButton.with_range (0, 10, 1);
-		hbox.add (spin);
+		var spin = new Gtk.SpinButton.with_range(32, 32000, 100);
+		spin.value = App.kvm_mem;
+		spin.digits = 0;
+		spin.xalign = 0.5f;
+		hbox.add(spin);
+
+		spin.value_changed.connect(()=>{
+			App.kvm_mem = (int) spin.get_value();
+		});
+
+		sg_label.add_widget(label);
 		sg_option.add_widget(spin);
+	}
+
+	private void add_option_kvm_enable(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Show KVM in context menu"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("Show KVM submenu in right-click context menu"));
+
+		chk.active = App.kvm_enable;
+
+		chk.toggled.connect(()=>{
+			App.kvm_enable = chk.active;
+		});
 	}
 	
 	private void add_option_network(Gtk.Box box){

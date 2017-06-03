@@ -41,20 +41,47 @@ public class KvmCreateDiskWindow : Gtk.Window {
 	
 	private string dest_path = "";
 	private string base_file_path = "";
+	private string derived_file_path = "";
 	private Gtk.Window window;
 	
 	private Gtk.Entry txt_file_name;
 	private Gtk.Entry txt_base_file;
 	private Gtk.ComboBox cmb_extension;
 	private Gtk.SpinButton spin_size;
+
+	private FileViewPane _pane;
+
+	private FileViewList? view{
+		get{
+			return (pane == null) ? null : pane.view;
+		}
+	}
+
+	private FileViewPane? pane {
+		get{
+			if (_pane != null){
+				return _pane;
+			}
+			else{
+				return App.main_window.active_pane;
+			}
+		}
+	}
+
+	private LayoutPanel? panel {
+		get{
+			return (pane == null) ? null : pane.panel;
+		}
+	}
 	
-	public KvmCreateDiskWindow(Gtk.Window _window, string _dest_path, string _base_file_path) {
+	public KvmCreateDiskWindow(Gtk.Window _window, string _dest_path, string _base_file_path, string _derived_file_path) {
 		
 		set_transient_for(_window);
 		window_position = WindowPosition.CENTER_ON_PARENT;
 
 		dest_path = _dest_path;
 		base_file_path = _base_file_path;
+		derived_file_path = _derived_file_path;
 		window = _window;
 		
 		init_window();
@@ -93,6 +120,8 @@ public class KvmCreateDiskWindow : Gtk.Window {
 		size_combo = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
 
 		init_name();
+
+		init_derived();
 		
 		init_base();
 
@@ -128,7 +157,17 @@ public class KvmCreateDiskWindow : Gtk.Window {
 
 		size_combo.add_widget(hbox2);
 
-		txt.text = "new-disk";
+		if (base_file_path.length > 0){
+			string title = file_get_title(base_file_path);
+			txt.text = "%s-derived".printf(title);
+		}
+		else if (derived_file_path.length > 0){
+			string title = file_get_title(derived_file_path);
+			txt.text = "%s-merged".printf(title);
+		}
+		else{
+			txt.text = "hda";
+		}
 
 		//txt.focus_out_event.connect((entry, event) => {
 		//	txt_archive_title.select_region(0, 0);
@@ -166,6 +205,34 @@ public class KvmCreateDiskWindow : Gtk.Window {
 		});
 	}
 
+	private void init_derived() {
+		
+		var hbox = new Box(Orientation.HORIZONTAL, 6);
+		vbox_main.add(hbox);
+		
+		var label = new Label (_("Derived File"));
+		label.xalign = 1.0f;
+		hbox.add(label);
+		
+		size_label.add_widget(label);
+
+		var txt = new Gtk.Entry();
+		txt.hexpand = true;
+		txt.sensitive = false;
+		txt.set_size_request(200,-1);
+		hbox.add(txt);
+		txt_base_file = txt;
+
+		size_combo.add_widget(txt);
+
+		if (derived_file_path.length == 0){
+			hbox.set_no_show_all(true);
+		}
+		else{
+			txt.text = file_basename(derived_file_path);
+		}
+	}
+
 	private void init_base() {
 		
 		var hbox = new Box(Orientation.HORIZONTAL, 6);
@@ -187,8 +254,7 @@ public class KvmCreateDiskWindow : Gtk.Window {
 		size_combo.add_widget(txt);
 
 		if (base_file_path.length == 0){
-			label.set_no_show_all(true);
-			txt.set_no_show_all(true);
+			hbox.set_no_show_all(true);
 		}
 		else{
 			txt.text = file_basename(base_file_path);
@@ -214,17 +280,15 @@ public class KvmCreateDiskWindow : Gtk.Window {
 
 		//size_combo.add_widget(spin);
 
-		if (base_file_path.length > 0){
-			label.set_no_show_all(true);
-			spin.set_no_show_all(true);
+		if ((base_file_path.length > 0) || (derived_file_path.length > 0)){
+			hbox.set_no_show_all(true);
 		}
 	}
 
 	private void init_messages() {
 
-		if (base_file_path.length == 0){ return; }
-		
 		var label = new Gtk.Label("");
+		label.xalign = 0.0f;
 		label.margin_top = 24;
 		label.wrap = true;
 		label.max_width_chars = 60;
@@ -232,10 +296,23 @@ public class KvmCreateDiskWindow : Gtk.Window {
 		vbox_main.add(label);
 
 		string txt = "";
-		txt += "▰ %s\n".printf(_("Boot the derived disk and use it to make changes to system instead of using base disk directly."));
-		txt += "▰ %s\n".printf(_("Changes can be discarded by deleting the derived disk file, or finalized by merging with base"));
-		txt += "▰ %s\n".printf(_("Do not rename or modify the base file as it will corrupt derived files"));
-		txt += "▰ %s\n".printf(_("Base file will be made read-only to prevent accidental modifications"));
+
+		if (derived_file_path.length > 0){
+			txt += "▰ %s\n".printf(_("Derived file will be merged with base to create a new disk file"));
+			txt += "▰ %s\n".printf(_("Derived and base files will remain unchanged and can be deleted"));
+		}
+		else if (base_file_path.length > 0){
+			txt += "▰ %s\n".printf(_("Derived disk will be created from the base disk."));
+			txt += "▰ %s\n".printf(_("Boot and use the derived disk to make changes to system instead of using base disk directly."));
+			txt += "▰ %s\n".printf(_("Changes can be discarded by deleting the derived disk file, or finalized by merging with base"));
+			txt += "▰ %s\n".printf(_("Do not rename or modify the base file as it will corrupt derived files"));
+			txt += "▰ %s\n".printf(_("Base file will be made read-only to prevent accidental modifications"));
+		}
+		else{
+			txt += "▰ %s\n".printf(_("New disk will be created with specified size"));
+			txt += "▰ %s\n".printf(_("File size will increase gradually as disk is modified"));
+		}
+
 		label.label = txt;
 	}
 
@@ -297,7 +374,7 @@ public class KvmCreateDiskWindow : Gtk.Window {
 		}
 	}
 
-	public double size {
+	public double disk_size {
 		get {
 			return spin_size.get_value();
 		}
@@ -313,34 +390,13 @@ public class KvmCreateDiskWindow : Gtk.Window {
 
 		log_debug("btn_ok_clicked()");
 		
-		string cmd = "qemu-img create";
-
-		cmd += " -f %s".printf(format);
-
-		if (base_file_path.length > 0){
-			cmd += " -b '%s'".printf(escape_single_quote(base_file_path));
-		}
-
-		cmd += " '%s'".printf(escape_single_quote(file_path));
-
-		if (base_file_path.length == 0){
-			cmd += " %.1fG".printf(size);
-		}
-
-		log_debug(cmd);
-
-		string std_out, std_err;
-		exec_sync(cmd, out std_out, out std_err);
-
-		if (std_err.length > 0){
-			gtk_messagebox(_("Finished with errors"), std_err, window, true);
+		if (derived_file_path.length == 0){
+			create_disk();
 		}
 		else{
-			if (base_file_path.length > 0){
-				chmod(base_file_path, "a-w", window);
-			}
+			rebase_derived_disk();
 		}
-
+		
 		this.destroy();
 	}
 
@@ -351,6 +407,36 @@ public class KvmCreateDiskWindow : Gtk.Window {
 		this.destroy();
 	}
 
+	private void create_disk(){
+
+		var task = new KvmTask();
+		task.create_disk(file_path, disk_size, base_file_path, this);
+	}
+
+	private void rebase_derived_disk(){
+		
+		var action = new ProgressPanelKvmTask(pane, FileActionType.KVM_DISK_MERGE);
+		action.set_parameters(file_path, base_file_path, derived_file_path, disk_size);
+		pane.file_operations.add(action);
+		action.execute();
+
+		/*
+		gtk_set_busy(true, this);
+		
+		string std_out, std_err;
+		exec_sync(cmd, out std_out, out std_err);
+
+		gtk_set_busy(false, this);
+
+		if (std_err.length > 0){
+			gtk_messagebox(_("Finished with errors"), std_err, window, true);
+		}
+		else{
+			if (base_file_path.length > 0){
+				chmod(base_file_path, "a-w", window);
+			}
+		}*/
+	}
 }
 
 

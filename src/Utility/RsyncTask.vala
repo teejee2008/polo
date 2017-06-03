@@ -50,9 +50,6 @@ public class RsyncTask : AsyncTask{
 	public bool show_progress = true;
 
 	public Gee.ArrayList<string> exclude_list;
-	
-	// regex
-	private Gee.HashMap<string, Regex> regex_list;
 
 	// status
 	public GLib.Queue<string> status_lines;

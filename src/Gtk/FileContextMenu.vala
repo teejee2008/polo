@@ -50,7 +50,8 @@ public enum FileActionType{
 	LIST_ARCHIVE,
 	TEST_ARCHIVE,
 	EXTRACT,
-	COMPRESS
+	COMPRESS,
+	KVM_DISK_MERGE
 }
 
 public class FileContextMenu : Gtk.Menu {
@@ -668,8 +669,7 @@ public class FileContextMenu : Gtk.Menu {
 		}
 	}
 
-	private bool add_templates_from_folder(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label,
-		string templates_folder){
+	private bool add_templates_from_folder(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label, string templates_folder){
 
 		log_debug("FileContextMenu: add_templates_from_folder(): %s".printf(templates_folder));
 
@@ -1252,7 +1252,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Archive"),
 			"",
-			IconManager.lookup_image("package-x-generic",16),
+			null,//IconManager.lookup_image("package-x-generic",16),
 			sg_icon,
 			sg_label);
 			
@@ -1375,7 +1375,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Disk Usage"),
 			_("Analyze disk usage"),
-			get_shared_icon(baobab.icon,"",16),
+			null,//get_shared_icon(baobab.icon,"",16),
 			sg_icon,
 			sg_label);
 
@@ -1484,7 +1484,9 @@ public class FileContextMenu : Gtk.Menu {
 	private void add_kvm_actions(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
 		log_debug("FileContextMenu: add_kvm_actions()");
-	
+
+		if (!App.kvm_enable) { return; }
+		
 		var menu_item = gtk_menu_add_item(
 			menu,
 			_("KVM"),
@@ -1499,15 +1501,19 @@ public class FileContextMenu : Gtk.Menu {
 
 		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
 		var sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+
+		add_boot_disk(sub_menu, sg_icon_sub, sg_label_sub);
+
+		gtk_menu_add_separator(sub_menu); //--------------------------------
 		
 		add_create_disk(sub_menu, sg_icon_sub, sg_label_sub);
 
 		add_create_disk_derived(sub_menu, sg_icon_sub, sg_label_sub);
 
+		add_create_disk_merged(sub_menu, sg_icon_sub, sg_label_sub);
+
 		add_install_disk(sub_menu, sg_icon_sub, sg_label_sub);
 
-		add_boot_disk(sub_menu, sg_icon_sub, sg_label_sub);
-		
 		//add_write_iso(sub_menu, sg_icon_sub, sg_label_sub);
 	}
 	
@@ -1518,7 +1524,7 @@ public class FileContextMenu : Gtk.Menu {
 		var menu_item = gtk_menu_add_item(
 			menu,
 			_("Create Disk..."),
-			_("Create a virtual hard disk"),
+			_("Create a virtual hard disk file"),
 			null,//get_shared_icon("media-cdrom","",16),
 			sg_icon,
 			sg_label);
@@ -1535,7 +1541,7 @@ public class FileContextMenu : Gtk.Menu {
 		var menu_item = gtk_menu_add_item(
 			menu,
 			_("Create Derived Disk..."),
-			_("Create a virtual hard disk that uses selected disk as the base"),
+			_("Create a virtual hard disk file that uses selected disk as the base"),
 			null,//get_shared_icon("media-cdrom","",16),
 			sg_icon,
 			sg_label);
@@ -1543,6 +1549,26 @@ public class FileContextMenu : Gtk.Menu {
 		menu_item.activate.connect (() => {
 			if (selected_item == null){ return; }
 			view.kvm_create_derived_disk();
+		});
+
+		menu_item.sensitive = (selected_item != null) && (selected_item.file_extension == ".qcow2");
+	}
+
+	private void add_create_disk_merged(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		log_debug("FileContextMenu: add_create_disk_derived()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Create Merged Disk..."),
+			_("Create a virtual hard disk file by merging selected derived disk with it's base"),
+			null,//get_shared_icon("media-cdrom","",16),
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			if (selected_item == null){ return; }
+			view.kvm_create_merged_disk();
 		});
 
 		menu_item.sensitive = (selected_item != null) && (selected_item.file_extension == ".qcow2");

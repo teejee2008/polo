@@ -87,7 +87,7 @@ public class Main : GLib.Object {
 	//public ArchiveTask archive_task;
 	//public DesktopApp crunchy_app;
 	//public Gee.ArrayList<MimeType> mimetype_list;
-	public Json.Object default_config;
+	public Json.Object appconfig;
 	public Bash bash_admin_shell;
 
 	public AppMode app_mode = AppMode.OPEN;
@@ -161,6 +161,7 @@ public class Main : GLib.Object {
 	public bool term_enable_network = true;
 	public bool term_enable_gui = true;
 
+	public bool kvm_enable = true;
 	public string kvm_vga = "std";
 	public string kvm_cpu = "host";
 	public int kvm_smp = 1;
@@ -403,34 +404,6 @@ public class Main : GLib.Object {
 		}
 	}
 
-/*
-	private void load_mimetype_list(){
-
-		var mime_list = new Gee.ArrayList<string>();
-		string mimelist = "/usr/share/%s/mimetypes".printf(AppShortName);
-		if (file_exists(mimelist)){
-			foreach(string line in file_read(mimelist).split("\n")){
-				mime_list.add(line.strip());
-			}
-		}
-
-		var list = new Gee.ArrayList<MimeType>();
-		foreach(string key in MimeType.mimetypes.keys) {
-			if (mime_list.contains(key)){
-				var mime = MimeType.mimetypes[key];
-				//mime.is_selected = true; // let user select explicitly
-				list.add(mime);
-			}
-		}
-
-		list.sort((a, b) => {
-			return strcmp(a.comment,b.comment);
-		});
-
-		mimetype_list = list;
-	}
-*/
-
 	public bool check_dependencies(out string msg) {
 		msg = "";
 
@@ -486,13 +459,7 @@ public class Main : GLib.Object {
 		}
 	}
 	
-	/* Common */
-
-	public string create_log_dir() {
-		string log_dir = "%s/.local/logs/%s".printf(user_home, AppShortName);
-		dir_create(log_dir);
-		return log_dir;
-	}
+	/* Configuration */
 
 	public void save_app_config() {
 
@@ -590,6 +557,12 @@ public class Main : GLib.Object {
 		config.set_string_member("term_enable_network", term_enable_network.to_string());
 		config.set_string_member("term_enable_gui", term_enable_gui.to_string());
 
+		config.set_string_member("kvm_enable", kvm_enable.to_string());
+		config.set_string_member("kvm_cpu", kvm_cpu);
+		config.set_string_member("kvm_smp", kvm_smp.to_string());
+		config.set_string_member("kvm_vga", kvm_vga);
+		config.set_string_member("kvm_mem", kvm_mem.to_string());
+
 		config.set_string_member("selected_columns", selected_columns);
 		config.set_string_member("maximise_on_startup", maximise_on_startup.to_string());
 		//config.set_string_member("single_click_activate", single_click_activate.to_string());
@@ -642,7 +615,7 @@ public class Main : GLib.Object {
 		var node = parser.get_root();
 		var config = node.get_object();
 
-		default_config = config;
+		appconfig = config;
 
 		if (format_is_obsolete(config, Main.APP_CONFIG_FORMAT_VERSION)){
 			first_run = true; // regard as first run
@@ -739,6 +712,12 @@ public class Main : GLib.Object {
 		term_bg_color = json_get_string(config, "term_bg_color", term_bg_color);
 		term_enable_network = json_get_bool(config, "term_enable_network", term_enable_network);
 		term_enable_gui = json_get_bool(config, "term_enable_gui", term_enable_gui);
+
+		kvm_enable = json_get_bool(config, "kvm_enable", kvm_enable);
+		kvm_cpu = json_get_string(config, "kvm_cpu", kvm_cpu);
+		kvm_smp = json_get_int(config, "kvm_smp", kvm_smp);
+		kvm_vga = json_get_string(config, "kvm_vga", kvm_vga);
+		kvm_mem = json_get_int(config, "kvm_mem", kvm_mem);
 		
 		selected_columns = json_get_string(config, "selected_columns", selected_columns);
 		selected_columns = selected_columns.replace(" ",""); // remove spaces
@@ -834,8 +813,6 @@ public class Main : GLib.Object {
 
 		var node = parser.get_root();
 		var config = node.get_object();
-
-		default_config = config;
 
 		if (format_is_obsolete(config, Main.APP_CONFIG_FOLDERS_FORMAT_VERSION)){
 			//first_run = true; // don't set
@@ -960,7 +937,15 @@ public class Main : GLib.Object {
 
 		return unsupported_format;
 	}
+
+	/* Common */
 	
+	public string create_log_dir() {
+		string log_dir = "%s/.local/logs/%s".printf(user_home, AppShortName);
+		dir_create(log_dir);
+		return log_dir;
+	}
+
 	public void exit_app() {
 
 		save_app_config();
@@ -983,6 +968,16 @@ public class Main : GLib.Object {
 		log_msg(_("Exiting Application"));
 	}
 
+	public Json.Object get_kvm_config(){
+		var config = new Json.Object();
+		config.set_string_member("kvm_cpu", kvm_cpu);
+		config.set_string_member("kvm_smp", kvm_smp.to_string());
+		config.set_string_member("kvm_vga", kvm_vga);
+		config.set_string_member("kvm_mem", kvm_mem.to_string());
+		config.set_string_member("kvm_smb", App.user_dirs.user_public);
+		return config;
+	}
+	
 	/* Core */
 
 	public static Gee.ArrayList<Device> get_devices(){
