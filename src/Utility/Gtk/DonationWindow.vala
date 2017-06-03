@@ -35,7 +35,7 @@ public class DonationWindow : Dialog {
 	
 	public DonationWindow() {
 		
-		set_title("Author's Note");
+		set_title(_("Author's Note"));
 		window_position = WindowPosition.CENTER_ON_PARENT;
 		set_destroy_with_parent (true);
 		set_modal (true);
@@ -64,19 +64,21 @@ public class DonationWindow : Dialog {
 		label.margin_bottom = 6;
 		vbox_main.pack_start(label, true, true, 0);
 
-		//vbox_actions
-		var vbox_actions = new Gtk.Box(Orientation.HORIZONTAL, 6);
-		//vbox_actions.margin_left = 50;
-		//vbox_actions.margin_right = 50;
-		//vbox_actions.margin_top = 20;
-		vbox_main.pack_start(vbox_actions, false, false, 0);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
+		hbox.margin_top = 24;
+		vbox_main.pack_start(hbox, false, false, 0);
+		
+		var bbox = new Gtk.ButtonBox(Orientation.HORIZONTAL);
+		bbox.set_layout(Gtk.ButtonBoxStyle.EXPAND);
+		bbox.set_homogeneous(false);
+		hbox.add(bbox);
 
 		string username = get_username();
 		
 		//btn_donate_paypal
-		var button = new Button.with_label(_("Donate - PayPal"));
+		var button = new Button.with_label(_("Donate with PayPal"));
 		button.set_tooltip_text("Donate to: teejeetech@gmail.com");
-		vbox_actions.add(button);
+		bbox.add(button);
 		button.clicked.connect(() => {
 			xdg_open("https://www.paypal.com/cgi-bin/webscr?business=teejeetech@gmail.com&cmd=_xclick&currency_code=USD&amount=10&item_name=Polo%20Donation");
 		});
@@ -84,15 +86,20 @@ public class DonationWindow : Dialog {
 		//btn_donate_wallet
 		button = new Button.with_label(_("Become a Patron"));
 		button.set_tooltip_text("https://www.patreon.com/bePatron?u=3059450");
-		vbox_actions.add(button);
+		bbox.add(button);
 		button.clicked.connect(() => {
 			xdg_open("https://www.patreon.com/bePatron?u=3059450");
 		});
 
+		bbox = new Gtk.ButtonBox(Orientation.HORIZONTAL);
+		bbox.set_layout(Gtk.ButtonBoxStyle.EXPAND);
+		bbox.set_homogeneous(false);
+		hbox.add(bbox);
+		
 		//tracker
-		button = new Button.with_label(_("Issue Tracker"));
+		button = new Button.with_label(_("Tracker"));
 		button.set_tooltip_text("https://github.com/teejee2008/polo/issues");
-		vbox_actions.add(button);
+		bbox.add(button);
 		button.clicked.connect(() => {
 			xdg_open("https://github.com/teejee2008/polo/issues");
 		});
@@ -100,9 +107,16 @@ public class DonationWindow : Dialog {
 		//btn_visit
 		button = new Button.with_label(_("Website"));
 		button.set_tooltip_text("http://www.teejeetech.in");
-		vbox_actions.add(button);
+		bbox.add(button);
 		button.clicked.connect(() => {
 			xdg_open("http://www.teejeetech.in");
+		});
+
+		//btn_visit
+		button = new Button.with_label(_("Close"));
+		hbox.add(button);
+		button.clicked.connect(() => {
+			this.destroy();
 		});
 	}
 }
