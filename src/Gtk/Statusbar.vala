@@ -473,13 +473,7 @@ public class Statusbar : Gtk.Box {
 
 		ebox.button_press_event.connect((event)=>{
 
-			if (pane.terminal.visible){
-				gtk_hide(pane.terminal);
-			}
-			else{
-				gtk_show(pane.terminal);
-				pane.terminal.refresh();
-			}
+			pane.terminal.toggle();
 
 			return true;
 		});
