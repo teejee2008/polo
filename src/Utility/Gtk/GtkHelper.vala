@@ -612,7 +612,7 @@ namespace TeeJee.GtkHelper{
 		scrolled.vscrollbar_policy = PolicyType.NEVER;
 		box.add(scrolled);
 
-		var hbox = new Box(Orientation.HORIZONTAL, 6);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		scrolled.add(hbox);
 
 		return hbox;

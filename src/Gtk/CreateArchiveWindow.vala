@@ -254,7 +254,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 
 		log_debug("CreateArchiveWindow: init_archive_name()");
 		
-		var hbox = new Box(Orientation.HORIZONTAL, 6);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 
 		// name
@@ -399,7 +399,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 
 		log_debug("CreateArchiveWindow: init_archive_location()");
 		
-		var hbox = new Box(Orientation.HORIZONTAL, 6);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 		
 		//lbl_location
@@ -482,7 +482,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 
 		log_debug("CreateArchiveWindow: init_format()");
 		
-		var hbox = new Box(Orientation.HORIZONTAL, 6);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 		
 		// label
@@ -609,7 +609,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 
 
 	private void init_method() {
-		var hbox = new Box(Orientation.HORIZONTAL, 6);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 		
 		// label
@@ -766,7 +766,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 
 
 	private void init_level() {
-		var hbox = new Box(Orientation.HORIZONTAL, 6);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 		
 		// label
@@ -1102,7 +1102,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 
 
 	private void init_dict_size() {
-		var hbox = new Box(Orientation.HORIZONTAL, 6);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 		
 		// label
@@ -1273,7 +1273,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 
 
 	private void init_word_size() {
-		var hbox = new Box(Orientation.HORIZONTAL, 6);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 		
 		// label
@@ -1439,7 +1439,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 
 
 	private void init_block_size() {
-		var hbox = new Box(Orientation.HORIZONTAL, 6);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 		
 		// label
@@ -1561,7 +1561,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 
 
 	private void init_passes() {
-		var hbox = new Box(Orientation.HORIZONTAL, 6);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 		
 		// label
@@ -1683,7 +1683,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 
 		log_debug("CreateArchiveWindow: init_password()");
 		
-		var hbox = new Box(Orientation.HORIZONTAL, 6);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 		
 		//lbl_passes
@@ -1809,7 +1809,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 	}
 
 	private void init_encrypt_method() {
-		var hbox = new Box(Orientation.HORIZONTAL, 6);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 		
 		// label
@@ -1846,7 +1846,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 
 	private void init_encrypt_header() {
 		
-		var hbox = new Box(Orientation.HORIZONTAL, 6);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 
 		var label = new Gtk.Label("");
@@ -1955,7 +1955,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 
 		log_debug("CreateArchiveWindow: init_split()");
 		
-		var hbox = new Box(Orientation.HORIZONTAL, 6);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 		
 		// label

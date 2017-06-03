@@ -115,7 +115,7 @@ public class FileViewPane : Gtk.Box {
 		paned.pack1(box, true, true); // resize, shrink
 		paned.pack2(terminal, true, true); // resize, shrink
 
-		file_operations_box = new Box(Orientation.VERTICAL, 6);
+		file_operations_box = new Gtk.Box(Orientation.VERTICAL, 6);
 		add(file_operations_box);
 
 		add(mediabar);

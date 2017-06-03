@@ -137,7 +137,7 @@ public class KvmCreateDiskWindow : Gtk.Window {
 
 		log_debug("CreateArchiveWindow: init_name()");
 		
-		var hbox = new Box(Orientation.HORIZONTAL, 6);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 
 		var label = new Label (_("File Name"));
@@ -146,7 +146,7 @@ public class KvmCreateDiskWindow : Gtk.Window {
 		
 		size_label.add_widget(label);
 
-		var hbox2 = new Box(Orientation.HORIZONTAL, 6);
+		var hbox2 = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		hbox.add(hbox2);
 		
 		var txt = new Gtk.Entry();
@@ -207,7 +207,7 @@ public class KvmCreateDiskWindow : Gtk.Window {
 
 	private void init_derived() {
 		
-		var hbox = new Box(Orientation.HORIZONTAL, 6);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 		
 		var label = new Label (_("Derived File"));
@@ -235,7 +235,7 @@ public class KvmCreateDiskWindow : Gtk.Window {
 
 	private void init_base() {
 		
-		var hbox = new Box(Orientation.HORIZONTAL, 6);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 		
 		var label = new Label (_("Base File"));
@@ -263,7 +263,7 @@ public class KvmCreateDiskWindow : Gtk.Window {
 	
 	private void init_size() {
 		
-		var hbox = new Box(Orientation.HORIZONTAL, 6);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 		
 		var label = new Gtk.Label(_("Size (GB)"));

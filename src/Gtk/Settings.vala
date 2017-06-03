@@ -81,7 +81,6 @@ public class Settings : Gtk.Box {
 
 		log_debug("Settings()");
 
-
 		window = App.main_window;
 		pane = window.active_pane;
 		view = pane.view;
@@ -99,9 +98,9 @@ public class Settings : Gtk.Box {
 
 	private void init_ui(){
 
-		header_box = new Box(Orientation.HORIZONTAL, 6);
+		header_box = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		add(header_box);
-
+		
 		switcher = new Gtk.StackSwitcher();
 		switcher.margin = 6;
 		header_box.add (switcher);
@@ -150,7 +149,7 @@ public class Settings : Gtk.Box {
 
 	private void init_tab_ui() {
 
-		var hbox = new Box(Orientation.HORIZONTAL, 12);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 12);
 		hbox.margin_left = 6;
 		stack.add_titled (hbox, _("UI"), _("UI"));
 
@@ -214,6 +213,8 @@ public class Settings : Gtk.Box {
 
 		add_headerbar_option_enable(vbox_items);
 
+		add_headerbar_option_left_window_buttons(vbox_items);
+		
 		// --------
 
 		vbox_items = add_group(vbox, _("Pathbar"), 0);
@@ -612,6 +613,22 @@ public class Settings : Gtk.Box {
 			App.headerbar_enabled_temp = chk.active;
 			
 			restart_app();
+		});
+	}
+
+	private void add_headerbar_option_left_window_buttons(Gtk.Container box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Window buttons on left"));
+		chk.set_tooltip_text(_("Show window buttons on the left side [Restart Required]"));
+		box.add(chk);
+ 
+		chk.active = App.headerbar_window_buttons_left;
+
+		chk.toggled.connect(()=>{
+
+			if (App.headerbar_window_buttons_left == chk.active){ return; }
+
+			App.headerbar_window_buttons_left = chk.active;
 		});
 	}
 
@@ -1061,7 +1078,7 @@ public class Settings : Gtk.Box {
 
 	private void init_tab_general() {
 
-		var box = new Box(Orientation.HORIZONTAL, 24);
+		var box = new Gtk.Box(Orientation.HORIZONTAL, 24);
 		box.margin_left = 6;
 		stack.add_titled (box, _("General"), _("General"));
 
@@ -1124,7 +1141,7 @@ public class Settings : Gtk.Box {
 
 	private void add_option_view_mode(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
 
-		var hbox = new Box(Orientation.HORIZONTAL,6);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL,6);
 		box.add(hbox);
 
 		hbox.margin_bottom = 6;
@@ -1193,7 +1210,7 @@ public class Settings : Gtk.Box {
 
 	private void add_option_folder_handler(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
 
-		var hbox = new Box(Orientation.HORIZONTAL,6);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL,6);
 		box.add(hbox);
 
 		// label
@@ -1388,7 +1405,6 @@ public class Settings : Gtk.Box {
 		// ------------------------
 
 		var vbox = add_group(box, _("List View"), 12);
-		box.add(vbox);
 
 		add_scale_listview_icon_size(vbox, sg_label, sg_scale);
 
@@ -1407,7 +1423,6 @@ public class Settings : Gtk.Box {
 		// ------------------------
 
 		vbox = add_group(box, _("Icon View"), 12);
-		box.add(vbox);
 
 		add_scale_iconview_icon_size(vbox, sg_label, sg_scale);
 
@@ -1426,7 +1441,6 @@ public class Settings : Gtk.Box {
 		// ------------------------
 
 		vbox = add_group(box, _("Tile View"), 12);
-		box.add(vbox);
 
 		add_scale_tileview_icon_size(vbox, sg_label, sg_scale);
 
@@ -1457,7 +1471,7 @@ public class Settings : Gtk.Box {
 
 	private void add_scale_font_scale(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_scale) {
 
-		var hbox = new Box(Orientation.VERTICAL, 6);
+		var hbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		box.add(hbox);
 
 		var label = new Label(_("Font scale"));
@@ -1491,7 +1505,7 @@ public class Settings : Gtk.Box {
 
 	private void add_scale_listview_icon_size(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_scale) {
 
-		var hbox = new Box(Orientation.VERTICAL, 6);
+		var hbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		box.add(hbox);
 
 		var label = new Label(_("Icon size"));
@@ -1532,7 +1546,7 @@ public class Settings : Gtk.Box {
 
 	private void add_scale_listview_row_spacing(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_scale) {
 
-		var hbox = new Box(Orientation.VERTICAL, 6);
+		var hbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		box.add(hbox);
 
 		var label = new Label(_("Row spacing"));
@@ -1645,7 +1659,7 @@ public class Settings : Gtk.Box {
 
 	private void add_scale_iconview_icon_size(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_scale) {
 
-		var hbox = new Box(Orientation.VERTICAL, 6);
+		var hbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		box.add(hbox);
 
 		var label = new Label(_("Icon size"));
@@ -1683,7 +1697,7 @@ public class Settings : Gtk.Box {
 
 	private void add_scale_iconview_row_spacing(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_scale) {
 
-		var hbox = new Box(Orientation.VERTICAL, 6);
+		var hbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		box.add(hbox);
 
 		var label = new Label(_("Row spacing"));
@@ -1718,7 +1732,7 @@ public class Settings : Gtk.Box {
 
 	private void add_scale_iconview_column_spacing(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_scale) {
 
-		var hbox = new Box(Orientation.VERTICAL, 6);
+		var hbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		box.add(hbox);
 
 		var label = new Label(_("Col spacing"));
@@ -1830,7 +1844,7 @@ public class Settings : Gtk.Box {
 
 	private void add_scale_tileview_icon_size(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_scale) {
 
-		var hbox = new Box(Orientation.VERTICAL, 6);
+		var hbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		box.add(hbox);
 
 		var label = new Label(_("Icon size"));
@@ -1868,7 +1882,7 @@ public class Settings : Gtk.Box {
 
 	private void add_scale_tileview_row_spacing(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_scale) {
 
-		var hbox = new Box(Orientation.VERTICAL, 6);
+		var hbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		box.add(hbox);
 
 		var label = new Label(_("Row spacing"));
@@ -1903,7 +1917,7 @@ public class Settings : Gtk.Box {
 
 	private void add_scale_tileview_padding(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_scale) {
 
-		var hbox = new Box(Orientation.VERTICAL, 6);
+		var hbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		box.add(hbox);
 
 		var label = new Label(_("Padding"));
@@ -2074,7 +2088,7 @@ public class Settings : Gtk.Box {
 
 	private void init_tab_advanced() {
 
-		var box = new Box(Orientation.HORIZONTAL, 24);
+		var box = new Gtk.Box(Orientation.HORIZONTAL, 24);
 		box.margin_left = 6;
 		stack.add_titled (box, _("Advanced"), _("Advanced"));
 
@@ -2108,7 +2122,7 @@ public class Settings : Gtk.Box {
 
 	private void add_option_kvm_cpu(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
 
-		var hbox = new Box(Orientation.HORIZONTAL, 12);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 12);
 		box.add(hbox);
 
 		// label
@@ -2156,7 +2170,7 @@ public class Settings : Gtk.Box {
 	
 	private void add_option_kvm_vga(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
 
-		var hbox = new Box(Orientation.HORIZONTAL, 12);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 12);
 		box.add(hbox);
 
 		// label
@@ -2202,7 +2216,7 @@ public class Settings : Gtk.Box {
 
 	private void add_option_kvm_smp(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
 
-		var hbox = new Box(Orientation.HORIZONTAL, 12);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 12);
 		box.add(hbox);
 		
 		var label = new Gtk.Label(_("CPU Cores"));
@@ -2226,7 +2240,7 @@ public class Settings : Gtk.Box {
 
 	private void add_option_kvm_memory(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
 
-		var hbox = new Box(Orientation.HORIZONTAL, 12);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 12);
 		box.add(hbox);
 
 		var label = new Label(_("RAM (MB)"));

@@ -329,10 +329,10 @@ public class ColumnSelectionBox : Gtk.Box {
 		var iter_prev = gtk_get_iter_prev(model, iter_current);
 
 		bool current_enabled;
-		model.get (iter_current, 3, out current_enabled);
+		model.get (iter_current, 3, out current_enabled, -1);
 
 		bool prev_enabled;
-		model.get (iter_prev, 3, out prev_enabled);
+		model.get (iter_prev, 3, out prev_enabled, -1);
 
 		if (!prev_enabled || !current_enabled){
 			gtk_messagebox(_("Fixed Column"),_("Position of fixed columns cannot be changed"), window, true);
@@ -364,10 +364,10 @@ public class ColumnSelectionBox : Gtk.Box {
 		var iter_next = gtk_get_iter_next(model, iter_current);
 
 		bool current_enabled;
-		model.get (iter_current, 3, out current_enabled);
+		model.get (iter_current, 3, out current_enabled, -1);
 
 		bool next_enabled;
-		model.get (iter_next, 3, out next_enabled);
+		model.get (iter_next, 3, out next_enabled, -1);
 
 		if (!next_enabled || !current_enabled){
 			gtk_messagebox(_("Fixed Column"),_("Position of fixed columns cannot be changed"), window, true);
@@ -388,10 +388,10 @@ public class ColumnSelectionBox : Gtk.Box {
 		while (iterExists){
 
 			string name;
-			model.get (iter, 0, out name);
+			model.get (iter, 0, out name, -1);
 
 			bool selected;
-			model.get (iter, 2, out selected);
+			model.get (iter, 2, out selected, -1);
 
 			if (selected){
 				if (s.length > 0){
@@ -439,6 +439,8 @@ public class ColumnSelectionBox : Gtk.Box {
 
 		treeview.set_model(model);
 		treeview.columns_autosize();
+
+		log_debug("ColumnSelectionBox: refresh_list_view_columns(): exit");
 	}
 
 	private void append_to_list_view_columns(Gtk.ListStore model, Gtk.TreeViewColumn col, string selected_columns){
@@ -455,10 +457,10 @@ public class ColumnSelectionBox : Gtk.Box {
 
 		TreeIter iter0;
 		model.append(out iter0);
-		model.set (iter0, 0, name);
-		model.set (iter0, 1, col.title);
-		model.set (iter0, 2, selected_columns.contains(name) || Main.REQUIRED_COLUMNS.contains(name));
-		model.set (iter0, 3, !Main.REQUIRED_COLUMNS.contains(name));
+		model.set (iter0, 0, name, -1);
+		model.set (iter0, 1, col.title, -1);
+		model.set (iter0, 2, selected_columns.contains(name) || Main.REQUIRED_COLUMNS.contains(name), -1);
+		model.set (iter0, 3, !Main.REQUIRED_COLUMNS.contains(name), -1);
 	}
 }
 
