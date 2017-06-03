@@ -181,7 +181,7 @@ public class PasswordDialog : Gtk.Dialog {
 			break;
 		case Gtk.ResponseType.CANCEL:
 			//do nothing
-			log_error("Password dialog cancelled by user");
+			log_error(_("Password dialog cancelled by user"));
 			break;
 		}
 		
@@ -216,7 +216,7 @@ public class PasswordDialog : Gtk.Dialog {
 	private void btn_ok_clicked(){
 		if (confirm_password){
 			if (txt_password.text != txt_confirm.text) {
-				gtk_messagebox("Password Mismatch", "Passwords do not match", this, true);
+				gtk_messagebox(_("Password Mismatch"), _("Passwords do not match"), this, true);
 				return;
 			}
 		}

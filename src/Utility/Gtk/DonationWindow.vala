@@ -65,7 +65,7 @@ public class DonationWindow : Dialog {
 		vbox_main.pack_start(label, true, true, 0);
 
 		//vbox_actions
-		var vbox_actions = new Box (Orientation.HORIZONTAL, 6);
+		var vbox_actions = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		//vbox_actions.margin_left = 50;
 		//vbox_actions.margin_right = 50;
 		//vbox_actions.margin_top = 20;

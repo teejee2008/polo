@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
-"POT-Creation-Date: 2017-06-03 19:06+0530\n"
+"POT-Creation-Date: 2017-06-03 19:17+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -68,7 +68,7 @@ msgstr ""
 msgid "AES256"
 msgstr ""
 
-#: Gtk/FileViewToolbar.vala:602 Gtk/MainMenubar.vala:1069
+#: Gtk/FileViewToolbar.vala:603 Gtk/MainMenubar.vala:1069
 msgid "About"
 msgstr ""
 
@@ -130,7 +130,7 @@ msgstr ""
 msgid "App config saved"
 msgstr ""
 
-#: Gtk/FileViewToolbar.vala:603
+#: Gtk/FileViewToolbar.vala:604
 msgid "Application Info"
 msgstr ""
 
@@ -258,7 +258,7 @@ msgstr ""
 msgid "Cannot extract to this location"
 msgstr ""
 
-#: Gtk/FileViewToolbar.vala:541 Gtk/MainHeaderBar.vala:299
+#: Gtk/FileViewToolbar.vala:542 Gtk/MainHeaderBar.vala:299
 msgid "Change Application Settings"
 msgstr ""
 
@@ -776,7 +776,7 @@ msgstr ""
 msgid "Documents"
 msgstr ""
 
-#: Gtk/FileViewToolbar.vala:582 Gtk/MainMenubar.vala:1059
+#: Gtk/FileViewToolbar.vala:583 Gtk/MainMenubar.vala:1059
 msgid "Donate"
 msgstr ""
 
@@ -1302,7 +1302,7 @@ msgstr ""
 msgid "MD5"
 msgstr ""
 
-#: Gtk/FileViewToolbar.vala:583
+#: Gtk/FileViewToolbar.vala:584
 msgid "Make a donation"
 msgstr ""
 
@@ -1625,7 +1625,7 @@ msgstr ""
 msgid "Open templates folder"
 msgstr ""
 
-#: Gtk/FileViewToolbar.vala:512 Gtk/Statusbar.vala:456
+#: Gtk/Statusbar.vala:456
 msgid "Open terminal window"
 msgstr ""
 
@@ -2143,7 +2143,7 @@ msgstr ""
 msgid "Sets the default application for opening folders"
 msgstr ""
 
-#: Gtk/FileViewToolbar.vala:540 Gtk/SettingsWindow.vala:49
+#: Gtk/FileViewToolbar.vala:541 Gtk/SettingsWindow.vala:49
 #: Gtk/TermContextMenu.vala:211
 msgid "Settings"
 msgstr ""
@@ -2437,8 +2437,12 @@ msgstr ""
 msgid "Toggle Terminal Pane"
 msgstr ""
 
-#: Gtk/Statusbar.vala:491
+#: Gtk/Statusbar.vala:485
 msgid "Toggle dual-pane view"
+msgstr ""
+
+#: Gtk/FileViewToolbar.vala:512
+msgid "Toggle terminal panel"
 msgstr ""
 
 #: Gtk/Settings.vala:164

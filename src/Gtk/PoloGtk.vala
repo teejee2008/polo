@@ -143,7 +143,7 @@ public class PoloGtk : GLib.Object {
 		msg += "\n";
 		msg += _("Options") + ":\n";
 		msg += "\n";
-		msg += "--new-window   Forces new window to be opened (overrides single-instance mode)";
+		msg += "--new-window   %s\n".printf(_("Forces new window to be opened (overrides single-instance mode)"));
 		return msg;
 	}
 }

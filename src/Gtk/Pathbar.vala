@@ -213,14 +213,14 @@ public class Pathbar : Gtk.Box {
 		var menu_item = new Gtk.MenuItem();
 		menu_bookmark.append(menu_item);
 
-		var box = new Gtk.Box (Orientation.HORIZONTAL, 3);
+		var box = new Gtk.Box(Orientation.HORIZONTAL, 3);
 		menu_item.add(box);
 
 		if (view.current_item != null){
 			var path = view.current_item.file_path;
 
 			if (GtkBookmark.is_bookmarked(path)){
-				var lbl = new Gtk.Label("Remove Bookmark");
+				var lbl = new Gtk.Label(_("Remove Bookmark"));
 				lbl.xalign = (float) 0.0;
 				lbl.margin_right = 6;
 				box.add(lbl);
@@ -233,7 +233,7 @@ public class Pathbar : Gtk.Box {
 				});
 			}
 			else{
-				var lbl = new Gtk.Label("Add Bookmark");
+				var lbl = new Gtk.Label(_("Add Bookmark"));
 				lbl.xalign = (float) 0.0;
 				lbl.margin_right = 6;
 				box.add(lbl);
@@ -281,7 +281,7 @@ public class Pathbar : Gtk.Box {
 		var menu_item = new Gtk.MenuItem();
 		menu_bookmark.append(menu_item);
 
-		var box = new Gtk.Box (Orientation.HORIZONTAL, 3);
+		var box = new Gtk.Box(Orientation.HORIZONTAL, 3);
 		menu_item.add(box);
 
 		var image = new Gtk.Image();
@@ -403,7 +403,7 @@ public class Pathbar : Gtk.Box {
 			var menu_item = new Gtk.MenuItem();
 			menu_disk.append(menu_item);
 
-			var box = new Gtk.Box (Orientation.HORIZONTAL, 3);
+			var box = new Gtk.Box(Orientation.HORIZONTAL, 3);
 			menu_item.add(box);
 
 			Gtk.Image img = null;

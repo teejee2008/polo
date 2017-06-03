@@ -106,7 +106,7 @@ public class CustomMessageDialog : Gtk.Dialog {
 		vbox_main.margin = 6;
 
 		//hbox_contents
-		var hbox_contents = new Box (Orientation.HORIZONTAL, 6);
+		var hbox_contents = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		hbox_contents.margin = 6;
 		vbox_main.add (hbox_contents);
 
@@ -163,17 +163,17 @@ public class CustomMessageDialog : Gtk.Dialog {
 
 		switch(buttons_type){
 		case Gtk.ButtonsType.OK:
-			btn_ok = (Gtk.Button) add_button ("_Ok", Gtk.ResponseType.OK);
+			btn_ok = (Gtk.Button) add_button (_("OK"), Gtk.ResponseType.OK);
 			btn_ok.grab_focus();
 			break;
 		case Gtk.ButtonsType.OK_CANCEL:
-			btn_ok = (Gtk.Button) add_button ("_Ok", Gtk.ResponseType.OK);
-			btn_cancel = (Gtk.Button) add_button ("_Cancel", Gtk.ResponseType.CANCEL);
+			btn_ok = (Gtk.Button) add_button (_("OK"), Gtk.ResponseType.OK);
+			btn_cancel = (Gtk.Button) add_button (_("Cancel"), Gtk.ResponseType.CANCEL);
 			btn_ok.grab_focus();
 			break;
 		case Gtk.ButtonsType.YES_NO:
-			btn_yes = (Gtk.Button) add_button ("_Yes", Gtk.ResponseType.YES);
-			btn_no = (Gtk.Button) add_button ("_No", Gtk.ResponseType.NO);
+			btn_yes = (Gtk.Button) add_button (_("Yes"), Gtk.ResponseType.YES);
+			btn_no = (Gtk.Button) add_button (_("No"), Gtk.ResponseType.NO);
 			btn_yes.grab_focus();
 			break;
 			

@@ -234,7 +234,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 
 		//hbox_status_line ---------------------------------------
 
-		var hbox_status_line = new Box (Orientation.HORIZONTAL, 6);
+		var hbox_status_line = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		hbox_status_line.margin_top = 12;
 		contents.add (hbox_status_line);
 
@@ -263,7 +263,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		//sw_progress.expand = true;
 		sw_progress.add (drawing_area);
 
-		hbox_bar = new Box (Orientation.HORIZONTAL, 6);
+		hbox_bar = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		contents.add (hbox_bar);
 		hbox_bar.add(sw_progress);
 		
@@ -441,7 +441,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		contents.add(hbox);
 		
 		//hbox_actions
-		var hbox_actions = new Gtk.Box (Gtk.Orientation.HORIZONTAL,6);
+		var hbox_actions = new Gtk.Box(Gtk.Orientation.HORIZONTAL,6);
 		hbox_actions.margin_top = 6;
 		hbox_actions.homogeneous = true;
 		hbox.add(hbox_actions);

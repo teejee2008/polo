@@ -224,7 +224,7 @@ public class LayoutPanel : Gtk.Box {
 		cmd += "%s\n".printf(command);
 		cmd += "echo ''\n";
 		cmd += "echo '====================================================='\n";
-		cmd += "echo 'Finished ~ Close Tab to exit'\n";
+		cmd += "echo '%s'\n".printf(_("Finished ~ Close Tab to exit"));
 		cmd += "echo '====================================================='\n";
 		cmd += "echo ''\n";
 		

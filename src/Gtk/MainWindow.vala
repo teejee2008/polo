@@ -166,7 +166,7 @@ public class MainWindow : Gtk.Window {
 		resizable = true;
 
 		//vbox_main
-		vbox_main = new Box (Orientation.VERTICAL, 0);
+		vbox_main = new Gtk.Box(Orientation.VERTICAL, 0);
 		vbox_main.margin = 0;
 		add (vbox_main);
 

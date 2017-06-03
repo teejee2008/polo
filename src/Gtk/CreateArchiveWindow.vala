@@ -427,7 +427,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		txt.icon_release.connect((p0, p1) => {
 			//chooser
 			var chooser = new Gtk.FileChooserDialog(
-			    "Select Archive Location",
+			    _("Select Archive Location"),
 			    this,
 			    FileChooserAction.SELECT_FOLDER,
 			    "_Cancel",
@@ -656,49 +656,49 @@ public class CreateArchiveWindow : Gtk.Dialog {
 			model.set (iter, 0, _("Copy"), 1, "copy");
 
 			model.append (out iter);
-			model.set (iter, 0, _("LZMA"), 1, "lzma");
+			model.set (iter, 0, "LZMA", 1, "lzma");
 
 			model.append (out iter);
-			model.set (iter, 0, _("LZMA2"), 1, "lzma2");
+			model.set (iter, 0, "LZMA2", 1, "lzma2");
 
 			model.append (out iter);
-			model.set (iter, 0, _("PPMd"), 1, "ppmd");
+			model.set (iter, 0, "PPMd", 1, "ppmd");
 
 			model.append (out iter);
-			model.set (iter, 0, _("BZip2"), 1, "bzip2");
+			model.set (iter, 0, "BZip2", 1, "bzip2");
 
 			model.append (out iter);
-			model.set (iter, 0, _("Deflate"), 1, "deflate");
+			model.set (iter, 0, "Deflate", 1, "deflate");
 			break;
 
 		case "bz2":
 		case "tar_bz2":
 			model.append (out iter);
-			model.set (iter, 0, _("BZip2"), 1, "bzip2");
+			model.set (iter, 0, "BZip2", 1, "bzip2");
 			break;
 
 		case "gz":
 		case "tar_gz":
 			model.append (out iter);
-			model.set (iter, 0, _("Deflate"), 1, "deflate");
+			model.set (iter, 0, "Deflate", 1, "deflate");
 			break;
 
 		case "lzo":
 		case "tar_lzo":
 			model.append (out iter);
-			model.set (iter, 0, _("LZO"), 1, "lzo");
+			model.set (iter, 0, "LZO", 1, "lzo");
 			break;
 
 		case "zpaq":
 		case "tar_zpaq":
 			model.append (out iter);
-			model.set (iter, 0, _("ZPAQ"), 1, "zpaq");
+			model.set (iter, 0, "ZPAQ", 1, "zpaq");
 			break;
 
 		case "xz":
 		case "tar_xz":
 			model.append (out iter);
-			model.set (iter, 0, _("LZMA2"), 1, "lzma2");
+			model.set (iter, 0, "LZMA2", 1, "lzma2");
 			break;
 
 		case "zip":
@@ -706,15 +706,15 @@ public class CreateArchiveWindow : Gtk.Dialog {
 			model.append (out iter);
 			model.set (iter, 0, _("Copy"), 1, "copy");
 			model.append (out iter);
-			model.set (iter, 0, _("Deflate"), 1, "deflate");
+			model.set (iter, 0, "Deflate", 1, "deflate");
 			model.append (out iter);
-			model.set (iter, 0, _("Deflate64"), 1, "deflate64");
+			model.set (iter, 0, "Deflate64", 1, "deflate64");
 			model.append (out iter);
-			model.set (iter, 0, _("BZip2"), 1, "bzip2");
+			model.set (iter, 0, "BZip2", 1, "bzip2");
 			model.append (out iter);
-			model.set (iter, 0, _("LZMA"), 1, "lzma");
+			model.set (iter, 0, "LZMA", 1, "lzma");
 			model.append (out iter);
-			model.set (iter, 0, _("PPMd"), 1, "ppmd");
+			model.set (iter, 0, "PPMd", 1, "ppmd");
 			break;
 
 		case "tar":
@@ -1764,7 +1764,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		
 		/*
 		//hbox_password_actions
-		hbox_password_actions = new Box (Orientation.HORIZONTAL, 6);
+		hbox_password_actions = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		hbox_password_actions.homogeneous = true;
 		hbox_password_actions.margin_bottom = 12;
 		//grid.attach(hbox_password_actions, 0, ++row, 2, 1);
@@ -1917,18 +1917,18 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		case "bz2":
 		case "tar_bz2":
 			model.append (out iter);
-			model.set (iter, 0, _("AES256"), 1, "AES256");
+			model.set (iter, 0, "AES256", 1, "AES256");
 			break;
 		case "zip":
 		case "tar_zip":
 			model.append (out iter);
-			model.set (iter, 0, _("ZipCrypto"), 1, "ZipCrypto");
+			model.set (iter, 0, "ZipCrypto", 1, "ZipCrypto");
 			model.append (out iter);
-			model.set (iter, 0, _("AES128"), 1, "AES128");
+			model.set (iter, 0, "AES128", 1, "AES128");
 			model.append (out iter);
-			model.set (iter, 0, _("AES192"), 1, "AES192");
+			model.set (iter, 0, "AES192", 1, "AES192");
 			model.append (out iter);
-			model.set (iter, 0, _("AES256"), 1, "AES256");
+			model.set (iter, 0, "AES256", 1, "AES256");
 			active = 0; //ZipCrypto
 			break;
 		default:
