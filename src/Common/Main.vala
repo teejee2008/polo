@@ -387,6 +387,7 @@ public class Main : GLib.Object {
 		string src_path = path_combine(share_dir, "files/fish_prompt.fish");
 		string dst_path = path_combine(user_home, ".config/fish/functions/fish_prompt.fish");
 		if (!file_exists(dst_path)){
+			dir_create(path_combine(user_home, ".config/fish/functions"));
 			file_copy(src_path, dst_path);
 			chown(dst_path, user_name, user_name, false, null);
 			chmod(dst_path, "u+rw", null);
