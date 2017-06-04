@@ -93,7 +93,7 @@ public class KvmCreateDiskWindow : Gtk.Window {
 
 		log_debug("KvmCreateDiskWindow: init_window()");
 
-		title = _("Create Disk");
+		title = _("Create Virtual Disk");
 
 		set_modal(true);
 		set_skip_taskbar_hint(true);
@@ -298,19 +298,16 @@ public class KvmCreateDiskWindow : Gtk.Window {
 		string txt = "";
 
 		if (derived_file_path.length > 0){
-			txt += "▰ %s\n".printf(_("Derived file will be merged with base to create a new disk file"));
-			txt += "▰ %s\n".printf(_("Derived and base files will remain unchanged and can be deleted"));
+			txt += "▰ %s\n".printf(_("New disk will be created by merging contents of derived and base files"));
+			txt += "▰ %s\n".printf(_("Derived and base files will remain unchanged and can be deleted if not required"));
 		}
 		else if (base_file_path.length > 0){
-			txt += "▰ %s\n".printf(_("Derived disk will be created from the base disk."));
-			txt += "▰ %s\n".printf(_("Boot and use the derived disk to make changes to system instead of using base disk directly."));
-			txt += "▰ %s\n".printf(_("Changes can be discarded by deleting the derived disk file, or finalized by merging with base"));
-			txt += "▰ %s\n".printf(_("Do not rename or modify the base file as it will corrupt derived files"));
-			txt += "▰ %s\n".printf(_("Base file will be made read-only to prevent accidental modifications"));
+			txt += "▰ %s\n".printf(_("New derived disk will be created from base disk. Boot and use the derived disk to make changes to system instead of using base disk directly."));
+			txt += "▰ %s\n".printf(_("Changes can be discarded by deleting the derived file, or finalized by merging it with base"));
+			txt += "▰ %s\n".printf(_("Do not rename or modify the base file as it will corrupt the derived disk. Base file will be made read-only to prevent accidental modification."));
 		}
 		else{
-			txt += "▰ %s\n".printf(_("New disk will be created with specified size"));
-			txt += "▰ %s\n".printf(_("File size will increase gradually as disk is modified"));
+			txt += "▰ %s\n".printf(_("A dynamically allocated disk will be created with specified size. File size will increase gradually as disk is modified."));
 		}
 
 		label.label = txt;

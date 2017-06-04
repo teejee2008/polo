@@ -116,6 +116,23 @@ public class KvmTask : AsyncTask {
 		return cmd;
 	}
 
+	public static bool is_supported_disk_format(string disk_file_path){
+		
+		string extension = file_get_extension(disk_file_path);
+
+		switch(extension.down()){
+		case ".qcow":
+		case ".qcow2":
+		case ".vdi":
+		case ".vmdk":
+		case ".vhd":
+		case ".img":
+			return true;
+		}
+		
+		return false;
+	}
+	
 	// extra, sync
 
 	public void create_disk(string file_path, double size, string base_file, Gtk.Window? window){

@@ -1591,7 +1591,7 @@ public class FileContextMenu : Gtk.Menu {
 			view.kvm_boot_disk();
 		});
 
-		menu_item.sensitive = (selected_item != null) && (selected_item.file_extension == ".qcow2");
+		menu_item.sensitive = (selected_item != null) && KvmTask.is_supported_disk_format(selected_item.file_path);
 	}
 
 	private void add_install_disk(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
@@ -1611,7 +1611,7 @@ public class FileContextMenu : Gtk.Menu {
 			view.kvm_install_iso();
 		});
 
-		menu_item.sensitive = (selected_item != null) && (selected_item.file_extension == ".qcow2");
+		menu_item.sensitive = (selected_item != null) && KvmTask.is_supported_disk_format(selected_item.file_path);
 	}
 	
 	private void add_sort_column(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){

@@ -70,13 +70,23 @@ namespace TeeJee.FileSystem{
 			// no extension
 			return "";
 		}
-		else if ((parts.length > 2) && (parts[parts.length-2].length <= 4) && (parts[parts.length-1].length <= 4)){
-			// 2-part extension
-			return ".%s.%s".printf(parts[parts.length-2], parts[parts.length-1]);
+		
+		if (parts.length > 2){
+			
+			string ext1 = parts[parts.length-2];
+			string ext2 = parts[parts.length-1];
+			
+			if ((ext1.length <= 4) && (ext2.length <= 4) && (ext1 == "tar")){
+				// 2-part extension
+				return ".%s.%s".printf(parts[parts.length-2], parts[parts.length-1]);
+			}
 		}
-		else{
+		
+		if (parts.length > 1){
 			return ".%s".printf(parts[parts.length - 1]);
 		}
+
+		return "";
 	}
 
 
