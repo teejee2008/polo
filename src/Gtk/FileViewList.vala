@@ -3995,7 +3995,7 @@ public class FileViewList : Gtk.Box {
 		
 		err_log_clear();
 
-		var win = new KvmCreateDiskWindow(window, current_item.file_path, "", "");
+		var win = new KvmCreateDiskWindow(KvmTaskType.CREATE_DISK, window, current_item.file_path, "", "", "");
 	}
 
 	public void kvm_create_derived_disk(){
@@ -4006,7 +4006,7 @@ public class FileViewList : Gtk.Box {
 		if (selected_items.size == 0){ return; }
 		var item = selected_items[0];
 
-		var win = new KvmCreateDiskWindow(window, current_item.file_path, item.file_path, "");
+		var win = new KvmCreateDiskWindow(KvmTaskType.CREATE_DISK_DERIVED, window, current_item.file_path, item.file_path, "", "");
 	}
 
 	public void kvm_create_merged_disk(){
@@ -4017,9 +4017,20 @@ public class FileViewList : Gtk.Box {
 		if (selected_items.size == 0){ return; }
 		var item = selected_items[0];
 
-		var win = new KvmCreateDiskWindow(window, current_item.file_path, "", item.file_path);
+		var win = new KvmCreateDiskWindow(KvmTaskType.CONVERT_MERGE, window, current_item.file_path, "", item.file_path, "");
 	}
 
+	public void kvm_convert_disk(string disk_format){
+		
+		err_log_clear();
+
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+		
+		var win = new KvmCreateDiskWindow(KvmTaskType.CONVERT_DISK, window, current_item.file_path, item.file_path, "", disk_format);
+	}
+	
 	public void kvm_boot_disk(){
 		
 		err_log_clear();
@@ -4056,6 +4067,8 @@ public class FileViewList : Gtk.Box {
 		var task = new KvmTask();
 		task.boot_iso_attach_disk(iso_file, item.file_path, App.get_kvm_config());
 	}
+
+
 
 	
 	public void hide_selected(){

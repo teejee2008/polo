@@ -35,7 +35,10 @@ using TeeJee.System;
 using TeeJee.Misc;
 
 public enum KvmTaskType{
-	CONVERT_MERGE
+	CONVERT_MERGE,
+	CONVERT_DISK,
+	CREATE_DISK,
+	CREATE_DISK_DERIVED
 }
 
 public class KvmTask : AsyncTask {
@@ -43,6 +46,8 @@ public class KvmTask : AsyncTask {
 	private KvmTaskType task_type;
 	private string file_path = "";
 	private string derived_file = "";
+	//private string base_file = "";
+	private string disk_format = "";
 	private Gtk.Window? window = null;
 
 	public string kvm_vga = "std";
@@ -60,6 +65,14 @@ public class KvmTask : AsyncTask {
 		derived_file = _derived_file;
 		window = _window;
 		task_type = KvmTaskType.CONVERT_MERGE;
+	}
+
+	public void convert_disk(string _file_path, string _derived_file, string _disk_format, Gtk.Window? _window){
+		file_path = _file_path;
+		derived_file = _derived_file;
+		disk_format = _disk_format;
+		window = _window;
+		task_type = KvmTaskType.CONVERT_DISK;
 	}
 
 	private void init_regular_expressions(){
@@ -92,6 +105,9 @@ public class KvmTask : AsyncTask {
 		case KvmTaskType.CONVERT_MERGE:
 			cmd = build_script_create_disk_merged();
 			break;
+		case KvmTaskType.CONVERT_DISK:
+			cmd = build_script_convert_disk();
+			break;
 		}
 		
 		return cmd;
@@ -103,7 +119,7 @@ public class KvmTask : AsyncTask {
 		
 		cmd += " -p";
 		
-		cmd += " -f qcow2";
+		//cmd += " -f qcow2";
 
 		cmd += " -O qcow2";
 
@@ -116,6 +132,27 @@ public class KvmTask : AsyncTask {
 		return cmd;
 	}
 
+	private string build_script_convert_disk(){
+
+		string cmd = "qemu-img convert";
+		
+		cmd += " -p";
+		
+		//cmd += " -f qcow2";
+
+		cmd += " -O %s".printf(disk_format.down());
+
+		cmd += " '%s'".printf(escape_single_quote(derived_file));
+
+		cmd += " '%s'".printf(escape_single_quote(file_path));
+
+		log_debug(cmd);
+
+		return cmd;
+		
+	}
+
+	
 	public static bool is_supported_disk_format(string disk_file_path){
 		
 		string extension = file_get_extension(disk_file_path);

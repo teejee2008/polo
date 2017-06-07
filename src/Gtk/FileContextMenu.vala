@@ -51,7 +51,8 @@ public enum FileActionType{
 	TEST_ARCHIVE,
 	EXTRACT,
 	COMPRESS,
-	KVM_DISK_MERGE
+	KVM_DISK_MERGE,
+	KVM_DISK_CONVERT
 }
 
 public class FileContextMenu : Gtk.Menu {
@@ -1514,6 +1515,8 @@ public class FileContextMenu : Gtk.Menu {
 
 		add_install_disk(sub_menu, sg_icon_sub, sg_label_sub);
 
+		add_kvm_convert(sub_menu, sg_icon_sub, sg_label_sub);
+
 		//add_write_iso(sub_menu, sg_icon_sub, sg_label_sub);
 	}
 	
@@ -1613,6 +1616,77 @@ public class FileContextMenu : Gtk.Menu {
 
 		menu_item.sensitive = (selected_item != null) && KvmTask.is_supported_disk_format(selected_item.file_path);
 	}
+
+	private void add_kvm_convert(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		log_debug("FileContextMenu: add_kvm_convert()");
+
+		if (!App.kvm_enable) { return; }
+		
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Convert to..."),
+			"",
+			null,//IconManager.lookup_image("kvm",16),
+			sg_icon,
+			sg_label);
+
+
+		menu_item.sensitive = (selected_item != null);
+
+		if (selected_item == null){ return; }
+			
+		var sub_menu = new Gtk.Menu();
+		//sub_menu.reserve_toggle_size = false;
+		menu_item.submenu = sub_menu;
+
+		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		var sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+
+		var formats = new Gee.ArrayList<string>();
+		
+		switch(selected_item.file_extension.down()){
+		case ".vmdk":
+		case ".vhd":
+		case ".vhdx":
+		case ".vdi":
+		case ".bochs":
+		case ".cloop":
+		case ".dmg":
+		case ".nbd":
+		case ".qed":
+		case ".vfat":
+		case ".vvfat":
+			formats.add("RAW - Raw disk format");
+			formats.add("QCOW2 - QEMU disk format");
+			break;
+		case ".raw":
+		case ".qcow2":
+			formats.add("RAW - Raw disk format");
+			formats.add("QCOW2 - QEMU disk format");
+			formats.add("VDI - Oracle VirtualBox disk format");
+			formats.add("VHDX - Microsoft Hyper-V disk format");
+			formats.add("VMDK - VMware disk format");
+			break;
+		}
+		
+		foreach(string format in formats){
+			
+			var sub_menu_item = gtk_menu_add_item(
+				sub_menu,
+				format,
+				"",
+				null,//get_shared_icon("media-cdrom","",16),
+				sg_icon_sub,
+				sg_label_sub);
+
+			sub_menu_item.activate.connect (() => {
+				view.kvm_convert_disk(format.split("-")[0].strip());
+			});
+		}
+	}
+
+	
 	
 	private void add_sort_column(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 

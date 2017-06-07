@@ -40,7 +40,8 @@ public class ProgressPanelKvmTask : ProgressPanel {
 	private string base_file = "";
 	private string derived_file = "";
 	private double disk_size = 0; 
-
+	private string disk_format = "QCOW2";
+	
 	// ui 
 	public Gtk.Label lbl_status;
 	public Gtk.Label lbl_stats;
@@ -57,12 +58,21 @@ public class ProgressPanelKvmTask : ProgressPanel {
 		disk_size = _disk_size;
 	}
 
+	public void set_action_convert(string _file_path, string _base_file, string _disk_format){
+		file_path = _file_path;
+		base_file = _base_file;
+		disk_format = _disk_format;
+	}
+	
 	public override void init_ui(){ // TODO: make protected
 
 		string txt = "";
 		switch(action_type){
 		case FileActionType.KVM_DISK_MERGE:
 			txt = _("Creating merged disk...");
+			break;
+		case FileActionType.KVM_DISK_CONVERT:
+			txt = _("Converting disk format...");
 			break;
 		default:
 			break;
@@ -94,9 +104,7 @@ public class ProgressPanelKvmTask : ProgressPanel {
 		// status message ------------------
 
 		label = new Gtk.Label(_("Preparing..."));
-		//label.set_use_markup(true);
 		label.xalign = (float) 0.0;
-		//label.margin_top = 12;
 		label.ellipsize = Pango.EllipsizeMode.START;
 		label.max_width_chars = 100;
 		hbox.add(label);
@@ -104,22 +112,15 @@ public class ProgressPanelKvmTask : ProgressPanel {
 
 		// progressbar ----------------------------
 
-		//hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
-		//vbox_outer.add(hbox);
-
 		progressbar = new Gtk.ProgressBar();
 		progressbar.fraction = 0;
 		progressbar.hexpand = true;
-		//progressbar.set_size_request(-1, 25);
-		//progressbar.pulse_step = 0.1;
 		vbox_outer.add(progressbar);
 
 		// stats label ----------------
 
 		label = new Gtk.Label("...");
-		//label.set_use_markup(true);
 		label.xalign = (float) 0.0;
-		//label.margin_bottom = 12;
 		label.ellipsize = Pango.EllipsizeMode.END;
 		label.max_width_chars = 100;
 		vbox_outer.add(label);
@@ -154,6 +155,7 @@ public class ProgressPanelKvmTask : ProgressPanel {
 
 		switch (action_type){
 		case FileActionType.KVM_DISK_MERGE:
+		case FileActionType.KVM_DISK_CONVERT:
 			start_task();
 			break;
 		}
@@ -179,6 +181,10 @@ public class ProgressPanelKvmTask : ProgressPanel {
 			task.create_disk_merged(file_path, derived_file, (Gtk.Window) window);
 			task.execute();
 			break;
+		case FileActionType.KVM_DISK_CONVERT:
+			task.convert_disk(file_path, base_file, disk_format, (Gtk.Window) window);
+			task.execute();
+			break;
 		}
 
 		gtk_do_events();
@@ -192,22 +198,27 @@ public class ProgressPanelKvmTask : ProgressPanel {
 			
 			log_debug("ProgressPanelKvmTask: update_status()");
 			
-			// refresh UI
 			lbl_status.label = "%s: %s".printf(_("File"), file_basename(file_path));
-			lbl_stats.label = "";
+			
+			lbl_stats.label = "%.0f%% complete, %s elapsed, %s remaining".printf(
+				task.progress * 100.0, task.stat_time_elapsed, task.stat_time_remaining);
+				
 			progressbar.fraction = task.progress;
+			
 			gtk_do_events();
 		}
 		else{
 
 			var error_message = err_log_read();
+			
 			if (error_message.length > 0){
 				string title = _("Error");
 				string msg = error_message;
 				gtk_messagebox(title, msg, window, true);
-				finish();
-				return false;
 			}
+			
+			finish();
+			return false;
 		}
 
 		return true;
