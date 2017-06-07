@@ -331,6 +331,8 @@ public class KvmCreateDiskWindow : Gtk.Window {
 		button = new Gtk.Button.with_label(_("Create"));
 		button.clicked.connect(btn_ok_clicked);
 		box.add(button);
+
+		button.grab_focus();
 	}
 
 	// properties ------------------------------------------------------
