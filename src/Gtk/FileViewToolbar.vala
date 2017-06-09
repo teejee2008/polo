@@ -509,7 +509,7 @@ public class FileViewToolbar : Gtk.Toolbar {
 
 		var button = new Gtk.ToolButton(null,null);
 		button.label = _("Terminal");
-		button.set_tooltip_text (_("Open terminal window"));
+		button.set_tooltip_text (_("Toggle terminal panel"));
 		button.is_important = true;
 		add(button);
 		btn_terminal = button;
@@ -520,7 +520,8 @@ public class FileViewToolbar : Gtk.Toolbar {
 		gtk_apply_css({ button }, "padding-left: 2px; padding-right: 2px;");
 
 		button.clicked.connect(() => {
-			open_terminal_window("", view.current_item.file_path, "", false);
+			//open_terminal_window("", view.current_item.file_path, "", false);
+			pane.terminal.toggle();
 		});
 	}
 

@@ -61,12 +61,12 @@ public class ToolsWindow : Gtk.Dialog {
 		vbox_actions = (Box) get_action_area();
 		vbox_actions.margin = 6;
 
-	    tv = new TreeView();
+	    tv = new Gtk.TreeView();
 		tv.get_selection().mode = SelectionMode.NONE;
 		tv.headers_visible = true;
 		//tv.set_rules_hint (true);
 
-		sw = new ScrolledWindow(null, null);
+		sw = new Gtk.ScrolledWindow(null, null);
 		sw.set_shadow_type (ShadowType.ETCHED_IN);
 		sw.add (tv);
 		sw.expand = true;
@@ -105,7 +105,7 @@ public class ToolsWindow : Gtk.Dialog {
 		tv_refresh();
 
 		//btn_refresh
-        btn_refresh = new Button.with_label("   " + _("Refresh") + "   ");
+        btn_refresh = new Gtk.Button.with_label("   " + _("Refresh") + "   ");
 		vbox_actions.add(btn_refresh);
 		btn_refresh.clicked.connect(()=>{
 			gtk_set_busy(true,this);

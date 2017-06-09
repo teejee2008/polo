@@ -521,7 +521,7 @@ public class Sidebar : Gtk.Box {
 		}
 	}
 
-	private SidebarItem add_device(Device dev){
+	private SidebarItem? add_device(Device dev){
 
 		if (dev.is_snap_volume || dev.is_swap_volume){
 			return null;
@@ -584,14 +584,14 @@ public class Sidebar : Gtk.Box {
 
 		var ebox = new Gtk.EventBox();
 		row.add(ebox);
-		var box = new Gtk.Box (Orientation.HORIZONTAL, 3);
+		var box = new Gtk.Box(Orientation.HORIZONTAL, 3);
 		ebox.add(box);
 
 		// icon
 		var image = new Gtk.Image();
 		box.add(image);
 
-		var vbox = new Gtk.Box (Orientation.VERTICAL, 0);
+		var vbox = new Gtk.Box(Orientation.VERTICAL, 0);
 		vbox.margin_right = 12;
 		box.add(vbox);
 
@@ -1100,7 +1100,7 @@ public class Sidebar : Gtk.Box {
 
 	private void add_fs_bar(Gtk.Box box, Device dev){
 
-		var hbox = new Gtk.Box (Orientation.HORIZONTAL, 0);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 0);
 		box.add(hbox);
 
 		var fs_bar = new Gtk.DrawingArea();

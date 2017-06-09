@@ -371,36 +371,12 @@ public class DesktopApp : GLib.Object {
 		
 		applist = new Gee.HashMap<string,DesktopApp>();
 		text_editors = new Gee.ArrayList<DesktopApp>();
-		
-		FileEnumerator enu;
-		FileInfo info;
-		File file = File.parse_name ("/usr/share/applications");
 
-		if (!file.query_exists()) {
-			return;
-		}
-		
-		try{
-			//parse items
-			enu = file.enumerate_children ("%s".printf(FileAttribute.STANDARD_NAME), 0);
-			while ((info = enu.next_file()) != null) {
-				string child_name = info.get_name();
-				string child_path = "/usr/share/applications/%s".printf(child_name);
+		var app_folder = "/usr/share/applications";
+		load_from_application_folder(app_folder);
 
-				if (!file_exists(child_path)){
-					continue;
-				}
-
-				if (!child_name.has_suffix(".desktop")){
-					continue;
-				}
-
-				parse_desktop_file(child_path);
-			}
-		}
-		catch (GLib.Error e) {
-			log_error (e.message);
-		}
+		app_folder = path_combine(App.user_home, ".local/share/applications");
+		load_from_application_folder(app_folder);
 
 		text_editors.sort((a,b)=>{
 			return strcmp(a.name, b.name);
@@ -432,6 +408,39 @@ public class DesktopApp : GLib.Object {
 		* */
 	}
 
+	public static void load_from_application_folder(string app_folder){
+
+		FileEnumerator enu;
+		FileInfo info;
+		File file = File.parse_name(app_folder);
+
+		if (!file.query_exists()) {
+			return;
+		}
+		
+		try{
+			//parse items
+			enu = file.enumerate_children ("%s".printf(FileAttribute.STANDARD_NAME), 0);
+			while ((info = enu.next_file()) != null) {
+				string child_name = info.get_name();
+				string child_path = path_combine(app_folder, child_name);
+
+				if (!file_exists(child_path)){
+					continue;
+				}
+
+				if (!child_name.has_suffix(".desktop")){
+					continue;
+				}
+
+				parse_desktop_file(child_path);
+			}
+		}
+		catch (GLib.Error e) {
+			log_error (e.message);
+		}
+	}
+	
 	public static void parse_desktop_file(string file_path){
 		if (!file_exists(file_path)){
 			return;

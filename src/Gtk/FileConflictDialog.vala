@@ -283,7 +283,7 @@ public class FileConflictDialog : Gtk.Dialog {
 		label.set_no_show_all(true);
 
 		// treeview
-		treeview = new TreeView();
+		treeview = new Gtk.TreeView();
 		treeview.get_selection().mode = SelectionMode.SINGLE;
 		treeview.headers_clickable = false;
 		treeview.rubber_banding = false;
@@ -293,7 +293,7 @@ public class FileConflictDialog : Gtk.Dialog {
 		treeview.headers_visible = true;
 
 		// scrolled
-		scrolled = new ScrolledWindow(null, null);
+		scrolled = new Gtk.ScrolledWindow(null, null);
 		scrolled.set_shadow_type (ShadowType.ETCHED_IN);
 		scrolled.hscrollbar_policy = PolicyType.AUTOMATIC;
 		scrolled.vscrollbar_policy = PolicyType.AUTOMATIC;

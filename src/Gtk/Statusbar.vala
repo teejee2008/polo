@@ -131,7 +131,7 @@ public class Statusbar : Gtk.Box {
 
 		//add_dual_pane_toggle();
 
-		//add_terminal_toggle();
+		add_terminal_toggle();
 
 		//add_style_toggle();
 	}
@@ -452,8 +452,8 @@ public class Statusbar : Gtk.Box {
 
 	private void add_terminal_toggle(){
 
-		var img = get_shared_icon("terminal", "terminal.svg",16);
-		img.set_tooltip_text(_("Open terminal window"));
+		var img = IconManager.lookup_image("terminal",16);
+		img.set_tooltip_text(_("Toggle terminal panel"));
 		//img.margin_left = 6;
 		//img.margin_right = 6;
 
@@ -470,6 +470,13 @@ public class Statusbar : Gtk.Box {
 				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
 			});
 		}
+
+		ebox.button_press_event.connect((event)=>{
+
+			pane.terminal.toggle();
+
+			return true;
+		});
 	}
 
 	private void add_dual_pane_toggle(){

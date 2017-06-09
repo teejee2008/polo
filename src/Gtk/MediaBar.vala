@@ -57,7 +57,7 @@ public class MediaBar : Gtk.Box {
 
 	private void init_ui(){
 
-		var label = new Label(_("Switch to media browser view?"));
+		var label = new Gtk.Label(_("Switch to media browser view?"));
 		label.xalign = 0.5f;
 		label.hexpand = true;
 		label.margin = 6;

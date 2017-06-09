@@ -33,6 +33,15 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
+public enum AccelContext {
+	TERM,
+	NORMAL,
+	TRASH,
+	ARCHIVE,
+	EDIT,
+	NONE
+}
+
 public class MainWindow : Gtk.Window {
 
 	private Gtk.Box vbox_main;
@@ -50,6 +59,8 @@ public class MainWindow : Gtk.Window {
 	public ProgressPanel pending_action = null;
 
 	public FileMonitor? open_task_monitor = null;
+
+	public bool refresh_apps_pending = false;
 
 	// window
 	private int def_width = 700;
@@ -155,12 +166,12 @@ public class MainWindow : Gtk.Window {
 		resizable = true;
 
 		//vbox_main
-		vbox_main = new Box (Orientation.VERTICAL, 0);
+		vbox_main = new Gtk.Box(Orientation.VERTICAL, 0);
 		vbox_main.margin = 0;
 		add (vbox_main);
 
 		init_hotkeys();
-
+		
 		init_menubar();
 
 		init_headerbar();
@@ -205,9 +216,9 @@ public class MainWindow : Gtk.Window {
 
 		statusbar.refresh();
 
-		//reset_sidebar_width();
-
 		layout_box.refresh_for_active_pane();
+
+		menubar.delayed_init();
 
 		gtk_set_busy(false, this);
 
@@ -235,6 +246,7 @@ public class MainWindow : Gtk.Window {
 			menubar = new MainMenuBar(true);
 			//vbox_main.add(menubar);
 		}
+
 	}
 
 	private void init_headerbar(){
@@ -284,7 +296,7 @@ public class MainWindow : Gtk.Window {
 		layout_box = new LayoutBox();
 		pane_nav.pack2(layout_box, true, false); // resize, no shrink
 	}
-
+	
 	private void initialize_views(){
 
 		TreeModelCache.enable();
@@ -381,14 +393,68 @@ public class MainWindow : Gtk.Window {
 		gtk_set_busy(false, this);
 	}
 
-	private void init_hotkeys() {
+	private void init_hotkeys() { 
 
 		Hotkeys.init();
 		this.add_accel_group(Hotkeys.accel_group);
 
-		//Hotkeys.bind("<Control>c", (grp, acc, keyval, mod) =>{ active_pane.view.copy(); return true; });
-		//Hotkeys.bind("<Control>x", (grp, acc, keyval, mod) =>{ active_pane.view.cut(); return true; });
-		//Hotkeys.bind("<Control>v", (grp, acc, keyval, mod) =>{ active_pane.view.paste(); return true; });
+		//enable_accelerators();
+		//this.accel_group.connect("<Control>x", Gdk.ModifierType.CONTROL_MASK, Gtk.AccelFlags.VISIBLE, () => view.cut());
+		
+		//Hotkeys.bind("<Control>c", (grp, acc, keyval, mod) =>{ active_pane.view.copy(); return true; }); 
+		//Hotkeys.bind("<Control>x", (grp, acc, keyval, mod) =>{ active_pane.view.cut(); return true; }); 
+		//Hotkeys.bind("<Control>v", (grp, acc, keyval, mod) =>{ active_pane.view.paste(); return true; }); 
+	}
+
+	public void update_accelerators_for_active_pane(){
+		
+		if (active_pane == null){ return; }
+		if (active_pane.view == null){ return; }
+		if (active_pane.view.current_item == null){ return; }
+
+		if (active_pane.view.current_item.is_trash || active_pane.view.current_item.is_trashed_item){
+			update_accelerators_for_context(AccelContext.TRASH);
+		}
+		else if (active_pane.view.current_item.is_archive || active_pane.view.current_item.is_archived_item){
+			update_accelerators_for_context(AccelContext.ARCHIVE);
+		}
+		else {
+			update_accelerators_for_context(AccelContext.NORMAL);
+		}
+	}
+
+	public void update_accelerators_for_terminal(){
+		update_accelerators_for_context(AccelContext.TERM);
+	}
+
+	public void update_accelerators_for_edit(){
+		update_accelerators_for_context(AccelContext.EDIT);
+	}
+	
+	public void update_accelerators_for_context(AccelContext context){
+
+		menubar.context_none();
+		
+		switch(context){
+		case AccelContext.TERM:
+			menubar.context_term();
+			break;
+		case AccelContext.NORMAL:
+			menubar.context_normal();
+			break;
+		case AccelContext.TRASH:
+			menubar.context_trash();
+			break;
+		case AccelContext.ARCHIVE:
+			menubar.context_archive();
+			break;
+		case AccelContext.EDIT:
+			menubar.context_edit();
+			break;
+		case AccelContext.NONE:
+			menubar.context_none();
+			break;
+		}
 	}
 
 	private void init_statusbar(){
@@ -455,7 +521,9 @@ public class MainWindow : Gtk.Window {
 
 			layout_box.refresh_for_active_pane();
 
-			menubar.enable_accelerators(); // enable
+			menubar.active_pane_changed();
+
+			this.update_accelerators_for_active_pane();
 		}
 	}
 
@@ -475,6 +543,16 @@ public class MainWindow : Gtk.Window {
 		}
 	}
 
+	public Gee.ArrayList<TermBox> terminals {
+		owned get {
+			var list = new Gee.ArrayList<TermBox>();
+			foreach(var pane in panes){
+				list.add(pane.terminal);
+			}
+			return list;
+		}
+	}
+	
 	public Gee.ArrayList<FileViewPane> panes {
 		owned get {
 			var list = new Gee.ArrayList<FileViewPane>();
@@ -582,7 +660,6 @@ public class MainWindow : Gtk.Window {
 			is_fullscreen = true;
 		}
 
-		menubar.refresh();
 	}
 	
 	// actions
@@ -625,7 +702,7 @@ public class MainWindow : Gtk.Window {
 		};
 
 		dialog.translators = {
-			//"giulux (Italian)",
+			"Thomas Gorzka (German):thomas.gorzka@gmail.com"
 			//"Jorge Jamhour (Brazilian Portuguese):https://launchpad.net/~jorge-jamhour",
 			//"B. W. Knight (Korean):https://launchpad.net/~kbd0651",
 			//"Rodion R. (Russian):https://launchpad.net/~r0di0n"
@@ -663,6 +740,48 @@ public class MainWindow : Gtk.Window {
 		dialog.show_all();
 	}
 
+	public void rebuild_font_cache(){
+		string cmd = "fc-cache -f -v";
+		layout_box.panel1.run_script_in_new_terminal_tab(cmd, _("Rebuilding Font Cache..."));
+	}
+
+	public void clear_thumbnail_cache(){
+
+		string cmd = "";
+		
+		foreach(string dir in new string[] { "normal", "large", "fail" }){
+			cmd += "rm -rfv '%s/.cache/thumbnails/%s'\n".printf(escape_single_quote(App.user_home), dir);
+			cmd += "mkdir -pv '%s/.cache/thumbnails/%s'\n".printf(escape_single_quote(App.user_home), dir);
+		}
+		
+		layout_box.panel1.run_script_in_new_terminal_tab(cmd, _("Cleaning Thumbnail Cache..."));
+	}
+
+	public void install_etcher(){
+
+		string fmt = """https://resin-production-downloads.s3.amazonaws.com/etcher/1.0.0/Etcher-1.0.0-linux-%s.zip""";
+		var url = fmt.printf((App.sysinfo.arch == 64) ? "x64" : "x86");
+		
+		fmt = "Etcher-1.0.0-linux-%s.zip";
+		var zip_name = fmt.printf((App.sysinfo.arch == 64) ? "x64" : "x86");
+		
+		fmt = "Etcher-1.0.0-linux-%s.AppImage";
+		var ins_name = fmt.printf((App.sysinfo.arch == 64) ? "x64" : "x86");
+		
+		string cmd = "cd '%s'\n".printf(escape_single_quote(TEMP_DIR));
+		cmd += "aria2c -x 10 '%s' \n".printf(url);
+		cmd += "if [ ! -f %s ]; then echo 'Error' ; exit 1; fi \n".printf(zip_name);
+		cmd += "7z e %s \n".printf(zip_name);
+		cmd += "if [ ! -f %s ]; then echo 'Error' ; exit 1; fi \n".printf(ins_name);
+		cmd += "chmod a+x %s \n".printf(ins_name);
+		cmd += "./%s \n".printf(ins_name);
+
+		log_debug("cmd=\n"+cmd);
+
+		refresh_apps_pending = true;
+		
+		layout_box.panel1.run_script_in_new_terminal_tab(cmd, _("Installing Etcher..."));
+	}
 
 	public void save_session(){
 

@@ -104,7 +104,7 @@ namespace TeeJee.GtkHelper{
 		/* Shows a simple input prompt */
 
 		//vbox_main
-        Gtk.Box vbox_main = new Box (Orientation.VERTICAL, 0);
+        Gtk.Box vbox_main = new Gtk.Box(Orientation.VERTICAL, 0);
         vbox_main.margin = 0;
 
 		//lbl_input
@@ -518,7 +518,8 @@ namespace TeeJee.GtkHelper{
 	
 	// menu
 	
-	public void gtk_menu_add_separator(Gtk.Menu menu){
+	public Gtk.SeparatorMenuItem gtk_menu_add_separator(Gtk.Menu menu){
+		
 		Gdk.RGBA gray = Gdk.RGBA();
 		gray.parse ("rgba(200,200,200,1)");
 		
@@ -526,6 +527,8 @@ namespace TeeJee.GtkHelper{
 		var menu_item = new Gtk.SeparatorMenuItem();
 		menu_item.override_color (StateFlags.NORMAL, gray);
 		menu.append(menu_item);
+
+		return menu_item;
 	}
 
 	public Gtk.MenuItem gtk_menu_add_item(
@@ -609,7 +612,7 @@ namespace TeeJee.GtkHelper{
 		scrolled.vscrollbar_policy = PolicyType.NEVER;
 		box.add(scrolled);
 
-		var hbox = new Box(Orientation.HORIZONTAL, 6);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		scrolled.add(hbox);
 
 		return hbox;
@@ -797,7 +800,7 @@ namespace TeeJee.GtkHelper{
 		var label = new Gtk.Label(title);
 
         // vbox
-        var vbox = new Box (Gtk.Orientation.VERTICAL, spacing);
+        var vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, spacing);
         vbox.margin = margin;
         book.append_page (vbox, label);
 
@@ -809,14 +812,14 @@ namespace TeeJee.GtkHelper{
 		Gtk.SelectionMode selection_mode = Gtk.SelectionMode.SINGLE){
 			
 		// TreeView
-		var treeview = new TreeView();
+		var treeview = new Gtk.TreeView();
 		treeview.get_selection().mode = selection_mode;
 		treeview.set_rules_hint (true);
 		treeview.show_expanders = true;
 		treeview.enable_tree_lines = true;
 
 		// ScrolledWindow
-		var scrollwin = new ScrolledWindow(null, null);
+		var scrollwin = new Gtk.ScrolledWindow(null, null);
 		scrollwin.set_shadow_type (ShadowType.ETCHED_IN);
 		scrollwin.add (treeview);
 		scrollwin.expand = true;

@@ -67,7 +67,14 @@ public abstract class AsyncTask : GLib.Object{
 	public int64 prg_bytes_total = 0;
 	public string eta = "";
 	public string rate = "";
+	public int64 count_completed = 0;
+	public int64 count_total = 0;
+	public int64 bytes_completed = 0;
+	public int64 bytes_total = 0;
 	//public bool is_running = false;
+
+	// regex
+	protected Gee.HashMap<string, Regex> regex_list;
 	
 	// signals
 	public signal void stdout_line_read(string line);
@@ -331,8 +338,10 @@ public abstract class AsyncTask : GLib.Object{
 		return exit_code;
 	}
 
-	public bool is_running(){
-		return (status == AppStatus.RUNNING);
+	public bool is_running {
+		get {
+			return (status == AppStatus.RUNNING);
+		}
 	}
 	
 	// public actions --------------
@@ -456,59 +465,43 @@ public enum AppStatus {
 /* Sample Subclass:
 public class RsyncTask : AsyncTask{
 
+	// parameters
 	public bool delete_extra = true;
-	public string rsync_log_file = "";
-	public string exclude_from_file = "";
-	public string source_path = "";
-	public string dest_path = "";
-	public bool verbose = true;
+
+	public RsyncTask(){
+	*
+		init_regular_expressions();
+	}
 	
-	public RsyncTask(string _script_file, string _working_dir, string _log_file){
-		working_dir = _working_dir;
-		script_file = _script_file;
-		log_file = _log_file;
+	private void init_regular_expressions(){
+		
+		regex_list = new Gee.HashMap<string, Regex>();
+		
+		try {
+			//   (1.00/100%)
+			regex_list["qemu-convert"] = new Regex("""[ \t]*[(]?([0-9.]+)\/[0-9.]+[%]?[)]?""");
+		}
+		catch (Error e) {
+			log_error (e.message);
+		}
 	}
 	
 	public void prepare() {
+	
 		string script_text = build_script();
 		save_bash_script_temp(script_text, script_file);
+
+		count_completed = 0;
+		count_total = 100;
 	}
 
 	private string build_script() {
+	
 		var script = new StringBuilder();
 
 		var cmd = "rsync -ai";
 
-		if (verbose){
-			cmd += " --verbose";
-		}
-		else{
-			cmd += " --quiet";
-		}
-
-		if (delete_extra){
-			cmd += " --delete";
-		}
-
 		cmd += " --numeric-ids --stats --relative --delete-excluded";
-
-		if (rsync_log_file.length > 0){
-			cmd += " --log-file='%s'".printf(escape_single_quote(rsync_log_file));
-		}
-
-		if (exclude_from_file.length > 0){
-			cmd += " --exclude-from='%s'".printf(escape_single_quote(exclude_from_file));
-		}
-
-		source_path = remove_trailing_slash(source_path);
-		
-		dest_path = remove_trailing_slash(dest_path);
-		
-		cmd += " '%s/'".printf(escape_single_quote(source_path));
-
-		cmd += " '%s/'".printf(escape_single_quote(dest_path));
-		
-		//cmd += " /. \"%s\"".printf(sync_path + "/localhost/");
 
 		return script.str;
 	}
@@ -544,8 +537,14 @@ public class RsyncTask : AsyncTask{
 	}
 
 	public bool update_progress_parse_console_output (string line) {
-		if ((line == null) || (line.length == 0)) {
-			return true;
+
+		if ((line == null) || (line.length == 0)) { return true; }
+
+		MatchInfo match;
+		if (regex_list["qemu-convert"].match(line, 0, out match)) {
+			string txt = match.fetch(1);
+			count_completed = int.parse(txt);
+			status_line = "%lld%%".printf(count_completed);
 		}
 
 		return true;

@@ -42,8 +42,12 @@ public class FileViewPane : Gtk.Box {
 	public AdminBar adminbar;
 	public TrashBar trashbar;
 	public Gtk.Box file_operations_box;
+	public TermBox terminal;
 	public Statusbar statusbar;
 
+	private Gtk.Box box_pathbar_view;
+	private Gtk.Paned paned_term;
+	
 	public Gee.ArrayList<ProgressPanel> file_operations = new Gee.ArrayList<ProgressPanel>();
 
 	// parents
@@ -91,18 +95,27 @@ public class FileViewPane : Gtk.Box {
 		log_trace("Settings created: %s".printf(timer_elapsed_string(timer)));
 		timer_restart(timer);
 
+		terminal = new TermBox(this);
+
 		statusbar = new Statusbar(this);
 
 		log_trace("Statusbar created: %s".printf(timer_elapsed_string(timer)));
 
 		//add(toolbar);
 
-		add(pathbar);
+		var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+		box.add(pathbar);
+		box.add(view);
+		box_pathbar_view = box;
+		
+		var paned = new Gtk.Paned (Gtk.Orientation.VERTICAL);
+		add(paned);
+		paned_term = paned;
+		
+		paned.pack1(box, true, true); // resize, shrink
+		paned.pack2(terminal, true, true); // resize, shrink
 
-		add(view);
-
-		file_operations_box = new Box(Orientation.VERTICAL, 6);
-		//action_bar.margin = 6;
+		file_operations_box = new Gtk.Box(Orientation.VERTICAL, 6);
 		add(file_operations_box);
 
 		add(mediabar);
@@ -180,6 +193,8 @@ public class FileViewPane : Gtk.Box {
 
 		refresh_file_action_panel();
 
+		refresh_terminal();
+		
 		refresh_statusbar();
 
 		log_trace("Pane %d refreshed: %s".printf(this.panel.number, timer_elapsed_string(timer)));
@@ -196,6 +211,10 @@ public class FileViewPane : Gtk.Box {
 	
 	public void refresh_headerbar(){
 		window.headerbar.refresh();
+	}
+
+	public void refresh_terminal(){
+		terminal.refresh();
 	}
 	
 	public void refresh_statusbar(){
@@ -219,6 +238,18 @@ public class FileViewPane : Gtk.Box {
 		else{
 			file_operations_box.hide();
 		}
+	}
+
+	public void maximize_terminal(){
+		gtk_hide(box_pathbar_view);
+	}
+
+	public void unmaximize_terminal(){
+		gtk_show(box_pathbar_view);
+
+		int pos_height = paned_term.get_allocated_height();
+		int pos_height_half = (int) (pos_height / 2);
+		paned_term.set_position(pos_height_half);
 	}
 
 	// helpers

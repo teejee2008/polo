@@ -105,6 +105,13 @@ public class MainHeaderBar : Gtk.HeaderBar {
 		bbox.set_homogeneous(false);
 		bbox.margin = 0;
 		scrolled.add(bbox);*/
+
+		if (App.headerbar_window_buttons_left){
+
+			add_close();
+
+			add_minimize();
+		}
 		
 		add_back();
 
@@ -122,9 +129,12 @@ public class MainHeaderBar : Gtk.HeaderBar {
 
 		// pack_end(), add remaining items in reverse order
 
-		add_close();
+		if (!App.headerbar_window_buttons_left){
+			
+			add_close();
 
-		add_minimize();
+			add_minimize();
+		}
 
 		add_menu();
 		
@@ -314,7 +324,13 @@ public class MainHeaderBar : Gtk.HeaderBar {
 		button.always_show_image = true;
 		button.image = IconManager.lookup_image("window-minimize", 20); // use symbolic
 		button.set_tooltip_text (_("Minimize"));
-		this.pack_end(button);
+
+		if (App.headerbar_window_buttons_left){
+			this.pack_start(button);
+		}
+		else{
+			this.pack_end(button);
+		}
 
 		gtk_apply_css({ button }, "padding-left: %dpx; padding-right: %dpx;".printf(BUTTON_PADDING, BUTTON_PADDING));
 		
@@ -329,8 +345,14 @@ public class MainHeaderBar : Gtk.HeaderBar {
 		button.always_show_image = true;
 		button.image = IconManager.lookup_image("window-close", 20);
 		button.set_tooltip_text (_("Close this window"));
-		this.pack_end(button);
-		
+
+		if (App.headerbar_window_buttons_left){
+			this.pack_start(button);
+		}
+		else{
+			this.pack_end(button);
+		}
+
 		gtk_apply_css({ button }, "padding-left: %dpx; padding-right: %dpx;".printf(BUTTON_PADDING, BUTTON_PADDING));
 
 		button.clicked.connect(() => {

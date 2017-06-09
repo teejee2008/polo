@@ -41,6 +41,8 @@ public class IconManager : GLib.Object {
 
 	public static void init(string[] args, string app_name){
 
+		log_debug("IconManager: init()");
+		
 		search_paths = new Gee.ArrayList<string>();
 
 		string binpath = file_resolve_executable_path(args[0]);

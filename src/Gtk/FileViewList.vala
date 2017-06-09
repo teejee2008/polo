@@ -150,8 +150,6 @@ public class FileViewList : Gtk.Box {
 
 		log_debug("view_mode = App.view_mode; %s".printf(view_mode.to_string()));
 
-		//menu_file = new FileContextMenu(pane);
-
 		overlay = new Gtk.Overlay();
 		this.add(overlay);
 
@@ -162,17 +160,7 @@ public class FileViewList : Gtk.Box {
 
 		init_iconview();
 
-		//if (use_flowbox_mediaview){
-		//	init_mediaview();
-		//}
-
-		//set_view_path(App.user_home);
-
 		show_all();
-
-		//start_thumbnail_cycler();
-
-		//refresh();
 	}
 
 	private void init_treeview() {
@@ -188,7 +176,7 @@ public class FileViewList : Gtk.Box {
 		//treeview.activate_on_single_click = true;
 
 		// scrolled
-		var scrolled = new ScrolledWindow(null, null);
+		var scrolled = new Gtk.ScrolledWindow(null, null);
 		scrolled.set_shadow_type (ShadowType.ETCHED_IN);
 		scrolled.hscrollbar_policy = PolicyType.AUTOMATIC;
 		scrolled.vscrollbar_policy = PolicyType.AUTOMATIC;
@@ -256,9 +244,10 @@ public class FileViewList : Gtk.Box {
 
 			window.active_pane = pane;
 
-			if (current_item == null) { return false; }
+			window.update_accelerators_for_active_pane();
 
 			if (event.button == 3) {
+				if (current_item == null) { return false; }
 				menu_file = new FileContextMenu(pane);
 				return menu_file.show_menu(event);
 			}
@@ -303,7 +292,7 @@ public class FileViewList : Gtk.Box {
 		iconview.spacing = 0;
 
 		// scrolled
-		var scrolled = new ScrolledWindow(null, null);
+		var scrolled = new Gtk.ScrolledWindow(null, null);
 		scrolled.set_shadow_type (ShadowType.ETCHED_IN);
 		scrolled.hscrollbar_policy = PolicyType.AUTOMATIC;
 		scrolled.vscrollbar_policy = PolicyType.AUTOMATIC;
@@ -341,9 +330,10 @@ public class FileViewList : Gtk.Box {
 
 			window.active_pane = pane;
 
-			if (current_item == null) { return false; }
+			window.update_accelerators_for_active_pane();
 
 			if (event.button == 3) {
+				if (current_item == null) { return false; }
 				menu_file = new FileContextMenu(pane);
 				return menu_file.show_menu(event);
 			}
@@ -480,7 +470,7 @@ public class FileViewList : Gtk.Box {
 
 			cell_name.editable = false;
 
-			window.menubar.enable_accelerators();
+			window.update_accelerators_for_active_pane();
 		});
 
 		// render icon
@@ -1181,7 +1171,6 @@ public class FileViewList : Gtk.Box {
 		update_column_headers();
 	}
 
-
 	private Gee.ArrayList<FileItem> treeview_set_sort_func(Gee.ArrayList<FileItem> list){
 
 		switch (sort_column_index) {
@@ -1482,7 +1471,6 @@ public class FileViewList : Gtk.Box {
 		sort();
 	}
 
-		
 	public FileViewColumn get_sort_column_index(){
 		return (FileViewColumn) sort_column_index;
 	}
@@ -1490,7 +1478,6 @@ public class FileViewList : Gtk.Box {
 	public bool get_sort_column_desc(){
 		return sort_column_desc;
 	}
-
 
 	public void set_sort_column_by_index(FileViewColumn col_index){
 		log_debug("set_sort_column_by_index(): %s".printf(col_index.to_string()));
@@ -2460,6 +2447,7 @@ public class FileViewList : Gtk.Box {
 
 		foreach(var mon in monitors){
 			if (mon.file_item.file_path == item.file_path){
+				log_debug("monitor exists: %s".printf(item.file_path));
 				return;
 			}
 		}
@@ -2467,9 +2455,12 @@ public class FileViewList : Gtk.Box {
 		var mon = new FileItemMonitor();
 		monitors.add(mon);
 
+		log_debug("monitor added: %s".printf(item.file_path));
+		
 		mon.file_item = item;
 		mon.monitor = mon.file_item.monitor_for_changes(out mon.cancellable);
 		mon.monitor.changed.connect(directory_changed);
+		log_debug("monitor connected: %s".printf(item.file_path));
 	}
 
 	private void remove_monitor(FileItem item){
@@ -2480,11 +2471,13 @@ public class FileViewList : Gtk.Box {
 				obj = mon;
 				mon.cancellable.cancel();
 				mon.monitor.changed.disconnect(directory_changed);
+				log_debug("monitor disconnected: %s".printf(item.file_path));
 			}
 		}
 
 		if (obj != null){
 			monitors.remove(obj);
+			log_debug("monitor removed: %s".printf(item.file_path));
 		}
 	}
 
@@ -2500,6 +2493,8 @@ public class FileViewList : Gtk.Box {
 				mon.cancellable.cancel();
 			}
 			mon.monitor.changed.disconnect(directory_changed);
+			log_debug("monitor disconnected: %s".printf(mon.file_item.file_path));
+			log_debug("monitor removed: %s".printf(mon.file_item.file_path));
 		}
 		
 		monitors.clear();
@@ -2534,6 +2529,7 @@ public class FileViewList : Gtk.Box {
 				append_item_to_treeview_by_file_path(src.get_path());
 				remove_overlay();
 			}
+			remove_overlay();
 			break;
 		case FileMonitorEvent.CHANGED:
 			//if(!current_item.has_child(file_basename(src.get_path()))){
@@ -2594,7 +2590,7 @@ public class FileViewList : Gtk.Box {
 			return;
 		}
 
-		cancel_monitors();
+		//cancel_monitors();
 		
 		if (clear_view){
 			store = null;
@@ -2629,16 +2625,19 @@ public class FileViewList : Gtk.Box {
 	public void set_overlay_on_unmount(){
 		add_overlay(_("Device was unmounted"), true);
 		pane.statusbar.refresh();
+		cancel_monitors();
 	}
 
 	public void set_overlay_on_invalid_path(){
 		add_overlay(_("Could not find path") + " '%s'".printf(current_path_saved), true);
 		pane.statusbar.refresh();
+		cancel_monitors();
 	}
 
 	public void set_overlay_on_empty(){
 		add_overlay(_("Folder is empty"), false);
 		//pane.statusbar.refresh(); // not needed
+		//cancel_monitors();// do not cancel
 	}
 
 	// update thumbnails ------------
@@ -3106,7 +3105,7 @@ public class FileViewList : Gtk.Box {
 		if (item.is_archive && item.is_trashed_item){
 			// ignore; do not open
 		}
-		else if ((item.file_type == FileType.DIRECTORY) || item.is_archive){
+		else if ((item.file_type == FileType.DIRECTORY) || (item.is_archive && !item.is_package)){
 			set_view_item(item);
 		}
 		else if (item.content_type.contains("executable")){
@@ -3490,7 +3489,7 @@ public class FileViewList : Gtk.Box {
 
 		if (view_mode == ViewMode.LIST){
 
-			window.menubar.disable_accelerators();
+			window.update_accelerators_for_edit();
 
 			cell_name.editable = true;
 			TreeModel model;
@@ -3650,6 +3649,7 @@ public class FileViewList : Gtk.Box {
 		if (selected_items.size != 1){ return; }
 
 		log_debug("action.open_terminal()");
+
 		open_terminal_window("", current_item.file_path, selected_items[0].file_path, false);
 	}
 
@@ -3661,7 +3661,7 @@ public class FileViewList : Gtk.Box {
 		if (baobab == null){ return; }
 
 		var selected_items = get_selected_items();
-		if (selected_items.size > 0){
+		if ((selected_items.size > 0) && (selected_items[0].is_directory)){
 			open(selected_items[0], baobab);
 		}
 		else{
@@ -3901,6 +3901,7 @@ public class FileViewList : Gtk.Box {
 		start_view_redraw();
 	}
 
+
 	public void mount_iso(){
 		
 		err_log_clear();
@@ -3956,6 +3957,120 @@ public class FileViewList : Gtk.Box {
 		}
 	}
 
+	public void boot_iso(){
+		
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+
+		var task = new KvmTask();
+		task.boot_iso(item.file_path, App.get_kvm_config());
+	}
+
+	public void write_iso(){
+		
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+		
+		DesktopApp? etcher_app = DesktopApp.get_app_by_filename("appimagekit-Etcher.desktop");
+
+		if (etcher_app == null){
+			
+			string title = _("'Etcher' Not Found");
+			string msg = _("Polo uses the third-party application 'Etcher' to write ISO files to USB. Do you want me to download and install it for you?");
+			int resp = gtk_messagebox_yes_no(title, msg, window, true);
+
+			if (resp == Gtk.ResponseType.YES){
+				window.install_etcher();
+			}
+		}
+		else{
+			open(item, etcher_app);
+		}
+	}
+
+
+	public void kvm_create_disk(){
+		
+		err_log_clear();
+
+		var win = new KvmCreateDiskWindow(KvmTaskType.CREATE_DISK, window, current_item.file_path, "", "", "");
+	}
+
+	public void kvm_create_derived_disk(){
+		
+		err_log_clear();
+
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+
+		var win = new KvmCreateDiskWindow(KvmTaskType.CREATE_DISK_DERIVED, window, current_item.file_path, item.file_path, "", "");
+	}
+
+	public void kvm_create_merged_disk(){
+		
+		err_log_clear();
+
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+
+		var win = new KvmCreateDiskWindow(KvmTaskType.CONVERT_MERGE, window, current_item.file_path, "", item.file_path, "");
+	}
+
+	public void kvm_convert_disk(string disk_format){
+		
+		err_log_clear();
+
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+		
+		var win = new KvmCreateDiskWindow(KvmTaskType.CONVERT_DISK, window, current_item.file_path, item.file_path, "", disk_format);
+	}
+	
+	public void kvm_boot_disk(){
+		
+		err_log_clear();
+
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+
+		var task = new KvmTask();
+		task.boot_disk(item.file_path, App.get_kvm_config());
+	}
+
+	public void kvm_install_iso(){
+		
+		err_log_clear();
+
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+
+		string message = _("Select ISO File");
+
+		var filters = new Gee.ArrayList<Gtk.FileFilter>();
+		var filter = create_file_filter("All Files", { "*" });
+		filters.add(filter);
+		filter = create_file_filter("ISO Image File (*.iso)", { "*.iso" });
+		filters.add(filter);
+		var default_filter = filter;
+
+		var selected_files = gtk_select_files(window, true, false, filters, default_filter, message);
+		if (selected_files.size == 0){ return; }
+		string iso_file = selected_files[0];
+
+		var task = new KvmTask();
+		task.boot_iso_attach_disk(iso_file, item.file_path, App.get_kvm_config());
+	}
+
+
+
+	
 	public void hide_selected(){
 
 		if (!is_normal_directory){ return; }

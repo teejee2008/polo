@@ -269,18 +269,18 @@ public class AboutWindow : Dialog {
         vbox_logo.add(img_logo);
 
 		//program_name
-		lbl_program_name = new Label("");
+		lbl_program_name = new Gtk.Label("");
 		lbl_program_name.set_use_markup(true);
 		vbox_logo.add(lbl_program_name);
 
 		//version
-		lbl_version = new Label("");
+		lbl_version = new Gtk.Label("");
 		lbl_version.set_use_markup(true);
 		lbl_version.margin_top = 5;
 		vbox_logo.add(lbl_version);
 
 		//comments
-		lbl_comments = new Label("");
+		lbl_comments = new Gtk.Label("");
 		lbl_comments.set_use_markup(true);
 		lbl_comments.margin_top = 10;
 		vbox_logo.add(lbl_comments);
@@ -300,13 +300,13 @@ public class AboutWindow : Dialog {
 		});
 
 		//copyright
-		lbl_copyright = new Label("");
+		lbl_copyright = new Gtk.Label("");
 		lbl_copyright.set_use_markup(true);
 		lbl_copyright.margin_top = 5;
 		vbox_logo.add(lbl_copyright);
 
 		//spacer_bottom
-		var spacer_bottom = new Label("");
+		var spacer_bottom = new Gtk.Label("");
 		spacer_bottom.margin_top = 20;
 		vbox_logo.add(spacer_bottom);
 
@@ -318,12 +318,12 @@ public class AboutWindow : Dialog {
 		hbox_action = (Box) get_action_area();
 
 		//btn_license
-		btn_license = new Button.with_label("  " + _("License"));
+		btn_license = new Gtk.Button.with_label("  " + _("License"));
 		btn_license.set_image (new Image.from_stock ("gtk-about", IconSize.MENU));
 		hbox_action.add(btn_license);
 
 		//btn_credits
-		btn_credits = new Button.with_label("  " + _("Credits"));
+		btn_credits = new Gtk.Button.with_label("  " + _("Credits"));
 		btn_credits.set_image (new Image.from_stock ("gtk-about", IconSize.MENU));
 		hbox_action.add(btn_credits);
 
@@ -392,7 +392,7 @@ public class AboutWindow : Dialog {
 		});
 
 		//btn_close
-		btn_close = new Button.with_label("  " + _("Close"));
+		btn_close = new Gtk.Button.with_label("  " + _("Close"));
 		btn_close.set_image (new Image.from_stock ("gtk-close", IconSize.MENU));
 		hbox_action.add(btn_close);
 
@@ -510,7 +510,7 @@ public class AboutWindow : Dialog {
 				txt = escape_html(text);
 			}
 
-			var lbl = new Label(txt);
+			var lbl = new Gtk.Label(txt);
 			lbl.set_use_markup(true);
 			lbl.valign = Align.START;
 			lbl.wrap = true;

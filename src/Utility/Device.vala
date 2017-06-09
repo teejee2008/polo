@@ -82,7 +82,7 @@ public class Device : GLib.Object{
 
 	private static Gee.ArrayList<Device> device_list;
 
-	private static DeviceMonitor monitor;
+	private static DeviceMonitor? monitor;
 
 	// static -----------------------------
 	
@@ -2486,8 +2486,8 @@ public class Device : GLib.Object{
 
 public class DeviceMonitor : GLib.Object{
 
-	private static DeviceMonitor device_monitor;
-	private static GLib.VolumeMonitor monitor;
+	private static DeviceMonitor? device_monitor;
+	private static GLib.VolumeMonitor? monitor;
 	private static uint tmr_init = 0;
 	
 	public signal void changed();

@@ -52,7 +52,7 @@ public class AdminBar : Gtk.Box {
 	}
 
 	private void init_ui(){
-		var label = new Label(_("Running with Admin Priviledges (!)"));
+		var label = new Gtk.Label(_("Running with Admin Priviledges (!)"));
 		label.xalign = 0.5f;
 		label.hexpand = true;
 		label.margin = 6;

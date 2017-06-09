@@ -58,7 +58,7 @@ public class TrashBar : Gtk.Box {
 
 	private void init_ui(){
 
-		var label = new Label("");
+		var label = new Gtk.Label("");
 		label.xalign = 0.5f;
 		label.hexpand = true;
 		label.margin = 6;

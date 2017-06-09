@@ -102,11 +102,13 @@ public class FileViewTab : Gtk.Box {
 			renamed = true;
 			gtk_hide(tab_entry);
 			gtk_show(tab_label);
+			window.update_accelerators_for_active_pane();
 		});
 
 		tab_entry.focus_out_event.connect((event) => {
 			//log_debug("tab_entry.focus_out_event");
 			tab_entry.activate();
+			window.update_accelerators_for_active_pane();
 			return true;
 		});
 
@@ -245,6 +247,7 @@ public class FileViewTab : Gtk.Box {
 			gtk_hide(tab_label);
 			gtk_show(tab_entry);
 			tab_entry.grab_focus();
+			window.update_accelerators_for_edit();
 		});
 
 		// reset tab name ---------------

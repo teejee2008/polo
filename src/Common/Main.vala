@@ -37,7 +37,7 @@ using TeeJee.Misc;
 public Main App;
 public const string AppName = "Polo File Manager";
 public const string AppShortName = "polo";
-public const string AppVersion = "17.5.1 (BETA 6)";
+public const string AppVersion = "17.6 (BETA 7)";
 public const string AppAuthor = "Tony George";
 public const string AppAuthorEmail = "teejeetech@gmail.com";
 
@@ -70,11 +70,13 @@ public class Main : GLib.Object {
 
 	public AppLock session_lock;
 
+	public SysInfo sysinfo;
+
 	public Gee.HashMap<string,Tool> Tools = new Gee.HashMap<string,Tool>();
 
 	public string temp_dir = "";
 	public string current_dir = "";
-	public string share_dir = "/usr/share";
+	public string share_dir = "/usr/share/polo";
 	public string app_conf_path = "";
 	public string app_conf_folders = "";
 	public string app_conf_session = "";
@@ -85,7 +87,7 @@ public class Main : GLib.Object {
 	//public ArchiveTask archive_task;
 	//public DesktopApp crunchy_app;
 	//public Gee.ArrayList<MimeType> mimetype_list;
-	public Json.Object default_config;
+	public Json.Object appconfig;
 	public Bash bash_admin_shell;
 
 	public AppMode app_mode = AppMode.OPEN;
@@ -111,6 +113,7 @@ public class Main : GLib.Object {
 
 	public bool headerbar_enabled = false;
 	public bool headerbar_enabled_temp = false;
+	public bool headerbar_window_buttons_left = false;
 
 	public bool middlebar_visible = true;
 
@@ -152,6 +155,20 @@ public class Main : GLib.Object {
 	public bool tabs_bottom = false;
 	public bool tabs_close_visible = true;
 
+	public const string TERM_FONT_DESC = "11";
+	public Pango.FontDescription term_font;
+	public string term_fg_color = "#DCDCDC";
+	public string term_bg_color = "#2C2C2C";
+	public bool term_enable_network = true;
+	public bool term_enable_gui = true;
+
+	public bool kvm_enable = true;
+	public string kvm_vga = "std";
+	public string kvm_cpu = "host";
+	public int kvm_smp = 1;
+	public int kvm_mem = 2048;
+	public string kvm_format = ".qcow2";
+
 	public static string REQUIRED_COLUMNS = "name,indicator,spacer";
 	public static string REQUIRED_COLUMNS_END = "spacer";
 	public static string DEFAULT_COLUMNS = "name,indicator,size,modified,filetype,spacer";
@@ -162,6 +179,8 @@ public class Main : GLib.Object {
 	public PanelLayout panel_layout = PanelLayout.SINGLE;
 	public bool maximise_on_startup = true;
 	public bool single_instance_mode = true;
+	public bool minimize_to_tray = true;
+	public bool autostart = true;
 	
 	// defaults
 	public static double LV_FONT_SCALE = 1.0;
@@ -277,6 +296,8 @@ public class Main : GLib.Object {
 
 		user_dirs = new XdgUserDirectories(user_name);
 
+		sysinfo = new SysInfo();
+		
 		SystemUser.query_users();
 		SystemGroup.query_groups();
 
@@ -363,6 +384,15 @@ public class Main : GLib.Object {
 
 		//load_mimetype_list();
 
+		string src_path = path_combine(share_dir, "files/fish_prompt.fish");
+		string dst_path = path_combine(user_home, ".config/fish/functions/fish_prompt.fish");
+		if (!file_exists(dst_path)){
+			dir_create(path_combine(user_home, ".config/fish/functions"));
+			file_copy(src_path, dst_path);
+			chown(dst_path, user_name, user_name, false, null);
+			chmod(dst_path, "u+rw", null);
+		}
+
 		init_tools_list();
 
 		load_app_config();
@@ -375,34 +405,6 @@ public class Main : GLib.Object {
 			//Device.bash_admin_shell = bash_admin_shell;
 		}
 	}
-
-/*
-	private void load_mimetype_list(){
-
-		var mime_list = new Gee.ArrayList<string>();
-		string mimelist = "/usr/share/%s/mimetypes".printf(AppShortName);
-		if (file_exists(mimelist)){
-			foreach(string line in file_read(mimelist).split("\n")){
-				mime_list.add(line.strip());
-			}
-		}
-
-		var list = new Gee.ArrayList<MimeType>();
-		foreach(string key in MimeType.mimetypes.keys) {
-			if (mime_list.contains(key)){
-				var mime = MimeType.mimetypes[key];
-				//mime.is_selected = true; // let user select explicitly
-				list.add(mime);
-			}
-		}
-
-		list.sort((a, b) => {
-			return strcmp(a.comment,b.comment);
-		});
-
-		mimetype_list = list;
-	}
-*/
 
 	public bool check_dependencies(out string msg) {
 		msg = "";
@@ -440,6 +442,7 @@ public class Main : GLib.Object {
 		Tools["udisksctl"] = new Tool("udisksctl","udisksctl","Mount and unmount devices");
 		Tools["cryptsetup"] = new Tool("cryptsetup","cryptsetup","Unlock encrypted LUKS devices");
 		Tools["xdg-mime"] = new Tool("xdg-mime","xdg-mime","Set file type associations");
+		Tools["fish"] = new Tool("fish","Fish Shell","Terminal Shell");
 		
 		check_all_tools();
 		
@@ -458,13 +461,7 @@ public class Main : GLib.Object {
 		}
 	}
 	
-	/* Common */
-
-	public string create_log_dir() {
-		string log_dir = "%s/.local/logs/%s".printf(user_home, AppShortName);
-		dir_create(log_dir);
-		return log_dir;
-	}
+	/* Configuration */
 
 	public void save_app_config() {
 
@@ -493,6 +490,7 @@ public class Main : GLib.Object {
 		
 		//save headerbar_enabled_temp instead of headerbar_enabled
 		config.set_string_member("headerbar_enabled", headerbar_enabled_temp.to_string());
+		config.set_string_member("headerbar_window_buttons_left", headerbar_window_buttons_left.to_string());
 
 		config.set_string_member("show_hidden_files", show_hidden_files.to_string());
 		config.set_string_member("panel_layout", ((int)panel_layout).to_string());
@@ -556,11 +554,25 @@ public class Main : GLib.Object {
 		config.set_string_member("tabs_bottom", tabs_bottom.to_string());
 		config.set_string_member("tabs_close_visible", tabs_close_visible.to_string());
 
+		config.set_string_member("term_font", term_font.to_string());
+		config.set_string_member("term_fg_color", term_fg_color);
+		config.set_string_member("term_bg_color", term_bg_color);
+		config.set_string_member("term_enable_network", term_enable_network.to_string());
+		config.set_string_member("term_enable_gui", term_enable_gui.to_string());
+
+		config.set_string_member("kvm_enable", kvm_enable.to_string());
+		config.set_string_member("kvm_cpu", kvm_cpu);
+		config.set_string_member("kvm_smp", kvm_smp.to_string());
+		config.set_string_member("kvm_vga", kvm_vga);
+		config.set_string_member("kvm_mem", kvm_mem.to_string());
+
 		config.set_string_member("selected_columns", selected_columns);
 		config.set_string_member("maximise_on_startup", maximise_on_startup.to_string());
 		//config.set_string_member("single_click_activate", single_click_activate.to_string());
 		config.set_string_member("restore_last_session", restore_last_session.to_string());
 		config.set_string_member("single_instance_mode", single_instance_mode.to_string());
+		config.set_string_member("minimize_to_tray", minimize_to_tray.to_string());
+		config.set_string_member("autostart", autostart.to_string());
 
 		config.set_string_member("confirm_delete", confirm_delete.to_string());
 		config.set_string_member("confirm_trash", confirm_trash.to_string());
@@ -606,7 +618,7 @@ public class Main : GLib.Object {
 		var node = parser.get_root();
 		var config = node.get_object();
 
-		default_config = config;
+		appconfig = config;
 
 		if (format_is_obsolete(config, Main.APP_CONFIG_FORMAT_VERSION)){
 			first_run = true; // regard as first run
@@ -627,6 +639,7 @@ public class Main : GLib.Object {
 
 		headerbar_enabled = json_get_bool(config, "headerbar_enabled", headerbar_enabled);
 		headerbar_enabled_temp = headerbar_enabled;
+		headerbar_window_buttons_left = json_get_bool(config, "headerbar_window_buttons_left", headerbar_window_buttons_left);
 		
 		show_hidden_files = json_get_bool(config, "show_hidden_files", show_hidden_files);
 		panel_layout = (PanelLayout) json_get_int(config, "panel_layout", panel_layout);
@@ -695,6 +708,20 @@ public class Main : GLib.Object {
 
 		tabs_bottom = json_get_bool(config, "tabs_bottom", tabs_bottom);
 		tabs_close_visible = json_get_bool(config, "tabs_close_visible", tabs_close_visible);
+
+		var term_font_string = json_get_string(config, "term_font", TERM_FONT_DESC);
+		term_font = Pango.FontDescription.from_string(term_font_string);
+		
+		term_fg_color = json_get_string(config, "term_fg_color", term_fg_color);
+		term_bg_color = json_get_string(config, "term_bg_color", term_bg_color);
+		term_enable_network = json_get_bool(config, "term_enable_network", term_enable_network);
+		term_enable_gui = json_get_bool(config, "term_enable_gui", term_enable_gui);
+
+		kvm_enable = json_get_bool(config, "kvm_enable", kvm_enable);
+		kvm_cpu = json_get_string(config, "kvm_cpu", kvm_cpu);
+		kvm_smp = json_get_int(config, "kvm_smp", kvm_smp);
+		kvm_vga = json_get_string(config, "kvm_vga", kvm_vga);
+		kvm_mem = json_get_int(config, "kvm_mem", kvm_mem);
 		
 		selected_columns = json_get_string(config, "selected_columns", selected_columns);
 		selected_columns = selected_columns.replace(" ",""); // remove spaces
@@ -703,6 +730,8 @@ public class Main : GLib.Object {
 		//single_click_activate = json_get_bool(config, "single_click_activate", single_click_activate);
 		restore_last_session = json_get_bool(config, "restore_last_session", restore_last_session);
 		single_instance_mode = json_get_bool(config, "single_instance_mode", single_instance_mode);
+		minimize_to_tray = json_get_bool(config, "minimize_to_tray", minimize_to_tray);
+		autostart = json_get_bool(config, "autostart", autostart);
 
 		confirm_delete = json_get_bool(config, "confirm_delete", confirm_delete);
 		confirm_trash = json_get_bool(config, "confirm_trash", confirm_trash);
@@ -788,8 +817,6 @@ public class Main : GLib.Object {
 
 		var node = parser.get_root();
 		var config = node.get_object();
-
-		default_config = config;
 
 		if (format_is_obsolete(config, Main.APP_CONFIG_FOLDERS_FORMAT_VERSION)){
 			//first_run = true; // don't set
@@ -914,7 +941,15 @@ public class Main : GLib.Object {
 
 		return unsupported_format;
 	}
+
+	/* Common */
 	
+	public string create_log_dir() {
+		string log_dir = "%s/.local/logs/%s".printf(user_home, AppShortName);
+		dir_create(log_dir);
+		return log_dir;
+	}
+
 	public void exit_app() {
 
 		save_app_config();
@@ -937,19 +972,17 @@ public class Main : GLib.Object {
 		log_msg(_("Exiting Application"));
 	}
 
-	/* Core */
-
-	public void clear_thumbnail_cache(){
-		
-		foreach(string dir in new string[] { "normal", "large", "fail" }){
-			
-			string cmd = "rm -rfv '%s/.cache/thumbnails/%s'".printf(escape_single_quote(App.user_home), dir);
-			Posix.system(cmd);
-			
-			cmd = "mkdir -pv '%s/.cache/thumbnails/%s'".printf(escape_single_quote(App.user_home), dir);
-			Posix.system(cmd);
-		}
+	public Json.Object get_kvm_config(){
+		var config = new Json.Object();
+		config.set_string_member("kvm_cpu", kvm_cpu);
+		config.set_string_member("kvm_smp", kvm_smp.to_string());
+		config.set_string_member("kvm_vga", kvm_vga);
+		config.set_string_member("kvm_mem", kvm_mem.to_string());
+		config.set_string_member("kvm_smb", App.user_dirs.user_public);
+		return config;
 	}
+	
+	/* Core */
 
 	public static Gee.ArrayList<Device> get_devices(){
 
@@ -973,79 +1006,6 @@ public class Main : GLib.Object {
 
 		return list;
 	}
-
-/*
-	public void compress(FileItem _archive, bool wait = false) {
-		archive_task.compress(_archive, wait);
-	}
-
-	public void extract(FileItem _archive, bool wait = false) {
-		archive_task.extract(_archive, wait);
-	}
-
-	public void test(FileItem _archive, bool wait = false) {
-		// create a unique temporary extraction directory
-		archive_task.extraction_path = "%s/%s".printf(App.temp_dir,random_string());
-		dir_create(archive_task.extraction_path);
-
-		// begin
-		archive_task.test(_archive, wait);
-	}
-
-	public void open(FileItem archive, bool wait = false) {
-
-	}
-
-	public void open_info(FileItem _archive, bool wait = false) {
-		archive_task.archive = _archive;
-		archive_task.open_info(_archive, wait);
-	}
-
-	
-	public void set_extraction_path_from_args(){
-
-		// set extraction path
-
-		if (arg_same_path){
-			// select a subfolder in source path for extraction
-			archive_task.extraction_path = "%s/%s".printf(
-				file_parent(archive.file_path),
-				file_basename(archive.file_path).split(".")[0]);
-
-			// since user has not specified the directory we need to
-			// make sure that files are not overwritten accidentally
-			// in existing directories 
-
-			// create a unique extraction directory
-			int count = 0;
-			string outpath = archive_task.extraction_path;
-			while (dir_exists(outpath)||file_exists(outpath)){
-				log_debug("dir_exists: %s".printf(outpath));
-				outpath = "%s (%d)".printf(archive_task.extraction_path, ++count);
-			}
-			log_debug("create_dir: %s".printf(outpath));
-			archive_task.extraction_path = outpath;
-		}
-		else if (arg_prompt_outpath){
-			// do nothing
-		}
-		else {
-			// set path specified on command line
-			archive_task.extraction_path = arg_outpath;
-		}
-	}
-
-	public FileItem new_archive() {
-		var archive = new FileItem();
-		archive_task.action = ArchiveAction.CREATE;
-		return archive;
-	}
-
-	public string get_random_password(){
-		string stdout, stderr;
-		exec_script_sync("head /dev/urandom | tr -dc 'a-zA-Z0-9-_!@#$%^&*()_+{}|:<>?=' | head -c 20", out stdout, out stderr, true);
-		return stdout;
-	}*/
 }
 
 public enum AppMode {

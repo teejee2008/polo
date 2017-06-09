@@ -25,12 +25,12 @@ all:
 	#build binaries
 
 	#polo-gtk
-	valac -X -D'GETTEXT_PACKAGE="${app_name}"' --Xcc="-lm" -X -Wl,-rpath,/usr/share/${app_name}/libs ${define_symbols} --thread Common/*.vala Gtk/*.vala Utility/*.vala Utility/Gtk/*.vala -o "${app_name}-gtk" --pkg glib-2.0 --pkg gio-unix-2.0 --pkg posix --pkg gtk+-3.0 --pkg gee-0.8 --pkg libsoup-2.4 --pkg json-glib-1.0 --pkg libxml-2.0
+	valac -X -D'GETTEXT_PACKAGE="${app_name}"' --Xcc="-lm" -X -Wl,-rpath,/usr/share/${app_name}/libs ${define_symbols} --thread Common/*.vala Gtk/*.vala Utility/*.vala Utility/Gtk/*.vala -o "${app_name}-gtk" --pkg glib-2.0 --pkg gio-unix-2.0 --pkg posix --pkg gtk+-3.0 --pkg gee-0.8 --pkg libsoup-2.4 --pkg json-glib-1.0 --pkg libxml-2.0 --pkg $(vte_version)
 
 	#valac -X -D'GETTEXT_PACKAGE="${app_name}"' --Xcc="-lm" -X -Wl,-rpath,/usr/share/${app_name}/libs --thread "IconThemeBrowser.vala" -o "aptik-icon-theme-browser-gtk" --pkg glib-2.0 --pkg gio-unix-2.0 --pkg posix --pkg gtk+-3.0 --pkg gee-0.8
 
 	#update translation template
-	xgettext --language=C --keyword=_ --copyright-holder='Tony George (teejeetech@gmail.com)' --package-name='${app_name}' --package-version='1.6' --msgid-bugs-address='teejeetech@gmail.com' --escape --sort-output --from-code=UTF-8 -o ../${app_name}.pot Common/*.vala Gtk/*.vala
+	xgettext --language=C --keyword=_ --copyright-holder='Tony George (teejeetech@gmail.com)' --package-name='${app_name}' --package-version='1.6' --msgid-bugs-address='teejeetech@gmail.com' --escape --sort-output --from-code=UTF-8 -o ../${app_name}.pot Common/*.vala Gtk/*.vala Utility/*.vala Utility/Gtk/*.vala
 
 clean:
 	rm -rf *.o ${app_name}
@@ -44,10 +44,12 @@ install:
 	mkdir -p "$(DESTDIR)$(sharedir)/${app_name}"
 	mkdir -p "$(DESTDIR)$(sharedir)/pixmaps"
 	mkdir -p "$(DESTDIR)/var/log/polo"
-	#mkdir -p "$(DESTDIR)$(localedir)/ca/LC_MESSAGES"
+	mkdir -p "$(DESTDIR)$(localedir)/de/LC_MESSAGES"
+	
 	#binary
 	#install -m 0755 ${app_name} "$(DESTDIR)$(bindir)"
 	install -m 0755 ${app_name}-gtk "$(DESTDIR)$(bindir)"
+	install -m 0755 ${app_name}-chroot "$(DESTDIR)$(bindir)"
 	install -m 0755 ${app_name}-uninstall "$(DESTDIR)$(bindir)"
 	#install -m 0755 ${app_name}-launcher "$(DESTDIR)$(bindir)"
 
@@ -62,13 +64,14 @@ install:
 	install -m 0755 ./share/pixmaps/${app_name}.png "$(DESTDIR)$(sharedir)/pixmaps/"
 
 	#translations
-	#msgfmt --check --verbose -o "$(DESTDIR)$(localedir)/ca/LC_MESSAGES/${app_name}.mo" ../po/${app_name}-ca.po
+	msgfmt --check --verbose -o "$(DESTDIR)$(localedir)/de/LC_MESSAGES/${app_name}.mo" ../po/${app_name}-de.po
 
 uninstall:
 
 	#binary
 	#rm -f "$(DESTDIR)$(bindir)/${app_name}"
 	rm -f "$(DESTDIR)$(bindir)/${app_name}-gtk"
+	rm -f "$(DESTDIR)$(bindir)/${app_name}-chroot"
 	rm -f "$(DESTDIR)$(bindir)/${app_name}-uninstall"
 	#rm -f "$(DESTDIR)$(bindir)/${app_name}-launcher"
 

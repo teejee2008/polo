@@ -206,6 +206,33 @@ public class LayoutPanel : Gtk.Box {
 		return tab;
 	}
 
+	
+	public void run_script_in_new_terminal_tab(string command, string desc){
+		
+		var tab = add_tab();
+		tab.select_tab();
+		tab.pane.terminal.toggle();
+		tab.pane.maximize_terminal();
+
+		string cmd = "";
+		cmd += "reset\n";
+		cmd += "echo ''\n";
+		cmd += "echo '====================================================='\n";
+		cmd += "echo '%s'\n".printf(desc);
+		cmd += "echo '====================================================='\n";
+		cmd += "echo ''\n";
+		cmd += "%s\n".printf(command);
+		cmd += "echo ''\n";
+		cmd += "echo '====================================================='\n";
+		cmd += "echo '%s'\n".printf(_("Finished ~ Close Tab to exit"));
+		cmd += "echo '====================================================='\n";
+		cmd += "echo ''\n";
+		
+		var sh = save_bash_script_temp(cmd);
+		cmd = "sh '%s'".printf(sh);
+		tab.pane.terminal.feed_command(cmd);
+	}
+	
 	// properties
 	
 	public Gee.ArrayList<ProgressPanel> file_operations {

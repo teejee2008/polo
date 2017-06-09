@@ -80,7 +80,7 @@ public class PropertiesWindow : Gtk.Window {
 		//vbox_main.set_size_request(300, 400);
 		add(vbox_main);
 
-		header_box = new Box(Orientation.HORIZONTAL, 6);
+		header_box = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		header_box.margin = 0;
 		header_box.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
 		vbox_main.add(header_box);
@@ -442,7 +442,7 @@ public class PropertiesWindow : Gtk.Window {
 
 		log_debug("PropertiesWindow: init_tab_fs()");
 		
-		var hbox = new Box(Orientation.VERTICAL, 12);
+		var hbox = new Gtk.Box(Orientation.VERTICAL, 12);
 		hbox.margin = 12;
 		//hbox.margin_bottom = 24;
 		//hbox.margin_right = 24;
@@ -602,7 +602,7 @@ public class PropertiesWindow : Gtk.Window {
 
 		log_debug("PropertiesWindow: init_tab_permissions()");
 		
-		var vbox = new Box(Orientation.VERTICAL, 6);
+		var vbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		vbox.margin = 12;
 		//hbox.margin_bottom = 24;
 		//vbox.margin_right = 24;
@@ -976,7 +976,7 @@ public class PropertiesWindow : Gtk.Window {
 		hbox.margin_top = 6;
 		box.add(hbox);
 
-		var label = new Label(_("You don't have permission to change some permissions"));
+		var label = new Gtk.Label(_("You don't have permission to change some permissions"));
 		label.xalign = 0.5f;
 		label.hexpand = true;
 		label.margin = 6;
@@ -1002,14 +1002,14 @@ public class PropertiesWindow : Gtk.Window {
 		stack.add_titled (vbox, _("MediaInfo"), _("MediaInfo"));
 
 		//tv_info
-		var treeview = new TreeView();
+		var treeview = new Gtk.TreeView();
 		treeview.get_selection().mode = SelectionMode.SINGLE;
 		treeview.headers_visible = false;
 		treeview.expand = true;
 		treeview.insert_column_with_attributes (-1, _("Key"), new CellRendererText(), "text", 0);
 		treeview.insert_column_with_attributes (-1, _("Value"), new CellRendererText(), "text", 1);
 
-		var scrolled = new ScrolledWindow(null, null);
+		var scrolled = new Gtk.ScrolledWindow(null, null);
 		scrolled.set_shadow_type (ShadowType.ETCHED_IN);
 		scrolled.hscrollbar_policy = PolicyType.AUTOMATIC;
 		scrolled.vscrollbar_policy = PolicyType.AUTOMATIC;

@@ -61,7 +61,23 @@ public class MainMenuBar : Gtk.MenuBar {
 
 	private Gtk.Menu? menu = null;
 	private bool menu_mode = false;
-	private bool add_accel = true;
+	private bool refreshed_once = false;
+
+	public signal void context_term();
+
+	public signal void context_normal();
+
+	public signal void context_trash();
+
+	public signal void context_archive();
+
+	public signal void context_edit();
+
+	public signal void context_none();
+
+	public signal void delayed_init();
+
+	public signal void active_pane_changed();
 	
 	public MainMenuBar(bool _menu_mode){
 		
@@ -70,31 +86,6 @@ public class MainMenuBar : Gtk.MenuBar {
 		if (menu_mode){
 			this.menu = new Gtk.Menu();
 		}
-	}
-
-	public void enable_accelerators(){
-		add_accel = true;
-		refresh();
-	}
-
-	public void disable_accelerators(){
-		add_accel = false;
-		refresh();
-	}
-
-	public Gtk.Menu? get_menu(){
-		return menu;
-	}
-
-	public void add_action_accel(Gtk.MenuItem item, string keycode){
-		uint accel_key;
-		Gdk.ModifierType accel_mods;
-		var accel_flags = Gtk.AccelFlags.VISIBLE;
-		Gtk.accelerator_parse(keycode, out accel_key, out accel_mods);
-		item.add_accelerator ("activate", Hotkeys.accel_group, accel_key, accel_mods, accel_flags);
-	}
-	
-	public void refresh(){
 
 		Gtk.MenuShell menu_shell = this;
 		if (menu_mode){
@@ -108,11 +99,31 @@ public class MainMenuBar : Gtk.MenuBar {
 		add_menu_view(menu_shell);
 		add_menu_go(menu_shell);
 		add_menu_tools(menu_shell);
+		add_menu_help(menu_shell);
 		
 		menu_shell.show_all();
 	}
+	
+	public Gtk.Menu? get_menu(){
+		return menu;
+	}
 
+	public void add_action_accel(Gtk.MenuItem item, string keycode){
+		uint accel_key;
+		Gdk.ModifierType accel_mods;
+		var accel_flags = Gtk.AccelFlags.VISIBLE;
+		Gtk.accelerator_parse(keycode, out accel_key, out accel_mods);
+		item.add_accelerator ("activate", Hotkeys.accel_group, accel_key, accel_mods, accel_flags);
+	}
 
+	public void remove_action_accel(Gtk.MenuItem item, string keycode){
+		uint accel_key;
+		Gdk.ModifierType accel_mods;
+		var accel_flags = Gtk.AccelFlags.VISIBLE;
+		Gtk.accelerator_parse(keycode, out accel_key, out accel_mods);
+		item.remove_accelerator (Hotkeys.accel_group, accel_key, accel_mods);
+	}
+	
 	private void add_menu_file(Gtk.MenuShell menu_shell){
 
 		log_debug("MainMenuBar: add_menu_file()");
@@ -155,9 +166,31 @@ public class MainMenuBar : Gtk.MenuBar {
 			panel.add_tab();
 		});
 
-		if (add_accel){
-			add_action_accel(item, "<Control>t");
-		}
+		string key = "<Control>t";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
 	}
 
 	private void add_new_window(Gtk.Menu submenu){
@@ -169,9 +202,31 @@ public class MainMenuBar : Gtk.MenuBar {
 			view.open_in_new_window();
 		});
 
-		if (add_accel){
-			add_action_accel(item, "<Control>n");
-		}
+		string key = "<Control>n";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
 	}
 
 	private void add_admin_window(Gtk.Menu submenu){
@@ -183,9 +238,31 @@ public class MainMenuBar : Gtk.MenuBar {
 			view.open_in_admin_window();
 		});
 
-		if (add_accel){
-			add_action_accel(item, "<Super>n");
-		}
+		string key = "<Super>n";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
 	}
 
 	private void add_new_folder(Gtk.Menu submenu){
@@ -197,9 +274,31 @@ public class MainMenuBar : Gtk.MenuBar {
 			view.create_directory();
 		});
 
-		if (add_accel){
-			add_action_accel(item, "<Control><Shift>n");
-		}
+		string key = "<Control><Shift>n";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
 	}
 
 	private void add_new_file(Gtk.Menu submenu){
@@ -211,23 +310,67 @@ public class MainMenuBar : Gtk.MenuBar {
 			view.create_file();
 		});
 
-		if (add_accel){
-			add_action_accel(item, "<Control><Alt>n");
-		}
+		string key = "<Control><Alt>n";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
 	}
 
 	private void add_terminal_window(Gtk.Menu submenu){
 
-		var item = new Gtk.MenuItem.with_label (_("Open Terminal Here"));
+		var item = new Gtk.MenuItem.with_label (_("Toggle Terminal Pane"));
 		submenu.add(item);
 
 		item.activate.connect (() => {
-			view.open_terminal();
+			pane.terminal.toggle();
 		});
 
-		if (add_accel){
-			add_action_accel(item, "F4");
-		}
+		string key = "F4";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
 	}
 
 	private void add_exit(Gtk.Menu submenu){
@@ -239,9 +382,31 @@ public class MainMenuBar : Gtk.MenuBar {
 			window.destroy();
 		});
 
-		if (add_accel){
-			add_action_accel(item, "<Control>w");
-		}
+		string key = "<Control>w";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
 	}
 
 	
@@ -291,9 +456,31 @@ public class MainMenuBar : Gtk.MenuBar {
 			view.cut();
 		});
 
-		if (add_accel){
-			add_action_accel(item, "<Control>x");
-		}
+		string key = "<Control>x";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
 	}
 
 	private void add_copy(Gtk.Menu submenu){
@@ -305,9 +492,31 @@ public class MainMenuBar : Gtk.MenuBar {
 			view.copy();
 		});
 
-		if (add_accel){
-			add_action_accel(item, "<Control>c");
-		}
+		string key = "<Control>c";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
 	}
 
 	private void add_paste(Gtk.Menu submenu){
@@ -319,9 +528,31 @@ public class MainMenuBar : Gtk.MenuBar {
 			view.paste();
 		});
 
-		if (add_accel){
-			add_action_accel(item, "<Control>v");
-		}
+		string key = "<Control>v";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
 	}
 
 	private void add_trash(Gtk.Menu submenu){
@@ -333,9 +564,31 @@ public class MainMenuBar : Gtk.MenuBar {
 			view.trash();
 		});
 
-		if (add_accel){
-			add_action_accel(item, "Delete");
-		}
+		string key = "Delete";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
 	}
 
 	private void add_delete(Gtk.Menu submenu){
@@ -347,9 +600,32 @@ public class MainMenuBar : Gtk.MenuBar {
 			view.delete_items();
 		});
 
-		if (add_accel){
-			add_action_accel(item, "<Shift>Delete");
-		}
+		string key = "<Shift>Delete";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			add_action_accel(item, "Delete"); // map to Delete key
+		});
+
+		context_archive.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+			remove_action_accel(item, "Delete");
+		});
 	}
 
 	private void add_rename(Gtk.Menu submenu){
@@ -361,9 +637,31 @@ public class MainMenuBar : Gtk.MenuBar {
 			view.rename();
 		});
 
-		if (add_accel){
-			add_action_accel(item, "F2");
-		}
+		string key = "F2";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
 	}
 
 	private void add_select_all(Gtk.Menu submenu){
@@ -375,9 +673,31 @@ public class MainMenuBar : Gtk.MenuBar {
 			view.select_all();
 		});
 
-		if (add_accel){
-			add_action_accel(item, "<Control>a");
-		}
+		string key = "<Control>a";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
 	}
 
 	private void add_select_none(Gtk.Menu submenu){
@@ -389,9 +709,31 @@ public class MainMenuBar : Gtk.MenuBar {
 			view.select_none();
 		});
 
-		if (add_accel){
-			add_action_accel(item, "Escape");
-		}
+		string key = "Escape";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
 	}
 
 	private void add_settings(Gtk.Menu submenu){
@@ -446,19 +788,41 @@ public class MainMenuBar : Gtk.MenuBar {
 			view.reload();
 		});
 
-		if (add_accel){
-			add_action_accel(item, "F5");
-		}
+		string key = "F5";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
 	}
 
 	private void add_hidden(Gtk.Menu submenu){
 
-		var chk = new Gtk.CheckMenuItem.with_label (_("Show Hidden"));
-		chk.active = (view == null) ? false : pane.view.show_hidden_files;
-		submenu.add(chk);
-		var chk_hidden = chk;
+		var item = new Gtk.CheckMenuItem.with_label (_("Show Hidden"));
+		item.active = (view == null) ? false : pane.view.show_hidden_files;
+		submenu.add(item);
+		var chk_hidden = item;
 
-		chk.activate.connect (() => {
+		item.activate.connect (() => {
 			if (view == null) { return; }
 			
 			if (chk_hidden.active){
@@ -469,9 +833,31 @@ public class MainMenuBar : Gtk.MenuBar {
 			}
 		});
 
-		if (add_accel){
-			add_action_accel(chk, "<Control>h");
-		}
+		string key = "<Control>h";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
 	}
 
 	private void add_layout(Gtk.Menu submenu){
@@ -479,7 +865,11 @@ public class MainMenuBar : Gtk.MenuBar {
 		var item = new Gtk.MenuItem.with_label (_("Layout"));
 		submenu.add(item);
 
-		item.set_submenu(window.toolbar.build_layout_menu());
+		delayed_init.connect(()=>{
+			item.sensitive = (window.toolbar != null);
+			if (window.toolbar == null){ return; }
+			item.set_submenu(window.toolbar.build_layout_menu());
+		});
 	}
 
 	private void add_view(Gtk.Menu submenu){
@@ -487,7 +877,11 @@ public class MainMenuBar : Gtk.MenuBar {
 		var item = new Gtk.MenuItem.with_label (_("View"));
 		submenu.add(item);
 
-		item.set_submenu(window.toolbar.build_view_menu());
+		delayed_init.connect(()=>{
+			item.sensitive = (window.toolbar != null);
+			if (window.toolbar == null){ return; }
+			item.set_submenu(window.toolbar.build_view_menu());
+		});
 	}
 	
 	private void add_dual_mode(Gtk.Menu submenu){
@@ -501,9 +895,7 @@ public class MainMenuBar : Gtk.MenuBar {
 			view.toggle_dual_pane();
 		});
 
-		if (add_accel){
-			add_action_accel(chk, "F3");
-		}
+		add_action_accel(chk, "F3");
 	}
 
 	private void add_fullscreen_mode(Gtk.Menu submenu){
@@ -516,9 +908,7 @@ public class MainMenuBar : Gtk.MenuBar {
 			window.toggle_fullscreen();
 		});
 		
-		if (add_accel){
-			add_action_accel(chk, "F11");
-		}
+		add_action_accel(chk, "F11");
 	}
 
 	private void add_sort_column(Gtk.Menu submenu){
@@ -531,8 +921,12 @@ public class MainMenuBar : Gtk.MenuBar {
 			view.reload();
 		});
 
-		var sort_menu = new SortMenu(pane);
-		item.set_submenu(sort_menu);
+		active_pane_changed.connect(()=>{
+			item.sensitive = (pane != null);
+			if (pane == null) { return; }
+			var sort_menu = new SortMenu(pane);
+			item.set_submenu(sort_menu);
+		});
 	}
 
 
@@ -570,9 +964,9 @@ public class MainMenuBar : Gtk.MenuBar {
 			view.open_selected_item();
 		});
 
-		if (add_accel){
+		//if (add_accel){
 			//add_action_accel(item, "enter");
-		}
+		//}
 	}
 
 	private void add_back(Gtk.Menu submenu){
@@ -584,9 +978,31 @@ public class MainMenuBar : Gtk.MenuBar {
 			view.go_back();
 		});
 
-		if (add_accel){
-			add_action_accel(item, "<Alt>Left");
-		}
+		string key = "<Alt>Left";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
 	}
 
 	private void add_forward(Gtk.Menu submenu){
@@ -598,9 +1014,31 @@ public class MainMenuBar : Gtk.MenuBar {
 			view.go_forward();
 		});
 
-		if (add_accel){
-			add_action_accel(item, "<Alt>Right");
-		}
+		string key = "<Alt>Right";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
 	}
 
 	private void add_up(Gtk.Menu submenu){
@@ -612,9 +1050,31 @@ public class MainMenuBar : Gtk.MenuBar {
 			view.go_up();
 		});
 
-		if (add_accel){
-			add_action_accel(item, "<Alt>Up");
-		}
+		string key = "<Alt>Up";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
 	}
 
 	private void add_open_location(Gtk.Menu submenu){
@@ -626,9 +1086,31 @@ public class MainMenuBar : Gtk.MenuBar {
 			pane.pathbar.edit_location();
 		});
 
-		if (add_accel){
-			add_action_accel(item, "<Control>l");
-		}
+		string key = "<Control>l";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
 	}
 
 	
@@ -644,6 +1126,8 @@ public class MainMenuBar : Gtk.MenuBar {
 
 		add_clear_thumbnail_cache(submenu);
 
+		add_rebuild_font_cache(submenu);
+
 		add_calculate_dir_sizes(submenu);
 
 		add_external_tools(submenu);
@@ -655,22 +1139,72 @@ public class MainMenuBar : Gtk.MenuBar {
 		add_test_action(submenu);
 
 		add_test_action2(submenu);
+		
+		add_test_action3(submenu);
 	}
 
 	private void add_clear_thumbnail_cache(Gtk.Menu menu){
 
-		var item = new Gtk.MenuItem.with_label (_("Clear thumbnail cache"));
+		var item = new Gtk.MenuItem.with_label (_("Clean thumbnail cache"));
 		item.set_tooltip_text(_("Clear the thumbnails in system cache. New thumbnails will be generated when folders are browsed using any file manager."));
 		menu.add(item);
 
 		item.activate.connect (() => {
-			App.clear_thumbnail_cache();
+			window.clear_thumbnail_cache();
 		});
 	}
 
+	private void add_rebuild_font_cache(Gtk.Menu menu){
+
+		var item = new Gtk.MenuItem.with_label(_("Rebuild font cache"));
+		item.set_tooltip_text(_("Rebuilds the system font cache, so that newly installed fonts become visible to applications"));
+		menu.add(item);
+
+		item.activate.connect (() => {
+			window.rebuild_font_cache();
+		});
+	}
+
+	private void add_calculate_dir_sizes(Gtk.Menu menu){
+
+		var item = new Gtk.MenuItem.with_label (_("Calculate directory sizes"));
+		//item.set_tooltip_text("");
+		menu.add(item);
+
+		item.activate.connect (() => {
+			view.calculate_directory_sizes();
+		});
+
+		string key = "<Control>e";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
+	}
+	
 	private void add_wizard(Gtk.Menu menu){
 
-		var item = new Gtk.MenuItem.with_label (_("Open Style Wizard"));
+		var item = new Gtk.MenuItem.with_label (_("Open style wizard"));
 		item.set_tooltip_text(_("Select layout and style"));
 		menu.add(item);
 
@@ -680,6 +1214,8 @@ public class MainMenuBar : Gtk.MenuBar {
 	}
 
 	private void add_reset_session(Gtk.Menu menu){
+
+		if (!App.session_lock.lock_acquired){ return; }
 
 		var item = new Gtk.MenuItem.with_label (_("Reset session and restart"));
 		item.set_tooltip_text(_("Polo will be restarted with a fresh session"));
@@ -728,19 +1264,102 @@ public class MainMenuBar : Gtk.MenuBar {
 		});
 	}
 
-	private void add_calculate_dir_sizes(Gtk.Menu menu){
+	private void add_test_action3(Gtk.Menu menu){
 
-		var item = new Gtk.MenuItem.with_label (_("Calculate directory sizes"));
-		//item.set_tooltip_text("");
+		if (!LOG_DEBUG){ return; }
+
+		var item = new Gtk.MenuItem.with_label (_("Debug: Monitors"));
+		item.set_tooltip_text("");
 		menu.add(item);
 
 		item.activate.connect (() => {
-			view.calculate_directory_sizes();
+			gtk_messagebox("Objects=%lld".printf(pane.view.monitors.size),"", window, false);
 		});
+	}
 
-		if (add_accel){
-			add_action_accel(item, "<Control>e");
-		}
+
+	private void add_menu_help(Gtk.MenuShell menu_shell){
+
+		log_debug("MainMenuBar: add_menu_help()");
+		
+		var menu_item = new Gtk.MenuItem.with_label(_("Help"));
+		menu_shell.add(menu_item);
+
+		var submenu = new Gtk.Menu();
+		menu_item.set_submenu(submenu);
+
+		add_homepage(submenu);
+
+		add_issue_tracker(submenu);
+
+		add_wiki(submenu);
+
+		add_shortcuts(submenu);
+		
+		add_donate(submenu);
+
+		add_about(submenu);
+
+	}
+
+	private void add_homepage(Gtk.Menu menu){
+
+		var item = new Gtk.MenuItem.with_label (_("Homepage"));
+		menu.add(item);
+
+		item.activate.connect (() => {
+			xdg_open("http://teejeetech.in");
+		});
+	}
+
+	private void add_issue_tracker(Gtk.Menu menu){
+
+		var item = new Gtk.MenuItem.with_label (_("Issue Tracker"));
+		menu.add(item);
+
+		item.activate.connect (() => {
+			xdg_open("https://github.com/teejee2008/polo/issues");
+		});
+	}
+
+	private void add_wiki(Gtk.Menu menu){
+
+		var item = new Gtk.MenuItem.with_label (_("Wiki"));
+		menu.add(item);
+
+		item.activate.connect (() => {
+			xdg_open("https://github.com/teejee2008/polo/wiki");
+		});
+	}
+
+	private void add_shortcuts(Gtk.Menu menu){
+
+		var item = new Gtk.MenuItem.with_label (_("Keyboard Shortcuts"));
+		menu.add(item);
+
+		item.activate.connect (() => {
+			//window.open_shortcuts_window();
+		});
+	}
+	
+	private void add_donate(Gtk.Menu menu){
+
+		var item = new Gtk.MenuItem.with_label (_("Donate"));
+		menu.add(item);
+
+		item.activate.connect (() => {
+			window.open_donate_window();
+		});
+	}
+
+	private void add_about(Gtk.Menu menu){
+
+		var item = new Gtk.MenuItem.with_label (_("About"));
+		menu.add(item);
+
+		item.activate.connect (() => {
+			window.open_about_window();
+		});
 	}
 }
 

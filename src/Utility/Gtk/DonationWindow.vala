@@ -35,7 +35,7 @@ public class DonationWindow : Dialog {
 	
 	public DonationWindow() {
 		
-		set_title("Author's Note");
+		set_title(_("Author's Note"));
 		window_position = WindowPosition.CENTER_ON_PARENT;
 		set_destroy_with_parent (true);
 		set_modal (true);
@@ -55,7 +55,7 @@ public class DonationWindow : Dialog {
 		// label
 		var label = new Gtk.Label("");
 
-		string msg = _("This application was created for my own use. I work on it during my free time based on my requirements and interest. I'm distributing it in the hope that it will be useful to someone.\n\n▰ Use the issue tracker to report issues, ask questions and request features.\n\n▰ You can leave a donation via PayPal if you wish to say thanks. Users who donate get early access to new releases before they become public. They also get priority for issues and feature requests.\n\n▰ This application comes with absolutely no warranty. See the terms of the GNU General Public License v2 for more details.\n\nThanks,\nTony George");
+		string msg = _("This application was created for my own use. I work on it during my free time based on my requirements and interest. I'm distributing it in the hope that it will be useful to someone.\n\n▰ You can leave a donation via PayPal if you wish to say thanks\n\n▰ Use the issue tracker to report issues, ask questions and request features\n\n▰ This application comes with absolutely no warranty. See the terms of the GNU General Public License v2 for more details.\n\nThanks,\nTony George");
 		
 		label.label = msg;
 		label.wrap = true;
@@ -64,45 +64,59 @@ public class DonationWindow : Dialog {
 		label.margin_bottom = 6;
 		vbox_main.pack_start(label, true, true, 0);
 
-		//vbox_actions
-		var vbox_actions = new Box (Orientation.HORIZONTAL, 6);
-		//vbox_actions.margin_left = 50;
-		//vbox_actions.margin_right = 50;
-		//vbox_actions.margin_top = 20;
-		vbox_main.pack_start(vbox_actions, false, false, 0);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
+		hbox.margin_top = 24;
+		vbox_main.pack_start(hbox, false, false, 0);
+		
+		var bbox = new Gtk.ButtonBox(Orientation.HORIZONTAL);
+		bbox.set_layout(Gtk.ButtonBoxStyle.EXPAND);
+		bbox.set_homogeneous(false);
+		hbox.add(bbox);
 
 		string username = get_username();
 		
 		//btn_donate_paypal
-		var button = new Button.with_label(_("Donate - PayPal"));
+		var button = new Gtk.Button.with_label(_("Donate with PayPal"));
 		button.set_tooltip_text("Donate to: teejeetech@gmail.com");
-		vbox_actions.add(button);
+		bbox.add(button);
 		button.clicked.connect(() => {
 			xdg_open("https://www.paypal.com/cgi-bin/webscr?business=teejeetech@gmail.com&cmd=_xclick&currency_code=USD&amount=10&item_name=Polo%20Donation");
 		});
 
 		//btn_donate_wallet
-		button = new Button.with_label(_("Become a Patron"));
+		button = new Gtk.Button.with_label(_("Become a Patron"));
 		button.set_tooltip_text("https://www.patreon.com/bePatron?u=3059450");
-		vbox_actions.add(button);
+		bbox.add(button);
 		button.clicked.connect(() => {
 			xdg_open("https://www.patreon.com/bePatron?u=3059450");
 		});
 
+		bbox = new Gtk.ButtonBox(Orientation.HORIZONTAL);
+		bbox.set_layout(Gtk.ButtonBoxStyle.EXPAND);
+		bbox.set_homogeneous(false);
+		hbox.add(bbox);
+		
 		//tracker
-		button = new Button.with_label(_("Issue Tracker"));
+		button = new Gtk.Button.with_label(_("Tracker"));
 		button.set_tooltip_text("https://github.com/teejee2008/polo/issues");
-		vbox_actions.add(button);
+		bbox.add(button);
 		button.clicked.connect(() => {
 			xdg_open("https://github.com/teejee2008/polo/issues");
 		});
 
 		//btn_visit
-		button = new Button.with_label(_("Website"));
+		button = new Gtk.Button.with_label(_("Website"));
 		button.set_tooltip_text("http://www.teejeetech.in");
-		vbox_actions.add(button);
+		bbox.add(button);
 		button.clicked.connect(() => {
 			xdg_open("http://www.teejeetech.in");
+		});
+
+		//btn_visit
+		button = new Gtk.Button.with_label(_("Close"));
+		hbox.add(button);
+		button.clicked.connect(() => {
+			this.destroy();
 		});
 	}
 }

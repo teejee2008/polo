@@ -43,12 +43,52 @@ namespace TeeJee.FileSystem{
 	// path helpers ----------------------------
 	
 	public string file_parent(string file_path){
+		
 		return File.new_for_path(file_path).get_parent().get_path();
 	}
 
 	public string file_basename(string file_path){
+		
 		return File.new_for_path(file_path).get_basename();
 	}
+
+	public string file_get_title(string file_path){
+		
+		string file_name = File.new_for_path(file_path).get_basename();
+
+		int end = file_name.length - file_get_extension(file_path).length;
+		return file_name[0:end];
+	}
+
+	public string file_get_extension(string file_path){
+		
+		string file_name = File.new_for_path(file_path).get_basename();
+
+		string[] parts = file_name.split(".");
+
+		if (parts.length == 1){
+			// no extension
+			return "";
+		}
+		
+		if (parts.length > 2){
+			
+			string ext1 = parts[parts.length-2];
+			string ext2 = parts[parts.length-1];
+			
+			if ((ext1.length <= 4) && (ext2.length <= 4) && (ext1 == "tar")){
+				// 2-part extension
+				return ".%s.%s".printf(parts[parts.length-2], parts[parts.length-1]);
+			}
+		}
+		
+		if (parts.length > 1){
+			return ".%s".printf(parts[parts.length - 1]);
+		}
+
+		return "";
+	}
+
 
 	public string path_combine(string part1, string part2){
 		return GLib.Path.build_path("/", part1, part2);
@@ -479,13 +519,13 @@ namespace TeeJee.FileSystem{
 			return GLib.Environment.find_program_in_path(file_path);
 		}
 		else if (file_path.has_prefix("./")){
-			return path_combine(GLib.Environment.get_current_dir(),  file_path[2:file_path.length]);
+			return path_combine(GLib.Environment.get_current_dir(), file_path[2:file_path.length]);
 		}
 		else if (file_path.has_prefix("../")){
-			return path_combine( file_parent(GLib.Environment.get_current_dir()),  file_path[3:file_path.length]);
+			return path_combine(file_parent(GLib.Environment.get_current_dir()), file_path[3:file_path.length]);
 		}
 		else {
-			return path_combine(GLib.Environment.get_current_dir(),  file_path[0:file_path.length]);
+			return path_combine(GLib.Environment.get_current_dir(), file_path);
 		}
 	}
 	
