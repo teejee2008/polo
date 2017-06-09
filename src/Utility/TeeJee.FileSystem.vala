@@ -519,13 +519,13 @@ namespace TeeJee.FileSystem{
 			return GLib.Environment.find_program_in_path(file_path);
 		}
 		else if (file_path.has_prefix("./")){
-			return path_combine(GLib.Environment.get_current_dir(),  file_path[2:file_path.length]);
+			return path_combine(GLib.Environment.get_current_dir(), file_path[2:file_path.length]);
 		}
 		else if (file_path.has_prefix("../")){
-			return path_combine( file_parent(GLib.Environment.get_current_dir()),  file_path[3:file_path.length]);
+			return path_combine(file_parent(GLib.Environment.get_current_dir()), file_path[3:file_path.length]);
 		}
 		else {
-			return path_combine(GLib.Environment.get_current_dir(),  file_path[0:file_path.length]);
+			return path_combine(GLib.Environment.get_current_dir(), file_path);
 		}
 	}
 	

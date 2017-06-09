@@ -446,8 +446,15 @@ public class KvmCreateDiskWindow : Gtk.Window {
 	// selections ---------------------------------------------------
 
 	private void btn_ok_clicked(){
-
+		
 		log_debug("btn_ok_clicked()");
+
+		if (file_or_dir_exists(file_path)){
+			var resp = gtk_messagebox_yes_no(_("Overwrite existing file?"), "%s: %s".printf(_("File"), file_path), this, true);
+			if (resp == Gtk.ResponseType.NO){
+				return;
+			}
+		}
 		
 		switch(task_type){
 		case KvmTaskType.CREATE_DISK:

@@ -267,6 +267,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	// static  ------------------
 
 	public static void init(){
+		log_debug("FileItem: init()");
 		cache = new Gee.HashMap<string, FileItem>();
 	}
 
