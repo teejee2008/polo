@@ -217,7 +217,11 @@ public class KvmTask : AsyncTask {
 		
 		log_debug(cmd);
 		
-		exec_script_async(cmd);
+		int pid = exec_script_async(cmd);
+
+		if (pid != -1){
+			set_cpu_limit(pid);
+		}
 	}
 
 	public void boot_disk(string disk_path, Json.Object config){
@@ -230,7 +234,11 @@ public class KvmTask : AsyncTask {
 		
 		log_debug(cmd);
 		
-		exec_script_async(cmd);
+		int pid = exec_script_async(cmd);
+
+		if (pid != -1){
+			set_cpu_limit(pid);
+		}
 	}
 
 	public void boot_iso_attach_disk(string iso_path, string disk_path, Json.Object config){
@@ -245,7 +253,11 @@ public class KvmTask : AsyncTask {
 		
 		log_debug(cmd);
 		
-		exec_script_async(cmd);
+		int pid = exec_script_async(cmd);
+
+		if (pid != -1){
+			set_cpu_limit(pid);
+		}
 	}
 
 	public string get_kvm_config(Json.Object config){
@@ -255,8 +267,9 @@ public class KvmTask : AsyncTask {
 		string kvm_vga = json_get_string(config, "kvm_vga", "vmware");
 		int kvm_mem = json_get_int(config, "kvm_mem", 1024);
 		string kvm_smb = json_get_string(config, "kvm_smb", "");
-		
-		string cmd = "kvm -enable-kvm";
+
+		string cmd = "";
+		cmd += "kvm -enable-kvm";
 		cmd += " -cpu %s".printf(kvm_cpu);
 		cmd += " -smp %d".printf(kvm_smp);
 		cmd += " -vga %s".printf(kvm_vga);
@@ -268,7 +281,20 @@ public class KvmTask : AsyncTask {
 		}
 		return cmd;
 	}
-	
+
+	public void set_cpu_limit(int pid){
+
+		if (App.kvm_cpu_limit == 100) { return; }
+
+		int cpu_max = App.sysinfo.cpu_cores * App.kvm_cpu_limit;
+
+		string cmd = "cpulimit -l %d -p %d".printf(cpu_max, pid);
+		
+		log_debug(cmd);
+		
+		exec_script_async(cmd);
+	}
+
 	// execution ----------------------------
 
 	public void execute() {

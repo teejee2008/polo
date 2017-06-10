@@ -167,6 +167,7 @@ public class Main : GLib.Object {
 	public string kvm_cpu = "host";
 	public int kvm_smp = 1;
 	public int kvm_mem = 2048;
+	public int kvm_cpu_limit = 80;
 	public string kvm_format = ".qcow2";
 
 	public static string REQUIRED_COLUMNS = "name,indicator,spacer";
@@ -563,6 +564,7 @@ public class Main : GLib.Object {
 		config.set_string_member("kvm_enable", kvm_enable.to_string());
 		config.set_string_member("kvm_cpu", kvm_cpu);
 		config.set_string_member("kvm_smp", kvm_smp.to_string());
+		config.set_string_member("kvm_cpu_limit", kvm_cpu_limit.to_string());
 		config.set_string_member("kvm_vga", kvm_vga);
 		config.set_string_member("kvm_mem", kvm_mem.to_string());
 
@@ -720,6 +722,7 @@ public class Main : GLib.Object {
 		kvm_enable = json_get_bool(config, "kvm_enable", kvm_enable);
 		kvm_cpu = json_get_string(config, "kvm_cpu", kvm_cpu);
 		kvm_smp = json_get_int(config, "kvm_smp", kvm_smp);
+		kvm_cpu_limit = json_get_int(config, "kvm_cpu_limit", kvm_cpu_limit);
 		kvm_vga = json_get_string(config, "kvm_vga", kvm_vga);
 		kvm_mem = json_get_int(config, "kvm_mem", kvm_mem);
 		

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
-"POT-Creation-Date: 2017-06-09 08:24+0530\n"
+"POT-Creation-Date: 2017-06-09 22:32+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -103,14 +103,18 @@ msgstr ""
 msgid "All"
 msgstr ""
 
-#: Gtk/Settings.vala:2298
+#: Gtk/Settings.vala:2343
 msgid ""
 "Allows X-window apps running inside the chroot environment to use the host "
 "display"
 msgstr ""
 
-#: Gtk/Settings.vala:2284
+#: Gtk/Settings.vala:2329
 msgid "Allows network connection to be used inside the chroot environment"
+msgstr ""
+
+#: Gtk/Settings.vala:2302
+msgid "Amount of RAM to allocate for guest machine"
 msgstr ""
 
 #: Gtk/FileContextMenu.vala:1378
@@ -125,11 +129,11 @@ msgstr ""
 msgid "Another instance of this application is running"
 msgstr ""
 
-#: Common/Main.vala:754 Common/Main.vala:832 Common/Main.vala:921
+#: Common/Main.vala:757 Common/Main.vala:835 Common/Main.vala:924
 msgid "App config loaded"
 msgstr ""
 
-#: Common/Main.vala:599 Common/Main.vala:799 Common/Main.vala:877
+#: Common/Main.vala:601 Common/Main.vala:802 Common/Main.vala:880
 msgid "App config saved"
 msgstr ""
 
@@ -226,12 +230,20 @@ msgstr ""
 msgid "Buttons"
 msgstr ""
 
-#: Gtk/Settings.vala:2129
+#: Gtk/Settings.vala:2131
 msgid "CPU"
 msgstr ""
 
-#: Gtk/Settings.vala:2222
+#: Gtk/Settings.vala:2232
 msgid "CPU Cores"
+msgstr ""
+
+#: Gtk/Settings.vala:2260
+msgid "CPU Limit (%)"
+msgstr ""
+
+#: Gtk/Settings.vala:2169
+msgid "CPU type to emulate for guest machine"
 msgstr ""
 
 #: Gtk/MainMenubar.vala:1170
@@ -321,11 +333,11 @@ msgstr ""
 msgid "Chroot"
 msgstr ""
 
-#: Gtk/Settings.vala:2295
+#: Gtk/Settings.vala:2340
 msgid "Chroot: Enable GUI Apps"
 msgstr ""
 
-#: Gtk/Settings.vala:2281
+#: Gtk/Settings.vala:2326
 msgid "Chroot: Enable network"
 msgstr ""
 
@@ -434,7 +446,7 @@ msgstr ""
 msgid "Commander Icons (Dual-pane + IconView)"
 msgstr ""
 
-#: Common/Main.vala:421
+#: Common/Main.vala:422
 msgid "Commands listed below are not available on this system"
 msgstr ""
 
@@ -988,7 +1000,7 @@ msgstr ""
 msgid "Exit"
 msgstr ""
 
-#: Common/Main.vala:972
+#: Common/Main.vala:975
 msgid "Exiting Application"
 msgstr ""
 
@@ -1290,8 +1302,25 @@ msgstr ""
 msgid "Go to location"
 msgstr ""
 
-#: Gtk/Settings.vala:2177
+#: Gtk/Settings.vala:2183
 msgid "Graphics"
+msgstr ""
+
+#: Gtk/Settings.vala:2219
+msgid ""
+"Graphics card to emulate for guest machine.\n"
+"\n"
+" cirrus &lt; std &lt; vmware &lt; qxl\n"
+"\n"
+"<b>cirrus</b> - Simple graphics card; every guest OS has a built-in driver.\n"
+"\n"
+"<b>std</b> - Supports resolutions greater than 1280x1024x16. Linux, Windows "
+"XP and newer guest have a built-in driver.\n"
+"\n"
+"<b>vmware</b> - VMware SVGA-II graphics card. Requires installation of "
+"driver xf86-video-vmware for Linux guests and VMware tools for Windows.\n"
+"\n"
+"<b>qxl</b> - More powerful graphics card for use with SPICE."
 msgstr ""
 
 #: Gtk/FileViewList.vala:741 Gtk/PropertiesWindow.vala:629
@@ -1361,7 +1390,7 @@ msgstr ""
 msgid "Incorrect password for encrypted archive"
 msgstr ""
 
-#: Gtk/ColumnSelectionBox.vala:163 Gtk/FileContextMenu.vala:1797
+#: Gtk/ColumnSelectionBox.vala:163 Gtk/FileContextMenu.vala:1800
 #: Gtk/ViewPopover.vala:407
 msgid "Indicator"
 msgstr ""
@@ -1446,6 +1475,14 @@ msgstr ""
 
 #: Utility/Gtk/AboutWindow.vala:321 Utility/Gtk/AboutWindow.vala:356
 msgid "License"
+msgstr ""
+
+#: Gtk/Settings.vala:2274
+#, c-format
+msgid ""
+"Limit the CPU usage for VM process. It is recommended to keep this below "
+"90% to prevent the host system from becoming unresponsive when intensive "
+"tasks are running in the guest OS."
 msgstr ""
 
 #: Gtk/PropertiesWindow.vala:175
@@ -1730,6 +1767,12 @@ msgstr ""
 
 #: Gtk/ProgressPanelFileTask.vala:379
 msgid "Not Responding"
+msgstr ""
+
+#: Gtk/Settings.vala:2247
+msgid ""
+"Number of CPU cores to emulate for guest machine. This can be greater than "
+"the number of cores on host machine."
 msgstr ""
 
 #: Gtk/FileConflictDialog.vala:245 Gtk/ProgressPanelArchiveTask.vala:532
@@ -2045,7 +2088,7 @@ msgstr ""
 msgid "Places"
 msgstr ""
 
-#: Common/Main.vala:422
+#: Common/Main.vala:423
 msgid "Please install required packages and try running again"
 msgstr ""
 
@@ -2077,7 +2120,7 @@ msgstr ""
 msgid "Processed:"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:1711 Gtk/MiddleToolbar.vala:333
+#: Gtk/FileContextMenu.vala:1714 Gtk/MiddleToolbar.vala:333
 #: Gtk/PropertiesWindow.vala:68
 msgid "Properties"
 msgstr ""
@@ -2109,7 +2152,7 @@ msgstr ""
 msgid "Queued"
 msgstr ""
 
-#: Gtk/Settings.vala:2246
+#: Gtk/Settings.vala:2287
 msgid "RAM (MB)"
 msgstr ""
 
@@ -2447,11 +2490,11 @@ msgstr ""
 msgid "Show Hidden"
 msgstr ""
 
-#: Gtk/Settings.vala:2267
+#: Gtk/Settings.vala:2312
 msgid "Show KVM in context menu"
 msgstr ""
 
-#: Gtk/Settings.vala:2270
+#: Gtk/Settings.vala:2315
 msgid "Show KVM submenu in right-click context menu"
 msgstr ""
 
@@ -2567,12 +2610,12 @@ msgstr ""
 msgid "Solid"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:1695 Gtk/MainMenubar.vala:916
+#: Gtk/FileContextMenu.vala:1698 Gtk/MainMenubar.vala:916
 #: Gtk/ViewPopover.vala:386
 msgid "Sort By"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:1821 Gtk/ViewPopover.vala:433
+#: Gtk/FileContextMenu.vala:1824 Gtk/ViewPopover.vala:433
 msgid "Sort Descending"
 msgstr ""
 
@@ -2953,7 +2996,7 @@ msgstr ""
 msgid "View Mode"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:1712
+#: Gtk/FileContextMenu.vala:1715
 msgid "View file properties"
 msgstr ""
 

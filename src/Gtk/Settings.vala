@@ -2108,6 +2108,8 @@ public class Settings : Gtk.Box {
 		add_option_kvm_cpu(vbox_group, sg_label, sg_option);
 
 		add_option_kvm_smp(vbox_group, sg_label, sg_option);
+
+		add_option_kvm_cpu_limit(vbox_group, sg_label, sg_option);
 		
 		add_option_kvm_vga(vbox_group, sg_label, sg_option);
 
@@ -2163,6 +2165,10 @@ public class Settings : Gtk.Box {
 		});
 
 		combo.sensitive = false;
+
+		string tt = _("CPU type to emulate for guest machine");
+		label.set_tooltip_text(tt);
+		combo.set_tooltip_text(tt);
 		
 		sg_label.add_widget(label);
 		sg_option.add_widget(combo);
@@ -2210,6 +2216,10 @@ public class Settings : Gtk.Box {
 			App.kvm_vga = gtk_combobox_get_value(combo, 0, App.kvm_vga);
 		});
 
+		string tt = _("Graphics card to emulate for guest machine.\n\n cirrus &lt; std &lt; vmware &lt; qxl\n\n<b>cirrus</b> - Simple graphics card; every guest OS has a built-in driver.\n\n<b>std</b> - Supports resolutions greater than 1280x1024x16. Linux, Windows XP and newer guest have a built-in driver.\n\n<b>vmware</b> - VMware SVGA-II graphics card. Requires installation of driver xf86-video-vmware for Linux guests and VMware tools for Windows.\n\n<b>qxl</b> - More powerful graphics card for use with SPICE.");
+		label.set_tooltip_markup(tt);
+		combo.set_tooltip_markup(tt);
+
 		sg_label.add_widget(label);
 		sg_option.add_widget(combo);
 	}
@@ -2234,6 +2244,37 @@ public class Settings : Gtk.Box {
 			App.kvm_smp = (int) spin.get_value();
 		});
 
+		string tt = _("Number of CPU cores to emulate for guest machine. This can be greater than the number of cores on host machine.");
+		label.set_tooltip_text(tt);
+		spin.set_tooltip_text(tt);
+
+		sg_label.add_widget(label);
+		sg_option.add_widget(spin);
+	}
+
+	private void add_option_kvm_cpu_limit(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
+
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 12);
+		box.add(hbox);
+
+		var label = new Gtk.Label(_("CPU Limit (%)"));
+		label.xalign = 0.0f;
+		hbox.add(label);
+
+		var spin = new Gtk.SpinButton.with_range(10, 100, 1);
+		spin.value = App.kvm_cpu_limit;
+		spin.digits = 0;
+		spin.xalign = 0.5f;
+		hbox.add(spin);
+
+		spin.value_changed.connect(()=>{
+			App.kvm_cpu_limit = (int) spin.get_value();
+		});
+
+		string tt = _("Limit the CPU usage for VM process. It is recommended to keep this below 90% to prevent the host system from becoming unresponsive when intensive tasks are running in the guest OS.");
+		label.set_tooltip_text(tt);
+		spin.set_tooltip_text(tt);
+		
 		sg_label.add_widget(label);
 		sg_option.add_widget(spin);
 	}
@@ -2248,7 +2289,7 @@ public class Settings : Gtk.Box {
 		label.margin_right = 12;
 		hbox.add(label);
 
-		var spin = new Gtk.SpinButton.with_range(32, 32000, 100);
+		var spin = new Gtk.SpinButton.with_range(32, App.sysinfo.mem_total_mb, 100);
 		spin.value = App.kvm_mem;
 		spin.digits = 0;
 		spin.xalign = 0.5f;
@@ -2257,6 +2298,10 @@ public class Settings : Gtk.Box {
 		spin.value_changed.connect(()=>{
 			App.kvm_mem = (int) spin.get_value();
 		});
+
+		string tt = _("Amount of RAM to allocate for guest machine");
+		label.set_tooltip_text(tt);
+		spin.set_tooltip_text(tt);
 
 		sg_label.add_widget(label);
 		sg_option.add_widget(spin);

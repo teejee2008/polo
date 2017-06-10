@@ -160,11 +160,11 @@ namespace TeeJee.ProcessHelper{
 			    null,
 			    out child_pid);
 
-			return 0;
+			return child_pid;
 		}
 		catch (Error e){
 	        log_error (e.message);
-	        return 1;
+	        return -1;
 	    }
 	}
 

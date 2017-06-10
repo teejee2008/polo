@@ -1668,6 +1668,9 @@ public class FileContextMenu : Gtk.Menu {
 			formats.add("VHDX - Microsoft Hyper-V disk format");
 			formats.add("VMDK - VMware disk format");
 			break;
+		default:
+			menu_item.sensitive = false;
+			return;
 		}
 		
 		foreach(string format in formats){
