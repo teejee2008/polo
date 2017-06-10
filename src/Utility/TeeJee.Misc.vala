@@ -368,4 +368,25 @@ namespace TeeJee.Misc {
 		exec_script_sync("head /dev/urandom | tr -dc 'a-zA-Z0-9-_!@#$%^&*()_+{}|:<>?=' | head -c 20", out stdout, out stderr, true);
 		return stdout;
 	}
+
+	public MatchInfo? regex_match(string expression, string line){
+
+		Regex regex = null;
+
+		try {
+			regex = new Regex(expression);
+		}
+		catch (Error e) {
+			log_error (e.message);
+			return null;
+		}
+
+		MatchInfo match;
+		if (regex.match(line, 0, out match)) {
+			return match;
+		}
+		else{
+			return null;
+		}
+	}
 }

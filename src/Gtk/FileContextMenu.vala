@@ -144,6 +144,8 @@ public class FileContextMenu : Gtk.Menu {
 
 		add_iso_actions(this, sg_icon, sg_label);
 
+		add_pdf_actions(this, sg_icon, sg_label);
+
 		add_kvm_actions(this, sg_icon, sg_label);
 
 		gtk_menu_add_separator(this); // -----------------------------
@@ -1689,8 +1691,110 @@ public class FileContextMenu : Gtk.Menu {
 		}
 	}
 
+
+	private void add_pdf_actions(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		if (selected_item == null){ return; }
+
+		if (!selected_item.file_extension.down().has_suffix(".pdf")){ return; }
+		
+		log_debug("FileContextMenu: add_pdf_actions()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("PDF"),
+			"",
+			IconManager.lookup_image("application-pdf",16),
+			sg_icon,
+			sg_label);
+			
+		var sub_menu = new Gtk.Menu();
+		//sub_menu.reserve_toggle_size = false;
+		menu_item.submenu = sub_menu;
+
+		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		var sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+
+		add_pdf_split(sub_menu, sg_icon_sub, sg_label_sub);
+
+		add_pdf_merge(sub_menu, sg_icon_sub, sg_label_sub);
+
+		gtk_menu_add_separator(sub_menu); //--------------------------------
+		
+		add_pdf_protect(sub_menu, sg_icon_sub, sg_label_sub);
+
+		add_pdf_unprotect(sub_menu, sg_icon_sub, sg_label_sub);
+	}
 	
-	
+	private void add_pdf_split(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		log_debug("FileContextMenu: add_pdf_split()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Split"),
+			_("Split PDF document by page"),
+			null,//get_shared_icon("media-cdrom","",16),
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			view.pdf_split();
+		});
+	}
+
+	private void add_pdf_merge(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		log_debug("FileContextMenu: add_pdf_merge()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Merge"),
+			_("Merge selected PDF files into one document"),
+			null,//get_shared_icon("media-cdrom","",16),
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			view.pdf_merge();
+		});
+	}
+
+	private void add_pdf_protect(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		log_debug("FileContextMenu: add_pdf_protect()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Add Password"),
+			_("Protect the PDF document by adding password"),
+			null,//get_shared_icon("media-cdrom","",16),
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			view.pdf_protect();
+		});
+	}
+
+	private void add_pdf_unprotect(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		log_debug("FileContextMenu: add_pdf_unprotect()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Remove Password"),
+			_("Unprotect the PDF document by removing password"),
+			null,//get_shared_icon("media-cdrom","",16),
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			view.pdf_unprotect();
+		});
+	}
+
+
 	private void add_sort_column(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
 		var menu_item = gtk_menu_add_item(

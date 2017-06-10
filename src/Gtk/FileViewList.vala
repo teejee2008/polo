@@ -4069,7 +4069,106 @@ public class FileViewList : Gtk.Box {
 	}
 
 
+	public void pdf_split(){
 
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+
+		if (!check_pdftk()){ return; }
+		
+		err_log_clear();
+
+		PdfTask.split(item.file_path, window);
+	}
+
+	public void pdf_merge(){
+		
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+
+		selected_items.sort((a,b)=> {
+			return strcmp(a.file_name,b.file_name);
+		});
+
+		if (!check_pdftk()){ return; }
+		
+		err_log_clear();
+
+		PdfTask.merge(selected_items, window);
+	}
+
+	public void pdf_protect(){
+		
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+
+		item.password = "";
+		prompt_for_pdf_password(item, true);
+
+		if (item.password.length == 0) { return; }
+
+		if (!check_pdftk()){ return; }
+		
+		err_log_clear();
+
+		PdfTask.protect(item.file_path, item.password, window);
+	}
+
+	public void pdf_unprotect(){
+		
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+
+		item.password = "";
+		prompt_for_pdf_password(item, false);
+
+		if (item.password.length == 0) { return; }
+
+		if (!check_pdftk()){ return; }
+		
+		err_log_clear();
+
+		PdfTask.unprotect(item.file_path, item.password, window);
+	}
+
+	public static bool prompt_for_pdf_password(FileItem item, bool confirm){
+
+		log_debug("FileViewList: prompt_for_pdf_password()");
+
+		bool wrong_pass = (item.password.length > 0);
+		
+		string msg = "";
+
+		if (!confirm){
+			
+			msg += "<b>%s: %s</b>\n\n".printf(_("Protected Document"), item.file_name);
+			
+			if (wrong_pass){
+				msg += "%s\n\n".printf(_("Password was wrong! Try again or Cancel"));
+			}
+		}
+
+		msg += _("Enter Password") + ":";
+		
+		item.password = PasswordDialog.prompt_user((Gtk.Window) App.main_window, confirm, "", msg);
+
+		return (item.password.length > 0);
+	}
+
+	private bool check_pdftk(){
+		var tool = App.Tools["pdftk"];
+		if (!tool.available){
+			gtk_messagebox(_("Missing Dependency"),_("Install the 'pdftk' package and try again"), window, true);
+			return false;
+		}
+		return true;
+	}
+
+	
 	
 	public void hide_selected(){
 

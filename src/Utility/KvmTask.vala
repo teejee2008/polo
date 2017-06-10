@@ -50,12 +50,6 @@ public class KvmTask : AsyncTask {
 	private string disk_format = "";
 	private Gtk.Window? window = null;
 
-	public string kvm_vga = "std";
-	public string kvm_cpu = "host";
-	public int kvm_smp = 1;
-	public int kvm_mem = 2048;
-	public string kvm_format = ".qcow2";
-	
 	public KvmTask(){
 		init_regular_expressions();
 	}

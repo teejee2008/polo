@@ -444,6 +444,8 @@ public class Main : GLib.Object {
 		Tools["cryptsetup"] = new Tool("cryptsetup","cryptsetup","Unlock encrypted LUKS devices");
 		Tools["xdg-mime"] = new Tool("xdg-mime","xdg-mime","Set file type associations");
 		Tools["fish"] = new Tool("fish","Fish Shell","Terminal Shell");
+		Tools["kvm"] = new Tool("kvm","Qemu-Kvm Emulator","Virtual Machine Emulator");
+		Tools["pdftk"] = new Tool("pdftk","pdftk","PDF Toolkit");
 		
 		check_all_tools();
 		
