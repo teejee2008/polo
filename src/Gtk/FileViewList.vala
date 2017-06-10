@@ -4186,6 +4186,19 @@ public class FileViewList : Gtk.Box {
 
 		PdfTask.uncompress(item.file_path, window);
 	}
+
+	public void pdf_compress(){
+
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+
+		if (!check_ghostscript()){ return; }
+		
+		err_log_clear();
+
+		PdfTask.compress(item.file_path, window);
+	}
 	
 	public static bool prompt_for_pdf_password(FileItem item, bool confirm){
 

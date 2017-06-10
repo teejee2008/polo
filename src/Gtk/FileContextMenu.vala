@@ -1726,10 +1726,14 @@ public class FileContextMenu : Gtk.Menu {
 		add_pdf_unprotect(sub_menu, sg_icon_sub, sg_label_sub);
 		
 		gtk_menu_add_separator(sub_menu); //--------------------------------
-		
-		add_pdf_grayscale(sub_menu, sg_icon_sub, sg_label_sub);
+
+		add_pdf_compress(sub_menu, sg_icon_sub, sg_label_sub);
 
 		add_pdf_uncompress(sub_menu, sg_icon_sub, sg_label_sub);
+
+		gtk_menu_add_separator(sub_menu); //--------------------------------
+		
+		add_pdf_grayscale(sub_menu, sg_icon_sub, sg_label_sub);
 
 		add_pdf_rotate(sub_menu, sg_icon_sub, sg_label_sub);
 
@@ -1810,7 +1814,7 @@ public class FileContextMenu : Gtk.Menu {
 
 		var menu_item = gtk_menu_add_item(
 			menu,
-			_("Remove colors"),
+			_("Remove Colors"),
 			_("Remove colors from PDF document"),
 			null,//get_shared_icon("media-cdrom","",16),
 			sg_icon,
@@ -1835,6 +1839,23 @@ public class FileContextMenu : Gtk.Menu {
 
 		menu_item.activate.connect (() => {
 			view.pdf_uncompress();
+		});
+	}
+
+	private void add_pdf_compress(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		log_debug("FileContextMenu: add_pdf_compress()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Reduce File Size"),
+			_("Reduce the file size of PDF document by downscaling images. Use the 'Optimize For' submenu for more options."),
+			null,//get_shared_icon("media-cdrom","",16),
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			view.pdf_compress();
 		});
 	}
 

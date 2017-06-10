@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
-"POT-Creation-Date: 2017-06-10 20:13+0530\n"
+"POT-Creation-Date: 2017-06-10 22:56+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,7 +79,7 @@ msgstr ""
 msgid "Add Bookmark"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:1779
+#: Gtk/FileContextMenu.vala:1783
 msgid "Add Password"
 msgstr ""
 
@@ -273,12 +273,12 @@ msgstr ""
 msgid "Cancelled by user"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4607
+#: Gtk/FileViewList.vala:4620
 msgid "Cannot create archive in this location"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4465 Gtk/FileViewList.vala:4504
-#: Gtk/FileViewList.vala:4536
+#: Gtk/FileViewList.vala:4478 Gtk/FileViewList.vala:4517
+#: Gtk/FileViewList.vala:4549
 msgid "Cannot extract to this location"
 msgstr ""
 
@@ -763,15 +763,15 @@ msgstr ""
 msgid "Desktop"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4504 Gtk/FileViewList.vala:4536
+#: Gtk/FileViewList.vala:4517 Gtk/FileViewList.vala:4549
 msgid "Destination directory does not exist"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4607
+#: Gtk/FileViewList.vala:4620
 msgid "Destination path is inside an archive (!)"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4465
+#: Gtk/FileViewList.vala:4478
 msgid "Destination path is inside an archive!"
 msgstr ""
 
@@ -941,7 +941,7 @@ msgstr ""
 msgid "Encrypted Device"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4446
+#: Gtk/FileViewList.vala:4459
 #, c-format
 msgid "Encrypted archive"
 msgstr ""
@@ -955,8 +955,8 @@ msgstr ""
 msgid "Enter Passphrase"
 msgstr ""
 
-#: Gtk/CreateArchiveWindow.vala:1698 Gtk/FileViewList.vala:4207
-#: Gtk/FileViewList.vala:4452 Utility/Device.vala:497
+#: Gtk/CreateArchiveWindow.vala:1698 Gtk/FileViewList.vala:4220
+#: Gtk/FileViewList.vala:4465 Utility/Device.vala:497
 msgid "Enter Password"
 msgstr ""
 
@@ -1205,7 +1205,8 @@ msgstr ""
 
 #: Utility/KvmTask.vala:195 Utility/PdfTask.vala:82 Utility/PdfTask.vala:110
 #: Utility/PdfTask.vala:149 Utility/PdfTask.vala:186 Utility/PdfTask.vala:221
-#: Utility/PdfTask.vala:253 Utility/PdfTask.vala:285 Utility/PdfTask.vala:331
+#: Utility/PdfTask.vala:253 Utility/PdfTask.vala:285 Utility/PdfTask.vala:317
+#: Utility/PdfTask.vala:363
 msgid "Finished with errors"
 msgstr ""
 
@@ -1396,7 +1397,7 @@ msgstr ""
 msgid "Incorrect password for encrypted archive"
 msgstr ""
 
-#: Gtk/ColumnSelectionBox.vala:163 Gtk/FileContextMenu.vala:2026
+#: Gtk/ColumnSelectionBox.vala:163 Gtk/FileContextMenu.vala:2047
 #: Gtk/ViewPopover.vala:407
 msgid "Indicator"
 msgstr ""
@@ -1409,15 +1410,15 @@ msgstr ""
 msgid "Install from ISO..."
 msgstr ""
 
-#: Gtk/FileViewList.vala:4235
+#: Gtk/FileViewList.vala:4248
 msgid "Install the 'ghostscript' package and try again"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4226
+#: Gtk/FileViewList.vala:4239
 msgid "Install the 'imagemagick' package and try again"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4217
+#: Gtk/FileViewList.vala:4230
 msgid "Install the 'pdftk' package and try again"
 msgstr ""
 
@@ -1581,7 +1582,7 @@ msgstr ""
 msgid "MediaInfo"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:1762
+#: Gtk/FileContextMenu.vala:1766
 msgid "Merge"
 msgstr ""
 
@@ -1589,7 +1590,7 @@ msgstr ""
 msgid "Merge Derived Disk"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:1763
+#: Gtk/FileContextMenu.vala:1767
 msgid "Merge selected PDF files into one document"
 msgstr ""
 
@@ -1630,8 +1631,8 @@ msgstr ""
 msgid "Missing Dependencies"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4217 Gtk/FileViewList.vala:4226
-#: Gtk/FileViewList.vala:4235
+#: Gtk/FileViewList.vala:4230 Gtk/FileViewList.vala:4239
+#: Gtk/FileViewList.vala:4248
 msgid "Missing Dependency"
 msgstr ""
 
@@ -1784,7 +1785,7 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4602
+#: Gtk/FileViewList.vala:4615
 msgid "No Files Selected"
 msgstr ""
 
@@ -1962,7 +1963,7 @@ msgstr ""
 msgid "Open with other applications"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:1847
+#: Gtk/FileContextMenu.vala:1868
 msgid "Optimize For"
 msgstr ""
 
@@ -2007,7 +2008,7 @@ msgstr ""
 msgid "Parent Device"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4547
+#: Gtk/FileViewList.vala:4560
 msgid "Partial extraction not supported for solid archives"
 msgstr ""
 
@@ -2027,7 +2028,7 @@ msgstr ""
 msgid "Password not set for encrypted archive"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4203 Gtk/FileViewList.vala:4449
+#: Gtk/FileViewList.vala:4216 Gtk/FileViewList.vala:4462
 #, c-format
 msgid "Password was wrong! Try again or Cancel"
 msgstr ""
@@ -2159,16 +2160,16 @@ msgstr ""
 msgid "Processed:"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:1940 Gtk/MiddleToolbar.vala:333
+#: Gtk/FileContextMenu.vala:1961 Gtk/MiddleToolbar.vala:333
 #: Gtk/PropertiesWindow.vala:68
 msgid "Properties"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:1780
+#: Gtk/FileContextMenu.vala:1784
 msgid "Protect the PDF document by adding password"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4200
+#: Gtk/FileViewList.vala:4213
 #, c-format
 msgid "Protected Document"
 msgstr ""
@@ -2239,6 +2240,16 @@ msgid ""
 "to applications"
 msgstr ""
 
+#: Gtk/FileContextMenu.vala:1851
+msgid "Reduce File Size"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1852
+msgid ""
+"Reduce the file size of PDF document by downscaling images. Use the "
+"'Optimize For' submenu for more options."
+msgstr ""
+
 #: Gtk/ToolsWindow.vala:108
 msgid "Refresh"
 msgstr ""
@@ -2267,7 +2278,7 @@ msgstr ""
 msgid "Remove Bookmark"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:1796
+#: Gtk/FileContextMenu.vala:1800
 msgid "Remove Password"
 msgstr ""
 
@@ -2279,11 +2290,11 @@ msgstr ""
 msgid "Remove bookmark for this location"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:1813
+#: Gtk/FileContextMenu.vala:1817
 msgid "Remove colors"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:1814
+#: Gtk/FileContextMenu.vala:1818
 msgid "Remove colors from PDF document"
 msgstr ""
 
@@ -2386,7 +2397,7 @@ msgstr ""
 msgid "Revision"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:1886
+#: Gtk/FileContextMenu.vala:1907
 msgid "Rotate Pages"
 msgstr ""
 
@@ -2426,7 +2437,7 @@ msgstr ""
 msgid "Select Copy Destination"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4497
+#: Gtk/FileViewList.vala:4510
 msgid "Select Destination"
 msgstr ""
 
@@ -2674,12 +2685,12 @@ msgstr ""
 msgid "Solid"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:1924 Gtk/MainMenubar.vala:916
+#: Gtk/FileContextMenu.vala:1945 Gtk/MainMenubar.vala:916
 #: Gtk/ViewPopover.vala:386
 msgid "Sort By"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:2050 Gtk/ViewPopover.vala:433
+#: Gtk/FileContextMenu.vala:2071 Gtk/ViewPopover.vala:433
 msgid "Sort Descending"
 msgstr ""
 
@@ -2699,11 +2710,11 @@ msgstr ""
 msgid "Speed:"
 msgstr ""
 
-#: Gtk/CreateArchiveWindow.vala:1962 Gtk/FileContextMenu.vala:1745
+#: Gtk/CreateArchiveWindow.vala:1962 Gtk/FileContextMenu.vala:1749
 msgid "Split"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:1746
+#: Gtk/FileContextMenu.vala:1750
 msgid "Split PDF document by page"
 msgstr ""
 
@@ -2803,7 +2814,7 @@ msgid ""
 "correctly and if connection with the device is reliable."
 msgstr ""
 
-#: Gtk/FileViewList.vala:4602
+#: Gtk/FileViewList.vala:4615
 msgid "There are no files selected for compression"
 msgstr ""
 
@@ -2946,11 +2957,11 @@ msgstr ""
 msgid "UnMaximize the terminal"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:1830
+#: Gtk/FileContextMenu.vala:1834
 msgid "Uncompress"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:1831
+#: Gtk/FileContextMenu.vala:1835
 msgid "Uncompress PDF document"
 msgstr ""
 
@@ -2998,7 +3009,7 @@ msgstr ""
 msgid "Unpacked"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:1797
+#: Gtk/FileContextMenu.vala:1801
 msgid "Unprotect the PDF document by removing password"
 msgstr ""
 
@@ -3076,7 +3087,7 @@ msgstr ""
 msgid "View Mode"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:1941
+#: Gtk/FileContextMenu.vala:1962
 msgid "View file properties"
 msgstr ""
 

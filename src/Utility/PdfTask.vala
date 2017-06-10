@@ -62,7 +62,7 @@ public class PdfTask : GLib.Object {
 
 		cmd += " burst";
 		
-		string outfile = "%s_page_%%02d.pdf".printf(file_get_title(file_path));
+		string outfile = "%s_page_%%03d.pdf".printf(file_get_title(file_path));
 		outfile = path_combine(file_parent(file_path), outfile);
 		
 		cmd += " output '%s'".printf(escape_single_quote(outfile));
@@ -82,7 +82,7 @@ public class PdfTask : GLib.Object {
 			gtk_messagebox(_("Finished with errors"), std_err, window, true);
 		}
 	}
-
+	
 	public static void uncompress(string file_path, Gtk.Window? window){
 
 		if (!file_exists(file_path)){ return; }
@@ -286,6 +286,38 @@ public class PdfTask : GLib.Object {
 		}
 	}
 
+	public static void compress(string file_path, Gtk.Window? window){
+		
+		if (!file_exists(file_path)){ return; }
+
+		string outfile = "%s_compressed.pdf".printf(file_get_title(file_path));
+		outfile = path_combine(file_parent(file_path), outfile);
+		
+		string cmd = "gs";
+		cmd += " -sOutputFile='%s'".printf(escape_single_quote(outfile));
+		cmd += " -sDEVICE=pdfwrite";
+		cmd += " -dCompatibilityLevel=1.4";
+		cmd += " -dDetectDuplicateImages=true";
+		cmd += " -dCompressFonts=true";
+		cmd += " -dPDFSETTINGS=/%s".printf("screen");
+		cmd += " -dNOPAUSE";
+		cmd += " -dBATCH";
+		cmd += " '%s'".printf(escape_single_quote(file_path));
+
+		log_debug(cmd);
+
+		gtk_set_busy(true, window);
+		
+		string std_out, std_err;
+		exec_sync(cmd, out std_out, out std_err);
+
+		gtk_set_busy(false, window);
+
+		if (std_err.length > 0){
+			gtk_messagebox(_("Finished with errors"), std_err, window, true);
+		}
+	}
+	
 	public static void rotate(string file_path, string direction, Gtk.Window? window){
 
 		if (!file_exists(file_path)){ return; }
