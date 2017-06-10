@@ -4135,6 +4135,58 @@ public class FileViewList : Gtk.Box {
 		PdfTask.unprotect(item.file_path, item.password, window);
 	}
 
+	public void pdf_grayscale(){
+
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+
+		if (!check_ghostscript()){ return; }
+		
+		err_log_clear();
+
+		PdfTask.convert_grayscale(item.file_path, window);
+	}
+
+	public void pdf_optimize(string target){
+
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+
+		if (!check_ghostscript()){ return; }
+		
+		err_log_clear();
+
+		PdfTask.optimize(item.file_path, target, window);
+	}
+
+	public void pdf_rotate(string direction){
+
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+
+		if (!check_pdftk()){ return; }
+		
+		err_log_clear();
+
+		PdfTask.rotate(item.file_path, direction, window);
+	}
+	
+	public void pdf_uncompress(){
+
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+
+		if (!check_pdftk()){ return; }
+		
+		err_log_clear();
+
+		PdfTask.uncompress(item.file_path, window);
+	}
+	
 	public static bool prompt_for_pdf_password(FileItem item, bool confirm){
 
 		log_debug("FileViewList: prompt_for_pdf_password()");
@@ -4163,6 +4215,24 @@ public class FileViewList : Gtk.Box {
 		var tool = App.Tools["pdftk"];
 		if (!tool.available){
 			gtk_messagebox(_("Missing Dependency"),_("Install the 'pdftk' package and try again"), window, true);
+			return false;
+		}
+		return true;
+	}
+
+	private bool check_imagemagick(){
+		var tool = App.Tools["convert"];
+		if (!tool.available){
+			gtk_messagebox(_("Missing Dependency"),_("Install the 'imagemagick' package and try again"), window, true);
+			return false;
+		}
+		return true;
+	}
+
+	private bool check_ghostscript(){
+		var tool = App.Tools["gs"];
+		if (!tool.available){
+			gtk_messagebox(_("Missing Dependency"),_("Install the 'ghostscript' package and try again"), window, true);
 			return false;
 		}
 		return true;

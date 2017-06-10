@@ -1724,6 +1724,16 @@ public class FileContextMenu : Gtk.Menu {
 		add_pdf_protect(sub_menu, sg_icon_sub, sg_label_sub);
 
 		add_pdf_unprotect(sub_menu, sg_icon_sub, sg_label_sub);
+		
+		gtk_menu_add_separator(sub_menu); //--------------------------------
+		
+		add_pdf_grayscale(sub_menu, sg_icon_sub, sg_label_sub);
+
+		add_pdf_uncompress(sub_menu, sg_icon_sub, sg_label_sub);
+
+		add_pdf_rotate(sub_menu, sg_icon_sub, sg_label_sub);
+
+		add_pdf_optimize(sub_menu, sg_icon_sub, sg_label_sub);
 	}
 	
 	private void add_pdf_split(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
@@ -1792,6 +1802,118 @@ public class FileContextMenu : Gtk.Menu {
 		menu_item.activate.connect (() => {
 			view.pdf_unprotect();
 		});
+	}
+
+	private void add_pdf_grayscale(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		log_debug("FileContextMenu: add_pdf_grayscale()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Remove colors"),
+			_("Remove colors from PDF document"),
+			null,//get_shared_icon("media-cdrom","",16),
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			view.pdf_grayscale();
+		});
+	}
+
+	private void add_pdf_uncompress(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		log_debug("FileContextMenu: add_pdf_uncompress()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Uncompress"),
+			_("Uncompress PDF document"),
+			null,//get_shared_icon("media-cdrom","",16),
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			view.pdf_uncompress();
+		});
+	}
+
+	private void add_pdf_optimize(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		log_debug("FileContextMenu: add_pdf_optimize()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Optimize For"),
+			"",
+			null,//IconManager.lookup_image("kvm",16),
+			sg_icon,
+			sg_label);
+
+		menu_item.sensitive = (selected_item != null);
+
+		if (selected_item == null){ return; }
+			
+		var sub_menu = new Gtk.Menu();
+		//sub_menu.reserve_toggle_size = false;
+		menu_item.submenu = sub_menu;
+
+		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		var sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+
+		foreach(string format in new string[] { "Default", "Screen (72 dpi images)", "EBook (150 dpi images)", "Printer (300 dpi images)", "PrePress" }){
+			
+			var sub_menu_item = gtk_menu_add_item(
+				sub_menu,
+				format,
+				"",
+				null,//get_shared_icon("media-cdrom","",16),
+				sg_icon_sub,
+				sg_label_sub);
+
+			sub_menu_item.activate.connect (() => {
+				view.pdf_optimize(format.split("(")[0].strip().down());
+			});
+		}
+	}
+
+	private void add_pdf_rotate(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		log_debug("FileContextMenu: add_pdf_rotate()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Rotate Pages"),
+			"",
+			null,//IconManager.lookup_image("kvm",16),
+			sg_icon,
+			sg_label);
+
+		menu_item.sensitive = (selected_item != null);
+
+		if (selected_item == null){ return; }
+			
+		var sub_menu = new Gtk.Menu();
+		//sub_menu.reserve_toggle_size = false;
+		menu_item.submenu = sub_menu;
+
+		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		var sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+
+		foreach(string direction in new string[] { "Left", "Right", "Flip Upside Down" }){
+			
+			var sub_menu_item = gtk_menu_add_item(
+				sub_menu,
+				direction,
+				"",
+				null,//get_shared_icon("media-cdrom","",16),
+				sg_icon_sub,
+				sg_label_sub);
+
+			sub_menu_item.activate.connect (() => {
+				view.pdf_rotate(direction.split(" ")[0].strip().down());
+			});
+		}
 	}
 
 

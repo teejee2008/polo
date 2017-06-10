@@ -445,7 +445,9 @@ public class Main : GLib.Object {
 		Tools["xdg-mime"] = new Tool("xdg-mime","xdg-mime","Set file type associations");
 		Tools["fish"] = new Tool("fish","Fish Shell","Terminal Shell");
 		Tools["kvm"] = new Tool("kvm","Qemu-Kvm Emulator","Virtual Machine Emulator");
-		Tools["pdftk"] = new Tool("pdftk","pdftk","PDF Toolkit");
+		Tools["pdftk"] = new Tool("pdftk","pdftk","Modifying PDF documents");
+		Tools["convert"] = new Tool("convert","convert","Converting images and PDF documents");
+		Tools["gs"] = new Tool("convert","convert","Modifying PDF documents");
 		
 		check_all_tools();
 		
