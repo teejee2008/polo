@@ -1529,7 +1529,7 @@ public class Settings : Gtk.Box {
 
 			var index = (int) scale.get_value();
 
-			log_debug("index=%d".printf(index));
+			log_debug("selected_index=%d".printf(index));
 
 			if (App.listview_icon_size == listview_icon_sizes[index]){
 				return;
@@ -1537,6 +1537,8 @@ public class Settings : Gtk.Box {
 
 			App.listview_icon_size = listview_icon_sizes[index];
 
+			log_debug("refreshing_views");
+			
 			foreach(var v in window.views){
 				v.listview_icon_size = App.listview_icon_size;
 				v.refresh();

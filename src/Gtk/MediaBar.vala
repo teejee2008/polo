@@ -196,6 +196,8 @@ public class MediaBar : Gtk.Box {
 		else{
 			gtk_hide(this);
 		}
+
+		log_debug("MediaBar: refresh(): exit");
 	}
 
 }

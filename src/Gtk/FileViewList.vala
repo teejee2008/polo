@@ -2231,9 +2231,9 @@ public class FileViewList : Gtk.Box {
 
 		pane.mediabar.refresh();
 
-		if (current_item != null){
-			add_monitor(current_item);
-		}
+		if (current_item == null){ return; }
+		
+		add_monitor(current_item);
 
 		if (current_item.children.size == 0){
 			set_overlay_on_empty();
