@@ -11,6 +11,9 @@ backup=`pwd`
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 cd $DIR
 
+bzr add *
+bzr commit -m "Updated"
+
 ./build-source
 cd installer
 

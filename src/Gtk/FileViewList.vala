@@ -2509,7 +2509,8 @@ public class FileViewList : Gtk.Box {
 		}
 
 		switch (event){
-		case FileMonitorEvent.CHANGES_DONE_HINT: // Handles create and rename
+		case FileMonitorEvent.RENAMED:
+		case FileMonitorEvent.CHANGES_DONE_HINT:
 			add_refresh_delayed();
 			break;
 		case FileMonitorEvent.DELETED:

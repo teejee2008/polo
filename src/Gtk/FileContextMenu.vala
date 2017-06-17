@@ -1746,7 +1746,7 @@ public class FileContextMenu : Gtk.Menu {
 
 		var menu_item = gtk_menu_add_item(
 			menu,
-			_("Split"),
+			_("Split Pages"),
 			_("Split PDF document by page"),
 			null,//get_shared_icon("media-cdrom","",16),
 			sg_icon,
@@ -1763,7 +1763,7 @@ public class FileContextMenu : Gtk.Menu {
 
 		var menu_item = gtk_menu_add_item(
 			menu,
-			_("Merge"),
+			_("Merge Pages"),
 			_("Merge selected PDF files into one document"),
 			null,//get_shared_icon("media-cdrom","",16),
 			sg_icon,
@@ -1882,7 +1882,7 @@ public class FileContextMenu : Gtk.Menu {
 		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
 		var sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
 
-		foreach(string format in new string[] { "Default", "Screen (72 dpi images)", "EBook (150 dpi images)", "Printer (300 dpi images)", "PrePress" }){
+		foreach(string format in new string[] { "Default", "Screen (72 dpi)", "EBook (150 dpi)", "Printer (300 dpi)", "PrePress" }){
 			
 			var sub_menu_item = gtk_menu_add_item(
 				sub_menu,
