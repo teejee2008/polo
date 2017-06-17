@@ -149,6 +149,8 @@ public class Settings : Gtk.Box {
 
 	private void init_tab_ui() {
 
+		log_debug("Settings: init_tab_ui()");
+
 		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 12);
 		hbox.margin_left = 6;
 		stack.add_titled (hbox, _("UI"), _("UI"));
@@ -1078,6 +1080,8 @@ public class Settings : Gtk.Box {
 
 	private void init_tab_general() {
 
+		log_debug("Settings: init_tab_general()");
+		
 		var box = new Gtk.Box(Orientation.HORIZONTAL, 24);
 		box.margin_left = 6;
 		stack.add_titled (box, _("General"), _("General"));
@@ -1395,6 +1399,8 @@ public class Settings : Gtk.Box {
 
 	private void init_tab_view() {
 
+		log_debug("Settings: init_tab_view()");
+		
 		var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12);
 		box.margin_left = 6;
 		stack.add_titled (box, _("View"), _("View"));
@@ -1441,7 +1447,7 @@ public class Settings : Gtk.Box {
 		// ------------------------
 
 		vbox = add_group(box, _("Tile View"), 12);
-
+		
 		add_scale_tileview_icon_size(vbox, sg_label, sg_scale);
 
 		add_scale_tileview_row_spacing(vbox, sg_label, sg_scale);
@@ -1602,7 +1608,6 @@ public class Settings : Gtk.Box {
 	private void add_options_listview_icons(Gtk.Box box) {
 
 		var vbox = add_sub_group(box, _("Icons"), 0);
-		box.add(vbox);
 
 		add_option_listview_emblems(vbox);
 		
@@ -1787,7 +1792,6 @@ public class Settings : Gtk.Box {
 	private void add_options_iconview_icons(Gtk.Box box) {
 
 		var vbox = add_sub_group(box, _("Icons"), 0);
-		box.add(vbox);
 
 		add_option_iconview_emblems(vbox);
 		
@@ -1974,7 +1978,6 @@ public class Settings : Gtk.Box {
 	private void add_options_tileview_icons(Gtk.Box box) {
 
 		var vbox = add_sub_group(box, _("Icons"), 0);
-		box.add(vbox);
 
 		add_option_tileview_emblems(vbox);
 		
@@ -2052,6 +2055,8 @@ public class Settings : Gtk.Box {
 	// list view options -----------------------------------
 
 	private void init_tab_columns() {
+
+		log_debug("Settings: init_tab_columns()");
 		
 		var box = new ColumnSelectionBox(parent_window, false);
 		box.refresh_list_view_columns();
@@ -2088,6 +2093,8 @@ public class Settings : Gtk.Box {
 
 	private void init_tab_advanced() {
 
+		log_debug("Settings: init_tab_advanced()");
+		
 		var box = new Gtk.Box(Orientation.HORIZONTAL, 24);
 		box.margin_left = 6;
 		stack.add_titled (box, _("Advanced"), _("Advanced"));
@@ -2148,7 +2155,7 @@ public class Settings : Gtk.Box {
 
 		// add items
 		int index = -1;
-		var store = new Gtk.ListStore(1, typeof(string));
+		var store = new Gtk.ListStore(2, typeof(string), typeof(string));
 		TreeIter iter;
 		foreach(string txt in new string[]{ "host" }){
 			index++;
@@ -2200,7 +2207,7 @@ public class Settings : Gtk.Box {
 
 		// add items
 		int index = -1;
-		var store = new Gtk.ListStore(1, typeof(string));
+		var store = new Gtk.ListStore(2, typeof(string), typeof(string));
 		TreeIter iter;
 		foreach(string txt in new string[]{ "cirrus", "std", "vmware", "qxl" }){
 			index++;

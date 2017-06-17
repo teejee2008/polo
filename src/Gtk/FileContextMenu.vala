@@ -2019,6 +2019,8 @@ public class SortMenu : Gtk.Menu {
 		window = App.main_window;
 
 		build_menu();
+
+		log_debug("SortMenu(): exit");
 	}
 
 	public void build_menu(){

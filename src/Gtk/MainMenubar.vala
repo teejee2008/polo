@@ -109,19 +109,31 @@ public class MainMenuBar : Gtk.MenuBar {
 	}
 
 	public void add_action_accel(Gtk.MenuItem item, string keycode){
+
+		string data_key = "has_accel_%s".printf(keycode);
+		
 		uint accel_key;
 		Gdk.ModifierType accel_mods;
 		var accel_flags = Gtk.AccelFlags.VISIBLE;
 		Gtk.accelerator_parse(keycode, out accel_key, out accel_mods);
 		item.add_accelerator ("activate", Hotkeys.accel_group, accel_key, accel_mods, accel_flags);
+
+		item.set_data<int>(data_key, 1);
 	}
 
 	public void remove_action_accel(Gtk.MenuItem item, string keycode){
+
+		string data_key = "has_accel_%s".printf(keycode);
+		
+		if (item.get_data<int>(data_key) != 1) { return; }
+		
 		uint accel_key;
 		Gdk.ModifierType accel_mods;
 		var accel_flags = Gtk.AccelFlags.VISIBLE;
 		Gtk.accelerator_parse(keycode, out accel_key, out accel_mods);
 		item.remove_accelerator (Hotkeys.accel_group, accel_key, accel_mods);
+		
+		item.set_data<int>(data_key, -1);
 	}
 	
 	private void add_menu_file(Gtk.MenuShell menu_shell){

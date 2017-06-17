@@ -2445,6 +2445,9 @@ public class FileViewList : Gtk.Box {
 			monitors = new Gee.ArrayList<FileItemMonitor>();
 		}
 
+		if (item == null) { return; }
+		if (item.is_virtual) { return; }
+
 		foreach(var mon in monitors){
 			if (mon.file_item.file_path == item.file_path){
 				log_debug("monitor exists: %s".printf(item.file_path));
@@ -2465,6 +2468,8 @@ public class FileViewList : Gtk.Box {
 
 	private void remove_monitor(FileItem item){
 
+		if (item == null) { return; }
+		
 		FileItemMonitor obj = null;
 		foreach (var mon in monitors){
 			if (mon.file_item.file_path == item.file_path){

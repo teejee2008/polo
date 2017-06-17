@@ -166,7 +166,7 @@ public class TermContextMenu : Gtk.Menu {
 
 		var menu_item = gtk_menu_add_item(
 			menu,
-			_("Clear"),
+			_("Reset and clear"),
 			_("Clear the terminal output"),
 			IconManager.lookup_image("edit-clear", 16),
 			sg_icon,
