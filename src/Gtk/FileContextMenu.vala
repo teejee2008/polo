@@ -1401,7 +1401,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("ISO"),
 			"",
-			IconManager.lookup_image("media-cdrom",16),
+			gtk_image_from_pixbuf(IconManager.generic_icon_iso(16)),
 			sg_icon,
 			sg_label);
 			
@@ -1740,7 +1740,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("PDF"),
 			"",
-			IconManager.lookup_image("application-pdf",16),
+			gtk_image_from_pixbuf(IconManager.generic_icon_pdf(16)),
 			sg_icon,
 			sg_label);
 			

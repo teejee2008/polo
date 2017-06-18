@@ -377,6 +377,16 @@ namespace TeeJee.GtkHelper{
 		return pixbuf;
 	}
 
+    public Gtk.Image? gtk_image_from_pixbuf(Gdk.Pixbuf? pixbuf) {
+		
+		if (pixbuf != null){
+			return new Gtk.Image.from_pixbuf(pixbuf);
+		}
+		else{
+			return null;
+		}
+    }
+    
 	public int gtk_icon_size_to_index(Gtk.IconSize icon_size){
 		
 		switch(icon_size){

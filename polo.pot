@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
-"POT-Creation-Date: 2017-06-18 10:56+0530\n"
+"POT-Creation-Date: 2017-06-18 12:34+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -79,11 +79,11 @@ msgstr ""
 msgid "Add Password"
 msgstr ""
 
-#: Gtk/Sidebar.vala:551
+#: Gtk/Sidebar.vala:548
 msgid "Add bookmark"
 msgstr ""
 
-#: Gtk/Sidebar.vala:552
+#: Gtk/Sidebar.vala:549
 msgid "Add bookmark for this location"
 msgstr ""
 
@@ -198,7 +198,7 @@ msgid "Blocks"
 msgstr ""
 
 #: Gtk/FileViewToolbar.vala:323 Gtk/Pathbar.vala:178 Gtk/Settings.vala:569
-#: Gtk/Settings.vala:727 Gtk/Settings.vala:944 Gtk/Sidebar.vala:383
+#: Gtk/Settings.vala:727 Gtk/Settings.vala:944 Gtk/Sidebar.vala:380
 msgid "Bookmarks"
 msgstr ""
 
@@ -376,11 +376,11 @@ msgstr ""
 msgid "Click to edit path"
 msgstr ""
 
-#: Gtk/Sidebar.vala:825
+#: Gtk/Sidebar.vala:812
 msgid "Click to mount device and open in active pane"
 msgstr ""
 
-#: Gtk/Sidebar.vala:822
+#: Gtk/Sidebar.vala:809
 msgid "Click to open in active pane"
 msgstr ""
 
@@ -752,7 +752,7 @@ msgid ""
 "required"
 msgstr ""
 
-#: Gtk/Sidebar.vala:375
+#: Gtk/Sidebar.vala:372
 msgid "Desktop"
 msgstr ""
 
@@ -781,11 +781,11 @@ msgstr ""
 msgid "Device"
 msgstr ""
 
-#: Gtk/Sidebar.vala:1103
+#: Gtk/Sidebar.vala:1090
 msgid "Device Locked"
 msgstr ""
 
-#: Gtk/Sidebar.vala:1037
+#: Gtk/Sidebar.vala:1024
 msgid "Device Unmounted"
 msgstr ""
 
@@ -802,7 +802,7 @@ msgid "Device was unmounted"
 msgstr ""
 
 #: Gtk/FileViewToolbar.vala:351 Gtk/Settings.vala:587 Gtk/Settings.vala:747
-#: Gtk/Settings.vala:962 Gtk/Sidebar.vala:402
+#: Gtk/Settings.vala:962 Gtk/Sidebar.vala:399
 msgid "Devices"
 msgstr ""
 
@@ -833,7 +833,7 @@ msgstr ""
 msgid "Documentation"
 msgstr ""
 
-#: Gtk/Sidebar.vala:370
+#: Gtk/Sidebar.vala:367
 msgid "Documents"
 msgstr ""
 
@@ -849,7 +849,7 @@ msgstr ""
 msgid "Donations"
 msgstr ""
 
-#: Gtk/Sidebar.vala:371
+#: Gtk/Sidebar.vala:368
 msgid "Downloads"
 msgstr ""
 
@@ -975,7 +975,7 @@ msgstr ""
 msgid "Enter passphrase to unlock '%s'"
 msgstr ""
 
-#: Utility/Gtk/GtkHelper.vala:1188
+#: Utility/Gtk/GtkHelper.vala:1198
 msgid "Enter path or browse for directory"
 msgstr ""
 
@@ -1192,7 +1192,7 @@ msgid "Files:"
 msgstr ""
 
 #: Gtk/PropertiesWindow.vala:449 Gtk/PropertiesWindow.vala:477
-#: Gtk/Sidebar.vala:368 Utility/Device.vala:2328
+#: Gtk/Sidebar.vala:365 Utility/Device.vala:2328
 #, c-format
 msgid "Filesystem"
 msgstr ""
@@ -1274,7 +1274,7 @@ msgstr ""
 msgid "Found"
 msgstr ""
 
-#: Gtk/Sidebar.vala:1187 Gtk/Statusbar.vala:363
+#: Gtk/Sidebar.vala:1174 Gtk/Statusbar.vala:363
 #, c-format
 msgid "Free"
 msgstr ""
@@ -1358,7 +1358,7 @@ msgstr ""
 msgid "Hide selected items"
 msgstr ""
 
-#: Gtk/FileViewToolbar.vala:252 Gtk/Settings.vala:484 Gtk/Sidebar.vala:369
+#: Gtk/FileViewToolbar.vala:252 Gtk/Settings.vala:484 Gtk/Sidebar.vala:366
 msgid "Home"
 msgstr ""
 
@@ -1523,7 +1523,7 @@ msgstr ""
 msgid "Location"
 msgstr ""
 
-#: Gtk/Sidebar.vala:703
+#: Gtk/Sidebar.vala:690
 msgid "Location not found"
 msgstr ""
 
@@ -1723,7 +1723,7 @@ msgstr ""
 msgid "Multiple items selected"
 msgstr ""
 
-#: Gtk/Sidebar.vala:373
+#: Gtk/Sidebar.vala:370
 msgid "Music"
 msgstr ""
 
@@ -2119,11 +2119,11 @@ msgstr ""
 msgid "Permissions"
 msgstr ""
 
-#: Gtk/Sidebar.vala:372
+#: Gtk/Sidebar.vala:369
 msgid "Pictures"
 msgstr ""
 
-#: Gtk/Settings.vala:926 Gtk/Sidebar.vala:363
+#: Gtk/Settings.vala:926 Gtk/Sidebar.vala:360
 msgid "Places"
 msgstr ""
 
@@ -2178,7 +2178,7 @@ msgid ""
 "files created by other users."
 msgstr ""
 
-#: Gtk/Sidebar.vala:376
+#: Gtk/Sidebar.vala:373
 msgid "Public"
 msgstr ""
 
@@ -2263,7 +2263,7 @@ msgstr ""
 msgid "Remember last session"
 msgstr ""
 
-#: Gtk/Sidebar.vala:986
+#: Gtk/Sidebar.vala:973
 msgid "Remove"
 msgstr ""
 
@@ -2279,11 +2279,11 @@ msgstr ""
 msgid "Remove Password"
 msgstr ""
 
-#: Gtk/Sidebar.vala:546
+#: Gtk/Sidebar.vala:543
 msgid "Remove bookmark"
 msgstr ""
 
-#: Gtk/Sidebar.vala:547
+#: Gtk/Sidebar.vala:544
 msgid "Remove bookmark for this location"
 msgstr ""
 
@@ -2292,7 +2292,7 @@ msgid "Remove colors from PDF document"
 msgstr ""
 
 #: Gtk/FileContextMenu.vala:801 Gtk/FileViewList.vala:3507
-#: Gtk/MainMenubar.vala:645 Gtk/Sidebar.vala:917
+#: Gtk/MainMenubar.vala:645 Gtk/Sidebar.vala:904
 msgid "Rename"
 msgstr ""
 
@@ -2442,11 +2442,11 @@ msgstr ""
 msgid "Select Extraction Location"
 msgstr ""
 
-#: Utility/Gtk/GtkHelper.vala:732
+#: Utility/Gtk/GtkHelper.vala:742
 msgid "Select File(s)"
 msgstr ""
 
-#: Utility/Gtk/GtkHelper.vala:736
+#: Utility/Gtk/GtkHelper.vala:746
 msgid "Select Folder(s)"
 msgstr ""
 
@@ -2478,7 +2478,7 @@ msgstr ""
 msgid "Select Older"
 msgstr ""
 
-#: Utility/Gtk/GtkHelper.vala:1198
+#: Utility/Gtk/GtkHelper.vala:1208
 msgid "Select Path"
 msgstr ""
 
@@ -2660,7 +2660,7 @@ msgstr ""
 
 #: Gtk/FileConflictDialog.vala:544 Gtk/FileConflictDialog.vala:556
 #: Gtk/FileViewList.vala:561 Gtk/PropertiesWindow.vala:187
-#: Gtk/PropertiesWindow.vala:492 Gtk/Sidebar.vala:1180 Gtk/Statusbar.vala:356
+#: Gtk/PropertiesWindow.vala:492 Gtk/Sidebar.vala:1167 Gtk/Statusbar.vala:356
 #: Utility/Device.vala:2316 Utility/Device.vala:2331 Utility/FileItem.vala:645
 #, c-format
 msgid "Size"
@@ -2902,7 +2902,7 @@ msgid "Transparency"
 msgstr ""
 
 #: Gtk/FileContextMenu.vala:823 Gtk/FileViewPane.vala:135
-#: Gtk/MainMenubar.vala:572 Gtk/Sidebar.vala:377
+#: Gtk/MainMenubar.vala:572 Gtk/Sidebar.vala:374
 msgid "Trash"
 msgstr ""
 
@@ -2986,7 +2986,7 @@ msgstr ""
 msgid "Unmount"
 msgstr ""
 
-#: Gtk/Sidebar.vala:1059
+#: Gtk/Sidebar.vala:1046
 msgid "Unmount and lock device"
 msgstr ""
 
@@ -2994,7 +2994,7 @@ msgstr ""
 msgid "Unmount button"
 msgstr ""
 
-#: Gtk/Sidebar.vala:1015
+#: Gtk/Sidebar.vala:1002
 msgid "Unmount device"
 msgstr ""
 
@@ -3047,7 +3047,7 @@ msgstr ""
 msgid "Use flat buttons (without borders) for path"
 msgstr ""
 
-#: Gtk/PropertiesWindow.vala:499 Gtk/Sidebar.vala:1182 Gtk/Statusbar.vala:358
+#: Gtk/PropertiesWindow.vala:499 Gtk/Sidebar.vala:1169 Gtk/Statusbar.vala:358
 #: Utility/Device.vala:2334
 #, c-format
 msgid "Used"
@@ -3074,7 +3074,7 @@ msgstr ""
 msgid "Vendor"
 msgstr ""
 
-#: Gtk/Sidebar.vala:374
+#: Gtk/Sidebar.vala:371
 msgid "Videos"
 msgstr ""
 
