@@ -2178,7 +2178,7 @@ public class Device : GLib.Object{
 		return s.strip();
 	}
 
-	public string description_simple(){
+	public string description_simple(bool show_device_file = true){
 		
 		string s = "";
 
@@ -2197,7 +2197,7 @@ public class Device : GLib.Object{
 					s += " (%s)".printf(format_file_size(size_bytes, false, "", true, 0));
 				}
 			}
-			if (device.length > 0){
+			if (show_device_file && (device.length > 0)){
 				s += " ~ %s".printf(device);
 			}
 		}

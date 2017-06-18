@@ -92,6 +92,18 @@ public class Sidebar : Gtk.Box {
 		}
 	}
 
+	public bool is_bm_popup {
+		get{
+			return (popover != null) && (popup_mode == "bm");
+		}
+	}
+
+	public bool is_device_popup {
+		get{
+			return (popover != null) && (popup_mode == "device");
+		}
+	}
+
 	// contructors
 
 	public Sidebar(Gtk.Popover? _popover, string? mode, FileViewPane? parent_pane){
@@ -314,7 +326,6 @@ public class Sidebar : Gtk.Box {
 		
 		return false;
 	}
-
 
 	// refresh
 
@@ -551,7 +562,7 @@ public class Sidebar : Gtk.Box {
 			return null;
 		}
 		
-		var item = new SidebarItem.from_device(dev);
+		var item = new SidebarItem.from_device(dev, popup);
 
 		if (popup){
 			item.node_key = "";
@@ -661,6 +672,11 @@ public class Sidebar : Gtk.Box {
 			label.margin_left = 0;
 			label.margin_top = 6;
 			label.margin_bottom = 6;
+
+			if (popup){
+				gtk_hide(image);
+			}
+
 			break;
 
 		case SidebarItemType.BOOKMARK:
@@ -802,7 +818,7 @@ public class Sidebar : Gtk.Box {
 				row.set_tooltip_markup(_("Click to mount device and open in active pane"));
 			}
 
-			if (dev.is_mounted && (dev.used_bytes > 0)){
+			if (dev.is_mounted && (dev.size_bytes > 0)){
 				add_fs_bar(vbox, dev);
 			}
 
@@ -833,12 +849,10 @@ public class Sidebar : Gtk.Box {
 				}
 			}
 
-			//if (popup){
 			var lbl2 = new Gtk.Label("");
 			lbl2.hexpand = true;
 			box.add(lbl2);
-			//}
-			
+
 			if (dev.is_on_encrypted_partition && !dev.is_system_device && (popup || App.sidebar_lock)){
 				add_lock_button(box, dev);
 			}

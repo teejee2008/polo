@@ -66,7 +66,7 @@ public class SidebarItem : GLib.Object {
 		tooltip = bookmark.path;
 	}
 
-	public SidebarItem.from_device(Device _dev){
+	public SidebarItem.from_device(Device _dev, bool show_device_file_name){
 		type = SidebarItemType.DEVICE;
 		device = _dev;
 
@@ -74,7 +74,7 @@ public class SidebarItem : GLib.Object {
 		tooltip = device.tooltip_text();
 
 		if (device.pkname.length == 0){
-			name = device.description_simple();
+			name = device.description_simple(show_device_file_name);
 			type = SidebarItemType.HEADER_DISK;
 			node_key = device.kname;
 		}
