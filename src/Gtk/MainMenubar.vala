@@ -897,6 +897,8 @@ public class MainMenuBar : Gtk.MenuBar {
 	}
 	
 	private void add_dual_mode(Gtk.Menu submenu){
+
+		if (window.layout_box == null){ return; }
 		
 		var chk = new Gtk.CheckMenuItem.with_label (_("Dual Pane Mode"));
 		chk.active = (window.layout_box.get_panel_layout() == PanelLayout.DUAL_VERTICAL);

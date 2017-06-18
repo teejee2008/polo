@@ -129,10 +129,12 @@ public class IconManager : GLib.Object {
 		}
 	}
 
-	public static Gdk.Pixbuf? lookup_gicon(GLib.Icon gicon, int icon_size){
+	public static Gdk.Pixbuf? lookup_gicon(GLib.Icon? gicon, int icon_size){
 
 		Gdk.Pixbuf? pixbuf = null;
 
+		if (gicon == null){ return null; }
+		
 		try {
 			pixbuf = theme.lookup_by_gicon(gicon, icon_size, Gtk.IconLookupFlags.FORCE_SIZE).load_icon();
 		}

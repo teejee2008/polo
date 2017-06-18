@@ -561,6 +561,10 @@ public class Sidebar : Gtk.Box {
 		if (dev.is_snap_volume || dev.is_swap_volume){
 			return null;
 		}
+
+		if (dev.size_bytes < 100 * KB){
+			return null;
+		}
 		
 		var item = new SidebarItem.from_device(dev, popup);
 
@@ -892,7 +896,7 @@ public class Sidebar : Gtk.Box {
 
 	private void add_bookmark_edit_button(Gtk.Box box, GtkBookmark bm, Gtk.Box label_box, Gtk.Entry entry, Gtk.ListBoxRow row, Gtk.EventBox ebox_row){
 
-		var img = new Gtk.Image.from_pixbuf(IconManager.lookup("edit-symbolic", 12, true));
+		var img = IconManager.lookup_image("edit-rename", 12, true);
 
 		var ebox = new Gtk.EventBox();
 		ebox.add(img);

@@ -313,20 +313,24 @@ namespace TeeJee.GtkHelper{
 		Gtk.Image img_icon = null;
 
 		if ((icon_name.length == 0) && (fallback_icon_file_name.length == 0)){
-			return img_icon;
+			return null;
 		}
 		
 		try {
-			Gtk.IconTheme icon_theme = Gtk.IconTheme.get_default();
-			
-			pix_icon = icon_theme.load_icon_for_scale (
-				icon_name, Gtk.IconSize.MENU, icon_size, Gtk.IconLookupFlags.FORCE_SIZE);
+			if (icon_name.length > 0) {
 				
+				Gtk.IconTheme icon_theme = Gtk.IconTheme.get_default();
+				
+				pix_icon = icon_theme.load_icon_for_scale (
+					icon_name, Gtk.IconSize.MENU, icon_size, Gtk.IconLookupFlags.FORCE_SIZE);
+			}
 		}
 		catch (Error e) {
 			log_warning (e.message);
 		}
 
+		if (fallback_icon_file_name.length == 0){ return null; }
+		
 		string fallback_icon_file_path = "/usr/share/%s/%s".printf(icon_directory, fallback_icon_file_name);
 
 		if (pix_icon == null){

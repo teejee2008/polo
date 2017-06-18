@@ -1006,6 +1006,9 @@ public class Main : GLib.Object {
 			else if (dev.is_snap_volume || dev.is_swap_volume){
 				continue;
 			}
+			else if (dev.size_bytes < 100 * KB){
+				continue;
+			}
 			else{
 				list.add(dev);
 			}

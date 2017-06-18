@@ -740,10 +740,10 @@ public class Pathbar : Gtk.Box {
 		}
 
 		if ((panel.number == 1)||(panel.number == 3)){
-			img_open_other.pixbuf = get_shared_icon("go-next-symbolic","go-next-symbolic.svg",ICON_SIZE).pixbuf;
+			img_open_other.pixbuf = get_shared_icon("go-next","go-next.svg",ICON_SIZE).pixbuf;
 		}
 		else if ((panel.number == 2)||(panel.number == 4)){
-			img_open_other.pixbuf = get_shared_icon("go-previous-symbolic","go-previous-symbolic.svg",ICON_SIZE).pixbuf;
+			img_open_other.pixbuf = get_shared_icon("go-previous","go-previous.svg",ICON_SIZE).pixbuf;
 		}
 
 		// margins ----------------------------
@@ -989,7 +989,7 @@ public class Pathbar : Gtk.Box {
 		var ebox = gtk_add_event_box(box);
 		ebox_back = ebox;
 
-		var img = get_shared_icon("go-previous-symbolic", "", 16);
+		var img = IconManager.lookup_image("go-previous", 16);
 		ebox.add(img);
 		img_back = img;
 
@@ -1019,7 +1019,7 @@ public class Pathbar : Gtk.Box {
 		var ebox = gtk_add_event_box(box);
 		ebox_next = ebox;
 
-		var img = get_shared_icon("go-next-symbolic", "", 16);
+		var img = IconManager.lookup_image("go-next", 16);
 		ebox.add(img);
 		img_next = img;
 
@@ -1049,7 +1049,7 @@ public class Pathbar : Gtk.Box {
 		var ebox = gtk_add_event_box(box);
 		ebox_up = ebox;
 
-		var img = get_shared_icon("go-up-symbolic", "", 16);
+		var img = IconManager.lookup_image("go-up", 16);
 		ebox.add(img);
 		img_up = img;
 
@@ -1083,7 +1083,7 @@ public class Pathbar : Gtk.Box {
 		ebox.margin_right = 0;
 		ebox_open_other = ebox;
 
-		var img = get_shared_icon("go-next-symbolic","go-next-symbolic.svg",ICON_SIZE);
+		var img = IconManager.lookup_image("go-next", 16);
 		ebox.add(img);
 		img_open_other = img;
 
@@ -1107,7 +1107,7 @@ public class Pathbar : Gtk.Box {
 		ebox.margin_right = 3;
 		ebox_swap = ebox;
 
-		var img = get_shared_icon("switch","switch.svg",ICON_SIZE);
+		var img = IconManager.lookup_image("switch", 16);
 		ebox.add(img);
 		img_swap = img;
 
@@ -1130,7 +1130,7 @@ public class Pathbar : Gtk.Box {
 		ebox.margin_right = 3;
 		ebox_close = ebox;
 
-		var img = get_shared_icon("window-close","window-close.svg", 16);
+		var img = IconManager.lookup_image("window-close", 16);
 		ebox.add(img);
 		img_close = img;
 

@@ -479,28 +479,6 @@ public class Statusbar : Gtk.Box {
 		});
 	}
 
-	private void add_dual_pane_toggle(){
-
-		var img = get_shared_icon("view-dual-symbolic", "view-dual-symbolic.svg",16);
-		img.set_tooltip_text(_("Toggle dual-pane view"));
-		//img.margin_left = 6;
-		//img.margin_right = 6;
-
-		var ebox = new Gtk.EventBox();
-		ebox.add(img);
-		add(ebox);
-
-		// set hand cursor
-		if (ebox.get_realized()){
-			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-		}
-		else{
-			ebox.realize.connect(()=>{
-				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-			});
-		}
-	}
-
 	// refresh
 
 	public void refresh(){
