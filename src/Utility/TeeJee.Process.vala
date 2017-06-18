@@ -215,7 +215,8 @@ namespace TeeJee.ProcessHelper{
 
 		if (admin_mode){
 			
-			var script_admin = "#!/bin/bash\n";
+			var script_admin = "";
+			//script_admin += "#!/bin/bash\n";
 			script_admin += "pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY";
 			script_admin += " '%s'".printf(escape_single_quote(sh_path));
 

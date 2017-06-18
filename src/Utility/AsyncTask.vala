@@ -103,6 +103,8 @@ public abstract class AsyncTask : GLib.Object{
 		prg_count = 0;
 		prg_bytes = 0;
 		error_msg = "";
+
+		log_debug("AsyncTask: %s".printf(script_file));
 		
 		string[] spawn_args = new string[1];
 		spawn_args[0] = script_file;

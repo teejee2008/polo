@@ -3907,7 +3907,8 @@ public class FileViewList : Gtk.Box {
 		start_view_redraw();
 	}
 
-
+	// ISO ---------------------------------------
+	
 	public void mount_iso(){
 		
 		err_log_clear();
@@ -3973,30 +3974,20 @@ public class FileViewList : Gtk.Box {
 		task.boot_iso(item.file_path, App.get_kvm_config());
 	}
 
-	public void write_iso(){
+	public void write_iso(string target_device){
 		
 		var selected_items = get_selected_items();
 		if (selected_items.size == 0){ return; }
 		var item = selected_items[0];
-		
-		DesktopApp? etcher_app = DesktopApp.get_app_by_filename("appimagekit-Etcher.desktop");
 
-		if (etcher_app == null){
-			
-			string title = _("'Etcher' Not Found");
-			string msg = _("Polo uses the third-party application 'Etcher' to write ISO files to USB. Do you want me to download and install it for you?");
-			int resp = gtk_messagebox_yes_no(title, msg, window, true);
-
-			if (resp == Gtk.ResponseType.YES){
-				window.install_etcher();
-			}
-		}
-		else{
-			open(item, etcher_app);
-		}
+		var action = new ProgressPanelUsbWriterTask(pane);
+		action.set_parameters(item.file_path, target_device);
+		pane.file_operations.add(action);
+		action.execute();
 	}
 
-
+	// KVM ---------------------------------------
+	
 	public void kvm_create_disk(){
 		
 		err_log_clear();
@@ -4074,7 +4065,8 @@ public class FileViewList : Gtk.Box {
 		task.boot_iso_attach_disk(iso_file, item.file_path, App.get_kvm_config());
 	}
 
-
+	// PDF ---------------------------------------
+	
 	public void pdf_split(){
 
 		var selected_items = get_selected_items();

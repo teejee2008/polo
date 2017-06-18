@@ -2179,7 +2179,38 @@ public class Device : GLib.Object{
 	}
 
 	public string description_simple(){
-		return description_simple_formatted().replace("<b>","").replace("</b>","");
+		
+		string s = "";
+
+		if (type == "disk"){
+			if (vendor.length > 0){
+				s += " " + vendor;
+			}
+			if (model.length > 0){
+				s += " " + model;
+			}
+			if (size_bytes > 0) {
+				if (s.strip().length == 0){
+					s += "%s Device".printf(format_file_size(size_bytes, false, "", true, 0));
+				}
+				else{
+					s += " (%s)".printf(format_file_size(size_bytes, false, "", true, 0));
+				}
+			}
+			if (device.length > 0){
+				s += " ~ %s".printf(device);
+			}
+		}
+		else{
+			s += short_name_with_parent;
+			s += (label.length > 0) ? " (" + label + ")": "";
+			s += (fstype.length > 0) ? " ~ " + fstype : "";
+			if (size_bytes > 0) {
+				s += " (%s)".printf(format_file_size(size_bytes, false, "", true, 0));
+			}
+		}
+
+		return s.strip();
 	}
 
 	public string description_simple_formatted(){

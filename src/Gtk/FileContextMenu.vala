@@ -52,7 +52,8 @@ public enum FileActionType{
 	EXTRACT,
 	COMPRESS,
 	KVM_DISK_MERGE,
-	KVM_DISK_CONVERT
+	KVM_DISK_CONVERT,
+	ISO_WRITE
 }
 
 public class FileContextMenu : Gtk.Menu {
@@ -1415,7 +1416,7 @@ public class FileContextMenu : Gtk.Menu {
 		
 		add_boot_iso(sub_menu, sg_icon_sub, sg_label_sub);
 
-		//add_write_iso(sub_menu, sg_icon_sub, sg_label_sub);
+		add_write_iso(sub_menu, sg_icon_sub, sg_label_sub);
 	}
 	
 	private void add_mount_iso(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
@@ -1470,17 +1471,52 @@ public class FileContextMenu : Gtk.Menu {
 
 		var menu_item = gtk_menu_add_item(
 			menu,
-			_("Write USB"),
+			_("Write to USB"),
 			_("Write ISO file to USB drive"),
 			null,//get_shared_icon("media-cdrom","",16),
 			sg_icon,
 			sg_label);
 
-		menu_item.activate.connect (() => {
-			view.write_iso();
-		});
-
 		menu_item.sensitive = true;
+
+		var sub_menu = new Gtk.Menu();
+		//sub_menu.reserve_toggle_size = false;
+		menu_item.submenu = sub_menu;
+
+		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		var sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+
+		var list = Main.get_devices();
+		
+		bool devices_available = false;
+		
+		foreach(var dev in list){
+		
+			if (dev.pkname.length > 0){ continue; }
+			if (!dev.removable){ continue; }
+			if (dev.size_bytes > 100 * GB){ continue; }
+			
+			var sub_menu_item = gtk_menu_add_item(
+				sub_menu,
+				dev.description_simple(),
+				"",
+				null,//get_shared_icon("media-cdrom","",16),
+				sg_icon_sub,
+				sg_label_sub);
+
+			sub_menu_item.activate.connect (() => {
+				string txt = "%s".printf(_("Overwrite data on device?"));
+				string msg = dev.description_simple();
+				var resp = gtk_messagebox_yes_no(txt, msg, window, true);
+				if (resp == Gtk.ResponseType.YES){
+					view.write_iso(dev.device);
+				}
+			});
+
+			devices_available = true;
+		}
+
+		menu_item.sensitive = devices_available;
 	}
 
 
