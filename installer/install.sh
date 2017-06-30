@@ -7,7 +7,7 @@ start_command='polo-gtk'
 generic_depends=(ffmpeg mediainfo rsync pv p7zip p7zip-full tar gzip bzip2 xz-utils fish qemu-kvm qemu-utils)
 
 debian_depends=(ffmpeg mediainfo rsync pv p7zip p7zip-full tar gzip bzip2 xz-utils fish qemu-kvm qemu-utils)
-redhat_depends=(ffmpeg mediainfo rsync pv p7zip p7zip-plugins tar gzip bzip2 xz fish qemu-kvm qemu-img) #pdftk not in repos
+redhat_depends=(ffmpeg mediainfo rsync pv p7zip p7zip-plugins tar gzip bzip2 xz fish qemu-kvm qemu-img)
 arch_depends=(ffmpeg mediainfo rsync pv p7zip tar xz gzip bzip2 fish qemu)
 
 generic_recommends=()

@@ -603,6 +603,19 @@ public class Pathbar : Gtk.Box {
 			return false;
 		});
 
+		// connect signal for shift+F10
+        txt.popup_menu.connect(() => {
+			return true; // suppress right-click menu
+		});
+
+        // connect signal for right-click
+		txt.button_press_event.connect((w, event) => {
+			if (event.button == 3) {
+				return true; // suppress right-click menu
+			}
+			return false;
+		});
+		
 		txt.set_no_show_all(true);
 	}
 

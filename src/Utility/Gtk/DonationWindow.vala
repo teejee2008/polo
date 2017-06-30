@@ -32,6 +32,8 @@ using TeeJee.Misc;
 using TeeJee.GtkHelper;
 
 public class DonationWindow : Dialog {
+
+	private string username = "";
 	
 	public DonationWindow() {
 		
@@ -52,7 +54,6 @@ public class DonationWindow : Dialog {
 
 		get_action_area().visible = false;
 
-		// label
 		var label = new Gtk.Label("");
 
 		string msg = _("This application was created for my own use. I work on it during my free time based on my requirements and interest. I'm distributing it in the hope that it will be useful to someone.\n\n▰ You can leave a donation via PayPal if you wish to say thanks\n\n▰ Use the issue tracker to report issues, ask questions and request features\n\n▰ This application comes with absolutely no warranty. See the terms of the GNU General Public License v2 for more details.\n\nThanks,\nTony George");
@@ -69,18 +70,21 @@ public class DonationWindow : Dialog {
 		vbox_main.pack_start(hbox, false, false, 0);
 		
 		var bbox = new Gtk.ButtonBox(Orientation.HORIZONTAL);
-		bbox.set_layout(Gtk.ButtonBoxStyle.EXPAND);
+		//bbox.set_layout(Gtk.ButtonBoxStyle.EXPAND);
+		bbox.set_spacing(6);
 		bbox.set_homogeneous(false);
 		hbox.add(bbox);
 
-		string username = get_username();
+		if (get_user_id_effective() == 0){
+			username = get_username();
+		}
 		
 		//btn_donate_paypal
 		var button = new Gtk.Button.with_label(_("Donate with PayPal"));
 		button.set_tooltip_text("Donate to: teejeetech@gmail.com");
 		bbox.add(button);
 		button.clicked.connect(() => {
-			xdg_open("https://www.paypal.com/cgi-bin/webscr?business=teejeetech@gmail.com&cmd=_xclick&currency_code=USD&amount=10&item_name=Polo%20Donation");
+			xdg_open("https://www.paypal.com/cgi-bin/webscr?business=teejeetech@gmail.com&cmd=_xclick&currency_code=USD&amount=10&item_name=Polo%20Donation", username);
 		});
 
 		//btn_donate_wallet
@@ -88,11 +92,12 @@ public class DonationWindow : Dialog {
 		button.set_tooltip_text("https://www.patreon.com/bePatron?u=3059450");
 		bbox.add(button);
 		button.clicked.connect(() => {
-			xdg_open("https://www.patreon.com/bePatron?u=3059450");
+			xdg_open("https://www.patreon.com/bePatron?u=3059450", username);
 		});
 
 		bbox = new Gtk.ButtonBox(Orientation.HORIZONTAL);
-		bbox.set_layout(Gtk.ButtonBoxStyle.EXPAND);
+		//bbox.set_layout(Gtk.ButtonBoxStyle.EXPAND);
+		bbox.set_spacing(6);
 		bbox.set_homogeneous(false);
 		hbox.add(bbox);
 		
@@ -101,7 +106,7 @@ public class DonationWindow : Dialog {
 		button.set_tooltip_text("https://github.com/teejee2008/polo/issues");
 		bbox.add(button);
 		button.clicked.connect(() => {
-			xdg_open("https://github.com/teejee2008/polo/issues");
+			xdg_open("https://github.com/teejee2008/polo/issues", username);
 		});
 
 		//btn_visit
@@ -109,7 +114,7 @@ public class DonationWindow : Dialog {
 		button.set_tooltip_text("http://www.teejeetech.in");
 		bbox.add(button);
 		button.clicked.connect(() => {
-			xdg_open("http://www.teejeetech.in");
+			xdg_open("http://www.teejeetech.in", username);
 		});
 
 		//btn_visit
