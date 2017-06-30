@@ -110,6 +110,7 @@ public class ToolsWindow : Gtk.Dialog {
 		btn_refresh.clicked.connect(()=>{
 			gtk_set_busy(true,this);
 			App.check_all_tools();
+			App.check_all_plugins();
 			tv_refresh();
 			gtk_set_busy(false,this);
 		});
@@ -139,7 +140,7 @@ public class ToolsWindow : Gtk.Dialog {
 
 		TreeIter iter;
 		var list = new Gee.ArrayList<Tool>();
-		foreach (var tool in App.Tools.values){
+		foreach (var tool in App.tools.values){
 			list.add(tool);
 		}
 		CompareDataFunc<Tool> func = (a, b) => {

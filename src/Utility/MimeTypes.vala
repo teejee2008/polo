@@ -549,6 +549,19 @@ public class DesktopApp : GLib.Object {
 		}
 		return null;
 	}
+
+	public static Gee.ArrayList<DesktopApp> get_all_apps(){
+		
+		var list = new Gee.ArrayList<DesktopApp>();
+
+		foreach(var app in applist.values){
+			list.add(app);
+		}
+
+		list.sort((a,b) => { return strcmp(a.name,b.name); });
+
+		return list;
+	}
 	
 	//https://specifications.freedesktop.org/desktop-entry-spec/desktop-entry-spec-1.0.html#exec-variables
 }

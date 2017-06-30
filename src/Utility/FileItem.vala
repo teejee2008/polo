@@ -331,12 +331,13 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	}
 
 	public static FileItem? find_in_cache(string item_display_path){
+
 		if (cache.has_key(item_display_path)){
-			return cache[item_display_path];
+			var cached_item = cache[item_display_path];
+			//return cached_item;
 		}
-		else{
-			return null;
-		}
+
+		return null;
 	}
 	
 	// properties --------------------------------------
@@ -679,6 +680,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 	}
 
+	// check file type ----------------------
+	
 	public bool is_image{
 		get{
 			return content_type.has_prefix("image/");
@@ -700,6 +703,22 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	public bool is_video{
 		get{
 			return content_type.has_prefix("video/");
+		}
+	}
+
+	public bool is_pdf{
+		get{
+			return file_extension.down().has_suffix(".pdf")
+				|| (content_type == "application/pdf")
+				|| (content_type == "application/x-pdf");
+		}
+	}
+
+	public bool is_iso{
+		get{
+			return file_extension.down().has_suffix(".iso")
+				|| (content_type == "application/iso-image")
+				|| (content_type == "application/x-iso-image");
 		}
 	}
 
@@ -1935,40 +1954,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 		return list;
 	}
-
-	/*public Gtk.Image get_icon_image(){
-
-		log_debug("FileItem.get_icon_image()");
-
-		var image = get_shared_icon("gtk-directory","gtk-directory.png",16);
-
-		if (is_archive) {
-			image.icon_name = "gnome-mime-application-x-archive";
-		}
-		else{
-			if ((content_type.length == 0) && (icon == null)){
-				query_file_info();
-			}
-
-			if ((icon != null) && file_path.has_prefix("/")) {
-				image.gicon = icon;
-				log_debug("using gicon for: %s".printf(file_name));
-			}
-			//else if (item.is_symlink) {
-			//	(cell as Gtk.CellRendererPixbuf).icon_name = "emblem-symbolic-link";
-			//}
-			else if (file_type == FileType.DIRECTORY) {
-				image.icon_name = "gtk-directory";
-			}
-			else{
-				image.icon_name = "gtk-file";
-			}
-		}
-
-		// TODO: use ThemedIcon?
-
-		return image;
-	}*/
 
 	// monitor
 

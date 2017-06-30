@@ -96,8 +96,8 @@ namespace TeeJee.Logging{
 
 		msg += "\n";
 
-		stdout.printf (msg);
-		stdout.flush();
+		stderr.printf (msg);
+		stderr.flush();
 		
 		try {
 			string str = "[%s] %s: %s\n".printf(timestamp(), prefix, message);

@@ -62,7 +62,6 @@ public class CreateArchiveWindow : Gtk.Dialog {
 	
 	private bool show_comp_advanced = false;
 	private bool show_enc_advanced = false;
-	private bool show_commands = false;
 	private bool add_files_thread_is_running = false;
 	private bool add_files_thread_cancelled = false;
 	
@@ -70,8 +69,6 @@ public class CreateArchiveWindow : Gtk.Dialog {
 	private Gtk.Button btn_commands;
 	private Gtk.Button btn_compress;
 	private Gtk.Button btn_cancel;
-	private Gtk.TextView txtview_commands;
-	private Gtk.ScrolledWindow sw_commands;
 
 	private bool window_is_ready = false;
 	//private uint tmr_init = 0;
@@ -793,7 +790,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		// button
 		var button = new Gtk.Button.with_label("");
 		button.always_show_image = true;
-		button.image = get_shared_icon("", "config.svg", 18);
+		button.image = IconManager.lookup_image("config", 18);
 		button.set_tooltip_text (_("Advanced options"));
 		hbox.add(button);
 		btn_level_advanced = button;
@@ -1713,14 +1710,14 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		*/
 		
 		// icon left
-		var img = get_shared_icon("gtk-config","config.svg",16);
+		var img = IconManager.lookup_image("config",16);
 		if (img != null){
 			//txt_password.primary_icon_pixbuf = img.pixbuf;
 		}
 		//txt.set_icon_tooltip_text(EntryIconPosition.PRIMARY, _("Generate Random Password"));
 
 		// icon right
-		img = get_shared_icon("gtk-lock","lock.svg",16);
+		img = IconManager.lookup_image("lock",16);
 		if (img != null){
 			txt_password.secondary_icon_pixbuf = img.pixbuf;
 		}
@@ -1744,7 +1741,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		// button
 		var button = new Gtk.Button.with_label("");
 		button.always_show_image = true;
-		button.image = get_shared_icon("", "config.svg", 18);
+		button.image = IconManager.lookup_image("config", 18);
 		button.set_tooltip_text (_("Advanced options"));
 		hbox.add(button);
 
@@ -1994,10 +1991,6 @@ public class CreateArchiveWindow : Gtk.Dialog {
 	}
 
 	// action buttons --------------------------------------------------
-
-	private void init_info() {
-
-	}
 
 	private void init_tooltip_messages() {
 		/*string tt_method = _("<b>Compression Method</b>\n\n<b>Store</b> - Store files without compression\n\n<b>LZMA</b> - Good compression and very fast decompression\n\n<b>LZMA2</b> - Modified version of LZMA with better compression ratio for partially-compressible data, and better multi-threading support\n\n<b>PPMd</b> - Very good compression for text files (better than LZMA)\n\n<b>Deflate</b> - Very fast compression and decompression");

@@ -23,21 +23,26 @@ sudo mount -t proc proc  "$path/proc"
 
 sudo cp /etc/resolv.conf "$path/etc/resolv.conf"
 
+xhost +local: 
 tput reset
 
 echo "====================================================="
-echo "Entering chroot environment... Type 'exit' to quit"
+echo "Entering chroot environment... "
 echo "====================================================="
-echo " - Network and X-Window apps are enabled"
+echo "Network and display sharing is enabled. "
+echo "You can connect to the internet, and run GUI apps."
+echo "Type 'exit' to quit the session"
+echo ""
 
-sudo chroot "$path" "export DISPLAY=:0.0"
-xhost +
+sudo chroot "$path" /bin/bash -c "export DISPLAY=$DISPLAY"
 sudo chroot "$path"
 
-sudo umount --force --recursive "$path/dev"
-sudo umount --force --recursive "$path/run"
-sudo umount --force --recursive "$path/sys"
-sudo umount --force --recursive "$path/proc"
+sync
+
+sudo umount --lazy --force --recursive "$path/dev"
+sudo umount --lazy --force --recursive "$path/run"
+sudo umount --lazy --force --recursive "$path/sys"
+sudo umount --lazy --force --recursive "$path/proc"
 
 echo "==============================="
 echo "Exited chroot environment"

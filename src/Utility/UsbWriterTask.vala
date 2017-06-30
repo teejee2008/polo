@@ -40,6 +40,8 @@ public class UsbWriterTask : AsyncTask {
 	public string device = "";
 	public string iso_file = "";
 
+	public string error_log = "";
+	
 	public UsbWriterTask(){
 		init_regular_expressions();
 	}
@@ -68,14 +70,15 @@ public class UsbWriterTask : AsyncTask {
 
 	private string build_script() {
 	
-		var cmd = "dd";
+		//var cmd = "dd";
+		//cmd += " if='%s'".printf(iso_file);
+		//cmd += " of='%s'".printf(device);
+		//cmd += " bs=8M status=progress oflag=direct";
 
-		cmd += " if='%s'".printf(iso_file);
-
-		cmd += " of='%s'".printf(device);
-
-		cmd += " bs=8M status=progress oflag=direct";
-
+		string cmd = "polo-iso write";
+		cmd += " --iso '%s'".printf(iso_file);
+		cmd += " --device '%s'".printf(device);
+		
 		return cmd;
 	}
 	
@@ -100,18 +103,16 @@ public class UsbWriterTask : AsyncTask {
 	}
 
 	public override void parse_stdout_line(string out_line){
-		if (is_terminated) {
-			return;
-		}
 		
+		if (is_terminated) { return; }
+
 		update_progress_parse_console_output(out_line);
 	}
 	
 	public override void parse_stderr_line(string err_line){
-		if (is_terminated) {
-			return;
-		}
 		
+		if (is_terminated) { return; }
+
 		update_progress_parse_console_output(err_line);
 	}
 
@@ -119,10 +120,16 @@ public class UsbWriterTask : AsyncTask {
 
 		if ((line == null) || (line.length == 0)) { return true; }
 
+		// dd and polo-iso write output to stderr
+		
 		MatchInfo match;
 		if (regex_list["status"].match(line, 0, out match)) {
 			bytes_completed = int64.parse(match.fetch(1));
 			progress = (bytes_completed * 1.0) / bytes_total;
+		}
+		else if (line.has_prefix("E:")){
+			error_log += "%s\n".printf(line);
+			log_error(line);
 		}
 
 		return true;
@@ -144,9 +151,14 @@ public class UsbWriterTask : AsyncTask {
 		return -1;
 	}
 
+	public new string get_error_message(){
+		return error_log;
+	}
+
 	// stats
 
 	public string stat_status_line{
+		
 		owned get{
 			var txt = "";
 			

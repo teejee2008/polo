@@ -207,12 +207,9 @@ public class LayoutPanel : Gtk.Box {
 	}
 
 	
-	public void run_script_in_new_terminal_tab(string command, string desc){
+	public TermBox run_script_in_new_terminal_tab(string command, string desc){
 		
-		var tab = add_tab();
-		tab.select_tab();
-		tab.pane.terminal.toggle();
-		tab.pane.maximize_terminal();
+		var tab = add_new_terminal_tab();
 
 		string cmd = "";
 		cmd += "reset\n";
@@ -231,7 +228,17 @@ public class LayoutPanel : Gtk.Box {
 		var sh = save_bash_script_temp(cmd);
 		cmd = "sh '%s'".printf(sh);
 		tab.pane.terminal.feed_command(cmd);
+		return tab.pane.terminal;
 	}
+
+	public FileViewTab add_new_terminal_tab(){
+		var tab = add_tab();
+		tab.select_tab();
+		tab.pane.terminal.toggle();
+		tab.pane.maximize_terminal();
+		return tab;
+	}
+	
 	
 	// properties
 	

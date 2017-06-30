@@ -291,12 +291,7 @@ public class AboutWindow : Dialog {
 		vbox_logo.add(lbtn_website);
 
 		lbtn_website.activate_link.connect(()=>{
-			try{
-				return xdg_open(lbtn_website.uri, username); 
-			}
-			catch(Error e){
-				return false;
-			}
+			return xdg_open(lbtn_website.uri, username); 
 		});
 
 		//copyright
@@ -496,12 +491,7 @@ public class AboutWindow : Dialog {
 			}
 
 			link.activate_link.connect(()=>{
-				try{
-					return xdg_open(link.uri, username); 
-				}
-				catch(Error e){
-					return false;
-				}
+				return xdg_open(link.uri, username); 
 			});
 		}
 		else{

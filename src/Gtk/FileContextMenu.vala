@@ -102,6 +102,10 @@ public class FileContextMenu : Gtk.Menu {
 
 		log_debug("FileContextMenu: build_file_menu()");
 
+		log_trace("build_file_menu()");
+		var timer = timer_start();
+		var subtimer = timer_start();
+		
 		Gdk.RGBA gray = Gdk.RGBA();
 		gray.parse("rgba(200,200,200,1)");
 
@@ -117,9 +121,13 @@ public class FileContextMenu : Gtk.Menu {
 
 		add_open(this, sg_icon, sg_label);
 
-		//add_file_compare();
-
+		log_trace("context menu created: open: %s".printf(timer_elapsed_string(subtimer)));
+		timer_restart(subtimer);
+		
 		add_new(this, sg_icon, sg_label);
+
+		log_trace("context menu created: new: %s".printf(timer_elapsed_string(subtimer)));
+		timer_restart(subtimer);
 
 		gtk_menu_add_separator(this); //---------------------------
 
@@ -155,6 +163,8 @@ public class FileContextMenu : Gtk.Menu {
 
 		add_properties(this, sg_icon, sg_label);
 
+		log_trace("context menu created: %s".printf(timer_elapsed_string(timer)));
+		 
 		show_all();
 	}
 
@@ -284,7 +294,7 @@ public class FileContextMenu : Gtk.Menu {
 					//_("Open With") + " " +
 					app.name,
 					_("Open with default application"),
-					get_shared_icon(app.icon, "folder-open.png",16),
+					IconManager.lookup_image(app.icon,16),
 					sg_icon,
 					sg_label);
 			}
@@ -309,6 +319,7 @@ public class FileContextMenu : Gtk.Menu {
 
 		menu_item.sensitive = (selected_items.size > 0);
 	}
+
 	
 	private void add_open_with(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
@@ -326,6 +337,8 @@ public class FileContextMenu : Gtk.Menu {
 
 		menu_item.sensitive = (selected_items.size > 0);
 
+		// sub menu ------------------------------------------
+		
 		var sub_menu = new Gtk.Menu();
 		sub_menu.reserve_toggle_size = false;
 		menu_item.submenu = sub_menu;
@@ -349,7 +362,7 @@ public class FileContextMenu : Gtk.Menu {
 				sub_menu,
 				supported_app.name,
 				_("Open With") + " " + supported_app.name,
-				get_shared_icon(supported_app.icon,"",16),
+				IconManager.lookup_image(supported_app.icon,16),
 				sg_icon_sub,
 				sg_label_sub);
 
@@ -360,8 +373,62 @@ public class FileContextMenu : Gtk.Menu {
 
 		sub_menu.show_all();
 
-		menu_item.sensitive = (selected_items.size > 0);
+		gtk_menu_add_separator(sub_menu);
+
+		add_open_with_others(sub_menu, sg_icon_sub, sg_label_sub);
 	}
+
+	private void add_open_with_others(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		log_debug("FileContextMenu: add_open_with_others()");
+
+		if (selected_item == null){ return; }
+		
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Other"),
+			_("Open with other applications"),
+			null,
+			sg_icon,
+			sg_label);
+
+		menu_item.sensitive = (selected_items.size > 0);
+
+		menu_item.activate.connect(() => {
+			var file = view.get_selected_items().get(0);
+			DesktopApp? app = choose_app(file);
+			if (app != null){
+				view.open(file, app);
+			}
+		});
+	}
+
+	private DesktopApp? choose_app(FileItem file_item){
+
+		var file = File.new_for_path(file_item.file_path);
+		
+		var dialog = new Gtk.AppChooserDialog(window, Gtk.DialogFlags.MODAL, file);
+
+		string desktop_file_name = "";
+		
+		if (dialog.run() == Gtk.ResponseType.OK) {
+			
+			var info = dialog.get_app_info();
+			
+			if (info != null) {
+				desktop_file_name = info.get_id();
+			}
+		}
+		
+		dialog.close();
+
+		if (DesktopApp.applist.has_key(desktop_file_name)){
+			return DesktopApp.applist[desktop_file_name];
+		}
+		
+		return null;
+	}
+
 
 	private void add_set_default_app(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
@@ -402,7 +469,7 @@ public class FileContextMenu : Gtk.Menu {
 				sub_menu,
 				supported_app.name,
 				_("Set as Default and Open With") + " " + supported_app.name,
-				get_shared_icon(supported_app.icon,"",16),
+				IconManager.lookup_image(supported_app.icon,16),
 				sg_icon_sub,
 				sg_label_sub);
 
@@ -413,7 +480,34 @@ public class FileContextMenu : Gtk.Menu {
 
 		sub_menu.show_all();
 
+		gtk_menu_add_separator(sub_menu);
+
+		add_set_default_app_others(sub_menu, sg_icon_sub, sg_label_sub);
+	}
+
+	private void add_set_default_app_others(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		log_debug("FileContextMenu: add_set_default_app_others()");
+
+		if (selected_item == null){ return; }
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Others"),
+			_("Set default application for file type"),
+			null,
+			sg_icon,
+			sg_label);
+
 		menu_item.sensitive = (selected_items.size > 0);
+
+		menu_item.activate.connect(() => {
+			var file = view.get_selected_items().get(0);
+			DesktopApp? app = choose_app(file);
+			if (app != null){
+				view.set_default_app(file, app);
+			}
+		});
 	}
 
 
@@ -589,7 +683,7 @@ public class FileContextMenu : Gtk.Menu {
 			this,
 			_("Open Terminal (Admin)"),
 			_("Open an administrator terminal window"),
-			get_shared_icon("terminal","",16),
+			IconManager.lookup_image("terminal",16),
 			sg_icon,
 			sg_label);
 
@@ -874,7 +968,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Run in Terminal"),
 			_("Run the selected script in a terminal window"),
-			get_shared_icon("terminal","",16),
+			IconManager.lookup_image("terminal",16),
 			sg_icon,
 			sg_label);
 
@@ -1235,7 +1329,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Restore"),
 			_("Restore item to the original location"),
-			get_shared_icon("gtk-add","file-add.png",16),
+			IconManager.lookup_image("list-add",16),
 			sg_icon,
 			sg_label);
 
@@ -1379,7 +1473,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Disk Usage"),
 			_("Analyze disk usage"),
-			null,//get_shared_icon(baobab.icon,"",16),
+			null,
 			sg_icon,
 			sg_label);
 
@@ -1431,7 +1525,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Mount"),
 			_("Mount the ISO file as a read-only disk"),
-			null, //get_shared_icon("media-cdrom","",16),
+			null,
 			sg_icon,
 			sg_label);
 
@@ -1450,9 +1544,9 @@ public class FileContextMenu : Gtk.Menu {
 
 		var menu_item = gtk_menu_add_item(
 			menu,
-			_("Boot"),
-			_("Boot ISO file in QEMU/KVM virtual machine"),
-			null,//get_shared_icon("media-cdrom","",16),
+			_("Boot in VM"),
+			_("Boot ISO file in QEMU-KVM virtual machine"),
+			null,
 			sg_icon,
 			sg_label);
 
@@ -1465,7 +1559,9 @@ public class FileContextMenu : Gtk.Menu {
 		
 		if (selected_item == null){ return; }
 
-		if (!selected_item.file_name.has_suffix(".iso")){ return; }
+		if (!selected_item.is_iso){ return; }
+
+		if (!App.tool_exists("polo-iso")) { return; }
 
 		log_debug("FileContextMenu: add_write_iso()");
 
@@ -1473,7 +1569,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Write to USB"),
 			_("Write ISO file to USB drive"),
-			null,//get_shared_icon("media-cdrom","",16),
+			null,
 			sg_icon,
 			sg_label);
 
@@ -1500,23 +1596,29 @@ public class FileContextMenu : Gtk.Menu {
 				sub_menu,
 				dev.description_simple(),
 				"",
-				null,//get_shared_icon("media-cdrom","",16),
+				null,
 				sg_icon_sub,
 				sg_label_sub);
 
 			sub_menu_item.activate.connect (() => {
-				string txt = "%s".printf(_("Overwrite data on device?"));
-				string msg = dev.description_simple();
-				var resp = gtk_messagebox_yes_no(txt, msg, window, true);
-				if (resp == Gtk.ResponseType.YES){
-					view.write_iso(dev.device);
-				}
+				view.write_iso(dev);
 			});
 
 			devices_available = true;
 		}
 
-		menu_item.sensitive = devices_available;
+		if (!devices_available){
+			
+			var sub_menu_item2 = gtk_menu_add_item(
+				sub_menu,
+				_("No USB devices found"),
+				_("Connect a USB device and come back to this menu"),
+				null,
+				sg_icon_sub,
+				sg_label_sub);
+				
+			sub_menu_item2.sensitive = false;
+		}
 	}
 
 
@@ -1550,6 +1652,8 @@ public class FileContextMenu : Gtk.Menu {
 		add_create_disk_derived(sub_menu, sg_icon_sub, sg_label_sub);
 
 		add_create_disk_merged(sub_menu, sg_icon_sub, sg_label_sub);
+		
+		add_mount_disk(sub_menu, sg_icon_sub, sg_label_sub);
 
 		add_install_disk(sub_menu, sg_icon_sub, sg_label_sub);
 
@@ -1566,7 +1670,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Create Disk..."),
 			_("Create a virtual hard disk file"),
-			null,//get_shared_icon("media-cdrom","",16),
+			null,
 			sg_icon,
 			sg_label);
 
@@ -1583,7 +1687,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Create Derived Disk..."),
 			_("Create a virtual hard disk file that uses selected disk as the base"),
-			null,//get_shared_icon("media-cdrom","",16),
+			null,
 			sg_icon,
 			sg_label);
 
@@ -1603,7 +1707,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Create Merged Disk..."),
 			_("Create a virtual hard disk file by merging selected derived disk with it's base"),
-			null,//get_shared_icon("media-cdrom","",16),
+			null,
 			sg_icon,
 			sg_label);
 
@@ -1623,7 +1727,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Boot Disk"),
 			_("Boot the selected disk in a virtual machine"),
-			null,//get_shared_icon("media-cdrom","",16),
+			null,
 			sg_icon,
 			sg_label);
 
@@ -1635,6 +1739,27 @@ public class FileContextMenu : Gtk.Menu {
 		menu_item.sensitive = (selected_item != null) && KvmTask.is_supported_disk_format(selected_item.file_path);
 	}
 
+	private void add_mount_disk(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		log_debug("FileContextMenu: add_mount_disk()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Mount Disk"),
+			_("Mount the selected disk"),
+			null,
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			if (selected_item == null){ return; }
+			view.kvm_mount_disk();
+		});
+
+		menu_item.sensitive = (selected_item != null) && (selected_item.file_extension == ".qcow2");
+	}
+
+
 	private void add_install_disk(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 		
 		log_debug("FileContextMenu: add_install_disk()");
@@ -1643,7 +1768,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Install from ISO..."),
 			_("Boot from an ISO file with the selected disk attached"),
-			null,//get_shared_icon("media-cdrom","",16),
+			null,
 			sg_icon,
 			sg_label);
 
@@ -1665,7 +1790,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Convert to..."),
 			"",
-			null,//IconManager.lookup_image("kvm",16),
+			null,
 			sg_icon,
 			sg_label);
 
@@ -1717,7 +1842,7 @@ public class FileContextMenu : Gtk.Menu {
 				sub_menu,
 				format,
 				"",
-				null,//get_shared_icon("media-cdrom","",16),
+				null,
 				sg_icon_sub,
 				sg_label_sub);
 
@@ -1732,7 +1857,9 @@ public class FileContextMenu : Gtk.Menu {
 
 		if (selected_item == null){ return; }
 
-		if (!selected_item.file_extension.down().has_suffix(".pdf")){ return; }
+		if (!selected_item.is_pdf){ return; }
+
+		if (!App.tool_exists("polo-pdf")) { return; }
 		
 		log_debug("FileContextMenu: add_pdf_actions()");
 
@@ -1784,7 +1911,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Split Pages"),
 			_("Split PDF document by page"),
-			null,//get_shared_icon("media-cdrom","",16),
+			null,
 			sg_icon,
 			sg_label);
 
@@ -1801,7 +1928,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Merge Pages"),
 			_("Merge selected PDF files into one document"),
-			null,//get_shared_icon("media-cdrom","",16),
+			null,
 			sg_icon,
 			sg_label);
 
@@ -1818,7 +1945,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Add Password"),
 			_("Protect the PDF document by adding password"),
-			null,//get_shared_icon("media-cdrom","",16),
+			null,
 			sg_icon,
 			sg_label);
 
@@ -1835,7 +1962,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Remove Password"),
 			_("Unprotect the PDF document by removing password"),
-			null,//get_shared_icon("media-cdrom","",16),
+			null,
 			sg_icon,
 			sg_label);
 
@@ -1852,7 +1979,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Remove Colors"),
 			_("Remove colors from PDF document"),
-			null,//get_shared_icon("media-cdrom","",16),
+			null,
 			sg_icon,
 			sg_label);
 
@@ -1869,7 +1996,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Uncompress"),
 			_("Uncompress PDF document"),
-			null,//get_shared_icon("media-cdrom","",16),
+			null,
 			sg_icon,
 			sg_label);
 
@@ -1886,7 +2013,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Reduce File Size"),
 			_("Reduce the file size of PDF document by downscaling images. Use the 'Optimize For' submenu for more options."),
-			null,//get_shared_icon("media-cdrom","",16),
+			null,
 			sg_icon,
 			sg_label);
 
@@ -1903,7 +2030,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Optimize For"),
 			"",
-			null,//IconManager.lookup_image("kvm",16),
+			null,
 			sg_icon,
 			sg_label);
 
@@ -1924,7 +2051,7 @@ public class FileContextMenu : Gtk.Menu {
 				sub_menu,
 				format,
 				"",
-				null,//get_shared_icon("media-cdrom","",16),
+				null,
 				sg_icon_sub,
 				sg_label_sub);
 
@@ -1942,7 +2069,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Rotate Pages"),
 			"",
-			null,//IconManager.lookup_image("kvm",16),
+			null,
 			sg_icon,
 			sg_label);
 
@@ -1963,7 +2090,7 @@ public class FileContextMenu : Gtk.Menu {
 				sub_menu,
 				direction,
 				"",
-				null,//get_shared_icon("media-cdrom","",16),
+				null,
 				sg_icon_sub,
 				sg_label_sub);
 
@@ -2035,11 +2162,6 @@ public class FileContextMenu : Gtk.Menu {
 }
 
 public class SortMenu : Gtk.Menu {
-
-	private Gtk.SizeGroup sg_icon;
-	private Gtk.SizeGroup sg_label;
-	private bool is_trash = false;
-	private bool is_archive = false;
 
 	// parents
 	public FileViewList view;

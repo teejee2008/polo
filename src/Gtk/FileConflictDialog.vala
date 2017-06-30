@@ -436,7 +436,6 @@ public class FileConflictDialog : Gtk.Dialog {
 
 			if (sel.iter_is_selected (iter)){
 
-				string name;
 				FileConflictItem conflict;
 				store.get (iter, 0, out conflict);
 

@@ -448,23 +448,6 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 
 		//hbox_actions.set_size_request(def_width, -1);
 		
-		//btn_background ---------------------------------------------------
-
-		/*btn_background = new Gtk.Button.from_stock ("gtk-execute");
-		btn_background.set_tooltip_text (_("Run in background with lower priority"));
-		hbox_actions.add(btn_background);
-
-		btn_background.label = _("Background");
-		btn_background.always_show_image = true;
-		btn_background.image_position = PositionType.LEFT;
-		btn_background.image = get_shared_icon("gtk-execute", "gtk-execute.png", 16);
-		
-		btn_background.clicked.connect(() => {
-			task.background_mode = true;
-			task.set_priority();
-			//this.iconify();
-		});*/
-
 		//btn_pause ---------------------------------------------------
 
 		btn_pause = new Gtk.Button.from_stock ("gtk-media-pause");
@@ -474,7 +457,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		btn_pause.label = _("Pause");
 		btn_pause.always_show_image = true;
 		btn_pause.image_position = PositionType.LEFT;
-		btn_pause.image = get_shared_icon("gtk-media-pause", "gtk-media-pause.png", 16);
+		btn_pause.image = IconManager.lookup_image("gtk-media-pause", 16);
 
 		btn_pause.clicked.connect(() => {
 			switch (task.status) {
@@ -494,12 +477,12 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 			case AppStatus.RUNNING:
 				btn_pause.label = _("Pause");
 				btn_pause.set_tooltip_text (_("Pause"));
-				btn_pause.image = get_shared_icon("gtk-media-pause", "gtk-media-pause.png", 16);
+				btn_pause.image = IconManager.lookup_image("gtk-media-pause", 16);
 				break;
 			case AppStatus.PAUSED:
 				btn_pause.label = _("Resume");
 				btn_pause.set_tooltip_text (_("Resume"));
-				btn_pause.image = get_shared_icon("stock_media-play", "gtk-media-play.png", 16);
+				btn_pause.image = IconManager.lookup_image("gtk-media-play", 16);
 				break;
 			}
 		});
@@ -513,7 +496,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		btn_stop.label = _("Stop");
 		btn_stop.always_show_image = true;
 		btn_stop.image_position = PositionType.LEFT;
-		btn_stop.image = get_shared_icon("gtk-media-stop", "gtk-media-stop.png", 16);
+		btn_stop.image = IconManager.lookup_image("gtk-media-stop", 16);
 
 		btn_stop.clicked.connect(() => {
 			cancel();
@@ -532,7 +515,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		btn_finish.label = _("OK");
 		btn_finish.always_show_image = true;
 		btn_finish.image_position = PositionType.LEFT;
-		btn_finish.image = get_shared_icon("gtk-ok", "gtk-ok.png", 16);
+		btn_finish.image = IconManager.lookup_image("gtk-ok", 16);
 
 		btn_finish.clicked.connect(() => {
 			finish();
@@ -624,7 +607,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		task.progress = 0.0;
 
 		btn_pause.set_tooltip_text (_("Pause"));
-		btn_pause.image = get_shared_icon("gtk-media-pause", "gtk-media-pause.png", 16);
+		btn_pause.image = IconManager.lookup_image("gtk-media-pause", 16);
 	}
 	
 	public override bool update_status(){
@@ -753,8 +736,8 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 			switch (task.action){
 			case ArchiveAction.TEST:
 			case ArchiveAction.EXTRACT:
-				if (task.error_msg.length > 0){
-					gtk_messagebox("",_("There were errors while processing the archive.") + "\n\n" + task.error_msg, window, true);
+				if (task.get_error_message().length > 0){
+					gtk_messagebox("",_("There were errors while processing the archive.") + "\n\n" + task.get_error_message(), window, true);
 				}
 				break;
 			}

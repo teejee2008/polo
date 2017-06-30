@@ -41,6 +41,9 @@ public const string AppVersion = "17.6 (BETA 7)";
 public const string AppAuthor = "Tony George";
 public const string AppAuthorEmail = "teejeetech@gmail.com";
 
+public const int PLUGIN_VER_ISO = 2;
+public const int PLUGIN_VER_PDF = 2;
+
 const string GETTEXT_PACKAGE = "";
 const string LOCALE_DIR = "/usr/share/locale";
 
@@ -72,7 +75,9 @@ public class Main : GLib.Object {
 
 	public SysInfo sysinfo;
 
-	public Gee.HashMap<string,Tool> Tools = new Gee.HashMap<string,Tool>();
+	public Gee.HashMap<string,Tool> tools = new Gee.HashMap<string,Tool>();
+
+	public Gee.HashMap<string,Plugin> plugins = new Gee.HashMap<string,Plugin>();
 
 	public string temp_dir = "";
 	public string current_dir = "";
@@ -152,6 +157,16 @@ public class Main : GLib.Object {
 	public bool confirm_delete = true;
 	public bool confirm_trash = true;
 
+	public bool overwrite_pdf_split = false;
+	public bool overwrite_pdf_merge = false;
+	public bool overwrite_pdf_compress = false;
+	public bool overwrite_pdf_uncompress = false;
+	public bool overwrite_pdf_protect = false;
+	public bool overwrite_pdf_unprotect = false;
+	public bool overwrite_pdf_decolor = false;
+	public bool overwrite_pdf_optimize = false;
+	public bool overwrite_pdf_rotate = false;
+
 	public bool tabs_bottom = false;
 	public bool tabs_close_visible = true;
 
@@ -222,6 +237,9 @@ public class Main : GLib.Object {
 	public bool tileview_thumbs = true;
 	public bool tileview_transparency = true;
 
+	public bool plugin_obsolete_iso = false;
+	public bool plugin_obsolete_pdf = false;
+
 	public Gee.ArrayList<string> mediaview_exclude = new Gee.ArrayList<string>();
 	public Gee.ArrayList<string> mediaview_include = new Gee.ArrayList<string>();
 
@@ -232,6 +250,8 @@ public class Main : GLib.Object {
 	public MainWindow main_window = null;
 
 	public TrashCan trashcan;
+
+	public RCloneClient rclone;
 
 	public string admin_pass = "";
 
@@ -374,6 +394,8 @@ public class Main : GLib.Object {
 		trashcan = new TrashCan(user_id_effective, user_name_effective, user_home_effective);
 		trashcan.query_items(false);
 
+		rclone = new RCloneClient();
+
 		/*foreach(var app in DesktopApp.applist.values){
 			if (app.desktop_file_name == "crunchy.desktop"){
 				crunchy_app = app;
@@ -394,7 +416,9 @@ public class Main : GLib.Object {
 			chmod(dst_path, "u+rw", null);
 		}
 
-		init_tools_list();
+		init_tools();
+
+		init_plugins();
 
 		load_app_config();
 	}
@@ -429,25 +453,27 @@ public class Main : GLib.Object {
 		}
 	}
 
-	public void init_tools_list(){
+	public void init_tools(){
 		
 		//Encoders["avconv"] = new Encoder("avconv","Libav Encoder","Audio-Video Decoding");
-		Tools["ffmpeg"] = new Tool("ffmpeg","FFmpeg Encoder","Generate thumbnails for video");
-		Tools["mediainfo"] = new Tool("mediainfo","MediaInfo","Read media properties from audio and video files");
-		Tools["exiftool"] = new Tool("exiftool","ExifTool","Read EXIF properties from JPG/TIFF/PNG/PDF files");
-		Tools["tar"] = new Tool("tar","tar","Read and extract TAR archives");
-		Tools["7z"] = new Tool("7z","7zip","Read and extract multiple archive formats");
-		Tools["lzop"] = new Tool("lzop","lzop","Read and extract LZO archives");
-		Tools["pv"] = new Tool("pv","pv","Get progress info for compression and extraction");
-		Tools["lsblk"] = new Tool("lsblk","lsblk","Read device information");
-		Tools["udisksctl"] = new Tool("udisksctl","udisksctl","Mount and unmount devices");
-		Tools["cryptsetup"] = new Tool("cryptsetup","cryptsetup","Unlock encrypted LUKS devices");
-		Tools["xdg-mime"] = new Tool("xdg-mime","xdg-mime","Set file type associations");
-		Tools["fish"] = new Tool("fish","Fish Shell","Terminal Shell");
-		Tools["kvm"] = new Tool("kvm","Qemu-Kvm Emulator","Virtual Machine Emulator");
-		Tools["pdftk"] = new Tool("pdftk","pdftk","Converting PDF files");
-		Tools["convert"] = new Tool("convert","convert","Converting images and PDF documents");
-		Tools["gs"] = new Tool("gs","ghostscript","Ghostscript - Converting PDF files");
+		tools["ffmpeg"] = new Tool("ffmpeg","FFmpeg Encoder","Generate thumbnails for video");
+		tools["mediainfo"] = new Tool("mediainfo","MediaInfo","Read media properties from audio and video files");
+		tools["exiftool"] = new Tool("exiftool","ExifTool","Read EXIF properties from JPG/TIFF/PNG/PDF files");
+		tools["tar"] = new Tool("tar","tar","Read and extract TAR archives");
+		tools["7z"] = new Tool("7z","7zip","Read and extract multiple archive formats");
+		tools["lzop"] = new Tool("lzop","lzop","Read and extract LZO archives");
+		tools["pv"] = new Tool("pv","pv","Get progress info for compression and extraction");
+		tools["lsblk"] = new Tool("lsblk","lsblk","Read device information");
+		tools["udisksctl"] = new Tool("udisksctl","udisksctl","Mount and unmount devices");
+		tools["cryptsetup"] = new Tool("cryptsetup","cryptsetup","Unlock encrypted LUKS devices");
+		tools["xdg-mime"] = new Tool("xdg-mime","xdg-mime","Set file type associations");
+		tools["fish"] = new Tool("fish","Fish Shell","Terminal Shell");
+		tools["kvm"] = new Tool("kvm","Qemu-Kvm Emulator","Virtual Machine Emulator");
+		tools["pdftk"] = new Tool("pdftk","pdftk","Converting PDF files");
+		tools["convert"] = new Tool("convert","convert","Converting images and PDF documents");
+		tools["gs"] = new Tool("gs","ghostscript","Ghostscript - Converting PDF files");
+		tools["polo-iso"] = new Tool("polo-iso","polo-iso","Polo ISO Plugin (Donation)");
+		tools["polo-pdf"] = new Tool("polo-pdf","polo-pdf","Polo PDF Plugin (Donation)");
 		
 		check_all_tools();
 		
@@ -461,8 +487,38 @@ public class Main : GLib.Object {
 	}
 
 	public void check_all_tools(){
-		foreach(var tool in Tools.values){
+		
+		foreach(var tool in tools.values){
+			
 			tool.check_availablity();
+		}
+	}
+
+	public bool tool_exists(string cmd){
+		
+		if (tools.keys.contains(cmd)){
+			
+			var tool = tools[cmd];
+			return tool.available;
+		}
+		else{
+			return cmd_exists(cmd);
+		}
+	}
+
+	public void init_plugins(){
+		
+		plugins["iso"] = new Plugin("polo-iso", "Polo ISO Plugin", PLUGIN_VER_ISO);
+		plugins["pdf"] = new Plugin("polo-pdf", "Polo PDF Plugin", PLUGIN_VER_PDF);
+
+		check_all_plugins();
+	}
+
+	public void check_all_plugins(){
+		
+		foreach(var plugin in plugins.values){
+			
+			plugin.check_availablity();
 		}
 	}
 	

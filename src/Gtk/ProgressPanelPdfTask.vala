@@ -1,5 +1,5 @@
 /*
- * ProgressPanelUsbWriterTask.vala
+ * ProgressPanelPdfTask.vala
  *
  * Copyright 2017 Tony George <teejeetech@gmail.com>
  *
@@ -33,29 +33,24 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
-public class ProgressPanelUsbWriterTask : ProgressPanel {
+public class ProgressPanelPdfTask : ProgressPanel {
 
-	public UsbWriterTask task;
-	private string device = "";
-	private string iso_file = "";
+	private PdfTask task;
 
 	// ui 
 	public Gtk.Label lbl_status;
 	public Gtk.Label lbl_stats;
 	public Gtk.ProgressBar progressbar;
 
-	public ProgressPanelUsbWriterTask(FileViewPane _pane){
+	public ProgressPanelPdfTask(FileViewPane _pane, PdfTask _task){
 		base(_pane, null, FileActionType.ISO_WRITE);
-	}
 
-	public void set_parameters(string _iso_file, string _device){
-		device = _device;
-		iso_file = _iso_file;
+		task = _task;
 	}
 
 	public override void init_ui(){ // TODO: make protected
 
-		string txt = _("Flashing ISO to device...");
+		string txt = _("Executing action...");
 
 		// heading ----------------
 
@@ -121,9 +116,7 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 
 	public override void execute(){
 
-		task = new UsbWriterTask();
-
-		log_debug("ProgressPanelUsbWriterTask: execute(%s)");
+		log_debug("ProgressPanelPdfTask: execute(%s)");
 
 		pane.refresh_file_action_panel();
 
@@ -132,7 +125,7 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 
 	public override void init_status(){
 
-		log_debug("ProgressPanelUsbWriterTask: init_status()");
+		log_debug("ProgressPanelPdfTask: init_status()");
 
 		progressbar.fraction = 0.0;
 		lbl_status.label = "Preparing...";
@@ -141,11 +134,11 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 	
 	public override void start_task(){
 
-		log_debug("ProgressPanelUsbWriterTask: start_task()");
+		log_debug("ProgressPanelPdfTask: start_task()");
 
 		err_log_clear();
 
-		task.write_iso_to_device(iso_file, device);
+		task.execute();
 
 		gtk_do_events();
 		
@@ -156,9 +149,9 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 
 		if (task.is_running){
 			
-			log_debug("ProgressPanelUsbWriterTask: update_status()");
+			log_debug("ProgressPanelPdfTask: update_status()");
 			
-			lbl_status.label = "%s: %s".printf(_("File"), file_basename(iso_file));
+			//lbl_status.label = "%s: %s".printf(_("File"), file_basename(iso_file));
 			
 			lbl_stats.label = task.stat_status_line;
 				
@@ -167,7 +160,6 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 			gtk_do_events();
 		}
 		else{
-			
 			finish();
 			return false;
 		}
@@ -177,7 +169,7 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 
 	public override void cancel(){
 
-		log_debug("ProgressPanelUsbWriterTask: cancel()");
+		log_debug("ProgressPanelPdfTask: cancel()");
 		
 		aborted = true;
 
@@ -196,21 +188,13 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 
 		stop_status_timer();
 		
-		log_debug("ProgressPanelUsbWriterTask: finish()");
+		log_debug("ProgressPanelPdfTask: finish()");
 
 		pane.file_operations.remove(this);
 		pane.refresh_file_action_panel();
 
-		//log_debug("read_status(): %d".printf(task.read_status()));
-		//log_debug("task.get_error_message()(): %s".printf(task.get_error_message()));
-		
-		if ((task.read_status() != 0) && (task.get_error_message().length > 0)){
-			gtk_messagebox("Finished with errors", task.get_error_message(), window, true);
-		}		
-		else if (!aborted){
-			string txt = _("Flash Complete");
-			string msg = _("Device safely ejected and ready for use");
-			gtk_messagebox(txt, msg, window, false);
+		if (task.get_error_message().length > 0){
+			gtk_messagebox(_("Finished with errors"), task.get_error_message(), window, true);
 		}
 	}
 }

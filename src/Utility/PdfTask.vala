@@ -34,333 +34,286 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
-public enum PdfTaskType{
+public enum PdfTaskType {
 	SPLIT,
 	MERGE,
+	COMPRESS,
+	UNCOMPRESS,
 	PROTECT,
-	UNPROTECT
+	UNPROTECT,
+	DECOLOR,
+	OPTIMIZE,
+	ROTATE
 }
 
-public class PdfTask : GLib.Object {
-
-	private PdfTaskType task_type;
-	private string file_path = "";
-	private Gee.ArrayList<FileItem> selected_files;
-	private Gtk.Window? window = null;
-
+public class PdfTask : AsyncTask {
+	
+	public Gee.ArrayList<string> files = new Gee.ArrayList<string>();
+	
+	public string optimize_target = "";
+	public string rotate_direction = "";
+	public string password = "";
+	public bool inplace = false;
+	
+	public PdfTaskType action;
+	
 	public PdfTask(){
-
+		init_regular_expressions();
 	}
-
-	public static void split(string file_path, Gtk.Window? window){
-
-		if (!file_exists(file_path)){ return; }
+	
+	private void init_regular_expressions(){
 		
-		string cmd = "pdftk";
-
-		cmd += " '%s'".printf(escape_single_quote(file_path));
-
-		cmd += " burst";
+		regex_list = new Gee.HashMap<string, Regex>();
 		
-		string outfile = "%s_page_%%03d.pdf".printf(file_get_title(file_path));
-		outfile = path_combine(file_parent(file_path), outfile);
-		
-		cmd += " output '%s'".printf(escape_single_quote(outfile));
-
-		//cmd += " compress";
-		
-		log_debug(cmd);
-
-		gtk_set_busy(true, window);
-		
-		string std_out, std_err;
-		exec_sync(cmd, out std_out, out std_err);
-
-		gtk_set_busy(false, window);
-
-		if (std_err.length > 0){
-			gtk_messagebox(_("Finished with errors"), std_err, window, true);
+		try {
+			//Batch: 1/1 complete
+			regex_list["status"] = new Regex("""^Batch:[ \t]*([0-9.]+)/([0-9.]+)[ \t]*complete""");
+		}
+		catch (Error e) {
+			log_error (e.message);
 		}
 	}
 	
-	public static void uncompress(string file_path, Gtk.Window? window){
+	public void prepare() {
+	
+		string script_text = build_script();
+		script_file = save_bash_script_temp(script_text, script_file, true, false, false);
 
-		if (!file_exists(file_path)){ return; }
-		
-		string cmd = "pdftk";
+		count_completed = 0;
+		count_total = (action == PdfTaskType.MERGE) ? 1 : files.size;
+	}
 
-		cmd += " '%s'".printf(escape_single_quote(file_path));
+	private string build_script() {
+	
+		var cmd = "polo-pdf";
 
-		string outfile = "%s_uncompressed.pdf".printf(file_get_title(file_path));
-		outfile = path_combine(file_parent(file_path), outfile);
-		cmd += " output '%s'".printf(escape_single_quote(outfile));
+		switch(action){
+		case PdfTaskType.SPLIT:
+			cmd += " split";
+			cmd += inplace ? " --inplace" : "";
+			foreach(var file in files){
+				cmd += " '%s'".printf(escape_single_quote(file));
+			}
+			break;
+			
+		case PdfTaskType.MERGE:
+			cmd += " merge";
+			cmd += inplace ? " --inplace" : "";
+			foreach(var file in files){
+				cmd += " '%s'".printf(escape_single_quote(file));
+			}
+			break;
+			
+		case PdfTaskType.COMPRESS:
+			cmd += " compress";
+			cmd += inplace ? " --inplace" : "";
+			foreach(var file in files){
+				cmd += " '%s'".printf(escape_single_quote(file));
+			}
+			break;
+			
+		case PdfTaskType.UNCOMPRESS:
+			cmd += " uncompress";
+			cmd += inplace ? " --inplace" : "";
+			foreach(var file in files){
+				cmd += " '%s'".printf(escape_single_quote(file));
+			}
+			break;
+			
+		case PdfTaskType.PROTECT:
+			cmd += " protect";
+			cmd += " --pass '%s'".printf(escape_single_quote(password));
+			cmd += inplace ? " --inplace" : "";
+			foreach(var file in files){
+				cmd += " '%s'".printf(escape_single_quote(file));
+			}
+			break;
+			
+		case PdfTaskType.UNPROTECT:
+			cmd += " unprotect";
+			cmd += " --pass '%s'".printf(escape_single_quote(password));
+			cmd += inplace? " --inplace" : "";
+			foreach(var file in files){
+				cmd += " '%s'".printf(escape_single_quote(file));
+			}
+			break;
+			
+		case PdfTaskType.DECOLOR:
+			cmd += " decolor";
+			cmd += inplace ? " --inplace" : "";
+			foreach(var file in files){
+				cmd += " '%s'".printf(escape_single_quote(file));
+			}
+			break;
+			
+		case PdfTaskType.OPTIMIZE:
+			cmd += " optimize";
+			cmd += " --target %s".printf(optimize_target);
+			cmd += inplace ? " --inplace" : "";
+			foreach(var file in files){
+				cmd += " '%s'".printf(escape_single_quote(file));
+			}
+			break;
+			
+		case PdfTaskType.ROTATE:
+			cmd += " rotate";
+			cmd += " --rotation %s".printf(rotate_direction);
+			cmd += inplace ? " --inplace" : "";
+			foreach(var file in files){
+				cmd += " '%s'".printf(escape_single_quote(file));
+			}
+			break;
+		}
 
-		cmd += " uncompress";
-		
 		log_debug(cmd);
-
-		gtk_set_busy(true, window);
 		
-		string std_out, std_err;
-		exec_sync(cmd, out std_out, out std_err);
+		return cmd;
+	}
+	
+	// execution ----------------------------
 
-		gtk_set_busy(false, window);
+	public void split(Gee.ArrayList<string> _files, bool _inplace){
+		action = PdfTaskType.SPLIT;
+		files = _files;
+		inplace = _inplace;
+		//execute();
+	}
+	
+	public void merge(Gee.ArrayList<string> _files, bool _inplace){
+		action = PdfTaskType.MERGE;
+		files = _files;
+		inplace = _inplace;
+		//execute();
+	}
 
-		if (std_err.length > 0){
-			gtk_messagebox(_("Finished with errors"), std_err, window, true);
+	public void compress(Gee.ArrayList<string> _files, bool _inplace){
+		action = PdfTaskType.COMPRESS;
+		files = _files;
+		inplace = _inplace;
+		//execute();
+	}
+
+	public void uncompress(Gee.ArrayList<string> _files, bool _inplace){
+		action = PdfTaskType.UNCOMPRESS;
+		files = _files;
+		inplace = _inplace;
+		//execute();
+	}
+
+	public void protect(Gee.ArrayList<string> _files, string _password, bool _inplace){
+		action = PdfTaskType.PROTECT;
+		files = _files;
+		password = _password;
+		inplace = _inplace;
+		//execute();
+	}
+
+	public void unprotect(Gee.ArrayList<string> _files, string _password, bool _inplace){
+		action = PdfTaskType.UNPROTECT;
+		files = _files;
+		password = _password;
+		inplace = _inplace;
+		//execute();
+	}
+
+	public void decolor(Gee.ArrayList<string> _files, bool _inplace){
+		action = PdfTaskType.DECOLOR;
+		files = _files;
+		inplace = _inplace;
+		//execute();
+	}
+
+	public void optimize(Gee.ArrayList<string> _files, string target, bool _inplace){
+		action = PdfTaskType.OPTIMIZE;
+		files = _files;
+		optimize_target = target;
+		inplace = _inplace;
+		//execute();
+	}
+
+	public void rotate(Gee.ArrayList<string> _files, string direction, bool _inplace){
+		action = PdfTaskType.ROTATE;
+		files = _files;
+		rotate_direction = direction;
+		inplace = _inplace;
+		//execute();
+	}
+	
+	public void execute() {
+
+		prepare();
+
+		begin();
+
+		if (status == AppStatus.RUNNING){
+			
+			
 		}
 	}
 
-	public static void merge(Gee.ArrayList<FileItem> files, Gtk.Window? window){
+	public override void parse_stdout_line(string out_line){
 		
-		if (files.size == 0){ return; }
+		if (is_terminated) { return; }
 		
-		string cmd = "pdftk";
+		update_progress_parse_console_output(out_line);
+	}
+	
+	public override void parse_stderr_line(string err_line){
 
-		foreach(var item in files){
-			cmd += " '%s'".printf(escape_single_quote(item.file_path));
+		if (is_terminated) { return; }
+
+		log_msg("ERR:" + err_line);
+		
+		update_progress_parse_console_output(err_line);
+	}
+
+	public bool update_progress_parse_console_output (string line) {
+
+		if ((line == null) || (line.length == 0)) { return true; }
+
+		MatchInfo match;
+		if (regex_list["status"].match(line, 0, out match)) {
+			count_completed = int64.parse(match.fetch(1));
+			progress = (count_completed * 1.0) / count_total;
 		}
 
-		cmd += " cat";
+		return true;
+	}
 
-		string title = file_get_title(files[0].file_path);
-		var match = regex_match("""^(.*)[^0-9][0-9]*$""", title);
-		if (match != null){
-			title = match.fetch(1);
-		}
-
-		string outfile = "%s_merged.pdf".printf(title);
-		outfile = path_combine(file_parent(files[0].file_path), outfile);
-
-		cmd += " output '%s'".printf(escape_single_quote(outfile));
-
-		//cmd += " compress";
-		
-		log_debug(cmd);
-
-		gtk_set_busy(true, window);
-		
-		string std_out, std_err;
-		exec_sync(cmd, out std_out, out std_err);
-
-		gtk_set_busy(false, window);
-
-		if (std_err.length > 0){
-			gtk_messagebox(_("Finished with errors"), std_err, window, true);
+	protected override void finish_task(){
+		if ((status != AppStatus.CANCELLED) && (status != AppStatus.PASSWORD_REQUIRED)) {
+			status = AppStatus.FINISHED;
 		}
 	}
 
-	public static void protect(string file_path, string password, Gtk.Window? window){
-		
-		if (!file_exists(file_path)){ return; }
-		
-		string cmd = "pdftk";
-
-		cmd += " '%s'".printf(escape_single_quote(file_path));
-
-		string title = file_get_title(file_path);
-		var match = regex_match("""^(.*)_[un]*protected$""", title);
-		if (match != null){
-			title = match.fetch(1);
+	public int read_status(){
+		var status_file = working_dir + "/status";
+		var f = File.new_for_path(status_file);
+		if (f.query_exists()){
+			var txt = file_read(status_file);
+			return int.parse(txt);
 		}
-		
-		string outfile = "%s_protected.pdf".printf(title);
-		outfile = path_combine(file_parent(file_path), outfile);
-
-		cmd += " output '%s'".printf(escape_single_quote(outfile));
-
-		//cmd += " owner_pw '%s'".printf(password);
-
-		cmd += " user_pw '%s'".printf(password);
-		
-		log_debug(cmd);
-
-		gtk_set_busy(true, window);
-		
-		string std_out, std_err;
-		exec_sync(cmd, out std_out, out std_err);
-
-		gtk_set_busy(false, window);
-
-		if (std_err.length > 0){
-			gtk_messagebox(_("Finished with errors"), std_err, window, true);
-		}
+		return -1;
 	}
 
-	public static void unprotect(string file_path, string password, Gtk.Window? window){
-		
-		if (!file_exists(file_path)){ return; }
-		
-		string cmd = "pdftk";
+	// stats
 
-		cmd += " '%s'".printf(escape_single_quote(file_path));
+	public string stat_status_line{
+		owned get{
+			var txt = "";
+			
+			txt = "%.2f %% complete, %s elapsed, %s remaining, %s".printf(
+				progress * 100.0, stat_time_elapsed, stat_time_remaining, stat_speed);
 
-		cmd += " input_pw '%s'".printf(password);
-
-		string title = file_get_title(file_path);
-		var match = regex_match("""^(.*)_[un]*protected$""", title);
-		if (match != null){
-			title = match.fetch(1);
-		}
-		
-		string outfile = "%s_unprotected.pdf".printf(title);
-		outfile = path_combine(file_parent(file_path), outfile);
-
-		cmd += " output '%s'".printf(escape_single_quote(outfile));
-
-		log_debug(cmd);
-
-		gtk_set_busy(true, window);
-		
-		string std_out, std_err;
-		exec_sync(cmd, out std_out, out std_err);
-
-		gtk_set_busy(false, window);
-
-		if (std_err.length > 0){
-			gtk_messagebox(_("Finished with errors"), std_err, window, true);
-		}
-	}
-
-	public static void convert_grayscale(string file_path, Gtk.Window? window){
-
-		if (!file_exists(file_path)){ return; }
-
-		string outfile = "%s_decolored.pdf".printf(file_get_title(file_path));
-		outfile = path_combine(file_parent(file_path), outfile);
-		
-		string cmd = "gs";
-		cmd += " -sOutputFile='%s'".printf(escape_single_quote(outfile));
-		cmd += " -sDEVICE=pdfwrite";
-		cmd += " -sColorConversionStrategy=Gray";
-		cmd += " -dProcessColorModel=/DeviceGray";
-		cmd += " -dCompatibilityLevel=1.4";
-		cmd += " -dDetectDuplicateImages=true";
-		cmd += " -dNOPAUSE";
-		cmd += " -dBATCH";
-		cmd += " '%s'".printf(escape_single_quote(file_path));
-
-		log_debug(cmd);
-
-		gtk_set_busy(true, window);
-		
-		string std_out, std_err;
-		exec_sync(cmd, out std_out, out std_err);
-
-		gtk_set_busy(false, window);
-
-		if (std_err.length > 0){
-			gtk_messagebox(_("Finished with errors"), std_err, window, true);
-		}
-	}
-
-	public static void optimize(string file_path, string target, Gtk.Window? window){
-
-		if (!file_exists(file_path)){ return; }
-
-		string outfile = "%s_optimized_%s.pdf".printf(file_get_title(file_path), target.down());
-		outfile = path_combine(file_parent(file_path), outfile);
-		
-		string cmd = "gs";
-		cmd += " -sOutputFile='%s'".printf(escape_single_quote(outfile));
-		cmd += " -sDEVICE=pdfwrite";
-		cmd += " -dCompatibilityLevel=1.4";
-		cmd += " -dDetectDuplicateImages=true";
-		cmd += " -dCompressFonts=true";
-		cmd += " -dPDFSETTINGS=/%s".printf(target.down());
-		cmd += " -dNOPAUSE";
-		cmd += " -dBATCH";
-		cmd += " '%s'".printf(escape_single_quote(file_path));
-
-		log_debug(cmd);
-
-		gtk_set_busy(true, window);
-		
-		string std_out, std_err;
-		exec_sync(cmd, out std_out, out std_err);
-
-		gtk_set_busy(false, window);
-
-		if (std_err.length > 0){
-			gtk_messagebox(_("Finished with errors"), std_err, window, true);
-		}
-	}
-
-	public static void compress(string file_path, Gtk.Window? window){
-		
-		if (!file_exists(file_path)){ return; }
-
-		string outfile = "%s_compressed.pdf".printf(file_get_title(file_path));
-		outfile = path_combine(file_parent(file_path), outfile);
-		
-		string cmd = "gs";
-		cmd += " -sOutputFile='%s'".printf(escape_single_quote(outfile));
-		cmd += " -sDEVICE=pdfwrite";
-		cmd += " -dCompatibilityLevel=1.4";
-		cmd += " -dDetectDuplicateImages=true";
-		cmd += " -dCompressFonts=true";
-		cmd += " -dPDFSETTINGS=/%s".printf("screen");
-		cmd += " -dNOPAUSE";
-		cmd += " -dBATCH";
-		cmd += " '%s'".printf(escape_single_quote(file_path));
-
-		log_debug(cmd);
-
-		gtk_set_busy(true, window);
-		
-		string std_out, std_err;
-		exec_sync(cmd, out std_out, out std_err);
-
-		gtk_set_busy(false, window);
-
-		if (std_err.length > 0){
-			gtk_messagebox(_("Finished with errors"), std_err, window, true);
+			return txt;
 		}
 	}
 	
-	public static void rotate(string file_path, string direction, Gtk.Window? window){
-
-		if (!file_exists(file_path)){ return; }
-
-		string cmd = "pdftk";
-
-		cmd += " '%s'".printf(escape_single_quote(file_path));
-
-		string orientation = "";
-		
-		switch(direction){
-		case "right":
-			orientation = "east";
-			break;
-		case "flip":
-			orientation = "south";
-			break;
-		case "left":
-			orientation = "west";
-			break;
-		}
-
-		if (orientation.length > 0){
-			cmd += " cat 1-end%s".printf(orientation);
-		}
-		
-		string title = file_get_title(file_path);
-		string outfile = "%s_rotated_%s.pdf".printf(title, direction);
-		outfile = path_combine(file_parent(file_path), outfile);
-
-		cmd += " output '%s'".printf(escape_single_quote(outfile));
-
-		log_debug(cmd);
-
-		gtk_set_busy(true, window);
-		
-		string std_out, std_err;
-		exec_sync(cmd, out std_out, out std_err);
-
-		gtk_set_busy(false, window);
-
-		if (std_err.length > 0){
-			gtk_messagebox(_("Finished with errors"), std_err, window, true);
+	public string stat_speed{
+		owned get{
+			long elapsed = (long) timer_elapsed(timer);
+			long speed = (long)(bytes_completed / (elapsed / 1000.0));
+			return format_file_size(speed) + "/s";
 		}
 	}
 

@@ -161,7 +161,7 @@ public class FileViewTab : Gtk.Box {
 	}
 
 	private void add_active_icon(Gtk.Box box){
-		var img = get_shared_icon("item-gray","item-gray.png",16);
+		var img = IconManager.lookup_image("item-gray",16);
 		img_active = img;
 		box.add(img);
 
@@ -173,11 +173,11 @@ public class FileViewTab : Gtk.Box {
 		/*
 		string tt = "";
 		if (window.active_pane == pane){
-			img_active.pixbuf = get_shared_icon("item-blue","item-blue.png",16).pixbuf;
+			img_active.pixbuf = IconManager.lookup_image("item-blue",16).pixbuf;
 			tt = _("This pane is active");
 		}
 		else{
-			img_active.pixbuf = get_shared_icon("item-gray","item-gray.png",16).pixbuf;
+			img_active.pixbuf = IconManager.lookup_image("item-gray",16).pixbuf;
 			tt = _("This pane is inactive.\n\nClick anywhere on this pane to make it active.");
 		}
 
@@ -197,7 +197,7 @@ public class FileViewTab : Gtk.Box {
 
 	private void add_close_button(Gtk.Box box){
 		
-		var img = get_shared_icon("window-close", "window-close.png", 16);
+		var img = IconManager.lookup_image("window-close", 16);
 		var ebox = new Gtk.EventBox();
 		ebox.margin_left = 10;
 		ebox.add(img);

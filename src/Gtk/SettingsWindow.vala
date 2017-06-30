@@ -44,7 +44,7 @@ public class SettingsWindow : Gtk.Window {
 		set_skip_pager_hint(true);
 		window_position = WindowPosition.CENTER_ON_PARENT;
 		deletable = true;
-		resizable = true;
+		resizable = false;
 		icon = get_app_icon(16,".svg");
 		title = _("Settings");
 		

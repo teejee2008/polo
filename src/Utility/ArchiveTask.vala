@@ -81,17 +81,16 @@ public class ArchiveTask : AsyncTask {
 	public long processed_file_count;
 	public double compression_ratio;
 
-	private static Gee.HashMap<string, Regex> regex_list;
 	private MatchInfo match;
 	private double dblVal;
 
-	public static string 7zip_version_name = "";
+	private static string 7zip_version_name = "";
 
 	public ArchiveTask() {
 		init_regular_expressions();
 	}
 
-	private static void init_regular_expressions(){
+	private void init_regular_expressions(){
 		if (regex_list != null){
 			return; // already initialized
 		}
@@ -111,9 +110,6 @@ public class ArchiveTask : AsyncTask {
 			//+ atom/packages/atom-beautify/node_modules/.bin/uuid
 			regex_list["7z1509prg"] = new Regex("""^[\-+][ \t]+(.*)""");
 
-			// 7-Zip [64] 9.20  Copyright (c) 1999-2010 Igor Pavlov  2010-11-18
-			regex_list["7z_version"] = new Regex("""^[^ \t]+[ ]+[^ \t]+[ ]+([0-9.]*)[ ]+""");
-			
 			//Example: atom/keymap.cson
 			regex_list["tar"] = new Regex("""^(.*)$""");
 			
@@ -141,14 +137,19 @@ public class ArchiveTask : AsyncTask {
 	public static double 7zip_version {
 		get {
 			if (7zip_version_name.length == 0){
+				
 				string std_out, std_err;
 				exec_sync("7z", out std_out, out std_err);
+				
 				foreach(string line in std_out.split("\n")){
-					if ((line == null) || (line.strip().length == 0)){
-						continue;
-					}
-					MatchInfo match;
-					if (regex_list["7z_version"].match(line, 0, out match)){
+					
+					if ((line == null) || (line.strip().length == 0)){ continue; }
+
+					// 7-Zip [64] 9.20  Copyright (c) 1999-2010 Igor Pavlov  2010-11-18
+					string expression = """^[^ \t]+[ ]+[^ \t]+[ ]+([0-9.]*)[ ]+""";
+					
+					MatchInfo match = regex_match(expression, line);
+					if (match != null){
 						7zip_version_name = match.fetch(1);
 					}
 					break;

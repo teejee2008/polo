@@ -408,19 +408,19 @@ public class Pathbar : Gtk.Box {
 
 			Gtk.Image img = null;
 			if ((dev.type == "crypt") && (dev.pkname.length > 0)){
-				img = get_shared_icon("unlocked","unlocked.png",16);
+				img = IconManager.lookup_image("unlocked",16);
 				box.add(img);
 			}
 			else if (dev.fstype.contains("luks")){
-				img = get_shared_icon("locked","locked.png",16);
+				img = IconManager.lookup_image("lock",16);
 				box.add(img);
 			}
 			else if (dev.fstype.contains("iso9660")){
-				img = get_shared_icon("media-cdrom","media-cdrom.png",16);
+				img = IconManager.lookup_image("media-cdrom",16);
 				box.add(img);
 			}
 			else{
-				img = get_shared_icon("gtk-harddisk","gtk-harddisk.svg",16);
+				img = IconManager.lookup_image("drive-harddisk",16);
 				box.add(img);
 			}
 
@@ -740,10 +740,10 @@ public class Pathbar : Gtk.Box {
 		}
 
 		if ((panel.number == 1)||(panel.number == 3)){
-			img_open_other.pixbuf = get_shared_icon("go-next","go-next.svg",ICON_SIZE).pixbuf;
+			img_open_other.pixbuf = IconManager.lookup_image("go-next",ICON_SIZE).pixbuf;
 		}
 		else if ((panel.number == 2)||(panel.number == 4)){
-			img_open_other.pixbuf = get_shared_icon("go-previous","go-previous.svg",ICON_SIZE).pixbuf;
+			img_open_other.pixbuf = IconManager.lookup_image("go-previous",ICON_SIZE).pixbuf;
 		}
 
 		// margins ----------------------------

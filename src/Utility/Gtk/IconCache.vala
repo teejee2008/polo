@@ -28,8 +28,6 @@ public class IconCache : GLib.Object {
 	
 	public Gtk.TreeStore model = null;
 	public FileItem file_item = null;
-	private int icon_size;
-	private DateTime timestamp;
 
 	private static Gee.HashMap<string,Gdk.Pixbuf> cache = new Gee.HashMap<string,Gdk.Pixbuf>();
 	private static bool enabled = true;

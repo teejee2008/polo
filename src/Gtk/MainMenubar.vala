@@ -98,6 +98,7 @@ public class MainMenuBar : Gtk.MenuBar {
 		add_menu_edit(menu_shell);
 		add_menu_view(menu_shell);
 		add_menu_go(menu_shell);
+		//add_menu_cloud(menu_shell);
 		add_menu_tools(menu_shell);
 		add_menu_help(menu_shell);
 		
@@ -619,7 +620,7 @@ public class MainMenuBar : Gtk.MenuBar {
 		});
 
 		context_trash.connect(()=>{
-			add_action_accel(item, "Delete"); // map to Delete key
+			//add_action_accel(item, "Delete"); // map to Delete key
 		});
 
 		context_archive.connect(()=>{
@@ -900,29 +901,77 @@ public class MainMenuBar : Gtk.MenuBar {
 
 		if (window.layout_box == null){ return; }
 		
-		var chk = new Gtk.CheckMenuItem.with_label (_("Dual Pane Mode"));
-		chk.active = (window.layout_box.get_panel_layout() == PanelLayout.DUAL_VERTICAL);
-		submenu.add(chk);
+		var item = new Gtk.CheckMenuItem.with_label (_("Dual Pane Mode"));
+		item.active = (window.layout_box.get_panel_layout() == PanelLayout.DUAL_VERTICAL);
+		submenu.add(item);
 
-		chk.activate.connect (() => {
+		item.activate.connect (() => {
 			if (view == null) { return; }
 			view.toggle_dual_pane();
 		});
 
-		add_action_accel(chk, "F3");
+		string key = "F3";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
 	}
 
 	private void add_fullscreen_mode(Gtk.Menu submenu){
 		
-		var chk = new Gtk.CheckMenuItem.with_label (_("Fullscreen Mode"));
-		chk.active = window.is_maximized;
-		submenu.add(chk);
+		var item = new Gtk.CheckMenuItem.with_label (_("Fullscreen Mode"));
+		item.active = window.is_maximized;
+		submenu.add(item);
 
-		chk.activate.connect (() => {
+		item.activate.connect (() => {
 			window.toggle_fullscreen();
 		});
 		
-		add_action_accel(chk, "F11");
+		string key = "F11";
+
+		context_normal.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_trash.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_archive.connect(()=>{
+			add_action_accel(item, key);
+		});
+
+		context_term.connect(()=>{
+			//add_action_accel(item, key);
+		});
+		
+		context_edit.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
+		context_none.connect(()=>{
+			remove_action_accel(item, key);
+		});
 	}
 
 	private void add_sort_column(Gtk.Menu submenu){
@@ -1125,6 +1174,61 @@ public class MainMenuBar : Gtk.MenuBar {
 		context_none.connect(()=>{
 			remove_action_accel(item, key);
 		});
+	}
+
+
+	private void add_menu_cloud(Gtk.MenuShell menu_shell){
+
+		log_debug("MainMenuBar: add_menu_cloud()");
+		
+		var menu_item = new Gtk.MenuItem.with_label(_("Cloud"));
+		menu_shell.add(menu_item);
+
+		var submenu = new Gtk.Menu();
+		menu_item.set_submenu(submenu);
+
+		add_cloud_account_add(submenu);
+
+		add_cloud_account_remove(submenu);
+
+		gtk_menu_add_separator(submenu);
+
+		add_cloud_account_browse(submenu);
+	}
+
+	private void add_cloud_account_add(Gtk.Menu menu){
+		
+		var item = new Gtk.MenuItem.with_label (_("Add Account"));
+		item.set_tooltip_text(_("Login to cloud storage account"));
+		menu.add(item);
+
+		item.activate.connect (() => {
+			window.cloud_login();
+		});
+	}
+
+	private void add_cloud_account_remove(Gtk.Menu menu){
+		
+		var item = new Gtk.MenuItem.with_label (_("Remove Account"));
+		item.set_tooltip_text(_("Logout from cloud storage account"));
+		menu.add(item);
+
+		item.activate.connect (() => {
+			//window.cloud_logout();
+		});
+	}
+
+	private void add_cloud_account_browse(Gtk.Menu menu){
+
+		foreach(var acc in App.rclone.accounts){
+			
+			var item = new Gtk.MenuItem.with_label("%s: %s".printf(acc.type_name, acc.name));
+			menu.add(item);
+
+			item.activate.connect (() => {
+				
+			});
+		}
 	}
 
 	

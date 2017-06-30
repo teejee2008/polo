@@ -219,7 +219,7 @@ public class KvmTask : AsyncTask {
 	}
 
 	public void boot_disk(string disk_path, Json.Object config){
-		
+
 		string cmd = "";
 		
 		cmd += get_kvm_config(config);
@@ -274,6 +274,45 @@ public class KvmTask : AsyncTask {
 			cmd += " -smb '%s'".printf(kvm_smb);
 		}
 		return cmd;
+	}
+
+	public void mount_disk(string disk_path){
+
+
+		int index = 0;
+		string nbd_device = "";
+		
+		do{
+			nbd_device = "/dev/nbd%d".printf(index);
+			index++;
+		}
+		while (file_exists(nbd_device));
+
+		string cmd = "";
+		
+		cmd += " modprobe nbd max_part=8";
+
+		cmd += " && ";
+		
+		cmd += " qemu-nbd";
+		
+		cmd += " --connect=%s".printf(nbd_device);
+		
+		cmd += " '%s'".printf(escape_single_quote(disk_path));
+		
+		log_debug(cmd);
+
+		err_log_clear();
+		
+		string std_out, std_err;
+		exec_script_sync(cmd, out std_out, out std_err, false, true);
+
+		if (std_err.length > 0){
+			gtk_messagebox(_("Error"), std_err, window, true);
+		}
+		else{
+			gtk_messagebox(_("Mounted successfully"), "%s: %s".printf(_("Device"), nbd_device), window, false);
+		}
 	}
 
 	public void set_cpu_limit(int pid){

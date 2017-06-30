@@ -42,8 +42,7 @@ public class GtkBookmark : GLib.Object {
 	private static const string config_path_gtk_template = "%s/.config/gtk-3.0/bookmarks";
 	private static const string config_path_custom_template = "%s/.config/%s-bookmarks";
 	private static string config_file;
-	private static bool use_config_file_custom;
-	
+
 	// properties
 	
 	public string path {
