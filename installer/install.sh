@@ -4,11 +4,11 @@ app_name='polo'
 app_fullname='Polo'
 start_command='polo-gtk'
 
-generic_depends=(ffmpeg mediainfo rsync pv p7zip p7zip-full tar gzip bzip2 xz-utils fish qemu-kvm pdftk)
+generic_depends=(ffmpeg mediainfo rsync pv p7zip p7zip-full tar gzip bzip2 xz-utils fish qemu-kvm qemu-utils)
 
-debian_depends=(ffmpeg mediainfo rsync pv p7zip p7zip-full tar gzip bzip2 xz-utils fish qemu-kvm pdftk)
-redhat_depends=(ffmpeg mediainfo rsync pv p7zip p7zip-plugins tar gzip bzip2 xz fish qemu-kvm ghostscript) #pdftk not in repos
-arch_depends=(ffmpeg mediainfo rsync pv p7zip tar xz gzip bzip2 fish qemu pdftk)
+debian_depends=(ffmpeg mediainfo rsync pv p7zip p7zip-full tar gzip bzip2 xz-utils fish qemu-kvm qemu-utils)
+redhat_depends=(ffmpeg mediainfo rsync pv p7zip p7zip-plugins tar gzip bzip2 xz fish qemu-kvm qemu-img) #pdftk not in repos
+arch_depends=(ffmpeg mediainfo rsync pv p7zip tar xz gzip bzip2 fish qemu)
 
 generic_recommends=()
 debian_recommends=()
@@ -170,24 +170,14 @@ if command -v apt-get >/dev/null 2>&1; then
 	if [ "$install_dependencies" == "y" ]; then
 		MSG_INFO "Installing Debian packages..."
 		echo ""
+
+		apt-cache search --names-only
+		
 		for i in "${debian_depends[@]}"; do
 		  MSG_INFO "Installing: $i"
-		  apt-get install $i
+		  apt-get install -y $i
 		  echo ""
 		done
-		
-		MSG_INFO "Install additional dependencies? (y/n):" "0"
-		read install_extra
-		
-		if [ "$install_extra" == "y" ]; then
-			MSG_INFO "Installing additional dependencies..."
-			echo ""
-			for i in "${debian_recommends[@]}"; do
-			  MSG_INFO "Installing: $i"
-			  apt-get install $i
-			  echo ""
-			done
-		fi
 	fi
 
 elif command -v yum >/dev/null 2>&1; then
