@@ -757,6 +757,16 @@ public class MainWindow : Gtk.Window {
 		layout_box.panel1.run_script_in_new_terminal_tab(cmd, _("Cleaning Thumbnail Cache..."));
 	}
 
+	public void cloud_login(){
+
+		err_log_clear();
+
+		var win = new CloudLoginWindow(this);
+
+	}
+
+	// session -------------------------------------
+	
 	public void save_session(){
 
 		log_msg("MainWindow: save_session()");
