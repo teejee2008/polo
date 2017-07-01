@@ -2091,21 +2091,19 @@ public class Settings : Gtk.Box {
 		init_ui();
 	}
 
-	// Defaults ------------------------
+	// Advanced ------------------------
 
 	private void init_tab_advanced() {
 
 		log_debug("Settings: init_tab_advanced()");
 		
-		var box = new Gtk.Box(Orientation.HORIZONTAL, 24);
+		var box = new Gtk.Box(Orientation.HORIZONTAL, 12);
 		box.margin_left = 6;
 		stack.add_titled (box, _("Advanced"), _("Advanced"));
 
 		// column 1 ---------------------------------
 
-		var vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 12);
-		vbox.homogeneous = false;
-		box.add(vbox);
+		var vbox = add_column_group(box, true);
 		
 		// ---------------------------------
 		
@@ -2129,6 +2127,36 @@ public class Settings : Gtk.Box {
 		vbox_group = add_group(vbox, "", 0);
 		
 		add_option_kvm_enable(vbox_group);
+
+
+		if (App.tool_exists("polo-pdf")) { 
+
+			// column 2 ---------------------------------
+
+			vbox = add_column_group(box, false);
+
+			// ---------------------------------
+			
+			vbox_group = add_group(vbox, _("Context Menu Actions\nReplace Original Files ?"), 0);
+
+			add_option_pdf_split(vbox_group);
+
+			add_option_pdf_merge(vbox_group);
+
+			add_option_pdf_compress(vbox_group);
+
+			add_option_pdf_uncompress(vbox_group);
+
+			add_option_pdf_protect(vbox_group);
+
+			add_option_pdf_unprotect(vbox_group);
+
+			add_option_pdf_decolor(vbox_group);
+
+			add_option_pdf_rotate(vbox_group);
+
+			add_option_pdf_optimize(vbox_group);
+		}
 	}
 
 	private void add_option_kvm_cpu(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
@@ -2358,6 +2386,134 @@ public class Settings : Gtk.Box {
 		});
 	}
 
+
+	private void add_option_pdf_split(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("PDF: Split"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'PDF > Split' action in right-click menu will remove the original file on success."));
+
+		chk.active = App.overwrite_pdf_split;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_pdf_split = chk.active;
+		});
+	}
+
+	private void add_option_pdf_merge(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("PDF: Merge"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'PDF > Merge' action in right-click menu will remove the original file on success."));
+
+		chk.active = App.overwrite_pdf_merge;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_pdf_merge = chk.active;
+		});
+	}
+
+	private void add_option_pdf_compress(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("PDF: Compress"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'PDF > Compress' action in right-click menu will replace the original file on success, instead of creating a new file."));
+
+		chk.active = App.overwrite_pdf_compress;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_pdf_compress = chk.active;
+		});
+	}
+
+	private void add_option_pdf_uncompress(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("PDF: Uncompress"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'PDF > Uncompress' action in right-click menu will replace the original file on success, instead of creating a new file."));
+
+		chk.active = App.overwrite_pdf_uncompress;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_pdf_uncompress = chk.active;
+		});
+	}
+
+	private void add_option_pdf_protect(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("PDF: Protect"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'PDF > Protect' action in right-click menu will replace the original file on success, instead of creating a new file."));
+
+		chk.active = App.overwrite_pdf_protect;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_pdf_protect = chk.active;
+		});
+	}
+
+	private void add_option_pdf_unprotect(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("PDF: Unprotect"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'PDF > Unprotect' action in right-click menu will replace the original file on success, instead of creating a new file."));
+
+		chk.active = App.overwrite_pdf_unprotect;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_pdf_unprotect = chk.active;
+		});
+	}
+
+	private void add_option_pdf_decolor(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("PDF: Decolor"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'PDF > Decolor' action in right-click menu will replace the original file on success, instead of creating a new file."));
+
+		chk.active = App.overwrite_pdf_decolor;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_pdf_decolor = chk.active;
+		});
+	}
+
+	private void add_option_pdf_rotate(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("PDF: Rotate"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'PDF > Rotate' action in right-click menu will replace the original file on success, instead of creating a new file."));
+
+		chk.active = App.overwrite_pdf_rotate;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_pdf_rotate = chk.active;
+		});
+	}
+
+	private void add_option_pdf_optimize(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("PDF: Optimize"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'PDF > Optimize' action in right-click menu will replace the original file on success, instead of creating a new file."));
+
+		chk.active = App.overwrite_pdf_optimize;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_pdf_optimize = chk.active;
+		});
+	}
+
+	
 	// helpers --------------
 
 	private Gtk.Box add_group(Gtk.Box box, string header_text, int spacing){
@@ -2395,6 +2551,21 @@ public class Settings : Gtk.Box {
 		
 		return vbox;
 	} 
+
+	private Gtk.Box add_column_group(Gtk.Box box, bool first_column){
+
+		if (!first_column){
+			var separator = new Gtk.Separator(Gtk.Orientation.VERTICAL);
+			separator.margin_left = 12;
+			box.add(separator);
+		}
+		
+		var vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 12);
+		vbox.homogeneous = false;
+		box.add(vbox);
+
+		return vbox;
+	}
 }
 
 

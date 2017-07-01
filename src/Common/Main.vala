@@ -638,6 +638,16 @@ public class Main : GLib.Object {
 
 		config.set_string_member("confirm_delete", confirm_delete.to_string());
 		config.set_string_member("confirm_trash", confirm_trash.to_string());
+
+		config.set_string_member("overwrite_pdf_split", overwrite_pdf_split.to_string());
+		config.set_string_member("overwrite_pdf_merge", overwrite_pdf_merge.to_string());
+		config.set_string_member("overwrite_pdf_compress", overwrite_pdf_compress.to_string());
+		config.set_string_member("overwrite_pdf_uncompress", overwrite_pdf_uncompress.to_string());
+		config.set_string_member("overwrite_pdf_protect", overwrite_pdf_protect.to_string());
+		config.set_string_member("overwrite_pdf_unprotect", overwrite_pdf_unprotect.to_string());
+		config.set_string_member("overwrite_pdf_decolor", overwrite_pdf_decolor.to_string());
+		config.set_string_member("overwrite_pdf_rotate", overwrite_pdf_rotate.to_string());
+		config.set_string_member("overwrite_pdf_optimize", overwrite_pdf_optimize.to_string());
 		
 		save_folder_selections();
 		
@@ -798,6 +808,16 @@ public class Main : GLib.Object {
 
 		confirm_delete = json_get_bool(config, "confirm_delete", confirm_delete);
 		confirm_trash = json_get_bool(config, "confirm_trash", confirm_trash);
+
+		overwrite_pdf_split = json_get_bool(config, "overwrite_pdf_split", overwrite_pdf_split);
+		overwrite_pdf_merge = json_get_bool(config, "overwrite_pdf_merge", overwrite_pdf_merge);
+		overwrite_pdf_compress = json_get_bool(config, "overwrite_pdf_compress", overwrite_pdf_compress);
+		overwrite_pdf_uncompress = json_get_bool(config, "overwrite_pdf_uncompress", overwrite_pdf_uncompress);
+		overwrite_pdf_protect = json_get_bool(config, "overwrite_pdf_protect", overwrite_pdf_protect);
+		overwrite_pdf_unprotect = json_get_bool(config, "overwrite_pdf_unprotect", overwrite_pdf_unprotect);
+		overwrite_pdf_decolor = json_get_bool(config, "overwrite_pdf_decolor", overwrite_pdf_decolor);
+		overwrite_pdf_rotate = json_get_bool(config, "overwrite_pdf_rotate", overwrite_pdf_rotate);
+		overwrite_pdf_optimize = json_get_bool(config, "overwrite_pdf_optimize", overwrite_pdf_optimize);
 
 		middlebar_visible = json_get_bool(config, "middlebar_visible", middlebar_visible);
 		sidebar_visible = json_get_bool(config, "sidebar_visible", sidebar_visible);
