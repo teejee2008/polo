@@ -687,7 +687,6 @@ public class MainWindow : Gtk.Window {
 	public void open_donate_window(){
 		var dialog = new DonationWindow();
 		dialog.set_transient_for(this);
-		dialog.show_all();
 		dialog.run();
 		dialog.destroy();
 	}

@@ -1898,10 +1898,9 @@ public class FileViewList : Gtk.Box {
 			
 		//}
 
-		FileItem item = null;
-
-		if (FileItem.cache.has_key(dir_path)){
-			item = FileItem.cache[dir_path];
+		FileItem item = FileItem.find_in_cache(dir_path);
+		
+		if (item != null){
 			log_debug("cache: found: %s".printf(dir_path), true);
 		}
 		else{
@@ -3758,6 +3757,7 @@ public class FileViewList : Gtk.Box {
 		else {
 			window.layout_box.set_panel_layout(PanelLayout.SINGLE);
 		}
+		
 		window.layout_box.reset_pane_positions();
 	}
 

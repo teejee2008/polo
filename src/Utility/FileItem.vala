@@ -334,7 +334,10 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 		if (cache.has_key(item_display_path)){
 			var cached_item = cache[item_display_path];
-			//return cached_item;
+			//if (!cached_item.is_directory){
+				//log_debug("get cache: %s".printf(item_display_path), true);
+				return cached_item;
+			//}
 		}
 
 		return null;
@@ -1047,7 +1050,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 				// check if directory
 				if (!item.is_directory) {
 					// add the item to cache, as it has no children
-					//add_to_cache(item); // no need to cache non-directories
+					add_to_cache(item);
 					return item;
 				}
 
@@ -1185,9 +1188,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			item = this.children[item_name];
 
 			//log_debug("existing child, queried: %s".printf(item.fileinfo_queried.to_string()));
-
-			// mark as fresh
-			item.is_stale = false;
 		}
 		else if (cache.has_key(item_file_path)){
 			
@@ -1207,6 +1207,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			item.parent = this;
 			this.children[item.file_name] = item;
 		}
+
+		item.is_stale = false; // mark fresh
 
 		//item.display_path = path_combine(this.display_path, item_name);
 
@@ -1741,7 +1743,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			return;
 		}
 
-		var cached = find_in_cache(display_path);
+		/*var cached = find_in_cache(display_path);
 		
 		if ((cached != null) && (cached.changed != null)){
 			
@@ -1759,8 +1761,10 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 		else{
 			query_file_info();
-		}
+		}*/
 
+		query_file_info(); // read folder properties
+		
 		try{
 			// mark existing children as stale
 			foreach(var child in children.values){

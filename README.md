@@ -30,7 +30,7 @@ Polo is a modern, light-weight file manager for Linux with support for multiple 
 
 [![](https://2.bp.blogspot.com/-ztn3NTFgZ7g/WSFeSyKB_CI/AAAAAAAAGv0/KqTj5Bd5VKkpqOED08G1fMtMznR980-FQCLcB/s1600/polo_layout_classic_list.png)](https://2.bp.blogspot.com/-ztn3NTFgZ7g/WSFeSyKB_CI/AAAAAAAAGv0/KqTj5Bd5VKkpqOED08G1fMtMznR980-FQCLcB/s1600/polo_layout_classic_list.png)
 
-![](https://1.bp.blogspot.com/-i0M8VMXGW2E/WSFeS7_XqBI/AAAAAAAAGvw/hWYkNIpn1w8IHvRqorNgjwcopfL6ZofvgCLcB/s1600/polo_layout_commander_icons.png)](https://1.bp.blogspot.com/-i0M8VMXGW2E/WSFeS7_XqBI/AAAAAAAAGvw/hWYkNIpn1w8IHvRqorNgjwcopfL6ZofvgCLcB/s1600/polo_layout_commander_icons.png)
+[![](https://1.bp.blogspot.com/-i0M8VMXGW2E/WSFeS7_XqBI/AAAAAAAAGvw/hWYkNIpn1w8IHvRqorNgjwcopfL6ZofvgCLcB/s1600/polo_layout_commander_icons.png)](https://1.bp.blogspot.com/-i0M8VMXGW2E/WSFeS7_XqBI/AAAAAAAAGvw/hWYkNIpn1w8IHvRqorNgjwcopfL6ZofvgCLcB/s1600/polo_layout_commander_icons.png)
 
 [![](https://4.bp.blogspot.com/-SoXr3INsUYo/WSFeTl19N_I/AAAAAAAAGv8/29ZnneUnWtYZhI-t3rQCx2z_n1JcjLtJQCLcB/s1600/polo_layout_commander_list.png)](https://4.bp.blogspot.com/-SoXr3INsUYo/WSFeTl19N_I/AAAAAAAAGv8/29ZnneUnWtYZhI-t3rQCx2z_n1JcjLtJQCLcB/s1600/polo_layout_commander_list.png)
 
