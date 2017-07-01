@@ -528,20 +528,20 @@ public class MiddleToolbar : Gtk.Toolbar {
 
 		icon_size_actual = 16;
 
-		img_cut.pixbuf = IconManager.lookup("gtk-cut", icon_size_actual);
-		img_copy.pixbuf = IconManager.lookup("gtk-copy", icon_size_actual);
-		img_paste.pixbuf = IconManager.lookup("gtk-paste", icon_size_actual);
+		img_cut.pixbuf = IconManager.lookup("edit-cut", icon_size_actual);
+		img_copy.pixbuf = IconManager.lookup("edit-copy", icon_size_actual);
+		img_paste.pixbuf = IconManager.lookup("edit-paste", icon_size_actual);
 
 		img_rename.pixbuf = IconManager.lookup("edit-rename", icon_size_actual);
 		img_trash.pixbuf = IconManager.lookup("user-trash", icon_size_actual);
-		img_delete.pixbuf = IconManager.lookup("gtk-delete", icon_size_actual);
+		img_delete.pixbuf = IconManager.lookup("edit-delete", icon_size_actual);
 		
 		img_move_across.pixbuf = IconManager.lookup("folder-move", icon_size_actual);
 		img_copy_across.pixbuf = IconManager.lookup("folder-copy", icon_size_actual);
 
 		img_new_file.pixbuf = IconManager.lookup("document-new", icon_size_actual);
 		img_new_folder.pixbuf = IconManager.lookup("folder-new", icon_size_actual);
-		img_open_terminal.pixbuf = IconManager.lookup("utilities-terminal", icon_size_actual);
+		img_open_terminal.pixbuf = IconManager.lookup("terminal", icon_size_actual);
 
 		img_props.pixbuf = IconManager.lookup("document-properties", icon_size_actual);
 

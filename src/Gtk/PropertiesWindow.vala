@@ -373,10 +373,10 @@ public class PropertiesWindow : Gtk.Window {
 		}
 		else{
 			if (file_item.file_type == FileType.DIRECTORY) {
-				image.icon_name = "gtk-directory";
+				image.pixbuf = IconManager.generic_icon_directory(256);
 			}
 			else{
-				image.icon_name = "gtk-file";
+				image.pixbuf = IconManager.generic_icon_file(256);
 			}
 		}
 

@@ -231,7 +231,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	public bool query_children_async_is_running = false;
 	public bool query_children_aborted = false;
 
-	//public string icon_name = "gtk-file";
 	public GLib.Icon icon;
 	private Gtk.Window? window = null;
 

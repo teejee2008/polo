@@ -314,12 +314,12 @@ public class AboutWindow : Dialog {
 
 		//btn_license
 		btn_license = new Gtk.Button.with_label("  " + _("License"));
-		btn_license.set_image (new Image.from_stock ("gtk-about", IconSize.MENU));
+		btn_license.image = IconManager.lookup_image("help-about", 16);
 		hbox_action.add(btn_license);
 
 		//btn_credits
 		btn_credits = new Gtk.Button.with_label("  " + _("Credits"));
-		btn_credits.set_image (new Image.from_stock ("gtk-about", IconSize.MENU));
+		btn_credits.image = IconManager.lookup_image("help-about", 16);
 		hbox_action.add(btn_credits);
 
 		// handlers

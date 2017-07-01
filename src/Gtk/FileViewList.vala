@@ -525,28 +525,6 @@ public class FileViewList : Gtk.Box {
 				pixcell.pixbuf = null;
 			}
 		});
-		/*
-		// cell icon
-		cell_pix = new Gtk.CellRendererPixbuf();
-		cell_pix.xpad = 3;
-		col.pack_start(cell_pix, false);
-
-		// render link indicator icon
-		col.set_cell_data_func (cell_pix, (cell_layout, cell, model, iter) => {
-
-			var pixcell = cell as Gtk.CellRendererPixbuf;
-
-			FileItem item;
-			model.get (iter, 0, out item, -1);
-
-			if (!item.can_write) {
-				pixcell.pixbuf = IconManager.lookup_image("lock.png", 16); //emblem-readonly
-			}
-			else{
-				pixcell.pixbuf = null;
-			}
-		});*/
-
 	}
 
 	private void add_col_size() {

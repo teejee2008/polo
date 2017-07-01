@@ -1,0 +1,13 @@
+#!/bin/bash
+
+backup=`pwd`
+DIR="$( cd "$( dirname "$0" )" && pwd )"
+cd "$DIR"
+
+egrep -h -R "IconManager." . > icons.txt
+# cleanup icons.txt
+cat icons.txt | sort | awk '!seen[$0]++'  > icons2.txt
+
+cd "$backup"
+
+

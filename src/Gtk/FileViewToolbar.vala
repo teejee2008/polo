@@ -731,7 +731,7 @@ public class FileViewToolbar : Gtk.Toolbar {
 		img_view.pixbuf = IconManager.lookup("view-grid", icon_size_actual);
 		img_bookmarks.pixbuf = IconManager.lookup("user-bookmarks", icon_size_actual);
 		img_devices.pixbuf = IconManager.lookup("drive-harddisk", icon_size_actual);
-		img_terminal.pixbuf = IconManager.lookup("utilities-terminal", icon_size_actual);
+		img_terminal.pixbuf = IconManager.lookup("terminal", icon_size_actual);
 
 		img_settings.pixbuf = IconManager.lookup("preferences-system", icon_size_actual);
 		img_donate.pixbuf = IconManager.lookup("donate", icon_size_actual);

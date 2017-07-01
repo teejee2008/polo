@@ -768,7 +768,7 @@ public class Sidebar : Gtk.Box {
 			row.set_tooltip_text(item.tooltip);
 			//row.selected = false;
 
-			image.pixbuf = IconManager.lookup("add", 16, false);
+			image.pixbuf = IconManager.lookup("list-add", 16, false);
 			image.margin_left = 12;
 
 			label.label = item.name;
@@ -788,7 +788,7 @@ public class Sidebar : Gtk.Box {
 			row.set_tooltip_text(item.tooltip);
 			//row.selected = false;
 
-			image.pixbuf = IconManager.lookup("remove", 16, false);
+			image.pixbuf = IconManager.lookup("list-remove", 16, false);
 
 			label.label = item.name;
 			label.set_use_markup(false);
@@ -1045,7 +1045,7 @@ public class Sidebar : Gtk.Box {
 
 	private void add_lock_button(Gtk.Box box, Device dev){
 		var icon_size = popup ? 16 : 16;
-		var img = new Gtk.Image.from_pixbuf(IconManager.lookup("lock-symbolic", icon_size, true, true));
+		var img = IconManager.lookup_image("lock", icon_size, true, true);
 
 		var ebox = new Gtk.EventBox();
 		ebox.add(img);

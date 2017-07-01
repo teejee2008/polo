@@ -245,7 +245,7 @@ public class ColumnSelectionBox : Gtk.Box {
 
 		if (popup){
 			button.label = "";
-			button.image = IconManager.lookup_image("up", 16);
+			button.image = IconManager.lookup_image("go-up", 16);
 			button.always_show_image = true;
 		}
 
@@ -262,7 +262,7 @@ public class ColumnSelectionBox : Gtk.Box {
 
 		if (popup){
 			button.label = "";
-			button.image = IconManager.lookup_image("down", 16);
+			button.image = IconManager.lookup_image("go-down", 16);
 			button.always_show_image = true;
 		}
 

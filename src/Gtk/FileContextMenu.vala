@@ -676,20 +676,6 @@ public class FileContextMenu : Gtk.Menu {
 		menu_item.activate.connect (() => {
 			view.open_terminal();
 		});
-
-		// open terminal (admin)
-
-		/*menu_item = gtk_menu_add_item(
-			this,
-			_("Open Terminal (Admin)"),
-			_("Open an administrator terminal window"),
-			IconManager.lookup_image("terminal",16),
-			sg_icon,
-			sg_label);
-
-		menu_item.activate.connect (() => {
-			view.open_terminal(true);
-		});*/
 	}
 
 	private void add_new_tab(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){

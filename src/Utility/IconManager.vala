@@ -245,6 +245,10 @@ public class IconManager : GLib.Object {
 		return lookup("text-x-preview", icon_size, false);
     }
 
+     public static Gdk.Pixbuf? generic_archive_file(int icon_size) {
+		return lookup("package-x-generic", icon_size, false);
+    }
+
     public static Gdk.Pixbuf? generic_icon_directory(int icon_size) {
 		return lookup("folder", icon_size, false);
     }
