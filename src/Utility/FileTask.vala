@@ -187,7 +187,7 @@ public class FileTask : GLib.Object {
 					if (destination.children.has_key(item.file_name)){
 						int index = 1;
 						do{
-							dest_item_name = item.file_name + " (%d)".printf(index++);
+							dest_item_name = "%s%s%s".printf(item.file_title, " (%d)".printf(index++), item.file_extension);
 						}
 						while(file_or_dir_exists(path_combine(destination.file_path, dest_item_name)));
 					}
@@ -569,6 +569,7 @@ public class FileTask : GLib.Object {
 					int index = 1;
 					do{
 						dest_item_name = "%s%s%s".printf(item.file_title, " (%d)".printf(index++), item.file_extension);
+						// TODO: restore to same path?
 					}
 					while(file_or_dir_exists(path_combine(destination.file_path, dest_item_name)));
 				}

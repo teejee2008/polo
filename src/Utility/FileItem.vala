@@ -1029,74 +1029,73 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 		FileItem item = null;
 
-		//log_debug("add_child_from_disk: %02d: %s".printf(depth, child_item_file_path), true);
+		log_debug("add_child_from_disk: %s".printf(child_item_file_path));
 
 		try {
 			FileEnumerator enumerator;
 			FileInfo info;
 			File file = File.parse_name (child_item_file_path);
 
-			if (file.query_exists()) {
+			if (!file.query_exists()) { return null; }
 
-				// query file type
-				var item_file_type = file.query_file_type(FileQueryInfoFlags.NONE);
+			// query file type
+			var item_file_type = file.query_file_type(FileQueryInfoFlags.NONE);
 
-				// add item
-				item = this.add_child(child_item_file_path, item_file_type, 0, 0, true);
+			// add item
+			item = this.add_child(child_item_file_path, item_file_type, 0, 0, true);
 
-				//log_debug("add_child_from_disk(): file_path=%s".printf(item.file_path));
+			//log_debug("add_child_from_disk(): file_path=%s".printf(item.file_path));
 
-				// check if directory
-				if (!item.is_directory) {
-					// add the item to cache, as it has no children
-					add_to_cache(item);
-					return item;
-				}
+			// check if directory
+			if (!item.is_directory) {
+				// add the item to cache, as it has no children
+				add_to_cache(item);
+				return item;
+			}
 
-				if (depth < 0){
-					// we are querying everything under this directory, so the directory size will be accurate; set flag for this
-					item.dir_size_queried = true;
-					//log_debug("dir_size_queried: %s".printf(this.file_name));
-				}
-		
-				// enumerate item's children
+			if (depth < 0){
+				// we are querying everything under this directory, so the directory size will be accurate; set flag for this
+				item.dir_size_queried = true;
+				//log_debug("dir_size_queried: %s".printf(this.file_name));
+			}
+	
+			// enumerate item's children
 
-				try {
+			try {
 
-					item.file_count = 0;
-					item.dir_count = 0;
+				item.file_count = 0;
+				item.dir_count = 0;
+				
+				enumerator = file.enumerate_children ("%s,%s".printf(FileAttribute.STANDARD_NAME,FileAttribute.STANDARD_TYPE), 0);
+				
+				while ((info = enumerator.next_file()) != null) {
 					
-					enumerator = file.enumerate_children ("%s,%s".printf(FileAttribute.STANDARD_NAME,FileAttribute.STANDARD_TYPE), 0);
-					
-					while ((info = enumerator.next_file()) != null) {
-						
-						if (query_children_aborted) {
-							item.query_children_aborted = true;
-							item.dir_size_queried = false;
-							return null;
-						}
+					if (query_children_aborted) {
+						item.query_children_aborted = true;
+						item.dir_size_queried = false;
+						return null;
+					}
 
-						string child_path = path_combine(child_item_file_path, info.get_name());
+					string child_path = path_combine(child_item_file_path, info.get_name());
 
-						if (depth == 0){
-							// count the item's children, do not add
-							if (info.get_file_type() == FileType.DIRECTORY){
-								item.dir_count++;
-							}
-							else{ item.file_count++; }
+					if (depth == 0){
+						// count the item's children, do not add
+						if (info.get_file_type() == FileType.DIRECTORY){
+							item.dir_count++;
 						}
-						else{
-							// add item's children from disk and drill down further
-							item.add_child_from_disk(child_path, depth - 1);
+						else{ item.file_count++; }
+					}
+					else{
+						// add item's children from disk and drill down further
+						item.add_child_from_disk(child_path, depth - 1);
 
-							// add the item to cache, as it's children have been added
-							add_to_cache(item);
-						}
+						// add the item to cache, as it's children have been added
+						add_to_cache(item);
 					}
 				}
-				catch (Error e) {
-					log_error (e.message);
-				}
+			}
+			catch (Error e) {
+				log_error (e.message);
 			}
 		}
 		catch (Error e) {
@@ -1181,14 +1180,14 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 		string item_name = file_basename(item_file_path);
 		
-		if (children.has_key(item_name)){
+		if (children.has_key(item_name) && (children[item_name].file_name == item_name)){
 
 			existing_file = true;
-			item = this.children[item_name];
+			item = children[item_name];
 
 			//log_debug("existing child, queried: %s".printf(item.fileinfo_queried.to_string()));
 		}
-		else if (cache.has_key(item_file_path)){
+		else if (cache.has_key(item_file_path) && (cache[item_file_path].file_path == item_file_path)){
 			
 			item = cache[item_file_path];
 
@@ -1770,6 +1769,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 				child.is_stale = true;
 			}
 
+			//children.clear();
+
 			//log_debug("FileItem: query_children(): enumerate_children");
 
 			// recurse children
@@ -1778,7 +1779,9 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 				//log_debug("FileItem: query_children(): found: %s".printf(info.get_name()));
 				string child_name = info.get_name();
 				string child_path = GLib.Path.build_filename(file_path, child_name);
-				this.add_child_from_disk(child_path, depth - 1);
+				var child = this.add_child_from_disk(child_path, depth - 1);
+				//child.is_stale = false;
+				//log_debug("fresh: name: %s".printf(child.file_name));
 				
 				if (query_children_aborted) {
 					dir_size_queried = false;
@@ -1795,7 +1798,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 				}
 			}
 			foreach(var key in list){
-				//log_debug("Unset:%s".printf(key));
+				//log_debug("unset: key: %s, name: %s".printf(key, children[key].file_name));
 				children.unset(key);
 			}
 		}
