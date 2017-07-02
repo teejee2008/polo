@@ -2526,6 +2526,7 @@ public class Settings : Gtk.Box {
 			var label = new Gtk.Label("<b>%s</b>".printf(header_text.replace("&amp;","&").replace("&","&amp;")));
 			label.set_use_markup(true);
 			label.xalign = (float) 0.0;
+			label.yalign = (float) 0.0;
 			vbox.add(label);
 			label.margin_bottom = 6;
 			vbox.margin_bottom = 6; // add box bottom padding only if group has a header
@@ -2544,6 +2545,7 @@ public class Settings : Gtk.Box {
 			var label = new Gtk.Label("<i>%s</i>".printf(header_text));
 			label.set_use_markup(true);
 			label.xalign = (float) 0.0;
+			label.yalign = (float) 0.0;
 			vbox.add(label);
 			label.margin_bottom = 6;
 			vbox.margin_bottom = 6; // add box bottom padding only if group has a header

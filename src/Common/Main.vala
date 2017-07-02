@@ -37,7 +37,8 @@ using TeeJee.Misc;
 public Main App;
 public const string AppName = "Polo File Manager";
 public const string AppShortName = "polo";
-public const string AppVersion = "17.6 (BETA 7)";
+public const string AppVersion = "17.7 (BETA 8)";
+public const string AppWikiVersion = "17.7 (BETA 8)"; // update only if wiki page exists
 public const string AppAuthor = "Tony George";
 public const string AppAuthorEmail = "teejeetech@gmail.com";
 
@@ -67,6 +68,8 @@ public class Main : GLib.Object {
 	public bool associate_archives = true;
 	public string last_input_dir = "";
 	public string last_output_dir = "";
+
+	public string app_version_in_config = "";
 
 	public bool first_run = false;
 	public FileItem fs_root = null;
@@ -528,13 +531,9 @@ public class Main : GLib.Object {
 
 		var config = new Json.Object();
 
-		//if (archive_task != null){
-		//	config = archive_task.to_json();
-		//}
-
 		set_numeric_locale("C"); // switch numeric locale
 
-		//config.set_string_member("first_run", first_run.to_string());
+		config.set_string_member("app-version", AppVersion);
 
 		config.set_int_member("format-version", (int64) APP_CONFIG_FORMAT_VERSION);
 
@@ -699,6 +698,10 @@ public class Main : GLib.Object {
 
 		set_numeric_locale("C"); // switch numeric locale
 
+		app_version_in_config = json_get_string(config, "app-version", "0");
+		// set dummy version number, if config file exists but parameter is missing
+		// this will trigger display of change log file
+
 		middlebar_visible = json_get_bool(config, "middlebar_visible", middlebar_visible);
 		sidebar_visible = json_get_bool(config, "sidebar_visible", sidebar_visible);
 		sidebar_dark = json_get_bool(config, "sidebar_dark", sidebar_dark);
@@ -839,7 +842,30 @@ public class Main : GLib.Object {
 		set_numeric_locale(""); // reset numeric locale
 	}
 
+	public bool first_run_after_update(){
 
+		if ((app_version_in_config.length > 0) && (app_version_in_config != AppVersion)){
+			save_app_config(); // update new version in config file
+			return true;
+		}
+
+		return false;
+	}
+
+	public void open_changelog_webpage(){
+		
+		string username = "";
+		if (get_user_id_effective() == 0){
+			username = get_username();
+		}
+
+		string uri = "https://github.com/teejee2008/polo/wiki/Polo-v%s".printf(AppVersion.replace(" ","-"));
+
+		if (AppVersion == AppWikiVersion){
+			xdg_open(uri, username);
+		}
+	}
+	
 	public void save_folder_selections() {
 
 		var config = new Json.Object();

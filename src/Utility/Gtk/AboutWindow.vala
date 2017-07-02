@@ -386,12 +386,23 @@ public class AboutWindow : Dialog {
 			}
 		});
 
-		//btn_close
-		btn_close = new Gtk.Button.with_label("  " + _("Close"));
-		btn_close.set_image (new Image.from_stock ("gtk-close", IconSize.MENU));
-		hbox_action.add(btn_close);
 
-		btn_close.clicked.connect(()=>{ this.destroy(); });
+		if (AppVersion == AppWikiVersion){
+			// changelog
+			var button = new Gtk.Button.with_label("  " + _("Changelog"));
+			hbox_action.add(button);
+
+			button.clicked.connect(()=>{
+				App.open_changelog_webpage();
+			});
+		}
+
+		// close
+		var button = new Gtk.Button.with_label("  " + _("Close"));
+		button.image = IconManager.lookup_image("window-close", 16);
+		hbox_action.add(button);
+
+		button.clicked.connect(()=>{ this.destroy(); });
 	}
 
 	public void initialize() {

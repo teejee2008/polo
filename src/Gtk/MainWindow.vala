@@ -227,6 +227,11 @@ public class MainWindow : Gtk.Window {
 		if (App.first_run){
 			open_wizard_window();
 		}
+		else{
+			if (App.first_run_after_update()){
+				App.open_changelog_webpage();
+			}
+		}
 
 		foreach(var view in views){
 			view.start_thumbnail_updater();
@@ -716,7 +721,10 @@ public class MainWindow : Gtk.Window {
 			"ExifTool by Phil Harvey (EXIF properties):http://www.sno.phy.queensu.ca/~phil/exiftool/",
 			"FFmpeg (video thumbnails):https://ffmpeg.org/",
 			"MediaInfo (media properties):https://mediaarea.net/en/MediaInfo",
-			"p7zip (archive handling):http://p7zip.sourceforge.net/"
+			"p7zip (archive handling):http://p7zip.sourceforge.net/",
+			"PDFtk (PDF handling):https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/",
+			"Ghostscript (PDF handling):https://www.ghostscript.com/",
+			"QEMU (vm):http://www.qemu.org/"
 		};
 
 		//TODO: Add all icon theme sources
