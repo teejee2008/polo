@@ -70,6 +70,8 @@ public class PropertiesWindow : Gtk.Window {
 		file_item = _file_item;
 		dir_item = file_item.is_directory ? file_item : (new FileItem.from_path(file_item.file_location));
 
+		file_item.query_file_info();
+		
 		init_window();
 	}
 

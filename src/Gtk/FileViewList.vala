@@ -4371,7 +4371,7 @@ public class FileViewList : Gtk.Box {
 		show_hidden_files = false;
 		refresh_hidden();
 	}
-	
+
 	// allowed actions
 
 	public bool is_normal_directory {

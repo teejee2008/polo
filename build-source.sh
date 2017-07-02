@@ -14,16 +14,14 @@ echo "==========================================================================
 echo ""
 
 echo "app_name: $app_name"
+echo "pkg_name: $pkg_name"
 echo "--------------------------------------------------------------------------"
 
 # commit to bzr repo
 bzr add *
 bzr commit -m "updated"
 
-#check for errors
-if [ $? -ne 0 ]; then
-	cd "$backup"; echo "Failed"; exit 1;
-fi
+#skip errors as commit may fail if no changes
 
 echo "--------------------------------------------------------------------------"
 

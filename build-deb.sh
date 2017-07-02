@@ -4,7 +4,7 @@ app_name=$(cat app_name)
 pkg_name=$(cat pkg_name)
 
 tgz="../../pbuilder/"
-dsc="../../builds/${app_name}*.dsc"
+dsc="../../builds/${pkg_name}*.dsc"
 libs="../../libs"
 
 backup=`pwd`
@@ -38,7 +38,7 @@ fi
 
 echo "--------------------------------------------------------------------------"
 
-cp -pv --no-preserve=ownership ./${arch}/${app_name}*.deb ./${app_name}-${arch}.deb 
+cp -pv --no-preserve=ownership ./${arch}/${pkg_name}*.deb ./${pkg_name}-${arch}.deb 
 
 #check for errors
 if [ $? -ne 0 ]; then

@@ -163,6 +163,10 @@ public class TermBox : Gtk.Box {
 		string[] argv = new string[1];
 		argv[0] = get_cmd_path("fish");
 
+		if (!cmd_exists("fish")){
+			argv[0] = get_cmd_path("bash");
+		}
+
 		string[] env = Environ.get();
 		
 		try{

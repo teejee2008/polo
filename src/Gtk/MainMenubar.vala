@@ -62,6 +62,7 @@ public class MainMenuBar : Gtk.MenuBar {
 	private Gtk.Menu? menu = null;
 	private bool menu_mode = false;
 	private bool refreshed_once = false;
+	private Gtk.CheckMenuItem chk_hidden;
 
 	public signal void context_term();
 
@@ -175,9 +176,7 @@ public class MainMenuBar : Gtk.MenuBar {
 		var item = new Gtk.MenuItem.with_label (_("New Tab"));
 		submenu.add(item);
 
-		item.activate.connect (() => {
-			panel.add_tab();
-		});
+		item.activate.connect(panel_add_tab);
 
 		string key = "<Control>t";
 
@@ -208,6 +207,10 @@ public class MainMenuBar : Gtk.MenuBar {
 			item.sensitive = false;
 			remove_action_accel(item, key);
 		});
+	}
+
+	private void panel_add_tab(){
+		panel.add_tab();
 	}
 
 	private void add_new_window(Gtk.Menu submenu){
@@ -878,36 +881,39 @@ public class MainMenuBar : Gtk.MenuBar {
 
 		var item = new Gtk.CheckMenuItem.with_label (_("Show Hidden"));
 		submenu.add(item);
-		var chk_hidden = item;
+		chk_hidden = item;
 
-		item.activate.connect (() => {
-			if (view == null) { return; }
-			
-			if (chk_hidden.active){
-				view.show_hidden();
-			}
-			else{
-				view.hide_hidden();
-			}
-		});
+		item.activate.connect(view_toggle_hidden);
 
 		string key = "<Control>h";
 
 		context_normal.connect(()=>{
 			item.sensitive = true;
+
+			item.activate.disconnect(view_toggle_hidden);
 			item.active = (view == null) ? false : view.show_hidden_files;
+			item.activate.connect(view_toggle_hidden);
+			
 			add_action_accel(item, key);
 		});
 
 		context_trash.connect(()=>{
 			item.sensitive = true;
+
+			item.activate.disconnect(view_toggle_hidden);
 			item.active = (view == null) ? false : view.show_hidden_files;
+			item.activate.connect(view_toggle_hidden);
+			
 			add_action_accel(item, key);
 		});
 
 		context_archive.connect(()=>{
 			item.sensitive = true;
+
+			item.activate.disconnect(view_toggle_hidden);
 			item.active = (view == null) ? false : view.show_hidden_files;
+			item.activate.connect(view_toggle_hidden);
+			
 			add_action_accel(item, key);
 		});
 
@@ -923,6 +929,18 @@ public class MainMenuBar : Gtk.MenuBar {
 			item.sensitive = false;
 			remove_action_accel(item, key);
 		});
+	}
+
+	private void view_toggle_hidden(){
+		
+		if (view == null) { return; }
+			
+		if (chk_hidden.active){
+			view.show_hidden();
+		}
+		else{
+			view.hide_hidden();
+		}
 	}
 
 	private void add_layout(Gtk.Menu submenu){
@@ -954,34 +972,47 @@ public class MainMenuBar : Gtk.MenuBar {
 		var item = new Gtk.CheckMenuItem.with_label (_("Dual Pane Mode"));
 		submenu.add(item);
 
-		item.activate.connect (() => {
-			if (view == null) { return; }
-			view.toggle_dual_pane();
-		});
+		item.activate.connect(view_toggle_dual);
 
 		string key = "F3";
 
 		context_normal.connect(()=>{
 			item.sensitive = true;
+
+			item.activate.disconnect(view_toggle_dual);
 			item.active = (window.layout_box != null) && (window.layout_box.get_panel_layout() == PanelLayout.DUAL_VERTICAL);
+			item.activate.connect(view_toggle_dual);
+			
 			add_action_accel(item, key);
 		});
 
 		context_trash.connect(()=>{
 			item.sensitive = true;
+
+			item.activate.disconnect(view_toggle_dual);
 			item.active = (window.layout_box != null) && (window.layout_box.get_panel_layout() == PanelLayout.DUAL_VERTICAL);
+			item.activate.connect(view_toggle_dual);
+			
 			add_action_accel(item, key);
 		});
 
 		context_archive.connect(()=>{
 			item.sensitive = true;
+
+			item.activate.disconnect(view_toggle_dual);
 			item.active = (window.layout_box != null) && (window.layout_box.get_panel_layout() == PanelLayout.DUAL_VERTICAL);
+			item.activate.connect(view_toggle_dual);
+			
 			add_action_accel(item, key);
 		});
 
 		context_term.connect(()=>{
 			item.sensitive = true;
+
+			item.activate.disconnect(view_toggle_dual);
 			item.active = (window.layout_box != null) && (window.layout_box.get_panel_layout() == PanelLayout.DUAL_VERTICAL);
+			item.activate.connect(view_toggle_dual);
+			
 			add_action_accel(item, key);
 		});
 		
@@ -995,32 +1026,49 @@ public class MainMenuBar : Gtk.MenuBar {
 		});
 	}
 
+	private void view_toggle_dual(){
+		
+		if (view == null) { return; }
+			
+		view.toggle_dual_pane();
+	}
+
 	private void add_fullscreen_mode(Gtk.Menu submenu){
 		
 		var item = new Gtk.CheckMenuItem.with_label (_("Fullscreen Mode"));
 		submenu.add(item);
 
-		item.activate.connect (() => {
-			window.toggle_fullscreen();
-		});
+		item.activate.connect(window.toggle_fullscreen);
 		
 		string key = "F11";
 
 		context_normal.connect(()=>{
 			item.sensitive = true;
+			
+			item.activate.disconnect(window.toggle_fullscreen);
 			item.active = window.is_maximized;
+			item.activate.connect(window.toggle_fullscreen);
+
 			add_action_accel(item, key);
 		});
 
 		context_trash.connect(()=>{
 			item.sensitive = true;
+			
+			item.activate.disconnect(window.toggle_fullscreen);
 			item.active = window.is_maximized;
+			item.activate.connect(window.toggle_fullscreen);
+			
 			add_action_accel(item, key);
 		});
 
 		context_archive.connect(()=>{
 			item.sensitive = true;
+			
+			item.activate.disconnect(window.toggle_fullscreen);
 			item.active = window.is_maximized;
+			item.activate.connect(window.toggle_fullscreen);
+			
 			add_action_accel(item, key);
 		});
 

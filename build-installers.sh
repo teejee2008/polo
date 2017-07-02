@@ -24,7 +24,7 @@ echo " build-installers.sh : $arch"
 echo "=========================================================================="
 echo ""
 
-dpkg-deb -x ${arch}/${app_name}*.deb ${arch}/files
+dpkg-deb -x ${arch}/${pkg_name}*.deb ${arch}/files
 
 #check for errors
 if [ $? -ne 0 ]; then
@@ -33,7 +33,7 @@ fi
 
 echo "--------------------------------------------------------------------------"
 
-rm -rfv ${arch}/${app_name}*.* # remove extra files
+rm -rfv ${arch}/${pkg_name}*.* # remove extra files
 cp -pv --no-preserve=ownership ./sanity.config ./${arch}/sanity.config
 sanity --generate --base-path ./${arch} --out-path . --arch ${arch}
 
