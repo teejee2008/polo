@@ -57,7 +57,8 @@ public abstract class AsyncTask : GLib.Object{
 	public AppStatus status;
 	public string status_line = "";
 	public string stats_line = "";
-	public string error_msg = "";
+	private string error_msg = ""; // call get_error_message()
+	
 	public GLib.Timer timer;
 	public double progress = 0.0;
 	public double percent = 0.0;
@@ -103,6 +104,8 @@ public abstract class AsyncTask : GLib.Object{
 		prg_count = 0;
 		prg_bytes = 0;
 		error_msg = "";
+
+		log_debug("AsyncTask: %s".printf(script_file));
 		
 		string[] spawn_args = new string[1];
 		spawn_args[0] = script_file;
@@ -181,12 +184,18 @@ public abstract class AsyncTask : GLib.Object{
 			stdout_is_open = true;
 			
 			out_line = dis_out.read_line (null);
+			
 			while (out_line != null) {
+				
 				//log_msg("O: " + out_line);
 				if (!is_terminated && (out_line.length > 0)){
+
+					log_msg("ASYNC_O: " + out_line);
+					
 					parse_stdout_line(out_line);
 					stdout_line_read(out_line); //signal
 				}
+				
 				out_line = dis_out.read_line (null); //read next
 			}
 
@@ -216,13 +225,19 @@ public abstract class AsyncTask : GLib.Object{
 			stderr_is_open = true;
 			
 			err_line = dis_err.read_line (null);
+			
 			while (err_line != null) {
+				
 				if (!is_terminated && (err_line.length > 0)){
-					error_msg += "%s\n".printf(err_line);
 					
+					error_msg += "%s\n".printf(err_line);
+
+					log_msg("ASYNC_E: " + err_line);
+
 					parse_stderr_line(err_line);
 					stderr_line_read(err_line); //signal
 				}
+				
 				err_line = dis_err.read_line (null); //read next
 			}
 
@@ -326,6 +341,10 @@ public abstract class AsyncTask : GLib.Object{
 
 	protected abstract void finish_task();
 
+	public string get_error_message(){
+		return error_msg.strip();
+	}
+	
 	public int get_exit_code(){
 		int exit_code = -1;
 		var path = file_parent(script_file) + "/status";
@@ -414,6 +433,7 @@ public abstract class AsyncTask : GLib.Object{
 	}
 
 	public string stat_time_remaining{
+		
 		owned get{
 			if (progress > 0){
 				long elapsed = (long) timer_elapsed(timer);
@@ -430,6 +450,7 @@ public abstract class AsyncTask : GLib.Object{
 	}
 
 	public void print_app_status(){
+		
 		switch(status){
 		case AppStatus.NOT_STARTED:
 			log_debug("status=%s".printf("NOT_STARTED"));
@@ -469,7 +490,7 @@ public class RsyncTask : AsyncTask{
 	public bool delete_extra = true;
 
 	public RsyncTask(){
-	*
+	
 		init_regular_expressions();
 	}
 	
@@ -521,17 +542,16 @@ public class RsyncTask : AsyncTask{
 	}
 
 	public override void parse_stdout_line(string out_line){
-		if (is_terminated) {
-			return;
-		}
+	
+		if (is_terminated) { return; }
 		
 		update_progress_parse_console_output(out_line);
 	}
 	
 	public override void parse_stderr_line(string err_line){
-		if (is_terminated) {
-			return;
-		}
+	
+		if (is_terminated) { return; }
+
 		
 		update_progress_parse_console_output(err_line);
 	}

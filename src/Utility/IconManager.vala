@@ -80,6 +80,8 @@ public class IconManager : GLib.Object {
 
 		Gdk.Pixbuf? pixbuf = null;
 
+		if (icon_name.length == 0){ return null; }
+
 		if (!use_hardcoded){
 			try {
 				pixbuf = theme.load_icon_for_scale(icon_name, icon_size, 1, Gtk.IconLookupFlags.FORCE_SIZE);
@@ -114,6 +116,8 @@ public class IconManager : GLib.Object {
 	}
 	
 	public static Gtk.Image? lookup_image(string icon_name, int icon_size, bool symbolic = false, bool use_hardcoded = false){
+
+		if (icon_name.length == 0){ return null; }
 		
 		Gdk.Pixbuf? pix = lookup(icon_name, icon_size, symbolic, use_hardcoded);
 		
@@ -125,10 +129,12 @@ public class IconManager : GLib.Object {
 		}
 	}
 
-	public static Gdk.Pixbuf? lookup_gicon(GLib.Icon gicon, int icon_size){
+	public static Gdk.Pixbuf? lookup_gicon(GLib.Icon? gicon, int icon_size){
 
 		Gdk.Pixbuf? pixbuf = null;
 
+		if (gicon == null){ return null; }
+		
 		try {
 			pixbuf = theme.lookup_by_gicon(gicon, icon_size, Gtk.IconLookupFlags.FORCE_SIZE).load_icon();
 		}
@@ -141,6 +147,8 @@ public class IconManager : GLib.Object {
 
 	public static Gtk.Image? lookup_animation(string gif_name){
 
+		if (gif_name.length == 0){ return null; }
+		
 		foreach(string search_path in search_paths){
 
 			foreach(string ext in new string[] { ".gif" }){
@@ -160,7 +168,7 @@ public class IconManager : GLib.Object {
 	public static Gdk.Pixbuf? add_emblem (Gdk.Pixbuf pixbuf, string icon_name, int emblem_size,
 		bool emblem_symbolic, Gtk.CornerType corner_type) {
 
-		//log_debug("get_emblemed_icon");
+		if (icon_name.length == 0){ return pixbuf; }
 
         Gdk.Pixbuf? emblem = null;
 
@@ -237,7 +245,20 @@ public class IconManager : GLib.Object {
 		return lookup("text-x-preview", icon_size, false);
     }
 
+     public static Gdk.Pixbuf? generic_archive_file(int icon_size) {
+		return lookup("package-x-generic", icon_size, false);
+    }
+
     public static Gdk.Pixbuf? generic_icon_directory(int icon_size) {
 		return lookup("folder", icon_size, false);
     }
+
+    public static Gdk.Pixbuf? generic_icon_iso(int icon_size) {
+		return lookup("media-cdrom", icon_size, false);
+    }
+
+    public static Gdk.Pixbuf? generic_icon_pdf(int icon_size) {
+		return lookup("application-pdf", icon_size, false);
+    }
+
 }

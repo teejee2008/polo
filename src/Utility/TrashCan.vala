@@ -122,7 +122,7 @@ public class TrashCan : FileItem {
 		
 		string dir_files = path_combine(trash_path, "files");
 		string dir_info = path_combine(trash_path, "info");
-		string dir_expunged = path_combine(trash_path, "expunged");
+		//string dir_expunged = path_combine(trash_path, "expunged");
 
 		if (!dir_exists(dir_files) || !dir_exists(dir_info)){
 			log_error("Trash: directories 'info' and 'files' not found: %s".printf(trash_path));
@@ -143,7 +143,7 @@ public class TrashCan : FileItem {
 		
 		string dir_files = path_combine(trash_path, "files");
 		string dir_info = path_combine(trash_path, "info");
-		string dir_expunged = path_combine(trash_path, "expunged");
+		//string dir_expunged = path_combine(trash_path, "expunged");
 		
 		var dir = new FileItem.from_path(dir_info);
 		dir.query_children(1);

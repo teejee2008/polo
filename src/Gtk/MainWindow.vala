@@ -227,6 +227,11 @@ public class MainWindow : Gtk.Window {
 		if (App.first_run){
 			open_wizard_window();
 		}
+		else{
+			if (App.first_run_after_update()){
+				App.open_changelog_webpage();
+			}
+		}
 
 		foreach(var view in views){
 			view.start_thumbnail_updater();
@@ -687,7 +692,6 @@ public class MainWindow : Gtk.Window {
 	public void open_donate_window(){
 		var dialog = new DonationWindow();
 		dialog.set_transient_for(this);
-		dialog.show_all();
 		dialog.run();
 		dialog.destroy();
 	}
@@ -717,7 +721,10 @@ public class MainWindow : Gtk.Window {
 			"ExifTool by Phil Harvey (EXIF properties):http://www.sno.phy.queensu.ca/~phil/exiftool/",
 			"FFmpeg (video thumbnails):https://ffmpeg.org/",
 			"MediaInfo (media properties):https://mediaarea.net/en/MediaInfo",
-			"p7zip (archive handling):http://p7zip.sourceforge.net/"
+			"p7zip (archive handling):http://p7zip.sourceforge.net/",
+			"PDFtk (PDF handling):https://www.pdflabs.com/tools/pdftk-the-pdf-toolkit/",
+			"Ghostscript (PDF handling):https://www.ghostscript.com/",
+			"QEMU (vm):http://www.qemu.org/"
 		};
 
 		//TODO: Add all icon theme sources
@@ -757,32 +764,16 @@ public class MainWindow : Gtk.Window {
 		layout_box.panel1.run_script_in_new_terminal_tab(cmd, _("Cleaning Thumbnail Cache..."));
 	}
 
-	public void install_etcher(){
+	public void cloud_login(){
 
-		string fmt = """https://resin-production-downloads.s3.amazonaws.com/etcher/1.0.0/Etcher-1.0.0-linux-%s.zip""";
-		var url = fmt.printf((App.sysinfo.arch == 64) ? "x64" : "x86");
-		
-		fmt = "Etcher-1.0.0-linux-%s.zip";
-		var zip_name = fmt.printf((App.sysinfo.arch == 64) ? "x64" : "x86");
-		
-		fmt = "Etcher-1.0.0-linux-%s.AppImage";
-		var ins_name = fmt.printf((App.sysinfo.arch == 64) ? "x64" : "x86");
-		
-		string cmd = "cd '%s'\n".printf(escape_single_quote(TEMP_DIR));
-		cmd += "aria2c -x 10 '%s' \n".printf(url);
-		cmd += "if [ ! -f %s ]; then echo 'Error' ; exit 1; fi \n".printf(zip_name);
-		cmd += "7z e %s \n".printf(zip_name);
-		cmd += "if [ ! -f %s ]; then echo 'Error' ; exit 1; fi \n".printf(ins_name);
-		cmd += "chmod a+x %s \n".printf(ins_name);
-		cmd += "./%s \n".printf(ins_name);
+		err_log_clear();
 
-		log_debug("cmd=\n"+cmd);
+		var win = new CloudLoginWindow(this);
 
-		refresh_apps_pending = true;
-		
-		layout_box.panel1.run_script_in_new_terminal_tab(cmd, _("Installing Etcher..."));
 	}
 
+	// session -------------------------------------
+	
 	public void save_session(){
 
 		log_msg("MainWindow: save_session()");

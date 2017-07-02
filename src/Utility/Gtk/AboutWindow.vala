@@ -291,12 +291,7 @@ public class AboutWindow : Dialog {
 		vbox_logo.add(lbtn_website);
 
 		lbtn_website.activate_link.connect(()=>{
-			try{
-				return xdg_open(lbtn_website.uri, username); 
-			}
-			catch(Error e){
-				return false;
-			}
+			return xdg_open(lbtn_website.uri, username); 
 		});
 
 		//copyright
@@ -319,12 +314,12 @@ public class AboutWindow : Dialog {
 
 		//btn_license
 		btn_license = new Gtk.Button.with_label("  " + _("License"));
-		btn_license.set_image (new Image.from_stock ("gtk-about", IconSize.MENU));
+		btn_license.image = IconManager.lookup_image("help-about", 16);
 		hbox_action.add(btn_license);
 
 		//btn_credits
 		btn_credits = new Gtk.Button.with_label("  " + _("Credits"));
-		btn_credits.set_image (new Image.from_stock ("gtk-about", IconSize.MENU));
+		btn_credits.image = IconManager.lookup_image("help-about", 16);
 		hbox_action.add(btn_credits);
 
 		// handlers
@@ -391,12 +386,23 @@ public class AboutWindow : Dialog {
 			}
 		});
 
-		//btn_close
-		btn_close = new Gtk.Button.with_label("  " + _("Close"));
-		btn_close.set_image (new Image.from_stock ("gtk-close", IconSize.MENU));
-		hbox_action.add(btn_close);
 
-		btn_close.clicked.connect(()=>{ this.destroy(); });
+		if (AppVersion == AppWikiVersion){
+			// changelog
+			var button = new Gtk.Button.with_label("  " + _("Changelog"));
+			hbox_action.add(button);
+
+			button.clicked.connect(()=>{
+				App.open_changelog_webpage();
+			});
+		}
+
+		// close
+		var button = new Gtk.Button.with_label("  " + _("Close"));
+		button.image = IconManager.lookup_image("window-close", 16);
+		hbox_action.add(button);
+
+		button.clicked.connect(()=>{ this.destroy(); });
 	}
 
 	public void initialize() {
@@ -496,12 +502,7 @@ public class AboutWindow : Dialog {
 			}
 
 			link.activate_link.connect(()=>{
-				try{
-					return xdg_open(link.uri, username); 
-				}
-				catch(Error e){
-					return false;
-				}
+				return xdg_open(link.uri, username); 
 			});
 		}
 		else{

@@ -31,6 +31,7 @@ public class SysInfo : GLib.Object {
 	public int arch = 64;
 	public int mem_total_mb = 0;
 	public string hostname = "";
+	public int cpu_cores = 1;
 	
 	public SysInfo(){
 		query();
@@ -38,7 +39,9 @@ public class SysInfo : GLib.Object {
 
 	public void query(){
 		query_arch();
+		query_cpu_cores();
 		query_host_name();
+		query_memory();
 		print();
 	}
 
@@ -54,18 +57,33 @@ public class SysInfo : GLib.Object {
 			arch = 32;
 		}
 	}
-
-	public void query_host_name(){
+	
+	public void query_cpu_cores(){
 
 		string std_out, std_err;
-		exec_sync("echo $(hostname)", out std_out, out std_err);
+		exec_sync("grep -c ^processor /proc/cpuinfo", out std_out, out std_err);
 
-		hostname = std_out;
+		cpu_cores = int.parse(std_out);
+	}
+
+	public void query_host_name(){		
+
+		hostname = GLib.Environment.get_host_name();
+	}
+
+	public void query_memory(){
+
+		string std_out, std_err;
+		exec_script_sync("grep MemTotal /proc/meminfo | awk '{print $2}'", out std_out, out std_err);
+
+		mem_total_mb = (int) (int.parse(std_out) / 1024.0);
 	}
 
 	public void print(){
 		log_msg("Architecture: %d-bit".printf(arch));
 		log_msg("Host Name: %s".printf(hostname));
+		log_msg("CPU Cores: %d".printf(cpu_cores));
+		log_msg("RAM: %d MB".printf(mem_total_mb));
 	}
 }
 

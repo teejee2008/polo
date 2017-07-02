@@ -294,6 +294,7 @@ namespace TeeJee.GtkHelper{
 	// icon -------
 	
 	public Gdk.Pixbuf? get_app_icon(int icon_size, string format = ".png"){
+		
 		var img_icon = get_shared_icon(AppShortName, AppShortName + format,icon_size,"pixmaps");
 		if (img_icon != null){
 			return img_icon.pixbuf;
@@ -308,32 +309,41 @@ namespace TeeJee.GtkHelper{
 		string fallback_icon_file_name,
 		int icon_size,
 		string icon_directory = AppShortName + "/images"){
-			
+		
 		Gdk.Pixbuf pix_icon = null;
 		Gtk.Image img_icon = null;
 
+		if ((icon_name.length == 0) && (fallback_icon_file_name.length == 0)){
+			return null;
+		}
+		
 		try {
-			Gtk.IconTheme icon_theme = Gtk.IconTheme.get_default();
-			
-			pix_icon = icon_theme.load_icon_for_scale (
-				icon_name, Gtk.IconSize.MENU, icon_size, Gtk.IconLookupFlags.FORCE_SIZE);
+			if (icon_name.length > 0) {
 				
-		} catch (Error e) {
-			//log_error (e.message);
+				Gtk.IconTheme icon_theme = Gtk.IconTheme.get_default();
+				
+				pix_icon = icon_theme.load_icon_for_scale (
+					icon_name, Gtk.IconSize.MENU, icon_size, Gtk.IconLookupFlags.FORCE_SIZE);
+			}
+		}
+		catch (Error e) {
+			log_warning (e.message);
 		}
 
+		if (fallback_icon_file_name.length == 0){ return null; }
+		
 		string fallback_icon_file_path = "/usr/share/%s/%s".printf(icon_directory, fallback_icon_file_name);
 
 		if (pix_icon == null){
 			try {
 				pix_icon = new Gdk.Pixbuf.from_file_at_size (fallback_icon_file_path, icon_size, icon_size);
 			} catch (Error e) {
-				log_error (e.message);
+				log_warning (e.message);
 			}
 		}
 
 		if (pix_icon == null){
-			log_error (_("Missing Icon") + ": '%s', '%s'".printf(icon_name, fallback_icon_file_path));
+			log_warning (_("Missing Icon") + ": '%s', '%s'".printf(icon_name, fallback_icon_file_path));
 		}
 		else{
 			img_icon = new Gtk.Image.from_pixbuf(pix_icon);
@@ -372,6 +382,16 @@ namespace TeeJee.GtkHelper{
 		return pixbuf;
 	}
 
+    public Gtk.Image? gtk_image_from_pixbuf(Gdk.Pixbuf? pixbuf) {
+		
+		if (pixbuf != null){
+			return new Gtk.Image.from_pixbuf(pixbuf);
+		}
+		else{
+			return null;
+		}
+    }
+    
 	public int gtk_icon_size_to_index(Gtk.IconSize icon_size){
 		
 		switch(icon_size){

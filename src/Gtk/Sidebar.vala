@@ -92,6 +92,18 @@ public class Sidebar : Gtk.Box {
 		}
 	}
 
+	public bool is_bm_popup {
+		get{
+			return (popover != null) && (popup_mode == "bm");
+		}
+	}
+
+	public bool is_device_popup {
+		get{
+			return (popover != null) && (popup_mode == "device");
+		}
+	}
+
 	// contructors
 
 	public Sidebar(Gtk.Popover? _popover, string? mode, FileViewPane? parent_pane){
@@ -114,12 +126,9 @@ public class Sidebar : Gtk.Box {
 		listbox = new Gtk.ListBox ();
 		listbox.selection_mode = Gtk.SelectionMode.SINGLE;
 		listbox.vexpand = true;
-		//listbox.margin_right = 12;
 
 		//listbox.drag_data_received.connect(on_drag_data_received);
 		//listbox.drag_data_get.connect(on_drag_data_get);
-
-		//listbox.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
 
 		listbox.leave_notify_event.connect((event) => {
 			hide_icons_current_row();
@@ -152,22 +161,38 @@ public class Sidebar : Gtk.Box {
 			}
 		}
 
-		if (!popup){
-			collapsed_sections = new Gee.ArrayList<string>();
-			foreach(var item in App.sidebar_collapsed_sections.split(",")){
-				if (!collapsed_sections.contains(item)){
-					collapsed_sections.add(item);
-				}
+		collapsed_sections = new Gee.ArrayList<string>();
+		foreach(var item in App.sidebar_collapsed_sections.split(",")){
+			if (!collapsed_sections.contains(item)){
+				collapsed_sections.add(item);
 			}
 		}
 	}
 
 	private void on_listbox_row_activated(Gtk.ListBoxRow row){
 
-		gtk_set_busy(true, window);
-
 		var item = (SidebarItem) row.get_data<SidebarItem>("item");
 
+		if (item.node_key.length > 0){
+			
+			log_debug("sidebar: header_activated");
+			node_expanded[item.node_key] = !node_expanded[item.node_key];
+			
+			if (node_expanded[item.node_key]){
+				if (collapsed_sections.contains(item.node_key)){
+					collapsed_sections.remove(item.node_key);
+				}
+			}
+			else{
+				if (!collapsed_sections.contains(item.node_key)){
+					collapsed_sections.add(item.node_key);
+				}
+			}
+
+			add_refresh_delayed();
+			return;
+		}
+		
 		switch(item.type){
 		case SidebarItemType.BOOKMARK:
 
@@ -229,6 +254,8 @@ public class Sidebar : Gtk.Box {
 
 		case SidebarItemType.DEVICE:
 
+			gtk_set_busy(true, window);
+			
 			log_debug("sidebar: device_activated: %s".printf(item.device.device));
 
 			Device dev = item.device;
@@ -266,31 +293,38 @@ public class Sidebar : Gtk.Box {
 				popover.hide();
 			}
 
+			gtk_set_busy(false, window);
+
 			break;
 		}
+	}
 
-		if (item.node_key.length > 0){
-			log_debug("sidebar: header_activated");
-			node_expanded[item.node_key] = !node_expanded[item.node_key];
-			
-			if (node_expanded[item.node_key]){
-				if (collapsed_sections.contains(item.node_key)){
-					collapsed_sections.remove(item.node_key);
-				}
-			}
-			else{
-				if (!collapsed_sections.contains(item.node_key)){
-					collapsed_sections.add(item.node_key);
-				}
-			}
-			
-			if (!popup){
-				gtk_set_busy(false, window);
-				refresh();
-			}
+	private uint tmr_refresh_delayed = 0;
+	
+	private void add_refresh_delayed(){
+		
+		clear_refresh_delayed();
+
+		tmr_refresh_delayed = Timeout.add(100, refresh_delayed);
+	}
+
+	private void clear_refresh_delayed(){
+		if (tmr_refresh_delayed > 0){
+			Source.remove(tmr_refresh_delayed);
+			tmr_refresh_delayed = 0;
 		}
-
 		gtk_set_busy(false, window);
+	}
+	
+	private bool refresh_delayed(){
+	
+		clear_refresh_delayed();
+
+		log_debug("refresh_delayed()");
+
+		refresh();
+		
+		return false;
 	}
 
 	// refresh
@@ -332,7 +366,9 @@ public class Sidebar : Gtk.Box {
 
 				item = add_header_locations(_("Places"));
 
-				if (popup || node_expanded[item.node_key]){
+				log_debug("sidebar: add_places()");
+				
+				if (node_expanded[item.node_key]){
 					add_bookmark(new GtkBookmark("file:///", _("Filesystem")));
 					add_bookmark(new GtkBookmark("file://" + App.user_dirs.user_home, _("Home")));
 					add_bookmark(new GtkBookmark("file://" + App.user_dirs.user_documents, _("Documents")));
@@ -350,7 +386,9 @@ public class Sidebar : Gtk.Box {
 
 				item = add_header_bookmarks(_("Bookmarks"));
 
-				if (popup || node_expanded[item.node_key]){
+				log_debug("sidebar: add_bookmarks()");
+				
+				if (node_expanded[item.node_key]){
 					foreach(var bm in GtkBookmark.bookmarks){
 						add_bookmark(bm, true);
 					}
@@ -358,6 +396,8 @@ public class Sidebar : Gtk.Box {
 			}
 		}
 
+		log_debug("sidebar: add_devices()");
+		
 		if (!popup || (popup_mode == "device")){
 
 			if (popup || App.sidebar_devices){
@@ -394,6 +434,8 @@ public class Sidebar : Gtk.Box {
 			}
 		}
 
+		log_debug("sidebar: add_buffer()");
+		
 		// buffer
 		var row = new Gtk.ListBoxRow();
 		row.activatable = false;
@@ -403,7 +445,6 @@ public class Sidebar : Gtk.Box {
 
 		// label is required to fix am issue with Greybird theme
 		var label = new Gtk.Label("");
-		//
 		label.vexpand = true;
 		row.add(label);
 
@@ -455,9 +496,6 @@ public class Sidebar : Gtk.Box {
 
 	private SidebarItem add_header_locations(string name){
 		var item = new SidebarItem.for_header(name, SidebarItemType.HEADER_LOCATIONS);
-		if (popup){
-			item.node_key = "";
-		}
 		add_missing_node_key(item);
 		add_item(item);
 		return item;
@@ -465,9 +503,6 @@ public class Sidebar : Gtk.Box {
 
 	private SidebarItem add_header_bookmarks(string name){
 		var item = new SidebarItem.for_header(name, SidebarItemType.HEADER_BOOKMARKS);
-		if (popup){
-			item.node_key = "";
-		}
 		add_missing_node_key(item);
 		add_item(item);
 		return item;
@@ -526,8 +561,12 @@ public class Sidebar : Gtk.Box {
 		if (dev.is_snap_volume || dev.is_swap_volume){
 			return null;
 		}
+
+		if (dev.size_bytes < 100 * KB){
+			return null;
+		}
 		
-		var item = new SidebarItem.from_device(dev);
+		var item = new SidebarItem.from_device(dev, popup);
 
 		if (popup){
 			item.node_key = "";
@@ -594,11 +633,12 @@ public class Sidebar : Gtk.Box {
 		var vbox = new Gtk.Box(Orientation.VERTICAL, 0);
 		vbox.margin_right = 12;
 		box.add(vbox);
+		var label_box = vbox;
 
 		// name
 		var label = new Gtk.Label("");
 		label.xalign = 0.0f;
-		label.margin_right = 3;
+		//label.margin_right = 3;
 		label.ellipsize = Pango.EllipsizeMode.END;
 		vbox.add(label);
 
@@ -618,32 +658,17 @@ public class Sidebar : Gtk.Box {
 		case SidebarItemType.HEADER_DEVICES:
 
 			row.margin_left = 0;
-			row.activatable = !popup;
-
-			if (popup){
-				box.remove(image);
-				label.margin_left = 3;
-			}
+			row.activatable = true;
 
 			label.label = "<b>%s</b>".printf(item.name);
 			label.set_use_markup(true);
 			label.margin_top = 6;
-
-			//var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
-			//sep.hexpand = true;
-			//sep.margin_right = 12;
-			//box.add(sep);
 			break;
 
 		case SidebarItemType.HEADER_DISK:
 
 			row.margin_left = 0;
-			row.activatable = !popup;
-
-			if (popup){
-				box.remove(image);
-				label.margin_left = 3;
-			}
+			row.activatable = true;
 
 			label.label = "<i>%s</i>".printf(item.name);
 			label.set_use_markup(true);
@@ -652,10 +677,9 @@ public class Sidebar : Gtk.Box {
 			label.margin_top = 6;
 			label.margin_bottom = 6;
 
-			//var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
-			//sep.hexpand = true;
-			//sep.margin_right = 12;
-			//box.add(sep);
+			if (popup){
+				gtk_hide(image);
+			}
 
 			break;
 
@@ -670,7 +694,6 @@ public class Sidebar : Gtk.Box {
 			image.pixbuf = bm.get_icon();
 			image.margin_left = 12;
 
-			//box.sensitive = bm.path_exists();
 			bool exists = bm.path_exists();
 			if (!exists){
 				label.sensitive = false;
@@ -700,7 +723,7 @@ public class Sidebar : Gtk.Box {
 					}
 
 					gtk_hide(entry);
-					gtk_show(label);
+					gtk_show(label_box);
 				});
 
 				entry.focus_out_event.connect((event) => {
@@ -709,7 +732,7 @@ public class Sidebar : Gtk.Box {
 				});
 
 				if (exists){
-					add_bookmark_edit_button(box, bm, label, entry, row, ebox);
+					add_bookmark_edit_button(box, bm, label_box, entry, row, ebox);
 				}
 
 				// allow non-existing to be removed
@@ -745,7 +768,7 @@ public class Sidebar : Gtk.Box {
 			row.set_tooltip_text(item.tooltip);
 			//row.selected = false;
 
-			image.pixbuf = IconManager.lookup("add", 16, false);
+			image.pixbuf = IconManager.lookup("list-add", 16, false);
 			image.margin_left = 12;
 
 			label.label = item.name;
@@ -765,7 +788,7 @@ public class Sidebar : Gtk.Box {
 			row.set_tooltip_text(item.tooltip);
 			//row.selected = false;
 
-			image.pixbuf = IconManager.lookup("remove", 16, false);
+			image.pixbuf = IconManager.lookup("list-remove", 16, false);
 
 			label.label = item.name;
 			label.set_use_markup(false);
@@ -799,7 +822,7 @@ public class Sidebar : Gtk.Box {
 				row.set_tooltip_markup(_("Click to mount device and open in active pane"));
 			}
 
-			if (dev.is_mounted && (dev.used_bytes > 0)){
+			if (dev.is_mounted && (dev.size_bytes > 0)){
 				add_fs_bar(vbox, dev);
 			}
 
@@ -830,12 +853,10 @@ public class Sidebar : Gtk.Box {
 				}
 			}
 
-			//if (popup){
 			var lbl2 = new Gtk.Label("");
 			lbl2.hexpand = true;
 			box.add(lbl2);
-			//}
-			
+
 			if (dev.is_on_encrypted_partition && !dev.is_system_device && (popup || App.sidebar_lock)){
 				add_lock_button(box, dev);
 			}
@@ -873,9 +894,9 @@ public class Sidebar : Gtk.Box {
 		box.add(lbl);
 	}
 
-	private void add_bookmark_edit_button(Gtk.Box box, GtkBookmark bm, Gtk.Label label, Gtk.Entry entry, Gtk.ListBoxRow row, Gtk.EventBox ebox_row){
+	private void add_bookmark_edit_button(Gtk.Box box, GtkBookmark bm, Gtk.Box label_box, Gtk.Entry entry, Gtk.ListBoxRow row, Gtk.EventBox ebox_row){
 
-		var img = new Gtk.Image.from_pixbuf(IconManager.lookup("edit-symbolic", 12, true));
+		var img = IconManager.lookup_image("edit-rename", 12, true);
 
 		var ebox = new Gtk.EventBox();
 		ebox.add(img);
@@ -903,7 +924,7 @@ public class Sidebar : Gtk.Box {
 		ebox.button_press_event.connect((event)=>{
 			entry.text = bm.name;
 			entry.select_region(0, entry.text.length);
-			gtk_hide(label);
+			gtk_hide(label_box);
 			gtk_show(entry);
 			return true;
 		});
@@ -1024,7 +1045,7 @@ public class Sidebar : Gtk.Box {
 
 	private void add_lock_button(Gtk.Box box, Device dev){
 		var icon_size = popup ? 16 : 16;
-		var img = new Gtk.Image.from_pixbuf(IconManager.lookup("lock-symbolic", icon_size, true, true));
+		var img = IconManager.lookup_image("lock", icon_size, true, true);
 
 		var ebox = new Gtk.EventBox();
 		ebox.add(img);
@@ -1176,8 +1197,6 @@ public class Sidebar : Gtk.Box {
 			}
 
 			// origin is top_left
-
-
 
 			//context.set_line_width (1); // 1
 			//context.move_to (x_level + line_width + 2, 0);

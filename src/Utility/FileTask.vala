@@ -187,7 +187,7 @@ public class FileTask : GLib.Object {
 					if (destination.children.has_key(item.file_name)){
 						int index = 1;
 						do{
-							dest_item_name = item.file_name + " (%d)".printf(index++);
+							dest_item_name = "%s%s%s".printf(item.file_title, " (%d)".printf(index++), item.file_extension);
 						}
 						while(file_or_dir_exists(path_combine(destination.file_path, dest_item_name)));
 					}
@@ -568,7 +568,8 @@ public class FileTask : GLib.Object {
 				if (destination.children.has_key(item.file_name)){
 					int index = 1;
 					do{
-						dest_item_name = item.file_name + " (%d)".printf(index++);
+						dest_item_name = "%s%s%s".printf(item.file_title, " (%d)".printf(index++), item.file_extension);
+						// TODO: restore to same path?
 					}
 					while(file_or_dir_exists(path_combine(destination.file_path, dest_item_name)));
 				}
@@ -624,46 +625,6 @@ public class FileTask : GLib.Object {
 			log_error ("FileTask: remove_items(): error");
 			log_error (e.message);
 		}
-	}
-
-	private void build_file_list_for_delete(){
-		status = _("Building file list...");
-
-		/*bytes_batch_total = 0;
-		foreach(var item in items){
-			if (aborted) { break; }
-			if (item.file_type == FileType.DIRECTORY){
-				item.query_children();
-			}
-			bytes_batch_total += item.file_count_total + item.dir_count_total;
-		}
-		log_debug("FileTask: delete_items_thread(): batch_size=%lld".printf(bytes_batch_total));
-
-
-		bytes_batch_total = 0;
-		count_batch_total = 0;
-		foreach(var item in items){
-			if (aborted) { break; }
-			if (item.file_type == FileType.DIRECTORY){
-				item.query_children_async();
-
-				while(item.query_children_async_is_running){
-
-					_stats = "%lld items (%s), %s elapsed".printf(
-						count_batch_total + item.file_count_total + item.dir_count_total,
-						format_file_size(bytes_batch_total + item.size),
-						stats_time_elapsed
-						);
-
-					sleep(200);
-					gtk_do_events();
-				}
-			}
-			bytes_batch_total += item.size;
-			count_batch_completed += item.file_count_total + item.dir_count_total;
-		}
-		_stats = "";
-		log_debug("FileTask: copy_items_thread(): batch_size=%lld".printf(bytes_batch_total));*/
 	}
 
 	private void delete_items_thread(){

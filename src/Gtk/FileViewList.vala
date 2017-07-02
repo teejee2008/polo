@@ -116,11 +116,6 @@ public class FileViewList : Gtk.Box {
 	public signal void changed();
 
 	// helper
-	private uint tmr_task = 0;
-	private bool task_is_running = false;
-	private bool open_archive_task_is_running;
-	private int global_counter = 0;
-
 	private Gtk.Image video_image;
 	private FileItem video_item;
 	private bool video_thumb_cycling_in_progress = false;
@@ -524,34 +519,12 @@ public class FileViewList : Gtk.Box {
 			model.get (iter, 0, out item, -1);
 
 			if (item.is_symlink) {
-				pixcell.pixbuf = get_shared_icon_pixbuf("", "symbolic-link.png", 16); //emblem-symbolic-link
+				pixcell.pixbuf = IconManager.lookup("symbolic-link", 16, false, true); //emblem-symbolic-link
 			}
 			else{
 				pixcell.pixbuf = null;
 			}
 		});
-		/*
-		// cell icon
-		cell_pix = new Gtk.CellRendererPixbuf();
-		cell_pix.xpad = 3;
-		col.pack_start(cell_pix, false);
-
-		// render link indicator icon
-		col.set_cell_data_func (cell_pix, (cell_layout, cell, model, iter) => {
-
-			var pixcell = cell as Gtk.CellRendererPixbuf;
-
-			FileItem item;
-			model.get (iter, 0, out item, -1);
-
-			if (!item.can_write) {
-				pixcell.pixbuf = get_shared_icon_pixbuf("", "lock.png", 16); //emblem-readonly
-			}
-			else{
-				pixcell.pixbuf = null;
-			}
-		});*/
-
 	}
 
 	private void add_col_size() {
@@ -1903,10 +1876,9 @@ public class FileViewList : Gtk.Box {
 			
 		//}
 
-		FileItem item = null;
-
-		if (FileItem.cache.has_key(dir_path)){
-			item = FileItem.cache[dir_path];
+		FileItem item = FileItem.find_in_cache(dir_path);
+		
+		if (item != null){
 			log_debug("cache: found: %s".printf(dir_path), true);
 		}
 		else{
@@ -2231,9 +2203,9 @@ public class FileViewList : Gtk.Box {
 
 		pane.mediabar.refresh();
 
-		if (current_item != null){
-			add_monitor(current_item);
-		}
+		if (current_item == null){ return; }
+		
+		add_monitor(current_item);
 
 		if (current_item.children.size == 0){
 			set_overlay_on_empty();
@@ -2445,6 +2417,9 @@ public class FileViewList : Gtk.Box {
 			monitors = new Gee.ArrayList<FileItemMonitor>();
 		}
 
+		if (item == null) { return; }
+		if (item.is_virtual) { return; }
+
 		foreach(var mon in monitors){
 			if (mon.file_item.file_path == item.file_path){
 				log_debug("monitor exists: %s".printf(item.file_path));
@@ -2465,6 +2440,8 @@ public class FileViewList : Gtk.Box {
 
 	private void remove_monitor(FileItem item){
 
+		if (item == null) { return; }
+		
 		FileItemMonitor obj = null;
 		foreach (var mon in monitors){
 			if (mon.file_item.file_path == item.file_path){
@@ -2509,7 +2486,10 @@ public class FileViewList : Gtk.Box {
 		}
 
 		switch (event){
-		case FileMonitorEvent.CHANGES_DONE_HINT: // Handles create and rename
+		case FileMonitorEvent.RENAMED:
+			add_refresh_delayed();
+			break;
+		case FileMonitorEvent.CHANGES_DONE_HINT:
 			add_refresh_delayed();
 			break;
 		case FileMonitorEvent.DELETED:
@@ -3003,7 +2983,7 @@ public class FileViewList : Gtk.Box {
 						menu_history,
 						path,
 						_("Go to location"),
-						null,//get_shared_icon("gtk-folder", "gtk-folder.png",16),
+						null,
 						sg_icon,
 						sg_label);
 
@@ -3757,6 +3737,7 @@ public class FileViewList : Gtk.Box {
 		else {
 			window.layout_box.set_panel_layout(PanelLayout.SINGLE);
 		}
+		
 		window.layout_box.reset_pane_positions();
 	}
 
@@ -3901,7 +3882,8 @@ public class FileViewList : Gtk.Box {
 		start_view_redraw();
 	}
 
-
+	// ISO ---------------------------------------
+	
 	public void mount_iso(){
 		
 		err_log_clear();
@@ -3967,30 +3949,29 @@ public class FileViewList : Gtk.Box {
 		task.boot_iso(item.file_path, App.get_kvm_config());
 	}
 
-	public void write_iso(){
+	public void write_iso(Device dev){
 		
 		var selected_items = get_selected_items();
 		if (selected_items.size == 0){ return; }
 		var item = selected_items[0];
-		
-		DesktopApp? etcher_app = DesktopApp.get_app_by_filename("appimagekit-Etcher.desktop");
 
-		if (etcher_app == null){
-			
-			string title = _("'Etcher' Not Found");
-			string msg = _("Polo uses the third-party application 'Etcher' to write ISO files to USB. Do you want me to download and install it for you?");
-			int resp = gtk_messagebox_yes_no(title, msg, window, true);
+		if (!check_plugin("iso")){ return; }
 
-			if (resp == Gtk.ResponseType.YES){
-				window.install_etcher();
-			}
+		string txt = "%s".printf(_("Flash ISO to device?"));
+		string msg = "%s:\n\n▰ %s".printf(_("Existing data on device will be destroyed"), dev.description_simple());
+		var resp = gtk_messagebox_yes_no(txt, msg, window, true);
+		if (resp != Gtk.ResponseType.YES){
+			return;
 		}
-		else{
-			open(item, etcher_app);
-		}
+
+		var action = new ProgressPanelUsbWriterTask(pane);
+		action.set_parameters(item.file_path, dev.device);
+		pane.file_operations.add(action);
+		action.execute();
 	}
 
-
+	// KVM ---------------------------------------
+	
 	public void kvm_create_disk(){
 		
 		err_log_clear();
@@ -4039,8 +4020,25 @@ public class FileViewList : Gtk.Box {
 		if (selected_items.size == 0){ return; }
 		var item = selected_items[0];
 
+		if (!item.can_write){
+			gtk_messagebox(_("Disk is Read-Only"),_("Read-only disks cannot be booted.\n\nTo boot this disk, make it writable by setting write permissions from the file properties dialog.\n\nIf this disk is modified, any disks derived from it will become corrupt.\n\nTo avoid corrupting derived disks, create a new derived disk from this file and boot from it, instead of booting this disk directly."), window, true);
+			return;
+		}
+
 		var task = new KvmTask();
 		task.boot_disk(item.file_path, App.get_kvm_config());
+	}
+
+	public void kvm_mount_disk(){
+		
+		err_log_clear();
+
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+		var item = selected_items[0];
+
+		var task = new KvmTask();
+		task.mount_disk(item.file_path);
 	}
 
 	public void kvm_install_iso(){
@@ -4068,8 +4066,266 @@ public class FileViewList : Gtk.Box {
 		task.boot_iso_attach_disk(iso_file, item.file_path, App.get_kvm_config());
 	}
 
+	// PDF ---------------------------------------
+
+	
+	public Gee.ArrayList<string> selected_pdfs(){
+
+		var files = new Gee.ArrayList<string>();
+		
+		var selected_items = get_selected_items();
+		
+		if (selected_items.size == 0){
+			return files;
+		}
+
+		selected_items.foreach((file) => {
+			if (file.is_pdf){
+				files.add(file.file_path);
+			}
+			return true;
+		});
+		
+		files.sort((a,b)=> {
+			return strcmp(a,b);
+		});
+
+		return files;
+	}
 
 
+	public void pdf_split(){
+
+		var files = selected_pdfs();
+		if (files.size == 0){ return; }
+
+		if (!check_pdftk()){ return; }
+
+		if (!check_plugin("pdf")){ return; }
+		
+		err_log_clear();
+
+		var task = new PdfTask();
+		task.split(files, App.overwrite_pdf_split);
+		
+		var action = new ProgressPanelPdfTask(pane, task);
+		pane.file_operations.add(action);
+		action.execute();
+	}
+
+	public void pdf_merge(){
+		
+		var files = selected_pdfs();
+		if (files.size == 0){ return; }
+
+		if (!check_pdftk()){ return; }
+
+		if (!check_plugin("pdf")){ return; }
+		
+		err_log_clear();
+
+		var task = new PdfTask();
+		task.merge(files, App.overwrite_pdf_merge);
+
+		var action = new ProgressPanelPdfTask(pane, task);
+		pane.file_operations.add(action);
+		action.execute();
+	}
+
+	public void pdf_protect(){
+		
+		var files = selected_pdfs();
+		if (files.size == 0){ return; }
+
+		if (!check_pdftk()){ return; }
+
+		if (!check_plugin("pdf")){ return; }
+
+		string pass = prompt_for_pdf_password(false);
+		if (pass.length == 0) { return; }
+		
+		err_log_clear();
+
+		var task = new PdfTask();
+		task.protect(files, pass, App.overwrite_pdf_protect);
+
+		var action = new ProgressPanelPdfTask(pane, task);
+		pane.file_operations.add(action);
+		action.execute();
+	}
+
+	public void pdf_unprotect(){
+		
+		var files = selected_pdfs();
+		if (files.size == 0){ return; }
+
+		if (!check_pdftk()){ return; }
+
+		if (!check_plugin("pdf")){ return; }
+
+		string pass = prompt_for_pdf_password(false);
+		if (pass.length == 0) { return; }
+		
+		err_log_clear();
+
+		var task = new PdfTask();
+		task.unprotect(files, pass, App.overwrite_pdf_unprotect);
+
+		var action = new ProgressPanelPdfTask(pane, task);
+		pane.file_operations.add(action);
+		action.execute();
+	}
+
+	public void pdf_compress(){
+
+		var files = selected_pdfs();
+		if (files.size == 0){ return; }
+
+		if (!check_ghostscript()){ return; }
+
+		if (!check_plugin("pdf")){ return; }
+		
+		err_log_clear();
+
+		var task = new PdfTask();
+		task.compress(files, App.overwrite_pdf_compress);
+
+		var action = new ProgressPanelPdfTask(pane, task);
+		pane.file_operations.add(action);
+		action.execute();
+	}
+
+	public void pdf_uncompress(){
+
+		var files = selected_pdfs();
+		if (files.size == 0){ return; }
+
+		if (!check_pdftk()){ return; }
+
+		if (!check_plugin("pdf")){ return; }
+		
+		err_log_clear();
+
+		var task = new PdfTask();
+		task.uncompress(files, App.overwrite_pdf_uncompress);
+
+		var action = new ProgressPanelPdfTask(pane, task);
+		pane.file_operations.add(action);
+		action.execute();
+	}
+	
+	public void pdf_grayscale(){
+
+		var files = selected_pdfs();
+		if (files.size == 0){ return; }
+
+		if (!check_ghostscript()){ return; }
+
+		if (!check_plugin("pdf")){ return; }
+		
+		err_log_clear();
+
+		var task = new PdfTask();
+		task.decolor(files, App.overwrite_pdf_decolor);
+
+		var action = new ProgressPanelPdfTask(pane, task);
+		pane.file_operations.add(action);
+		action.execute();
+	}
+
+	public void pdf_optimize(string target){
+
+		var files = selected_pdfs();
+		if (files.size == 0){ return; }
+
+		if (!check_ghostscript()){ return; }
+
+		if (!check_plugin("pdf")){ return; }
+		
+		err_log_clear();
+
+		var task = new PdfTask();
+		task.optimize(files, target, App.overwrite_pdf_optimize);
+
+		var action = new ProgressPanelPdfTask(pane, task);
+		pane.file_operations.add(action);
+		action.execute();
+	}
+
+	public void pdf_rotate(string direction){
+
+		var files = selected_pdfs();
+		if (files.size == 0){ return; }
+
+		if (!check_pdftk()){ return; }
+
+		if (!check_plugin("pdf")){ return; }
+		
+		err_log_clear();
+
+		var task = new PdfTask();
+		task.rotate(files, direction, App.overwrite_pdf_rotate);
+
+		var action = new ProgressPanelPdfTask(pane, task);
+		pane.file_operations.add(action);
+		action.execute();
+	}
+	
+	public static string prompt_for_pdf_password(bool confirm){
+
+		log_debug("FileViewList: prompt_for_pdf_password()");
+
+		string msg = "";
+
+		msg += _("Enter password for PDF document") + ":";
+		
+		string password = PasswordDialog.prompt_user((Gtk.Window) App.main_window, confirm, "", msg);
+
+		return password;
+	}
+
+	private bool check_pdftk(){
+		var tool = App.tools["pdftk"];
+		if (!tool.available){
+			gtk_messagebox(_("Missing Dependency"),_("Install the 'pdftk' package and try again"), window, true);
+			return false;
+		}
+		return true;
+	}
+
+	private bool check_imagemagick(){
+		var tool = App.tools["convert"];
+		if (!tool.available){
+			gtk_messagebox(_("Missing Dependency"),_("Install the 'imagemagick' package and try again"), window, true);
+			return false;
+		}
+		return true;
+	}
+
+	private bool check_ghostscript(){
+		var tool = App.tools["gs"];
+		if (!tool.available){
+			gtk_messagebox(_("Missing Dependency"),_("Install the 'ghostscript' package and try again"), window, true);
+			return false;
+		}
+		return true;
+	}
+
+	private bool check_plugin(string name){
+		var plug = App.plugins[name];
+
+		if (!plug.check_version()){
+			plug.check_availablity(); // check again
+		}
+		
+		if (!plug.check_version()){
+			string txt = _("Plugin is Outdated");
+			string msg = _("Please update the plugin package") + ":\n\n▰ %s".printf(plug.name);
+			gtk_messagebox(txt, msg, window, true);
+			return false;
+		}
+		return true;
+	}
 	
 	public void hide_selected(){
 
@@ -4115,7 +4371,7 @@ public class FileViewList : Gtk.Box {
 		show_hidden_files = false;
 		refresh_hidden();
 	}
-	
+
 	// allowed actions
 
 	public bool is_normal_directory {

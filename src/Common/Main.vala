@@ -37,9 +37,13 @@ using TeeJee.Misc;
 public Main App;
 public const string AppName = "Polo File Manager";
 public const string AppShortName = "polo";
-public const string AppVersion = "17.6 (BETA 7)";
+public const string AppVersion = "17.7 (BETA 8)";
+public const string AppWikiVersion = "17.7 (BETA 8)"; // update only if wiki page exists
 public const string AppAuthor = "Tony George";
 public const string AppAuthorEmail = "teejeetech@gmail.com";
+
+public const int PLUGIN_VER_ISO = 2;
+public const int PLUGIN_VER_PDF = 2;
 
 const string GETTEXT_PACKAGE = "";
 const string LOCALE_DIR = "/usr/share/locale";
@@ -65,6 +69,8 @@ public class Main : GLib.Object {
 	public string last_input_dir = "";
 	public string last_output_dir = "";
 
+	public string app_version_in_config = "";
+
 	public bool first_run = false;
 	public FileItem fs_root = null;
 
@@ -72,7 +78,9 @@ public class Main : GLib.Object {
 
 	public SysInfo sysinfo;
 
-	public Gee.HashMap<string,Tool> Tools = new Gee.HashMap<string,Tool>();
+	public Gee.HashMap<string,Tool> tools = new Gee.HashMap<string,Tool>();
+
+	public Gee.HashMap<string,Plugin> plugins = new Gee.HashMap<string,Plugin>();
 
 	public string temp_dir = "";
 	public string current_dir = "";
@@ -152,6 +160,16 @@ public class Main : GLib.Object {
 	public bool confirm_delete = true;
 	public bool confirm_trash = true;
 
+	public bool overwrite_pdf_split = false;
+	public bool overwrite_pdf_merge = false;
+	public bool overwrite_pdf_compress = false;
+	public bool overwrite_pdf_uncompress = false;
+	public bool overwrite_pdf_protect = false;
+	public bool overwrite_pdf_unprotect = false;
+	public bool overwrite_pdf_decolor = false;
+	public bool overwrite_pdf_optimize = false;
+	public bool overwrite_pdf_rotate = false;
+
 	public bool tabs_bottom = false;
 	public bool tabs_close_visible = true;
 
@@ -167,6 +185,7 @@ public class Main : GLib.Object {
 	public string kvm_cpu = "host";
 	public int kvm_smp = 1;
 	public int kvm_mem = 2048;
+	public int kvm_cpu_limit = 80;
 	public string kvm_format = ".qcow2";
 
 	public static string REQUIRED_COLUMNS = "name,indicator,spacer";
@@ -221,6 +240,9 @@ public class Main : GLib.Object {
 	public bool tileview_thumbs = true;
 	public bool tileview_transparency = true;
 
+	public bool plugin_obsolete_iso = false;
+	public bool plugin_obsolete_pdf = false;
+
 	public Gee.ArrayList<string> mediaview_exclude = new Gee.ArrayList<string>();
 	public Gee.ArrayList<string> mediaview_include = new Gee.ArrayList<string>();
 
@@ -231,6 +253,8 @@ public class Main : GLib.Object {
 	public MainWindow main_window = null;
 
 	public TrashCan trashcan;
+
+	public RCloneClient rclone;
 
 	public string admin_pass = "";
 
@@ -373,6 +397,8 @@ public class Main : GLib.Object {
 		trashcan = new TrashCan(user_id_effective, user_name_effective, user_home_effective);
 		trashcan.query_items(false);
 
+		rclone = new RCloneClient();
+
 		/*foreach(var app in DesktopApp.applist.values){
 			if (app.desktop_file_name == "crunchy.desktop"){
 				crunchy_app = app;
@@ -393,7 +419,9 @@ public class Main : GLib.Object {
 			chmod(dst_path, "u+rw", null);
 		}
 
-		init_tools_list();
+		init_tools();
+
+		init_plugins();
 
 		load_app_config();
 	}
@@ -428,21 +456,27 @@ public class Main : GLib.Object {
 		}
 	}
 
-	public void init_tools_list(){
+	public void init_tools(){
 		
 		//Encoders["avconv"] = new Encoder("avconv","Libav Encoder","Audio-Video Decoding");
-		Tools["ffmpeg"] = new Tool("ffmpeg","FFmpeg Encoder","Generate thumbnails for video");
-		Tools["mediainfo"] = new Tool("mediainfo","MediaInfo","Read media properties from audio and video files");
-		Tools["exiftool"] = new Tool("exiftool","ExifTool","Read EXIF properties from JPG/TIFF/PNG/PDF files");
-		Tools["tar"] = new Tool("tar","tar","Read and extract TAR archives");
-		Tools["7z"] = new Tool("7z","7zip","Read and extract multiple archive formats");
-		Tools["lzop"] = new Tool("lzop","lzop","Read and extract LZO archives");
-		Tools["pv"] = new Tool("pv","pv","Get progress info for compression and extraction");
-		Tools["lsblk"] = new Tool("lsblk","lsblk","Read device information");
-		Tools["udisksctl"] = new Tool("udisksctl","udisksctl","Mount and unmount devices");
-		Tools["cryptsetup"] = new Tool("cryptsetup","cryptsetup","Unlock encrypted LUKS devices");
-		Tools["xdg-mime"] = new Tool("xdg-mime","xdg-mime","Set file type associations");
-		Tools["fish"] = new Tool("fish","Fish Shell","Terminal Shell");
+		tools["ffmpeg"] = new Tool("ffmpeg","FFmpeg Encoder","Generate thumbnails for video");
+		tools["mediainfo"] = new Tool("mediainfo","MediaInfo","Read media properties from audio and video files");
+		tools["exiftool"] = new Tool("exiftool","ExifTool","Read EXIF properties from JPG/TIFF/PNG/PDF files");
+		tools["tar"] = new Tool("tar","tar","Read and extract TAR archives");
+		tools["7z"] = new Tool("7z","7zip","Read and extract multiple archive formats");
+		tools["lzop"] = new Tool("lzop","lzop","Read and extract LZO archives");
+		tools["pv"] = new Tool("pv","pv","Get progress info for compression and extraction");
+		tools["lsblk"] = new Tool("lsblk","lsblk","Read device information");
+		tools["udisksctl"] = new Tool("udisksctl","udisksctl","Mount and unmount devices");
+		tools["cryptsetup"] = new Tool("cryptsetup","cryptsetup","Unlock encrypted LUKS devices");
+		tools["xdg-mime"] = new Tool("xdg-mime","xdg-mime","Set file type associations");
+		tools["fish"] = new Tool("fish","Fish Shell","Terminal Shell");
+		tools["kvm"] = new Tool("kvm","Qemu-Kvm Emulator","Virtual Machine Emulator");
+		tools["pdftk"] = new Tool("pdftk","pdftk","Converting PDF files");
+		tools["convert"] = new Tool("convert","convert","Converting images and PDF documents");
+		tools["gs"] = new Tool("gs","ghostscript","Ghostscript - Converting PDF files");
+		tools["polo-iso"] = new Tool("polo-iso","polo-iso","Polo ISO Plugin (Donation)");
+		tools["polo-pdf"] = new Tool("polo-pdf","polo-pdf","Polo PDF Plugin (Donation)");
 		
 		check_all_tools();
 		
@@ -456,8 +490,38 @@ public class Main : GLib.Object {
 	}
 
 	public void check_all_tools(){
-		foreach(var tool in Tools.values){
+		
+		foreach(var tool in tools.values){
+			
 			tool.check_availablity();
+		}
+	}
+
+	public bool tool_exists(string cmd){
+		
+		if (tools.keys.contains(cmd)){
+			
+			var tool = tools[cmd];
+			return tool.available;
+		}
+		else{
+			return cmd_exists(cmd);
+		}
+	}
+
+	public void init_plugins(){
+		
+		plugins["iso"] = new Plugin("polo-iso", "Polo ISO Plugin", PLUGIN_VER_ISO);
+		plugins["pdf"] = new Plugin("polo-pdf", "Polo PDF Plugin", PLUGIN_VER_PDF);
+
+		check_all_plugins();
+	}
+
+	public void check_all_plugins(){
+		
+		foreach(var plugin in plugins.values){
+			
+			plugin.check_availablity();
 		}
 	}
 	
@@ -467,13 +531,9 @@ public class Main : GLib.Object {
 
 		var config = new Json.Object();
 
-		//if (archive_task != null){
-		//	config = archive_task.to_json();
-		//}
-
 		set_numeric_locale("C"); // switch numeric locale
 
-		//config.set_string_member("first_run", first_run.to_string());
+		config.set_string_member("app-version", AppVersion);
 
 		config.set_int_member("format-version", (int64) APP_CONFIG_FORMAT_VERSION);
 
@@ -563,6 +623,7 @@ public class Main : GLib.Object {
 		config.set_string_member("kvm_enable", kvm_enable.to_string());
 		config.set_string_member("kvm_cpu", kvm_cpu);
 		config.set_string_member("kvm_smp", kvm_smp.to_string());
+		config.set_string_member("kvm_cpu_limit", kvm_cpu_limit.to_string());
 		config.set_string_member("kvm_vga", kvm_vga);
 		config.set_string_member("kvm_mem", kvm_mem.to_string());
 
@@ -576,6 +637,16 @@ public class Main : GLib.Object {
 
 		config.set_string_member("confirm_delete", confirm_delete.to_string());
 		config.set_string_member("confirm_trash", confirm_trash.to_string());
+
+		config.set_string_member("overwrite_pdf_split", overwrite_pdf_split.to_string());
+		config.set_string_member("overwrite_pdf_merge", overwrite_pdf_merge.to_string());
+		config.set_string_member("overwrite_pdf_compress", overwrite_pdf_compress.to_string());
+		config.set_string_member("overwrite_pdf_uncompress", overwrite_pdf_uncompress.to_string());
+		config.set_string_member("overwrite_pdf_protect", overwrite_pdf_protect.to_string());
+		config.set_string_member("overwrite_pdf_unprotect", overwrite_pdf_unprotect.to_string());
+		config.set_string_member("overwrite_pdf_decolor", overwrite_pdf_decolor.to_string());
+		config.set_string_member("overwrite_pdf_rotate", overwrite_pdf_rotate.to_string());
+		config.set_string_member("overwrite_pdf_optimize", overwrite_pdf_optimize.to_string());
 		
 		save_folder_selections();
 		
@@ -626,6 +697,10 @@ public class Main : GLib.Object {
 		}
 
 		set_numeric_locale("C"); // switch numeric locale
+
+		app_version_in_config = json_get_string(config, "app-version", "0");
+		// set dummy version number, if config file exists but parameter is missing
+		// this will trigger display of change log file
 
 		middlebar_visible = json_get_bool(config, "middlebar_visible", middlebar_visible);
 		sidebar_visible = json_get_bool(config, "sidebar_visible", sidebar_visible);
@@ -720,6 +795,7 @@ public class Main : GLib.Object {
 		kvm_enable = json_get_bool(config, "kvm_enable", kvm_enable);
 		kvm_cpu = json_get_string(config, "kvm_cpu", kvm_cpu);
 		kvm_smp = json_get_int(config, "kvm_smp", kvm_smp);
+		kvm_cpu_limit = json_get_int(config, "kvm_cpu_limit", kvm_cpu_limit);
 		kvm_vga = json_get_string(config, "kvm_vga", kvm_vga);
 		kvm_mem = json_get_int(config, "kvm_mem", kvm_mem);
 		
@@ -735,6 +811,16 @@ public class Main : GLib.Object {
 
 		confirm_delete = json_get_bool(config, "confirm_delete", confirm_delete);
 		confirm_trash = json_get_bool(config, "confirm_trash", confirm_trash);
+
+		overwrite_pdf_split = json_get_bool(config, "overwrite_pdf_split", overwrite_pdf_split);
+		overwrite_pdf_merge = json_get_bool(config, "overwrite_pdf_merge", overwrite_pdf_merge);
+		overwrite_pdf_compress = json_get_bool(config, "overwrite_pdf_compress", overwrite_pdf_compress);
+		overwrite_pdf_uncompress = json_get_bool(config, "overwrite_pdf_uncompress", overwrite_pdf_uncompress);
+		overwrite_pdf_protect = json_get_bool(config, "overwrite_pdf_protect", overwrite_pdf_protect);
+		overwrite_pdf_unprotect = json_get_bool(config, "overwrite_pdf_unprotect", overwrite_pdf_unprotect);
+		overwrite_pdf_decolor = json_get_bool(config, "overwrite_pdf_decolor", overwrite_pdf_decolor);
+		overwrite_pdf_rotate = json_get_bool(config, "overwrite_pdf_rotate", overwrite_pdf_rotate);
+		overwrite_pdf_optimize = json_get_bool(config, "overwrite_pdf_optimize", overwrite_pdf_optimize);
 
 		middlebar_visible = json_get_bool(config, "middlebar_visible", middlebar_visible);
 		sidebar_visible = json_get_bool(config, "sidebar_visible", sidebar_visible);
@@ -756,7 +842,30 @@ public class Main : GLib.Object {
 		set_numeric_locale(""); // reset numeric locale
 	}
 
+	public bool first_run_after_update(){
 
+		if ((app_version_in_config.length > 0) && (app_version_in_config != AppVersion)){
+			save_app_config(); // update new version in config file
+			return true;
+		}
+
+		return false;
+	}
+
+	public void open_changelog_webpage(){
+		
+		string username = "";
+		if (get_user_id_effective() == 0){
+			username = get_username();
+		}
+
+		string uri = "https://github.com/teejee2008/polo/wiki/Polo-v%s".printf(AppVersion.replace(" ","-"));
+
+		if (AppVersion == AppWikiVersion){
+			xdg_open(uri, username);
+		}
+	}
+	
 	public void save_folder_selections() {
 
 		var config = new Json.Object();
@@ -997,6 +1106,9 @@ public class Main : GLib.Object {
 				continue;
 			}
 			else if (dev.is_snap_volume || dev.is_swap_volume){
+				continue;
+			}
+			else if (dev.size_bytes < 100 * KB){
 				continue;
 			}
 			else{

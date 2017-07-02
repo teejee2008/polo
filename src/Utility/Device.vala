@@ -325,26 +325,43 @@ public class Device : GLib.Object{
 			return true;
 		}
 
-		var cmd = "udisksctl mount -b '%s'".printf(device);
-		log_debug(cmd);
 		string std_out, std_err;
-		int status = exec_sync(cmd, out std_out, out std_err);
+		int status;
+		if (device.has_prefix("/dev/nbd")){
 
+			string mpath = "/mnt/%s".printf(uuid);
+
+			string cmd = "";
+			cmd += "mkdir -p '%s' &&".printf(escape_single_quote(mpath));
+			cmd += "mount '%s' '%s'".printf(device, mpath);
+			log_debug(cmd);
+
+			status = exec_script_sync(cmd, out std_out, out std_err, false, true);
+		}
+		else {
+			var cmd = "";
+			cmd += "udisksctl mount -b '%s'".printf(device);
+			log_debug(cmd);
+
+			status = exec_sync(cmd, out std_out, out std_err);
+		}
+		
 		query_mount_points();
+		
 		if (is_mounted){
 			string message = _("Device mounted successfully");
 			string details = "%s: %s, %s: %s".printf(_("Device"), device, _("Path"), mount_points[0].mount_point);
 			bool is_error = false;
 			show_message(message, details, is_error, parent_window, show_on_success);
+			return is_error;
 		}
 		else{
 			string message = _("Failed to mount device");
 			string details = "%s: %s\n\n%s".printf(_("Device"), device, std_err);
 			bool is_error = true;
 			show_message(message, details, is_error, parent_window, show_on_success);
+			return is_error;
 		}
-
-		return (status == 0);
 	}
 
 	public bool unlock(string mapped_name, string passphrase, Gtk.Window? parent_window, bool show_on_success = false){
@@ -633,11 +650,19 @@ public class Device : GLib.Object{
 
 	private static void find_toplevel_parent(Gee.ArrayList<Device> list, Device dev){
 
+		if (dev.pkname.length == 0){ return; }
+
+		var top_kname = dev.pkname;
+		
 		foreach (var part in list){
-			if ((part.kname == dev.pkname) && (part.pkname.length > 0)){
-				dev.pkname_toplevel = part.pkname;
+			if (part.kname == top_kname){
+				if (part.pkname.length > 0){
+					top_kname = part.pkname; // get parent's parent if not empty
+				}
 			}
 		}
+
+		dev.pkname_toplevel = top_kname;
 
 		//log_debug("%s -> %s -> %s".printf(dev.pkname_toplevel, dev.pkname, dev.kname));
 	}
@@ -1575,6 +1600,34 @@ public class Device : GLib.Object{
 			return true;
 		}
 
+		if (dev.device.has_prefix("/dev/nbd")){
+			
+			string cmd = "";
+
+			string mpath = "/mnt/%s".printf(dev.uuid);
+			
+			cmd += "mkdir -p '%s'".printf(escape_single_quote(mpath));
+
+			cmd += "\n";
+			
+			cmd += "mount '%s' '%s'".printf(dev.device, mpath);
+
+			cmd += "\n";
+			
+			string std_out, std_err;
+			exec_script_sync(cmd, out std_out, out std_err, false, true);
+
+			if (std_err.length > 0){
+				gtk_messagebox(_("Error"), std_err, parent_window, true);
+				return false;
+			}
+			else{
+				//gtk_messagebox(_("Mounted successfully"), "%s: %s".printf(_("Device"), nbd_device), window, false);
+			}
+
+			return true;
+		}
+
 		var cmd = "udisksctl mount -b '%s'".printf(dev.device);
 		log_debug(cmd);
 		string std_out, std_err;
@@ -2178,8 +2231,39 @@ public class Device : GLib.Object{
 		return s.strip();
 	}
 
-	public string description_simple(){
-		return description_simple_formatted().replace("<b>","").replace("</b>","");
+	public string description_simple(bool show_device_file = true){
+		
+		string s = "";
+
+		if (type == "disk"){
+			if (vendor.length > 0){
+				s += " " + vendor;
+			}
+			if (model.length > 0){
+				s += " " + model;
+			}
+			if (size_bytes > 0) {
+				if (s.strip().length == 0){
+					s += "%s Device".printf(format_file_size(size_bytes, false, "", true, 0));
+				}
+				else{
+					s += " (%s)".printf(format_file_size(size_bytes, false, "", true, 0));
+				}
+			}
+			if (show_device_file && (device.length > 0)){
+				s += " ~ %s".printf(device);
+			}
+		}
+		else{
+			s += short_name_with_parent;
+			s += (label.length > 0) ? " (" + label + ")": "";
+			s += (fstype.length > 0) ? " ~ " + fstype : "";
+			if (size_bytes > 0) {
+				s += " (%s)".printf(format_file_size(size_bytes, false, "", true, 0));
+			}
+		}
+
+		return s.strip();
 	}
 
 	public string description_simple_formatted(){

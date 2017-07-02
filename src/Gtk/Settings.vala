@@ -149,6 +149,8 @@ public class Settings : Gtk.Box {
 
 	private void init_tab_ui() {
 
+		log_debug("Settings: init_tab_ui()");
+
 		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 12);
 		hbox.margin_left = 6;
 		stack.add_titled (hbox, _("UI"), _("UI"));
@@ -1078,6 +1080,8 @@ public class Settings : Gtk.Box {
 
 	private void init_tab_general() {
 
+		log_debug("Settings: init_tab_general()");
+		
 		var box = new Gtk.Box(Orientation.HORIZONTAL, 24);
 		box.margin_left = 6;
 		stack.add_titled (box, _("General"), _("General"));
@@ -1395,6 +1399,8 @@ public class Settings : Gtk.Box {
 
 	private void init_tab_view() {
 
+		log_debug("Settings: init_tab_view()");
+		
 		var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 12);
 		box.margin_left = 6;
 		stack.add_titled (box, _("View"), _("View"));
@@ -1441,7 +1447,7 @@ public class Settings : Gtk.Box {
 		// ------------------------
 
 		vbox = add_group(box, _("Tile View"), 12);
-
+		
 		add_scale_tileview_icon_size(vbox, sg_label, sg_scale);
 
 		add_scale_tileview_row_spacing(vbox, sg_label, sg_scale);
@@ -1523,7 +1529,7 @@ public class Settings : Gtk.Box {
 
 			var index = (int) scale.get_value();
 
-			log_debug("index=%d".printf(index));
+			log_debug("selected_index=%d".printf(index));
 
 			if (App.listview_icon_size == listview_icon_sizes[index]){
 				return;
@@ -1531,6 +1537,8 @@ public class Settings : Gtk.Box {
 
 			App.listview_icon_size = listview_icon_sizes[index];
 
+			log_debug("refreshing_views");
+			
 			foreach(var v in window.views){
 				v.listview_icon_size = App.listview_icon_size;
 				v.refresh();
@@ -1602,7 +1610,6 @@ public class Settings : Gtk.Box {
 	private void add_options_listview_icons(Gtk.Box box) {
 
 		var vbox = add_sub_group(box, _("Icons"), 0);
-		box.add(vbox);
 
 		add_option_listview_emblems(vbox);
 		
@@ -1787,7 +1794,6 @@ public class Settings : Gtk.Box {
 	private void add_options_iconview_icons(Gtk.Box box) {
 
 		var vbox = add_sub_group(box, _("Icons"), 0);
-		box.add(vbox);
 
 		add_option_iconview_emblems(vbox);
 		
@@ -1974,7 +1980,6 @@ public class Settings : Gtk.Box {
 	private void add_options_tileview_icons(Gtk.Box box) {
 
 		var vbox = add_sub_group(box, _("Icons"), 0);
-		box.add(vbox);
 
 		add_option_tileview_emblems(vbox);
 		
@@ -2052,6 +2057,8 @@ public class Settings : Gtk.Box {
 	// list view options -----------------------------------
 
 	private void init_tab_columns() {
+
+		log_debug("Settings: init_tab_columns()");
 		
 		var box = new ColumnSelectionBox(parent_window, false);
 		box.refresh_list_view_columns();
@@ -2084,19 +2091,19 @@ public class Settings : Gtk.Box {
 		init_ui();
 	}
 
-	// Defaults ------------------------
+	// Advanced ------------------------
 
 	private void init_tab_advanced() {
 
-		var box = new Gtk.Box(Orientation.HORIZONTAL, 24);
+		log_debug("Settings: init_tab_advanced()");
+		
+		var box = new Gtk.Box(Orientation.HORIZONTAL, 12);
 		box.margin_left = 6;
 		stack.add_titled (box, _("Advanced"), _("Advanced"));
 
 		// column 1 ---------------------------------
 
-		var vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 12);
-		vbox.homogeneous = false;
-		box.add(vbox);
+		var vbox = add_column_group(box, true);
 		
 		// ---------------------------------
 		
@@ -2108,6 +2115,8 @@ public class Settings : Gtk.Box {
 		add_option_kvm_cpu(vbox_group, sg_label, sg_option);
 
 		add_option_kvm_smp(vbox_group, sg_label, sg_option);
+
+		add_option_kvm_cpu_limit(vbox_group, sg_label, sg_option);
 		
 		add_option_kvm_vga(vbox_group, sg_label, sg_option);
 
@@ -2118,6 +2127,36 @@ public class Settings : Gtk.Box {
 		vbox_group = add_group(vbox, "", 0);
 		
 		add_option_kvm_enable(vbox_group);
+
+
+		if (App.tool_exists("polo-pdf")) { 
+
+			// column 2 ---------------------------------
+
+			vbox = add_column_group(box, false);
+
+			// ---------------------------------
+			
+			vbox_group = add_group(vbox, _("Context Menu Actions\nReplace Original Files ?"), 0);
+
+			add_option_pdf_split(vbox_group);
+
+			add_option_pdf_merge(vbox_group);
+
+			add_option_pdf_compress(vbox_group);
+
+			add_option_pdf_uncompress(vbox_group);
+
+			add_option_pdf_protect(vbox_group);
+
+			add_option_pdf_unprotect(vbox_group);
+
+			add_option_pdf_decolor(vbox_group);
+
+			add_option_pdf_rotate(vbox_group);
+
+			add_option_pdf_optimize(vbox_group);
+		}
 	}
 
 	private void add_option_kvm_cpu(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
@@ -2146,7 +2185,7 @@ public class Settings : Gtk.Box {
 
 		// add items
 		int index = -1;
-		var store = new Gtk.ListStore(1, typeof(string));
+		var store = new Gtk.ListStore(2, typeof(string), typeof(string));
 		TreeIter iter;
 		foreach(string txt in new string[]{ "host" }){
 			index++;
@@ -2163,6 +2202,10 @@ public class Settings : Gtk.Box {
 		});
 
 		combo.sensitive = false;
+
+		string tt = _("CPU type to emulate for guest machine");
+		label.set_tooltip_text(tt);
+		combo.set_tooltip_text(tt);
 		
 		sg_label.add_widget(label);
 		sg_option.add_widget(combo);
@@ -2194,7 +2237,7 @@ public class Settings : Gtk.Box {
 
 		// add items
 		int index = -1;
-		var store = new Gtk.ListStore(1, typeof(string));
+		var store = new Gtk.ListStore(2, typeof(string), typeof(string));
 		TreeIter iter;
 		foreach(string txt in new string[]{ "cirrus", "std", "vmware", "qxl" }){
 			index++;
@@ -2209,6 +2252,10 @@ public class Settings : Gtk.Box {
 		combo.changed.connect(() => {
 			App.kvm_vga = gtk_combobox_get_value(combo, 0, App.kvm_vga);
 		});
+
+		string tt = _("Graphics card to emulate for guest machine.\n\n cirrus &lt; std &lt; vmware &lt; qxl\n\n<b>cirrus</b> - Simple graphics card; every guest OS has a built-in driver.\n\n<b>std</b> - Supports resolutions greater than 1280x1024x16. Linux, Windows XP and newer guest have a built-in driver.\n\n<b>vmware</b> - VMware SVGA-II graphics card. Requires installation of driver xf86-video-vmware for Linux guests and VMware tools for Windows.\n\n<b>qxl</b> - More powerful graphics card for use with SPICE.");
+		label.set_tooltip_markup(tt);
+		combo.set_tooltip_markup(tt);
 
 		sg_label.add_widget(label);
 		sg_option.add_widget(combo);
@@ -2234,6 +2281,37 @@ public class Settings : Gtk.Box {
 			App.kvm_smp = (int) spin.get_value();
 		});
 
+		string tt = _("Number of CPU cores to emulate for guest machine. This can be greater than the number of cores on host machine.");
+		label.set_tooltip_text(tt);
+		spin.set_tooltip_text(tt);
+
+		sg_label.add_widget(label);
+		sg_option.add_widget(spin);
+	}
+
+	private void add_option_kvm_cpu_limit(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
+
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 12);
+		box.add(hbox);
+
+		var label = new Gtk.Label(_("CPU Limit (%)"));
+		label.xalign = 0.0f;
+		hbox.add(label);
+
+		var spin = new Gtk.SpinButton.with_range(10, 100, 1);
+		spin.value = App.kvm_cpu_limit;
+		spin.digits = 0;
+		spin.xalign = 0.5f;
+		hbox.add(spin);
+
+		spin.value_changed.connect(()=>{
+			App.kvm_cpu_limit = (int) spin.get_value();
+		});
+
+		string tt = _("Limit the CPU usage for VM process. It is recommended to keep this below 90% to prevent the host system from becoming unresponsive when intensive tasks are running in the guest OS.");
+		label.set_tooltip_text(tt);
+		spin.set_tooltip_text(tt);
+		
 		sg_label.add_widget(label);
 		sg_option.add_widget(spin);
 	}
@@ -2248,7 +2326,7 @@ public class Settings : Gtk.Box {
 		label.margin_right = 12;
 		hbox.add(label);
 
-		var spin = new Gtk.SpinButton.with_range(32, 32000, 100);
+		var spin = new Gtk.SpinButton.with_range(32, App.sysinfo.mem_total_mb, 100);
 		spin.value = App.kvm_mem;
 		spin.digits = 0;
 		spin.xalign = 0.5f;
@@ -2257,6 +2335,10 @@ public class Settings : Gtk.Box {
 		spin.value_changed.connect(()=>{
 			App.kvm_mem = (int) spin.get_value();
 		});
+
+		string tt = _("Amount of RAM to allocate for guest machine");
+		label.set_tooltip_text(tt);
+		spin.set_tooltip_text(tt);
 
 		sg_label.add_widget(label);
 		sg_option.add_widget(spin);
@@ -2304,6 +2386,134 @@ public class Settings : Gtk.Box {
 		});
 	}
 
+
+	private void add_option_pdf_split(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("PDF: Split"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'PDF > Split' action in right-click menu will remove the original file on success."));
+
+		chk.active = App.overwrite_pdf_split;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_pdf_split = chk.active;
+		});
+	}
+
+	private void add_option_pdf_merge(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("PDF: Merge"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'PDF > Merge' action in right-click menu will remove the original file on success."));
+
+		chk.active = App.overwrite_pdf_merge;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_pdf_merge = chk.active;
+		});
+	}
+
+	private void add_option_pdf_compress(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("PDF: Compress"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'PDF > Compress' action in right-click menu will replace the original file on success, instead of creating a new file."));
+
+		chk.active = App.overwrite_pdf_compress;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_pdf_compress = chk.active;
+		});
+	}
+
+	private void add_option_pdf_uncompress(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("PDF: Uncompress"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'PDF > Uncompress' action in right-click menu will replace the original file on success, instead of creating a new file."));
+
+		chk.active = App.overwrite_pdf_uncompress;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_pdf_uncompress = chk.active;
+		});
+	}
+
+	private void add_option_pdf_protect(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("PDF: Protect"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'PDF > Protect' action in right-click menu will replace the original file on success, instead of creating a new file."));
+
+		chk.active = App.overwrite_pdf_protect;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_pdf_protect = chk.active;
+		});
+	}
+
+	private void add_option_pdf_unprotect(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("PDF: Unprotect"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'PDF > Unprotect' action in right-click menu will replace the original file on success, instead of creating a new file."));
+
+		chk.active = App.overwrite_pdf_unprotect;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_pdf_unprotect = chk.active;
+		});
+	}
+
+	private void add_option_pdf_decolor(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("PDF: Decolor"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'PDF > Decolor' action in right-click menu will replace the original file on success, instead of creating a new file."));
+
+		chk.active = App.overwrite_pdf_decolor;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_pdf_decolor = chk.active;
+		});
+	}
+
+	private void add_option_pdf_rotate(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("PDF: Rotate"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'PDF > Rotate' action in right-click menu will replace the original file on success, instead of creating a new file."));
+
+		chk.active = App.overwrite_pdf_rotate;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_pdf_rotate = chk.active;
+		});
+	}
+
+	private void add_option_pdf_optimize(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("PDF: Optimize"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'PDF > Optimize' action in right-click menu will replace the original file on success, instead of creating a new file."));
+
+		chk.active = App.overwrite_pdf_optimize;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_pdf_optimize = chk.active;
+		});
+	}
+
+	
 	// helpers --------------
 
 	private Gtk.Box add_group(Gtk.Box box, string header_text, int spacing){
@@ -2316,6 +2526,7 @@ public class Settings : Gtk.Box {
 			var label = new Gtk.Label("<b>%s</b>".printf(header_text.replace("&amp;","&").replace("&","&amp;")));
 			label.set_use_markup(true);
 			label.xalign = (float) 0.0;
+			label.yalign = (float) 0.0;
 			vbox.add(label);
 			label.margin_bottom = 6;
 			vbox.margin_bottom = 6; // add box bottom padding only if group has a header
@@ -2334,6 +2545,7 @@ public class Settings : Gtk.Box {
 			var label = new Gtk.Label("<i>%s</i>".printf(header_text));
 			label.set_use_markup(true);
 			label.xalign = (float) 0.0;
+			label.yalign = (float) 0.0;
 			vbox.add(label);
 			label.margin_bottom = 6;
 			vbox.margin_bottom = 6; // add box bottom padding only if group has a header
@@ -2341,6 +2553,21 @@ public class Settings : Gtk.Box {
 		
 		return vbox;
 	} 
+
+	private Gtk.Box add_column_group(Gtk.Box box, bool first_column){
+
+		if (!first_column){
+			var separator = new Gtk.Separator(Gtk.Orientation.VERTICAL);
+			separator.margin_left = 12;
+			box.add(separator);
+		}
+		
+		var vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 12);
+		vbox.homogeneous = false;
+		box.add(vbox);
+
+		return vbox;
+	}
 }
 
 

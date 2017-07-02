@@ -231,7 +231,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	public bool query_children_async_is_running = false;
 	public bool query_children_aborted = false;
 
-	//public string icon_name = "gtk-file";
 	public GLib.Icon icon;
 	private Gtk.Window? window = null;
 
@@ -331,12 +330,16 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	}
 
 	public static FileItem? find_in_cache(string item_display_path){
+
 		if (cache.has_key(item_display_path)){
-			return cache[item_display_path];
+			var cached_item = cache[item_display_path];
+			//if (!cached_item.is_directory){
+				//log_debug("get cache: %s".printf(item_display_path), true);
+				return cached_item;
+			//}
 		}
-		else{
-			return null;
-		}
+
+		return null;
 	}
 	
 	// properties --------------------------------------
@@ -679,6 +682,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 	}
 
+	// check file type ----------------------
+	
 	public bool is_image{
 		get{
 			return content_type.has_prefix("image/");
@@ -700,6 +705,22 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	public bool is_video{
 		get{
 			return content_type.has_prefix("video/");
+		}
+	}
+
+	public bool is_pdf{
+		get{
+			return file_extension.down().has_suffix(".pdf")
+				|| (content_type == "application/pdf")
+				|| (content_type == "application/x-pdf");
+		}
+	}
+
+	public bool is_iso{
+		get{
+			return file_extension.down().has_suffix(".iso")
+				|| (content_type == "application/iso-image")
+				|| (content_type == "application/x-iso-image");
 		}
 	}
 
@@ -1008,74 +1029,73 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 		FileItem item = null;
 
-		//log_debug("add_child_from_disk: %02d: %s".printf(depth, child_item_file_path), true);
+		//log_debug("add_child_from_disk: %s".printf(child_item_file_path));
 
 		try {
 			FileEnumerator enumerator;
 			FileInfo info;
 			File file = File.parse_name (child_item_file_path);
 
-			if (file.query_exists()) {
+			if (!file.query_exists()) { return null; }
 
-				// query file type
-				var item_file_type = file.query_file_type(FileQueryInfoFlags.NONE);
+			// query file type
+			var item_file_type = file.query_file_type(FileQueryInfoFlags.NONE);
 
-				// add item
-				item = this.add_child(child_item_file_path, item_file_type, 0, 0, true);
+			// add item
+			item = this.add_child(child_item_file_path, item_file_type, 0, 0, true);
 
-				//log_debug("add_child_from_disk(): file_path=%s".printf(item.file_path));
+			//log_debug("add_child_from_disk(): file_path=%s".printf(item.file_path));
 
-				// check if directory
-				if (!item.is_directory) {
-					// add the item to cache, as it has no children
-					//add_to_cache(item); // no need to cache non-directories
-					return item;
-				}
+			// check if directory
+			if (!item.is_directory) {
+				// add the item to cache, as it has no children
+				add_to_cache(item);
+				return item;
+			}
 
-				if (depth < 0){
-					// we are querying everything under this directory, so the directory size will be accurate; set flag for this
-					item.dir_size_queried = true;
-					//log_debug("dir_size_queried: %s".printf(this.file_name));
-				}
-		
-				// enumerate item's children
+			if (depth < 0){
+				// we are querying everything under this directory, so the directory size will be accurate; set flag for this
+				item.dir_size_queried = true;
+				//log_debug("dir_size_queried: %s".printf(this.file_name));
+			}
+	
+			// enumerate item's children
 
-				try {
+			try {
 
-					item.file_count = 0;
-					item.dir_count = 0;
+				item.file_count = 0;
+				item.dir_count = 0;
+				
+				enumerator = file.enumerate_children ("%s,%s".printf(FileAttribute.STANDARD_NAME,FileAttribute.STANDARD_TYPE), 0);
+				
+				while ((info = enumerator.next_file()) != null) {
 					
-					enumerator = file.enumerate_children ("%s,%s".printf(FileAttribute.STANDARD_NAME,FileAttribute.STANDARD_TYPE), 0);
-					
-					while ((info = enumerator.next_file()) != null) {
-						
-						if (query_children_aborted) {
-							item.query_children_aborted = true;
-							item.dir_size_queried = false;
-							return null;
-						}
+					if (query_children_aborted) {
+						item.query_children_aborted = true;
+						item.dir_size_queried = false;
+						return null;
+					}
 
-						string child_path = path_combine(child_item_file_path, info.get_name());
+					string child_path = path_combine(child_item_file_path, info.get_name());
 
-						if (depth == 0){
-							// count the item's children, do not add
-							if (info.get_file_type() == FileType.DIRECTORY){
-								item.dir_count++;
-							}
-							else{ item.file_count++; }
+					if (depth == 0){
+						// count the item's children, do not add
+						if (info.get_file_type() == FileType.DIRECTORY){
+							item.dir_count++;
 						}
-						else{
-							// add item's children from disk and drill down further
-							item.add_child_from_disk(child_path, depth - 1);
+						else{ item.file_count++; }
+					}
+					else{
+						// add item's children from disk and drill down further
+						item.add_child_from_disk(child_path, depth - 1);
 
-							// add the item to cache, as it's children have been added
-							add_to_cache(item);
-						}
+						// add the item to cache, as it's children have been added
+						add_to_cache(item);
 					}
 				}
-				catch (Error e) {
-					log_error (e.message);
-				}
+			}
+			catch (Error e) {
+				log_error (e.message);
 			}
 		}
 		catch (Error e) {
@@ -1160,17 +1180,14 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 		string item_name = file_basename(item_file_path);
 		
-		if (children.has_key(item_name)){
+		if (children.has_key(item_name) && (children[item_name].file_name == item_name)){
 
 			existing_file = true;
-			item = this.children[item_name];
+			item = children[item_name];
 
 			//log_debug("existing child, queried: %s".printf(item.fileinfo_queried.to_string()));
-
-			// mark as fresh
-			item.is_stale = false;
 		}
-		else if (cache.has_key(item_file_path)){
+		else if (cache.has_key(item_file_path) && (cache[item_file_path].file_path == item_file_path)){
 			
 			item = cache[item_file_path];
 
@@ -1188,6 +1205,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			item.parent = this;
 			this.children[item.file_name] = item;
 		}
+
+		item.is_stale = false; // mark fresh
 
 		//item.display_path = path_combine(this.display_path, item_name);
 
@@ -1722,7 +1741,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			return;
 		}
 
-		var cached = find_in_cache(display_path);
+		/*var cached = find_in_cache(display_path);
 		
 		if ((cached != null) && (cached.changed != null)){
 			
@@ -1740,13 +1759,17 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 		else{
 			query_file_info();
-		}
+		}*/
 
+		query_file_info(); // read folder properties
+		
 		try{
 			// mark existing children as stale
 			foreach(var child in children.values){
 				child.is_stale = true;
 			}
+
+			//children.clear();
 
 			//log_debug("FileItem: query_children(): enumerate_children");
 
@@ -1756,7 +1779,9 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 				//log_debug("FileItem: query_children(): found: %s".printf(info.get_name()));
 				string child_name = info.get_name();
 				string child_path = GLib.Path.build_filename(file_path, child_name);
-				this.add_child_from_disk(child_path, depth - 1);
+				var child = this.add_child_from_disk(child_path, depth - 1);
+				//child.is_stale = false;
+				//log_debug("fresh: name: %s".printf(child.file_name));
 				
 				if (query_children_aborted) {
 					dir_size_queried = false;
@@ -1773,7 +1798,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 				}
 			}
 			foreach(var key in list){
-				//log_debug("Unset:%s".printf(key));
+				//log_debug("unset: key: %s, name: %s".printf(key, children[key].file_name));
 				children.unset(key);
 			}
 		}
@@ -1935,40 +1960,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 		return list;
 	}
-
-	/*public Gtk.Image get_icon_image(){
-
-		log_debug("FileItem.get_icon_image()");
-
-		var image = get_shared_icon("gtk-directory","gtk-directory.png",16);
-
-		if (is_archive) {
-			image.icon_name = "gnome-mime-application-x-archive";
-		}
-		else{
-			if ((content_type.length == 0) && (icon == null)){
-				query_file_info();
-			}
-
-			if ((icon != null) && file_path.has_prefix("/")) {
-				image.gicon = icon;
-				log_debug("using gicon for: %s".printf(file_name));
-			}
-			//else if (item.is_symlink) {
-			//	(cell as Gtk.CellRendererPixbuf).icon_name = "emblem-symbolic-link";
-			//}
-			else if (file_type == FileType.DIRECTORY) {
-				image.icon_name = "gtk-directory";
-			}
-			else{
-				image.icon_name = "gtk-file";
-			}
-		}
-
-		// TODO: use ThemedIcon?
-
-		return image;
-	}*/
 
 	// monitor
 

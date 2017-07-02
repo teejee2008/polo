@@ -38,13 +38,13 @@ public class Bash : AsyncTask {
 
 	public Pid bash_pid = -1;
 	public int status_code = -1;
-	private static Gee.HashMap<string, Regex> regex_list;
-	
+
 	public Bash() {
 		init_regular_expressions();
 	}
 
-	private static void init_regular_expressions(){
+	private void init_regular_expressions(){
+		
 		if (regex_list != null){
 			return; // already initialized
 		}

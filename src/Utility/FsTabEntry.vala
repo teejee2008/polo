@@ -225,7 +225,7 @@ public class FsTabEntry : GLib.Object{
 							
 							if (dev_luks != null){
 								
-								string msg_out, msg_err;
+								//string msg_out, msg_err;
 								var dev_unlocked = Device.luks_unlock(dev_luks, "", "", parent_window);
 
 								if (dev_unlocked != null){

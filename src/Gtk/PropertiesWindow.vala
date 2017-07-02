@@ -70,6 +70,8 @@ public class PropertiesWindow : Gtk.Window {
 		file_item = _file_item;
 		dir_item = file_item.is_directory ? file_item : (new FileItem.from_path(file_item.file_location));
 
+		file_item.query_file_info();
+		
 		init_window();
 	}
 
@@ -373,10 +375,10 @@ public class PropertiesWindow : Gtk.Window {
 		}
 		else{
 			if (file_item.file_type == FileType.DIRECTORY) {
-				image.icon_name = "gtk-directory";
+				image.pixbuf = IconManager.generic_icon_directory(256);
 			}
 			else{
-				image.icon_name = "gtk-file";
+				image.pixbuf = IconManager.generic_icon_file(256);
 			}
 		}
 

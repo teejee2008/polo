@@ -84,7 +84,7 @@ public class Thumbnailer : GLib.Object {
 
 		Gdk.Pixbuf? pixbuf = null;
 
-		string file_uri = file_item.file_path_prefix + file_item.file_path;
+		//string file_uri = file_item.file_path_prefix + file_item.file_path;
 		string hash = file_item.thumb_key;
 
 		// use images smaller than 128px directly, instead of generating thumbnails
@@ -263,7 +263,7 @@ public class Thumbnailer : GLib.Object {
 		var list = new Gee.ArrayList<Gdk.Pixbuf>();
 
 		string thumb_path = path_combine(thumbdir, subdir);
-		string thumb_file = path_combine(thumb_path, hash + ".png");
+		//string thumb_file = path_combine(thumb_path, hash + ".png");
 
 		log_debug("Thumbnailer: read_animation_from_directory(): %s".printf(thumb_path));
 

@@ -160,11 +160,11 @@ namespace TeeJee.ProcessHelper{
 			    null,
 			    out child_pid);
 
-			return 0;
+			return child_pid;
 		}
 		catch (Error e){
 	        log_error (e.message);
-	        return 1;
+	        return -1;
 	    }
 	}
 
@@ -176,55 +176,46 @@ namespace TeeJee.ProcessHelper{
 		/* Creates a temporary bash script with given commands
 		 * Returns the script file path */
 
-		var script = new StringBuilder();
-		script.append ("#!/bin/bash\n");
-		script.append ("\n");
+		string sh = "";
+		sh += "#!/bin/bash\n";
+		sh += "\n";
 		if (force_locale){
-			script.append ("LANG=C\n");
+			sh += "LANG=C\n";
 		}
-		script.append ("\n");
-		script.append ("%s\n".printf(commands));
-		script.append ("\n\nexitCode=$?\n");
-		script.append ("echo ${exitCode} > ${exitCode}\n");
-		script.append ("echo ${exitCode} > status\n");
+		sh += "\n";
+		sh += "%s\n".printf(commands);
+		sh += "\n\nexitCode=$?\n";
+		sh += "echo ${exitCode} > ${exitCode}\n";
+		sh += "echo ${exitCode} > status\n";
 
 		if ((sh_path == null) || (sh_path.length == 0)){
 			sh_path = get_temp_file_path() + ".sh";
 		}
 
-		try{
-			//write script file
-			var file = File.new_for_path (sh_path);
-			if (file.query_exists ()) {
-				file.delete ();
-			}
-			var file_stream = file.create (FileCreateFlags.REPLACE_DESTINATION);
-			var data_stream = new DataOutputStream (file_stream);
-			data_stream.put_string (script.str);
-			data_stream.close();
-
-			// set execute permission
-			chmod (sh_path, "u+x");
-		}
-		catch (Error e) {
-			if (!supress_errors){
-				log_error (e.message);
-			}
-			return null;
-		}
+		// write file
+		file_write(sh_path, sh);
+		// set execute permission
+		chmod (sh_path, "u+x");
 
 		if (admin_mode){
 			
-			var script_admin = "#!/bin/bash\n";
-			script_admin += "pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY";
-			script_admin += " '%s'".printf(escape_single_quote(sh_path));
+			sh = "";
+			sh += "#!/bin/bash\n";
+			sh += "pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY";
+			sh += " '%s'".printf(escape_single_quote(sh_path));
 
-			string sh_file_admin = "";
-			sh_file_admin = GLib.Path.build_filename(file_parent(sh_path),"script-admin.sh");
+			string sh_path_admin = GLib.Path.build_filename(file_parent(sh_path),"script-admin.sh");
 
-			save_bash_script_temp(script_admin, sh_file_admin, true, supress_errors);
+			// do not use script wrapper, write script file manually
+			//save_bash_script_temp(script_admin, sh_file_admin, true, supress_errors);
 
-			return sh_file_admin;
+			// write file
+			file_write(sh_path_admin, sh);
+			
+			// set execute permission
+			chmod (sh_path_admin, "u+x");
+			
+			return sh_path_admin;
 		}
 		else{
 			return sh_path;

@@ -430,14 +430,9 @@ public class MediaFile : GLib.Object{
 
 		string std_out, std_err;
 
-		try {
-			string cmd = "mediainfo%s '%s'".printf((getRawText ? " --Language=raw" : ""), escape_single_quote(filePath));
-			log_debug(cmd);
-			exec_sync(cmd, out std_out, out std_err);
-		}
-		catch(Error e){
-	        log_error (e.message);
-	    }
+		string cmd = "mediainfo%s '%s'".printf((getRawText ? " --Language=raw" : ""), escape_single_quote(filePath));
+		log_debug(cmd);
+		exec_sync(cmd, out std_out, out std_err);
 
 		return std_out;
 	}
@@ -448,14 +443,9 @@ public class MediaFile : GLib.Object{
 
 		string std_out, std_err;
 
-		try {
-			string cmd = "exiftool '%s'".printf(escape_single_quote(filePath));
-			log_debug(cmd);
-			exec_sync(cmd, out std_out, out std_err);
-		}
-		catch(Error e){
-	        log_error (e.message);
-	    }
+		string cmd = "exiftool '%s'".printf(escape_single_quote(filePath));
+		log_debug(cmd);
+		exec_sync(cmd, out std_out, out std_err);
 
 		return std_out;
 	}

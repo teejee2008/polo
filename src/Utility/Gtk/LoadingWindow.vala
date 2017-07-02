@@ -37,8 +37,6 @@ public class LoadingWindow : Gtk.Window {
 	
 	private Gtk.Box vbox_main;
 	private Gtk.Label lbl_msg;
-	private Gtk.ScrolledWindow sw_msg;
-	private Gtk.Button btn_ok;
 
 	private string msg_title;
 	private string msg_body;

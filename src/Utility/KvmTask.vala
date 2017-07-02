@@ -50,12 +50,6 @@ public class KvmTask : AsyncTask {
 	private string disk_format = "";
 	private Gtk.Window? window = null;
 
-	public string kvm_vga = "std";
-	public string kvm_cpu = "host";
-	public int kvm_smp = 1;
-	public int kvm_mem = 2048;
-	public string kvm_format = ".qcow2";
-	
 	public KvmTask(){
 		init_regular_expressions();
 	}
@@ -217,11 +211,15 @@ public class KvmTask : AsyncTask {
 		
 		log_debug(cmd);
 		
-		exec_script_async(cmd);
+		int pid = exec_script_async(cmd);
+
+		if (pid != -1){
+			set_cpu_limit(pid);
+		}
 	}
 
 	public void boot_disk(string disk_path, Json.Object config){
-		
+
 		string cmd = "";
 		
 		cmd += get_kvm_config(config);
@@ -230,7 +228,11 @@ public class KvmTask : AsyncTask {
 		
 		log_debug(cmd);
 		
-		exec_script_async(cmd);
+		int pid = exec_script_async(cmd);
+
+		if (pid != -1){
+			set_cpu_limit(pid);
+		}
 	}
 
 	public void boot_iso_attach_disk(string iso_path, string disk_path, Json.Object config){
@@ -245,7 +247,11 @@ public class KvmTask : AsyncTask {
 		
 		log_debug(cmd);
 		
-		exec_script_async(cmd);
+		int pid = exec_script_async(cmd);
+
+		if (pid != -1){
+			set_cpu_limit(pid);
+		}
 	}
 
 	public string get_kvm_config(Json.Object config){
@@ -255,8 +261,9 @@ public class KvmTask : AsyncTask {
 		string kvm_vga = json_get_string(config, "kvm_vga", "vmware");
 		int kvm_mem = json_get_int(config, "kvm_mem", 1024);
 		string kvm_smb = json_get_string(config, "kvm_smb", "");
-		
-		string cmd = "kvm -enable-kvm";
+
+		string cmd = "";
+		cmd += "kvm -enable-kvm";
 		cmd += " -cpu %s".printf(kvm_cpu);
 		cmd += " -smp %d".printf(kvm_smp);
 		cmd += " -vga %s".printf(kvm_vga);
@@ -268,7 +275,59 @@ public class KvmTask : AsyncTask {
 		}
 		return cmd;
 	}
-	
+
+	public void mount_disk(string disk_path){
+
+
+		int index = 0;
+		string nbd_device = "";
+		
+		do{
+			nbd_device = "/dev/nbd%d".printf(index);
+			index++;
+		}
+		while (file_exists(nbd_device));
+
+		string cmd = "";
+		
+		cmd += " modprobe nbd max_part=8";
+
+		cmd += " && ";
+		
+		cmd += " qemu-nbd";
+		
+		cmd += " --connect=%s".printf(nbd_device);
+		
+		cmd += " '%s'".printf(escape_single_quote(disk_path));
+		
+		log_debug(cmd);
+
+		err_log_clear();
+		
+		string std_out, std_err;
+		exec_script_sync(cmd, out std_out, out std_err, false, true);
+
+		if (std_err.length > 0){
+			gtk_messagebox(_("Error"), std_err, window, true);
+		}
+		else{
+			gtk_messagebox(_("Mounted successfully"), "%s: %s".printf(_("Device"), nbd_device), window, false);
+		}
+	}
+
+	public void set_cpu_limit(int pid){
+
+		if (App.kvm_cpu_limit == 100) { return; }
+
+		int cpu_max = App.sysinfo.cpu_cores * App.kvm_cpu_limit;
+
+		string cmd = "cpulimit -l %d -p %d".printf(cpu_max, pid);
+		
+		log_debug(cmd);
+		
+		exec_script_async(cmd);
+	}
+
 	// execution ----------------------------
 
 	public void execute() {

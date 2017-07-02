@@ -163,6 +163,10 @@ public class TermBox : Gtk.Box {
 		string[] argv = new string[1];
 		argv[0] = get_cmd_path("fish");
 
+		if (!cmd_exists("fish")){
+			argv[0] = get_cmd_path("bash");
+		}
+
 		string[] env = Environ.get();
 		
 		try{
@@ -182,7 +186,9 @@ public class TermBox : Gtk.Box {
 
 			term.child_exited.connect((status)=>{
 				log_debug("TermBox: child_exited(): pid=%d, status=%d".printf(child_pid, status));
-				start_shell();
+				if (!cancelled){
+					start_shell();
+				}
 			});
 
 			reset();
@@ -192,6 +198,11 @@ public class TermBox : Gtk.Box {
 		catch (Error e) {
 			log_error (e.message);
 		}
+	}
+
+	public void exit_shell(){
+		cancelled = true;
+		feed_command("exit");
 	}
 
 	public void terminate_child(){
@@ -204,6 +215,10 @@ public class TermBox : Gtk.Box {
 			var children = get_process_children(child_pid);
 			return (children.length > 0);
 		}
+	}
+
+	public int get_child_pid() {
+		return child_pid;
 	}
 
 	public void feed_command(string command, bool newline = true){
