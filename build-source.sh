@@ -1,0 +1,48 @@
+#!/bin/bash
+
+backup=`pwd`
+DIR="$( cd "$( dirname "$0" )" && pwd )"
+cd "$DIR"
+
+app_name=$(cat app_name)
+pkg_name=$(cat pkg_name)
+
+echo ""
+echo "=========================================================================="
+echo " build-source.sh"
+echo "=========================================================================="
+echo ""
+
+echo "app_name: $app_name"
+echo "--------------------------------------------------------------------------"
+
+# commit to bzr repo
+bzr add *
+bzr commit -m "updated"
+
+#check for errors
+if [ $? -ne 0 ]; then
+	cd "$backup"; echo "Failed"; exit 1;
+fi
+
+echo "--------------------------------------------------------------------------"
+
+# clean build dir
+rm -rf ../builds
+
+# build source
+bzr builddeb --source --native --build-dir ../builds/temp --result-dir ../builds
+
+#check for errors
+if [ $? -ne 0 ]; then
+	cd "$backup"; echo "Failed"; exit 1;
+fi
+
+echo "--------------------------------------------------------------------------"
+
+# list files
+ls -l ../builds
+
+echo "-------------------------------------------------------------------------"
+
+cd "$backup"
