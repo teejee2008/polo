@@ -877,7 +877,6 @@ public class MainMenuBar : Gtk.MenuBar {
 	private void add_hidden(Gtk.Menu submenu){
 
 		var item = new Gtk.CheckMenuItem.with_label (_("Show Hidden"));
-		item.active = (view == null) ? false : pane.view.show_hidden_files;
 		submenu.add(item);
 		var chk_hidden = item;
 
@@ -896,16 +895,19 @@ public class MainMenuBar : Gtk.MenuBar {
 
 		context_normal.connect(()=>{
 			item.sensitive = true;
+			item.active = (view == null) ? false : view.show_hidden_files;
 			add_action_accel(item, key);
 		});
 
 		context_trash.connect(()=>{
 			item.sensitive = true;
+			item.active = (view == null) ? false : view.show_hidden_files;
 			add_action_accel(item, key);
 		});
 
 		context_archive.connect(()=>{
 			item.sensitive = true;
+			item.active = (view == null) ? false : view.show_hidden_files;
 			add_action_accel(item, key);
 		});
 
@@ -996,7 +998,6 @@ public class MainMenuBar : Gtk.MenuBar {
 	private void add_fullscreen_mode(Gtk.Menu submenu){
 		
 		var item = new Gtk.CheckMenuItem.with_label (_("Fullscreen Mode"));
-		item.active = window.is_maximized;
 		submenu.add(item);
 
 		item.activate.connect (() => {
@@ -1007,16 +1008,19 @@ public class MainMenuBar : Gtk.MenuBar {
 
 		context_normal.connect(()=>{
 			item.sensitive = true;
+			item.active = window.is_maximized;
 			add_action_accel(item, key);
 		});
 
 		context_trash.connect(()=>{
 			item.sensitive = true;
+			item.active = window.is_maximized;
 			add_action_accel(item, key);
 		});
 
 		context_archive.connect(()=>{
 			item.sensitive = true;
+			item.active = window.is_maximized;
 			add_action_accel(item, key);
 		});
 

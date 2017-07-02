@@ -1963,7 +1963,7 @@ public class FileContextMenu : Gtk.Menu {
 
 		var menu_item = gtk_menu_add_item(
 			menu,
-			_("Remove Colors"),
+			_("Remove Color"),
 			_("Remove colors from PDF document"),
 			null,
 			sg_icon,

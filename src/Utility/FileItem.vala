@@ -1029,7 +1029,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 		FileItem item = null;
 
-		log_debug("add_child_from_disk: %s".printf(child_item_file_path));
+		//log_debug("add_child_from_disk: %s".printf(child_item_file_path));
 
 		try {
 			FileEnumerator enumerator;
