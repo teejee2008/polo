@@ -175,7 +175,7 @@ public class MiddleToolbar : Gtk.Toolbar {
 	private void add_toolbar_button_for_cut(){
 		
 		var button = new Gtk.ToolButton(null,null);
-		button.set_tooltip_text (_("Cut\n\nCut the items selected in active pane"));
+		button.set_tooltip_text (_("Cut\n\nCut selected items in active pane"));
 		button.is_important = true;
 		add(button);
 		btn_cut = button;
@@ -194,7 +194,7 @@ public class MiddleToolbar : Gtk.Toolbar {
 	private void add_toolbar_button_for_copy(){
 		
 		var button = new Gtk.ToolButton(null,null);
-		button.set_tooltip_text (_("Copy\n\nCopy the items selected in active pane"));
+		button.set_tooltip_text (_("Copy\n\nCopy selected items in active pane"));
 		button.is_important = true;
 		add(button);
 		btn_copy = button;
@@ -252,7 +252,7 @@ public class MiddleToolbar : Gtk.Toolbar {
 	private void add_toolbar_button_for_trash(){
 		
 		var button = new Gtk.ToolButton(null,null);
-		button.set_tooltip_text (_("Trash\n\nMove files to recycle bin"));
+		button.set_tooltip_text (_("Trash\n\nMove selected items to recycle bin"));
 		button.is_important = true;
 		add(button);
 		btn_trash = button;
@@ -272,7 +272,7 @@ public class MiddleToolbar : Gtk.Toolbar {
 	private void add_toolbar_button_for_delete(){
 		
 		var button = new Gtk.ToolButton(null,null);
-		button.set_tooltip_text (_("Delete\n\nDelete files permanently (without sending to recycle bin)"));
+		button.set_tooltip_text (_("Delete\n\nDelete selected items permanently (without sending to recycle bin)"));
 		button.is_important = true;
 		add(button);
 		btn_delete = button;
@@ -292,7 +292,7 @@ public class MiddleToolbar : Gtk.Toolbar {
 	private void add_toolbar_button_for_move_across(){
 		
 		var button = new Gtk.ToolButton(null,null);
-		button.set_tooltip_text (_("Move Across\n\nMove selected items from active pane to opposite pane"));
+		button.set_tooltip_text (_("Move Across\n\nMove selected items in active pane to opposite pane"));
 		button.is_important = true;
 		add(button);
 		btn_move_across = button;
@@ -311,7 +311,7 @@ public class MiddleToolbar : Gtk.Toolbar {
 	private void add_toolbar_button_for_copy_across(){
 		
 		var button = new Gtk.ToolButton(null,null);
-		button.set_tooltip_text (_("Copy Across\n\nCopy selected items from active pane to opposite pane"));
+		button.set_tooltip_text (_("Copy Across\n\nCopy selected items in active pane to opposite pane"));
 		button.is_important = true;
 		add(button);
 		btn_copy_across = button;

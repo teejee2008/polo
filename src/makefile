@@ -34,7 +34,7 @@ all:
 		Utility/Gtk/*.vala \
 		-o "${app_name}-gtk" \
 		--pkg glib-2.0 --pkg gio-unix-2.0 \
-		--pkg posix --pkg gtk+-3.0 --pkg gee-0.8 --pkg libsoup-2.4 \
+		--pkg posix --pkg gtk+-3.0 --pkg gee-0.8 \
 		--pkg json-glib-1.0 --pkg libxml-2.0 --pkg $(vte_version)
 
 	#update translation template
