@@ -1065,6 +1065,10 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 				item.file_count = 0;
 				item.dir_count = 0;
+
+				if (!item.can_read){
+					return item;
+				}
 				
 				enumerator = file.enumerate_children ("%s,%s".printf(FileAttribute.STANDARD_NAME,FileAttribute.STANDARD_TYPE), 0);
 				
