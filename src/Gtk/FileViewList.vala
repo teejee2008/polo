@@ -85,6 +85,8 @@ public class FileViewList : Gtk.Box {
 	public FileItem current_item;
 	public FileContextMenu menu_file;
 
+	public string filter_pattern = "";
+	
 	public Gee.ArrayList<FileItemMonitor> monitors = new Gee.ArrayList<FileItemMonitor>();
 
 	// parents
@@ -154,6 +156,8 @@ public class FileViewList : Gtk.Box {
 		init_treeview();
 
 		init_iconview();
+
+		connect_key_press_handler();
 
 		show_all();
 	}
@@ -241,6 +245,8 @@ public class FileViewList : Gtk.Box {
 
 			window.update_accelerators_for_active_pane();
 
+			pane.selection_bar.close_panel();
+
 			if (event.button == 3) {
 				if (current_item == null) { return false; }
 				menu_file = new FileContextMenu(pane);
@@ -259,7 +265,8 @@ public class FileViewList : Gtk.Box {
         treeview.drag_data_received.connect(on_drag_data_received);
 		treeview.drag_data_get.connect(on_drag_data_get);
 
-
+		treeview.enable_search = false;
+		
 		//treeview.button_press_event.connect(on_button_press_event);
 		//treeview.button_release_event.connect(on_button_release_event);
 
@@ -326,6 +333,8 @@ public class FileViewList : Gtk.Box {
 			window.active_pane = pane;
 
 			window.update_accelerators_for_active_pane();
+
+			pane.selection_bar.close_panel();
 
 			if (event.button == 3) {
 				if (current_item == null) { return false; }
@@ -1569,7 +1578,45 @@ public class FileViewList : Gtk.Box {
 		treeview.row_collapsed.connect(row_collapsed);
 	}
 
-	// DND
+	// key press
+
+	private void connect_key_press_handler(){
+		treeview.key_press_event.connect(on_key_press_event);
+		iconview.key_press_event.connect(on_key_press_event);
+	}
+
+	private void disconnect_key_press_handler(){
+		treeview.key_press_event.disconnect(on_key_press_event);
+		iconview.key_press_event.disconnect(on_key_press_event);
+	}
+	
+	private bool on_key_press_event(Gdk.EventKey event){
+
+		log_debug("keypress : %s, is_modifier : %s".printf(Gdk.keyval_name(event.keyval), event.is_modifier.to_string()));
+		log_debug("state    : %s".printf(event.state.to_string()));
+
+        if (event.is_modifier == 1){
+			return false;
+		}
+
+        switch(event.state){
+		case Gdk.ModifierType.CONTROL_MASK:
+		case Gdk.ModifierType.SHIFT_MASK:
+		//case Gdk.ModifierType.LOCK_MASK: // caps lock and shift lock
+		case Gdk.ModifierType.SUPER_MASK:
+		case Gdk.ModifierType.HYPER_MASK:
+		case Gdk.ModifierType.META_MASK:
+			return false;
+		}
+
+		if ((current_item != null) && (current_item.is_local) && !pane.selection_bar.visible){
+			pane.selection_bar.open_panel(Gdk.keyval_name(event.keyval));
+			return true;
+		}
+		return false;
+	}
+
+	// DND ------------------------------------
 
 	//private bool on_drag_data_get (TreePath path, SelectionData selection_data){
 	private void on_drag_data_get (Gdk.DragContext context, Gtk.SelectionData data, uint info, uint time) {
@@ -1583,7 +1630,7 @@ public class FileViewList : Gtk.Box {
 			uris.add("file://" + item.file_path);
 			log_debug("dnd get: %s".printf("file://" + item.file_path));
 		}
-		data.set_uris((string[])uris.to_array());
+		data.set_uris((string[]) uris.to_array());
 
 		log_debug("on_drag_data_get: exit");
 	}
@@ -2171,11 +2218,30 @@ public class FileViewList : Gtk.Box {
 				display = false;
 			}
 		}
+
+		if (filter_pattern.length > 0){
+			if (item.file_name.down().contains(filter_pattern) && display){
+				display = true;
+			}
+			else{
+				display = false;
+			}
+		}
 		
 		return display;
 	}
 
 	public void refilter(){
+		treefilter.refilter();
+	}
+
+	public void filter(string pattern){
+		filter_pattern = pattern;
+		treefilter.refilter();
+	}
+
+	public void clear_filter(){
+		filter_pattern = "";
 		treefilter.refilter();
 	}
 
@@ -3049,7 +3115,7 @@ public class FileViewList : Gtk.Box {
 		return list;
 	}
 
-	private void select_items(Gee.ArrayList<string> items){
+	public void select_items_by_file_path(Gee.ArrayList<string> items){
 
 		Gtk.TreeModel model;
 		model = (Gtk.TreeModel) treefilter;
@@ -3068,6 +3134,16 @@ public class FileViewList : Gtk.Box {
 				}
 			}
 			iterExists = model.iter_next (ref iter);
+		}
+	}
+
+	public void clear_selections(){
+		
+		if (view_mode == ViewMode.LIST){
+			treeview.get_selection().unselect_all();
+		}
+		else{
+			iconview.unselect_all();
 		}
 	}
 
@@ -3539,7 +3615,7 @@ public class FileViewList : Gtk.Box {
 
 		var list = new Gee.ArrayList<string>();
 		list.add(path_combine(current_item.file_path, new_name));
-		select_items(list);
+		select_items_by_file_path(list);
 	}
 
 	public void create_file(){
@@ -3571,7 +3647,7 @@ public class FileViewList : Gtk.Box {
 
 		var list = new Gee.ArrayList<string>();
 		list.add(path_combine(current_item.file_path, new_name));
-		select_items(list);
+		select_items_by_file_path(list);
 	}
 
 	public void create_file_from_template(string template_path){
@@ -3610,7 +3686,7 @@ public class FileViewList : Gtk.Box {
 
 		var list = new Gee.ArrayList<string>();
 		list.add(path_combine(current_item.file_path, new_name));
-		select_items(list);
+		select_items_by_file_path(list);
 	}
 
 	public void open_tab(){
