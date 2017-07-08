@@ -3590,10 +3590,10 @@ public class FileViewList : Gtk.Box {
 
 		log_debug("action.create_directory()");
 
-		string? new_name = "";
+		string? new_name = _("New Folder");
 
 		do {
-			new_name = gtk_inputbox(_("Create Directory"),_("Enter directory name"), window);
+			new_name = gtk_inputbox(_("Create Directory"),_("Enter directory name"), window, false, new_name);
 			if ((new_name == null) || (new_name.length == 0)){
 				return;
 			}
@@ -3622,10 +3622,10 @@ public class FileViewList : Gtk.Box {
 
 		log_debug("action.create_file()");
 
-		string? new_name = "";
+		string? new_name = _("New File");
 
 		do {
-			new_name = gtk_inputbox(_("Create File"),_("Enter file name"), window);
+			new_name = gtk_inputbox(_("Create File"),_("Enter file name"), window, false, new_name);
 			if ((new_name == null) || (new_name.length == 0)){
 				return;
 			}
