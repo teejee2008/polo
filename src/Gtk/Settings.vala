@@ -1103,6 +1103,8 @@ public class Settings : Gtk.Box {
 		
 		add_option_view_mode(vbox_group, sg_label, sg_option);
 
+		add_option_terminal(vbox_group, sg_label, sg_option);
+
 		//add_option_single_click_browse(vbox_items);
 
 		// --------------------------------
@@ -1148,7 +1150,7 @@ public class Settings : Gtk.Box {
 		var hbox = new Gtk.Box(Orientation.HORIZONTAL,6);
 		box.add(hbox);
 
-		hbox.margin_bottom = 6;
+		//hbox.margin_bottom = 6;
 
 		// label
 		var label = new Gtk.Label(_("View Mode"));
@@ -1209,6 +1211,63 @@ public class Settings : Gtk.Box {
 
 		combo.changed.connect(() => {
 			App.view_mode = (ViewMode) gtk_combobox_get_value_enum(combo, 0, App.view_mode);
+		});
+	}
+
+	private void add_option_terminal(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
+
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL,6);
+		box.add(hbox);
+
+		hbox.margin_bottom = 6;
+
+		// label
+		var label = new Gtk.Label(_("Terminal"));
+		label.xalign = (float) 0.0;
+		label.margin_left = 6;
+		label.margin_right = 6;
+		label.margin_bottom = 6;
+		hbox.add(label);
+		sg_label.add_widget(label);
+
+		// cmb_app
+		var combo = new Gtk.ComboBox();
+		combo.set_tooltip_text(_("Terminal emulator to use for terminal panes"));
+		hbox.add (combo);
+		sg_option.add_widget(combo);
+
+		// render text
+		var cell_text = new CellRendererText();
+		combo.pack_start(cell_text, false);
+		combo.set_cell_data_func (cell_text, (cell_text, cell, model, iter) => {
+			string text;
+			model.get (iter, 1, out text, -1);
+			(cell as Gtk.CellRendererText).text = text;
+		});
+
+		// add items
+		var store = new Gtk.ListStore(2,
+			typeof(PanelLayout),
+			typeof(string));
+
+		combo.set_model (store);
+		
+		TreeIter iter;
+		int index = -1;
+		
+		foreach(var shell in Shell.get_installed_shells()){
+			
+			index++;
+			store.append(out iter);
+			store.set (iter, 0, shell.cmd, 1, shell.display_name, -1);
+
+			if (shell.cmd == App.shell_default){
+				combo.active = index;
+			}
+		}
+
+		combo.changed.connect(() => {
+			App.shell_default = gtk_combobox_get_value(combo, 0, App.shell_default);
 		});
 	}
 

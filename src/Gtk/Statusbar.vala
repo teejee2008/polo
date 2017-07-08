@@ -131,6 +131,8 @@ public class Statusbar : Gtk.Box {
 
 		//add_dual_pane_toggle();
 
+		add_filter_toggle();
+		
 		add_terminal_toggle();
 
 		//add_style_toggle();
@@ -474,6 +476,35 @@ public class Statusbar : Gtk.Box {
 		ebox.button_press_event.connect((event)=>{
 
 			pane.terminal.toggle();
+
+			return true;
+		});
+	}
+
+	private void add_filter_toggle(){
+
+		var img = IconManager.lookup_image("view-filter",16);
+		img.set_tooltip_text(_("Filter Items"));
+		//img.margin_left = 6;
+		//img.margin_right = 6;
+
+		var ebox = new Gtk.EventBox();
+		ebox.add(img);
+		add(ebox);
+
+		// set hand cursor
+		if (ebox.get_realized()){
+			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
+		}
+		else{
+			ebox.realize.connect(()=>{
+				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
+			});
+		}
+
+		ebox.button_press_event.connect((event)=>{
+
+			pane.selection_bar.toggle();
 
 			return true;
 		});

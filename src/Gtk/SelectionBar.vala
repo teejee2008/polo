@@ -43,6 +43,8 @@ public class SelectionBar : Gtk.Box {
 	private Gtk.RadioButton opt_select;
 	private Gtk.RadioButton opt_filter;
 
+	private Gtk.Box hbox;
+
 	public string text {
 		owned get {
 			return txt_pattern.text;
@@ -51,7 +53,7 @@ public class SelectionBar : Gtk.Box {
 
 	public SelectionBar(FileViewPane parent_pane){
 		//base(Gtk.Orientation.VERTICAL, 6); // issue with vala
-		Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 6); // work-around
+		Object(orientation: Gtk.Orientation.VERTICAL, spacing: 6); // work-around
 		margin = 6;
 		log_debug("SelectionBar()");
 
@@ -66,11 +68,18 @@ public class SelectionBar : Gtk.Box {
 
 	private void init_ui(){
 
+		hbox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
+		add(hbox);
+		
 		add_entry();
 
 		add_toggle_buttons();
 
 		add_close_button();
+
+		var separator = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
+		//separator.margin_left = 24;
+		add(separator);
 	}
 
 	private void add_entry(){
@@ -79,7 +88,7 @@ public class SelectionBar : Gtk.Box {
 		txt.xalign = 0.0f;
 		txt.hexpand = true;
 		txt.margin = 0;
-		this.add(txt);
+		hbox.add(txt);
 
 		txt.placeholder_text = _("Enter pattern for selecting or filtering items in view");
 
@@ -116,7 +125,7 @@ public class SelectionBar : Gtk.Box {
 	private void add_toggle_buttons(){
 
 		var button = new Gtk.RadioButton.with_label_from_widget (null, _("Select"));
-		this.add(button);
+		hbox.add(button);
 		opt_select = button;
 
 		button.toggled.connect(()=>{
@@ -126,7 +135,7 @@ public class SelectionBar : Gtk.Box {
 		});
 		
 		button = new Gtk.RadioButton.with_label_from_widget (button, _("Filter"));
-		this.add(button);
+		hbox.add(button);
 		opt_filter = button;
 
 		button.toggled.connect(()=>{
@@ -139,13 +148,23 @@ public class SelectionBar : Gtk.Box {
 	private void add_close_button(){
 
 		var button = new Gtk.Button.with_label(_("Close"));
-		this.add(button);
+		hbox.add(button);
 		
 		button.clicked.connect((event) => {
 			close_panel();
 		});
 	}
 
+	public void toggle(){
+		
+		if (this.visible){
+			close_panel();
+		}
+		else{
+			open_panel("");
+		}
+	}
+	
 	public void open_panel(string initial_text){
 
 		if (this.visible) { return; }

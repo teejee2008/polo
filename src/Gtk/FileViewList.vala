@@ -1592,12 +1592,9 @@ public class FileViewList : Gtk.Box {
 	
 	private bool on_key_press_event(Gdk.EventKey event){
 
-		log_debug("keypress : %s, is_modifier : %s".printf(Gdk.keyval_name(event.keyval), event.is_modifier.to_string()));
-		log_debug("state    : %s".printf(event.state.to_string()));
+		log_debug("key: %s, state: %s".printf(Gdk.keyval_name(event.keyval), event.state.to_string()));
 
-        if (event.is_modifier == 1){
-			return false;
-		}
+        if (event.is_modifier == 1){ return false; }
 
         switch(event.state){
 		case Gdk.ModifierType.CONTROL_MASK:

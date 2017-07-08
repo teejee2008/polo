@@ -98,6 +98,8 @@ public class Main : GLib.Object {
 	public Json.Object appconfig;
 	public Bash bash_admin_shell;
 
+	public string shell_default = "fish";
+
 	public AppMode app_mode = AppMode.OPEN;
 	public Gee.ArrayList<string> cmd_files;
 	public string arg_outpath = "";
@@ -203,7 +205,7 @@ public class Main : GLib.Object {
 	
 	// defaults
 	public static double LV_FONT_SCALE = 1.0;
-	public static int LV_ICON_SIZE = 16;
+	public static int LV_ICON_SIZE = 24;
 	public static int LV_ROW_SPACING = 0;
 
 	public static int IV_ICON_SIZE = 64;
@@ -245,7 +247,7 @@ public class Main : GLib.Object {
 
 	public Gee.ArrayList<string> mediaview_exclude = new Gee.ArrayList<string>();
 	public Gee.ArrayList<string> mediaview_include = new Gee.ArrayList<string>();
-
+	
 	public string status_line = "";
 	public int64 progress_count;
 	public int64 progress_total;
@@ -347,11 +349,6 @@ public class Main : GLib.Object {
 		dir_create(app_conf_dir_path);
 		dir_create(app_conf_dir_path_open);
 		
-		// create default objects
-		//archive = new ArchiveFile();
-		//archive_task = new ArchiveTask();
-		//ArchiveCache.refresh();
-
 		supported_formats_open = {
 			".tar",
 			".tar.gz", ".tgz",
@@ -458,7 +455,6 @@ public class Main : GLib.Object {
 
 	public void init_tools(){
 		
-		//Encoders["avconv"] = new Encoder("avconv","Libav Encoder","Audio-Video Decoding");
 		tools["ffmpeg"] = new Tool("ffmpeg","FFmpeg Encoder","Generate thumbnails for video");
 		tools["mediainfo"] = new Tool("mediainfo","MediaInfo","Read media properties from audio and video files");
 		tools["exiftool"] = new Tool("exiftool","ExifTool","Read EXIF properties from JPG/TIFF/PNG/PDF files");
@@ -479,14 +475,6 @@ public class Main : GLib.Object {
 		tools["polo-pdf"] = new Tool("polo-pdf","polo-pdf","Polo PDF Plugin (Donation)");
 		
 		check_all_tools();
-		
-		//Encoders["ffplay"] = new Encoder("ffplay","FFmpeg's Audio Video Player","Audio-Video Playback");
-		//Encoders["avplay"] = new Encoder("avplay","Libav's Audio Video Player","Audio-Video Playback");
-		//Encoders["mplayer"] = new Encoder("mplayer","Media Player","Audio-Video Playback");
-		//Encoders["mplayer2"] = new Encoder("mplayer2","Media Player","Audio-Video Playback");
-		//Encoders["mpv"] = new Encoder("mpv","Media Player","Audio-Video Playback");
-		//Encoders["smplayer"] = new Encoder("smplayer","Media Player","Audio-Video Playback");
-		//Encoders["vlc"] = new Encoder("vlc","Media Player","Audio-Video Playback");
 	}
 
 	public void check_all_tools(){
@@ -524,7 +512,7 @@ public class Main : GLib.Object {
 			plugin.check_availablity();
 		}
 	}
-	
+
 	/* Configuration */
 
 	public void save_app_config() {
@@ -555,6 +543,7 @@ public class Main : GLib.Object {
 		config.set_string_member("show_hidden_files", show_hidden_files.to_string());
 		config.set_string_member("panel_layout", ((int)panel_layout).to_string());
 		config.set_string_member("view_mode", ((int)view_mode).to_string());
+		config.set_string_member("shell_default", shell_default);
 
 		config.set_string_member("listview_font_scale", listview_font_scale.to_string());
 		config.set_string_member("listview_icon_size", listview_icon_size.to_string());
@@ -718,7 +707,8 @@ public class Main : GLib.Object {
 		
 		show_hidden_files = json_get_bool(config, "show_hidden_files", show_hidden_files);
 		panel_layout = (PanelLayout) json_get_int(config, "panel_layout", panel_layout);
-
+		shell_default = json_get_string(config, "shell_default", shell_default);
+		
 		int vmode = json_get_int(config, "view_mode", view_mode);
 		if (vmode >= 1 && vmode <= 4){
 			view_mode = (ViewMode) vmode;

@@ -145,6 +145,8 @@ public class TermBox : Gtk.Box {
 			
 			window.update_accelerators_for_terminal();
 
+			pane.selection_bar.close_panel();
+
 			term.grab_focus();
 			
 			if (event.button == 3) {
@@ -161,10 +163,10 @@ public class TermBox : Gtk.Box {
 		log_debug("TermBox: start_shell()");
 		
 		string[] argv = new string[1];
-		argv[0] = get_cmd_path("fish");
+		argv[0] = get_cmd_path(App.shell_default);
 
-		if (!cmd_exists("fish")){
-			argv[0] = get_cmd_path("bash");
+		if (!cmd_exists(App.shell_default)){
+			argv[0] = get_cmd_path("sh");
 		}
 
 		string[] env = Environ.get();
