@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
-"POT-Creation-Date: 2017-07-09 11:44+0530\n"
+"POT-Creation-Date: 2017-07-09 12:02+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,7 +55,7 @@ msgid ""
 "will increase gradually as disk is modified."
 msgstr ""
 
-#: Gtk/MainWindow.vala:756
+#: Gtk/MainWindow.vala:753
 msgid "A modern, light-weight file manager for Linux"
 msgstr ""
 
@@ -344,7 +344,7 @@ msgstr ""
 msgid "Cancel"
 msgstr ""
 
-#: Gtk/FileViewTab.vala:376 Gtk/LayoutBox.vala:491 Gtk/MainWindow.vala:161
+#: Gtk/FileViewTab.vala:376 Gtk/LayoutBox.vala:491 Gtk/MainWindow.vala:158
 msgid "Cancel File Operations?"
 msgstr ""
 
@@ -448,7 +448,7 @@ msgstr ""
 msgid "Clean thumbnail cache"
 msgstr ""
 
-#: Gtk/MainWindow.vala:783
+#: Gtk/MainWindow.vala:780
 msgid "Cleaning Thumbnail Cache..."
 msgstr ""
 
@@ -507,7 +507,7 @@ msgstr ""
 msgid "Close this window"
 msgstr ""
 
-#: Gtk/MainWindow.vala:162
+#: Gtk/MainWindow.vala:159
 msgid ""
 "Closing the application will cancel running file operations.\n"
 "Do you want to cancel?"
@@ -1946,7 +1946,7 @@ msgstr ""
 msgid "Missing"
 msgstr ""
 
-#: Gtk/MainWindow.vala:506
+#: Gtk/MainWindow.vala:503
 msgid "Missing Dependencies"
 msgstr ""
 
@@ -2618,7 +2618,7 @@ msgstr ""
 msgid "Rebuild font cache"
 msgstr ""
 
-#: Gtk/MainWindow.vala:771
+#: Gtk/MainWindow.vala:768
 msgid "Rebuilding Font Cache..."
 msgstr ""
 
@@ -2825,7 +2825,7 @@ msgstr ""
 msgid "Restoring items..."
 msgstr ""
 
-#: Gtk/MainWindow.vala:905
+#: Gtk/MainWindow.vala:902
 msgid "Restoring session..."
 msgstr ""
 
