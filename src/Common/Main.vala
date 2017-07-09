@@ -37,13 +37,14 @@ using TeeJee.Misc;
 public Main App;
 public const string AppName = "Polo File Manager";
 public const string AppShortName = "polo";
-public const string AppVersion = "17.7 (BETA 8)";
-public const string AppWikiVersion = "17.7 (BETA 8)"; // update only if wiki page exists
+public const string AppVersion = "17.7.1 (BETA 9)";
+public const string AppWikiVersion = "17.7.1 (BETA 9)"; // update only if wiki page exists
 public const string AppAuthor = "Tony George";
 public const string AppAuthorEmail = "teejeetech@gmail.com";
 
 public const int PLUGIN_VER_ISO = 2;
 public const int PLUGIN_VER_PDF = 2;
+public const int PLUGIN_VER_IMAGE = 2;
 
 const string GETTEXT_PACKAGE = "";
 const string LOCALE_DIR = "/usr/share/locale";
@@ -97,6 +98,8 @@ public class Main : GLib.Object {
 	//public Gee.ArrayList<MimeType> mimetype_list;
 	public Json.Object appconfig;
 	public Bash bash_admin_shell;
+
+	public string shell_default = "fish";
 
 	public AppMode app_mode = AppMode.OPEN;
 	public Gee.ArrayList<string> cmd_files;
@@ -170,6 +173,15 @@ public class Main : GLib.Object {
 	public bool overwrite_pdf_optimize = false;
 	public bool overwrite_pdf_rotate = false;
 
+	public bool overwrite_image_optimize_png = false;
+	public bool overwrite_image_reduce_jpeg = false;
+	public bool overwrite_image_resize = false;
+	public bool overwrite_image_rotate = false;
+	public bool overwrite_image_convert = false;
+	public bool overwrite_image_decolor = false;
+	public bool overwrite_image_boost_color = false;
+	public bool overwrite_image_reduce_color = false;
+	
 	public bool tabs_bottom = false;
 	public bool tabs_close_visible = true;
 
@@ -203,7 +215,7 @@ public class Main : GLib.Object {
 	
 	// defaults
 	public static double LV_FONT_SCALE = 1.0;
-	public static int LV_ICON_SIZE = 16;
+	public static int LV_ICON_SIZE = 24;
 	public static int LV_ROW_SPACING = 0;
 
 	public static int IV_ICON_SIZE = 64;
@@ -240,12 +252,14 @@ public class Main : GLib.Object {
 	public bool tileview_thumbs = true;
 	public bool tileview_transparency = true;
 
+	public bool donation_plugins_found = false;
 	public bool plugin_obsolete_iso = false;
 	public bool plugin_obsolete_pdf = false;
+	public bool plugin_obsolete_image = false;
 
 	public Gee.ArrayList<string> mediaview_exclude = new Gee.ArrayList<string>();
 	public Gee.ArrayList<string> mediaview_include = new Gee.ArrayList<string>();
-
+	
 	public string status_line = "";
 	public int64 progress_count;
 	public int64 progress_total;
@@ -259,6 +273,10 @@ public class Main : GLib.Object {
 	public string admin_pass = "";
 
 	public string[] supported_formats_open;
+
+	// donation counter
+	private int run_count = 0;
+	private int[] donation_triggers = { 100 };
 
 	public static string[] extensions_tar = {
 		".tar"
@@ -347,11 +365,6 @@ public class Main : GLib.Object {
 		dir_create(app_conf_dir_path);
 		dir_create(app_conf_dir_path_open);
 		
-		// create default objects
-		//archive = new ArchiveFile();
-		//archive_task = new ArchiveTask();
-		//ArchiveCache.refresh();
-
 		supported_formats_open = {
 			".tar",
 			".tar.gz", ".tgz",
@@ -458,7 +471,6 @@ public class Main : GLib.Object {
 
 	public void init_tools(){
 		
-		//Encoders["avconv"] = new Encoder("avconv","Libav Encoder","Audio-Video Decoding");
 		tools["ffmpeg"] = new Tool("ffmpeg","FFmpeg Encoder","Generate thumbnails for video");
 		tools["mediainfo"] = new Tool("mediainfo","MediaInfo","Read media properties from audio and video files");
 		tools["exiftool"] = new Tool("exiftool","ExifTool","Read EXIF properties from JPG/TIFF/PNG/PDF files");
@@ -474,19 +486,13 @@ public class Main : GLib.Object {
 		tools["kvm"] = new Tool("kvm","Qemu-Kvm Emulator","Virtual Machine Emulator");
 		tools["pdftk"] = new Tool("pdftk","pdftk","Converting PDF files");
 		tools["convert"] = new Tool("convert","convert","Converting images and PDF documents");
+		tools["pngcrush"] = new Tool("pngcrush","pngcrush","Reduce file size of PNG files");
 		tools["gs"] = new Tool("gs","ghostscript","Ghostscript - Converting PDF files");
 		tools["polo-iso"] = new Tool("polo-iso","polo-iso","Polo ISO Plugin (Donation)");
 		tools["polo-pdf"] = new Tool("polo-pdf","polo-pdf","Polo PDF Plugin (Donation)");
+		tools["polo-image"] = new Tool("polo-image","polo-image","Polo Image Plugin (Donation)");
 		
 		check_all_tools();
-		
-		//Encoders["ffplay"] = new Encoder("ffplay","FFmpeg's Audio Video Player","Audio-Video Playback");
-		//Encoders["avplay"] = new Encoder("avplay","Libav's Audio Video Player","Audio-Video Playback");
-		//Encoders["mplayer"] = new Encoder("mplayer","Media Player","Audio-Video Playback");
-		//Encoders["mplayer2"] = new Encoder("mplayer2","Media Player","Audio-Video Playback");
-		//Encoders["mpv"] = new Encoder("mpv","Media Player","Audio-Video Playback");
-		//Encoders["smplayer"] = new Encoder("smplayer","Media Player","Audio-Video Playback");
-		//Encoders["vlc"] = new Encoder("vlc","Media Player","Audio-Video Playback");
 	}
 
 	public void check_all_tools(){
@@ -513,6 +519,7 @@ public class Main : GLib.Object {
 		
 		plugins["iso"] = new Plugin("polo-iso", "Polo ISO Plugin", PLUGIN_VER_ISO);
 		plugins["pdf"] = new Plugin("polo-pdf", "Polo PDF Plugin", PLUGIN_VER_PDF);
+		plugins["image"] = new Plugin("polo-image", "Polo Image Plugin", PLUGIN_VER_IMAGE);
 
 		check_all_plugins();
 	}
@@ -522,9 +529,13 @@ public class Main : GLib.Object {
 		foreach(var plugin in plugins.values){
 			
 			plugin.check_availablity();
+
+			if (plugin.available){
+				donation_plugins_found = true;
+			}
 		}
 	}
-	
+
 	/* Configuration */
 
 	public void save_app_config() {
@@ -534,6 +545,8 @@ public class Main : GLib.Object {
 		set_numeric_locale("C"); // switch numeric locale
 
 		config.set_string_member("app-version", AppVersion);
+
+		config.set_string_member("run-count", run_count.to_string());
 
 		config.set_int_member("format-version", (int64) APP_CONFIG_FORMAT_VERSION);
 
@@ -555,6 +568,7 @@ public class Main : GLib.Object {
 		config.set_string_member("show_hidden_files", show_hidden_files.to_string());
 		config.set_string_member("panel_layout", ((int)panel_layout).to_string());
 		config.set_string_member("view_mode", ((int)view_mode).to_string());
+		config.set_string_member("shell_default", shell_default);
 
 		config.set_string_member("listview_font_scale", listview_font_scale.to_string());
 		config.set_string_member("listview_icon_size", listview_icon_size.to_string());
@@ -647,6 +661,15 @@ public class Main : GLib.Object {
 		config.set_string_member("overwrite_pdf_decolor", overwrite_pdf_decolor.to_string());
 		config.set_string_member("overwrite_pdf_rotate", overwrite_pdf_rotate.to_string());
 		config.set_string_member("overwrite_pdf_optimize", overwrite_pdf_optimize.to_string());
+
+		config.set_string_member("overwrite_image_optimize_png", overwrite_image_optimize_png.to_string());
+		config.set_string_member("overwrite_image_reduce_jpeg", overwrite_image_reduce_jpeg.to_string());
+		config.set_string_member("overwrite_image_resize", overwrite_image_resize.to_string());
+		config.set_string_member("overwrite_image_rotate", overwrite_image_rotate.to_string());
+		config.set_string_member("overwrite_image_convert", overwrite_image_convert.to_string());
+		config.set_string_member("overwrite_image_decolor", overwrite_image_decolor.to_string());
+		config.set_string_member("overwrite_image_boost_color", overwrite_image_boost_color.to_string());
+		config.set_string_member("overwrite_image_reduce_color", overwrite_image_reduce_color.to_string());
 		
 		save_folder_selections();
 		
@@ -699,6 +722,7 @@ public class Main : GLib.Object {
 		set_numeric_locale("C"); // switch numeric locale
 
 		app_version_in_config = json_get_string(config, "app-version", "0");
+		run_count = json_get_int(config, "run-count", 0);
 		// set dummy version number, if config file exists but parameter is missing
 		// this will trigger display of change log file
 
@@ -718,7 +742,8 @@ public class Main : GLib.Object {
 		
 		show_hidden_files = json_get_bool(config, "show_hidden_files", show_hidden_files);
 		panel_layout = (PanelLayout) json_get_int(config, "panel_layout", panel_layout);
-
+		shell_default = json_get_string(config, "shell_default", shell_default);
+		
 		int vmode = json_get_int(config, "view_mode", view_mode);
 		if (vmode >= 1 && vmode <= 4){
 			view_mode = (ViewMode) vmode;
@@ -822,6 +847,15 @@ public class Main : GLib.Object {
 		overwrite_pdf_rotate = json_get_bool(config, "overwrite_pdf_rotate", overwrite_pdf_rotate);
 		overwrite_pdf_optimize = json_get_bool(config, "overwrite_pdf_optimize", overwrite_pdf_optimize);
 
+		overwrite_image_optimize_png = json_get_bool(config, "overwrite_image_optimize_png", overwrite_image_optimize_png);
+		overwrite_image_reduce_jpeg = json_get_bool(config, "overwrite_image_reduce_jpeg", overwrite_image_reduce_jpeg);
+		overwrite_image_resize = json_get_bool(config, "overwrite_image_resize", overwrite_image_resize);
+		overwrite_image_rotate = json_get_bool(config, "overwrite_image_rotate", overwrite_image_rotate);
+		overwrite_image_convert = json_get_bool(config, "overwrite_image_convert", overwrite_image_convert);
+		overwrite_image_decolor = json_get_bool(config, "overwrite_image_decolor", overwrite_image_decolor);
+		overwrite_image_boost_color = json_get_bool(config, "overwrite_image_boost_color", overwrite_image_boost_color);
+		overwrite_image_reduce_color = json_get_bool(config, "overwrite_image_reduce_color", overwrite_image_reduce_color);
+
 		middlebar_visible = json_get_bool(config, "middlebar_visible", middlebar_visible);
 		sidebar_visible = json_get_bool(config, "sidebar_visible", sidebar_visible);
 		sidebar_dark = json_get_bool(config, "sidebar_dark", sidebar_dark);
@@ -840,6 +874,15 @@ public class Main : GLib.Object {
 		log_debug(_("App config loaded") + ": '%s'".printf(this.app_conf_path));
 
 		set_numeric_locale(""); // reset numeric locale
+	}
+	
+	public void increment_run_count() {
+		run_count++;
+	}
+
+	public bool check_donation_trigger() {
+		log_debug("run_count: %d".printf(run_count));
+		return !donation_plugins_found && array_contains(run_count, donation_triggers);
 	}
 
 	public bool first_run_after_update(){

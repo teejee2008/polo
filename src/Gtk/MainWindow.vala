@@ -85,6 +85,8 @@ public class MainWindow : Gtk.Window {
 
 		App.main_window = this;
 
+		App.increment_run_count();
+
 		this.destroy.connect(on_destroy);
 		this.delete_event.connect(on_delete_event);
 
@@ -116,21 +118,34 @@ public class MainWindow : Gtk.Window {
 
 	private bool on_delete_event(Gdk.EventAny event){
 
+		log_debug("MainWindow: on_delete_event()");
+
 		this.delete_event.disconnect(on_delete_event); //disconnect this handler
 
 		App.sidebar_position = pane_nav.position;
 
 		if (show_file_operation_warning_on_window_close() == Gtk.ResponseType.NO){
+			log_debug("MainWindow: running operation warning displayed");
+			log_debug("MainWindow: cancelled on_delete_event");
 			this.delete_event.connect(on_delete_event); // reconnect this handler
 			return true; // keep window open
 		}
 		else{
+			log_debug("MainWindow: no operations running");
+			
 			save_session();
+
+			if (App.check_donation_trigger()){
+				log_debug("Donation message shown");
+				App.increment_run_count();
+				open_donate_window();
+			}
+
+			log_debug("MainWindow: exiting...");
+		
 			window_is_closing = true; // set after save_session()
 			return false; // close window
 		}
-
-		return false;
 	}
 
 	private Gtk.ResponseType show_file_operation_warning_on_window_close(){
@@ -690,6 +705,7 @@ public class MainWindow : Gtk.Window {
 	}
 
 	public void open_donate_window(){
+		log_debug("open_donate_window()");
 		var dialog = new DonationWindow();
 		dialog.set_transient_for(this);
 		dialog.run();

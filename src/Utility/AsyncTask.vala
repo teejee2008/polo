@@ -58,6 +58,7 @@ public abstract class AsyncTask : GLib.Object{
 	public string status_line = "";
 	public string stats_line = "";
 	private string error_msg = ""; // call get_error_message()
+	public string current_file = "";
 	
 	public GLib.Timer timer;
 	public double progress = 0.0;

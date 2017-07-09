@@ -34,9 +34,9 @@ using TeeJee.GtkHelper;
 public class DonationWindow : Dialog {
 
 	private string username = "";
-	
+
 	public DonationWindow() {
-		
+
 		set_title(_("Donate"));
 		window_position = WindowPosition.CENTER_ON_PARENT;
 		set_destroy_with_parent (true);
@@ -54,7 +54,7 @@ public class DonationWindow : Dialog {
 
 		//get_action_area().visible = false;
 
-		string msg = _("Did you find this application useful?\n\nYou can buy me a coffee or make a donation via PayPal to show your support.\n\nThis application includes a few extra features and plugins for people who have contributed to the project through donations, translations, etc. You can make a donation for $10 or more via PayPal to receive the plugins by email. Your contributions will help keep the project alive and support future development.\n\nThanks,\nTony George");
+		string msg = _("Did you find this application useful?\n\nYou can buy me a coffee or make a donation via PayPal to show your support.\n\nThis application includes a few extra features for people who have contributed to the project through donations, translations, etc. You can make a donation for $10 or more via PayPal to receive the plugins by email. Your contributions will help keep the project alive and support future development.\n\nThanks,\nTony George");
 		
 		var label = new Gtk.Label(msg);
 		label.wrap = true;

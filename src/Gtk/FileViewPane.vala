@@ -39,6 +39,7 @@ public class FileViewPane : Gtk.Box {
 	public Pathbar pathbar;
 	public FileViewList view;
 	public MediaBar mediabar;
+	public SelectionBar selection_bar;
 	public AdminBar adminbar;
 	public TrashBar trashbar;
 	public Gtk.Box file_operations_box;
@@ -84,6 +85,8 @@ public class FileViewPane : Gtk.Box {
 		log_trace("Pathbar created: %s".printf(timer_elapsed_string(timer)));
 		timer_restart(timer);
 
+		selection_bar = new SelectionBar(this);
+		
 		mediabar = new MediaBar(this);
 
 		adminbar = new AdminBar(this);
@@ -118,6 +121,8 @@ public class FileViewPane : Gtk.Box {
 		file_operations_box = new Gtk.Box(Orientation.VERTICAL, 6);
 		add(file_operations_box);
 
+		add(selection_bar);
+		
 		add(mediabar);
 
 		add(trashbar);

@@ -48,7 +48,9 @@ public class Statusbar : Gtk.Box {
 	private Gtk.Image img_sidebar_toggle;
 	private Gtk.DrawingArea fs_bar;
 	private Gtk.EventBox ebox_left_toggle;
-
+	private Gtk.EventBox ebox_filter;
+	private Gtk.EventBox ebox_terminal;
+	
 	private double fs_bar_value = 0;
 
 	// parents
@@ -131,20 +133,29 @@ public class Statusbar : Gtk.Box {
 
 		//add_dual_pane_toggle();
 
+		add_filter_toggle();
+		
 		add_terminal_toggle();
 
 		//add_style_toggle();
 	}
 
 	private void add_dir_count(){
+
+		var separator = new Gtk.Separator(Gtk.Orientation.VERTICAL);
+		add(separator);
+		
+		var img = gtk_image_from_pixbuf(IconManager.generic_icon_directory(16));
+		add(img);
+		
 		var label = new Gtk.Label ("");
 		label.xalign = (float) 0.0;
 		add(label);
 		lbl_dir_count = label;
 
-		label = new Gtk.Label (_("dirs"));
-		label.xalign = (float) 0.0;
-		add(label);
+		//label = new Gtk.Label (_("dirs"));
+		//label.xalign = (float) 0.0;
+		//add(label);
 
 		lbl_dir_count.notify["visible"].connect(()=>{
 			label.visible = lbl_dir_count.visible;
@@ -153,17 +164,21 @@ public class Statusbar : Gtk.Box {
 	}
 
 	private void add_file_count(){
+		
 		var separator = new Gtk.Separator(Gtk.Orientation.VERTICAL);
 		add(separator);
 
+		var img = gtk_image_from_pixbuf(IconManager.generic_icon_file(16));
+		add(img);
+		
 		var label = new Gtk.Label ("");
 		label.xalign = (float) 0.0;
 		add(label);
 		lbl_file_count = label;
 
-		label = new Gtk.Label(_("files"));
-		label.xalign = (float) 0.0;
-		add(label);
+		//label = new Gtk.Label(_("files"));
+		//label.xalign = (float) 0.0;
+		//add(label);
 
 		lbl_file_count.notify["visible"].connect(()=>{
 			label.visible = lbl_file_count.visible;
@@ -460,7 +475,8 @@ public class Statusbar : Gtk.Box {
 		var ebox = new Gtk.EventBox();
 		ebox.add(img);
 		add(ebox);
-
+		ebox_terminal = ebox;
+		
 		// set hand cursor
 		if (ebox.get_realized()){
 			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
@@ -474,6 +490,36 @@ public class Statusbar : Gtk.Box {
 		ebox.button_press_event.connect((event)=>{
 
 			pane.terminal.toggle();
+
+			return true;
+		});
+	}
+
+	private void add_filter_toggle(){
+
+		var img = IconManager.lookup_image("view-filter",16);
+		img.set_tooltip_text(_("Filter Items"));
+		//img.margin_left = 6;
+		//img.margin_right = 6;
+
+		var ebox = new Gtk.EventBox();
+		ebox.add(img);
+		add(ebox);
+		ebox_filter = ebox;	
+		
+		// set hand cursor
+		if (ebox.get_realized()){
+			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
+		}
+		else{
+			ebox.realize.connect(()=>{
+				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
+			});
+		}
+
+		ebox.button_press_event.connect((event)=>{
+
+			pane.selection_bar.toggle(true);
 
 			return true;
 		});
@@ -562,20 +608,12 @@ public class Statusbar : Gtk.Box {
 
 		//lbl_statusbar.label = "%ld files, %ld dirs, %s size".printf(App.archive.file_count_total,App.archive.dir_count_total,format_file_size(App.archive.byte_count_total));
 
-		if (view.current_item == null){
-
-			lbl_dir_count.label = "%'ld".printf(0);
-			lbl_file_count.label = "%'ld".printf(0);
-			lbl_hidden_count.visible = false;
-			lbl_fs_free.visible = false;
-			lbl_fs_type.visible = false;
-			lbl_fs_read_only.visible = false;
+		if ((view == null) || (view.current_item == null)){
+			set_empty();
 			return;
 		}
 
-		lbl_dir_count.label = "%'ld".printf(view.current_item.dir_count);
-
-		lbl_file_count.label = "%'ld".printf(view.current_item.file_count);
+		refresh_selection_counts();
 
 		if (view.show_hidden_files){
 			lbl_hidden_count.label = "0";
@@ -624,6 +662,10 @@ public class Statusbar : Gtk.Box {
 
 		lbl_fs_read_only.label = "%s".printf(view.current_item.filesystem_read_only ? "ReadOnly" : "");
 		lbl_fs_read_only.visible = (lbl_fs_read_only.label.length > 0);
+
+		ebox_filter.visible = view.current_item.is_local;
+		ebox_terminal.visible = view.current_item.is_local;
+		
 		//lbl_fs_read_only
 
 		/*if (pane.view.current_item.is_archive){
@@ -654,6 +696,43 @@ public class Statusbar : Gtk.Box {
 		* */
 	}
 
+	public void set_empty(){
+		lbl_dir_count.label = "%'ld".printf(0);
+		lbl_file_count.label = "%'ld".printf(0);
+		lbl_hidden_count.visible = false;
+		lbl_fs_free.visible = false;
+		lbl_fs_type.visible = false;
+		lbl_fs_read_only.visible = false;
+		ebox_filter.visible = false;
+		ebox_terminal.visible = false;
+	}	
+	
+	public void refresh_selection_counts(){
+
+		if ((view == null) || (view.current_item == null)){
+			set_empty();
+			return;
+		}
+
+		log_debug("Statusbar: refresh_selection_counts()");
+
+		if (view.current_item.is_local){
+
+			int files, dirs;
+			view.get_selected_counts(out files, out dirs);
+
+			lbl_dir_count.label = "%'ld / %'ld".printf(dirs, view.current_item.dir_count);
+			
+			lbl_file_count.label = "%'ld / %'ld".printf(files, view.current_item.file_count);
+		}
+		else{
+
+			lbl_dir_count.label = "%'ld".printf(view.current_item.dir_count);
+			
+			lbl_file_count.label = "%'ld".printf(view.current_item.file_count);
+		}
+	}
+	
 	private void refresh_usage_bar() {
 		fs_bar.queue_draw_area(0, 0, fs_bar.get_allocated_width(), fs_bar.get_allocated_height());
 	}

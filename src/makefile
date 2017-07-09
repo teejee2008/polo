@@ -65,6 +65,7 @@ install:
 	mkdir -p "$(DESTDIR)$(sharedir)/pixmaps"
 	mkdir -p "$(DESTDIR)/var/log/polo"
 	mkdir -p "$(DESTDIR)$(localedir)/de/LC_MESSAGES"
+	mkdir -p "$(DESTDIR)$(localedir)/nl/LC_MESSAGES"
 	
 	#binary
 	#install -m 0755 ${app_name} "$(DESTDIR)$(bindir)"
@@ -85,6 +86,7 @@ install:
 
 	#translations
 	msgfmt --check --verbose -o "$(DESTDIR)$(localedir)/de/LC_MESSAGES/${app_name}.mo" ../po/${app_name}-de.po
+	msgfmt --check --verbose -o "$(DESTDIR)$(localedir)/nl/LC_MESSAGES/${app_name}.mo" ../po/${app_name}-nl.po
 
 uninstall:
 

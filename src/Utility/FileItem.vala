@@ -716,6 +716,21 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 	}
 
+	public bool is_png{
+		get{
+			return file_extension.down().has_suffix(".png")
+				|| (content_type == "image/png");
+		}
+	}
+
+	public bool is_jpeg{
+		get{
+			return file_extension.down().has_suffix(".jpeg")
+				|| file_extension.down().has_suffix(".jpg")
+				|| (content_type == "image/jpeg");
+		}
+	}
+
 	public bool is_iso{
 		get{
 			return file_extension.down().has_suffix(".iso")
@@ -1065,6 +1080,10 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 				item.file_count = 0;
 				item.dir_count = 0;
+
+				if (!item.can_read){
+					return item;
+				}
 				
 				enumerator = file.enumerate_children ("%s,%s".printf(FileAttribute.STANDARD_NAME,FileAttribute.STANDARD_TYPE), 0);
 				

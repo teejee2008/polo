@@ -33,16 +33,16 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
-public class ProgressPanelPdfTask : ProgressPanel {
+public class ProgressPanelImageTask : ProgressPanel {
 
-	private PdfTask task;
+	private ImageTask task;
 
 	// ui 
 	public Gtk.Label lbl_status;
 	public Gtk.Label lbl_stats;
 	public Gtk.ProgressBar progressbar;
 
-	public ProgressPanelPdfTask(FileViewPane _pane, PdfTask _task){
+	public ProgressPanelImageTask(FileViewPane _pane, ImageTask _task){
 		base(_pane, null, FileActionType.ISO_WRITE);
 
 		task = _task;
@@ -150,7 +150,7 @@ public class ProgressPanelPdfTask : ProgressPanel {
 		if (task.is_running){
 			
 			log_debug("ProgressPanelPdfTask: update_status()");
-			
+
 			if (task.current_file.length > 0){
 				lbl_status.label = "%s: %s".printf(_("File"), task.current_file);
 			}

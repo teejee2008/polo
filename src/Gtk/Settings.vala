@@ -1103,6 +1103,8 @@ public class Settings : Gtk.Box {
 		
 		add_option_view_mode(vbox_group, sg_label, sg_option);
 
+		add_option_terminal(vbox_group, sg_label, sg_option);
+
 		//add_option_single_click_browse(vbox_items);
 
 		// --------------------------------
@@ -1148,7 +1150,7 @@ public class Settings : Gtk.Box {
 		var hbox = new Gtk.Box(Orientation.HORIZONTAL,6);
 		box.add(hbox);
 
-		hbox.margin_bottom = 6;
+		//hbox.margin_bottom = 6;
 
 		// label
 		var label = new Gtk.Label(_("View Mode"));
@@ -1209,6 +1211,63 @@ public class Settings : Gtk.Box {
 
 		combo.changed.connect(() => {
 			App.view_mode = (ViewMode) gtk_combobox_get_value_enum(combo, 0, App.view_mode);
+		});
+	}
+
+	private void add_option_terminal(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
+
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL,6);
+		box.add(hbox);
+
+		hbox.margin_bottom = 6;
+
+		// label
+		var label = new Gtk.Label(_("Terminal"));
+		label.xalign = (float) 0.0;
+		label.margin_left = 6;
+		label.margin_right = 6;
+		label.margin_bottom = 6;
+		hbox.add(label);
+		sg_label.add_widget(label);
+
+		// cmb_app
+		var combo = new Gtk.ComboBox();
+		combo.set_tooltip_text(_("Terminal emulator to use for terminal panes"));
+		hbox.add (combo);
+		sg_option.add_widget(combo);
+
+		// render text
+		var cell_text = new CellRendererText();
+		combo.pack_start(cell_text, false);
+		combo.set_cell_data_func (cell_text, (cell_text, cell, model, iter) => {
+			string text;
+			model.get (iter, 1, out text, -1);
+			(cell as Gtk.CellRendererText).text = text;
+		});
+
+		// add items
+		var store = new Gtk.ListStore(2,
+			typeof(PanelLayout),
+			typeof(string));
+
+		combo.set_model (store);
+		
+		TreeIter iter;
+		int index = -1;
+		
+		foreach(var shell in Shell.get_installed_shells()){
+			
+			index++;
+			store.append(out iter);
+			store.set (iter, 0, shell.cmd, 1, shell.display_name, -1);
+
+			if (shell.cmd == App.shell_default){
+				combo.active = index;
+			}
+		}
+
+		combo.changed.connect(() => {
+			App.shell_default = gtk_combobox_get_value(combo, 0, App.shell_default);
 		});
 	}
 
@@ -2129,15 +2188,18 @@ public class Settings : Gtk.Box {
 		add_option_kvm_enable(vbox_group);
 
 
-		if (App.tool_exists("polo-pdf")) { 
+		if (App.tool_exists("polo-pdf") || App.tool_exists("polo-image")) {
 
 			// column 2 ---------------------------------
 
 			vbox = add_column_group(box, false);
 
-			// ---------------------------------
-			
-			vbox_group = add_group(vbox, _("Context Menu Actions\nReplace Original Files ?"), 0);
+			vbox = add_group(vbox, _("Replace Original Files ?"), 0);
+		}
+
+		if (App.tool_exists("polo-pdf")) { 
+
+			vbox_group = add_sub_group(vbox, _("PDF Actions"), 0);
 
 			add_option_pdf_split(vbox_group);
 
@@ -2156,6 +2218,25 @@ public class Settings : Gtk.Box {
 			add_option_pdf_rotate(vbox_group);
 
 			add_option_pdf_optimize(vbox_group);
+		}
+
+		if (App.tool_exists("polo-image")) { 
+
+			vbox_group = add_sub_group(vbox, _("Image Actions"), 0);
+
+			add_option_image_optimize_png(vbox_group);
+
+			add_option_image_reduce_jpeg(vbox_group);
+
+			add_option_image_resize(vbox_group);
+
+			add_option_image_rotate(vbox_group);
+
+			add_option_image_convert(vbox_group);
+
+			add_option_image_decolor(vbox_group);
+
+			add_option_image_boost_color(vbox_group);
 		}
 	}
 
@@ -2389,7 +2470,7 @@ public class Settings : Gtk.Box {
 
 	private void add_option_pdf_split(Gtk.Box box){
 
-		var chk = new Gtk.CheckButton.with_label(_("PDF: Split"));
+		var chk = new Gtk.CheckButton.with_label(_("Split"));
 		box.add(chk);
 
 		chk.set_tooltip_text(_("If selected, the 'PDF > Split' action in right-click menu will remove the original file on success."));
@@ -2403,7 +2484,7 @@ public class Settings : Gtk.Box {
 
 	private void add_option_pdf_merge(Gtk.Box box){
 
-		var chk = new Gtk.CheckButton.with_label(_("PDF: Merge"));
+		var chk = new Gtk.CheckButton.with_label(_("Merge"));
 		box.add(chk);
 
 		chk.set_tooltip_text(_("If selected, the 'PDF > Merge' action in right-click menu will remove the original file on success."));
@@ -2417,10 +2498,10 @@ public class Settings : Gtk.Box {
 
 	private void add_option_pdf_compress(Gtk.Box box){
 
-		var chk = new Gtk.CheckButton.with_label(_("PDF: Compress"));
+		var chk = new Gtk.CheckButton.with_label(_("Reduce File Size"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'PDF > Compress' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the 'PDF > Reduce File Size' action in right-click menu will replace the original file on success, instead of creating a new file."));
 
 		chk.active = App.overwrite_pdf_compress;
 
@@ -2431,7 +2512,7 @@ public class Settings : Gtk.Box {
 
 	private void add_option_pdf_uncompress(Gtk.Box box){
 
-		var chk = new Gtk.CheckButton.with_label(_("PDF: Uncompress"));
+		var chk = new Gtk.CheckButton.with_label(_("Uncompress"));
 		box.add(chk);
 
 		chk.set_tooltip_text(_("If selected, the 'PDF > Uncompress' action in right-click menu will replace the original file on success, instead of creating a new file."));
@@ -2445,10 +2526,10 @@ public class Settings : Gtk.Box {
 
 	private void add_option_pdf_protect(Gtk.Box box){
 
-		var chk = new Gtk.CheckButton.with_label(_("PDF: Protect"));
+		var chk = new Gtk.CheckButton.with_label(_("Add Password"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'PDF > Protect' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the 'PDF > Add Password' action in right-click menu will replace the original file on success, instead of creating a new file."));
 
 		chk.active = App.overwrite_pdf_protect;
 
@@ -2459,10 +2540,10 @@ public class Settings : Gtk.Box {
 
 	private void add_option_pdf_unprotect(Gtk.Box box){
 
-		var chk = new Gtk.CheckButton.with_label(_("PDF: Unprotect"));
+		var chk = new Gtk.CheckButton.with_label(_("Remove Password"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'PDF > Unprotect' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the 'PDF > Remove Password' action in right-click menu will replace the original file on success, instead of creating a new file."));
 
 		chk.active = App.overwrite_pdf_unprotect;
 
@@ -2473,10 +2554,10 @@ public class Settings : Gtk.Box {
 
 	private void add_option_pdf_decolor(Gtk.Box box){
 
-		var chk = new Gtk.CheckButton.with_label(_("PDF: Decolor"));
+		var chk = new Gtk.CheckButton.with_label(_("Remove color"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'PDF > Decolor' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the 'PDF > Remove color' action in right-click menu will replace the original file on success, instead of creating a new file."));
 
 		chk.active = App.overwrite_pdf_decolor;
 
@@ -2487,7 +2568,7 @@ public class Settings : Gtk.Box {
 
 	private void add_option_pdf_rotate(Gtk.Box box){
 
-		var chk = new Gtk.CheckButton.with_label(_("PDF: Rotate"));
+		var chk = new Gtk.CheckButton.with_label(_("Rotate"));
 		box.add(chk);
 
 		chk.set_tooltip_text(_("If selected, the 'PDF > Rotate' action in right-click menu will replace the original file on success, instead of creating a new file."));
@@ -2501,7 +2582,7 @@ public class Settings : Gtk.Box {
 
 	private void add_option_pdf_optimize(Gtk.Box box){
 
-		var chk = new Gtk.CheckButton.with_label(_("PDF: Optimize"));
+		var chk = new Gtk.CheckButton.with_label(_("Optimize"));
 		box.add(chk);
 
 		chk.set_tooltip_text(_("If selected, the 'PDF > Optimize' action in right-click menu will replace the original file on success, instead of creating a new file."));
@@ -2513,7 +2594,105 @@ public class Settings : Gtk.Box {
 		});
 	}
 
-	
+
+	private void add_option_image_optimize_png(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Optimize PNG"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'Image > Optimize PNG' action in right-click menu will replace the original file on success, instead of creating a new file."));
+
+		chk.active = App.overwrite_image_optimize_png;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_image_optimize_png = chk.active;
+		});
+	}
+
+	private void add_option_image_reduce_jpeg(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Reduce JPEG"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'Image > Reduce JPEG' action in right-click menu will replace the original file on success, instead of creating a new file."));
+
+		chk.active = App.overwrite_image_reduce_jpeg;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_image_reduce_jpeg = chk.active;
+		});
+	}
+
+	private void add_option_image_resize(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Resize"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'Image > Resize' action in right-click menu will replace the original file on success, instead of creating a new file."));
+
+		chk.active = App.overwrite_image_resize;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_image_resize = chk.active;
+		});
+	}
+
+	private void add_option_image_rotate(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Rotate"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'Image > Rotate' action in right-click menu will replace the original file on success, instead of creating a new file."));
+
+		chk.active = App.overwrite_image_rotate;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_image_rotate = chk.active;
+		});
+	}
+
+	private void add_option_image_convert(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Convert"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'Image > Convert' action in right-click menu will replace the original file on success, instead of creating a new file."));
+
+		chk.active = App.overwrite_image_convert;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_image_convert = chk.active;
+		});
+	}
+
+	private void add_option_image_decolor(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Remove Color"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'Image > Remove Color' action in right-click menu will replace the original file on success, instead of creating a new file."));
+
+		chk.active = App.overwrite_image_decolor;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_image_decolor = chk.active;
+		});
+	}
+
+	private void add_option_image_boost_color(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Boost Color"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("If selected, the 'Image > Boost Color' action in right-click menu will replace the original file on success, instead of creating a new file."));
+
+		chk.active = App.overwrite_image_boost_color;
+
+		chk.toggled.connect(()=>{
+			App.overwrite_image_boost_color = chk.active;
+		});
+	}
+
 	// helpers --------------
 
 	private Gtk.Box add_group(Gtk.Box box, string header_text, int spacing){
