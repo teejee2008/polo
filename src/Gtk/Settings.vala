@@ -2389,7 +2389,7 @@ public class Settings : Gtk.Box {
 			App.kvm_cpu_limit = (int) spin.get_value();
 		});
 
-		string tt = _("Limit the CPU usage for VM process. It is recommended to keep this below 90% to prevent the host system from becoming unresponsive when intensive tasks are running in the guest OS.");
+		string tt = _("Limit the CPU usage for VM process. It is recommended to keep this below 90 to prevent the host system from becoming unresponsive when intensive tasks are running in the guest OS.");
 		label.set_tooltip_text(tt);
 		spin.set_tooltip_text(tt);
 		

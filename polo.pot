@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
-"POT-Creation-Date: 2017-07-09 12:19+0530\n"
+"POT-Creation-Date: 2017-07-09 12:28+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -1808,11 +1808,10 @@ msgid "License"
 msgstr ""
 
 #: Gtk/Settings.vala:2392
-#, c-format
 msgid ""
-"Limit the CPU usage for VM process. It is recommended to keep this below "
-"90% to prevent the host system from becoming unresponsive when intensive "
-"tasks are running in the guest OS."
+"Limit the CPU usage for VM process. It is recommended to keep this below 90 "
+"to prevent the host system from becoming unresponsive when intensive tasks "
+"are running in the guest OS."
 msgstr ""
 
 #: Gtk/PropertiesWindow.vala:177

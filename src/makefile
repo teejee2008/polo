@@ -85,8 +85,8 @@ install:
 	install -m 0755 ./share/pixmaps/${app_name}.png "$(DESTDIR)$(sharedir)/pixmaps/"
 
 	#translations
-	msgfmt --check --verbose -o "$(DESTDIR)$(localedir)/de/LC_MESSAGES/${app_name}.mo" ../po/${app_name}-de.po
-	msgfmt --check --verbose -o "$(DESTDIR)$(localedir)/nl/LC_MESSAGES/${app_name}.mo" ../po/${app_name}-nl.po
+	install -m 0644 ../po/${app_name}-de.mo $(DESTDIR)$(localedir)/de/LC_MESSAGES/${app_name}.mo
+	install -m 0644 ../po/${app_name}-nl.mo $(DESTDIR)$(localedir)/nl/LC_MESSAGES/${app_name}.mo
 
 uninstall:
 
