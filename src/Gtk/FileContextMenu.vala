@@ -150,6 +150,8 @@ public class FileContextMenu : Gtk.Menu {
 		add_disk_usage(this, sg_icon, sg_label);
 		
 		add_archive_actions(this, sg_icon, sg_label);
+		
+		add_image_actions(this, sg_icon, sg_label);
 
 		add_iso_actions(this, sg_icon, sg_label);
 
@@ -1623,7 +1625,7 @@ public class FileContextMenu : Gtk.Menu {
 			sg_label);
 			
 		var sub_menu = new Gtk.Menu();
-		//sub_menu.reserve_toggle_size = false;
+		sub_menu.reserve_toggle_size = false;
 		menu_item.submenu = sub_menu;
 
 		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
@@ -1745,7 +1747,6 @@ public class FileContextMenu : Gtk.Menu {
 		menu_item.sensitive = (selected_item != null) && (selected_item.file_extension == ".qcow2");
 	}
 
-
 	private void add_install_disk(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 		
 		log_debug("FileContextMenu: add_install_disk()");
@@ -1786,7 +1787,7 @@ public class FileContextMenu : Gtk.Menu {
 		if (selected_item == null){ return; }
 			
 		var sub_menu = new Gtk.Menu();
-		//sub_menu.reserve_toggle_size = false;
+		sub_menu.reserve_toggle_size = false;
 		menu_item.submenu = sub_menu;
 
 		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
@@ -1895,7 +1896,7 @@ public class FileContextMenu : Gtk.Menu {
 
 		var menu_item = gtk_menu_add_item(
 			menu,
-			_("Split Pages"),
+			_("Split"),
 			_("Split PDF document by page"),
 			null,
 			sg_icon,
@@ -1912,7 +1913,7 @@ public class FileContextMenu : Gtk.Menu {
 
 		var menu_item = gtk_menu_add_item(
 			menu,
-			_("Merge Pages"),
+			_("Merge"),
 			_("Merge selected PDF files into one document"),
 			null,
 			sg_icon,
@@ -2025,7 +2026,7 @@ public class FileContextMenu : Gtk.Menu {
 		if (selected_item == null){ return; }
 			
 		var sub_menu = new Gtk.Menu();
-		//sub_menu.reserve_toggle_size = false;
+		sub_menu.reserve_toggle_size = false;
 		menu_item.submenu = sub_menu;
 
 		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
@@ -2053,7 +2054,7 @@ public class FileContextMenu : Gtk.Menu {
 
 		var menu_item = gtk_menu_add_item(
 			menu,
-			_("Rotate Pages"),
+			_("Rotate"),
 			"",
 			null,
 			sg_icon,
@@ -2064,7 +2065,7 @@ public class FileContextMenu : Gtk.Menu {
 		if (selected_item == null){ return; }
 			
 		var sub_menu = new Gtk.Menu();
-		//sub_menu.reserve_toggle_size = false;
+		sub_menu.reserve_toggle_size = false;
 		menu_item.submenu = sub_menu;
 
 		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
@@ -2087,6 +2088,322 @@ public class FileContextMenu : Gtk.Menu {
 	}
 
 
+	private void add_image_actions(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		if (selected_item == null){ return; }
+
+		if (!selected_item.is_image){ return; }
+
+		//if (!App.tool_exists("polo-img")) { return; }
+		
+		log_debug("FileContextMenu: add_image_actions()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Image"),
+			"",
+			gtk_image_from_pixbuf(IconManager.generic_icon_image(16)),
+			sg_icon,
+			sg_label);
+			
+		var sub_menu = new Gtk.Menu();
+		sub_menu.reserve_toggle_size = false;
+		menu_item.submenu = sub_menu;
+
+		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		var sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+
+		add_image_optimize_png(sub_menu, sg_icon_sub, sg_label_sub);
+
+		add_image_reduce_jpeg(sub_menu, sg_icon_sub, sg_label_sub);
+
+		gtk_menu_add_separator(sub_menu); //--------------------------------
+		
+		add_image_decolor(sub_menu, sg_icon_sub, sg_label_sub);
+
+		add_image_reduce_color(sub_menu, sg_icon_sub, sg_label_sub);
+
+		add_image_boost_color(sub_menu, sg_icon_sub, sg_label_sub);
+
+		gtk_menu_add_separator(sub_menu); //--------------------------------
+
+		add_image_set_wallpaper(sub_menu, sg_icon_sub, sg_label_sub);
+		
+		add_image_rotate(sub_menu, sg_icon_sub, sg_label_sub);
+
+		gtk_menu_add_separator(sub_menu); //--------------------------------
+		
+		add_image_resize(sub_menu, sg_icon_sub, sg_label_sub);
+
+		add_image_convert(sub_menu, sg_icon_sub, sg_label_sub);
+	}
+
+	private void add_image_set_wallpaper(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		log_debug("FileContextMenu: add_image_set_wallpaper()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Set as Wallpaper"),
+			_("Set the image as wallpaper"),
+			null,
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			//view.set_wallpaper(); // check size
+		});
+
+		menu_item.sensitive = false;
+	}
+	
+	private void add_image_optimize_png(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		log_debug("FileContextMenu: add_image_optimize_png()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Optimize PNG (lossless)"),
+			_("Reduce file size of PNG images without losing quality. PNG files will be re-packed using better compression algorithms."),
+			null,
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			view.image_optimize_png();
+		});
+	}
+
+	private void add_image_reduce_jpeg(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		log_debug("FileContextMenu: add_image_reduce_jpeg()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Reduce JPEG Quality"),
+			_("Reduce file size of JPEG images by reducing quality"),
+			null,
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			view.image_reduce_jpeg();
+		});
+	}
+
+	private void add_image_decolor(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		log_debug("FileContextMenu: add_image_decolor()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Remove Color"),
+			_("Convert to black and white"),
+			null,
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			view.image_decolor();
+		});
+	}
+
+	private void add_image_reduce_color(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		log_debug("FileContextMenu: add_image_reduce_color()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Reduce Color"),
+			_("Reduce color (less saturation). This can be used for correcting photos that are over-saturated (too much color)."),
+			null,
+			sg_icon,
+			sg_label);
+
+		menu_item.sensitive = (selected_item != null);
+
+		if (selected_item == null){ return; }
+			
+		var sub_menu = new Gtk.Menu();
+		sub_menu.reserve_toggle_size = false;
+		menu_item.submenu = sub_menu;
+
+		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		var sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+
+		foreach(string level in new string[] { "Light", "Medium", "Strong" }){
+			
+			var sub_menu_item = gtk_menu_add_item(
+				sub_menu,
+				level,
+				"",
+				null,
+				sg_icon_sub,
+				sg_label_sub);
+
+			sub_menu_item.activate.connect (() => {
+				view.image_reduce_color(level.split(" ")[0].strip().down());
+			});
+		}
+	}
+	
+	private void add_image_boost_color(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		log_debug("FileContextMenu: add_image_boost_color()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Boost Color"),
+			_("Boost color (more saturation). This can be used for correcting photos that are too dull (less color)."),
+			null,
+			sg_icon,
+			sg_label);
+
+		menu_item.sensitive = (selected_item != null);
+
+		if (selected_item == null){ return; }
+			
+		var sub_menu = new Gtk.Menu();
+		sub_menu.reserve_toggle_size = false;
+		menu_item.submenu = sub_menu;
+
+		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		var sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+
+		foreach(string level in new string[] { "Light", "Medium", "Strong" }){
+			
+			var sub_menu_item = gtk_menu_add_item(
+				sub_menu,
+				level,
+				"",
+				null,
+				sg_icon_sub,
+				sg_label_sub);
+
+			sub_menu_item.activate.connect (() => {
+				view.image_boost_color(level.split(" ")[0].strip().down());
+			});
+		}
+	}
+
+	private void add_image_resize(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		log_debug("FileContextMenu: add_image_rotate()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Resize to"),
+			"",
+			null,
+			sg_icon,
+			sg_label);
+
+		menu_item.sensitive = (selected_item != null);
+
+		if (selected_item == null){ return; }
+			
+		var sub_menu = new Gtk.Menu();
+		sub_menu.reserve_toggle_size = false;
+		menu_item.submenu = sub_menu;
+
+		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		var sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+
+		foreach(string direction in new string[] { "240p", "320p", "480p", "640p", "720p", "960p", "1080p" }){
+			
+			var sub_menu_item = gtk_menu_add_item(
+				sub_menu,
+				direction,
+				"",
+				null,
+				sg_icon_sub,
+				sg_label_sub);
+
+			sub_menu_item.activate.connect (() => {
+				view.image_resize(0, int.parse(direction.replace("p","")));
+			});
+		}
+	}
+	
+	private void add_image_rotate(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		log_debug("FileContextMenu: add_image_rotate()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Rotate"),
+			"",
+			null,
+			sg_icon,
+			sg_label);
+
+		menu_item.sensitive = (selected_item != null);
+
+		if (selected_item == null){ return; }
+			
+		var sub_menu = new Gtk.Menu();
+		sub_menu.reserve_toggle_size = false;
+		menu_item.submenu = sub_menu;
+
+		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		var sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+
+		foreach(string direction in new string[] { "Left", "Right", "Flip Upside Down" }){
+			
+			var sub_menu_item = gtk_menu_add_item(
+				sub_menu,
+				direction,
+				"",
+				null,
+				sg_icon_sub,
+				sg_label_sub);
+
+			sub_menu_item.activate.connect (() => {
+				view.image_rotate(direction.split(" ")[0].strip().down());
+			});
+		}
+	}
+
+	private void add_image_convert(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		log_debug("FileContextMenu: add_image_convert()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Convert to"),
+			"",
+			null,
+			sg_icon,
+			sg_label);
+
+		menu_item.sensitive = (selected_item != null);
+
+		if (selected_item == null){ return; }
+			
+		var sub_menu = new Gtk.Menu();
+		sub_menu.reserve_toggle_size = false;
+		menu_item.submenu = sub_menu;
+
+		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		var sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+
+		foreach(string format in new string[] { "PNG", "JPEG", "TIFF", "ICO", "BMP" }){
+			
+			var sub_menu_item = gtk_menu_add_item(
+				sub_menu,
+				format,
+				"",
+				null,
+				sg_icon_sub,
+				sg_label_sub);
+
+			sub_menu_item.activate.connect (() => {
+				view.image_convert(format.down());
+			});
+		}
+	}
+	
+	
 	private void add_sort_column(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
 		var menu_item = gtk_menu_add_item(

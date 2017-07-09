@@ -1,5 +1,5 @@
 /*
- * PdfTask.vala
+ * ImageTask.vala
  *
  * Copyright 2017 Tony George <teejeetech@gmail.com>
  *
@@ -34,30 +34,35 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
-public enum PdfTaskType {
-	SPLIT,
-	MERGE,
-	COMPRESS,
-	UNCOMPRESS,
-	PROTECT,
-	UNPROTECT,
+public enum ImageTaskType {
+	OPTIMIZE_PNG,
+	REDUCE_JPEG,
 	DECOLOR,
-	OPTIMIZE,
-	ROTATE
+	BOOST_COLOR,
+	REDUCE_COLOR,
+	RESIZE,
+	ROTATE,
+	CONVERT
 }
 
-public class PdfTask : AsyncTask {
+public class ImageTask : AsyncTask {
 	
 	public Gee.ArrayList<string> files = new Gee.ArrayList<string>();
 	
-	public string optimize_target = "";
-	public string rotate_direction = "";
-	public string password = "";
+	public int width = 0;
+	public int height = 0;
+	public string format = "";
+	public int quality = 0;
+	public bool keep_aspect = true;
+	public bool upscale = false;
 	public bool inplace = false;
+	public bool silent = false;
+	public string rotate_direction = "";
+	public string level = "";
 	
-	public PdfTaskType action;
-	
-	public PdfTask(){
+	public ImageTaskType action;
+
+	public ImageTask(){
 		init_regular_expressions();
 	}
 	
@@ -81,84 +86,78 @@ public class PdfTask : AsyncTask {
 		script_file = save_bash_script_temp(script_text, script_file, true, false, false);
 
 		count_completed = 0;
-		count_total = (action == PdfTaskType.MERGE) ? 1 : files.size;
+		count_total = files.size;
 	}
 
 	private string build_script() {
 	
-		var cmd = "polo-pdf";
+		var cmd = "polo-image";
 
 		switch(action){
-		case PdfTaskType.SPLIT:
-			cmd += " split";
+		case ImageTaskType.OPTIMIZE_PNG:
+			cmd += " optimize-png";
 			cmd += inplace ? " --inplace" : "";
 			foreach(var file in files){
 				cmd += " '%s'".printf(escape_single_quote(file));
 			}
 			break;
 			
-		case PdfTaskType.MERGE:
-			cmd += " merge";
+		case ImageTaskType.REDUCE_JPEG:
+			cmd += " reduce-jpeg";
 			cmd += inplace ? " --inplace" : "";
 			foreach(var file in files){
 				cmd += " '%s'".printf(escape_single_quote(file));
 			}
 			break;
-			
-		case PdfTaskType.COMPRESS:
-			cmd += " compress";
-			cmd += inplace ? " --inplace" : "";
-			foreach(var file in files){
-				cmd += " '%s'".printf(escape_single_quote(file));
-			}
-			break;
-			
-		case PdfTaskType.UNCOMPRESS:
-			cmd += " uncompress";
-			cmd += inplace ? " --inplace" : "";
-			foreach(var file in files){
-				cmd += " '%s'".printf(escape_single_quote(file));
-			}
-			break;
-			
-		case PdfTaskType.PROTECT:
-			cmd += " protect";
-			cmd += " --pass '%s'".printf(escape_single_quote(password));
-			cmd += inplace ? " --inplace" : "";
-			foreach(var file in files){
-				cmd += " '%s'".printf(escape_single_quote(file));
-			}
-			break;
-			
-		case PdfTaskType.UNPROTECT:
-			cmd += " unprotect";
-			cmd += " --pass '%s'".printf(escape_single_quote(password));
-			cmd += inplace? " --inplace" : "";
-			foreach(var file in files){
-				cmd += " '%s'".printf(escape_single_quote(file));
-			}
-			break;
-			
-		case PdfTaskType.DECOLOR:
+
+		case ImageTaskType.DECOLOR:
 			cmd += " decolor";
 			cmd += inplace ? " --inplace" : "";
 			foreach(var file in files){
 				cmd += " '%s'".printf(escape_single_quote(file));
 			}
 			break;
-			
-		case PdfTaskType.OPTIMIZE:
-			cmd += " optimize";
-			cmd += " --target %s".printf(optimize_target);
+
+		case ImageTaskType.BOOST_COLOR:
+			cmd += " boost-color";
+			cmd += " --level %s".printf(level);
+			cmd += inplace ? " --inplace" : "";
+			foreach(var file in files){
+				cmd += " '%s'".printf(escape_single_quote(file));
+			}
+			break;
+
+		case ImageTaskType.REDUCE_COLOR:
+			cmd += " reduce-color";
+			cmd += " --level %s".printf(level);
 			cmd += inplace ? " --inplace" : "";
 			foreach(var file in files){
 				cmd += " '%s'".printf(escape_single_quote(file));
 			}
 			break;
 			
-		case PdfTaskType.ROTATE:
+		case ImageTaskType.RESIZE:
+			cmd += " resize";
+			cmd += " --width %d".printf(width);
+			cmd += " --height %d".printf(height);
+			cmd += inplace ? " --inplace" : "";
+			foreach(var file in files){
+				cmd += " '%s'".printf(escape_single_quote(file));
+			}
+			break;
+			
+		case ImageTaskType.ROTATE:
 			cmd += " rotate";
 			cmd += " --rotation %s".printf(rotate_direction);
+			cmd += inplace ? " --inplace" : "";
+			foreach(var file in files){
+				cmd += " '%s'".printf(escape_single_quote(file));
+			}
+			break;
+			
+		case ImageTaskType.CONVERT:
+			cmd += " convert";
+			cmd += " --format %s".printf(format.down());
 			cmd += inplace ? " --inplace" : "";
 			foreach(var file in files){
 				cmd += " '%s'".printf(escape_single_quote(file));
@@ -173,73 +172,69 @@ public class PdfTask : AsyncTask {
 	
 	// execution ----------------------------
 
-	public void split(Gee.ArrayList<string> _files, bool _inplace){
-		action = PdfTaskType.SPLIT;
+	public void optimize_png(Gee.ArrayList<string> _files, bool _inplace){
+		action = ImageTaskType.OPTIMIZE_PNG;
 		files = _files;
 		inplace = _inplace;
 		//execute();
 	}
 	
-	public void merge(Gee.ArrayList<string> _files, bool _inplace){
-		action = PdfTaskType.MERGE;
+	public void reduce_jpeg(Gee.ArrayList<string> _files, bool _inplace){
+		action = ImageTaskType.REDUCE_JPEG;
 		files = _files;
-		inplace = _inplace;
-		//execute();
-	}
-
-	public void compress(Gee.ArrayList<string> _files, bool _inplace){
-		action = PdfTaskType.COMPRESS;
-		files = _files;
-		inplace = _inplace;
-		//execute();
-	}
-
-	public void uncompress(Gee.ArrayList<string> _files, bool _inplace){
-		action = PdfTaskType.UNCOMPRESS;
-		files = _files;
-		inplace = _inplace;
-		//execute();
-	}
-
-	public void protect(Gee.ArrayList<string> _files, string _password, bool _inplace){
-		action = PdfTaskType.PROTECT;
-		files = _files;
-		password = _password;
-		inplace = _inplace;
-		//execute();
-	}
-
-	public void unprotect(Gee.ArrayList<string> _files, string _password, bool _inplace){
-		action = PdfTaskType.UNPROTECT;
-		files = _files;
-		password = _password;
 		inplace = _inplace;
 		//execute();
 	}
 
 	public void decolor(Gee.ArrayList<string> _files, bool _inplace){
-		action = PdfTaskType.DECOLOR;
+		action = ImageTaskType.DECOLOR;
 		files = _files;
 		inplace = _inplace;
 		//execute();
 	}
 
-	public void optimize(Gee.ArrayList<string> _files, string target, bool _inplace){
-		action = PdfTaskType.OPTIMIZE;
+	public void boost_color(Gee.ArrayList<string> _files, string _level, bool _inplace){
+		action = ImageTaskType.BOOST_COLOR;
 		files = _files;
-		optimize_target = target;
+		level = _level;
 		inplace = _inplace;
 		//execute();
 	}
 
-	public void rotate(Gee.ArrayList<string> _files, string direction, bool _inplace){
-		action = PdfTaskType.ROTATE;
+	public void reduce_color(Gee.ArrayList<string> _files, string _level, bool _inplace){
+		action = ImageTaskType.REDUCE_COLOR;
 		files = _files;
-		rotate_direction = direction;
+		level = _level;
 		inplace = _inplace;
 		//execute();
 	}
-	
+
+	public void resize(Gee.ArrayList<string> _files, int _width, int _height, bool _inplace){
+		action = ImageTaskType.RESIZE;
+		files = _files;
+		inplace = _inplace;
+		width = _width;
+		height = _height;
+		//execute();
+	}
+
+	public void rotate(Gee.ArrayList<string> _files, string _direction, bool _inplace){
+		action = ImageTaskType.ROTATE;
+		files = _files;
+		rotate_direction = _direction;
+		inplace = _inplace;
+		//execute();
+	}
+
+	public void convert(Gee.ArrayList<string> _files, string _format, int _quality, bool _inplace){
+		action = ImageTaskType.CONVERT;
+		files = _files;
+		format = _format;
+		quality = _quality;
+		inplace = _inplace;
+		//execute();
+	}
+
 	public void execute() {
 
 		prepare();

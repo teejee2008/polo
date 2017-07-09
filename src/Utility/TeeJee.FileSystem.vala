@@ -404,6 +404,23 @@ namespace TeeJee.FileSystem{
 		return true;
 	}
 
+	public string file_generate_unique_name(string file_path){
+		
+		string title = file_get_title(file_path);
+		string extension = file_get_extension(file_path);
+		string location = file_parent(file_path);
+		
+		string outpath = file_path;
+		
+		int index = 1;
+		while (file_or_dir_exists(outpath)){
+			string new_name = "%s%s%s".printf(title, " (%d)".printf(index++), extension);
+			outpath = path_combine(location, new_name);
+		}
+
+		return outpath;
+	}
+
 	public bool file_create_symlink(string file_path, string symlink_file_path, bool? make_relative = null, Gtk.Window? window = null){
 
 		/* make_relative = null, decide automatically

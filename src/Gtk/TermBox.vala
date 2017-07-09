@@ -145,7 +145,7 @@ public class TermBox : Gtk.Box {
 			
 			window.update_accelerators_for_terminal();
 
-			pane.selection_bar.close_panel();
+			pane.selection_bar.close_panel(false);
 
 			term.grab_focus();
 			

@@ -44,6 +44,7 @@ public const string AppAuthorEmail = "teejeetech@gmail.com";
 
 public const int PLUGIN_VER_ISO = 2;
 public const int PLUGIN_VER_PDF = 2;
+public const int PLUGIN_VER_IMAGE = 2;
 
 const string GETTEXT_PACKAGE = "";
 const string LOCALE_DIR = "/usr/share/locale";
@@ -172,6 +173,15 @@ public class Main : GLib.Object {
 	public bool overwrite_pdf_optimize = false;
 	public bool overwrite_pdf_rotate = false;
 
+	public bool overwrite_image_optimize_png = false;
+	public bool overwrite_image_reduce_jpeg = false;
+	public bool overwrite_image_resize = false;
+	public bool overwrite_image_rotate = false;
+	public bool overwrite_image_convert = false;
+	public bool overwrite_image_decolor = false;
+	public bool overwrite_image_boost_color = false;
+	public bool overwrite_image_reduce_color = false;
+	
 	public bool tabs_bottom = false;
 	public bool tabs_close_visible = true;
 
@@ -244,6 +254,7 @@ public class Main : GLib.Object {
 
 	public bool plugin_obsolete_iso = false;
 	public bool plugin_obsolete_pdf = false;
+	public bool plugin_obsolete_image = false;
 
 	public Gee.ArrayList<string> mediaview_exclude = new Gee.ArrayList<string>();
 	public Gee.ArrayList<string> mediaview_include = new Gee.ArrayList<string>();
@@ -470,9 +481,11 @@ public class Main : GLib.Object {
 		tools["kvm"] = new Tool("kvm","Qemu-Kvm Emulator","Virtual Machine Emulator");
 		tools["pdftk"] = new Tool("pdftk","pdftk","Converting PDF files");
 		tools["convert"] = new Tool("convert","convert","Converting images and PDF documents");
+		tools["pngcrush"] = new Tool("pngcrush","pngcrush","Reduce file size of PNG files");
 		tools["gs"] = new Tool("gs","ghostscript","Ghostscript - Converting PDF files");
 		tools["polo-iso"] = new Tool("polo-iso","polo-iso","Polo ISO Plugin (Donation)");
 		tools["polo-pdf"] = new Tool("polo-pdf","polo-pdf","Polo PDF Plugin (Donation)");
+		tools["polo-image"] = new Tool("polo-image","polo-image","Polo Image Plugin (Donation)");
 		
 		check_all_tools();
 	}
@@ -501,6 +514,7 @@ public class Main : GLib.Object {
 		
 		plugins["iso"] = new Plugin("polo-iso", "Polo ISO Plugin", PLUGIN_VER_ISO);
 		plugins["pdf"] = new Plugin("polo-pdf", "Polo PDF Plugin", PLUGIN_VER_PDF);
+		plugins["image"] = new Plugin("polo-image", "Polo Image Plugin", PLUGIN_VER_IMAGE);
 
 		check_all_plugins();
 	}
@@ -636,6 +650,15 @@ public class Main : GLib.Object {
 		config.set_string_member("overwrite_pdf_decolor", overwrite_pdf_decolor.to_string());
 		config.set_string_member("overwrite_pdf_rotate", overwrite_pdf_rotate.to_string());
 		config.set_string_member("overwrite_pdf_optimize", overwrite_pdf_optimize.to_string());
+
+		config.set_string_member("overwrite_image_optimize_png", overwrite_image_optimize_png.to_string());
+		config.set_string_member("overwrite_image_reduce_jpeg", overwrite_image_reduce_jpeg.to_string());
+		config.set_string_member("overwrite_image_resize", overwrite_image_resize.to_string());
+		config.set_string_member("overwrite_image_rotate", overwrite_image_rotate.to_string());
+		config.set_string_member("overwrite_image_convert", overwrite_image_convert.to_string());
+		config.set_string_member("overwrite_image_decolor", overwrite_image_decolor.to_string());
+		config.set_string_member("overwrite_image_boost_color", overwrite_image_boost_color.to_string());
+		config.set_string_member("overwrite_image_reduce_color", overwrite_image_reduce_color.to_string());
 		
 		save_folder_selections();
 		
@@ -811,6 +834,15 @@ public class Main : GLib.Object {
 		overwrite_pdf_decolor = json_get_bool(config, "overwrite_pdf_decolor", overwrite_pdf_decolor);
 		overwrite_pdf_rotate = json_get_bool(config, "overwrite_pdf_rotate", overwrite_pdf_rotate);
 		overwrite_pdf_optimize = json_get_bool(config, "overwrite_pdf_optimize", overwrite_pdf_optimize);
+
+		overwrite_image_optimize_png = json_get_bool(config, "overwrite_image_optimize_png", overwrite_image_optimize_png);
+		overwrite_image_reduce_jpeg = json_get_bool(config, "overwrite_image_reduce_jpeg", overwrite_image_reduce_jpeg);
+		overwrite_image_resize = json_get_bool(config, "overwrite_image_resize", overwrite_image_resize);
+		overwrite_image_rotate = json_get_bool(config, "overwrite_image_rotate", overwrite_image_rotate);
+		overwrite_image_convert = json_get_bool(config, "overwrite_image_convert", overwrite_image_convert);
+		overwrite_image_decolor = json_get_bool(config, "overwrite_image_decolor", overwrite_image_decolor);
+		overwrite_image_boost_color = json_get_bool(config, "overwrite_image_boost_color", overwrite_image_boost_color);
+		overwrite_image_reduce_color = json_get_bool(config, "overwrite_image_reduce_color", overwrite_image_reduce_color);
 
 		middlebar_visible = json_get_bool(config, "middlebar_visible", middlebar_visible);
 		sidebar_visible = json_get_bool(config, "sidebar_visible", sidebar_visible);

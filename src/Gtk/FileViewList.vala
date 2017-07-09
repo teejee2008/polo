@@ -231,6 +231,10 @@ public class FileViewList : Gtk.Box {
 
 		treeview.row_collapsed.connect(row_collapsed);
 
+		treeview.get_selection().changed.connect(()=> {
+			pane.statusbar.refresh_selection_counts();
+		});
+
 		// connect signal for shift+F10
         treeview.popup_menu.connect(() => {
 			if (current_item == null) { return false; }
@@ -245,7 +249,7 @@ public class FileViewList : Gtk.Box {
 
 			window.update_accelerators_for_active_pane();
 
-			pane.selection_bar.close_panel();
+			pane.selection_bar.close_panel(false);
 
 			if (event.button == 3) {
 				if (current_item == null) { return false; }
@@ -334,7 +338,7 @@ public class FileViewList : Gtk.Box {
 
 			window.update_accelerators_for_active_pane();
 
-			pane.selection_bar.close_panel();
+			pane.selection_bar.close_panel(false);
 
 			if (event.button == 3) {
 				if (current_item == null) { return false; }
@@ -345,6 +349,10 @@ public class FileViewList : Gtk.Box {
 			return false;
 		});
 
+		iconview.selection_changed.connect(()=> {
+			pane.statusbar.refresh_selection_counts();
+		});
+		
 		// tooltip
 		iconview.has_tooltip = true;
 		iconview.query_tooltip.connect(iconview_query_tooltip);
@@ -1606,10 +1614,25 @@ public class FileViewList : Gtk.Box {
 			return false;
 		}
 
+		string keychar = Gdk.keyval_name(event.keyval);
+		
+		switch(Gdk.keyval_name(event.keyval).down()){
+		case "left":
+		case "right":
+		case "up":
+		case "down":
+		case "tab":
+			return false;
+		case "space":
+			keychar = " ";
+			break;
+		}
+
 		if ((current_item != null) && (current_item.is_local) && !pane.selection_bar.visible){
-			pane.selection_bar.open_panel(Gdk.keyval_name(event.keyval));
+			pane.selection_bar.open_panel(keychar, false);
 			return true;
 		}
+		
 		return false;
 	}
 
@@ -1955,6 +1978,9 @@ public class FileViewList : Gtk.Box {
 		var previous_item = current_item;
 		current_item = item;
 		current_path_saved = current_item.display_path;
+
+		clear_filter();
+		pane.selection_bar.close_panel(true); // force
 
 		if (update_history){
 			visited_locations.add(item.file_path);
@@ -3097,6 +3123,45 @@ public class FileViewList : Gtk.Box {
 		return selected_items;
 	}
 
+	public void get_selected_counts(out int files, out int dirs){
+
+		log_debug("FileViewList: get_selected_counts()");
+
+		files = 0;
+		dirs = 0;
+
+		Gtk.TreeModel model;
+		GLib.List<TreePath> paths;
+
+		if (view_mode == ViewMode.LIST){
+			paths = treeview.get_selection().get_selected_rows(out model);
+		}
+		else{
+			model = (Gtk.TreeModel) treefilter; // use model from treeview
+			paths = iconview.get_selected_items();
+		}
+
+		//log_debug("treeview.get_selection() = %d".printf(sel.count_selected_rows()));
+
+		//log_debug("selected: %s ==============================".printf(paths.nth_data(0).to_string()));
+
+		foreach(var treepath in paths){
+			TreeIter iter;
+			if (model.get_iter(out iter, treepath)){
+				FileItem item;
+				model.get (iter, 0, out item, -1);
+				if (item.is_directory){
+					dirs++;
+				}
+				else{
+					files++;
+				}
+			}
+		}
+
+		//log_debug("FileViewList: get_selected_counts(): exit")
+	}
+
 	public Gee.ArrayList<FileItem> get_all_items(){
 
 		log_debug("FileViewList: get_all_items()");
@@ -3144,6 +3209,28 @@ public class FileViewList : Gtk.Box {
 		}
 	}
 
+	public void scroll_to_item_by_file_path(string item_path){
+
+		Gtk.TreeModel model;
+		model = (Gtk.TreeModel) treefilter;
+
+		TreeIter iter;
+		bool iterExists = model.get_iter_first (out iter);
+		while (iterExists){
+			FileItem item;
+			model.get (iter, 0, out item, -1);
+			if (item.file_path == item_path){
+				if (view_mode == ViewMode.LIST){
+					treeview.scroll_to_cell(model.get_path(iter), col_name, false, 0.0f, 0.0f);
+				}
+				else{
+					iconview.scroll_to_path(model.get_path(iter), false, 0.0f, 0.0f);
+				}
+			}
+			iterExists = model.iter_next (ref iter);
+		}
+	}
+	
 	// context actions
 
 	public void open(FileItem item, DesktopApp? app){
@@ -4141,7 +4228,6 @@ public class FileViewList : Gtk.Box {
 
 	// PDF ---------------------------------------
 
-	
 	public Gee.ArrayList<string> selected_pdfs(){
 
 		var files = new Gee.ArrayList<string>();
@@ -4165,7 +4251,6 @@ public class FileViewList : Gtk.Box {
 
 		return files;
 	}
-
 
 	public void pdf_split(){
 
@@ -4357,6 +4442,253 @@ public class FileViewList : Gtk.Box {
 		return password;
 	}
 
+	// Image Actions ------------------------
+
+	public Gee.ArrayList<string> selected_pngs(){
+
+		var files = new Gee.ArrayList<string>();
+		
+		var selected_items = get_selected_items();
+		
+		if (selected_items.size == 0){
+			return files;
+		}
+
+		selected_items.foreach((file) => {
+			if (file.is_png){
+				files.add(file.file_path);
+			}
+			return true;
+		});
+		
+		files.sort((a,b)=> {
+			return strcmp(a,b);
+		});
+
+		return files;
+	}
+
+	public Gee.ArrayList<string> selected_jpegs(){
+
+		var files = new Gee.ArrayList<string>();
+		
+		var selected_items = get_selected_items();
+		
+		if (selected_items.size == 0){
+			return files;
+		}
+
+		selected_items.foreach((file) => {
+			if (file.is_jpeg){
+				files.add(file.file_path);
+			}
+			return true;
+		});
+		
+		files.sort((a,b)=> {
+			return strcmp(a,b);
+		});
+
+		return files;
+	}
+
+	public Gee.ArrayList<string> selected_images(){
+
+		var files = new Gee.ArrayList<string>();
+		
+		var selected_items = get_selected_items();
+		
+		if (selected_items.size == 0){
+			return files;
+		}
+
+		selected_items.foreach((file) => {
+			if (file.is_image){
+				files.add(file.file_path);
+			}
+			return true;
+		});
+		
+		files.sort((a,b)=> {
+			return strcmp(a,b);
+		});
+
+		return files;
+	}
+
+	public void image_optimize_png(){
+
+		var files = selected_pngs();
+		if (files.size == 0){
+			gtk_messagebox(_("No PNGs Selected"),_("Select the PNG image files to convert"), window, true);
+			return;
+		}
+
+		if (!check_pngcrush()){ return; }
+
+		if (!check_plugin("image")){ return; }
+		
+		err_log_clear();
+
+		var task = new ImageTask();
+		task.optimize_png(files, App.overwrite_image_optimize_png);
+		
+		var action = new ProgressPanelImageTask(pane, task);
+		pane.file_operations.add(action);
+		action.execute();
+	}
+
+	public void image_reduce_jpeg(){
+
+		var files = selected_jpegs();
+		if (files.size == 0){
+			gtk_messagebox(_("No JPEGs Selected"),_("Select the JPEG image files to convert"), window, true);
+			return;
+		}
+
+		if (!check_plugin("image")){ return; }
+		
+		err_log_clear();
+
+		var task = new ImageTask();
+		task.reduce_jpeg(files, App.overwrite_image_reduce_jpeg);
+		
+		var action = new ProgressPanelImageTask(pane, task);
+		pane.file_operations.add(action);
+		action.execute();
+	}
+
+	public void image_decolor(){
+
+		var files = selected_images();
+		if (files.size == 0){
+			gtk_messagebox(_("No Images Selected"),_("Select the image files to convert"), window, true);
+			return;
+		}
+
+		if (!check_plugin("image")){ return; }
+		
+		err_log_clear();
+
+		var task = new ImageTask();
+		task.decolor(files, App.overwrite_image_decolor);
+		
+		var action = new ProgressPanelImageTask(pane, task);
+		pane.file_operations.add(action);
+		action.execute();
+	}
+
+	public void image_boost_color(string level){
+
+		var files = selected_images();
+		if (files.size == 0){
+			gtk_messagebox(_("No Images Selected"),_("Select the image files to convert"), window, true);
+			return;
+		}
+
+		if (!check_plugin("image")){ return; }
+		
+		err_log_clear();
+
+		var task = new ImageTask();
+		task.boost_color(files, level, App.overwrite_image_boost_color);
+		
+		var action = new ProgressPanelImageTask(pane, task);
+		pane.file_operations.add(action);
+		action.execute();
+	}
+
+	public void image_reduce_color(string level){
+
+		var files = selected_images();
+		if (files.size == 0){
+			gtk_messagebox(_("No Images Selected"),_("Select the image files to convert"), window, true);
+			return;
+		}
+
+		if (!check_plugin("image")){ return; }
+		
+		err_log_clear();
+
+		var task = new ImageTask();
+		task.reduce_color(files, level, App.overwrite_image_reduce_color);
+		
+		var action = new ProgressPanelImageTask(pane, task);
+		pane.file_operations.add(action);
+		action.execute();
+	}
+
+	public void image_resize(int width, int height){
+
+		var files = selected_images();
+		if (files.size == 0){
+			gtk_messagebox(_("No Images Selected"),_("Select the image files to convert"), window, true);
+			return;
+		}
+
+		if (!check_plugin("image")){ return; }
+		
+		err_log_clear();
+
+		var task = new ImageTask();
+		task.resize(files, width, height, App.overwrite_image_resize);
+		
+		var action = new ProgressPanelImageTask(pane, task);
+		pane.file_operations.add(action);
+		action.execute();
+	}
+
+	public void image_rotate(string direction){
+
+		var files = selected_images();
+		if (files.size == 0){
+			gtk_messagebox(_("No Images Selected"),_("Select the image files to convert"), window, true);
+			return;
+		}
+
+		if (!check_plugin("image")){ return; }
+		
+		err_log_clear();
+
+		var task = new ImageTask();
+		task.rotate(files, direction, App.overwrite_image_rotate);
+		
+		var action = new ProgressPanelImageTask(pane, task);
+		pane.file_operations.add(action);
+		action.execute();
+	}
+
+	public void image_convert(string format){
+
+		var files = selected_images();
+		if (files.size == 0){
+			gtk_messagebox(_("No Images Selected"),_("Select the image files to convert"), window, true);
+			return;
+		}
+
+		if (!check_plugin("image")){ return; }
+		
+		err_log_clear();
+
+		var task = new ImageTask();
+		task.convert(files, format, 90, App.overwrite_image_convert);
+		
+		var action = new ProgressPanelImageTask(pane, task);
+		pane.file_operations.add(action);
+		action.execute();
+	}
+	
+	// common
+
+	private bool check_pngcrush(){
+		var tool = App.tools["pngcrush"];
+		if (!tool.available){
+			gtk_messagebox(_("Missing Dependency"),_("Install the 'pngcrush' package and try again"), window, true);
+			return false;
+		}
+		return true;
+	}
+	
 	private bool check_pdftk(){
 		var tool = App.tools["pdftk"];
 		if (!tool.available){
@@ -4399,7 +4731,7 @@ public class FileViewList : Gtk.Box {
 		}
 		return true;
 	}
-	
+
 	public void hide_selected(){
 
 		if (!is_normal_directory){ return; }

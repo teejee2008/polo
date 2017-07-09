@@ -716,6 +716,21 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 	}
 
+	public bool is_png{
+		get{
+			return file_extension.down().has_suffix(".png")
+				|| (content_type == "image/png");
+		}
+	}
+
+	public bool is_jpeg{
+		get{
+			return file_extension.down().has_suffix(".jpeg")
+				|| file_extension.down().has_suffix(".jpg")
+				|| (content_type == "image/jpeg");
+		}
+	}
+
 	public bool is_iso{
 		get{
 			return file_extension.down().has_suffix(".iso")

@@ -70,6 +70,10 @@ public class SelectionBar : Gtk.Box {
 
 		hbox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
 		add(hbox);
+
+		//var label = new Gtk.Label(_("Pattern:"));
+		//label.xalign = (float) 0.0;
+		//hbox.add(label);
 		
 		add_entry();
 
@@ -130,6 +134,7 @@ public class SelectionBar : Gtk.Box {
 
 		button.toggled.connect(()=>{
 			if (opt_select.active){
+				view.clear_filter(); // clear filter if any before selection
 				execute_action();
 			}
 		});
@@ -151,21 +156,21 @@ public class SelectionBar : Gtk.Box {
 		hbox.add(button);
 		
 		button.clicked.connect((event) => {
-			close_panel();
+			close_panel(true);
 		});
 	}
 
-	public void toggle(){
+	public void toggle(bool filter_mode){
 		
 		if (this.visible){
-			close_panel();
+			close_panel(true);
 		}
 		else{
-			open_panel("");
+			open_panel("", filter_mode);
 		}
 	}
 	
-	public void open_panel(string initial_text){
+	public void open_panel(string initial_text, bool filter_mode){
 
 		if (this.visible) { return; }
 
@@ -174,21 +179,36 @@ public class SelectionBar : Gtk.Box {
 		txt_pattern.text = initial_text;
 		txt_pattern.grab_focus_without_selecting();
 		txt_pattern.move_cursor(Gtk.MovementStep.BUFFER_ENDS, 1, false);
+
+		if (filter_mode){
+			opt_filter.active = true;
+		}
+		else{
+			opt_select.active = true;
+		}
+		
+		execute_action();
 		
 		gtk_show(this);
 	}
 
-	public void close_panel(){
+	public void close_panel(bool force){
 
 		if (!this.visible) { return; }
 		
 		log_debug("SelectionBar: hide_panel()");
 
 		if (opt_filter.active){
-			view.clear_filter();
+			if (force){
+				view.clear_filter();
+			}
+			else{
+				return;
+			}
 		}
 			
 		txt_pattern.text = "";
+		view.clear_filter(); // always clear
 		gtk_hide(this);
 	}
 
@@ -222,8 +242,6 @@ public class SelectionBar : Gtk.Box {
 	
 	private void select_items_by_pattern(){
 
-		
-
 		if (view.current_item == null) { return; }
 		if (!view.current_item.is_local) { return; }
 
@@ -240,7 +258,11 @@ public class SelectionBar : Gtk.Box {
 			}
 		}
 
+		if (list.size == 0){ return; }
+
 		view.select_items_by_file_path(list);
+
+		view.scroll_to_item_by_file_path(list[0]);
 	}
 
 	private void filter_items_by_pattern(){
