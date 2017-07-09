@@ -438,14 +438,6 @@ public class AboutWindow : Dialog {
 			}
 			add_line("\n");
 		}
-		
-		if (third_party.length > 0){
-			add_header(_("Icon Themes & Utilities"));
-			foreach(string name in third_party){
-				add_line("%s\n".printf(name));
-			}
-			add_line("\n");
-		}
 
 		if (artists.length > 0){
 			add_header(_("Artists"));
@@ -466,6 +458,14 @@ public class AboutWindow : Dialog {
 		if (documenters.length > 0){
 			add_header(_("Documentation"));
 			foreach(string name in documenters){
+				add_line("%s\n".printf(name));
+			}
+			add_line("\n");
+		}
+
+		if (third_party.length > 0){
+			add_header(_("Icon Themes & Utilities"));
+			foreach(string name in third_party){
 				add_line("%s\n".printf(name));
 			}
 			add_line("\n");

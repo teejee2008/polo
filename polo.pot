@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
-"POT-Creation-Date: 2017-07-09 12:02+0530\n"
+"POT-Creation-Date: 2017-07-09 12:19+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,7 +55,7 @@ msgid ""
 "will increase gradually as disk is modified."
 msgstr ""
 
-#: Gtk/MainWindow.vala:753
+#: Gtk/MainWindow.vala:754
 msgid "A modern, light-weight file manager for Linux"
 msgstr ""
 
@@ -221,7 +221,7 @@ msgstr ""
 msgid "Archive"
 msgstr ""
 
-#: Utility/Gtk/AboutWindow.vala:451
+#: Utility/Gtk/AboutWindow.vala:443
 msgid "Artists"
 msgstr ""
 
@@ -448,7 +448,7 @@ msgstr ""
 msgid "Clean thumbnail cache"
 msgstr ""
 
-#: Gtk/MainWindow.vala:780
+#: Gtk/MainWindow.vala:781
 msgid "Cleaning Thumbnail Cache..."
 msgstr ""
 
@@ -983,7 +983,7 @@ msgid ""
 "Base file will be made read-only to prevent accidental modification."
 msgstr ""
 
-#: Utility/Gtk/AboutWindow.vala:467
+#: Utility/Gtk/AboutWindow.vala:459
 msgid "Documentation"
 msgstr ""
 
@@ -1575,7 +1575,7 @@ msgstr ""
 msgid "ISO"
 msgstr ""
 
-#: Utility/Gtk/AboutWindow.vala:443
+#: Utility/Gtk/AboutWindow.vala:467
 msgid "Icon Themes & Utilities"
 msgstr ""
 
@@ -2618,7 +2618,7 @@ msgstr ""
 msgid "Rebuild font cache"
 msgstr ""
 
-#: Gtk/MainWindow.vala:768
+#: Gtk/MainWindow.vala:769
 msgid "Rebuilding Font Cache..."
 msgstr ""
 
@@ -2825,7 +2825,7 @@ msgstr ""
 msgid "Restoring items..."
 msgstr ""
 
-#: Gtk/MainWindow.vala:902
+#: Gtk/MainWindow.vala:903
 msgid "Restoring session..."
 msgstr ""
 
@@ -3339,7 +3339,7 @@ msgstr ""
 msgid "Touch"
 msgstr ""
 
-#: Utility/Gtk/AboutWindow.vala:459
+#: Utility/Gtk/AboutWindow.vala:451
 msgid "Translations"
 msgstr ""
 
