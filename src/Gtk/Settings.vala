@@ -2193,10 +2193,10 @@ public class Settings : Gtk.Box {
 			// column 2 ---------------------------------
 
 			vbox = add_column_group(box, false);
+
+			vbox = add_group(vbox, _("Replace Original Files ?"), 0);
 		}
 
-		vbox = add_group(vbox, _("Replace Original Files ?"), 0);
-		
 		if (App.tool_exists("polo-pdf")) { 
 
 			vbox_group = add_sub_group(vbox, _("PDF Actions"), 0);

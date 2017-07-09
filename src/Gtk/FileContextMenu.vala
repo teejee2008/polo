@@ -2094,7 +2094,7 @@ public class FileContextMenu : Gtk.Menu {
 
 		if (!selected_item.is_image){ return; }
 
-		//if (!App.tool_exists("polo-img")) { return; }
+		if (!App.tool_exists("polo-image")) { return; }
 		
 		log_debug("FileContextMenu: add_image_actions()");
 

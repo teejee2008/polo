@@ -252,6 +252,7 @@ public class Main : GLib.Object {
 	public bool tileview_thumbs = true;
 	public bool tileview_transparency = true;
 
+	public bool donation_plugins_found = false;
 	public bool plugin_obsolete_iso = false;
 	public bool plugin_obsolete_pdf = false;
 	public bool plugin_obsolete_image = false;
@@ -272,6 +273,10 @@ public class Main : GLib.Object {
 	public string admin_pass = "";
 
 	public string[] supported_formats_open;
+
+	// donation counter
+	private int run_count = 0;
+	private int[] donation_triggers = { 100 };
 
 	public static string[] extensions_tar = {
 		".tar"
@@ -524,6 +529,10 @@ public class Main : GLib.Object {
 		foreach(var plugin in plugins.values){
 			
 			plugin.check_availablity();
+
+			if (plugin.available){
+				donation_plugins_found = true;
+			}
 		}
 	}
 
@@ -536,6 +545,8 @@ public class Main : GLib.Object {
 		set_numeric_locale("C"); // switch numeric locale
 
 		config.set_string_member("app-version", AppVersion);
+
+		config.set_string_member("run-count", run_count.to_string());
 
 		config.set_int_member("format-version", (int64) APP_CONFIG_FORMAT_VERSION);
 
@@ -711,6 +722,7 @@ public class Main : GLib.Object {
 		set_numeric_locale("C"); // switch numeric locale
 
 		app_version_in_config = json_get_string(config, "app-version", "0");
+		run_count = json_get_int(config, "run-count", 0);
 		// set dummy version number, if config file exists but parameter is missing
 		// this will trigger display of change log file
 
@@ -862,6 +874,15 @@ public class Main : GLib.Object {
 		log_debug(_("App config loaded") + ": '%s'".printf(this.app_conf_path));
 
 		set_numeric_locale(""); // reset numeric locale
+	}
+	
+	public void increment_run_count() {
+		run_count++;
+	}
+
+	public bool check_donation_trigger() {
+		log_debug("run_count: %d".printf(run_count));
+		return !donation_plugins_found && array_contains(run_count, donation_triggers);
 	}
 
 	public bool first_run_after_update(){

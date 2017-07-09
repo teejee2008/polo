@@ -299,6 +299,22 @@ namespace TeeJee.Misc {
 		}
 		return parts.to_array();
 	}
+
+	public bool array_contains(int needle, int[] haystack){
+		int result = -1;
+		for (int i=0; i < haystack.length; i++) {
+			if(needle == haystack[i]) return true;
+		}
+		return false;
+	}
+
+	public int array_index(int needle, int[] haystack){
+		int result = -1;
+		for (int i=0; i < haystack.length; i++) {
+			if (needle == haystack[i]) return i;
+		}
+		return result;
+	}
 	
 	public string random_string(int length = 8, string charset = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz1234567890"){
 		string random = "";
