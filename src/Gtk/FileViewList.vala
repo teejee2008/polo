@@ -2255,17 +2255,19 @@ public class FileViewList : Gtk.Box {
 	}
 
 	public void refilter(){
+		var list = get_selected_items();
 		treefilter.refilter();
+		select_items(list);
 	}
 
 	public void filter(string pattern){
 		filter_pattern = pattern;
-		treefilter.refilter();
+		refilter();
 	}
 
 	public void clear_filter(){
 		filter_pattern = "";
-		treefilter.refilter();
+		refilter();
 	}
 
 	// refresh  -----------------
@@ -3177,6 +3179,13 @@ public class FileViewList : Gtk.Box {
 		return list;
 	}
 
+	public void select_items(Gee.ArrayList<FileItem> items){
+
+		var list = new Gee.ArrayList<string>();
+		items.foreach(x => { list.add(x.file_path); return true; });
+		select_items_by_file_path(list);
+	}
+	
 	public void select_items_by_file_path(Gee.ArrayList<string> items){
 
 		Gtk.TreeModel model;
@@ -3193,6 +3202,14 @@ public class FileViewList : Gtk.Box {
 				}
 				else{
 					iconview.select_path(model.get_path(iter));
+				}
+			}
+			else {
+				if (view_mode == ViewMode.LIST){
+					treeview.get_selection().unselect_iter(iter);
+				}
+				else{
+					iconview.unselect_path(model.get_path(iter));
 				}
 			}
 			iterExists = model.iter_next (ref iter);

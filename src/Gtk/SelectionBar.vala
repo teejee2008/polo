@@ -186,7 +186,7 @@ public class SelectionBar : Gtk.Box {
 		else{
 			opt_select.active = true;
 		}
-		
+
 		execute_action();
 		
 		gtk_show(this);
@@ -206,9 +206,7 @@ public class SelectionBar : Gtk.Box {
 				return;
 			}
 		}
-			
-		txt_pattern.text = "";
-		view.clear_filter(); // always clear
+
 		gtk_hide(this);
 	}
 
