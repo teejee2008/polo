@@ -405,12 +405,10 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 	public string file_uri {
 		owned get{
-			if (file_path_prefix == "file://"){
-				// skip the prefix for local files
-				return file_path;
+			if (file_path_prefix.length == 0){
+				return "file://%s".printf(file_path);
 			}
 			else{
-				// use full path with prefix
 				return file_path_prefix + file_path;
 			}
 		}
@@ -1497,7 +1495,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 			FileInfo info;
 
-			var file = File.parse_name(file_path);
+			var file = File.parse_name(file_uri);
 
 			if (!file.query_exists()) {
 				log_debug("query_file_info(): not found: %s".printf(file_path));

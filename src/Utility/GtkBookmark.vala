@@ -34,6 +34,12 @@ public class GtkBookmark : GLib.Object {
 	public string uri = "";
 	public string name = "";
 
+	public string display_name {
+		owned get {
+			return uri_decode(name);
+		}
+	}
+
 	public static string user_name;
 	public static string user_home;
 	
@@ -181,6 +187,7 @@ public class GtkBookmark : GLib.Object {
 
 	public Gdk.Pixbuf? get_icon(int icon_size = 16){
 		if (path_exists()){
+
 			if (uri == "trash:///"){
 				return IconManager.lookup("user-trash",16);
 			}

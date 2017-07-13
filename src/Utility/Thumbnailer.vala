@@ -182,16 +182,14 @@ public class Thumbnailer : GLib.Object {
 
 		var list = new Gee.ArrayList<Gdk.Pixbuf>();
 
-		string file_uri = file_item.file_path_prefix + file_item.file_path;
-
 		string hash = "";
 
-		if (hash_lookup.has_key(file_uri)){
-			hash = hash_lookup[file_uri];
+		if (hash_lookup.has_key(file_item.file_uri)){
+			hash = hash_lookup[file_item.file_uri];
 		}
 		else{
-			hash = string_checksum(file_uri);
-			hash_lookup[file_uri] = hash;
+			hash = string_checksum(file_item.file_uri);
+			hash_lookup[file_item.file_uri] = hash;
 		}
 
 		foreach(string thumbdir in search_paths){
