@@ -243,6 +243,15 @@ namespace TeeJee.Misc {
 		return Uri.unescape_string(path);
 	}
 
+	public string ellipsize(string txt, int maxchars){
+		if (txt.length > maxchars){
+			return txt[0:maxchars-1] + "...";
+		}
+		else{
+			return txt;
+		}
+	}
+
 	public DateTime datetime_from_string (string date_time_string){
 
 		/* Converts date time string to DateTime
