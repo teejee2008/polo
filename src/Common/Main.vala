@@ -245,6 +245,8 @@ public class Main : GLib.Object {
 	public bool iconview_thumbs = true;
 	public bool iconview_transparency = true;
 
+	public bool iconview_trim_names = true;
+
 	public int tileview_icon_size = TV_ICON_SIZE;
 	public int tileview_row_spacing = TV_ROW_SPACING;
 	public int tileview_padding = TV_PADDING;
@@ -584,6 +586,8 @@ public class Main : GLib.Object {
 		config.set_string_member("iconview_thumbs", iconview_thumbs.to_string());
 		config.set_string_member("iconview_transparency", iconview_transparency.to_string());
 
+		config.set_string_member("iconview_trim_names", iconview_trim_names.to_string());
+
 		config.set_string_member("tileview_icon_size", tileview_icon_size.to_string());
 		config.set_string_member("tileview_row_spacing", tileview_row_spacing.to_string());
 		config.set_string_member("tileview_padding", tileview_padding.to_string());
@@ -765,6 +769,8 @@ public class Main : GLib.Object {
 		iconview_emblems = json_get_bool(config, "iconview_emblems", iconview_emblems);
 		iconview_thumbs = json_get_bool(config, "iconview_thumbs", iconview_thumbs);
 		iconview_transparency = json_get_bool(config, "iconview_transparency", iconview_transparency);
+
+		iconview_trim_names = json_get_bool(config, "iconview_trim_names", iconview_trim_names);
 
 		tileview_icon_size = json_get_int(config, "tileview_icon_size", TV_ICON_SIZE);
 		tileview_row_spacing = json_get_int(config, "tileview_row_spacing", TV_ROW_SPACING);

@@ -2214,9 +2214,14 @@ public class FileViewList : Gtk.Box {
 			}
 		}
 
+		string name = item.display_name;
+		if (App.iconview_trim_names && (name.length > 30)){
+			name = name[0:29] + "...";
+		}
+
 		store.set (iter1, FileViewColumn.ITEM, item); // used by list view
 		store.set (iter1, FileViewColumn.ICON, pixbuf); // used by all views
-		store.set (iter1, FileViewColumn.NAME, item.display_name); // only used by icon view
+		store.set (iter1, FileViewColumn.NAME, name); // only used by icon view
 		store.set (iter1, FileViewColumn.TILE_MARKUP, item.tile_markup); // only used by tile view
 		store.set (iter1, FileViewColumn.THUMBKEY, task); // used by thumbnail updater
 

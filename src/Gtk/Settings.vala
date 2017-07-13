@@ -1668,7 +1668,7 @@ public class Settings : Gtk.Box {
 
 	private void add_options_listview_icons(Gtk.Box box) {
 
-		var vbox = add_sub_group(box, _("Icons"), 0);
+		var vbox = add_sub_group(box, _("Options"), 0);
 
 		add_option_listview_emblems(vbox);
 		
@@ -1852,13 +1852,15 @@ public class Settings : Gtk.Box {
 
 	private void add_options_iconview_icons(Gtk.Box box) {
 
-		var vbox = add_sub_group(box, _("Icons"), 0);
+		var vbox = add_sub_group(box, _("Options"), 0);
 
 		add_option_iconview_emblems(vbox);
 		
 		add_option_iconview_thumbs(vbox);
 		
 		add_option_iconview_transparency(vbox);
+
+		add_option_iconview_trim_names(vbox);
 	}
 
 	private void add_option_iconview_emblems(Gtk.Box box){
@@ -1902,6 +1904,21 @@ public class Settings : Gtk.Box {
 
 		chk.toggled.connect(()=>{
 			App.iconview_transparency = chk.active;
+			window.refresh_treemodels();
+		});
+	}
+
+	private void add_option_iconview_trim_names(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Ellipsize file name"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("Ellipsize long file names with 3 dots. Uncheck this option to display entire file name."));
+
+		chk.active = App.iconview_trim_names;
+
+		chk.toggled.connect(()=>{
+			App.iconview_trim_names = chk.active;
 			window.refresh_treemodels();
 		});
 	}
@@ -2038,7 +2055,7 @@ public class Settings : Gtk.Box {
 
 	private void add_options_tileview_icons(Gtk.Box box) {
 
-		var vbox = add_sub_group(box, _("Icons"), 0);
+		var vbox = add_sub_group(box, _("Options"), 0);
 
 		add_option_tileview_emblems(vbox);
 		
