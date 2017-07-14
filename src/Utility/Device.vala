@@ -88,22 +88,31 @@ public class Device : GLib.Object{
 	
 	public static void init(){
 
+		log_debug("Device.init()");
+		
 		get_block_devices();
 		
 		get_monitor();
+
+		log_debug("Device.init(): exit");
 	}
 	
 	public static DeviceMonitor get_monitor(){
 		
 		if (monitor != null){ return monitor; }
 
+		log_debug("Device.get_monitor()");
+		
 		var monitor = DeviceMonitor.get_monitor();
 
 		monitor.changed.connect(()=>{
+			log_debug("Device: get_monitor(): monitor_changed");
 			//get_block_devices_using_lsblk();
 			get_block_devices();
 		});
 
+		log_debug("Device.get_monitor(): exit");
+		
 		return monitor;
 	}
 

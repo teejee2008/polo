@@ -225,7 +225,7 @@ public class MainWindow : Gtk.Window {
 
 		pathbar.refresh();
 
-		sidebar.refresh();
+		//sidebar.refresh();
 
 		reset_sidebar_width();
 
@@ -238,6 +238,8 @@ public class MainWindow : Gtk.Window {
 		gtk_set_busy(false, this);
 
 		window_is_ready = true;
+
+		sidebar.refresh(); // after setting flag
 
 		if (App.first_run){
 			open_wizard_window();
@@ -302,10 +304,14 @@ public class MainWindow : Gtk.Window {
 		pane_nav.pack1(sidebar, false, false); // resize, shrink
 
 		DeviceMonitor.get_monitor().changed.connect(()=>{
-			sidebar.refresh();
+			if (sidebar == null){ return; }
+			if (window_is_ready) {
+				sidebar.refresh();
+			}
 		});
 
 		App.trashcan.query_completed.connect(()=>{
+			if (sidebar == null){ return; }
 			if (window_is_ready) {
 				sidebar.refresh();
 			}

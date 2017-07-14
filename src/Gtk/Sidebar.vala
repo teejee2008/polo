@@ -331,13 +331,11 @@ public class Sidebar : Gtk.Box {
 
 	public void refresh() {
 
-		if (listbox == null){
-			return;
-		}
+		if (listbox == null){ return; }
 
-		if (!popup && !App.sidebar_visible){
-			return;
-		}
+		if (!window.window_is_ready) { return; }
+
+		if (!popup && !App.sidebar_visible){ return; }
 
 		apply_css_listbox();
 

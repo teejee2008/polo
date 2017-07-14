@@ -563,6 +563,8 @@ public class MiddleToolbar : Gtk.Toolbar {
 	public void refresh_for_active_pane(){
 
 		log_debug("MiddleToolbar: refresh_for_active_pane");
+
+		if (!window.window_is_ready){ return; }
 		
 		if ((view == null) || (view.current_item == null)){
 			this.sensitive = false;
