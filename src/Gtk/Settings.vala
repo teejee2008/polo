@@ -1058,7 +1058,7 @@ public class Settings : Gtk.Box {
 
 	private void add_tabbar_option_close(Gtk.Container box){
 
-		var chk = new Gtk.CheckButton.with_label(_("Close button"));
+		var chk = new Gtk.CheckButton.with_label(_("Close button (R)"));
 		chk.set_tooltip_text(_("Show tab close button (requires application restart)"));
 		box.add(chk);
 

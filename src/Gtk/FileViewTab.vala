@@ -59,7 +59,8 @@ public class FileViewTab : Gtk.Box {
 		panel = parent_panel;
 		notebook = parent_notebook;
 		window =  App.main_window;
-
+		// pane is set by init_tab()
+		
 		//var timer = timer_start();
 		
 		init_tab();
@@ -188,11 +189,17 @@ public class FileViewTab : Gtk.Box {
 		if (window.active_pane == pane){
 			tab_label.set_use_markup(true);
 			tab_label.label = "<b>%s</b>".printf(_tab_name);
+
+			pane.view.set_active_indicator(true);
+			pane.set_active_indicator(true);
 		}
 		else{
 			tab_label.set_use_markup(false);
 			tab_label.label = tab_name;
-		}	
+
+			pane.view.set_active_indicator(false);
+			pane.set_active_indicator(false);
+		}
 	}
 
 	private void add_close_button(Gtk.Box box){

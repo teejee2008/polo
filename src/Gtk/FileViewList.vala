@@ -39,6 +39,9 @@ public class FileViewList : Gtk.Box {
 	private Gtk.Overlay overlay;
 	private Gtk.Label? lbl_overlay;
 
+	private Gtk.Box active_indicator_top;
+	//private Gtk.Box active_indicator_bottom;
+	
 	public ExtendedTreeView treeview;
 	private Gtk.ScrolledWindow scrolled_treeview;
 	private TreeViewColumnManager tv_manager;
@@ -147,6 +150,8 @@ public class FileViewList : Gtk.Box {
 
 		log_debug("view_mode = App.view_mode; %s".printf(view_mode.to_string()));
 
+		init_active_indicator_top();
+		
 		overlay = new Gtk.Overlay();
 		this.add(overlay);
 
@@ -156,6 +161,8 @@ public class FileViewList : Gtk.Box {
 		init_treeview();
 
 		init_iconview();
+
+		//init_active_indicator_bottom();
 
 		connect_key_press_handler();
 
@@ -445,6 +452,28 @@ public class FileViewList : Gtk.Box {
 		return "";
 	}
 
+	private void init_active_indicator_top(){
+
+		active_indicator_top = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		active_indicator_top.set_size_request(-1,2);
+		add(active_indicator_top);
+		
+		string css = " background-color: #2196F3; ";
+		gtk_apply_css(new Gtk.Widget[] { active_indicator_top }, css);
+
+		//css = " color: #ffffff; ";
+		//gtk_apply_css(new Gtk.Widget[] { label }, css);
+	}
+
+	public void set_active_indicator(bool is_active){
+		string css = " background-color: #2196F3; ";
+		if (!is_active){
+			css = " background-color: @content_view_bg; "; //#C0C0C0
+		}
+		gtk_apply_css(new Gtk.Widget[] { active_indicator_top }, css);
+		//gtk_apply_css(new Gtk.Widget[] { active_indicator_bottom }, css);
+	}
+	
 	private void add_col_name() {
 
 		// column

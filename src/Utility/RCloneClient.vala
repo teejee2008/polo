@@ -2,7 +2,7 @@
 /*
  * RCloneClient.vala
  *
- * Copyright 2017 Tony George <teejee2008@gmail.com>
+ * Copyright 2017 Tony George <teejeetech@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by

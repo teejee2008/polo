@@ -46,6 +46,9 @@ public class FileViewPane : Gtk.Box {
 	public TermBox terminal;
 	public Statusbar statusbar;
 
+	//private Gtk.Box active_indicator_top;
+	private Gtk.Box active_indicator_bottom;
+
 	private Gtk.Box box_pathbar_view;
 	private Gtk.Paned paned_term;
 	
@@ -129,6 +132,8 @@ public class FileViewPane : Gtk.Box {
 
 		add(adminbar);
 
+		add_active_indicator_bottom();
+
 		add(statusbar);
 
 		view.changed.connect(()=>{
@@ -172,6 +177,28 @@ public class FileViewPane : Gtk.Box {
 		//refresh();
 
 		log_debug("FileViewPane(): created -------------------------");
+	}
+
+	private void add_active_indicator_bottom(){
+
+		active_indicator_bottom = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		active_indicator_bottom.set_size_request(-1,2);
+		add(active_indicator_bottom);
+		
+		string css = " background-color: #2196F3; ";
+		gtk_apply_css(new Gtk.Widget[] { active_indicator_bottom }, css);
+
+		//css = " color: #ffffff; ";
+		//gtk_apply_css(new Gtk.Widget[] { label }, css);
+	}
+
+	public void set_active_indicator(bool is_active){
+		string css = " background-color: #2196F3; ";
+		if (!is_active){
+			css = " background-color: @content_view_bg; "; //#C0C0C0
+		}
+		//gtk_apply_css(new Gtk.Widget[] { active_indicator_top }, css);
+		gtk_apply_css(new Gtk.Widget[] { active_indicator_bottom }, css);
 	}
 
 	// refresh
