@@ -631,6 +631,15 @@ public class MainWindow : Gtk.Window {
 		log_debug("MainWindow: reset_views_with_path_prefix(): exit");
 	}*/
 
+	public void refresh_pathbars(){
+		
+		foreach(var pn in panes){
+			pn.pathbar.refresh();
+		}
+
+		this.pathbar.refresh();
+	}
+	
 	public void refresh_treemodels(){
 
 		log_debug("MainWindow: refresh_treemodels()");

@@ -167,7 +167,7 @@ public class WizardWindow : Gtk.Window {
 
 	private void init_pathbar_style(){
 
-		gtk_container_remove_children(vbox_main);
+		/*gtk_container_remove_children(vbox_main);
 		
 		add_label_header(vbox_main, _("Select Pathbar Style"), true);
 
@@ -222,7 +222,7 @@ public class WizardWindow : Gtk.Window {
 			return true;
 		});
 
-		this.show_all();
+		this.show_all();*/
 	}
 }
 

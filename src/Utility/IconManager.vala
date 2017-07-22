@@ -121,12 +121,11 @@ public class IconManager : GLib.Object {
 		
 		Gdk.Pixbuf? pix = lookup(icon_name, icon_size, symbolic, use_hardcoded);
 		
-		if (pix != null){
-			return new Gtk.Image.from_pixbuf(pix);
+		if (pix == null){
+			pix = generic_icon_image_missing(icon_size);
 		}
-		else{
-			return null;
-		}
+
+		return new Gtk.Image.from_pixbuf(pix);
 	}
 
 	public static Gdk.Pixbuf? lookup_gicon(GLib.Icon? gicon, int icon_size){
@@ -235,6 +234,10 @@ public class IconManager : GLib.Object {
 
     public static Gdk.Pixbuf? generic_icon_image(int icon_size) {
 		return lookup("image-x-generic", icon_size, false);
+    }
+
+    public static Gdk.Pixbuf? generic_icon_image_missing(int icon_size) {
+		return lookup("image-missing", icon_size, false);
     }
 
     public static Gdk.Pixbuf? generic_icon_video(int icon_size) {

@@ -829,11 +829,16 @@ public class Pathbar : Gtk.Box {
 		log_debug("display_path: %s".printf(view.current_item.display_path));
 		log_debug("current_path_saved: %s".printf(view.current_path_saved));*/
 
-		if (App.pathbar_use_buttons && !App.pathbar_flat_buttons){
-			link_box.spacing = 3;
-		}
-		else{
+		switch(App.pathbar_style){
+		case PathbarStyle.COMPACT:
+		case PathbarStyle.FLAT_BUTTONS:
 			link_box.spacing = 0;
+			break;
+			
+		case PathbarStyle.ARROWS:
+		case PathbarStyle.BUTTONS:
+			link_box.spacing = 3;
+			break;
 		}
 		
 		string link_path = "";
@@ -855,8 +860,8 @@ public class Pathbar : Gtk.Box {
 			add_crumb(link_box, "/", link_path);
 		}
 
-		if (!App.pathbar_use_buttons){
-			add_crumb_separator(link_box, "");
+		if (App.pathbar_style == PathbarStyle.ARROWS){
+			add_crumb_separator(link_box);
 		}
 
 		var parts = view.current_path_saved.replace("trash://","").split("/");
@@ -867,6 +872,8 @@ public class Pathbar : Gtk.Box {
 			index++;
 			if (part.length == 0){ continue; }
 
+			// crumb ----------------
+			
 			if (link_path.contains("://")){
 				link_path = link_path + "/" + part; // don't use path_combine()
 			}
@@ -874,21 +881,19 @@ public class Pathbar : Gtk.Box {
 				link_path = path_combine(link_path, part); // don't use simple concatenation
 			}
 
+			add_crumb(link_box, part, link_path);
+
+			// separator ------------
+			
 			bool add_separator = false;
-			if (!App.pathbar_use_buttons){
+			if ((App.pathbar_style == PathbarStyle.COMPACT) || (App.pathbar_style == PathbarStyle.ARROWS)){
 				if (index < parts.length - 1){
 					add_separator = true;
 				}
 			}
 
-			string txt = part;
-			//if (add_separator){
-			//	txt = txt + "  >  ";
-			//}
-			add_crumb(link_box, txt, link_path);
-
 			if (add_separator){
-				add_crumb_separator(link_box, "");
+				add_crumb_separator(link_box);
 			}
 		}
 
@@ -899,7 +904,7 @@ public class Pathbar : Gtk.Box {
 
 	private void add_crumb(Gtk.Box box, string text, string link_path){
 		
-		if (App.pathbar_use_buttons){
+		if ((App.pathbar_style == PathbarStyle.BUTTONS) || (App.pathbar_style == PathbarStyle.FLAT_BUTTONS)){
 			add_crumb_button(box, text, link_path);
 		}
 		else{
@@ -956,7 +961,7 @@ public class Pathbar : Gtk.Box {
 		button.set_data<string>("link", link_path);
 		box.add(button);
 
-		if (App.pathbar_flat_buttons){
+		if (App.pathbar_style == PathbarStyle.FLAT_BUTTONS){
 			button.relief = Gtk.ReliefStyle.NONE;
 		}
 		else{
@@ -968,7 +973,7 @@ public class Pathbar : Gtk.Box {
 		label.margin_left = label.margin_right = 0;
 		button.add(label);
 
-		if (App.pathbar_flat_buttons && (text != "/") && !text.contains("://")){
+		if ((App.pathbar_style == PathbarStyle.FLAT_BUTTONS) && (text != "/") && !text.contains("://")){
 			label.label = "➤ " + text;
 		}
 		
@@ -979,17 +984,27 @@ public class Pathbar : Gtk.Box {
 		});
 	}
 
-	private void add_crumb_separator(Gtk.Box box, string link_path){
+	private void add_crumb_separator(Gtk.Box box){
 
 		string separator = "➤";
-		
-		if (!App.pathbar_use_buttons){
-			// pad with space
-			separator = " %s ".printf(separator);
-		}
 
+		switch(App.pathbar_style){
+		case PathbarStyle.COMPACT:
+			separator = "/";
+			break;
+			
+		case PathbarStyle.ARROWS:
+			separator = "➤";
+			break;
+			
+		case PathbarStyle.BUTTONS:
+		case PathbarStyle.FLAT_BUTTONS:
+			// pad with space
+			separator = "%s ".printf(separator);
+			break;
+		}
+		
 		var label = new Gtk.Label(separator);
-		//lbl3.margin_bottom = 1;
 		box.add(label);
 	}
 	

@@ -223,7 +223,9 @@ public class Settings : Gtk.Box {
 
 		add_pathbar_option_unified(vbox_items);
 
-		add_pathbar_option_use_buttons(vbox_items);
+		add_pathbar_option_style(vbox_items);
+
+		//add_pathbar_option_use_buttons(vbox_items);
 
 		// -----------------------------
 
@@ -581,7 +583,6 @@ public class Settings : Gtk.Box {
 		});
 	}
 
-
 	private void add_toolbar_item_devices(Gtk.Container box){
 
 		var chk = new Gtk.CheckButton.with_label(_("Devices"));
@@ -670,7 +671,37 @@ public class Settings : Gtk.Box {
 		});
 	}
 
-	private void add_pathbar_option_use_buttons(Gtk.Container box){
+	private void add_pathbar_option_style(Gtk.Box box){
+
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL,6);
+		hbox.margin_top = 6;
+		box.add(hbox);
+
+		// label
+		var label = new Gtk.Label(_("Style") + ":");
+		label.xalign = 0.0f;
+		//label.margin_left = 6;
+		hbox.add(label);
+
+		var link = new Gtk.LinkButton(App.pathbar_style.to_string());
+		link.xalign = 0.0f;
+		hbox.add(link);
+
+		gtk_apply_css( { link }, "padding-left: 0px; padding-right: 0px; margin-left: 0px; margin-right: 0px;");
+
+		link.activate_link.connect(()=>{
+			var menu = new PathbarStyleMenu(link);
+			return menu.show_menu(null); 
+		});
+
+		gtk_suppress_context_menu(link);
+		
+		label = new Gtk.Label("");
+		label.hexpand = true;
+		hbox.add(label);
+	}
+
+	/*private void add_pathbar_option_use_buttons(Gtk.Container box){
 
 		var chk = new Gtk.CheckButton.with_label(_("Use Buttons"));
 		chk.set_tooltip_text(_("Use buttons for path instead of links"));
@@ -720,7 +751,7 @@ public class Settings : Gtk.Box {
 
 			window.pathbar.refresh();
 		});
-	}
+	}*/
 	
 	private void add_pathbar_item_bookmarks(Gtk.Container box){
 

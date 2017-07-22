@@ -147,8 +147,7 @@ public class Main : GLib.Object {
 	public bool toolbar_item_devices = true;
 
 	public bool pathbar_unified = false;
-	public bool pathbar_use_buttons = false;
-	public bool pathbar_flat_buttons = false;
+	public PathbarStyle pathbar_style = PathbarStyle.COMPACT; 
 	public bool pathbar_show_bookmarks = true;
 	public bool pathbar_show_disks = true;
 	public bool pathbar_show_back = false;
@@ -615,9 +614,7 @@ public class Main : GLib.Object {
 		config.set_string_member("toolbar_item_devices", toolbar_item_devices.to_string());
 
 		config.set_string_member("pathbar_unified", pathbar_unified.to_string());
-		config.set_string_member("pathbar_use_buttons", pathbar_use_buttons.to_string());
-		config.set_string_member("pathbar_flat_buttons", pathbar_flat_buttons.to_string());
-
+		config.set_string_member("pathbar_style", pathbar_style.to_string());
 		config.set_string_member("pathbar_show_bookmarks", pathbar_show_bookmarks.to_string());
 		config.set_string_member("pathbar_show_disks", pathbar_show_disks.to_string());
 		config.set_string_member("pathbar_show_back", pathbar_show_back.to_string());
@@ -799,8 +796,10 @@ public class Main : GLib.Object {
 		toolbar_item_devices = json_get_bool(config, "toolbar_item_devices", toolbar_item_devices);
 
 		pathbar_unified = json_get_bool(config, "pathbar_unified", pathbar_unified);
-		pathbar_use_buttons = json_get_bool(config, "pathbar_use_buttons", pathbar_use_buttons);
-		pathbar_flat_buttons = json_get_bool(config, "pathbar_flat_buttons", pathbar_flat_buttons);
+
+		var text = json_get_string(config, "pathbar_style", "compact");
+		pathbar_style = PathbarStyle.from_string(text);
+
 		pathbar_show_bookmarks = json_get_bool(config, "pathbar_show_bookmarks", pathbar_show_bookmarks);
 		pathbar_show_disks = json_get_bool(config, "pathbar_show_disks", pathbar_show_disks);
 		pathbar_show_back = json_get_bool(config, "pathbar_show_back", pathbar_show_back);

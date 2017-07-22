@@ -184,6 +184,22 @@ namespace TeeJee.GtkHelper{
 		widget.hide();
 	}
 
+	public void gtk_suppress_context_menu(Gtk.Widget widget){
+		
+		// connect signal for shift+F10
+        widget.popup_menu.connect(() => {
+			return true; // suppress right-click menu
+		});
+
+        // connect signal for right-click
+		widget.button_press_event.connect((w, event) => {
+			if (event.button == 3) {
+				return true; // suppress right-click menu
+			}
+			return false;
+		});
+	}
+	
 	public TreeIter gtk_get_iter_next (Gtk.TreeModel model, Gtk.TreeIter iter_find){
 
 		bool return_next = false;
