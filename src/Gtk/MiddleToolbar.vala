@@ -33,7 +33,7 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
-public class MiddleToolbar : Gtk.Toolbar {
+public class MiddleToolbar : Gtk.Toolbar, IPaneActive {
 
 	private int icon_size_actual = 16;
 	private Gtk.Menu menu_history;
@@ -75,30 +75,6 @@ public class MiddleToolbar : Gtk.Toolbar {
 	private Gtk.Image img_open_left;
 	private Gtk.Image img_open_right;
 	
-	private FileViewList view{
-		get{
-			return pane.view;
-		}
-	}
-
-	private FileViewPane pane {
-		get{
-			return App.main_window.active_pane;
-		}
-	}
-	
-	private LayoutPanel panel {
-		get{
-			return pane.panel;
-		}
-	}
-	
-	private MainWindow window{
-		get{
-			return App.main_window;
-		}
-	}
-
 	// contruct
 	
 	public MiddleToolbar(){
@@ -387,7 +363,7 @@ public class MiddleToolbar : Gtk.Toolbar {
 	private void add_toolbar_button_for_terminal(){
 		
 		var button = new Gtk.ToolButton(null,null);
-		button.set_tooltip_text (_("Open Terminal Here"));
+		button.set_tooltip_text (_("Toggle terminal panel"));
 		button.is_important = true;
 		add(button);
 		btn_open_terminal = button;
@@ -398,8 +374,8 @@ public class MiddleToolbar : Gtk.Toolbar {
 		gtk_apply_css({ button }, "padding-left: 0px; padding-right: 0px;");
 		
 		button.clicked.connect(() => {
-			if (view == null) { return; };
-			view.open_terminal();
+			if (pane == null) { return; };
+			pane.terminal.toggle();
 		});
 	}
 	

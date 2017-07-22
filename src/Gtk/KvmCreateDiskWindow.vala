@@ -33,8 +33,8 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
-public class KvmCreateDiskWindow : Gtk.Window {
-	
+public class KvmCreateDiskWindow : Gtk.Window, IPaneActive {
+
 	private Gtk.Box vbox_main;
 	private Gtk.SizeGroup size_label;
 	private Gtk.SizeGroup size_combo;
@@ -51,31 +51,6 @@ public class KvmCreateDiskWindow : Gtk.Window {
 	private Gtk.ComboBox cmb_extension;
 	private Gtk.SpinButton spin_size;
 
-	private FileViewPane _pane;
-
-	private FileViewList? view{
-		get{
-			return (pane == null) ? null : pane.view;
-		}
-	}
-
-	private FileViewPane? pane {
-		get{
-			if (_pane != null){
-				return _pane;
-			}
-			else{
-				return App.main_window.active_pane;
-			}
-		}
-	}
-
-	private LayoutPanel? panel {
-		get{
-			return (pane == null) ? null : pane.panel;
-		}
-	}
-	
 	public KvmCreateDiskWindow(KvmTaskType _task_type,
 		Gtk.Window _window, string _dest_path, string _base_file_path, string _derived_file_path, string _disk_format) {
 		

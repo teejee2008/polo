@@ -38,8 +38,8 @@ public class DeviceContextMenu : Gtk.Menu {
 	private Gtk.MenuItem mi_open;
 	private Gtk.MenuItem mi_mount;
 	private Gtk.MenuItem mi_unmount;
-	private Gtk.MenuItem mi_lock;
-	private Gtk.MenuItem mi_unlock;
+	//private Gtk.MenuItem mi_lock;
+	//private Gtk.MenuItem mi_unlock;
 	private Gtk.MenuItem mi_sync;
 	private Gtk.MenuItem mi_flush;
 

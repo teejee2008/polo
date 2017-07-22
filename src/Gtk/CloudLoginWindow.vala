@@ -33,7 +33,7 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
-public class CloudLoginWindow : Gtk.Window {
+public class CloudLoginWindow : Gtk.Window, IPaneActive {
 	
 	private Gtk.Box vbox_main;
 	private Gtk.SizeGroup size_label;
@@ -51,31 +51,6 @@ public class CloudLoginWindow : Gtk.Window {
 	private Gtk.Button btn_add;
 	private Gtk.Button btn_cancel;
 	private Gtk.Button btn_finish;
-	
-	private FileViewPane _pane;
-
-	private FileViewList? view{
-		get{
-			return (pane == null) ? null : pane.view;
-		}
-	}
-
-	private FileViewPane? pane {
-		get{
-			if (_pane != null){
-				return _pane;
-			}
-			else{
-				return App.main_window.active_pane;
-			}
-		}
-	}
-
-	private LayoutPanel? panel {
-		get{
-			return (pane == null) ? null : pane.panel;
-		}
-	}
 	
 	public CloudLoginWindow(Gtk.Window _window) {
 		

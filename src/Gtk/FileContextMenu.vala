@@ -58,15 +58,28 @@ public enum FileActionType{
 
 public class FileContextMenu : Gtk.Menu {
 
+	// reference properties ----------
+
+	protected MainWindow window {
+		get { return App.main_window; }
+	}
+	
+	protected FileViewPane pane;
+
+	protected FileViewList view {
+		get{ return pane.view; }
+	}
+
+	protected LayoutPanel panel {
+		get { return pane.panel; }
+	}
+
+	// -------------------------------
+	
 	private Gee.ArrayList<FileItem> selected_items;
 	private FileItem? selected_item = null;
 	private bool is_trash = false;
 	private bool is_archive = false;
-
-	// parents
-	public FileViewList view;
-	public FileViewPane pane;
-	public MainWindow window;
 
 	public FileContextMenu(FileViewPane parent_pane){
 		
@@ -75,8 +88,6 @@ public class FileContextMenu : Gtk.Menu {
 		margin = 0;
 
 		pane = parent_pane;
-		view = pane.view;
-		window = App.main_window;
 
 		if (window.refresh_apps_pending){
 			window.refresh_apps_pending = false;

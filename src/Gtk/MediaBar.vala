@@ -35,9 +35,23 @@ using TeeJee.Misc;
 
 public class MediaBar : Gtk.Box {
 
-	private FileViewPane pane;
-	private FileViewList view;
-	private MainWindow window;
+	// reference properties ----------
+
+	protected MainWindow window {
+		get { return App.main_window; }
+	}
+	
+	protected FileViewPane pane;
+
+	protected FileViewList view {
+		get{ return pane.view; }
+	}
+
+	protected LayoutPanel panel {
+		get { return pane.panel; }
+	}
+
+	// -------------------------------
 
 	public MediaBar(FileViewPane parent_pane){
 		//base(Gtk.Orientation.VERTICAL, 6); // issue with vala
@@ -47,8 +61,6 @@ public class MediaBar : Gtk.Box {
 		log_debug("MediaBar()");
 
 		pane = parent_pane;
-		view = parent_pane.view;
-		window = App.main_window;
 
 		init_ui();
 

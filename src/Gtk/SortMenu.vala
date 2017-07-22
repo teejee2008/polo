@@ -35,18 +35,29 @@ using TeeJee.Misc;
 
 public class SortMenu : Gtk.Menu {
 
-	// parents
-	public FileViewList view;
-	public FileViewPane pane;
-	public MainWindow window;
+	// reference properties ----------
+
+	protected MainWindow window {
+		get { return App.main_window; }
+	}
+	
+	protected FileViewPane pane;
+
+	protected FileViewList view {
+		get{ return pane.view; }
+	}
+
+	protected LayoutPanel panel {
+		get { return pane.panel; }
+	}
+
+	// -------------------------------
 
 	public SortMenu(FileViewPane parent_pane){
 
 		log_debug("SortMenu()");
 
 		pane = parent_pane;
-		view = pane.view;
-		window = App.main_window;
 
 		build_menu();
 

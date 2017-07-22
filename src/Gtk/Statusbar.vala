@@ -35,6 +35,30 @@ using TeeJee.Misc;
 
 public class Statusbar : Gtk.Box {
 
+	// reference properties ----------
+
+	private MainWindow window{
+		get { return App.main_window; }
+	}
+	
+	FileViewPane _pane;
+	private FileViewPane? pane {
+		get{
+			if (_pane != null){ return _pane; }
+			else { return window.active_pane; }
+		}
+	}
+
+	private FileViewList? view{
+		get{ return (pane == null) ? null : pane.view; }
+	}
+
+	private LayoutPanel? panel {
+		get { return (pane == null) ? null : pane.panel; }
+	}
+
+	// -------------------------------
+	
 	private Gtk.Label lbl_file_count;
 	private Gtk.Label lbl_dir_count;
 	private Gtk.Label lbl_size;
@@ -52,38 +76,6 @@ public class Statusbar : Gtk.Box {
 	private Gtk.EventBox ebox_terminal;
 	
 	private double fs_bar_value = 0;
-
-	// parents
-	private FileViewPane _pane;
-
-	private FileViewList? view{
-		get{
-			return (pane == null) ? null : pane.view;
-		}
-	}
-
-	private FileViewPane? pane {
-		get{
-			if (_pane != null){
-				return _pane;
-			}
-			else{
-				return App.main_window.active_pane;
-			}
-		}
-	}
-
-	private LayoutPanel? panel {
-		get{
-			return (pane == null) ? null : pane.panel;
-		}
-	}
-
-	private MainWindow window{
-		get{
-			return App.main_window;
-		}
-	}
 
 	private bool is_global{
 		get{
@@ -721,9 +713,9 @@ public class Statusbar : Gtk.Box {
 			int files, dirs;
 			view.get_selected_counts(out files, out dirs);
 
-			lbl_dir_count.label = "%'ld / %'ld".printf(dirs, view.current_item.dir_count);
+			lbl_dir_count.label = "%'ld/%'ld".printf(dirs, view.current_item.dir_count);
 			
-			lbl_file_count.label = "%'ld / %'ld".printf(files, view.current_item.file_count);
+			lbl_file_count.label = "%'ld/%'ld".printf(files, view.current_item.file_count);
 		}
 		else{
 

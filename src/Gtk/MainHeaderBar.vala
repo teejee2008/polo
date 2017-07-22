@@ -33,33 +33,7 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
-public class MainHeaderBar : Gtk.HeaderBar {
-
-	// parents
-
-	private FileViewList? view{
-		get{
-			return (pane == null) ? null : pane.view;
-		}
-	}
-
-	private FileViewPane? pane {
-		get{
-			return App.main_window.active_pane;
-		}
-	}
-
-	private LayoutPanel? panel {
-		get{
-			return (pane == null) ? null : pane.panel;
-		}
-	}
-
-	private MainWindow window{
-		get{
-			return App.main_window;
-		}
-	}
+public class MainHeaderBar : Gtk.HeaderBar, IPaneActive {
 
 	private Gtk.ButtonBox crumbs;
 	//private Gtk.ScrolledWindow scrolled;

@@ -35,37 +35,23 @@ using TeeJee.Misc;
 
 public class TermBox : Gtk.Box {
 
-	// parents
-	private FileViewPane _pane;
+	// reference properties ----------
 
-	private FileViewList? view{
-		get{
-			return (pane == null) ? null : pane.view;
-		}
+	protected MainWindow window {
+		get { return App.main_window; }
+	}
+	
+	protected FileViewPane pane;
+
+	protected FileViewList view {
+		get{ return pane.view; }
 	}
 
-	private FileViewPane? pane {
-		get{
-			if (_pane != null){
-				return _pane;
-			}
-			else{
-				return App.main_window.active_pane;
-			}
-		}
+	protected LayoutPanel panel {
+		get { return pane.panel; }
 	}
 
-	private LayoutPanel? panel {
-		get{
-			return (pane == null) ? null : pane.panel;
-		}
-	}
-
-	private MainWindow window{
-		get{
-			return App.main_window;
-		}
-	}
+	// -------------------------------
 	
 	private Vte.Terminal term;
 	private Pid child_pid;
@@ -85,7 +71,7 @@ public class TermBox : Gtk.Box {
 
 		//var timer = timer_start();
 		
-		_pane = parent_pane;
+		pane = parent_pane;
 		
 		init_ui();
 

@@ -33,42 +33,10 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
-public class ColumnSelectionBox : Gtk.Box {
+public class ColumnSelectionBox : Gtk.Box, IPaneActive {
 
 	private Gtk.TreeView treeview;
 	private bool popup = false;
-	
-	// parents
-	private FileViewPane _pane;
-
-	private FileViewList? view{
-		get{
-			return (pane == null) ? null : pane.view;
-		}
-	}
-
-	private FileViewPane? pane {
-		get{
-			if (_pane != null){
-				return _pane;
-			}
-			else{
-				return App.main_window.active_pane;
-			}
-		}
-	}
-
-	private LayoutPanel? panel {
-		get{
-			return (pane == null) ? null : pane.panel;
-		}
-	}
-
-	private MainWindow window{
-		get{
-			return App.main_window;
-		}
-	}
 	
 	public Gtk.Window parent_window;
 

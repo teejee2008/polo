@@ -35,6 +35,16 @@ using TeeJee.Misc;
 
 public class FileViewTab : Gtk.Box {
 
+	// reference properties ----------
+
+	protected MainWindow window {
+		get { return App.main_window; }
+	}
+	
+	public LayoutPanel panel; // public, will be referenced by pane
+
+	// -------------------------------
+	
 	private Gtk.Label tab_label;
 	private Gtk.Entry tab_entry;
 	private Gtk.EventBox ebox_close;
@@ -47,8 +57,6 @@ public class FileViewTab : Gtk.Box {
 
 	// parents
 	public Gtk.Notebook notebook;
-	public LayoutPanel panel;
-	private MainWindow window;
 
 	public FileViewTab(LayoutPanel parent_panel, Gtk.Notebook parent_notebook){
 		//base(Gtk.Orientation.VERTICAL, 6); // issue with vala
@@ -58,7 +66,7 @@ public class FileViewTab : Gtk.Box {
 
 		panel = parent_panel;
 		notebook = parent_notebook;
-		window =  App.main_window;
+
 		// pane is set by init_tab()
 		
 		//var timer = timer_start();

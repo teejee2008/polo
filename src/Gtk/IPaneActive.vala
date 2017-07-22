@@ -1,5 +1,6 @@
+
 /*
- * ProgressWindow.vala
+ * IPaneActive.vala
  *
  * Copyright 2017 Tony George <teejeetech@gmail.com>
  *
@@ -21,45 +22,25 @@
  *
  */
 
+public interface IPaneActive {
 
-using Gtk;
-using Gee;
-
-using TeeJee.Logging;
-using TeeJee.FileSystem;
-using TeeJee.JsonHelper;
-using TeeJee.ProcessHelper;
-using TeeJee.GtkHelper;
-using TeeJee.System;
-using TeeJee.Misc;
-
-public class ProgressWindow : Window {
+	// reference properties ---------------------------
 	
-	private Gtk.Box vbox_main;
+	public MainWindow window{
+		get{ return App.main_window; }
+	}
 	
-	private uint timerID = 0;
-	private double progress_prev;
-
-	private FileItem archive;
+	public FileViewPane? pane {
+		get{ return window.active_pane; }
+	}
 	
-	//actions
-	private Gtk.Box hbox_actions;
-	private Gtk.Button btn_background;
-	private Gtk.Button btn_pause;
-	private Gtk.Button btn_stop;
-	private Gtk.Button btn_finish;
+	public FileViewList? view{
+		get{ return (pane == null) ? null : pane.view; }
+	}
 
-	//window
-	private int def_width = 460;
-	private uint tmr_init = 0;
-	private uint tmr_task = 0;
-	private bool task_is_running = false;
+	public LayoutPanel? panel {
+		get{ return (pane == null) ? null : pane.panel; }
+	}
 
-	//public ProgressWindow() {
-	//	destroy.connect(Gtk.main_quit);
-	//	init_window();
-	//}
-
+	// ------------------------------------------------
 }
-
-

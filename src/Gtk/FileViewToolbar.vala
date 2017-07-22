@@ -43,7 +43,7 @@ public enum ToolbarItem{
 	NEW_TAB
 }
 
-public class FileViewToolbar : Gtk.Toolbar {
+public class FileViewToolbar : Gtk.Toolbar, IPaneActive {
 
 	private int icon_size_actual = 16;
 	private Gtk.Menu menu_history;
@@ -89,31 +89,6 @@ public class FileViewToolbar : Gtk.Toolbar {
 	//private Gtk.Image img_wizard;
 	private Gtk.Image img_about;
 	private Gtk.Image img_donate;
-
-
-	private FileViewList? view{
-		get{
-			return (pane == null) ? null : pane.view;
-		}
-	}
-
-	private FileViewPane? pane {
-		get{
-			return App.main_window.active_pane;
-		}
-	}
-
-	private LayoutPanel? panel {
-		get{
-			return (pane == null) ? null : pane.panel;
-		}
-	}
-
-	private MainWindow window{
-		get{
-			return App.main_window;
-		}
-	}
 
 	// contruct
 

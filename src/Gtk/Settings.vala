@@ -33,7 +33,7 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
-public class Settings : Gtk.Box {
+public class Settings : Gtk.Box, IPaneActive {
 
 	private Gtk.Box header_box;
 	private Gtk.StackSwitcher switcher;
@@ -65,10 +65,6 @@ public class Settings : Gtk.Box {
 	private Gee.ArrayList<int> iconview_icon_sizes;
 	private Gee.ArrayList<int> tileview_icon_sizes;
 
-	// parents
-	public FileViewList view;
-	public FileViewPane pane;
-	public MainWindow window;
 	public Gtk.Window parent_window;
 
 	// signals
@@ -80,10 +76,6 @@ public class Settings : Gtk.Box {
 		margin = 6;
 
 		log_debug("Settings()");
-
-		window = App.main_window;
-		pane = window.active_pane;
-		view = pane.view;
 
 		parent_window = _parent_window;
 

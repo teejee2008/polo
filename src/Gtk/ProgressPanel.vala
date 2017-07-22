@@ -35,20 +35,30 @@ using TeeJee.Misc;
 
 public abstract class ProgressPanel : Gtk.Box {
 
+	// reference properties ----------
+
+	protected MainWindow window {
+		get { return App.main_window; }
+	}
+	
+	protected FileViewPane pane;
+
+	protected FileViewList view {
+		get{ return pane.view; }
+	}
+
+	protected LayoutPanel panel {
+		get { return pane.panel; }
+	}
+
+	// -------------------------------
+	
 	public Gee.ArrayList<FileItem> items;
 	public FileActionType action_type;
 	public FileItem source;
 	public FileItem destination;
 
 	protected Gtk.Box contents;
-
-	// parents
-	protected FileViewPane pane;
-	protected MainWindow window {
-		get {
-			return App.main_window;
-		}
-	}
 
 	protected bool aborted = false;
 	protected uint tmr_status = 0;
