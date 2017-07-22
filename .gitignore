@@ -5,3 +5,5 @@ installer/i386
 installer/*.deb
 installer/*.run
 .bzr/
+*.c
+*.o

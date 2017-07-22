@@ -2,7 +2,7 @@
 /*
  * GtkBookmark.vala
  *
- * Copyright 2017 Tony George <teejee2008@gmail.com>
+ * Copyright 2017 Tony George <teejeetech@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,9 +34,14 @@ public class GtkBookmark : GLib.Object {
 	public string uri = "";
 	public string name = "";
 
-	public string display_name {
-		owned get {
-			return uri_decode(name);
+	public string path {
+		owned get{
+			if (uri.has_prefix("file://")){
+				return uri_decode(uri.replace("file://",""));
+			}
+			else{
+				return uri;
+			}
 		}
 	}
 
@@ -48,15 +53,7 @@ public class GtkBookmark : GLib.Object {
 	private static const string config_path_gtk_template = "%s/.config/gtk-3.0/bookmarks";
 	private static const string config_path_custom_template = "%s/.config/%s-bookmarks";
 	private static string config_file;
-
-	// properties
 	
-	public string path {
-		owned get{
-			return uri_decode(uri.replace("file://",""));
-		}
-	}
-
 	// constructors
 	
 	public GtkBookmark(string _uri, string _name = ""){
@@ -83,6 +80,9 @@ public class GtkBookmark : GLib.Object {
 		if (file_exists(config_file)){
 			
 			log_debug("Reading bookmarks: %s".printf(config_file));
+
+			// sample:
+			// file:///path/to/folder Bookmark name with spaces
 			
 			foreach(var line in file_read(config_file).split("\n")){
 			
@@ -94,16 +94,22 @@ public class GtkBookmark : GLib.Object {
 				string bm_name = "";
 				for(int i = 0; i < parts.length; i++){
 					if (i == 0){
-						bm_uri = parts[i];
+						bm_uri = parts[i]; // first part is the uri
 					}
 					else{
+						if (bm_name.length > 0) { bm_name += " "; }
 						bm_name += parts[i];
 					}
 				}
 
+				if (bm_name.length > 0){
+					bm_name = file_basename(bm_uri);
+					bm_name = uri_decode(bm_name);
+				}
+
 				var bm = new GtkBookmark(bm_uri, bm_name);
 				bookmarks.add(bm);
-				//log_debug("Read bookmark: %s".printf(bm.uri));
+				log_debug("Bookmark: uri: %s, name: %s".printf(bm.uri, bm.name));
 			}
 		}
 		else{
@@ -181,18 +187,24 @@ public class GtkBookmark : GLib.Object {
 	
 	// instance methods
 
-	public bool path_exists(){
-		return file_or_dir_exists(uri);
+	public bool exists(){
+		if (uri.has_prefix("file://")){
+			return uri_exists(uri);
+		}
+		else{
+			return file_or_dir_exists(uri);
+		}
 	}
 
 	public Gdk.Pixbuf? get_icon(int icon_size = 16){
-		if (path_exists()){
+		
+		if (exists()){
 
 			if (uri == "trash:///"){
 				return IconManager.lookup("user-trash",16);
 			}
 			else{
-				var item = new FileItem.from_path(uri);
+				var item = new FileItem.from_path(path);
 				return item.get_icon(icon_size, true, false);
 			}
 		}

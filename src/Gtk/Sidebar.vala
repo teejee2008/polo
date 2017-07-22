@@ -35,6 +35,30 @@ using TeeJee.Misc;
 
 public class Sidebar : Gtk.Box {
 
+	// reference properties ----------
+
+	private MainWindow window{
+		get { return App.main_window; }
+	}
+	
+	FileViewPane _pane;
+	private FileViewPane? pane {
+		get{
+			if (_pane != null){ return _pane; }
+			else { return window.active_pane; }
+		}
+	}
+
+	private FileViewList? view{
+		get{ return (pane == null) ? null : pane.view; }
+	}
+
+	private LayoutPanel? panel {
+		get { return (pane == null) ? null : pane.panel; }
+	}
+
+	// -------------------------------
+	
 	private Gtk.ListBox listbox;
 	private Gtk.ScrolledWindow scrolled;
 	private Gtk.ListBoxRow current_row;
@@ -51,38 +75,6 @@ public class Sidebar : Gtk.Box {
 
 	public Gee.ArrayList<string> collapsed_sections = new Gee.ArrayList<string>();
 	
-	// parents
-
-	private FileViewList view{
-		get{
-			return pane.view;
-		}
-	}
-
-	FileViewPane _pane;
-	private FileViewPane pane {
-		get{
-			if (_pane != null){
-				return _pane;
-			}
-			else{
-				return App.main_window.active_pane;
-			}
-		}
-	}
-
-	private LayoutPanel panel {
-		get{
-			return pane.panel;
-		}
-	}
-
-	private MainWindow window{
-		get{
-			return App.main_window;
-		}
-	}
-
 	private Gtk.Popover? popover;
 	private string popup_mode;
 
@@ -390,6 +382,11 @@ public class Sidebar : Gtk.Box {
 					foreach(var bm in GtkBookmark.bookmarks){
 						add_bookmark(bm, true);
 					}
+					
+					foreach(var mount in GvfsMounts.get_mounts(App.user_id)){
+						var bm = new GtkBookmark(mount.file_path, mount.display_name);
+						add_bookmark(bm, true);
+					}
 				}
 			}
 		}
@@ -692,12 +689,13 @@ public class Sidebar : Gtk.Box {
 			image.pixbuf = bm.get_icon();
 			image.margin_left = 12;
 
-			bool exists = bm.path_exists();
+			bool exists = bm.exists();
 			if (!exists){
 				label.sensitive = false;
 				row.set_tooltip_text(_("Location not found") + ": %s".printf(bm.path));
 			}
 			else{
+				label.sensitive = true;
 				row.set_tooltip_text("%s".printf(bm.path));
 			}
 
@@ -928,7 +926,7 @@ public class Sidebar : Gtk.Box {
 		});
 
 
-		if (!bm.path_exists()){
+		if (!bm.exists()){
 			ebox.sensitive = false;
 		}
 

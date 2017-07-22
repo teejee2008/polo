@@ -88,7 +88,7 @@ public class BookmarksMenu : Gtk.Menu, IPaneActive {
 
 		gtk_menu_add_separator(this);
 
-		add_bookmark(new GtkBookmark("file:///","Filesystem"));
+		add_bookmark(new GtkBookmark("file:///", "Filesystem"));
 		add_bookmark(new GtkBookmark("file://" + App.user_home, "Home"));
 		add_bookmark(new GtkBookmark("file://" + path_combine(App.user_home,"Desktop"), "Desktop"));
 		add_bookmark(new GtkBookmark("trash:///", "Trash"));

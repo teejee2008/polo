@@ -62,7 +62,7 @@ public class SidebarItem : GLib.Object {
 		type = SidebarItemType.BOOKMARK;
 		bookmark = _bookmark;
 
-		name = ellipsize(bookmark.display_name, 20);
+		name = ellipsize(bookmark.name, 20);
 		tooltip = bookmark.path;
 	}
 

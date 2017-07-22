@@ -43,18 +43,43 @@ namespace TeeJee.FileSystem{
 	// path helpers ----------------------------
 	
 	public string file_parent(string file_path){
+
+		string text = "";
+		var arr = file_path.split("/");
+		int index = 0;
 		
-		return File.new_for_path(file_path).get_parent().get_path();
+		while (index < arr.length - 1){
+			
+			if (index == 0){
+				// append first part without / prefix
+				// appends empty string in case of /path/file and non-empty string in case of path/file
+				text += "%s".printf(arr[index++]);
+				continue;
+			}
+
+			text += "/%s".printf(arr[index++]);
+		}
+		return text;
+		//return File.new_for_path(file_path).get_parent().get_path();
 	}
 
 	public string file_basename(string file_path){
 		
-		return File.new_for_path(file_path).get_basename();
+		var arr = file_path.split("/");
+		
+		if (arr.length == 1){
+			return file_path;
+		}
+		else{
+			return arr[arr.length - 1];
+		}
+		
+		//return File.new_for_path(file_path).get_basename();
 	}
 
 	public string file_get_title(string file_path){
 		
-		string file_name = File.new_for_path(file_path).get_basename();
+		string file_name = file_basename(file_path);
 
 		int end = file_name.length - file_get_extension(file_path).length;
 		return file_name[0:end];
@@ -62,7 +87,7 @@ namespace TeeJee.FileSystem{
 
 	public string file_get_extension(string file_path){
 		
-		string file_name = File.new_for_path(file_path).get_basename();
+		string file_name = file_basename(file_path);
 
 		string[] parts = file_name.split(".");
 
@@ -109,7 +134,17 @@ namespace TeeJee.FileSystem{
 		
 		/* check if item exists on disk*/
 
-		var item = File.parse_name(item_path);
+		var item = File.new_for_path(item_path);
+		return item.query_exists();
+	}
+
+	public bool uri_exists(string uri){
+		
+		/* check if resource exists at uri */
+
+		//log_debug("uri: %s".printf(uri));
+
+		var item = File.new_for_uri(uri);
 		return item.query_exists();
 	}
 	
@@ -127,7 +162,7 @@ namespace TeeJee.FileSystem{
 
 	public bool file_delete(string file_path, Gtk.Window? window = null, out string error_msg = null){
 		
-		var file = File.parse_name(file_path);
+		var file = File.new_for_path(file_path);
 		if (!file.query_exists()){
 			return true;
 		}

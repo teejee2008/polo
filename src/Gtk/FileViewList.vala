@@ -21,7 +21,6 @@
  *
  */
 
-
 using Gtk;
 using Gee;
 
@@ -386,7 +385,7 @@ public class FileViewList : Gtk.Box {
 					return true;
 				}
 				else{
-					tooltip.set_markup("");
+					tooltip.set_markup(null);
 					return true;
 				}
 			}
@@ -416,7 +415,7 @@ public class FileViewList : Gtk.Box {
 				return true;
 			}
 			else{
-				tooltip.set_markup("");
+				tooltip.set_markup(null);
 				return true;
 			}
 		}
@@ -429,6 +428,9 @@ public class FileViewList : Gtk.Box {
 		if (column == col_indicator){
 			if (item.is_symlink){
 				return "%s: %s".printf(_("Link to"), item.symlink_target);
+			}
+			else{
+				return _("Item is not a symbolic link");
 			}
 		}
 		else if (column == col_access){
@@ -447,6 +449,15 @@ public class FileViewList : Gtk.Box {
 		}
 		else if (column == col_name){
 			return item.tile_tooltip;
+		}
+		else if (column == col_owner){
+			return "%s".printf(_("User"));
+		}
+		else if (column == col_group){
+			return "%s".printf(_("Group"));
+		}
+		else if (column == col_permissions){
+			return "%s".printf(_("Permissions"));
 		}
 
 		return "";
@@ -644,18 +655,16 @@ public class FileViewList : Gtk.Box {
 			FileItem item;
 			model.get (iter, FileViewColumn.ITEM, out item, -1);
 
-			if (!item.is_dummy){
-				if (item.modified != null) {
-					crt.text = item.modified.format ("%Y-%m-%d %H:%M");
-				}
-				else {
-					crt.text = "--";
-				}
-			}
-			else{
+			if (item.is_dummy){
 				crt.text = "";
 			}
-
+			else if (item.modified == null) {
+				crt.text = "--";
+			}
+			else{
+				crt.text = item.modified.format ("%Y-%m-%d %H:%M");
+			}
+			
 			crt.scale = listview_font_scale;
 		});
 
@@ -690,22 +699,18 @@ public class FileViewList : Gtk.Box {
 			FileItem item;
 			model.get (iter, FileViewColumn.ITEM, out item, -1);
 
-			if (!item.is_dummy){
-				if (item.size_compressed > 0) {
-					crt.text = format_file_size(item.size_compressed);
-				}
-				else {
-					crt.text = "--";
-				}
+			if (item.is_dummy){
+				crt.text = "";
+			}
+			else if (item.size_compressed == 0) {
+				crt.text = "--";
 			}
 			else{
-				crt.text = "";
+				crt.text = format_file_size(item.size_compressed);
 			}
 
 			crt.scale = listview_font_scale;
 		});
-
-
 	}
 
 	private void add_col_owner() {
@@ -736,18 +741,16 @@ public class FileViewList : Gtk.Box {
 			FileItem item;
 			model.get (iter, FileViewColumn.ITEM, out item, -1);
 
-			if (!item.is_dummy){
-				if (item.owner_user.length > 0) {
-					crt.text = item.owner_user;
-				}
-				else {
-					crt.text = "--";
-				}
-			}
-			else{
+			if (item.is_dummy){
 				crt.text = "";
 			}
-
+			else if (item.owner_user.length == 0) {
+				crt.text = "--";
+			}
+			else{
+				crt.text = item.owner_user;
+			}
+			
 			crt.scale = listview_font_scale;
 		});
 
@@ -781,16 +784,14 @@ public class FileViewList : Gtk.Box {
 			FileItem item;
 			model.get (iter, FileViewColumn.ITEM, out item, -1);
 
-			if (!item.is_dummy){
-				if (item.owner_group != null) {
-					crt.text = item.owner_group;
-				}
-				else {
-					crt.text = "--";
-				}
+			if (item.is_dummy){
+				crt.text = "";
+			}
+			else if (item.owner_group.length == 0) {
+				crt.text = "--";
 			}
 			else{
-				crt.text = "";
+				crt.text = item.owner_group;
 			}
 
 			crt.scale = listview_font_scale;
@@ -826,16 +827,14 @@ public class FileViewList : Gtk.Box {
 			FileItem item;
 			model.get (iter, FileViewColumn.ITEM, out item, -1);
 
-			if (!item.is_dummy){
-				if (item.permissions.length > 0) {
-					crt.text = item.permissions;
-				}
-				else {
-					crt.text = "--";
-				}
+			if (item.is_dummy){
+				crt.text = "";
+			}
+			else if (item.permissions.length == 0) {
+				crt.text = "--";
 			}
 			else{
-				crt.text = "";
+				crt.text = item.permissions;
 			}
 
 			crt.scale = listview_font_scale;
@@ -871,8 +870,16 @@ public class FileViewList : Gtk.Box {
 			FileItem item;
 			model.get (iter, FileViewColumn.ITEM, out item, -1);
 
-			crt.text = item.access_flags;
-
+			if (item.is_dummy){
+				crt.text = "";
+			}
+			else if (item.access_flags.length == 0) {
+				crt.text = "--";
+			}
+			else{
+				crt.text = item.access_flags;
+			}
+			
 			crt.scale = listview_font_scale;
 		});
 
@@ -906,7 +913,15 @@ public class FileViewList : Gtk.Box {
 			FileItem item;
 			model.get (iter, FileViewColumn.ITEM, out item, -1);
 
-			crt.text = item.content_type;
+			if (item.is_dummy){
+				crt.text = "";
+			}
+			else if (item.content_type.length == 0) {
+				crt.text = "--";
+			}
+			else{
+				crt.text = item.content_type;
+			}
 
 			crt.scale = listview_font_scale;
 		});
@@ -941,7 +956,15 @@ public class FileViewList : Gtk.Box {
 			FileItem item;
 			model.get (iter, FileViewColumn.ITEM, out item, -1);
 
-			crt.text = item.content_type_desc;
+			if (item.is_dummy){
+				crt.text = "";
+			}
+			else if (item.content_type_desc.length == 0) {
+				crt.text = "--";
+			}
+			else{
+				crt.text = item.content_type_desc;
+			}
 
 			crt.scale = listview_font_scale;
 		});
@@ -976,18 +999,16 @@ public class FileViewList : Gtk.Box {
 			FileItem item;
 			model.get (iter, FileViewColumn.ITEM, out item, -1);
 
-			if (!item.is_dummy){
-				if (item.owner_group != null) {
-					crt.text = item.checksum_md5;
-				}
-				else {
-					crt.text = "--";
-				}
-			}
-			else{
+			if (item.is_dummy){
 				crt.text = "";
 			}
-
+			else if (item.checksum_md5.length == 0) {
+				crt.text = "--";
+			}
+			else{
+				crt.text = item.checksum_md5;
+			}
+			
 			crt.scale = listview_font_scale;
 		});
 
@@ -1021,8 +1042,16 @@ public class FileViewList : Gtk.Box {
 			FileItem item;
 			model.get (iter, FileViewColumn.ITEM, out item, -1);
 
-			crt.text = item.symlink_target;
-
+			if (item.is_dummy){
+				crt.text = "";
+			}
+			else if (item.symlink_target.length == 0) {
+				crt.text = "--";
+			}
+			else{
+				crt.text = item.symlink_target;
+			}
+			
 			crt.scale = listview_font_scale;
 		});
 
@@ -1056,8 +1085,16 @@ public class FileViewList : Gtk.Box {
 			FileItem item;
 			model.get (iter, FileViewColumn.ITEM, out item, -1);
 
-			crt.text = item.trash_original_path;
-
+			if (item.is_dummy){
+				crt.text = "";
+			}
+			else if (item.trash_original_path.length == 0) {
+				crt.text = "--";
+			}
+			else{
+				crt.text = item.trash_original_path;
+			}
+			
 			crt.scale = listview_font_scale;
 		});
 
@@ -1091,13 +1128,16 @@ public class FileViewList : Gtk.Box {
 			FileItem item;
 			model.get (iter, FileViewColumn.ITEM, out item, -1);
 
-			if (item.trash_deletion_date != null) {
-				crt.text = item.trash_deletion_date.format ("%Y-%m-%d %H:%M");
+			if (item.is_dummy){
+				crt.text = "";
 			}
-			else {
+			else if (item.trash_deletion_date == null) {
 				crt.text = "--";
 			}
-
+			else{
+				crt.text = item.trash_deletion_date.format ("%Y-%m-%d %H:%M");
+			}
+			
 			crt.scale = listview_font_scale;
 		});
 
@@ -2001,6 +2041,7 @@ public class FileViewList : Gtk.Box {
 	public FileItem set_view_item(FileItem item, bool update_history = true){
 
 		log_debug("FileViewList: set_view_item(%s): %d".printf(item.file_uri, item.children.size));
+		log_debug(string.nfill(80, '-'));
 
 		log_trace("view_changed: %s ------------------------".printf(item.file_uri));
 		
@@ -2023,22 +2064,9 @@ public class FileViewList : Gtk.Box {
 			return previous_item;
 		}
 
-		log_debug("media=%s, photos=%d, videos=%d".printf(
-			current_item.is_media_directory.to_string(), current_item.count_photos, current_item.count_videos));
+		set_view_mode_for_location();
 
-		if (has_media && mediaview_include && !mediaview_exclude){
-			view_mode = ViewMode.MEDIA;
-			//log_debug("changed view mode: %s".printf(view_mode.to_string()));
-		}
-		else{
-			view_mode = view_mode_user;
-			//log_debug("changed view mode: %s".printf(view_mode.to_string()));
-		}
-
-		//log_debug("view_mode: %s, %s".printf(view_mode.to_string(), view_mode_user.to_string()));
-
-		cancel_monitors();
-		view_refresher_cancelled = true;
+		//view_refresher_cancelled = true;
 		
 		refresh(false); // do not requery
 
@@ -2053,31 +2081,52 @@ public class FileViewList : Gtk.Box {
 		return current_item;
 	}
 
-	private bool query_items(){
+	private void set_view_mode_for_location(){
 
-		if (current_item != null){
+		if (current_item == null){ return; }
+		
+		log_debug("media=%s, photos=%d, videos=%d".printf(
+			current_item.is_media_directory.to_string(), current_item.count_photos, current_item.count_videos));
 
-			//var cached = TreeModelCache.find_file_item(current_item.file_path);
-
-			//if (cached == null){
-
-				var timer = timer_start();
-
-				if (current_item.is_trash){
-					App.trashcan.query_items(true);
-					current_item = App.trashcan;
-				}
-				else if (current_item.is_archive && (current_item.children.size == 0)){
-					return list_archive(current_item);
-				}
-				else{
-					current_item.query_children(1);
-				}
-
-				log_trace("FileViewList: query_children(): %s".printf(timer_elapsed_string(timer)));
-				log_debug("FileViewList: set_view_item: query_children: %d".printf(current_item.children.size));
-			//}
+		if (has_media && mediaview_include && !mediaview_exclude){
+			view_mode = ViewMode.MEDIA;
+			//log_debug("changed view mode: %s".printf(view_mode.to_string()));
 		}
+		else{
+			view_mode = view_mode_user;
+			//log_debug("changed view mode: %s".printf(view_mode.to_string()));
+		}
+
+		//log_debug("view_mode: %s, %s".printf(view_mode.to_string(), view_mode_user.to_string()));
+	}
+
+	private bool query_items(){
+		
+		if (current_item == null){ return true; }
+
+		log_debug("FileViewList: query_items()");
+
+		//var cached = TreeModelCache.find_file_item(current_item.file_path);
+
+		//if (cached == null){
+
+			var timer = timer_start();
+
+			if (current_item.is_trash){
+				App.trashcan.query_items(true);
+				current_item = App.trashcan;
+			}
+			else if (current_item.is_archive && (current_item.children.size == 0)){
+				return list_archive(current_item);
+			}
+			else{
+				current_item.query_children(1);
+			}
+
+			log_trace("FileViewList: query_items(): %s".printf(timer_elapsed_string(timer)));
+
+			log_debug("FileViewList: query_items(): %d".printf(current_item.children.size));
+		//}
 
 		return true;
 	}
@@ -2438,7 +2487,7 @@ public class FileViewList : Gtk.Box {
 		if ((view_mode == ViewMode.ICONS) || (view_mode == ViewMode.TILES) || (view_mode == ViewMode.MEDIA)){
 			refresh_iconview();
 		}
-
+  
 		window.layout_box.restore_pane_positions();
 
 		if ((view_mode != ViewMode.LIST) && thumbnail_update_is_required && window.window_is_ready){
@@ -2902,7 +2951,7 @@ public class FileViewList : Gtk.Box {
 	// cycle video thumbnails --------------------
 
 	private void start_thumbnail_cycler(){
-
+		return;
 		if (!video_thumb_cycling_in_progress){
 			try {
 				//start thread for thumbnail updation
@@ -2968,7 +3017,8 @@ public class FileViewList : Gtk.Box {
 	private bool view_refresher_cancelled = false;
 	
 	private void start_view_redraw(){
-
+		return;
+		
 		if (!view_refresher_in_progress){
 			try {
 				//start thread for view refresh
