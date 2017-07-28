@@ -50,7 +50,6 @@ public class TrashCan : FileItem {
 
 	public TrashCan(int _user_id, string _user_name, string _user_home) {
 		this.is_trash = true;
-		this.file_path_prefix = "trash://";
 		this.user_id = _user_id.to_string();
 		this.user_name = _user_name;
 		this.user_home = _user_home;
@@ -139,7 +138,7 @@ public class TrashCan : FileItem {
 
 	private void remove_orphaned_trashinfo(string trash_path){
 
-		log_debug("Trash: remove_orphaned_trashinfo(): %s".printf(trash_path));
+		//log_debug("Trash: remove_orphaned_trashinfo(): %s".printf(trash_path));
 		
 		string dir_files = path_combine(trash_path, "files");
 		string dir_info = path_combine(trash_path, "info");
@@ -236,15 +235,19 @@ public class TrashCan : FileItem {
 		//log_debug("trashed on  : %s".printf(item.trash_deletion_date.format ("%Y-%m-%d %H:%M")));
 		//log_debug("trashed type: %s".printf(item.content_type));
 
-		if ((trash_size == 0) && (item.file_type == FileType.DIRECTORY)){
+		if (trash_size == 0) {
+			if (item.file_type == FileType.DIRECTORY){
+				log_msg("Trash: Calculating trashed folder size: %s".printf(trash_file));
+				trash_size = dir_size(trash_file);
+				item._size = trash_size;
+			}
+			else{
+				trash_size = file_get_size(trash_file);
+				item._size = trash_size;
+			}
 
-			log_msg("Trash: Calculating trashed folder size: %s".printf(trash_file), true);
-			
-			trash_size = dir_size(trash_file);
-			item._size = trash_size;
-			
 			if (file_exists(info_file)){
-				
+				log_msg("Trash: Updating trashinfo file: %s".printf(info_file));
 				if (!file_info_text.has_suffix("\n")){
 					file_info_text += "\n";
 				}
@@ -254,6 +257,8 @@ public class TrashCan : FileItem {
 				//chown(info_file, App.user_name, App.user_name, false, null);
 			}
 		}
+
+		log_debug("item: %s, %s".printf(orig_path, format_file_size(trash_size)));
 
 		this.trash_can_size += trash_size;
 		//log_debug("trash_can_size += %lld".printf(trash_size));
