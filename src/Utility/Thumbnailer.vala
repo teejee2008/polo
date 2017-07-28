@@ -585,7 +585,7 @@ public class ThumbTask : GLib.Object {
 
 	public string file_uri {
 		owned get {
-			return file_item.file_path_prefix + file_item.file_path;
+			return file_item.file_uri;
 		}
 	}
 }

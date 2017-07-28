@@ -189,8 +189,14 @@ public class Sidebar : Gtk.Box {
 		case SidebarItemType.BOOKMARK:
 
 			log_debug("sidebar: bookmark_activated: %s".printf(item.bookmark.path));
-			pane.view.set_view_path(item.bookmark.path);
 
+			if (item.bookmark.path.length > 0){
+				pane.view.set_view_path(item.bookmark.path);
+			}
+			else{
+				pane.view.set_view_path(item.bookmark.uri);
+			}
+			
 			if (popup){
 				popover.hide();
 				//window.sidebar.refresh(); // not needed
@@ -206,9 +212,10 @@ public class Sidebar : Gtk.Box {
 			if (pane.view.current_item != null){
 
 				var path = pane.view.current_item.file_path;
+				var uri = pane.view.current_item.file_uri;
 
-				if (!GtkBookmark.is_bookmarked(path) && (path != "/") && (path != App.user_home)){
-					GtkBookmark.add_bookmark_from_path(path);
+				if (!GtkBookmark.is_bookmarked(uri) && (path != "/") && (path != App.user_home)){
+					GtkBookmark.add_bookmark(uri);
 				}
 			}
 
@@ -228,9 +235,10 @@ public class Sidebar : Gtk.Box {
 			if (pane.view.current_item != null){
 
 				var path = pane.view.current_item.file_path;
+				var uri = pane.view.current_item.file_uri;
 
-				if (GtkBookmark.is_bookmarked(path) && (path != "/") && (path != App.user_home)){
-					GtkBookmark.remove_bookmark_by_path(path);
+				if (GtkBookmark.is_bookmarked(uri) && (path != "/") && (path != App.user_home)){
+					GtkBookmark.remove_bookmark(uri);
 				}
 			}
 
@@ -369,6 +377,14 @@ public class Sidebar : Gtk.Box {
 					add_bookmark(new GtkBookmark("file://" + App.user_dirs.user_desktop, _("Desktop")));
 					add_bookmark(new GtkBookmark("file://" + App.user_dirs.user_public, _("Public")));
 					add_bookmark(new GtkBookmark("trash:///", _("Trash") + " (%s)".printf(format_file_size(App.trashcan.trash_can_size))));
+				
+					foreach(var mount in GvfsMounts.get_mounts(App.user_id)){
+						var bm = new GtkBookmark(mount.file_uri, mount.display_name);
+						add_bookmark(bm);
+					}
+
+					var bm = new GtkBookmark("network:///", _("Network"));
+					add_bookmark(bm);
 				}
 			}
 
@@ -380,11 +396,6 @@ public class Sidebar : Gtk.Box {
 				
 				if (node_expanded[item.node_key]){
 					foreach(var bm in GtkBookmark.bookmarks){
-						add_bookmark(bm, true);
-					}
-					
-					foreach(var mount in GvfsMounts.get_mounts(App.user_id)){
-						var bm = new GtkBookmark(mount.file_path, mount.display_name);
 						add_bookmark(bm, true);
 					}
 				}
@@ -692,11 +703,11 @@ public class Sidebar : Gtk.Box {
 			bool exists = bm.exists();
 			if (!exists){
 				label.sensitive = false;
-				row.set_tooltip_text(_("Location not found") + ": %s".printf(bm.path));
+				row.set_tooltip_text(_("Location not found") + ": %s".printf(bm.uri));
 			}
 			else{
 				label.sensitive = true;
-				row.set_tooltip_text("%s".printf(bm.path));
+				row.set_tooltip_text("%s".printf(bm.uri));
 			}
 
 			label.label = item.name;
@@ -990,7 +1001,7 @@ public class Sidebar : Gtk.Box {
 
 		ebox.button_press_event.connect((event)=>{
 			listbox.remove(row);
-			GtkBookmark.remove_bookmark_by_path(bm.path);
+			GtkBookmark.remove_bookmark(bm.uri);
 			return true;
 		});
 	}

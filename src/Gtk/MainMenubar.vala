@@ -138,6 +138,10 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 
 		gtk_menu_add_separator(submenu);
 
+		add_connect_to_server(submenu);
+
+		gtk_menu_add_separator(submenu);
+
 		add_terminal_window(submenu);
 
 		gtk_menu_add_separator(submenu);
@@ -342,6 +346,16 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		context_none.connect(()=>{
 			item.sensitive = false;
 			remove_action_accel(item, key);
+		});
+	}
+
+	private void add_connect_to_server(Gtk.Menu submenu){
+
+		var item = new Gtk.MenuItem.with_label (_("Connect to Server..."));
+		submenu.add(item);
+
+		item.activate.connect (() => {
+			var win = new ConnectServerWindow(window, "");
 		});
 	}
 

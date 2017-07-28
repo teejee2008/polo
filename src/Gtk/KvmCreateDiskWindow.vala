@@ -133,7 +133,7 @@ public class KvmCreateDiskWindow : Gtk.Window, IPaneActive {
 		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 
-		var label = new Label (_("File Name"));
+		var label = new Gtk.Label (_("File Name"));
 		label.xalign = 1.0f;
 		hbox.add(label);
 		
@@ -228,7 +228,7 @@ public class KvmCreateDiskWindow : Gtk.Window, IPaneActive {
 		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 		
-		var label = new Label (_("Derived File"));
+		var label = new Gtk.Label (_("Derived File"));
 		label.xalign = 1.0f;
 		hbox.add(label);
 		
@@ -258,7 +258,7 @@ public class KvmCreateDiskWindow : Gtk.Window, IPaneActive {
 		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 		
-		var label = new Label("");
+		var label = new Gtk.Label("");
 		label.xalign = 1.0f;
 		hbox.add(label);
 		

@@ -394,7 +394,7 @@ public class MainHeaderBar : Gtk.HeaderBar, IPaneActive {
 			add_crumb(crumbs, "/", link_path);
 		}
 
-		var parts = view.current_path_saved.replace("trash://","").split("/");
+		var parts = view.current_location.replace("trash://","").split("/");
 
 		int index = -1;
 

@@ -83,7 +83,7 @@ public class FileViewList : Gtk.Box {
 	private int history_index = -1;
 
 	// items
-	public string current_path_saved = "";
+	public string current_location = "";
 	public FileItem current_item;
 	public FileContextMenu menu_file;
 
@@ -505,7 +505,7 @@ public class FileViewList : Gtk.Box {
 
 		// cell text
 		var cell_text = new Gtk.CellRendererText ();
-		//cell_text.ellipsize = Pango.EllipsizeMode.END;
+		cell_text.ellipsize = Pango.EllipsizeMode.END;
 		//cell_text.hxpand = true;
 		col.pack_start (cell_text, true);
 		cell_name = cell_text;
@@ -1687,7 +1687,7 @@ public class FileViewList : Gtk.Box {
 		
 		switch(Gdk.keyval_name(event.keyval).down()){
 		case "left":
-		case "right":
+		case "right":	
 		case "up":
 		case "down":
 		case "tab":
@@ -1979,55 +1979,49 @@ public class FileViewList : Gtk.Box {
 
 	// change current directory ----------------------------------
 
-	public FileItem? set_view_path(string dir_path, bool update_history = true){
+	public FileItem? set_view_path(string path, bool update_history = true){
 
-		log_debug("FileViewList: set_view_path(): %s -------------------------------------------".printf(dir_path));
-
-		if (dir_path.strip().length == 0){
+		log_debug("FileViewList: set_view_path(): %s -------------------------------------------".printf(path));
+		
+		if (path.strip().length == 0){
 			//gtk_messagebox(_("Path is Empty!"), "Path: (empty)", window, true);
 			return null;
 		}
 
-		current_path_saved = dir_path; // non-empty path - display in pathbar
-
-		//if (!dir_exists(dir_path) && !dir_path.down().has_prefix("trash://")){
-
-			/*if (FileItem.is_archive_by_extension(dir_path)){
-
-				var cached = ArchiveCache.lookup_archive(dir_path);
-				if (cached != null){
-					return set_view_item(cached);
-				}
+		if (path.contains("://")){
+			var file = File.new_for_uri(path);
+			if (file.query_exists()){
+				current_location = file.get_path();
 			}
-			else{
-				var cached = ArchiveCache.lookup_item(dir_path);
-				if (cached != null){
-					return set_view_item(cached);
-				}
-			}*/
+			if (current_location == null){
+				current_location = path; // some uri don't have a file_path
+			}
+		}
+		else {
+			current_location = path; // non-empty path - display in pathbar
+		}
 
-			// nothing to do, we don't know the archive file name
-			// TODO: parse parent paths to find archive
-			//gtk_messagebox(_("Path Not Found"), "Path: %s".printf(dir_path), window, true);
-			
-		//}
-
-		FileItem item = FileItem.find_in_cache(dir_path);
+		FileItem item = FileItem.find_in_cache(current_location);
 		
 		if (item != null){
-			log_debug("cache: found: %s".printf(dir_path), true);
+			log_debug("cache: found: %s".printf(current_location), true);
 		}
 		else{
-			log_debug("cache: not found: %s".printf(dir_path), true);
+			log_debug("cache: not found: %s".printf(current_location), true);
 			
-			if (dir_path.down().has_prefix("trash://")){
+			if (current_location.down().has_prefix("trash://")){
 				//App.trash.query_items(); //will be queried by set_view_item()
 				item = App.trashcan;
 			}
-			else if (dir_exists(dir_path)){
-				item = new FileItem.from_path_and_type(dir_path, FileType.DIRECTORY, true);
+			else if (dir_exists(current_location)){
+				item = new FileItem.from_path_and_type(current_location, FileType.DIRECTORY, true);
 				//FileItem.add_to_cache(item);
-				log_debug("created file item: %s".printf(dir_path));
+				log_debug("created file item: %s".printf(current_location));
+			}
+			else if (uri_exists(current_location)){
+				item = new FileItem.from_path_and_type(current_location, FileType.DIRECTORY, true);
+				//FileItem.add_to_cache(item);
+				log_debug("created file item: %s".printf(current_location));
 			}
 			else{
 				set_overlay_on_invalid_path();
@@ -2040,14 +2034,14 @@ public class FileViewList : Gtk.Box {
 
 	public FileItem set_view_item(FileItem item, bool update_history = true){
 
-		log_debug("FileViewList: set_view_item(%s): %d".printf(item.file_uri, item.children.size));
+		log_debug("FileViewList: set_view_item(%s): %d".printf(item.file_path, item.children.size));
 		log_debug(string.nfill(80, '-'));
 
-		log_trace("view_changed: %s ------------------------".printf(item.file_uri));
+		log_trace("view_changed: %s ------------------------".printf(item.file_path));
 		
 		var previous_item = current_item;
 		current_item = item;
-		current_path_saved = current_item.display_path;
+		current_location = current_item.display_path;
 
 		clear_filter();
 		pane.selection_bar.close_panel(true); // force
@@ -2060,7 +2054,7 @@ public class FileViewList : Gtk.Box {
 		if (!query_items()){
 			// do not change view
 			current_item = previous_item;
-			current_path_saved = previous_item.display_path;
+			current_location = previous_item.display_path;
 			return previous_item;
 		}
 
@@ -2074,8 +2068,6 @@ public class FileViewList : Gtk.Box {
 
 		window.save_session();
 
-		changed(); //informs FileViewPane to update other components like statusbar, etc
-		
 		log_debug("FileViewList: set_view_item : done ----------------------------------------------------");
 		
 		return current_item;
@@ -2132,7 +2124,7 @@ public class FileViewList : Gtk.Box {
 	}
 
 	private void set_columns_for_special_locations(){
-		if (current_item.file_path_prefix == "trash://"){
+		if (current_item.file_uri_scheme == "trash"){
 			set_columns("name,size,modified,filetype,deletion_date,original_path");
 		}
 	}
@@ -2384,6 +2376,8 @@ public class FileViewList : Gtk.Box {
 		if (current_item.children.size == 0){
 			set_overlay_on_empty();
 		}
+
+		changed(); //informs FileViewPane to update other components like statusbar, etc
 	}
 
 	public void refresh_treeview() {
@@ -2592,7 +2586,7 @@ public class FileViewList : Gtk.Box {
 		}
 
 		if (item == null) { return; }
-		if (item.is_virtual) { return; }
+		if (item.file_uri_scheme != "file") { return; }
 
 		foreach(var mon in monitors){
 			if (mon.file_item.file_path == item.file_path){
@@ -2783,7 +2777,7 @@ public class FileViewList : Gtk.Box {
 	}
 
 	public void set_overlay_on_invalid_path(){
-		add_overlay(_("Could not find path") + " '%s'".printf(current_path_saved), true);
+		add_overlay(_("Could not find path") + " '%s'".printf(current_location), true);
 		pane.statusbar.refresh();
 		cancel_monitors();
 	}

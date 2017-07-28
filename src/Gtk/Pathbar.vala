@@ -520,7 +520,7 @@ public class Pathbar : Gtk.Box {
 
 		link_box.forall ((x) => link_box.remove (x));
 
-		if (view.current_path_saved == null){
+		if (view.current_location == null){
 			// add dummy widget - maintains hbox height when empty
 			var buffer = new Gtk.LinkButton("");
 			buffer.sensitive = false;
@@ -531,11 +531,11 @@ public class Pathbar : Gtk.Box {
 
 		//Gtk.Label lbl;
 
-		/*log_debug("update_crumb_labels()", true);
-		log_debug("file_path: %s".printf(view.current_item.file_path));
-		log_debug("file_path_prefix: %s".printf(view.current_item.file_path_prefix));
-		log_debug("display_path: %s".printf(view.current_item.display_path));
-		log_debug("current_path_saved: %s".printf(view.current_path_saved));*/
+		log_debug("update_crumb_labels()", true);
+		//log_debug("file_path: %s".printf(view.current_item.file_path));
+		//log_debug("file_path_prefix: %s".printf(view.current_item.file_path_prefix));
+		//log_debug("display_path: %s".printf(view.current_item.display_path));
+		log_debug("current_path_saved: %s".printf(view.current_location));
 
 		switch(App.pathbar_style){
 		case PathbarStyle.COMPACT:
@@ -548,8 +548,20 @@ public class Pathbar : Gtk.Box {
 			link_box.spacing = 3;
 			break;
 		}
+
+		string[] parts = null;
+
+		string basepath = GvfsMounts.get_gvfs_basepath(view.current_location); // scheme:///
+
+		string link_path = basepath[0:basepath.length-1]; // scheme://
+
+		log_debug("basepath: %s".printf(basepath));
+
+		add_crumb(link_box, basepath.replace("file://",""), link_path);
+
+		parts = view.current_location.replace(link_path, "").split("/");
 		
-		string link_path = "";
+		/*string link_path = "";
 		//string prefix = view.current_item.file_path_prefix;
 		bool is_trash = false;
 		
@@ -566,13 +578,11 @@ public class Pathbar : Gtk.Box {
 			link_path = "/";
 
 			add_crumb(link_box, "/", link_path);
-		}
+		}*/
 
 		if (App.pathbar_style == PathbarStyle.ARROWS){
 			add_crumb_separator(link_box);
 		}
-
-		var parts = view.current_path_saved.replace("trash://","").split("/");
 
 		int index = -1;
 
@@ -582,12 +592,7 @@ public class Pathbar : Gtk.Box {
 
 			// crumb ----------------
 			
-			if (link_path.contains("://")){
-				link_path = link_path + "/" + part; // don't use path_combine()
-			}
-			else{
-				link_path = path_combine(link_path, part); // don't use simple concatenation
-			}
+			link_path = link_path + "/" + part; // don't use path_combine()
 
 			add_crumb(link_box, part, link_path);
 
@@ -898,7 +903,7 @@ public class Pathbar : Gtk.Box {
 		window.update_accelerators_for_edit();
 
 		path_edit_mode = true;
-		txt_path.text = view.current_path_saved;
+		txt_path.text = view.current_location;
 		txt_path.select_region(0, txt_path.text.length);
 
 		gtk_hide(link_box);

@@ -865,7 +865,7 @@ public class MainWindow : Gtk.Window {
 
 				string tab_view_path = "";
 				if (tab.pane.view.current_item == null){
-					tab_view_path = tab.pane.view.current_path_saved;
+					tab_view_path = tab.pane.view.current_location;
 				}
 				//else if (tab.pane.view.current_item.is_trash || tab.pane.view.current_item.is_trashed_item){
 				//	tab_view_path = "trash://";

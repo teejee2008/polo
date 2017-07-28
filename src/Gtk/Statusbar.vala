@@ -708,7 +708,13 @@ public class Statusbar : Gtk.Box {
 
 		log_debug("Statusbar: refresh_selection_counts()");
 
-		if (view.current_item.is_local){
+		/*if (view.current_item.is_virtual){
+
+			lbl_dir_count.label = "%'ld".printf(view.current_item.dir_count);
+			
+			lbl_file_count.label = "%'ld".printf(view.current_item.file_count);
+		}
+		else{*/
 
 			int files, dirs;
 			view.get_selected_counts(out files, out dirs);
@@ -716,13 +722,7 @@ public class Statusbar : Gtk.Box {
 			lbl_dir_count.label = "%'ld/%'ld".printf(dirs, view.current_item.dir_count);
 			
 			lbl_file_count.label = "%'ld/%'ld".printf(files, view.current_item.file_count);
-		}
-		else{
-
-			lbl_dir_count.label = "%'ld".printf(view.current_item.dir_count);
-			
-			lbl_file_count.label = "%'ld".printf(view.current_item.file_count);
-		}
+		//}
 	}
 	
 	private void refresh_usage_bar() {

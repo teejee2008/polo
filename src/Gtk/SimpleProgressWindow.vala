@@ -109,7 +109,7 @@ public class SimpleProgressWindow : Gtk.Dialog {
 		hbox_status.add(spinner);
 		
 		//lbl_msg
-		lbl_msg = new Label (status_message);
+		lbl_msg = new Gtk.Label (status_message);
 		lbl_msg.halign = Align.START;
 		lbl_msg.ellipsize = Pango.EllipsizeMode.END;
 		lbl_msg.max_width_chars = 40;
@@ -122,7 +122,7 @@ public class SimpleProgressWindow : Gtk.Dialog {
 		vbox_main.pack_start (progressbar, false, true, 0);
 
 		//lbl_status
-		lbl_status = new Label ("");
+		lbl_status = new Gtk.Label ("");
 		lbl_status.halign = Align.START;
 		lbl_status.ellipsize = Pango.EllipsizeMode.END;
 		lbl_status.max_width_chars = 40;

@@ -53,9 +53,11 @@ public class BookmarksMenu : Gtk.Menu, IPaneActive {
 		menu_item.add(box);
 
 		if (view.current_item != null){
+			
 			var path = view.current_item.file_path;
-
-			if (GtkBookmark.is_bookmarked(path)){
+			var uri =  view.current_item.file_uri;
+			
+			if (GtkBookmark.is_bookmarked(uri)){
 				var lbl = new Gtk.Label(_("Remove Bookmark"));
 				lbl.xalign = (float) 0.0;
 				lbl.margin_right = 6;
@@ -63,7 +65,7 @@ public class BookmarksMenu : Gtk.Menu, IPaneActive {
 
 				menu_item.activate.connect (() => {
 					if ((path != "/") && (path != App.user_home)){
-						GtkBookmark.remove_bookmark_by_path(path);
+						GtkBookmark.remove_bookmark(uri);
 						window.sidebar.refresh();
 					}
 				});
@@ -75,11 +77,11 @@ public class BookmarksMenu : Gtk.Menu, IPaneActive {
 				box.add(lbl);
 
 				menu_item.activate.connect (() => {
-					if (!GtkBookmark.is_bookmarked(path)
+					if (!GtkBookmark.is_bookmarked(uri)
 						&& (path != "/")
 						&& (path != App.user_home)){
 
-						GtkBookmark.add_bookmark_from_path(path);
+						GtkBookmark.add_bookmark(uri);
 						window.sidebar.refresh();
 					}
 				});

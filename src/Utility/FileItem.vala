@@ -36,11 +36,15 @@ using TeeJee.Misc;
 
 public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
+	public GLib.File? file = null;
+	
 	public static Gee.HashMap<string, FileItem> cache = new Gee.HashMap<string, FileItem>();
 	public static uint64 object_count = 0;
 
-	public string file_path = "";
-	public string file_path_prefix = "";
+	public string file_path = ""; // disk path; can be empty for uri like network:///
+	public string file_uri = "";  // uri; always non-empty
+	public string file_uri_scheme = ""; // file, ftp, smb, etc
+	//public string file_path_prefix = "";
 	public FileType file_type = FileType.REGULAR;
 
 	public DateTime modified = null;
@@ -288,6 +292,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	}
 
 	public FileItem.from_path(string _file_path){
+		// _file_path can be a local path, or GIO uri
 		resolve_file_path(_file_path);
 		query_file_info();
 		object_count++;
@@ -304,17 +309,26 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 	private void resolve_file_path(string _file_path){
 
-		file_path = _file_path;
-
 		if (_file_path.contains("://")){
-			file_path_prefix = _file_path[0 : _file_path.index_of("://")].down() + "://";
-			file_path = _file_path[_file_path.index_of("://") + 3: _file_path.length];
-			//log_debug("file_path_prefix=%s".printf(file_path_prefix));
-			//log_debug("file_path=%s".printf(file_path));
+			file_uri = _file_path;
+			file = File.new_for_uri(file_uri);
+			file_path = file.get_path();
 		}
-		else{
-			file_path_prefix = "file://"; //local file
+		else {
+			file_path = _file_path;
+			file = File.new_for_path(file_path);
+			file_uri = file.get_uri();
 		}
+
+		if (file_path == null){ file_path = ""; }
+
+		file_uri_scheme = file.get_uri_scheme();
+		
+		//log_debug("");
+		//log_debug("file_path      : %s".printf(file_path));
+		//log_debug("file.get_path(): %s".printf(file.get_path()));
+		//log_debug("file_uri       : %s".printf(file_uri));
+		//log_debug("file_uri_scheme: %s".printf(file_uri_scheme));
 	}
 
 	public static void add_to_cache(FileItem item){
@@ -403,49 +417,16 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 	}
 
-	public string file_uri {
-		owned get{
-			if (file_path_prefix.length == 0){
-				return "file://%s".printf(file_path);
-			}
-			else{
-				return file_path_prefix + file_path;
-			}
-		}
-	}
-
 	string _thumb_key = null;
 	public string thumb_key {
 		get {
 			if (_thumb_key == null){
-				_thumb_key = string_checksum(file_path_prefix + file_path);
+				_thumb_key = string_checksum(file_uri);
 			}
 			return _thumb_key;
 		}
 	}
 
-/*
-	public string file_path_effective {
-		owned get{
-			if (is_archived_item){
-
-				var arch = source_archive;
-				var txt = "";
-				while (arch != null){
-					txt = path_combine(arch.file_path, txt);
-					arch = arch.source_archive;
-				}
-				return path_combine(txt, file_path);
-			}
-			else { // if (is_local){
-				return file_path;
-			}
-			//else{
-			//	return file_path_prefix + file_path; // don't use path_combine()
-			//}
-		}
-	}
-*/
 	public string file_size_formatted {
 		owned get{
 			if (!is_dummy) {
@@ -468,23 +449,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 						}
 					}
 				}
-				//if (size > 0) {
-				//return format_file_size(size); // directory size will be available for trashed dirs
-				//}
-				/*else if (file_type == FileType.DIRECTORY){
-					if (children.size == 1){
-						return "%'lld %s".printf(children.size, _("item"));
-					}
-					else if (children.size > 1){
-						return "%'lld %s".printf(children.size, _("items"));
-					}
-					else{
-						return _("empty");
-					}
-				}*/
-				//else{
-				//	return "0 B";
-				//}
 			}
 			else {
 				return "";
@@ -499,13 +463,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 				return _display_name;
 			}
 			else if (is_trashed_item){
-				/*string txt = file_basename(trash_original_path);
-				if (txt.contains("\\")){
-					var arr = txt.split("\\");
-					txt = arr[arr.length - 1];
-				}
-				txt = uri_decode(txt);
-				return txt;*/
 				return file_basename(display_path);
 			}
 			else{
@@ -526,24 +483,35 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			}
 
 			string txt = "";
-			
-			if (is_trash){
-				//log_debug("is_trash: display_path: " + display_name);
-				txt = file_path_prefix + "/";
-			}
-			else if (is_trashed_item){
-				//log_debug("trash_original_path: " + trash_original_path);
-				//string files_dir = file_parent(trash_data_file);
-				//log_debug("trash_basepath: %s".printf(trash_basepath));
-				//log_debug("is_trashed_item: display_path: %s".printf(file_path[trash_basepath.length + 1 : file_path.length]));
-				txt = file_path_prefix + file_path[trash_basepath.length : file_path.length];
-			}
-			else if (is_archived_item && (archive_base_item != null)){
+
+			if (is_archived_item && (archive_base_item != null)){
 				txt = path_combine(archive_base_item.display_path, file_path); 
 			}
-			else{
-				//log_debug("is_normal: " + display_name);
-				txt = file_path;
+			else if (is_trash){
+				txt = "trash:///";
+			}
+			else if (is_trashed_item){
+				txt = "trash://" + file_path[trash_basepath.length : file_path.length];
+			}
+			//else if (file_uri_scheme != "file"){
+			//	txt = GvfsMounts.get_gvfs_basepath(file_path);
+			//}
+			else {
+				/*if (GvfsMounts.map != null){
+					foreach(string key in GvfsMounts.map.keys){
+						if (file_path.has_prefix(key)){
+							txt = file_path.replace(key, GvfsMounts.map[key].file_uri);
+							break;
+						}
+					}
+				}*/
+
+				if ((file_path != null) && (file_path.length > 0)){
+					txt = file_path;
+				}
+				else{
+					txt = file_uri;
+				}
 			}
 
 			return txt;
@@ -555,12 +523,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 	public string display_location {
 		owned get{
-			if (file_path_prefix == "trash://"){
-				return "trash://" + file_parent(display_path.replace("trash://",""));
-			}
-			else{
-				return file_parent(display_path);
-			}
+			return file_parent(display_path);
 		}
 	}
 
@@ -596,7 +559,13 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 	public bool is_local {
 		get{
-			return (file_path_prefix.length == 0) || (file_path_prefix == "file://");
+			return (file_uri_scheme == "file");
+		}
+	}
+
+	public bool is_remote {
+		get{
+			return (file_uri_scheme != "file");
 		}
 	}
 
@@ -1228,9 +1197,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		//item.display_path = path_combine(this.display_path, item_name);
 
 		// copy values from parent
-		
-		item.file_path_prefix = this.file_path_prefix;
-		
+
 		if (this.is_trash || this.is_trashed_item){
 			item.is_trashed_item = true;
 			item.trash_basepath = this.trash_basepath;
@@ -1495,7 +1462,12 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 			FileInfo info;
 
-			var file = File.parse_name(file_uri);
+			if (file_path.length > 0){
+				file = File.new_for_path(file_path);
+			}
+			else{
+				file = File.new_for_uri(file_uri);
+			}
 
 			if (!file.query_exists()) {
 				log_debug("query_file_info(): not found: %s".printf(file_path));
@@ -1598,10 +1570,12 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 			// owner_user
 			this.owner_user = info.get_attribute_string(FileAttribute.OWNER_USER);
-
+			if (owner_user == null) { owner_user = ""; }
+			
 			// owner_group
 			this.owner_group = info.get_attribute_string(FileAttribute.OWNER_GROUP);
-
+			if (owner_group == null) { owner_group = ""; }
+			
 			this.can_read = info.get_attribute_boolean(FileAttribute.ACCESS_CAN_READ);
 			this.can_write = info.get_attribute_boolean(FileAttribute.ACCESS_CAN_WRITE);
 			this.can_execute = info.get_attribute_boolean(FileAttribute.ACCESS_CAN_EXECUTE);
@@ -1746,7 +1720,12 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		FileEnumerator enumerator;
 		FileInfo info;
 
-		var file = File.parse_name(file_path);
+		if (file_path.length > 0){
+			file = File.new_for_path(file_path);
+		}
+		else{
+			file = File.new_for_uri(file_uri);
+		}
 
 		//if (is_trashed_item){
 		//	file = File.parse_name(trash_data_file);
@@ -1930,13 +1909,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 		else{
 			return null;
-		}
-	}
-
-	public void set_file_path_prefix(string prefix){
-		file_path_prefix = prefix;
-		foreach(var child in this.children.values){
-			child.set_file_path_prefix(prefix);
 		}
 	}
 

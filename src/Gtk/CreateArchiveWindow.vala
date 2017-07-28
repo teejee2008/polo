@@ -255,7 +255,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		vbox_main.add(hbox);
 
 		// name
-		var label = new Label (_("Name"));
+		var label = new Gtk.Label (_("Name"));
 		label.xalign = 1.0f;
 		hbox.add(label);
 		
@@ -400,7 +400,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		vbox_main.add(hbox);
 		
 		//lbl_location
-		var label = new Label (_("Location"));
+		var label = new Gtk.Label (_("Location"));
 		label.xalign = 1.0f;
 		hbox.add(label);
 

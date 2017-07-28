@@ -31,9 +31,13 @@ using TeeJee.System;
 
 public class GvfsMounts: GLib.Object {
 
+	public static Gee.HashMap<string,FileItem> map;
+	
 	// static methods
 	
 	public static Gee.ArrayList<FileItem> get_mounts(int userid){
+
+		map = new Gee.HashMap<string,FileItem>();
 
 		string gvfs_root_path = "/run/user/%d/gvfs".printf(userid);
 		
@@ -49,6 +53,8 @@ public class GvfsMounts: GLib.Object {
 			
 			map_display_name(child);
 			mounts.add(child);
+
+			map[child.file_path] = child;
 
 			log_debug("");
 			log_debug("found_gvfs: %s".printf(child.display_name));
@@ -82,27 +88,62 @@ public class GvfsMounts: GLib.Object {
 		}
 		
 		item.display_name = uri_decode(item.file_name);
+	}
 
-		//item.is_gvfs = true;
+	public static string get_gvfs_basepath(string file_uri){
+
+		//file:///home/user
+		var info = regex_match("""^(file:\/\/\/)""", file_uri);
+		if (info != null){
+			return info.fetch(1);
+		}
+
+		//mtp://[usb:002,010]/sss
+		info = regex_match("""^(mtp:\/\/\[usb:[0-9]+,[0-9]+\]\/)""", file_uri);
+		if (info != null){
+			return info.fetch(1);
+		}
+
+		//ftp://user:password@192.168.43.140:3721/sss
+		info = regex_match("""^(ftp:\/\/.*[0-9.]+:[0-9.]+\/)""", file_uri);
+		if (info != null){
+			return info.fetch(1);
+		}
+
+		//trash:///sss
+		info = regex_match("""^(trash:\/\/\/)""", file_uri);
+		if (info != null){
+			return info.fetch(1);
+		}
+
+		return "/";
+	}
+
+	public static bool mount(string file_uri){
+		return gvfs_mount(file_uri);
+	}
+	
+	public static bool unmount(string file_uri){
+		return gvfs_mount(file_uri, true);
+	}
+
+	private static bool gvfs_mount(string file_uri, bool unmount = false){
+
+		string std_out, std_err;
 		
-		// set some properties to be passed to children
-		//item.gvfs_basepath = item.file_path;
+		string cmd = "gvfs-mount";
+		if (unmount){
+			cmd += " -u";
+		}
+		cmd += " '%s'".printf(escape_single_quote(file_uri));
 		
+		int status = exec_sync(cmd, out std_out, out std_err);
 
-		//FileItem.add_to_cache(item);
-		
-		/*var item = this.add_child_from_disk(trash_file, 0);
-
-		item.trash_original_path = uri_decode(orig_path);
-
-		if (item.trash_original_path.length > 0){
-			item.display_name = file_basename(item.trash_original_path);
+		if (std_err.length > 0){
+			log_error(std_err);
 		}
 		
-		item.trash_item_name = item_name;
-		item.trash_deletion_date = trash_date;
-		item.trash_info_file = info_file;
-		item.trash_data_file = trash_file;*/
+		return (status == 0) && (std_err.strip().length == 0);
 	}
 }
 

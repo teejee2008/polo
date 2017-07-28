@@ -150,7 +150,7 @@ public class FileViewPane : Gtk.Box {
 				}
 			}
 			else{
-				tab.tab_name = file_basename(view.current_path_saved);
+				tab.tab_name = file_basename(view.current_location);
 			}
 
 			refresh(false);
