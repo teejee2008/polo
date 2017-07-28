@@ -4,8 +4,7 @@ backup=`pwd`
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 cd "$DIR"
 
-app_name=$(cat app_name)
-pkg_name=$(cat pkg_name)
+. ./BUILD_CONFIG
 
 echo ""
 echo "=========================================================================="
