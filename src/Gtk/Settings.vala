@@ -55,6 +55,10 @@ public class Settings : Gtk.Box, IPaneActive {
 	private Gtk.Scale scale_toolbar_icon;
 	private Gtk.TreeView tv_columns;
 
+	private Gtk.Box vbox_toolbar;
+	private Gtk.Box vbox_pathbar;
+	private Gtk.CheckButton chk_headerbar_enabled;
+
 	Gtk.IconSize[] toolbar_icon_sizes = new Gtk.IconSize[] { Gtk.IconSize.MENU, Gtk.IconSize.SMALL_TOOLBAR };
 
 	private int[] ICON_SIZE_MAPPING_LIST = new int[] { 16, 24, 32, 48 };
@@ -147,147 +151,115 @@ public class Settings : Gtk.Box, IPaneActive {
 		hbox.margin_left = 6;
 		stack.add_titled (hbox, _("UI"), _("UI"));
 
-		// toolbar ---------------------------------
+		// new column ---------------------------------
 
 		var vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 6);
 		vbox.homogeneous = false;
 		hbox.add(vbox);
 
-		// --------------
+		// -------------------------
 
-		var vbox_items = add_group(vbox, _("Toolbar"), 0);
-
-		add_toolbar_option_visible(vbox_items);
-		
-		add_toolbar_option_large_icons(vbox_items);
-
-		add_toolbar_option_dark_theme(vbox_items);
-
-		add_toolbar_option_labels(vbox_items);
-
-		// -------------
-
-		vbox_items = add_sub_group(vbox, _("Items"), 0);
-
-		add_toolbar_item_back(vbox_items);
-
-		add_toolbar_item_next(vbox_items);
-
-		add_toolbar_item_up(vbox_items);
-
-		add_toolbar_item_reload(vbox_items);
-
-		add_toolbar_item_home(vbox_items);
-
-		//add_toolbar_item_dual_pane(vbox_items);
-
-		add_toolbar_item_view(vbox_items);
-
-		//add_toolbar_item_hidden(vbox_items);
-
-		add_toolbar_item_bookmarks(vbox_items);
-
-		add_toolbar_item_devices(vbox_items);
-
-		add_toolbar_item_terminal(vbox_items);
-
-		var separator = new Gtk.Separator(Gtk.Orientation.VERTICAL);
-		separator.margin_left = 24;
-		hbox.add(separator);
-
-		// pathbar ---------------------------------
-
-		vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 6);
-		vbox.homogeneous = false;
-		hbox.add(vbox);
-
-		// --------
-
-		vbox_items = add_group(vbox, _("Headerbar"), 0);
-
+		var vbox_items = add_group(vbox, _("Headerbar"), 0);
 		add_headerbar_option_enable(vbox_items);
-
 		add_headerbar_option_left_window_buttons(vbox_items);
-		
-		// --------
-
-		vbox_items = add_group(vbox, _("Pathbar"), 0);
-
-		add_pathbar_option_unified(vbox_items);
-
-		add_pathbar_option_style(vbox_items);
-
-		//add_pathbar_option_use_buttons(vbox_items);
-
-		// -----------------------------
-
-		vbox_items = add_sub_group(vbox, _("Items"), 0);
-
-		add_pathbar_item_bookmarks(vbox_items);
-
-		add_pathbar_item_disk(vbox_items);
-
-		add_pathbar_item_back(vbox_items);
-
-		add_pathbar_item_next(vbox_items);
-
-		add_pathbar_item_up(vbox_items);
-
-		add_pathbar_item_home(vbox_items);
-
-		add_pathbar_item_swap(vbox_items);
-
-		add_pathbar_item_other(vbox_items);
-
-		//add_pathbar_item_close(vbox_items);
-
-		separator = new Gtk.Separator(Gtk.Orientation.VERTICAL);
-		separator.margin_left = 12;
-		hbox.add(separator);
-
-		// column 2 ---------------------------------
-
-		vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 6);
-		vbox.homogeneous = false;
-		hbox.add(vbox);
 
 		// Sidebar -------------------------------
 
 		vbox_items = add_group(vbox, _("Sidebar"), 0);
-
 		add_sidebar_option_visible(vbox_items);
-
 		add_sidebar_option_dark_theme(vbox_items);
-
 		add_sidebar_option_places(vbox_items);
-
 		add_sidebar_option_bookmarks(vbox_items);
-
 		add_sidebar_option_devices(vbox_items);
-
 		add_sidebar_option_unmount(vbox_items);
-
 		add_sidebar_option_lock(vbox_items);
 
 		// Statusbar -------------------------------
 
 		vbox_items = add_group(vbox, _("Statusbar"), 0);
-
 		add_statusbar_option_unified(vbox_items);
 
 		// Tabs -------------------------------------
 
 		vbox_items = add_group(vbox, _("Tabs"), 0);
-
 		add_tabbar_option_close(vbox_items);
-		
 		add_tabbar_option_below(vbox_items);
 
-		// buffer ---------------------------------------
+		// new column ---------------------------------------
+
+		var separator = new Gtk.Separator(Gtk.Orientation.VERTICAL);
+		separator.margin_left = 12;
+		hbox.add(separator);
+		
+		vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 6);
+		vbox.homogeneous = false;
+		hbox.add(vbox);
+		vbox_toolbar = vbox;
+		
+		// toolbar --------------
+
+		vbox_items = add_group(vbox, _("Toolbar"), 0);
+		add_toolbar_option_visible(vbox_items);
+		add_toolbar_option_large_icons(vbox_items);
+		add_toolbar_option_dark_theme(vbox_items);
+		add_toolbar_option_labels(vbox_items);
+
+		// ---------------------------
+
+		vbox_items = add_sub_group(vbox, _("Items"), 0);
+		add_toolbar_item_back(vbox_items);
+		add_toolbar_item_next(vbox_items);
+		add_toolbar_item_up(vbox_items);
+		add_toolbar_item_reload(vbox_items);
+		add_toolbar_item_home(vbox_items);
+		add_toolbar_item_view(vbox_items);
+		add_toolbar_item_bookmarks(vbox_items);
+		add_toolbar_item_devices(vbox_items);
+		add_toolbar_item_terminal(vbox_items);
+
+		// new column  ---------------------------------
+
+		separator = new Gtk.Separator(Gtk.Orientation.VERTICAL);
+		separator.margin_left = 24;
+		hbox.add(separator);
+
+		vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 6);
+		vbox.homogeneous = false;
+		hbox.add(vbox);
+		vbox_pathbar = vbox;
+		
+		// pathbar --------------------------
+
+		vbox_items = add_group(vbox, _("Pathbar"), 0);
+		add_pathbar_option_unified(vbox_items);
+		add_pathbar_option_style(vbox_items);
+
+		// -----------------------------
+
+		vbox_items = add_sub_group(vbox, _("Items"), 0);
+		add_pathbar_item_bookmarks(vbox_items);
+		add_pathbar_item_disk(vbox_items);
+		add_pathbar_item_back(vbox_items);
+		add_pathbar_item_next(vbox_items);
+		add_pathbar_item_up(vbox_items);
+		add_pathbar_item_home(vbox_items);
+		add_pathbar_item_swap(vbox_items);
+		add_pathbar_item_other(vbox_items);
+
+		// buffer --------------
 
 		var label = new Gtk.Label("");
 		label.hexpand = true;
 		hbox.add(label);
+
+		// set state after creating controls
+
+		if (vbox_toolbar != null){
+			vbox_toolbar.sensitive = !chk_headerbar_enabled.active;
+		}
+		if (vbox_pathbar != null){
+			vbox_pathbar.sensitive = !chk_headerbar_enabled.active;
+		}
 	}
 
 	private void add_toolbar_option_visible(Gtk.Container box){
@@ -600,17 +572,27 @@ public class Settings : Gtk.Box, IPaneActive {
 		var chk = new Gtk.CheckButton.with_label(_("Enabled (R)"));
 		chk.set_tooltip_text(_("Show combined HeaderBar instead of Toolbar and Pathbars [Restart Required]"));
 		box.add(chk);
- 
+		chk_headerbar_enabled = chk;
+		
 		chk.active = App.headerbar_enabled_temp;
 
-		chk.toggled.connect(()=>{
+		chk.toggled.connect(chk_headerbar_toggled);
+	}
 
-			if (App.headerbar_enabled_temp == chk.active){ return; }
+	private void chk_headerbar_toggled(){
+		
+		if (App.headerbar_enabled_temp == chk_headerbar_enabled.active){ return; }
 
-			App.headerbar_enabled_temp = chk.active;
-			
-			restart_app();
-		});
+		App.headerbar_enabled_temp = chk_headerbar_enabled.active;
+
+		restart_app();
+
+		if (vbox_toolbar != null){
+			vbox_toolbar.sensitive = !chk_headerbar_enabled.active;
+		}
+		if (vbox_pathbar != null){
+			vbox_pathbar.sensitive = !chk_headerbar_enabled.active;
+		}
 	}
 
 	private void add_headerbar_option_left_window_buttons(Gtk.Container box){
