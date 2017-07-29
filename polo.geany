@@ -30,6 +30,7 @@ long_line_column=72
 [files]
 <<<<<<< master
 <<<<<<< master
+<<<<<<< master
 current_page=119
 FILE_NAME_0=1061;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FAdminBar.vala;0;4
 FILE_NAME_1=38670;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FCreateArchiveWindow.vala;0;4
@@ -62,6 +63,9 @@ current_page=114
 =======
 current_page=31
 >>>>>>> Updated build scripts
+=======
+current_page=114
+>>>>>>> Use async task for connecting to remote server
 FILE_NAME_0=1061;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FAdminBar.vala;0;4
 FILE_NAME_1=52803;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FCreateArchiveWindow.vala;0;4
 FILE_NAME_2=1936;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FFileContextMenu.vala;0;4
@@ -72,10 +76,10 @@ FILE_NAME_6=435;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2
 FILE_NAME_7=12473;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FLayoutBox.vala;0;4
 FILE_NAME_8=4188;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FLayoutPanel.vala;0;4
 FILE_NAME_9=4662;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FMainWindow.vala;0;4
-FILE_NAME_10=1031;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FMediaBar.vala;0;4
+FILE_NAME_10=3257;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FMediaBar.vala;0;4
 FILE_NAME_11=1058;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FMiddleToolbar.vala;0;4
 FILE_NAME_12=2591;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FPasswordDialog.vala;0;4
-FILE_NAME_13=6544;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FPathbar.vala;0;4
+FILE_NAME_13=11259;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FPathbar.vala;0;4
 FILE_NAME_14=1956;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FPoloGtk.vala;0;4
 FILE_NAME_15=1076;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressWindow.vala;0;4
 FILE_NAME_16=24634;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FPropertiesWindow.vala;0;4
@@ -83,7 +87,7 @@ FILE_NAME_17=1033;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo
 FILE_NAME_18=1444;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FSettingsWindow.vala;0;4
 FILE_NAME_19=4916;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FSidebar.vala;0;4
 FILE_NAME_20=2022;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FSidebarItem.vala;0;4
-FILE_NAME_21=3194;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FSimpleProgressWindow.vala;0;4
+FILE_NAME_21=2783;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FSimpleProgressWindow.vala;0;4
 FILE_NAME_22=17127;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FStatusbar.vala;0;4
 FILE_NAME_23=1334;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FTrashBar.vala;0;4
 FILE_NAME_24=6197;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FWizardWindow.vala;0;4
@@ -94,6 +98,7 @@ FILE_NAME_25=4679;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo
 FILE_NAME_25=12453;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FCommon%2FMain.vala;0;4
 >>>>>>> Updated build scripts
 FILE_NAME_26=1374;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FAppLock.vala;0;4
+<<<<<<< master
 FILE_NAME_27=953;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FAsyncTask.vala;0;4
 FILE_NAME_28=1170;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FBash.vala;0;4
 FILE_NAME_29=0;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FCryptTabEntry.vala;0;4
@@ -105,6 +110,13 @@ FILE_NAME_33=1281;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo
 =======
 FILE_NAME_30=66467;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FDevice.vala;0;4
 FILE_NAME_31=42265;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FFileItem.vala;0;4
+=======
+FILE_NAME_27=11061;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FAsyncTask.vala;0;4
+FILE_NAME_28=1170;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FBash.vala;0;4
+FILE_NAME_29=0;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FCryptTabEntry.vala;0;4
+FILE_NAME_30=47794;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FDevice.vala;0;4
+FILE_NAME_31=34818;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FFileItem.vala;0;4
+>>>>>>> Use async task for connecting to remote server
 FILE_NAME_32=5808;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FFsTabEntry.vala;0;4
 <<<<<<< master
 FILE_NAME_33=4392;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FGtkBookmark.vala;0;4
@@ -122,6 +134,7 @@ FILE_NAME_40=0;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2F
 FILE_NAME_41=1551;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FRsyncTask.vala;0;4
 FILE_NAME_42=30;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FSystemGroup.vala;0;4
 FILE_NAME_43=29;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FSystemUser.vala;0;4
+<<<<<<< master
 <<<<<<< master
 <<<<<<< master
 FILE_NAME_44=21658;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTeeJee.FileSystem.vala;0;4
@@ -149,16 +162,28 @@ FILE_NAME_48=5645;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo
 FILE_NAME_48=8958;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTeeJee.Misc.vala;0;4
 >>>>>>> Updated build scripts
 FILE_NAME_49=6639;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTeeJee.Process.vala;0;4
+=======
+FILE_NAME_44=3553;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTeeJee.FileSystem.vala;0;4
+FILE_NAME_45=0;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTeeJee.Json.vala;0;4
+FILE_NAME_46=3906;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTeeJee.Logging.vala;0;4
+FILE_NAME_47=0;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTeeJee.MediaInfo.vala;0;4
+FILE_NAME_48=3940;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTeeJee.Misc.vala;0;4
+FILE_NAME_49=3594;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTeeJee.Process.vala;0;4
+>>>>>>> Use async task for connecting to remote server
 FILE_NAME_50=7786;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTeeJee.System.vala;0;4
 FILE_NAME_51=15243;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FThumbnailer.vala;0;4
 FILE_NAME_52=0;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FThunarMenuEntry.vala;0;4
 FILE_NAME_53=0;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTimeoutCounter.vala;0;4
+<<<<<<< master
 <<<<<<< master
 FILE_NAME_54=6521;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTrashCan.vala;0;4
 >>>>>>> Added support for browsing GVFS mounts
 =======
 FILE_NAME_54=1451;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTrashCan.vala;0;4
 >>>>>>> Updated build scripts
+=======
+FILE_NAME_54=8029;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTrashCan.vala;0;4
+>>>>>>> Use async task for connecting to remote server
 FILE_NAME_55=1631;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTreeViewColumnManager.vala;0;4
 FILE_NAME_56=10550;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FGtk%2FAboutWindow.vala;0;4
 FILE_NAME_57=0;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FGtk%2FCellRendererProgress2.vala;0;4
@@ -233,13 +258,13 @@ FILE_NAME_71=1536;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo
 FILE_NAME_72=654;Conf;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fdebian%2Fcontrol;0;4
 FILE_NAME_73=1043;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FColumnSelectionBox.vala;0;4
 FILE_NAME_74=27347;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FArchiveTask.vala;0;4
-FILE_NAME_75=1253;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanel.vala;0;4
+FILE_NAME_75=2872;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanel.vala;0;4
 FILE_NAME_76=16723;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelArchiveTask.vala;0;4
-FILE_NAME_77=4082;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelFileTask.vala;0;4
+FILE_NAME_77=7808;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelFileTask.vala;0;4
 FILE_NAME_78=3240;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FToolsWindow.vala;0;4
 FILE_NAME_79=10031;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FMainHeaderBar.vala;0;4
 FILE_NAME_80=1043;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FViewPopover.vala;0;4
-FILE_NAME_81=7571;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FMainMenubar.vala;0;4
+FILE_NAME_81=7584;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FMainMenubar.vala;0;4
 FILE_NAME_82=37;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FXdgUserDirectories.vala;0;4
 <<<<<<< master
 FILE_NAME_83=525;Sh;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fbuild-release;0;4
@@ -283,13 +308,13 @@ FILE_NAME_86=26;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2
 FILE_NAME_87=1116;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FPoloShortcutsWindow.vala;0;4
 FILE_NAME_88=1978;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FKvmCreateDiskWindow.vala;0;4
 FILE_NAME_89=4662;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FKvmTask.vala;0;4
-FILE_NAME_90=5792;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelKvmTask.vala;0;4
+FILE_NAME_90=5269;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelKvmTask.vala;0;4
 FILE_NAME_91=6653;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FPdfTask.vala;0;4
 FILE_NAME_92=3515;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FUsbWriterTask.vala;0;4
 FILE_NAME_93=31;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FRCloneClient.vala;0;4
 FILE_NAME_94=1057;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FCloudLoginWindow.vala;0;4
 FILE_NAME_95=4640;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelUsbWriterTask.vala;0;4
-FILE_NAME_96=3665;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelPdfTask.vala;0;4
+FILE_NAME_96=4043;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelPdfTask.vala;0;4
 FILE_NAME_97=5;Make;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fmakefile;0;4
 FILE_NAME_98=25;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FPlugin.vala;0;4
 FILE_NAME_99=139;Sh;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fbuild-installers.sh;0;4
@@ -298,17 +323,22 @@ FILE_NAME_101=128;Sh;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2
 FILE_NAME_102=1342;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FSelectionBar.vala;0;4
 FILE_NAME_103=2698;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FShell.vala;0;4
 FILE_NAME_104=3150;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FImageTask.vala;0;4
-FILE_NAME_105=3585;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelImageTask.vala;0;4
-FILE_NAME_106=1065;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FGvfsMount.vala;0;4
+FILE_NAME_105=3458;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelImageTask.vala;0;4
+FILE_NAME_106=5097;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FGvfsMount.vala;0;4
 FILE_NAME_107=2384;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FPathbarStyleMenu.vala;0;4
 FILE_NAME_108=1335;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FSortMenu.vala;0;4
 FILE_NAME_109=1786;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FBookmarksMenu.vala;0;4
 FILE_NAME_110=995;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FIPaneActive.vala;0;4
 FILE_NAME_111=4575;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FDevicesMenu.vala;0;4
-FILE_NAME_112=49703;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FFileViewList.vala;0;4
+FILE_NAME_112=105289;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FFileViewList.vala;0;4
 FILE_NAME_113=1593;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FPlacesPopover.vala;0;4
+<<<<<<< master
 FILE_NAME_114=14695;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FConnectServerWindow.vala;0;4
 >>>>>>> Updated build scripts
+=======
+FILE_NAME_114=10268;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FConnectServerWindow.vala;0;4
+FILE_NAME_115=2312;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FGvfsTask.vala;0;4
+>>>>>>> Use async task for connecting to remote server
 
 [VTE]
 last_dir=/home/teejee

@@ -37,6 +37,8 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 	
 	private Gtk.Box vbox_main;
 	private Gtk.Box vbox_content;
+	private Gtk.Box hbox_status;
+	private Gtk.Label lbl_status;
 	
 	private Gtk.Entry entry_server;
 	private Gtk.SpinButton spin_port;
@@ -50,19 +52,30 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 	private Gtk.SizeGroup sg_label;
 	private Gtk.SizeGroup sg_option;
 
-	private Gtk.Button btn_ok;
+	private Gtk.Button btn_connect;
 	private Gtk.Button btn_cancel;
+
+	private GvfsTask task;
+	
+	protected bool aborted = false;
+	protected uint tmr_status = 0;
 
 	private uint tmr_init = 0;
 
-	public ConnectServerWindow(Window parent, string uri) {
+	private string uri_temp = "";
+
+	public ConnectServerWindow(Window parent, string uri_text) {
 		
 		set_transient_for(parent);
 		window_position = WindowPosition.CENTER_ON_PARENT;
 
 		this.delete_event.connect(on_delete_event);
+		
+		uri_temp = uri_text;
 
 		init_ui();
+
+		this.set_size_request(500,-1);
 
 		tmr_init = Timeout.add(100, init_delayed);
 
@@ -70,17 +83,25 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 	}
 
 	private bool on_delete_event(Gdk.EventAny event){
+		
 		btn_cancel_clicked();
 		return false; // close window
 	}	
 
 	private bool init_delayed(){
+		
 		if (tmr_init > 0){
 			Source.remove(tmr_init);
 			tmr_init = 0;
 		}
 
-		cmb_type.active = 1;
+		if (uri_temp.length > 0){
+			parse_uri(uri_temp);
+		}
+		else{
+			cmb_type.active = 1;
+		}
+		
 		return false;
 	}
 	
@@ -102,7 +123,6 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 		this.add(vbox_main);
 		
 		vbox_content = new Gtk.Box(Orientation.VERTICAL, 6);
-		//vbox_content.margin_bottom = 48;
 		vbox_main.add(vbox_content);
 
 		sg_label = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
@@ -115,6 +135,7 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 		ui_add_password();
 		ui_add_server_share();
 		ui_add_uri();
+		ui_add_statusbar();
 		ui_add_action_area();
 
 		connect_signals();
@@ -176,13 +197,12 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 
 		//sg_option.add_widget(spin);
 
-		spin.notify["sensitive"].connect(()=>{
-			lbl_port.sensitive = spin.sensitive;
+		spin_port.notify["sensitive"].connect(()=>{
+			lbl_port.sensitive = spin_port.sensitive;
 		});
 
-		spin.notify["visible"].connect(()=>{
-			lbl_port.visible = spin.visible;
-			hbox.visible = spin.visible;
+		spin_port.notify["visible"].connect(()=>{
+			lbl_port.visible = spin_port.visible;
 		});
 	}
 
@@ -434,6 +454,10 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_content.add(hbox);
 
+		if (!LOG_DEBUG){
+			gtk_hide(hbox);
+		}
+
 		// label ----------------
 		
 		var label = new Gtk.Label (_("URI") + ":");
@@ -461,6 +485,84 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 		});
 	}
 
+	private void ui_add_statusbar(){
+
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
+		hbox.margin_top = 12;
+		vbox_main.add(hbox);
+		hbox_status = hbox;
+
+		string css = " background-color: #1976d2; ";
+		gtk_apply_css(new Gtk.Widget[] { hbox }, css);
+
+		gtk_hide(hbox_status);
+
+		// label ----------------
+		
+		var label = new Gtk.Label(_("Connecting to Server..."));
+		label.xalign = 0.0f;
+		//label.hexpand = true;
+		label.margin = 6;
+		label.margin_left = 12;
+		hbox.add(label);
+
+		css = " color: #ffffff; ";
+		gtk_apply_css(new Gtk.Widget[] { label }, css);
+
+		// label ----------------
+		
+		label = new Gtk.Label("");
+		label.xalign = 0.0f;
+		label.hexpand = true;
+		label.margin = 6;
+		label.margin_left = 0;
+		hbox.add(label);
+		lbl_status = label;
+
+		css = " color: #ffffff; ";
+		gtk_apply_css(new Gtk.Widget[] { label }, css);
+
+		// button -------------
+		
+		add_cancel_button(hbox);
+	}
+
+	private void add_cancel_button(Gtk.Box box){
+
+		var ebox = gtk_add_event_box(box);
+
+		var text = _("Cancel");
+		var label = new Gtk.Label(text);
+		//link.ellipsize = Pango.EllipsizeMode.MIDDLE;
+		label.set_use_markup(true);
+		label.margin = 6;
+		label.margin_right = 12;
+		ebox.add(label);
+
+		var css = " color: #ffffff; ";
+		gtk_apply_css(new Gtk.Widget[] { label }, css);
+
+		ebox.button_press_event.connect((event) => {
+			aborted = true;
+			if (task != null){
+				task.stop();
+			}
+			return false;
+		});
+
+		ebox.enter_notify_event.connect((event) => {
+			//log_debug("lbl.enter_notify_event()");
+			label.label = "<u>%s</u>".printf(text);
+			return false;
+		});
+
+		ebox.leave_notify_event.connect((event) => {
+			//log_debug("lbl.leave_notify_event()");
+			label.label = "%s".printf(text);
+			return false;
+		});
+	}
+	
 	private void ui_add_action_area() {
 
 		log_debug("ConnectServerWindow: ui_add_action_area()");
@@ -477,12 +579,12 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 		var button = new Gtk.Button.with_label(_("Cancel"));
 		button.clicked.connect(btn_cancel_clicked);
 		box.add(button);
-		btn_ok = button;
+		btn_cancel = button;
 		
 		button = new Gtk.Button.with_label(_("Connect"));
-		button.clicked.connect(btn_ok_clicked);
+		button.clicked.connect(btn_connect_clicked);
 		box.add(button);
-		btn_cancel = button;
+		btn_connect = button;
 
 		button.grab_focus();
 	}
@@ -504,10 +606,10 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 				entry_domain.visible = false;
 				domain = "";
 				
-				if (username.length == 0){
-					username = "anonymous";
-					password = "";
-				}
+				username = "";
+				entry_username.placeholder_text = _("Optional: anonymous (default)");
+
+				password = "";
 
 				entry_share.visible = false;
 				share = "";
@@ -515,20 +617,23 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 				
 			case "smb":
 			
-				entry_server.placeholder_text = _("Host IP or Name");
+				entry_server.placeholder_text = _("NETBIOS Name");
 
 				spin_port.visible = false;
 				port = 0;
 
 				entry_domain.visible = true;
-				domain = "WORKGROUP";
+				entry_domain.placeholder_text = _("Optional: WORKGROUP (default)");
+				
+				domain = "";
 				
 				username = "";
+				entry_username.placeholder_text = _("Optional: guest (default)");
 				
 				password = "";
 
 				entry_share.visible = true;
-				share = "";
+				entry_share.placeholder_text = "Required";
 
 				break;
 			}
@@ -538,7 +643,10 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 		
 		entry_server.changed.connect(() => {
 
-			if (scheme == "smb"){ return; }
+			if (scheme == "smb"){
+				entry_uri.text = build_uri(true);
+				return;
+			}
 
 			string text = entry_server.text;
 
@@ -564,7 +672,7 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 			entry_uri.text = build_uri(true);
 		});
 
-		spin_port.changed.connect(() => {
+		spin_port.value_changed.connect(() => {
 			entry_uri.text = build_uri(true);
 		});
 
@@ -573,7 +681,7 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 		});
 
 		entry_username.changed.connect(() => {
-			entry_password.visible = (username != "anonymous");
+			//entry_password.visible = (username != "anonymous");
 			entry_uri.text = build_uri(true);
 		});
 
@@ -673,22 +781,25 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 			txt += param;
 		}
 
-		if (domain.length > 0){
-			param = "%s;".printf(domain);
-			txt += param;
-			login += param;
-		}
+		if (scheme != "smb"){
 
-		if (username.length > 0){
-			param = "%s".printf(username);
-			txt += param;
-			login += param;
-		}
+			if (domain.length > 0){
+				param = "%s;".printf(domain);
+				txt += param;
+				login += param;
+			}
 
-		if (password.length > 0){
-			param = ":%s".printf((mask ? string.nfill(password.length, '*') : password));
-			txt += param;
-			login += param;
+			if (username.length > 0){
+				param = "%s".printf(username);
+				txt += param;
+				login += param;
+			}
+
+			if (password.length > 0){
+				param = ":%s".printf((mask ? string.nfill(password.length, '*') : password));
+				txt += param;
+				login += param;
+			}
 		}
 
 		if (server.length > 0){
@@ -715,55 +826,174 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 		return txt;
 	}
 
-	// actions ----------------------------------
-	 
-	private void btn_ok_clicked(){
+	public void parse_uri(string text){
 
-		log_debug("btn_ok_clicked()");
+		log_debug("parse_uri: %s".printf(text));
 
-		// check if already mounted
-		foreach(var item in GvfsMounts.get_mounts(App.user_id)){
-			log_debug("item: %s".printf(item.file_uri));
-			if (item.file_uri == uri){
-				log_debug("already mounted");
-				view.set_view_item(item);
-				this.destroy(); // exit
-				return;
-			}
+		// scheme --------------------------------
+		
+		var match = regex_match("""^(ftp|sftp|ssh|smb):""", text);
+		if (match != null){
+			scheme = match.fetch(1);
+			log_debug("parsed: scheme: %s".printf(match.fetch(1)));
 		}
 
-		vbox_content.sensitive = false;
-		gtk_set_busy(true, this);
+		// ftp --------------------------------
 		
-		btn_ok.sensitive = false;
+		match = regex_match("""^(ftp|sftp|ssh):\/\/([0-9.]+)""", text);
+		if (match != null){
+			server = match.fetch(2);
+			log_debug("parsed: server: %s".printf(match.fetch(2)));
+		}
 
-		err_log_clear();
+		match = regex_match("""^(ftp|sftp|ssh):\/\/([0-9.]+):([0-9]+)""", text);
+		if (match != null){
+			if (is_numeric(match.fetch(3))){
+				port = int.parse(match.fetch(3));
+				log_debug("parsed: port: %s".printf(match.fetch(3)));
+			}
+		}
 		
-		bool ok = GvfsMounts.mount(uri);
+		// samba --------------------------------
 
-		gtk_set_busy(false, this);
-		vbox_content.sensitive = true;
+		match = regex_match("""^(smb):\/\/([^\/]+)\/*""", text);
+		if (match != null){
+			server = match.fetch(2);
+			log_debug("parsed: server: %s".printf(match.fetch(2)));
+		}
+
+		match = regex_match("""^(smb):\/\/([^\/]+)\/([^\/]+)\/*""", text);
+		if (match != null){
+			share = match.fetch(3);
+			log_debug("parsed: share: %s".printf(match.fetch(3)));
+		}
+	}
+
+	// actions ----------------------------------
+	 
+	private void btn_connect_clicked(){
+
+		log_debug("ConnectServerWindow: btn_connect_clicked()");
+
+		// check if already mounted
+		var item = GvfsMounts.find_by_uri(uri);
+		if (item != null){
+			log_debug("already mounted");
+			view.set_view_item(item);
+			this.destroy(); // exit
+			return;
+		}
+
+		switch(scheme){
+		case "ftp":
+		case "sftp":
+		case "ssh":
+
+			var match = regex_match("^[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}.[0-9]{1,3}$", server);
+			if (match == null){
+				gtk_messagebox(_("Invalid Server Name"),_("Enter IP address in correct format (Eg: 192.0.10.1)"), window, false);
+				return;
+			}	
+
+			break;
+			
+		case "smb":
 		
-		if (ok){
-
-			// open the mounted path in active pane
-			foreach(var item in GvfsMounts.get_mounts(App.user_id)){
-				log_debug("item: %s".printf(item.file_uri));
-				if (item.file_uri == uri){
-					log_debug("success: setting view item");
-					view.set_view_item(item);
-					break;
-				}
+			var match = regex_match("^[a-zA-Z0-9]{1,15}$", server);
+			if (match == null){
+				gtk_messagebox(_("Invalid Server Name"),_("Enter NETBIOS name in correct format (1-15 alpha-numeric characters)"), window, false);
+				return;
 			}
 			
+			if (share.length == 0){
+				gtk_messagebox(_("Share Name Not Specified"),_("Enter share name to connect (Required)"), window, false);
+				return;
+			}
+
+			break;
+		}
+
+		connect_begin();
+	}
+
+	private void connect_begin(){
+
+		log_debug("ConnectServerWindow: connect_begin(): %s".printf(uri));
+
+		aborted = false;
+		
+		vbox_content.sensitive = false;
+		btn_connect.sensitive = false;
+		gtk_show(hbox_status);
+
+		gtk_set_busy(true, this);
+
+		err_log_clear();
+
+		task = new GvfsTask();
+		task.mount(uri, domain, username, password);
+
+		//task.task_complete.connect(connect_end);
+
+		task.execute();
+
+		tmr_status = Timeout.add(500, update_status);
+	}
+
+	public bool update_status() {
+
+		log_debug("update_status(): %s".printf(task.status.to_string()));
+		
+		if (task.is_running){
+			lbl_status.label = "(%s)".printf(task.stat_time_elapsed_simple);
+			gtk_do_events();
+		}
+		else{
+			connect_end();
+			return false;
+		}
+
+		return true;
+	}
+
+	public void stop_status_timer(){
+		if (tmr_status > 0){
+			Source.remove(tmr_status);
+			tmr_status = 0;
+		}
+	}
+
+	private void connect_end(){
+
+		log_debug("ConnectServerWindow: connect_end()");
+		
+		gtk_set_busy(false, this);
+		vbox_content.sensitive = true;
+		btn_connect.sensitive = true;
+		gtk_hide(hbox_status);
+
+		log_debug("checking status");
+
+		var file = File.new_for_uri(uri);
+		if ((file.get_path() != null) && !file.get_path().contains("://")){
+			// open the mounted path in active pane
+			log_debug("success: setting view set_view_path");
+			view.set_view_path(uri);
 			this.close();
 		}
 		else{
-			gtk_messagebox(_("Failed to Connect"), err_log_read(), this, true);
+			if (!aborted){
+				gtk_messagebox(_("Failed to Connect"), err_log_read(), this, true);
+				// keep window open
+			}
 		}
 	}
 
 	private void btn_cancel_clicked(){
+		aborted = true;
+		if (task != null){
+			task.stop();
+		}
 		this.close();
 	}
 }

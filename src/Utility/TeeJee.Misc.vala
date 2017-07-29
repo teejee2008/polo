@@ -137,6 +137,31 @@ namespace TeeJee.Misc {
         return "%02.0lf:%02.0lf:%02.0lf".printf (hr, min, sec);
 	}
 
+	public string format_duration_simple (long millis){
+
+		/* Converts time in milliseconds to format '00:00:00.0' */
+
+	    double time = millis / 1000.0; // time in seconds
+
+	    double hr = Math.floor(time / (60.0 * 60));
+	    time = time - (hr * 60 * 60);
+	    double min = Math.floor(time / 60.0);
+	    time = time - (min * 60);
+	    double sec = Math.floor(time);
+
+	    string txt = "";
+
+	    if (hr > 0){
+			return "%2.0lfh %2.0lfm %2.0lfs".printf(hr, min, sec);
+		}
+		else if (min > 0){
+			return "%2.0lfm %2.0lfs".printf(min, sec);
+		}
+		else {
+			return "%2.0lfs".printf(sec);
+		}
+	}
+
 	public string format_time_left(int64 millis){
 		double mins = (millis * 1.0) / 60000;
 		double secs = ((millis * 1.0) % 60000) / 1000;

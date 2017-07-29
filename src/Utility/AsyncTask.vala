@@ -433,6 +433,13 @@ public abstract class AsyncTask : GLib.Object{
 		}
 	}
 
+	public string stat_time_elapsed_simple{
+		owned get{
+			long elapsed = (long) timer_elapsed(timer);
+			return format_duration_simple(elapsed);
+		}
+	}
+
 	public string stat_time_remaining{
 		
 		owned get{
@@ -443,6 +450,23 @@ public abstract class AsyncTask : GLib.Object{
 					remaining = 0;
 				}
 				return format_duration(remaining);
+			}
+			else{
+				return "???";
+			}
+		}
+	}
+
+	public string stat_time_remaining_simple{
+		
+		owned get{
+			if (progress > 0){
+				long elapsed = (long) timer_elapsed(timer);
+				long remaining = (long)((elapsed / progress) * (1.0 - progress));
+				if (remaining < 0){
+					remaining = 0;
+				}
+				return format_duration_simple(remaining);
 			}
 			else{
 				return "???";

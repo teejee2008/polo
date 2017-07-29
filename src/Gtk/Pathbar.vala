@@ -289,22 +289,8 @@ public class Pathbar : Gtk.Box {
 		txt_path = txt;
 		scrolled_box.add(txt);
 
-		txt.activate.connect(()=>{
-
-			path_edit_mode = false;
-
-			if ((view.current_item == null) || (view.current_item.display_path != txt_path.text)){
-				view.set_view_path(txt_path.text);
-				// set_view_path() will show message if not existing
-			}
-
-			gtk_hide(txt_path);
-			gtk_show(link_box);
-			gtk_show(ebox_edit_buffer);
-			update_crumbs();
-
-			window.update_accelerators_for_active_pane();
-		});
+		// will be connected on edit
+		//txt.activate.connect(txt_path_activate);
 
 		txt.focus_out_event.connect((event) => {
 			txt.activate();
@@ -616,6 +602,8 @@ public class Pathbar : Gtk.Box {
 	}
 
 	private void add_crumb(Gtk.Box box, string text, string link_path){
+
+		log_debug("add_crumb: %s, %s".printf(text, link_path));
 		
 		if ((App.pathbar_style == PathbarStyle.BUTTONS) || (App.pathbar_style == PathbarStyle.FLAT_BUTTONS)){
 			add_crumb_button(box, text, link_path);
@@ -911,5 +899,40 @@ public class Pathbar : Gtk.Box {
 		gtk_show(txt_path);
 
 		txt_path.grab_focus();
+
+		txt_path.activate.connect(txt_path_activate);
+	}
+
+	private void txt_path_activate(){
+
+		path_edit_mode = false;
+
+		txt_path.activate.disconnect(txt_path_activate);
+
+		bool handled = false;
+		
+		if (GvfsMounts.is_gvfs_uri(txt_path.text)){
+			var file = File.new_for_uri(txt_path.text);
+			if (file.query_exists()){
+				view.set_view_path(file.get_path());
+				handled = true;
+			}
+			else{
+				var win = new ConnectServerWindow(window, txt_path.text);
+				handled = true;
+			}
+		}
+
+		if (!handled && (view.current_item == null) || (view.current_item.display_path != txt_path.text)){
+			view.set_view_path(txt_path.text);
+			// set_view_path() will show message if not existing
+		}
+
+		gtk_hide(txt_path);
+		gtk_show(link_box);
+		gtk_show(ebox_edit_buffer);
+		update_crumbs();
+
+		window.update_accelerators_for_active_pane();
 	}
 }

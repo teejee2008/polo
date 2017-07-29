@@ -81,37 +81,50 @@ public class GvfsMounts: GLib.Object {
 		}
 
 		//ftp:host=192.168.43.140,port=3721
-		info = regex_match("""^ftp:host=([0-9.]+),port=([0-9.]+)""", uri_decode(item.file_name));
+		info = regex_match("""^(ftp|sftp|ssh):host=([0-9.]+),port=([0-9.]+)""", uri_decode(item.file_name));
 		if (info != null){
-			item.display_name = "ftp:%s:%s".printf(info.fetch(1), info.fetch(2));
+			item.display_name = "%s://%s:%s".printf(info.fetch(1), info.fetch(2), info.fetch(2));
+			return;
+		}
+
+		//smb-share:server=cp8676,share=storage
+		info = regex_match("""^smb-share:server=(.*),share=(.*)""", uri_decode(item.file_name));
+		if (info != null){
+			item.display_name = "smb://%s/%s".printf(info.fetch(1), info.fetch(2));
 			return;
 		}
 		
 		item.display_name = uri_decode(item.file_name);
 	}
 
+	public static bool is_gvfs_uri(string uri){
+		var match = regex_match("""^(file|trash|mtp|ftp|sftp|ssh|smb):\/\/""", uri);
+		return (match != null);
+	}
+	
 	public static string get_gvfs_basepath(string file_uri){
 
 		//file:///home/user
-		var info = regex_match("""^(file:\/\/\/)""", file_uri);
-		if (info != null){
-			return info.fetch(1);
-		}
-
-		//mtp://[usb:002,010]/sss
-		info = regex_match("""^(mtp:\/\/\[usb:[0-9]+,[0-9]+\]\/)""", file_uri);
+		//trash:///sss
+		var info = regex_match("""^((file|trash):\/\/\/*)""", file_uri);
 		if (info != null){
 			return info.fetch(1);
 		}
 
 		//ftp://user:password@192.168.43.140:3721/sss
-		info = regex_match("""^(ftp:\/\/.*[0-9.]+:[0-9.]+\/)""", file_uri);
+		info = regex_match("""^((ftp|sftp|ssh):*\/*\/*.*[0-9.]*:*[0-9.]*\/*)""", file_uri);
 		if (info != null){
 			return info.fetch(1);
 		}
 
-		//trash:///sss
-		info = regex_match("""^(trash:\/\/\/)""", file_uri);
+		//mtp://[usb:002,010]/sss
+		info = regex_match("""^(mtp:\/\/\[usb:[0-9]+,[0-9]+\]\/*)""", file_uri);
+		if (info != null){
+			return info.fetch(1);
+		}
+
+		//smb://DATA/share1
+		info = regex_match("""^(smb:\/\/.*\/*.*)""", file_uri);
 		if (info != null){
 			return info.fetch(1);
 		}
@@ -119,23 +132,38 @@ public class GvfsMounts: GLib.Object {
 		return "/";
 	}
 
-	public static bool mount(string file_uri){
-		return gvfs_mount(file_uri);
-	}
-	
-	public static bool unmount(string file_uri){
-		return gvfs_mount(file_uri, true);
+	public static FileItem? find_by_uri(string uri){
+		
+		foreach(var item in GvfsMounts.get_mounts(App.user_id)){
+			log_debug("item: %s".printf(item.file_uri));
+			if (item.file_uri.down() == uri.down()){
+				return item;
+			}
+		}
+		return null;
 	}
 
-	private static bool gvfs_mount(string file_uri, bool unmount = false){
+	public static bool mount(string file_uri, string smb_domain, string smb_username, string smb_password){
+
+		if (file_uri.has_prefix("smb://")){
+			return gvfs_mount_samba(file_uri, smb_domain, smb_username, smb_password);
+		}
+		else{
+			return gvfs_mount(file_uri, false);
+		}
+	}
+
+	private static bool gvfs_mount(string file_uri, bool unmount){
 
 		string std_out, std_err;
-		
+
 		string cmd = "gvfs-mount";
 		if (unmount){
 			cmd += " -u";
 		}
 		cmd += " '%s'".printf(escape_single_quote(file_uri));
+
+		log_debug(cmd);
 		
 		int status = exec_sync(cmd, out std_out, out std_err);
 
@@ -145,6 +173,45 @@ public class GvfsMounts: GLib.Object {
 		
 		return (status == 0) && (std_err.strip().length == 0);
 	}
+
+	private static bool gvfs_mount_samba(string file_uri, string smb_username, string smb_domain, string smb_password){
+		
+		string sh = "";
+		sh += "echo '%s' >> samba.props \n".printf(escape_single_quote(smb_username));
+		sh += "echo '%s' >> samba.props \n".printf(escape_single_quote(smb_domain));
+		sh += "echo '%s' >> samba.props \n".printf(escape_single_quote(smb_password));
+
+		string cmd = "gvfs-mount '%s' < ./samba.props".printf(escape_single_quote(file_uri));
+		sh += cmd + "\n";
+		log_debug(cmd);
+		
+		string std_out, std_err;
+		int status = exec_script_sync(sh, out std_out, out std_err);
+
+		if (std_err.length > 0){
+			log_error(std_err);
+		}
+		
+		return (status == 0) && (std_err.strip().length == 0);
+	}
+	
+	public static bool unmount(string file_uri){
+		
+		string std_out, std_err;
+
+		string cmd = "gvfs-mount -u '%s'".printf(escape_single_quote(file_uri));
+
+		log_debug(cmd);
+		
+		int status = exec_sync(cmd, out std_out, out std_err);
+
+		if (std_err.length > 0){
+			log_error(std_err);
+		}
+		
+		return (status == 0) && (std_err.strip().length == 0);
+	}
+
 }
 
 

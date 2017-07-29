@@ -1988,19 +1988,26 @@ public class FileViewList : Gtk.Box {
 			return null;
 		}
 
+		current_location = "";
 		if (path.contains("://")){
+			log_debug("path is uri");
 			var file = File.new_for_uri(path);
-			if (file.query_exists()){
+			if (file.query_exists() && (file.get_path() != null)){
 				current_location = file.get_path();
+				log_debug("resolved uri to path: %s".printf(current_location));
 			}
-			if (current_location == null){
+			else{
 				current_location = path; // some uri don't have a file_path
+				log_debug("failed to resolve uri to path: file does not exist");
 			}
 		}
 		else {
+			log_debug("path is local");
 			current_location = path; // non-empty path - display in pathbar
 		}
 
+		log_debug("current_location: %s".printf(current_location));
+		
 		FileItem item = FileItem.find_in_cache(current_location);
 		
 		if (item != null){
@@ -2024,6 +2031,7 @@ public class FileViewList : Gtk.Box {
 				log_debug("created file item: %s".printf(current_location));
 			}
 			else{
+				log_debug("uri does not exist");
 				set_overlay_on_invalid_path();
 				return null;
 			}
