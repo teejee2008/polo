@@ -743,11 +743,11 @@ public class FileViewToolbar : Gtk.Toolbar, IPaneActive {
 	}
 
 	public void refresh_for_active_pane(){
-		log_debug("FileViewToolbar: refresh_for_active_pane()");
-		btn_next.sensitive = (view != null) && view.history_can_go_forward();
-		btn_back.sensitive = (view != null) && view.history_can_go_back();
-		btn_up.sensitive = (view != null) && view.location_can_go_up();
-		log_debug("FileViewToolbar: refresh_for_active_pane(): ok");
+		//log_debug("FileViewToolbar: refresh_for_active_pane()");
+		//btn_next.sensitive = (view != null) && view.history_can_go_forward();
+		//btn_back.sensitive = (view != null) && view.history_can_go_back();
+		//btn_up.sensitive = (view != null) && view.location_can_go_up();
+		//log_debug("FileViewToolbar: refresh_for_active_pane(): ok");
 	}
 
 	public void set_icon_size_actual(int _icon_size){

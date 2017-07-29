@@ -233,6 +233,8 @@ public class Settings : Gtk.Box, IPaneActive {
 
 		add_pathbar_item_up(vbox_items);
 
+		add_pathbar_item_home(vbox_items);
+
 		add_pathbar_item_swap(vbox_items);
 
 		add_pathbar_item_other(vbox_items);
@@ -837,6 +839,26 @@ public class Settings : Gtk.Box, IPaneActive {
 			if (App.pathbar_show_up == chk.active){ return; }
 
 			App.pathbar_show_up = chk.active;
+
+			foreach(var pn in window.panes){
+				pn.pathbar.refresh_icon_visibility();
+			}
+			window.pathbar.refresh_icon_visibility();
+		});
+	}
+
+	private void add_pathbar_item_home(Gtk.Container box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Home"));
+		box.add(chk);
+
+		chk.active = App.pathbar_show_home;
+
+		chk.toggled.connect(()=>{
+
+			if (App.pathbar_show_home == chk.active){ return; }
+
+			App.pathbar_show_home = chk.active;
 
 			foreach(var pn in window.panes){
 				pn.pathbar.refresh_icon_visibility();

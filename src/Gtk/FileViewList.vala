@@ -3079,10 +3079,13 @@ public class FileViewList : Gtk.Box {
 
 	public string history_go_back(){
 
+		log_debug("history_go_back(): history_index: %d/%d".printf(history_index, (visited_locations.size - 1)));
+		
 		var index = history_index - 1;
 
 		if ((index >= 0) && (index < visited_locations.size)){
 			history_index = index;
+			log_debug("history_index --");
 			return visited_locations[history_index];
 		}
 		else{
@@ -3097,10 +3100,13 @@ public class FileViewList : Gtk.Box {
 
 	public string history_go_forward() {
 
+		log_debug("history_go_forward(): history_index: %d/%d".printf(history_index, (visited_locations.size - 1)));
+		
 		var index = history_index + 1;
 
 		if ((index >= 0) && (index < visited_locations.size)){
 			history_index = index;
+			log_debug("history_index ++");
 			return visited_locations[history_index];
 		}
 		else{

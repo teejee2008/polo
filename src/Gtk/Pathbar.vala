@@ -75,6 +75,9 @@ public class Pathbar : Gtk.Box {
 	private Gtk.EventBox ebox_up;
 	private Gtk.Image img_up;
 
+	private Gtk.EventBox ebox_home;
+	private Gtk.Image img_home;
+
 	private Gtk.EventBox ebox_bookmark;
 	private Gtk.Image img_bookmark;
 
@@ -122,17 +125,13 @@ public class Pathbar : Gtk.Box {
 
 		_pane = parent_pane;
 
-		//var box = new Gtk.Box(Orientation.HORIZONTAL, 6);
-		//box.homogeneous = false;
-		//box.margin_left = 6;
-		//box.margin_right = 3;
-		//add(box);
-		
 		add_item_back(this);
 
 		add_item_next(this);
 
 		add_item_up(this);
+
+		add_item_home(this);
 
 		add_item_bookmarks(this);
 
@@ -428,6 +427,15 @@ public class Pathbar : Gtk.Box {
 			gtk_hide(ebox_up);
 		}
 
+		// home ---------------
+
+		if (App.pathbar_show_home){
+			gtk_show(ebox_home);
+		}
+		else{
+			gtk_hide(ebox_home);
+		}
+
 		// swap ---------------
 
 		if (panel.visible && panel.opposite_panel.visible && App.pathbar_show_swap){
@@ -518,9 +526,6 @@ public class Pathbar : Gtk.Box {
 		//Gtk.Label lbl;
 
 		log_debug("update_crumb_labels()", true);
-		//log_debug("file_path: %s".printf(view.current_item.file_path));
-		//log_debug("file_path_prefix: %s".printf(view.current_item.file_path_prefix));
-		//log_debug("display_path: %s".printf(view.current_item.display_path));
 		log_debug("current_path_saved: %s".printf(view.current_location));
 
 		switch(App.pathbar_style){
@@ -547,25 +552,6 @@ public class Pathbar : Gtk.Box {
 
 		parts = view.current_location.replace(link_path, "").split("/");
 		
-		/*string link_path = "";
-		//string prefix = view.current_item.file_path_prefix;
-		bool is_trash = false;
-		
-		if ((view.current_item != null) && (view.current_item.is_trash || view.current_item.is_trashed_item)){
-
-			is_trash = true;
-
-			link_path = "trash://";
-			
-			add_crumb(link_box, "trash://", link_path);
-		}
-		else { //if (view.current_item.is_local){
-
-			link_path = "/";
-
-			add_crumb(link_box, "/", link_path);
-		}*/
-
 		if (App.pathbar_style == PathbarStyle.ARROWS){
 			add_crumb_separator(link_box);
 		}
@@ -734,7 +720,7 @@ public class Pathbar : Gtk.Box {
 
 			var path = view.history_go_back();
 			if (path.length > 0){
-				view.set_view_path(path, false); // update_history = false
+				view.set_view_path(path, false); // don't update_history
 			}
 
 			return true;
@@ -764,7 +750,7 @@ public class Pathbar : Gtk.Box {
 
 			var path = view.history_go_forward();
 			if (path.length > 0){
-				view.set_view_path(path, false); // update_history = false
+				view.set_view_path(path, false); // don't update_history
 			}
 
 			return true;
@@ -794,8 +780,34 @@ public class Pathbar : Gtk.Box {
 
 			var path = view.get_location_up();
 			if (path.length > 0){
-				view.set_view_path(path, false); // update_history = false
+				view.set_view_path(path, true); // update_history
 			}
+
+			return true;
+		});
+	}
+
+	private void add_item_home(Gtk.Box box){
+
+		log_debug("Pathbar: add_item_home()");
+
+		var ebox = gtk_add_event_box(box);
+		ebox_home = ebox;
+
+		var img = IconManager.lookup_image("go-home", 16);
+		ebox.add(img);
+		img_home = img;
+
+		var tt =  _("Home");
+		img.set_tooltip_text(tt);
+		ebox.set_tooltip_text(tt);
+
+		ebox.button_press_event.connect((event)=>{
+
+			if (event.button != 1) { return false; }
+			
+			if (view == null) { return true; };
+			view.set_view_path(App.user_home, true); // update_history
 
 			return true;
 		});

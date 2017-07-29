@@ -153,6 +153,7 @@ public class Main : GLib.Object {
 	public bool pathbar_show_back = false;
 	public bool pathbar_show_next = false;
 	public bool pathbar_show_up = false;
+	public bool pathbar_show_home = false;
 	public bool pathbar_show_swap = true;
 	public bool pathbar_show_other = true;
 	public bool pathbar_show_close = true;
@@ -620,6 +621,7 @@ public class Main : GLib.Object {
 		config.set_string_member("pathbar_show_back", pathbar_show_back.to_string());
 		config.set_string_member("pathbar_show_next", pathbar_show_next.to_string());
 		config.set_string_member("pathbar_show_up", pathbar_show_up.to_string());
+		config.set_string_member("pathbar_show_home", pathbar_show_home.to_string());
 		config.set_string_member("pathbar_show_swap", pathbar_show_swap.to_string());
 		config.set_string_member("pathbar_show_other", pathbar_show_other.to_string());
 		config.set_string_member("pathbar_show_close", pathbar_show_close.to_string());
@@ -805,6 +807,7 @@ public class Main : GLib.Object {
 		pathbar_show_back = json_get_bool(config, "pathbar_show_back", pathbar_show_back);
 		pathbar_show_next = json_get_bool(config, "pathbar_show_next", pathbar_show_next);
 		pathbar_show_up = json_get_bool(config, "pathbar_show_up", pathbar_show_up);
+		pathbar_show_home = json_get_bool(config, "pathbar_show_home", pathbar_show_home);
 		pathbar_show_swap = json_get_bool(config, "pathbar_show_swap", pathbar_show_swap);
 		pathbar_show_other = json_get_bool(config, "pathbar_show_other", pathbar_show_other);
 		pathbar_show_close = json_get_bool(config, "pathbar_show_close", pathbar_show_close);
