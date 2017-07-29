@@ -191,7 +191,7 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 		
 		var adj = new Gtk.Adjustment(1, 1, 65535, 1, 1, 0); //value, lower, upper, step, page_step, size
 		var spin = new Gtk.SpinButton (adj, 1, 0);
-		spin.xalign = (float) 0.5;
+		spin.xalign = 0.5f;
 		hbox.add(spin);
 		spin_port = spin;
 

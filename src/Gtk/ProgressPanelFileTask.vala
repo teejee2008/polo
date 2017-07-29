@@ -91,7 +91,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 
 		var label = new Gtk.Label("<b>" + txt + "</b>");
 		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.margin_bottom = 12;
 		contents.add(label);
 		
@@ -114,7 +114,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 
 		label = new Gtk.Label(_("Preparing..."));
 		//label.set_use_markup(true);
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		//label.margin_top = 12;
 		label.ellipsize = Pango.EllipsizeMode.START;
 		label.max_width_chars = 100;
@@ -137,7 +137,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 
 		label = new Gtk.Label("...");
 		//label.set_use_markup(true);
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		//label.margin_bottom = 12;
 		label.ellipsize = Pango.EllipsizeMode.END;
 		label.max_width_chars = 100;

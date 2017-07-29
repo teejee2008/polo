@@ -117,7 +117,7 @@ public class DevicesMenu : Gtk.Menu, IPaneActive {
 			}
 
 			var lbl = new Gtk.Label(name);
-			lbl.xalign = (float) 0.0;
+			lbl.xalign = 0.0f;
 			lbl.margin_right = 6;
 			box.add(lbl);
 
@@ -136,7 +136,7 @@ public class DevicesMenu : Gtk.Menu, IPaneActive {
 			}
 			else{
 				lbl = new Gtk.Label(dev.size_formatted);
-				lbl.xalign = (float) 1.0;
+				lbl.xalign = 1.0f;
 				lbl.margin_right = 6;
 				box.add(lbl);
 				sg_size.add_widget(lbl);
@@ -147,7 +147,7 @@ public class DevicesMenu : Gtk.Menu, IPaneActive {
 			if (dev.mount_points.size > 0){
 				var mp = dev.mount_points[0];
 				lbl = new Gtk.Label(mp.mount_point);
-				lbl.xalign = (float) 0.0;
+				lbl.xalign = 0.0f;
 				lbl.margin_right = 6;
 				box.add(lbl);
 				sg_mp.add_widget(lbl);

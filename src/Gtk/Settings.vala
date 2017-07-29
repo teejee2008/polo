@@ -1199,7 +1199,7 @@ public class Settings : Gtk.Box, IPaneActive {
 
 		// label
 		var label = new Gtk.Label(_("View Mode"));
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.margin_left = 6;
 		label.margin_right = 6;
 		label.margin_bottom = 6;
@@ -1268,7 +1268,7 @@ public class Settings : Gtk.Box, IPaneActive {
 
 		// label
 		var label = new Gtk.Label(_("Terminal"));
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.margin_left = 6;
 		label.margin_right = 6;
 		label.margin_bottom = 6;
@@ -1323,7 +1323,7 @@ public class Settings : Gtk.Box, IPaneActive {
 
 		// label
 		var label = new Gtk.Label(_("File Manager"));
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.margin_left = 6;
 		label.margin_right = 6;
 		label.margin_bottom = 6;
@@ -2766,8 +2766,8 @@ public class Settings : Gtk.Box, IPaneActive {
 		if (header_text.length > 0){
 			var label = new Gtk.Label("<b>%s</b>".printf(header_text.replace("&amp;","&").replace("&","&amp;")));
 			label.set_use_markup(true);
-			label.xalign = (float) 0.0;
-			label.yalign = (float) 0.0;
+			label.xalign = 0.0f;
+			label.yalign = 0.0f;
 			vbox.add(label);
 			label.margin_bottom = 6;
 			vbox.margin_bottom = 6; // add box bottom padding only if group has a header
@@ -2785,8 +2785,8 @@ public class Settings : Gtk.Box, IPaneActive {
 		if (header_text.length > 0){
 			var label = new Gtk.Label("<i>%s</i>".printf(header_text));
 			label.set_use_markup(true);
-			label.xalign = (float) 0.0;
-			label.yalign = (float) 0.0;
+			label.xalign = 0.0f;
+			label.yalign = 0.0f;
 			vbox.add(label);
 			label.margin_bottom = 6;
 			vbox.margin_bottom = 6; // add box bottom padding only if group has a header

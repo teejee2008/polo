@@ -111,13 +111,13 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		
 		var label = new Gtk.Label("<b>" + txt + ": </b>");
 		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.margin_bottom = 12;
 		hbox.add(label);
 
 		label = new Gtk.Label("");
 		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.margin_bottom = 12;
 		hbox.add(label);
 		lbl_header = label;
@@ -144,88 +144,88 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 
 		//lbl_file_count -----------------------------------------
 		var lbl_file_count = new Gtk.Label(_("Files:"));
-		lbl_file_count.xalign = (float) 0.0;
+		lbl_file_count.xalign = 0.0f;
 		grid_stats.attach(lbl_file_count, 0, ++row, 1, 1);
 
 		//lbl_file_count_value
 		lbl_file_count_value = new Gtk.Label(_("???"));
-		lbl_file_count_value.xalign = (float) 1.0;
+		lbl_file_count_value.xalign = 1.0f;
 		grid_stats.attach(lbl_file_count_value, 1, row, 1, 1);
 
 		//lbl_elapsed -----------------------------------------
 		var lbl_elapsed = new Gtk.Label(_("Elapsed:"));
-		lbl_elapsed.xalign = (float) 0.0;
+		lbl_elapsed.xalign = 0.0f;
 		grid_stats.attach(lbl_elapsed, 0, ++row, 1, 1);
 
 		//lbl_elapsed_value
 		lbl_elapsed_value = new Gtk.Label(_("???"));
-		lbl_elapsed_value.xalign = (float) 1.0;
+		lbl_elapsed_value.xalign = 1.0f;
 		grid_stats.attach(lbl_elapsed_value, 1, row, 1, 1);
 
 		//lbl_remaining -----------------------------------------
 		var lbl_remaining = new Gtk.Label(_("Remaining:"));
-		lbl_remaining.xalign = (float) 0.0;
+		lbl_remaining.xalign = 0.0f;
 		grid_stats.attach(lbl_remaining, 0, ++row, 1, 1);
 
 		//lbl_remaining_value
 		lbl_remaining_value = new Gtk.Label(_("???"));
-		lbl_remaining_value.xalign = (float) 1.0;
+		lbl_remaining_value.xalign = 1.0f;
 		grid_stats.attach(lbl_remaining_value, 1, row, 1, 1);
 
 		//lbl_speed -----------------------------------------
 		var lbl_speed = new Gtk.Label(_("Speed:"));
-		lbl_speed.xalign = (float) 0.0;
+		lbl_speed.xalign = 0.0f;
 		grid_stats.attach(lbl_speed, 0, ++row, 1, 1);
 
 		//lbl_speed_value
 		lbl_speed_value = new Gtk.Label(_("???"));
-		lbl_speed_value.xalign = (float) 1.0;
+		lbl_speed_value.xalign = 1.0f;
 		grid_stats.attach(lbl_speed_value, 1, row, 1, 1);
 
 		row = -1;
 
 		//lbl_data -------------------------------------------------
 		var lbl_data = new Gtk.Label(_("Data:"));
-		lbl_data.xalign = (float) 0.0;
+		lbl_data.xalign = 0.0f;
 		lbl_data.margin_left = 12;
 		grid_stats.attach(lbl_data, 2, ++row, 1, 1);
 
 		//lbl_data_value
 		lbl_data_value = new Gtk.Label(_("???"));
-		lbl_data_value.xalign = (float) 1.0;
+		lbl_data_value.xalign = 1.0f;
 		grid_stats.attach(lbl_data_value, 3, row, 1, 1);
 
 		//lbl_processed ------------------------------------------
 		var lbl_processed = new Gtk.Label(_("Processed:"));
-		lbl_processed.xalign = (float) 0.0;
+		lbl_processed.xalign = 0.0f;
 		lbl_processed.margin_left = 12;
 		grid_stats.attach(lbl_processed, 2, ++row, 1, 1);
 
 		//lbl_processed_value
 		lbl_processed_value = new Gtk.Label(_("???"));
-		lbl_processed_value.xalign = (float) 1.0;
+		lbl_processed_value.xalign = 1.0f;
 		grid_stats.attach(lbl_processed_value, 3, row, 1, 1);
 
 		//lbl_compressed -----------------------------------------
 		var lbl_compressed = new Gtk.Label(_("Compressed:"));
-		lbl_compressed.xalign = (float) 0.0;
+		lbl_compressed.xalign = 0.0f;
 		lbl_compressed.margin_left = 12;
 		grid_stats.attach(lbl_compressed, 2, ++row, 1, 1);
 
 		//lbl_compressed_value
 		lbl_compressed_value = new Gtk.Label(_("???"));
-		lbl_compressed_value.xalign = (float) 1.0;
+		lbl_compressed_value.xalign = 1.0f;
 		grid_stats.attach(lbl_compressed_value, 3, row, 1, 1);
 
 		//lbl_ratio -----------------------------------------
 		var lbl_ratio = new Gtk.Label(_("Ratio:"));
-		lbl_ratio.xalign = (float) 0.0;
+		lbl_ratio.xalign = 0.0f;
 		lbl_ratio.margin_left = 12;
 		grid_stats.attach(lbl_ratio, 2, ++row, 1, 1);
 
 		//lbl_ratio_value
 		lbl_ratio_value = new Gtk.Label(_("???"));
-		lbl_ratio_value.xalign = (float) 1.0;
+		lbl_ratio_value.xalign = 1.0f;
 		grid_stats.attach(lbl_ratio_value, 3, row, 1, 1);
 
 		var label = new Gtk.Label("");
@@ -243,7 +243,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 
 		//lbl_status
 		lbl_status = new Gtk.Label("");
-		lbl_status.xalign = (float) 0.0;
+		lbl_status.xalign = 0.0f;
 		lbl_status.ellipsize = Pango.EllipsizeMode.MIDDLE;
 		lbl_status.max_width_chars = 50;
 		hbox_status_line.add(lbl_status);

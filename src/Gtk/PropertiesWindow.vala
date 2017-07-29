@@ -612,7 +612,7 @@ public class PropertiesWindow : Gtk.Window {
 
 		var label = new Gtk.Label("<b>%s:</b>".printf(_("Permissions")));
 		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.margin_bottom = 6;
 		vbox.add(label);
 
@@ -673,7 +673,7 @@ public class PropertiesWindow : Gtk.Window {
 
 		/*label = new Gtk.Label("<b>%s:</b>".printf(_("Ownership")));
 		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.margin_top = 6;
 		label.margin_bottom = 12;
 		vbox.add(label);*/

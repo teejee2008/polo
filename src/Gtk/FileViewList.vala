@@ -602,7 +602,7 @@ public class FileViewList : Gtk.Box {
 
 		// cell text
 		var cell_text = new CellRendererText ();
-		cell_text.xalign = (float) 1.0;
+		cell_text.xalign = 1.0f;
 		col.pack_start (cell_text, false);
 
 		// render text
@@ -688,7 +688,7 @@ public class FileViewList : Gtk.Box {
 
 		// cell text
 		var cell_text = new CellRendererText();
-		cell_text.xalign = (float) 1.0;
+		cell_text.xalign = 1.0f;
 		col.pack_start (cell_text, false);
 
 		//render text

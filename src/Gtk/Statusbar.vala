@@ -141,12 +141,12 @@ public class Statusbar : Gtk.Box {
 		add(img);
 		
 		var label = new Gtk.Label ("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		add(label);
 		lbl_dir_count = label;
 
 		//label = new Gtk.Label (_("dirs"));
-		//label.xalign = (float) 0.0;
+		//label.xalign = 0.0f;
 		//add(label);
 
 		lbl_dir_count.notify["visible"].connect(()=>{
@@ -164,12 +164,12 @@ public class Statusbar : Gtk.Box {
 		add(img);
 		
 		var label = new Gtk.Label ("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		add(label);
 		lbl_file_count = label;
 
 		//label = new Gtk.Label(_("files"));
-		//label.xalign = (float) 0.0;
+		//label.xalign = 0.0f;
 		//add(label);
 
 		lbl_file_count.notify["visible"].connect(()=>{
@@ -184,7 +184,7 @@ public class Statusbar : Gtk.Box {
 		add(separator);
 
 		var label = new Gtk.Label ("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.set_use_markup(true);
 		lbl_hidden_count = label;
 		
@@ -193,7 +193,7 @@ public class Statusbar : Gtk.Box {
 		add(ebox_count);
 
 		label = new Gtk.Label(_("hidden"));
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.set_use_markup(true);
 		add(label);
 		lbl_hidden = label;
@@ -225,7 +225,7 @@ public class Statusbar : Gtk.Box {
 		add(separator);
 
 		var label = new Gtk.Label ("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		add(label);
 		lbl_size = label;
 
@@ -265,12 +265,12 @@ public class Statusbar : Gtk.Box {
 		//add(separator);
 
 		var label = new Gtk.Label ("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		add(label);
 		lbl_fs_free = label;
 
 		label = new Gtk.Label(_("free"));
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		add(label);
 
 		add_fs_bar();
@@ -288,7 +288,7 @@ public class Statusbar : Gtk.Box {
 		//add(separator);
 
 		var label = new Gtk.Label ("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		add(label);
 		lbl_fs_read_only = label;
 
@@ -303,7 +303,7 @@ public class Statusbar : Gtk.Box {
 		//add(separator);
 
 		var label = new Gtk.Label ("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		add(label);
 		lbl_fs_type = label;
 
@@ -409,7 +409,7 @@ public class Statusbar : Gtk.Box {
 
 	private void add_spacer(){
 		var label = new Gtk.Label("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.hexpand = true;
 		add(label);
 	}

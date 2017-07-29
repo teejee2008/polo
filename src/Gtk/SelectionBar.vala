@@ -84,7 +84,7 @@ public class SelectionBar : Gtk.Box {
 		add(hbox);
 
 		//var label = new Gtk.Label(_("Pattern:"));
-		//label.xalign = (float) 0.0;
+		//label.xalign = 0.0f;
 		//hbox.add(label);
 		
 		add_entry();

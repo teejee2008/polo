@@ -109,7 +109,7 @@ namespace TeeJee.GtkHelper{
 
 		//lbl_input
 		Gtk.Label lbl_input = new Gtk.Label(title);
-		lbl_input.xalign = (float) 0.0;
+		lbl_input.xalign = 0.0f;
 		lbl_input.label = message;
 
 		//txt_input
@@ -598,7 +598,7 @@ namespace TeeJee.GtkHelper{
 		// add label
 		
 		var lbl = new Gtk.Label(label);
-		lbl.xalign = (float) 0.0;
+		lbl.xalign = 0.0f;
 		lbl.margin_right = 6;
 		box.add(lbl);
 
@@ -633,7 +633,7 @@ namespace TeeJee.GtkHelper{
 	public Gtk.Label gtk_box_add_header(Gtk.Box box, string text){
 		var label = new Gtk.Label("<b>" + text + "</b>");
 		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.margin_bottom = 6;
 		box.add(label);
 
@@ -873,7 +873,7 @@ namespace TeeJee.GtkHelper{
 		col.title = title;
 		
 		cell = new Gtk.CellRendererText();
-		cell.xalign = (float) 0.0;
+		cell.xalign = 0.0f;
 		col.pack_start (cell, false);
 		treeview.append_column(col);
 		
@@ -911,7 +911,7 @@ namespace TeeJee.GtkHelper{
 		col.pack_start (cell_pix, false);
 		
 		cell_text = new Gtk.CellRendererText();
-		cell_text.xalign = (float) 0.0;
+		cell_text.xalign = 0.0f;
 		col.pack_start (cell_text, false);
 		treeview.append_column(col);
 
@@ -934,7 +934,7 @@ namespace TeeJee.GtkHelper{
 		col.pack_start (cell_radio, false);
 		
 		cell_text = new Gtk.CellRendererText();
-		cell_text.xalign = (float) 0.0;
+		cell_text.xalign = 0.0f;
 		col.pack_start (cell_text, false);
 		treeview.append_column(col);
 
@@ -963,7 +963,7 @@ namespace TeeJee.GtkHelper{
 		col.pack_start (cell_radio, false);
 		
 		cell_text = new Gtk.CellRendererText();
-		cell_text.xalign = (float) 0.0;
+		cell_text.xalign = 0.0f;
 		col.pack_start (cell_text, false);
 		treeview.append_column(col);
 
@@ -983,8 +983,8 @@ namespace TeeJee.GtkHelper{
 		box.add(scroll);
 		
 		var label = new Gtk.Label(text);
-		label.xalign = (float) 0.0;
-		label.yalign = (float) 0.0;
+		label.xalign = 0.0f;
+		label.yalign = 0.0f;
 		label.margin = 6;
 		label.set_use_markup(true);
 		scroll.add(label);
@@ -1045,7 +1045,7 @@ namespace TeeJee.GtkHelper{
 			
 		var label = new Gtk.Label(msg);
 		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.wrap = true;
 		label.wrap_mode = Pango.WrapMode.WORD;
 		box.add(label);
@@ -1143,7 +1143,7 @@ namespace TeeJee.GtkHelper{
 
 		var adj = new Gtk.Adjustment(val, min, max, step, step_page, 0);
 		var spin  = new Gtk.SpinButton(adj, step, digits);
-		spin.xalign = (float) 0.5;
+		spin.xalign = 0.5f;
 		box.add(spin);
 
 		/*

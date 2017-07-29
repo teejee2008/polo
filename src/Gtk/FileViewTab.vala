@@ -253,7 +253,7 @@ public class FileViewTab : Gtk.Box {
 		menu_tab.append(menu_item);
 		
 		var lbl = new Gtk.Label(_("Edit Tab Name"));
-		lbl.xalign = (float) 0.0;
+		lbl.xalign = 0.0f;
 		lbl.margin_right = 6;
 		menu_item.add(lbl);
 
@@ -271,7 +271,7 @@ public class FileViewTab : Gtk.Box {
 		menu_tab.append(menu_item);
 		
 		lbl = new Gtk.Label(_("Reset Tab Name"));
-		lbl.xalign = (float) 0.0;
+		lbl.xalign = 0.0f;
 		lbl.margin_right = 6;
 		lbl.sensitive = renamed;
 		menu_item.add(lbl);
@@ -287,7 +287,7 @@ public class FileViewTab : Gtk.Box {
 		menu_tab.append(menu_item);
 		
 		lbl = new Gtk.Label(_("Close"));
-		lbl.xalign = (float) 0.0;
+		lbl.xalign = 0.0f;
 		lbl.margin_right = 6;
 		menu_item.add(lbl);
 

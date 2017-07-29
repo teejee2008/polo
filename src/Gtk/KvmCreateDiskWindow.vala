@@ -301,7 +301,7 @@ public class KvmCreateDiskWindow : Gtk.Window, IPaneActive {
 		
 		var adj = new Gtk.Adjustment(20.0, 0.1, 2000000.0, 1.0, 10.0, 0); //value, lower, upper, step, page_step, size
 		var spin = new Gtk.SpinButton (adj, 1, 1);
-		spin.xalign = (float) 0.5;
+		spin.xalign = 0.5f;
 		hbox.add(spin);
 		spin_size = spin;
 

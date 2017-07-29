@@ -104,7 +104,7 @@ public class ProgressPanelKvmTask : ProgressPanel {
 		// status message ------------------
 
 		label = new Gtk.Label(_("Preparing..."));
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.ellipsize = Pango.EllipsizeMode.START;
 		label.max_width_chars = 100;
 		hbox.add(label);
@@ -120,7 +120,7 @@ public class ProgressPanelKvmTask : ProgressPanel {
 		// stats label ----------------
 
 		label = new Gtk.Label("...");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.ellipsize = Pango.EllipsizeMode.END;
 		label.max_width_chars = 100;
 		vbox_outer.add(label);

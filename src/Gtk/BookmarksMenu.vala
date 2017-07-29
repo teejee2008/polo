@@ -59,7 +59,7 @@ public class BookmarksMenu : Gtk.Menu, IPaneActive {
 			
 			if (GtkBookmark.is_bookmarked(uri)){
 				var lbl = new Gtk.Label(_("Remove Bookmark"));
-				lbl.xalign = (float) 0.0;
+				lbl.xalign = 0.0f;
 				lbl.margin_right = 6;
 				box.add(lbl);
 
@@ -72,7 +72,7 @@ public class BookmarksMenu : Gtk.Menu, IPaneActive {
 			}
 			else{
 				var lbl = new Gtk.Label(_("Add Bookmark"));
-				lbl.xalign = (float) 0.0;
+				lbl.xalign = 0.0f;
 				lbl.margin_right = 6;
 				box.add(lbl);
 
@@ -120,7 +120,7 @@ public class BookmarksMenu : Gtk.Menu, IPaneActive {
 		// name and label
 
 		var label = new Gtk.Label(bm.name);
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.margin_right = 6;
 		label.set_tooltip_text(bm.path);
 		box.add(label);

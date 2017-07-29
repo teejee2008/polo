@@ -1572,7 +1572,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 
 		var adj = new Gtk.Adjustment(1, 1, 10, 1, 1, 0); //value, lower, upper, step, page_step, size
 		var spin = new Gtk.SpinButton (adj, 1, 0);
-		spin.xalign = (float) 0.5;
+		spin.xalign = 0.5f;
 		hbox.add(spin);
 		spin_passes = spin;
 
@@ -1966,7 +1966,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 
 		var adj = new Gtk.Adjustment(0, 0, 100000, 1, 1, 0); //value, lower, upper, step, page_step, size
 		var spin = new Gtk.SpinButton (adj, 1, 0);
-		spin.xalign = (float) 0.5;
+		spin.xalign = 0.5f;
 		hbox.add(spin);
 		spin_split = spin;
 		

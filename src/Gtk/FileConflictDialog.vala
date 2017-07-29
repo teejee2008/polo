@@ -92,13 +92,13 @@ public class FileConflictDialog : Gtk.Dialog {
 
 		var label = new Gtk.Label(format_text(_("Replace Existing Files?"), true, false, true));
 		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.margin_bottom = 12;
 		vbox_main.add(label);
 
 		label = new Gtk.Label("%'ld %s".printf(task.conflicts.keys.size, _("file(s) exist at the destination")));
 		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.margin_bottom = 12;
 		label.margin_left = 6;
 		vbox_main.add(label);
@@ -276,7 +276,7 @@ public class FileConflictDialog : Gtk.Dialog {
 
 		var label = new Gtk.Label(format_text(_("Select files to replace:"), false, false, false));
 		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.margin_top = 12;
 		box.add(label);
 
@@ -485,17 +485,17 @@ public class FileConflictDialog : Gtk.Dialog {
 		hbox.add(vbox);
 
 		var label = new Gtk.Label("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		vbox.add(label);
 		lbl_type_src = label;
 
 		label = new Gtk.Label("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		vbox.add(label);
 		lbl_size_src = label;
 
 		label = new Gtk.Label("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		vbox.add(label);
 		lbl_modified_src = label;
 
@@ -514,17 +514,17 @@ public class FileConflictDialog : Gtk.Dialog {
 		hbox.add(vbox);
 
 		label = new Gtk.Label("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		vbox.add(label);
 		lbl_type_dest = label;
 
 		label = new Gtk.Label("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		vbox.add(label);
 		lbl_size_dest = label;
 
 		label = new Gtk.Label("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		vbox.add(label);
 		lbl_modified_dest = label;
 	}

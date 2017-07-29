@@ -81,7 +81,7 @@ public class PasswordDialog : Gtk.Dialog {
 
 		// lbl_message
 		var label = new Gtk.Label(message);
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.wrap = true;
 		label.wrap_mode = Pango.WrapMode.WORD;
 		label.max_width_chars = 50;

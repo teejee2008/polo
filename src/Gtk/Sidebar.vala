@@ -717,7 +717,7 @@ public class Sidebar : Gtk.Box {
 			if (allow_edit){
 
 				var entry = new Gtk.Entry();
-				entry.xalign = (float) 0.0;
+				entry.xalign = 0.0f;
 				entry.hexpand = true;
 				box.add(entry);
 				entry.set_no_show_all(true);
