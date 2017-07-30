@@ -1562,10 +1562,10 @@ public class FileViewList : Gtk.Box {
 				}
 				
 				if (sort_column_desc) {
-					return -1 * strcmp(a.content_type_desc, b.content_type_desc);
+					return -1 * strcmp(a.content_type_desc.down(), b.content_type_desc.down());
 				}
 				else {
-					return strcmp(a.content_type_desc, b.content_type_desc);
+					return strcmp(a.content_type_desc.down(), b.content_type_desc.down());
 				}
 			});
 			break;
@@ -1646,13 +1646,19 @@ public class FileViewList : Gtk.Box {
 
 		var col_index = tv_column.get_data<FileViewColumn>("index");
 
+		log_debug("sort_column_previous: %d".printf(sort_column_index));
+		log_debug("sort_column_order: %s".printf(sort_column_desc ? "desc" : "asc"));
+		
 		if (sort_column_index == col_index) {
 			sort_column_desc = !sort_column_desc;
 		}
 		else {
 			sort_column_index = col_index;
-			sort_column_desc = true;
+			sort_column_desc = false;
 		}
+
+		log_debug("sort_column_new: %d".printf(sort_column_index));
+		log_debug("sort_column_order: %s".printf(sort_column_desc ? "desc" : "asc"));
 
 		sort();
 	}
