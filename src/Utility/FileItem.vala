@@ -1370,7 +1370,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		return child;
 	}
 
-	/*public FileItem rename_child(string child_name, string new_name){
+	public FileItem rename_child(string child_name, string new_name){
 
 		log_debug("FileItem: rename_child(): %s -> %s".printf(child_name, new_name));
 
@@ -1389,11 +1389,11 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			child.file_path = path_combine(child.file_location, new_name);
 			child.display_name = null;
 			child.query_file_info();
-			//add_to_cache(child);
+			add_to_cache(child);
 		}
 
 		return child;
-	}*/
+	}
 
 	public bool hide_item(){
 
