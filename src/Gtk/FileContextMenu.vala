@@ -146,6 +146,8 @@ public class FileContextMenu : Gtk.Menu {
 		
 		add_copy(this, sg_icon, sg_label);
 
+		add_paste_into_folder(this, sg_icon, sg_label);
+
 		add_paste(this, sg_icon, sg_label);
 
 		add_rename(this, sg_icon, sg_label);
@@ -862,6 +864,32 @@ public class FileContextMenu : Gtk.Menu {
 
 		menu_item.sensitive = (selected_items.size > 0);
 	}
+
+	private void add_paste_into_folder(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		log_debug("FileContextMenu: add_paste_into_folder()");
+
+		if ((window.pending_action == null) || (selected_items.size != 1) || !selected_items[0].is_directory){
+			return;
+		}
+		
+		// paste --------------------------------
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Paste Into Folder"),
+			_("Paste items into selected directory"),
+			IconManager.lookup_image("edit-paste",16),
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			log_debug("file_context_menu.paste()");
+			view.paste_into_folder();
+		});
+
+		menu_item.sensitive = (window.pending_action != null) && (selected_items.size == 1) && selected_items[0].is_directory;
+	}
 	
 	private void add_paste(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
@@ -872,7 +900,7 @@ public class FileContextMenu : Gtk.Menu {
 		var menu_item = gtk_menu_add_item(
 			menu,
 			_("Paste Here"),
-			_("Paste selected items in this directory"),
+			_("Paste items in current directory"),
 			IconManager.lookup_image("edit-paste",16),
 			sg_icon,
 			sg_label);

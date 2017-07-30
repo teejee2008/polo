@@ -3463,6 +3463,45 @@ public class FileViewList : Gtk.Box {
 		action.execute();
 	}
 
+	public void paste_into_folder(){
+
+		if (!can_paste){ return; }
+		
+		if (window.pending_action == null) { return; }
+
+		var selected_items = get_selected_items();
+		if (selected_items.size != 1){ return; }
+		if (!selected_items[0].is_directory){ return; }
+
+		log_debug("action.paste_into_folder()");
+
+		// pickup
+		var action = window.pending_action;
+
+		// clear
+		window.pending_action = null;
+
+		// update
+		action.set_destination(selected_items[0]);
+
+		if (action.source.file_path == action.destination.file_path){
+			if (action.action_type == FileActionType.CUT){
+				show_msg_for_same_source_and_dest();
+				return;
+			}
+			else if (confirm_copy_for_same_source_and_dest() == Gtk.ResponseType.NO){
+				return;
+			}
+		}
+
+		// link
+		action.set_pane(pane);
+		pane.file_operations.add(action);
+
+		// execute
+		action.execute();
+	}
+
 	public void copy_across(bool move = false){
 		var selected_items = get_selected_items();
 		if (selected_items.size == 0){ return; }
