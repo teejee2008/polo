@@ -168,6 +168,8 @@ public class FileViewList : Gtk.Box {
 		show_all();
 	}
 
+	// treeview -----------------------------------
+	
 	private void init_treeview() {
 
 		// treeview
@@ -228,14 +230,11 @@ public class FileViewList : Gtk.Box {
 
 		// events -------------------------------
 
-		treeview.row_activated.connect((path,column)=>{
-			//current_view = view;
-			row_activated(path,column);
-		});
+		treeview.row_activated.connect(treeview_row_activated);
 
-		treeview.row_expanded.connect(row_expanded);
+		treeview.row_expanded.connect(treeview_row_expanded);
 
-		treeview.row_collapsed.connect(row_collapsed);
+		treeview.row_collapsed.connect(treeview_row_collapsed);
 
 		treeview.get_selection().changed.connect(()=> {
 			pane.statusbar.refresh_selection_counts();
@@ -249,22 +248,7 @@ public class FileViewList : Gtk.Box {
 		});
 
         // connect signal for right-click
-		treeview.button_press_event.connect((w, event) => {
-
-			window.active_pane = pane;
-
-			window.update_accelerators_for_active_pane();
-
-			pane.selection_bar.close_panel(false);
-
-			if (event.button == 3) {
-				if (current_item == null) { return false; }
-				menu_file = new FileContextMenu(pane);
-				return menu_file.show_menu(event);
-			}
-
-			return false;
-		});
+		treeview.button_press_event.connect(treeview_button_press_event);
 
 		// tooltip
 		treeview.has_tooltip = true;
@@ -290,78 +274,6 @@ public class FileViewList : Gtk.Box {
 		//	treeview_refresh(view);
 		//	log_msg("clicked");
 		//});
-	}
-
-	public void init_iconview(){
-
-		// iconview
-		iconview = new Gtk.IconView();
-		iconview.set_pixbuf_column(FileViewColumn.ICON);
-		iconview.set_text_column(FileViewColumn.NAME);
-		iconview.selection_mode = Gtk.SelectionMode.MULTIPLE;
-		iconview.reorderable = false;
-		//iconview.enable_search = true;
-		iconview.spacing = 0;
-
-		// scrolled
-		var scrolled = new Gtk.ScrolledWindow(null, null);
-		scrolled.set_shadow_type (ShadowType.ETCHED_IN);
-		scrolled.hscrollbar_policy = PolicyType.AUTOMATIC;
-		scrolled.vscrollbar_policy = PolicyType.AUTOMATIC;
-		scrolled.add (iconview);
-		scrolled.expand = true;
-		contents.add(scrolled);
-		scrolled_iconview = scrolled;
-
-		gtk_hide(scrolled);
-
-		iconview.item_activated.connect((path) =>{
-			row_activated(path, null);
-		});
-
-		//iconview.selection_changed.connect((path) =>{
-
-			//log_debug("iconview.selection_changed");
-
-			//var paths = iconview.get_selected_items();
-
-			//if (paths.length() > 0){
-			//	cycle_thumbnail_images(paths.nth_data(0));
-			//}
-		//});
-
-		// connect signal for shift+F10
-        iconview.popup_menu.connect(() => {
-			if (current_item == null) { return false; }
-			menu_file = new FileContextMenu(pane);
-			return menu_file.show_menu(null);
-		});
-
-        // connect signal for right-click
-		iconview.button_press_event.connect((w, event) => {
-
-			window.active_pane = pane;
-
-			window.update_accelerators_for_active_pane();
-
-			pane.selection_bar.close_panel(false);
-
-			if (event.button == 3) {
-				if (current_item == null) { return false; }
-				menu_file = new FileContextMenu(pane);
-				return menu_file.show_menu(event);
-			}
-
-			return false;
-		});
-
-		iconview.selection_changed.connect(()=> {
-			pane.statusbar.refresh_selection_counts();
-		});
-		
-		// tooltip
-		iconview.has_tooltip = true;
-		iconview.query_tooltip.connect(iconview_query_tooltip);
 	}
 
 	private bool treeview_query_tooltip(int x, int y, bool keyboard_tooltip, Tooltip tooltip) {
@@ -463,27 +375,188 @@ public class FileViewList : Gtk.Box {
 		return "";
 	}
 
-	private void init_active_indicator_top(){
+	private bool treeview_button_press_event(Gtk.Widget w, Gdk.EventButton event){
 
-		active_indicator_top = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
-		active_indicator_top.set_size_request(-1,2);
-		add(active_indicator_top);
-		
-		string css = " background-color: #2196F3; ";
-		gtk_apply_css(new Gtk.Widget[] { active_indicator_top }, css);
+		window.active_pane = pane;
 
-		//css = " color: #ffffff; ";
-		//gtk_apply_css(new Gtk.Widget[] { label }, css);
-	}
+		window.update_accelerators_for_active_pane();
 
-	public void set_active_indicator(bool is_active){
-		string css = " background-color: #2196F3; ";
-		if (!is_active){
-			css = " background-color: @content_view_bg; "; //#C0C0C0
+		pane.selection_bar.close_panel(false);
+
+		if (event.button == 3) {
+			if (current_item == null) { return false; }
+
+			TreePath? path;
+			TreeViewColumn? column;
+			int cell_x, cell_y;
+			treeview.get_path_at_pos((int) event.x, (int) event.y, out path, out column, out cell_x, out cell_y);
+			
+			var sel = treeview.get_selection();
+			if (!sel.path_is_selected(path)){
+				clear_selections();
+				sel.select_path(path);
+			}
+			
+			menu_file = new FileContextMenu(pane);
+			return menu_file.show_menu(event);
 		}
-		gtk_apply_css(new Gtk.Widget[] { active_indicator_top }, css);
-		//gtk_apply_css(new Gtk.Widget[] { active_indicator_bottom }, css);
+
+		return false;
 	}
+
+	private void treeview_row_activated(TreePath path, TreeViewColumn? column){
+		log_debug("treeview_row_activated()");
+
+		TreeIter iter;
+		treefilter.get_iter_from_string(out iter, path.to_string());
+		FileItem item;
+		treefilter.get (iter, 0, out item, -1);
+
+		open(item, null);
+	}
+
+	private void treeview_row_expanded(TreeIter iter, TreePath path){
+
+		gtk_set_busy(true, window);
+
+		treeview.row_expanded.disconnect(treeview_row_expanded);
+		
+		TreeIter iter0;
+		treefilter.convert_iter_to_child_iter(out iter0, iter);
+		
+		FileItem item0, item1;
+		store.get (iter0, 0, out item0, -1);
+
+		log_debug("expanded: %s".printf(item0.file_path));
+
+		// re-query and re-populate the expanded node (iter0)
+
+		item0.query_children(1);
+		set_iter_from_item(iter0, item0, true);
+		remove_iter_children(ref iter0);
+		append_item_children_to_iter(ref iter0, item0, true);
+
+		treeview.expand_row(path, false);
+		treeview.queue_draw();
+		gtk_do_events();
+		
+		TreeIter iter1;
+		bool iterExists = store.iter_children (out iter1, iter0);
+		while (iterExists) {
+			store.get (iter1, 0, out item1, -1);
+
+			// re-query and re-populate child nodes
+
+			item1.query_children(1);
+			//set_iter_from_item(iter1, item1); // not needed
+			remove_iter_children(ref iter1);
+			append_item_children_to_iter(ref iter1, item1, false);
+
+			iterExists = store.iter_next (ref iter1);
+		}
+
+		treeview.queue_draw();
+		gtk_do_events();
+		
+		treeview.row_expanded.connect(treeview_row_expanded);
+	
+		add_monitor(item0);
+
+		gtk_set_busy(false, window);
+	}
+
+	private void treeview_row_collapsed(TreeIter iter, TreePath path){
+		
+		treeview.row_collapsed.disconnect(treeview_row_collapsed);
+
+		TreeIter iter0;
+		treefilter.convert_iter_to_child_iter(out iter0, iter);
+		
+		FileItem item0;
+		store.get (iter0, 0, out item0, -1);
+		
+		remove_monitor(item0);
+		
+		treeview.row_collapsed.connect(treeview_row_collapsed);
+	}
+
+	// iconview -----------------------------------
+	
+	public void init_iconview(){
+
+		// iconview
+		iconview = new Gtk.IconView();
+		iconview.set_pixbuf_column(FileViewColumn.ICON);
+		iconview.set_text_column(FileViewColumn.NAME);
+		iconview.selection_mode = Gtk.SelectionMode.MULTIPLE;
+		iconview.reorderable = false;
+		//iconview.enable_search = true;
+		iconview.spacing = 0;
+
+		// scrolled
+		var scrolled = new Gtk.ScrolledWindow(null, null);
+		scrolled.set_shadow_type (ShadowType.ETCHED_IN);
+		scrolled.hscrollbar_policy = PolicyType.AUTOMATIC;
+		scrolled.vscrollbar_policy = PolicyType.AUTOMATIC;
+		scrolled.add (iconview);
+		scrolled.expand = true;
+		contents.add(scrolled);
+		scrolled_iconview = scrolled;
+
+		gtk_hide(scrolled);
+
+		iconview.item_activated.connect((path) =>{
+			treeview_row_activated(path, null);
+		});
+
+		// connect signal for shift+F10
+        iconview.popup_menu.connect(() => {
+			if (current_item == null) { return false; }
+			menu_file = new FileContextMenu(pane);
+			return menu_file.show_menu(null);
+		});
+
+        // connect signal for right-click
+		iconview.button_press_event.connect(iconview_button_press_event);
+
+		iconview.selection_changed.connect(()=> {
+			pane.statusbar.refresh_selection_counts();
+		});
+		
+		// tooltip
+		iconview.has_tooltip = true;
+		iconview.query_tooltip.connect(iconview_query_tooltip);
+	}
+
+	private bool iconview_button_press_event(Gtk.Widget w, Gdk.EventButton event){
+
+		window.active_pane = pane;
+
+		window.update_accelerators_for_active_pane();
+
+		pane.selection_bar.close_panel(false);
+
+		if (event.button == 3) {
+			if (current_item == null) { return false; }
+
+			TreePath? path;
+			TreeViewColumn? column;
+			int cell_x, cell_y;
+			path = iconview.get_path_at_pos((int) event.x, (int) event.y);
+			
+			if (!iconview.path_is_selected(path)){
+				clear_selections();
+				iconview.select_path(path);
+			}
+			
+			menu_file = new FileContextMenu(pane);
+			return menu_file.show_menu(event);
+		}
+
+		return false;
+	}
+
+	// treeview columns -----------------------------------
 	
 	private void add_col_name() {
 
@@ -1328,6 +1401,15 @@ public class FileViewList : Gtk.Box {
 						return +1;
 					}
 				}
+
+				if (a.permissions == b.permissions){
+					if (sort_column_desc) {
+						return -1 * a.compare_to(b);
+					}
+					else{
+						return a.compare_to(b);
+					}
+				}
 				
 				if (sort_column_desc) {
 					return -1 * strcmp(a.permissions, b.permissions);
@@ -1347,6 +1429,15 @@ public class FileViewList : Gtk.Box {
 					}
 					else {
 						return +1;
+					}
+				}
+
+				if (a.owner_user == b.owner_user){
+					if (sort_column_desc) {
+						return -1 * a.compare_to(b);
+					}
+					else{
+						return a.compare_to(b);
 					}
 				}
 				
@@ -1370,6 +1461,15 @@ public class FileViewList : Gtk.Box {
 						return +1;
 					}
 				}
+
+				if (a.owner_group == b.owner_group){
+					if (sort_column_desc) {
+						return -1 * a.compare_to(b);
+					}
+					else{
+						return a.compare_to(b);
+					}
+				}
 				
 				if (sort_column_desc) {
 					return -1 * strcmp(a.owner_group, b.owner_group);
@@ -1389,6 +1489,15 @@ public class FileViewList : Gtk.Box {
 					}
 					else {
 						return +1;
+					}
+				}
+
+				if (a.access_flags == b.access_flags){
+					if (sort_column_desc) {
+						return -1 * a.compare_to(b);
+					}
+					else{
+						return a.compare_to(b);
 					}
 				}
 				
@@ -1412,6 +1521,15 @@ public class FileViewList : Gtk.Box {
 						return +1;
 					}
 				}
+
+				if (a.content_type == b.content_type){
+					if (sort_column_desc) {
+						return -1 * a.compare_to(b);
+					}
+					else{
+						return a.compare_to(b);
+					}
+				}
 				
 				if (sort_column_desc) {
 					return -1 * strcmp(a.content_type, b.content_type);
@@ -1431,6 +1549,15 @@ public class FileViewList : Gtk.Box {
 					}
 					else {
 						return +1;
+					}
+				}
+				
+				if (a.content_type_desc == b.content_type_desc){
+					if (sort_column_desc) {
+						return -1 * a.compare_to(b);
+					}
+					else{
+						return a.compare_to(b);
 					}
 				}
 				
@@ -1578,84 +1705,58 @@ public class FileViewList : Gtk.Box {
 			}
 		}
 	}
-	
-	private void row_activated(TreePath path, TreeViewColumn? column){
-		log_debug("treeview_row_activated()");
 
-		TreeIter iter;
-		treefilter.get_iter_from_string(out iter, path.to_string());
-		FileItem item;
-		treefilter.get (iter, 0, out item, -1);
-
-		open(item, null);
+	public string get_columns(){
+		return tv_manager.get_columns();
 	}
 
-	private void row_expanded(TreeIter iter, TreePath path){
+	public Gee.ArrayList<TreeViewColumn> get_all_columns(){
+		return tv_manager.get_all_columns();
+	}
 
-		gtk_set_busy(true, window);
+	public void set_columns(string columns){
+		tv_manager.set_columns(columns);
+	}
 
-		treeview.row_expanded.disconnect(row_expanded);
+	public void add_column(string name){
+		log_debug("add_column: %s".printf(name));
+		tv_manager.add_column(name);
+	}
+
+	public void remove_column(string name){
+		log_debug("remove_column: %s".printf(name));
+		tv_manager.remove_column(name);
+	}
+
+	public void reset_columns(){
+		tv_manager.reset_columns();
+	}
+
+	// active pane indicators ------------------------
+	
+	private void init_active_indicator_top(){
+
+		active_indicator_top = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		active_indicator_top.set_size_request(-1,2);
+		add(active_indicator_top);
 		
-		TreeIter iter0;
-		treefilter.convert_iter_to_child_iter(out iter0, iter);
-		
-		FileItem item0, item1;
-		store.get (iter0, 0, out item0, -1);
+		string css = " background-color: #2196F3; ";
+		gtk_apply_css(new Gtk.Widget[] { active_indicator_top }, css);
 
-		log_debug("expanded: %s".printf(item0.file_path));
+		//css = " color: #ffffff; ";
+		//gtk_apply_css(new Gtk.Widget[] { label }, css);
+	}
 
-		// re-query and re-populate the expanded node (iter0)
-
-		item0.query_children(1);
-		set_iter_from_item(iter0, item0, true);
-		remove_iter_children(ref iter0);
-		append_item_children_to_iter(ref iter0, item0, true);
-
-		treeview.expand_row(path, false);
-		treeview.queue_draw();
-		gtk_do_events();
-		
-		TreeIter iter1;
-		bool iterExists = store.iter_children (out iter1, iter0);
-		while (iterExists) {
-			store.get (iter1, 0, out item1, -1);
-
-			// re-query and re-populate child nodes
-
-			item1.query_children(1);
-			//set_iter_from_item(iter1, item1); // not needed
-			remove_iter_children(ref iter1);
-			append_item_children_to_iter(ref iter1, item1, false);
-
-			iterExists = store.iter_next (ref iter1);
+	public void set_active_indicator(bool is_active){
+		string css = " background-color: #2196F3; ";
+		if (!is_active){
+			css = " background-color: @content_view_bg; "; //#C0C0C0
 		}
-
-		treeview.queue_draw();
-		gtk_do_events();
-		
-		treeview.row_expanded.connect(row_expanded);
-	
-		add_monitor(item0);
-
-		gtk_set_busy(false, window);
+		gtk_apply_css(new Gtk.Widget[] { active_indicator_top }, css);
+		//gtk_apply_css(new Gtk.Widget[] { active_indicator_bottom }, css);
 	}
 
-	private void row_collapsed(TreeIter iter, TreePath path){
-		
-		treeview.row_collapsed.disconnect(row_collapsed);
-
-		TreeIter iter0;
-		treefilter.convert_iter_to_child_iter(out iter0, iter);
-		
-		FileItem item0;
-		store.get (iter0, 0, out item0, -1);
-		
-		remove_monitor(item0);
-		
-		treeview.row_collapsed.connect(row_collapsed);
-	}
-
-	// key press
+	// key press -------------------------
 
 	private void connect_key_press_handler(){
 		treeview.key_press_event.connect(on_key_press_event);
@@ -1912,34 +2013,6 @@ public class FileViewList : Gtk.Box {
 		App.tileview_icon_size = tileview_icon_size;
 		App.tileview_row_spacing = tileview_row_spacing;
 		App.tileview_padding  = tileview_padding;
-	}
-
-	// columns  ------------------------
-
-	public string get_columns(){
-		return tv_manager.get_columns();
-	}
-
-	public Gee.ArrayList<TreeViewColumn> get_all_columns(){
-		return tv_manager.get_all_columns();
-	}
-
-	public void set_columns(string columns){
-		tv_manager.set_columns(columns);
-	}
-
-	public void add_column(string name){
-		log_debug("add_column: %s".printf(name));
-		tv_manager.add_column(name);
-	}
-
-	public void remove_column(string name){
-		log_debug("remove_column: %s".printf(name));
-		tv_manager.remove_column(name);
-	}
-
-	public void reset_columns(){
-		tv_manager.reset_columns();
 	}
 
 	// view mode ------------------------------------------
@@ -3181,7 +3254,7 @@ public class FileViewList : Gtk.Box {
 		return menu_history;
 	}
 
-	// helpers -----------------------------------
+	// selection helpers -----------------------------------
 
 	public Gee.ArrayList<FileItem> get_selected_items(){
 
@@ -3341,7 +3414,7 @@ public class FileViewList : Gtk.Box {
 		}
 	}
 	
-	// context actions
+	// context actions -----------------------------------------
 
 	public void open(FileItem item, DesktopApp? app){
 
