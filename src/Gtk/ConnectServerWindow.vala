@@ -24,6 +24,7 @@
 
 using Gtk;
 using Gee;
+using Json;
 
 using TeeJee.Logging;
 using TeeJee.FileSystem;
@@ -39,6 +40,7 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 	private Gtk.Box vbox_content;
 	private Gtk.Box hbox_status;
 	private Gtk.Label lbl_status;
+	private Gtk.Menu menu_config;
 	
 	private Gtk.Entry entry_server;
 	private Gtk.SpinButton spin_port;
@@ -251,6 +253,8 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 		});
 		
 		ui_server_type_populate();
+
+		ui_add_history_icon(hbox);
 	}
 
 	private void ui_server_type_populate() {
@@ -589,6 +593,60 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 		button.grab_focus();
 	}
 
+	private void ui_add_history_icon(Gtk.Box box){
+
+		var list = dir_list_names(App.app_conf_dir_remotes);
+
+		if (list.size == 0) { return; }
+		
+		var ebox = gtk_add_event_box(box);
+		ebox.margin_left = 6;
+
+		var img = IconManager.lookup_image("preferences-system", 16);
+		ebox.add(img);
+
+		var tt = _("History");
+		img.set_tooltip_text(tt);
+		ebox.set_tooltip_text(tt);
+
+		ebox.button_press_event.connect((event)=>{
+
+			log_debug("remote_history:button_press_event()");
+			
+			menu_config = new Gtk.Menu();
+			menu_config.reserve_toggle_size = false;
+
+			foreach(string file_name in list){
+
+				var item = new Gtk.MenuItem();
+				menu_config.append(item);
+
+				string file_path = path_combine(App.app_conf_dir_remotes, file_name);
+				
+				var lbl = new Gtk.Label(file_get_title(file_name));
+				lbl.xalign = 0.0f;
+				lbl.margin_right = 6;
+				item.add(lbl);
+
+				item.activate.connect (() => {
+					log_debug("item_activated(): %s".printf(file_path));
+					load_settings(file_path);
+				});
+			}
+
+			menu_config.show_all();
+		
+			if (event != null) {
+				menu_config.popup (null, null, null, event.button, event.time);
+			}
+			else {
+				menu_config.popup (null, null, null, 0, Gtk.get_current_event_time());
+			}
+			
+			return true;
+		});
+	}
+	
 	private void connect_signals(){
 
 		cmb_type.changed.connect(() => {
@@ -977,6 +1035,7 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 		var file = File.new_for_uri(uri);
 		if ((file.get_path() != null) && !file.get_path().contains("://")){
 			// open the mounted path in active pane
+			save_settings();
 			log_debug("success: setting view set_view_path");
 			view.set_view_path(uri);
 			this.close();
@@ -995,6 +1054,111 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 			task.stop();
 		}
 		this.close();
+	}
+
+	// settings
+
+	private void save_settings(){
+		
+		var config = new Json.Object();
+
+		set_numeric_locale("C"); // switch numeric locale
+
+		config.set_string_member("scheme", scheme);
+		config.set_string_member("server", server);
+		config.set_string_member("port", port.to_string());
+		config.set_string_member("domain", domain);
+		config.set_string_member("username", username);
+		config.set_string_member("password", password);
+		config.set_string_member("share", share);
+
+		var json = new Json.Generator();
+		json.pretty = true;
+		json.indent = 2;
+		var node = new Json.Node(NodeType.OBJECT);
+		node.set_object(config);
+		json.set_root(node);
+
+		file_delete(conf_path);
+
+		try {
+			json.to_file(conf_path);
+		} catch (Error e) {
+			log_error (e.message);
+		}
+
+		set_numeric_locale(""); // reset numeric locale
+
+		log_debug(_("Remote config saved") + ": '%s'".printf(conf_path));
+	}
+
+	private void load_settings(string remote_conf_path){
+
+		var f = File.new_for_path(remote_conf_path);
+		if (!f.query_exists()) {
+			return;
+		}
+
+		var parser = new Json.Parser();
+		try {
+			parser.load_from_file(remote_conf_path);
+		}
+		catch (Error e) {
+			log_error (e.message);
+		}
+
+		var node = parser.get_root();
+		var config = node.get_object();
+
+		set_numeric_locale("C"); // switch numeric locale
+
+		scheme = json_get_string(config, "scheme", scheme);
+		server = json_get_string(config, "server", server);
+		port = json_get_int(config, "port", port);
+		domain = json_get_string(config, "domain", domain);
+		username = json_get_string(config, "username", username);
+		password = json_get_string(config, "password", password);
+		share = json_get_string(config, "share", share);
+
+		log_debug(_("Remote config loaded") + ": '%s'".printf(remote_conf_path));
+
+		set_numeric_locale(""); // reset numeric locale
+	}
+
+	private string conf_path {
+		owned get {
+			
+			string text = "";
+			text += "%s".printf(scheme);
+			text += "-%s".printf(server);
+			
+			if (scheme == "smb"){
+				if (domain.length > 0){
+					text += "-%s".printf(domain);
+				}
+				if (username.length > 0){
+					text += "-%s".printf(username);
+				}
+				if (share.length > 0){
+					text += "-%s".printf(share);
+				}
+			}
+			else{
+				if (port > 0){
+					text += "-%d".printf(port);
+				}
+				if (domain.length > 0){
+					text += "-%s".printf(domain);
+				}
+				if (username.length > 0){
+					text += "-%s".printf(username);
+				}
+			}
+
+			text += ".json";
+
+			return path_combine(App.app_conf_dir_remotes, text);
+		}
 	}
 }
 

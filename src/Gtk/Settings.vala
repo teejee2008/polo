@@ -2517,7 +2517,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		var chk = new Gtk.CheckButton.with_label(_("Split"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'PDF > Split' action in right-click menu will remove the original file on success."));
+		chk.set_tooltip_text(_("If selected, the action will remove original file on success"));
 
 		chk.active = App.overwrite_pdf_split;
 
@@ -2531,7 +2531,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		var chk = new Gtk.CheckButton.with_label(_("Merge"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'PDF > Merge' action in right-click menu will remove the original file on success."));
+		chk.set_tooltip_text(_("If selected, the action will remove original file on success"));
 
 		chk.active = App.overwrite_pdf_merge;
 
@@ -2545,7 +2545,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		var chk = new Gtk.CheckButton.with_label(_("Reduce File Size"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'PDF > Reduce File Size' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_pdf_compress;
 
@@ -2559,7 +2559,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		var chk = new Gtk.CheckButton.with_label(_("Uncompress"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'PDF > Uncompress' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_pdf_uncompress;
 
@@ -2573,7 +2573,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		var chk = new Gtk.CheckButton.with_label(_("Add Password"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'PDF > Add Password' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_pdf_protect;
 
@@ -2587,7 +2587,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		var chk = new Gtk.CheckButton.with_label(_("Remove Password"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'PDF > Remove Password' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_pdf_unprotect;
 
@@ -2601,7 +2601,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		var chk = new Gtk.CheckButton.with_label(_("Remove color"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'PDF > Remove color' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_pdf_decolor;
 
@@ -2615,7 +2615,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		var chk = new Gtk.CheckButton.with_label(_("Rotate"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'PDF > Rotate' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_pdf_rotate;
 
@@ -2629,7 +2629,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		var chk = new Gtk.CheckButton.with_label(_("Optimize"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'PDF > Optimize' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_pdf_optimize;
 
@@ -2644,7 +2644,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		var chk = new Gtk.CheckButton.with_label(_("Optimize PNG"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'Image > Optimize PNG' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_image_optimize_png;
 
@@ -2658,7 +2658,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		var chk = new Gtk.CheckButton.with_label(_("Reduce JPEG"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'Image > Reduce JPEG' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_image_reduce_jpeg;
 
@@ -2672,7 +2672,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		var chk = new Gtk.CheckButton.with_label(_("Resize"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'Image > Resize' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_image_resize;
 
@@ -2686,7 +2686,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		var chk = new Gtk.CheckButton.with_label(_("Rotate"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'Image > Rotate' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_image_rotate;
 
@@ -2700,7 +2700,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		var chk = new Gtk.CheckButton.with_label(_("Convert"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'Image > Convert' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_image_convert;
 
@@ -2714,7 +2714,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		var chk = new Gtk.CheckButton.with_label(_("Remove Color"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'Image > Remove Color' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_image_decolor;
 
@@ -2728,7 +2728,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		var chk = new Gtk.CheckButton.with_label(_("Boost Color"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'Image > Boost Color' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_image_boost_color;
 

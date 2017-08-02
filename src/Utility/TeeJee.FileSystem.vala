@@ -866,20 +866,25 @@ namespace TeeJee.FileSystem{
 	}
 
 	// dir info -------------------
-	
-	// dep: find wc    TODO: rewrite
+
 	public long dir_count(string path){
 
-		/* Return total count of files and directories */
+		long count = 0;
+		
+		try
+		{
+			File file = File.new_for_path (path);
+			FileInfo info;
+			FileEnumerator enumerator = file.enumerate_children ("%s".printf(FileAttribute.STANDARD_NAME), 0);
+			while ((info = enumerator.next_file()) != null) {
+				count++;
+			}
+		}
+		catch (Error e) {
+			log_error (e.message);
+		}
 
-		string cmd = "";
-		string std_out;
-		string std_err;
-		int ret_val;
-
-		cmd = "find '%s' | wc -l".printf(escape_single_quote(path));
-		ret_val = exec_script_sync(cmd, out std_out, out std_err);
-		return long.parse(std_out);
+		return count;
 	}
 
 	// dep: du

@@ -32,7 +32,7 @@ using TeeJee.System;
 public class GvfsMounts: GLib.Object {
 
 	public static Gee.HashMap<string,FileItem> map;
-	
+
 	// static methods
 	
 	public static Gee.ArrayList<FileItem> get_mounts(int userid){
