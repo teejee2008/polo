@@ -2597,6 +2597,11 @@ public class DeviceMonitor : GLib.Object{
 	public signal void volume_added (Volume volume);
 	public signal void volume_changed (Volume volume);
 	public signal void volume_removed (Volume volume);
+
+	/*
+	Known Issues:
+	Sometimes when a device is mounted, the event is not detected by GLib.VolumeMonitor
+	*/
 	
 	private DeviceMonitor(){
 
@@ -2693,6 +2698,16 @@ public class DeviceMonitor : GLib.Object{
 			tmr_init = 0;
 		}
 		tmr_init = Timeout.add(500, init_delayed);
+	}
+
+	public static void notify_change(){
+		/*
+		Known Issues:
+		Sometimes when a device is mounted, the event is not detected by GLib.VolumeMonitor
+		Call this explicity after a mount operation
+		*/
+	
+		start_timer();
 	}
 
 	private static bool init_delayed(){

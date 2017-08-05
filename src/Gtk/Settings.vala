@@ -171,8 +171,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		add_sidebar_option_places(vbox_items);
 		add_sidebar_option_bookmarks(vbox_items);
 		add_sidebar_option_devices(vbox_items);
-		add_sidebar_option_unmount(vbox_items);
-		add_sidebar_option_lock(vbox_items);
+		add_sidebar_option_action_button(vbox_items);
 
 		// Statusbar -------------------------------
 
@@ -1002,38 +1001,19 @@ public class Settings : Gtk.Box, IPaneActive {
 		});
 	}
 
-	private void add_sidebar_option_unmount(Gtk.Container box){
+	private void add_sidebar_option_action_button(Gtk.Container box){
 
-		var chk = new Gtk.CheckButton.with_label(_("Unmount button"));
-		chk.set_tooltip_text(_("Show Unmount button for mounted devices"));
+		var chk = new Gtk.CheckButton.with_label(_("Action button"));
+		chk.set_tooltip_text(_("Show Action button for sidebar items"));
 		box.add(chk);
 
-		chk.active = App.sidebar_unmount;
+		chk.active = App.sidebar_action_button;
 
 		chk.toggled.connect(()=>{
 
-			if (App.sidebar_unmount == chk.active){ return; }
+			if (App.sidebar_action_button == chk.active){ return; }
 
-			App.sidebar_unmount = chk.active;
-
-			window.sidebar.refresh();
-		});
-	}
-
-
-	private void add_sidebar_option_lock(Gtk.Container box){
-
-		var chk = new Gtk.CheckButton.with_label(_("Lock button"));
-		chk.set_tooltip_text(_("Show Lock button for encrypted devices"));
-		box.add(chk);
-
-		chk.active = App.sidebar_lock;
-
-		chk.toggled.connect(()=>{
-
-			if (App.sidebar_lock == chk.active){ return; }
-
-			App.sidebar_lock = chk.active;
+			App.sidebar_action_button = chk.active;
 
 			window.sidebar.refresh();
 		});

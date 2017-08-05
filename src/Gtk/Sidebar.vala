@@ -159,6 +159,10 @@ public class Sidebar : Gtk.Box {
 				collapsed_sections.add(item);
 			}
 		}
+
+		DeviceMonitor.get_monitor().changed.connect(()=>{
+			this.refresh();
+		});
 	}
 
 	private void on_listbox_row_activated(Gtk.ListBoxRow row){
@@ -254,46 +258,11 @@ public class Sidebar : Gtk.Box {
 
 		case SidebarItemType.DEVICE:
 
-			gtk_set_busy(true, window);
-			
-			log_debug("sidebar: device_activated: %s".printf(item.device.device));
-
-			Device dev = item.device;
-
-			if (!dev.is_mounted){
-
-				if (dev.is_encrypted_partition){
-
-					log_debug("prompting user to unlock encrypted partition");
-
-					if (!dev.unlock("", "", window, false)){
-
-						log_debug("device is null or still in locked state!");
-						if (popup){
-							popover.hide();
-						}
-
-						gtk_set_busy(false, window);
-						return; // no message needed
-					}
-					else{
-						dev = dev.children[0];
-					}
-				}
-
-				dev.automount(window);
-			}
-
-			if (dev.is_mounted){
-				var mp = dev.mount_points[0];
-				pane.view.set_view_path(mp.mount_point);
-			}
+			DeviceContextMenu.browse_device(item.device, pane, window);
 
 			if (popup){
 				popover.hide();
 			}
-
-			gtk_set_busy(false, window);
 
 			break;
 		}
@@ -337,6 +306,8 @@ public class Sidebar : Gtk.Box {
 
 		if (!popup && !App.sidebar_visible){ return; }
 
+		log_debug("sidebar: refresh(%s): %s".printf((popup ? "popup" : ""), view.paneid));
+
 		apply_css_listbox();
 
 		listbox.forall ((x) => listbox.remove(x));
@@ -349,8 +320,6 @@ public class Sidebar : Gtk.Box {
 			txt += item;
 		}
 		App.sidebar_collapsed_sections = txt;
-
-		log_debug("sidebar: refresh(%s): %s".printf((popup ? "popup" : ""), view.paneid));
 
 		SidebarItem item = null;
 
@@ -383,8 +352,8 @@ public class Sidebar : Gtk.Box {
 						add_bookmark(bm);
 					}
 
-					var bm = new GtkBookmark("network:///", _("Network"));
-					add_bookmark(bm);
+					//var bm = new GtkBookmark("network:///", _("Network"));
+					//add_bookmark(bm);
 				}
 			}
 
@@ -864,31 +833,15 @@ public class Sidebar : Gtk.Box {
 			lbl2.hexpand = true;
 			box.add(lbl2);
 
-			if (dev.is_on_encrypted_partition && !dev.is_system_device && (popup || App.sidebar_lock)){
-				add_lock_button(box, dev);
+			if (popup || App.sidebar_action_button){
+				add_actions_button(box, dev);
 			}
 
-			if (dev.is_mounted && !dev.is_system_device && (popup || App.sidebar_unmount)){
-				add_unmount_button(box, dev);
-			}
-
-			/*
 			// connect signal for shift+F10
-			row.popup_menu.connect(() => {
-				if (dev == null) { return false; }
-				menu_device = new DeviceContextMenu(dev);
-				return menu_device.show_menu(null);
-			});
+			row.popup_menu.connect(() => { return row_device_button_press_event(null, dev); });
 
-			// connect signal for right-click
-			row.button_press_event.connect((w, event) => {
-				if (dev == null) { return false; }
-				if (event.button == 3) {
-					menu_device = new DeviceContextMenu(dev);
-					return menu_device.show_menu(event);
-				}
-				return false;
-			});*/
+			// connect signal for right-click menu
+			row.button_press_event.connect((w,e) => { return row_device_button_press_event(e, dev); });
 
 			break;
 		}
@@ -899,6 +852,20 @@ public class Sidebar : Gtk.Box {
 		var lbl = new Gtk.Label("");
 		lbl.margin_right = 12;
 		box.add(lbl);
+	}
+
+	private bool row_device_button_press_event(Gdk.EventButton? event, Device? dev){
+
+		log_debug("Sidebar: row_button_press_event()");
+		
+		if (dev == null) { return false; }
+		
+		if ((event != null) && (event.button != 3)){
+			return false;
+		}
+			
+		menu_device = new DeviceContextMenu(dev);
+		return menu_device.show_menu(event);
 	}
 
 	private void add_bookmark_edit_button(Gtk.Box box, GtkBookmark bm, Gtk.Box label_box, Gtk.Entry entry, Gtk.ListBoxRow row, Gtk.EventBox ebox_row){
@@ -1006,15 +973,15 @@ public class Sidebar : Gtk.Box {
 		});
 	}
 
-	private void add_unmount_button(Gtk.Box box, Device dev){
+	private void add_actions_button(Gtk.Box box, Device dev){
 		var icon_size = popup ? 16 : 16;
-		var img = new Gtk.Image.from_pixbuf(IconManager.lookup("media-eject", icon_size, true));
+		var img = new Gtk.Image.from_pixbuf(IconManager.lookup("preferences-system", icon_size, true));
 
 		var ebox = new Gtk.EventBox();
 		ebox.add(img);
 		box.add(ebox);
 
-		ebox.set_tooltip_text(_("Unmount device"));
+		ebox.set_tooltip_text(_("Actions"));
 
 		// set hand cursor
 		if (ebox.get_realized()){
@@ -1027,102 +994,8 @@ public class Sidebar : Gtk.Box {
 		}
 
 		ebox.button_press_event.connect((event)=>{
-
-			if (event.button != 1) { return false; }
-			
-			gtk_set_busy(true, window);
-
-			log_debug("unmount_button_clicked ------------------------------");
-
-			if (dev.is_mounted){
-				if (dev.unmount(window)){
-					string title =  _("Device Unmounted");
-					OSDNotify.notify_send(title, "", 1000, "low", "info");
-				}
-			}
-
-			gtk_set_busy(false, window);
-
-			if (popup){
-				popover.hide();
-			}
-			return true;
-		});
-	}
-
-	private void add_lock_button(Gtk.Box box, Device dev){
-		var icon_size = popup ? 16 : 16;
-		var img = IconManager.lookup_image("lock", icon_size, true, true);
-
-		var ebox = new Gtk.EventBox();
-		ebox.add(img);
-		box.add(ebox);
-
-		ebox.set_tooltip_text(_("Unmount and lock device"));
-
-		// set hand cursor
-		if (ebox.get_realized()){
-			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-		}
-		else{
-			ebox.realize.connect(()=>{
-				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-			});
-		}
-
-		ebox.button_press_event.connect((event)=>{
-
-			if (event.button != 1) { return false; }
-			
-			gtk_set_busy(true, window);
-
-			log_debug("lock_button_clicked ------------------------------");
-
-			bool ok = true;
-			string mpath = "";
-
-			// unmount if mounted, and save the mount path
-			if (dev.is_mounted){
-				mpath = dev.mount_points[0].mount_point;
-				if (!dev.unmount(window)){
-					log_debug("device is still mounted!");
-					mpath = "";
-				}
-				else{
-					log_debug("device was unmounted");
-				}
-			}
-			else{
-				log_debug("device is not mounted");
-			}
-
-			// lock the device's parent if device is unmounted and encrypted
-			if (dev.is_on_encrypted_partition){
-				log_debug("locking device...");
-				ok = dev.parent.lock_device(window);
-
-				if (ok){
-					string title =  _("Device Locked");
-					OSDNotify.notify_send(title, "", 1000, "low", "info");
-				}
-			}
-			else{
-				log_debug("device is not an encrypted partition");
-			}
-
-			// reset views that were displaying the mounted path
-			if (mpath.length > 0){
-				log_debug("resetting views for the mount path");
-				//window.reset_views_with_path_prefix(mpath);
-			}
-
-			gtk_set_busy(false, window);
-
-			if (popup){
-				popover.hide();
-			}
-
-			return true;
+			menu_device = new DeviceContextMenu(dev);
+			return menu_device.show_menu(event);
 		});
 	}
 
