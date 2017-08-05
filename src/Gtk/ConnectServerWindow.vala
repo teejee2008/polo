@@ -1069,7 +1069,7 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 		config.set_string_member("port", port.to_string());
 		config.set_string_member("domain", domain);
 		config.set_string_member("username", username);
-		config.set_string_member("password", password);
+		//config.set_string_member("password", password);
 		config.set_string_member("share", share);
 
 		var json = new Json.Generator();
@@ -1117,7 +1117,7 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 		port = json_get_int(config, "port", port);
 		domain = json_get_string(config, "domain", domain);
 		username = json_get_string(config, "username", username);
-		password = json_get_string(config, "password", password);
+		//password = json_get_string(config, "password", password);
 		share = json_get_string(config, "share", share);
 
 		log_debug(_("Remote config loaded") + ": '%s'".printf(remote_conf_path));
