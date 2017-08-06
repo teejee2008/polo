@@ -75,7 +75,7 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		add_menu_edit(menu_shell);
 		add_menu_view(menu_shell);
 		add_menu_go(menu_shell);
-		//add_menu_cloud(menu_shell);
+		add_menu_cloud(menu_shell);
 		add_menu_tools(menu_shell);
 		add_menu_help(menu_shell);
 		
@@ -1305,15 +1305,49 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		var submenu = new Gtk.Menu();
 		menu_item.set_submenu(submenu);
 
-		add_cloud_account_add(submenu);
+		context_normal.connect(()=>{
+			add_cloud_account_refresh(submenu);
+		});
 
-		add_cloud_account_remove(submenu);
+		context_trash.connect(()=>{
+			add_cloud_account_refresh(submenu);
+		});
 
-		gtk_menu_add_separator(submenu);
+		context_archive.connect(()=>{
+			add_cloud_account_refresh(submenu);
+		});
 
-		add_cloud_account_browse(submenu);
+		context_term.connect(()=>{
+			add_cloud_account_refresh(submenu);
+		});
+		
+		context_edit.connect(()=>{
+			//add_cloud_account_refresh(submenu);
+		});
+
+		context_none.connect(()=>{
+			log_debug("NainMenu: cloud: clear()");
+			gtk_container_remove_children(submenu);
+		});
 	}
 
+	private void add_cloud_account_refresh(Gtk.Menu menu){
+		
+		log_debug("mainmenu: cloud: refresh()");
+
+		gtk_container_remove_children(menu);
+		
+		add_cloud_account_add(menu);
+
+		add_cloud_account_remove(menu);
+
+		gtk_menu_add_separator(menu);
+
+		add_cloud_account_browse(menu);
+
+		show_all();
+	}
+	
 	private void add_cloud_account_add(Gtk.Menu menu){
 		
 		var item = new Gtk.MenuItem.with_label (_("Add Account"));
@@ -1321,7 +1355,7 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		menu.add(item);
 
 		item.activate.connect (() => {
-			window.cloud_login();
+			window.add_rclone_account();
 		});
 	}
 
@@ -1331,20 +1365,46 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		item.set_tooltip_text(_("Logout from cloud storage account"));
 		menu.add(item);
 
-		item.activate.connect (() => {
-			//window.cloud_logout();
-		});
+		var submenu = new Gtk.Menu();
+		item.set_submenu(submenu);
+		
+		foreach(var acc in App.rclone.accounts){
+
+			string acc_name = "%s > %s".printf(acc.type_name, acc.name);
+			
+			var subitem = new Gtk.MenuItem.with_label(acc_name);
+			submenu.add(subitem);
+
+			subitem.activate.connect (() => {
+				bool ok = window.remove_rclone_account(acc);
+				if (ok){
+					gtk_messagebox(_("Account Removed"), "%s".printf(acc_name), window, false);
+					submenu.remove(subitem);
+				}
+				else {
+					gtk_messagebox(_("Failed to Remove Account"), "%s".printf(acc_name), window, false);
+				}
+				//window.cloud_remove();
+			});
+		}
 	}
 
 	private void add_cloud_account_browse(Gtk.Menu menu){
 
 		foreach(var acc in App.rclone.accounts){
 			
-			var item = new Gtk.MenuItem.with_label("%s: %s".printf(acc.type_name, acc.name));
+			var item = new Gtk.MenuItem.with_label("%s > %s".printf(acc.type_name, acc.name));
 			menu.add(item);
 
 			item.activate.connect (() => {
+
+				log_debug("menu_item_clicked: %s".printf(acc.name));
 				
+				if (!acc.check_mounted()){
+					acc.mount();
+					sleep(300);
+				}
+				view.open_in_new_tab(acc.mount_path);
 			});
 		}
 	}

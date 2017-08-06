@@ -83,8 +83,9 @@ public class FileViewList : Gtk.Box {
 	private int history_index = -1;
 
 	// items
-	public string current_location = "";
 	public FileItem current_item;
+	public string current_location = "";
+	public bool current_location_is_remote = false;
 	public FileContextMenu menu_file;
 
 	public string filter_pattern = "";
@@ -2129,6 +2130,7 @@ public class FileViewList : Gtk.Box {
 		var previous_item = current_item;
 		current_item = item;
 		current_location = current_item.display_path;
+		current_location_is_remote = current_item.file_path.has_prefix(App.rclone_mounts);
 
 		clear_filter();
 		pane.selection_bar.close_panel(true); // force
@@ -2177,37 +2179,6 @@ public class FileViewList : Gtk.Box {
 		}
 
 		//log_debug("view_mode: %s, %s".printf(view_mode.to_string(), view_mode_user.to_string()));
-	}
-
-	private bool query_items(){
-		
-		if (current_item == null){ return true; }
-
-		log_debug("FileViewList: query_items()");
-
-		//var cached = TreeModelCache.find_file_item(current_item.file_path);
-
-		//if (cached == null){
-
-			var timer = timer_start();
-
-			if (current_item.is_trash){
-				App.trashcan.query_items(true);
-				current_item = App.trashcan;
-			}
-			else if (current_item.is_archive && (current_item.children.size == 0)){
-				return list_archive(current_item);
-			}
-			else{
-				current_item.query_children(1);
-			}
-
-			log_trace("FileViewList: query_items(): %s".printf(timer_elapsed_string(timer)));
-
-			log_debug("FileViewList: query_items(): %d".printf(current_item.children.size));
-		//}
-
-		return true;
 	}
 
 	private void set_columns_for_special_locations(){
@@ -2363,7 +2334,7 @@ public class FileViewList : Gtk.Box {
 		
 		if (load_icon){
 			
-			pixbuf = item.get_image(treemodel_icon_size, use_thumbs, use_transparency, use_emblems, out task);
+			pixbuf = item.get_image(treemodel_icon_size, use_thumbs && !current_location_is_remote, use_transparency, use_emblems, out task);
 
 			if (use_thumbs && (task != null)){
 				thumbnail_update_is_required = true;
@@ -2523,9 +2494,9 @@ public class FileViewList : Gtk.Box {
 
 				var iter0 = append_item_to_treeview(item);
 
-				if ((item.file_type == FileType.DIRECTORY) && (item.item_count > 0)){
+				if (item.file_type == FileType.DIRECTORY){
 
-					/* performance hack: append the item itself as it's child iter if item has children
+					/* performance hack: append the item itself as it's child iter
 					 * this will make the node display expanders in treeview
 					 * we will repopulate this node correctly when user tries to expand it
 					 * */
@@ -2657,6 +2628,37 @@ public class FileViewList : Gtk.Box {
 		pane.statusbar.refresh_summary();
 		window.statusbar.refresh_summary();
 		refresh(false);
+	}
+
+	private bool query_items(){
+		
+		if (current_item == null){ return true; }
+
+		log_debug("FileViewList: query_items()");
+
+		//var cached = TreeModelCache.find_file_item(current_item.file_path);
+
+		//if (cached == null){
+
+			var timer = timer_start();
+
+			if (current_item.is_trash){
+				App.trashcan.query_items(true);
+				current_item = App.trashcan;
+			}
+			else if (current_item.is_archive && (current_item.children.size == 0)){
+				return list_archive(current_item);
+			}
+			else{
+				current_item.query_children(1);
+			}
+
+			log_trace("FileViewList: query_items(): %s".printf(timer_elapsed_string(timer)));
+
+			log_debug("FileViewList: query_items(): %d".printf(current_item.children.size));
+		//}
+
+		return true;
 	}
 
 	private int get_adjusted_column_width_for_tileview(){
@@ -2832,7 +2834,7 @@ public class FileViewList : Gtk.Box {
 			store = null;
 			current_item = null;
 			treeview.set_model(null);
-			treeview.headers_visible = false;
+			//treeview.headers_visible = false;
 			iconview.set_model(null);
 		}
 
@@ -2890,6 +2892,10 @@ public class FileViewList : Gtk.Box {
 	public void start_thumbnail_updater(){
 
 		cancel_thumbnail_updater();
+
+		if ((current_item != null) && current_item.file_path.has_prefix(App.rclone_mounts)){
+			return;
+		}
 
 		if (thumbnail_pending == 0){
 			return;
@@ -3581,6 +3587,46 @@ public class FileViewList : Gtk.Box {
 		action.execute();
 	}
 
+	public void paste_url(string url){
+
+		if (!can_paste){ return; }
+		
+		if (url.length == 0) { return; }
+
+		log_debug("action.paste_url()");
+
+		// create
+		var action = new ProgressPanelVideoDownloadTask(pane, url);
+		action.set_source(current_item);
+		action.set_destination(current_item);
+		pane.file_operations.add(action);
+
+		// execute
+		action.execute();
+	}
+
+	public void paste_url_into_folder(string url){
+
+		if (!can_paste){ return; }
+		
+		if (url.length == 0) { return; }
+
+		var selected_items = get_selected_items();
+		if (selected_items.size != 1){ return; }
+		if (!selected_items[0].is_directory){ return; }
+
+		log_debug("action.paste_url_into_folder()");
+
+		// create
+		var action = new ProgressPanelVideoDownloadTask(pane, url);
+		action.set_source(current_item);
+		action.set_destination(selected_items[0]);
+		pane.file_operations.add(action);
+
+		// execute
+		action.execute();
+	}
+
 	public void copy_across(bool move = false){
 		var selected_items = get_selected_items();
 		if (selected_items.size == 0){ return; }
@@ -4057,7 +4103,7 @@ public class FileViewList : Gtk.Box {
 			}
 		}
 
-		var tab = panel.add_tab();
+		var tab = panel.add_tab(false);
 		tab.pane.view.set_view_path(path_to_open);
 		tab.select_tab();
 	}
@@ -4223,7 +4269,7 @@ public class FileViewList : Gtk.Box {
 		var item = selected_items[0];
 
 		if (item.is_trashed_item){
-			var tab = panel.add_tab();
+			var tab = panel.add_tab(false);
 			tab.pane.view.set_view_path(file_parent(item.trash_original_path));
 			tab.select_tab();
 		}
@@ -4239,7 +4285,7 @@ public class FileViewList : Gtk.Box {
 		var item = selected_items[0];
 
 		if (item.is_trashed_item){
-			var tab = panel.add_tab();
+			var tab = panel.add_tab(false);
 			log_debug("trash_basepath=%s".printf(file_parent(item.trash_basepath)));
 			tab.pane.view.set_view_path(file_parent(item.trash_basepath));
 			tab.select_tab();

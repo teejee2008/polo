@@ -32,6 +32,7 @@ long_line_column=72
 <<<<<<< master
 <<<<<<< master
 <<<<<<< master
+<<<<<<< master
 current_page=119
 FILE_NAME_0=1061;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FAdminBar.vala;0;4
 FILE_NAME_1=38670;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FCreateArchiveWindow.vala;0;4
@@ -70,37 +71,44 @@ current_page=114
 =======
 current_page=115
 >>>>>>> Fixed issue with Back and Forward buttons; Added Home button to pathbar;
+=======
+current_page=119
+>>>>>>> Added support for downloading videos from pasted URLs
 FILE_NAME_0=1061;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FAdminBar.vala;0;4
-FILE_NAME_1=52803;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FCreateArchiveWindow.vala;0;4
-FILE_NAME_2=1936;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FFileContextMenu.vala;0;4
-FILE_NAME_3=3767;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FFileViewPane.vala;0;4
-FILE_NAME_4=1204;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FFileViewTab.vala;0;4
-FILE_NAME_5=1143;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FFileViewToolbar.vala;0;4
+FILE_NAME_1=38670;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FCreateArchiveWindow.vala;0;4
+FILE_NAME_2=1342;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FFileContextMenu.vala;0;4
+FILE_NAME_3=3879;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FFileViewPane.vala;0;4
+FILE_NAME_4=6969;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FFileViewTab.vala;0;4
+FILE_NAME_5=15018;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FFileViewToolbar.vala;0;4
 FILE_NAME_6=435;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FHotkeys.vala;0;4
 FILE_NAME_7=12473;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FLayoutBox.vala;0;4
-FILE_NAME_8=4188;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FLayoutPanel.vala;0;4
-FILE_NAME_9=4662;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FMainWindow.vala;0;4
+FILE_NAME_8=4797;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FLayoutPanel.vala;0;4
+FILE_NAME_9=6369;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FMainWindow.vala;0;4
 FILE_NAME_10=3257;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FMediaBar.vala;0;4
 FILE_NAME_11=1058;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FMiddleToolbar.vala;0;4
 FILE_NAME_12=2591;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FPasswordDialog.vala;0;4
-FILE_NAME_13=11259;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FPathbar.vala;0;4
+FILE_NAME_13=15964;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FPathbar.vala;0;4
 FILE_NAME_14=1956;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FPoloGtk.vala;0;4
 FILE_NAME_15=1076;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressWindow.vala;0;4
-FILE_NAME_16=24634;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FPropertiesWindow.vala;0;4
-FILE_NAME_17=1033;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FSettings.vala;0;4
+FILE_NAME_16=4221;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FPropertiesWindow.vala;0;4
+FILE_NAME_17=4723;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FSettings.vala;0;4
 FILE_NAME_18=1444;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FSettingsWindow.vala;0;4
-FILE_NAME_19=4916;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FSidebar.vala;0;4
-FILE_NAME_20=2022;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FSidebarItem.vala;0;4
+FILE_NAME_19=16246;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FSidebar.vala;0;4
+FILE_NAME_20=1882;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FSidebarItem.vala;0;4
 FILE_NAME_21=2783;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FSimpleProgressWindow.vala;0;4
 FILE_NAME_22=17127;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FStatusbar.vala;0;4
 FILE_NAME_23=1334;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FTrashBar.vala;0;4
 FILE_NAME_24=6197;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FWizardWindow.vala;0;4
+<<<<<<< master
 <<<<<<< master
 FILE_NAME_25=4679;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FCommon%2FMain.vala;0;4
 >>>>>>> Added support for browsing GVFS mounts
 =======
 FILE_NAME_25=12453;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FCommon%2FMain.vala;0;4
 >>>>>>> Updated build scripts
+=======
+FILE_NAME_25=36682;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FCommon%2FMain.vala;0;4
+>>>>>>> Added support for downloading videos from pasted URLs
 FILE_NAME_26=1374;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FAppLock.vala;0;4
 <<<<<<< master
 FILE_NAME_27=953;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FAsyncTask.vala;0;4
@@ -118,6 +126,7 @@ FILE_NAME_31=42265;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpol
 FILE_NAME_27=11061;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FAsyncTask.vala;0;4
 FILE_NAME_28=1170;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FBash.vala;0;4
 FILE_NAME_29=0;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FCryptTabEntry.vala;0;4
+<<<<<<< master
 FILE_NAME_30=47794;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FDevice.vala;0;4
 FILE_NAME_31=34818;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FFileItem.vala;0;4
 >>>>>>> Use async task for connecting to remote server
@@ -128,6 +137,12 @@ FILE_NAME_33=4392;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo
 =======
 FILE_NAME_33=4820;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FGtkBookmark.vala;0;4
 >>>>>>> Updated build scripts
+=======
+FILE_NAME_30=55986;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FDevice.vala;0;4
+FILE_NAME_31=23019;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FFileItem.vala;0;4
+FILE_NAME_32=5808;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FFsTabEntry.vala;0;4
+FILE_NAME_33=1281;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FGtkBookmark.vala;0;4
+>>>>>>> Added support for downloading videos from pasted URLs
 FILE_NAME_34=3345;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FIconManager.vala;0;4
 FILE_NAME_35=0;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FLinuxDistro.vala;0;4
 FILE_NAME_36=12597;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FMediaFile.vala;0;4
@@ -138,6 +153,7 @@ FILE_NAME_40=0;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2F
 FILE_NAME_41=1551;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FRsyncTask.vala;0;4
 FILE_NAME_42=30;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FSystemGroup.vala;0;4
 FILE_NAME_43=29;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FSystemUser.vala;0;4
+<<<<<<< master
 <<<<<<< master
 <<<<<<< master
 <<<<<<< master
@@ -168,10 +184,13 @@ FILE_NAME_48=8958;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo
 FILE_NAME_49=6639;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTeeJee.Process.vala;0;4
 =======
 FILE_NAME_44=3553;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTeeJee.FileSystem.vala;0;4
+=======
+FILE_NAME_44=21658;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTeeJee.FileSystem.vala;0;4
+>>>>>>> Added support for downloading videos from pasted URLs
 FILE_NAME_45=0;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTeeJee.Json.vala;0;4
 FILE_NAME_46=3906;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTeeJee.Logging.vala;0;4
 FILE_NAME_47=0;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTeeJee.MediaInfo.vala;0;4
-FILE_NAME_48=3940;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTeeJee.Misc.vala;0;4
+FILE_NAME_48=2570;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTeeJee.Misc.vala;0;4
 FILE_NAME_49=3594;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTeeJee.Process.vala;0;4
 >>>>>>> Use async task for connecting to remote server
 FILE_NAME_50=7786;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FTeeJee.System.vala;0;4
@@ -201,6 +220,7 @@ FILE_NAME_64=817;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%
 FILE_NAME_65=2844;Make;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2Fmakefile;0;4
 FILE_NAME_66=282;Conf;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2Fpolo.desktop;0;4
 FILE_NAME_67=1707;Sh;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2Fpolo-uninstall;0;4
+<<<<<<< master
 <<<<<<< master
 FILE_NAME_68=1172;None;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fdebian%2Fchangelog;0;4
 FILE_NAME_69=13929;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FFileConflictDialog.vala;0;4
@@ -256,9 +276,12 @@ FILE_NAME_118=11327;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpo
 FILE_NAME_119=2598;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FVideoDownloadTask.vala;0;4
 =======
 FILE_NAME_68=77;None;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fdebian%2Fchangelog;0;4
+=======
+FILE_NAME_68=1172;None;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fdebian%2Fchangelog;0;4
+>>>>>>> Added support for downloading videos from pasted URLs
 FILE_NAME_69=11021;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FFileConflictDialog.vala;0;4
 FILE_NAME_70=4644;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FFileTask.vala;0;4
-FILE_NAME_71=1536;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FDeviceContextMenu.vala;0;4
+FILE_NAME_71=9452;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FDeviceContextMenu.vala;0;4
 FILE_NAME_72=654;Conf;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fdebian%2Fcontrol;0;4
 FILE_NAME_73=1043;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FColumnSelectionBox.vala;0;4
 FILE_NAME_74=27347;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FArchiveTask.vala;0;4
@@ -267,9 +290,10 @@ FILE_NAME_76=16723;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpol
 FILE_NAME_77=7808;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelFileTask.vala;0;4
 FILE_NAME_78=3240;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FToolsWindow.vala;0;4
 FILE_NAME_79=10031;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FMainHeaderBar.vala;0;4
-FILE_NAME_80=1043;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FViewPopover.vala;0;4
-FILE_NAME_81=7584;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FMainMenubar.vala;0;4
+FILE_NAME_80=1041;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FViewPopover.vala;0;4
+FILE_NAME_81=26803;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FMainMenubar.vala;0;4
 FILE_NAME_82=37;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FXdgUserDirectories.vala;0;4
+<<<<<<< master
 <<<<<<< master
 FILE_NAME_83=525;Sh;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fbuild-release;0;4
 FILE_NAME_84=1332;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FTermBox.vala;0;4
@@ -306,6 +330,9 @@ FILE_NAME_114=11238;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpo
 >>>>>>> Added support for browsing GVFS mounts
 =======
 FILE_NAME_83=1332;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FTermBox.vala;0;4
+=======
+FILE_NAME_83=6392;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FTermBox.vala;0;4
+>>>>>>> Added support for downloading videos from pasted URLs
 FILE_NAME_84=1349;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FTermContextMenu.vala;0;4
 FILE_NAME_85=548;Sh;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2Fpolo-chroot;0;4
 FILE_NAME_86=26;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FSysInfo.vala;0;4
@@ -314,28 +341,29 @@ FILE_NAME_88=1978;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo
 FILE_NAME_89=4662;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FKvmTask.vala;0;4
 FILE_NAME_90=5269;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelKvmTask.vala;0;4
 FILE_NAME_91=6653;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FPdfTask.vala;0;4
-FILE_NAME_92=3515;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FUsbWriterTask.vala;0;4
-FILE_NAME_93=31;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FRCloneClient.vala;0;4
-FILE_NAME_94=1057;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FCloudLoginWindow.vala;0;4
-FILE_NAME_95=4640;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelUsbWriterTask.vala;0;4
+FILE_NAME_92=2330;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FUsbWriterTask.vala;0;4
+FILE_NAME_93=930;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FRCloneClient.vala;0;4
+FILE_NAME_94=7960;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FCloudLoginWindow.vala;0;4
+FILE_NAME_95=3134;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelUsbWriterTask.vala;0;4
 FILE_NAME_96=4043;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelPdfTask.vala;0;4
 FILE_NAME_97=5;Make;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fmakefile;0;4
 FILE_NAME_98=25;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FPlugin.vala;0;4
 FILE_NAME_99=139;Sh;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fbuild-installers.sh;0;4
 FILE_NAME_100=63;Sh;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fbuild-deb.sh;0;4
 FILE_NAME_101=128;Sh;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fbuild-source.sh;0;4
-FILE_NAME_102=1342;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FSelectionBar.vala;0;4
+FILE_NAME_102=3355;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FSelectionBar.vala;0;4
 FILE_NAME_103=2698;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FShell.vala;0;4
-FILE_NAME_104=3150;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FImageTask.vala;0;4
+FILE_NAME_104=1024;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FImageTask.vala;0;4
 FILE_NAME_105=3458;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelImageTask.vala;0;4
-FILE_NAME_106=5097;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FGvfsMount.vala;0;4
+FILE_NAME_106=2606;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FGvfsMount.vala;0;4
 FILE_NAME_107=2384;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FPathbarStyleMenu.vala;0;4
-FILE_NAME_108=1335;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FSortMenu.vala;0;4
+FILE_NAME_108=3401;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FSortMenu.vala;0;4
 FILE_NAME_109=1786;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FBookmarksMenu.vala;0;4
 FILE_NAME_110=995;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FIPaneActive.vala;0;4
 FILE_NAME_111=4575;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FDevicesMenu.vala;0;4
-FILE_NAME_112=105289;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FFileViewList.vala;0;4
+FILE_NAME_112=5366;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FFileViewList.vala;0;4
 FILE_NAME_113=1593;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FPlacesPopover.vala;0;4
+<<<<<<< master
 <<<<<<< master
 FILE_NAME_114=14695;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FConnectServerWindow.vala;0;4
 >>>>>>> Updated build scripts
@@ -347,6 +375,14 @@ FILE_NAME_115=2312;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpol
 =======
 FILE_NAME_115=3112;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FGvfsTask.vala;0;4
 >>>>>>> Fixed issue with Back and Forward buttons; Added Home button to pathbar;
+=======
+FILE_NAME_114=13446;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FConnectServerWindow.vala;0;4
+FILE_NAME_115=3280;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FGvfsTask.vala;0;4
+FILE_NAME_116=17057;Vala;0;EUTF-8;1;1;1;%2Fmnt%2Fsdcard%2FDropbox%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FLicenseText.vala;0;4
+FILE_NAME_117=2680;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FBookmarkContextMenu.vala;0;4
+FILE_NAME_118=5445;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelVideoDownloadTask.vala;0;4
+FILE_NAME_119=2315;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FVideoDownloadTask.vala;0;4
+>>>>>>> Added support for downloading videos from pasted URLs
 
 [VTE]
 last_dir=/home/teejee

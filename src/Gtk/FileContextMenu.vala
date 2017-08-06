@@ -53,7 +53,9 @@ public enum FileActionType{
 	COMPRESS,
 	KVM_DISK_MERGE,
 	KVM_DISK_CONVERT,
-	ISO_WRITE
+	ISO_WRITE,
+	VIDEO_LIST_FORMATS,
+	VIDEO_DOWNLOAD
 }
 
 public class FileContextMenu : Gtk.Menu {
@@ -869,7 +871,10 @@ public class FileContextMenu : Gtk.Menu {
 
 		log_debug("FileContextMenu: add_paste_into_folder()");
 
-		if ((window.pending_action == null) || (selected_items.size != 1) || !selected_items[0].is_directory){
+		string txt = get_clipboard_text();
+		string url = txt.has_prefix("http") ? txt : "";
+
+		if ((window.pending_action == null) || (selected_items.size != 1) || !selected_items[0].is_directory || (url.length == 0)){
 			return;
 		}
 		
@@ -885,16 +890,24 @@ public class FileContextMenu : Gtk.Menu {
 
 		menu_item.activate.connect (() => {
 			log_debug("file_context_menu.paste()");
-			view.paste_into_folder();
+			if (window.pending_action != null){
+				view.paste_into_folder();
+			}
+			else if (url.length > 0){
+				view.paste_url_into_folder(url);
+			}
 		});
 
-		menu_item.sensitive = (window.pending_action != null) && (selected_items.size == 1) && selected_items[0].is_directory;
+		menu_item.sensitive = ((window.pending_action != null) || (url.length > 0)) && (selected_items.size == 1) && selected_items[0].is_directory;
 	}
 	
 	private void add_paste(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
 		log_debug("FileContextMenu: add_paste()");
 
+		string txt = get_clipboard_text();
+		string url = txt.has_prefix("http") ? txt : "";
+		
 		// paste --------------------------------
 
 		var menu_item = gtk_menu_add_item(
@@ -907,11 +920,26 @@ public class FileContextMenu : Gtk.Menu {
 
 		menu_item.activate.connect (() => {
 			log_debug("file_context_menu.paste()");
-			view.paste();
+			if (window.pending_action != null){
+				view.paste();
+			}
+			else if (url.length > 0){
+				view.paste_url(url);
+			}
 		});
 
-		menu_item.sensitive = (window.pending_action != null);
+		menu_item.sensitive = (window.pending_action != null) || (url.length > 0);
 	}
+
+	private string get_clipboard_text(){
+		Gdk.Display display = this.get_display();
+		Gtk.Clipboard clipboard = Gtk.Clipboard.get_for_display(display, Gdk.SELECTION_CLIPBOARD);
+		string txt = clipboard.wait_for_text();
+		if ((txt != null) && (txt.has_prefix("http"))){
+			return txt;
+		}
+		return "";
+	}	
 
 	private void add_rename(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
