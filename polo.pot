@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
-"POT-Creation-Date: 2017-08-05 21:22+0530\n"
+"POT-Creation-Date: 2017-08-06 11:15+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -268,19 +268,19 @@ msgstr ""
 msgid "Become a Patron"
 msgstr ""
 
-#: Gtk/ProgressPanelVideoDownloadTask.vala:143
+#: Gtk/ProgressPanelVideoDownloadTask.vala:136
 msgid "Best (audio + video)"
 msgstr ""
 
-#: Gtk/ProgressPanelVideoDownloadTask.vala:154
+#: Gtk/ProgressPanelVideoDownloadTask.vala:147
 msgid "Best (audio only)"
 msgstr ""
 
-#: Gtk/ProgressPanelVideoDownloadTask.vala:165
+#: Gtk/ProgressPanelVideoDownloadTask.vala:158
 msgid "Best (video only)"
 msgstr ""
 
-#: Gtk/ProgressPanelVideoDownloadTask.vala:176
+#: Gtk/ProgressPanelVideoDownloadTask.vala:169
 msgid "Best Video + Best Audio (merge)"
 msgstr ""
 
@@ -365,9 +365,9 @@ msgstr ""
 #: Gtk/ProgressPanelFileTask.vala:153 Gtk/ProgressPanelImageTask.vala:109
 #: Gtk/ProgressPanelKvmTask.vala:135 Gtk/ProgressPanelPdfTask.vala:109
 #: Gtk/ProgressPanelUsbWriterTask.vala:114
-#: Gtk/ProgressPanelVideoDownloadTask.vala:211
-#: Gtk/ProgressPanelVideoDownloadTask.vala:212
-#: Gtk/ProgressPanelVideoDownloadTask.vala:282
+#: Gtk/ProgressPanelVideoDownloadTask.vala:230
+#: Gtk/ProgressPanelVideoDownloadTask.vala:231
+#: Gtk/ProgressPanelVideoDownloadTask.vala:399
 #: Gtk/SimpleProgressWindow.vala:139 Utility/Gtk/CustomMessageDialog.vala:171
 #: Utility/Gtk/GtkHelper.vala:140
 msgid "Cancel"
@@ -1057,15 +1057,15 @@ msgstr ""
 msgid "Donations"
 msgstr ""
 
-#: Gtk/ProgressPanelVideoDownloadTask.vala:199
+#: Gtk/ProgressPanelVideoDownloadTask.vala:218
 msgid "Download"
 msgstr ""
 
-#: Gtk/ProgressPanelVideoDownloadTask.vala:200
+#: Gtk/ProgressPanelVideoDownloadTask.vala:219
 msgid "Download Selected Format"
 msgstr ""
 
-#: Gtk/ProgressPanelVideoDownloadTask.vala:226
+#: Gtk/ProgressPanelVideoDownloadTask.vala:343
 msgid "Downloading..."
 msgstr ""
 
@@ -1099,6 +1099,10 @@ msgstr ""
 
 #: Gtk/FileViewToolbar.vala:354
 msgid "Dual Vertical"
+msgstr ""
+
+#: Gtk/ProgressPanelVideoDownloadTask.vala:290
+msgid "Duration"
 msgstr ""
 
 #: Utility/TeeJee.Logging.vala:89
@@ -1424,6 +1428,7 @@ msgstr ""
 #: Gtk/MainMenubar.vala:121 Gtk/ProgressPanelImageTask.vala:155
 #: Gtk/ProgressPanelKvmTask.vala:201 Gtk/ProgressPanelPdfTask.vala:155
 #: Gtk/ProgressPanelUsbWriterTask.vala:161
+#: Gtk/ProgressPanelVideoDownloadTask.vala:455
 #, c-format
 msgid "File"
 msgstr ""
@@ -1504,7 +1509,7 @@ msgid "Finish"
 msgstr ""
 
 #: Gtk/ProgressPanelImageTask.vala:199 Gtk/ProgressPanelPdfTask.vala:199
-#: Gtk/ProgressPanelVideoDownloadTask.vala:398 Utility/KvmTask.vala:195
+#: Gtk/ProgressPanelVideoDownloadTask.vala:516 Utility/KvmTask.vala:195
 msgid "Finished with errors"
 msgstr ""
 
@@ -2613,7 +2618,7 @@ msgstr ""
 #: Gtk/ProgressPanelFileTask.vala:115 Gtk/ProgressPanelImageTask.vala:80
 #: Gtk/ProgressPanelKvmTask.vala:106 Gtk/ProgressPanelPdfTask.vala:80
 #: Gtk/ProgressPanelUsbWriterTask.vala:85
-#: Gtk/ProgressPanelVideoDownloadTask.vala:253 Utility/FileTask.vala:147
+#: Gtk/ProgressPanelVideoDownloadTask.vala:370 Utility/FileTask.vala:147
 #: Utility/FileTask.vala:533 Utility/FileTask.vala:617
 msgid "Preparing..."
 msgstr ""
@@ -2993,8 +2998,8 @@ msgstr ""
 msgid "Select Font"
 msgstr ""
 
-#: Gtk/ProgressPanelVideoDownloadTask.vala:105
-msgid "Select Format..."
+#: Gtk/ProgressPanelVideoDownloadTask.vala:243
+msgid "Select Format"
 msgstr ""
 
 #: Gtk/FileViewList.vala:4486
@@ -3413,6 +3418,10 @@ msgstr ""
 msgid "Tiles"
 msgstr ""
 
+#: Gtk/ProgressPanelVideoDownloadTask.vala:261
+msgid "Title"
+msgstr ""
+
 #: Gtk/Statusbar.vala:432
 msgid "Toggle Middle Toolbar"
 msgstr ""
@@ -3636,6 +3645,10 @@ msgstr ""
 
 #: Utility/TeeJee.Logging.vala:89
 msgid "W"
+msgstr ""
+
+#: Gtk/ProgressPanelVideoDownloadTask.vala:319
+msgid "Web Page"
 msgstr ""
 
 #: Utility/Gtk/DonationWindow.vala:128

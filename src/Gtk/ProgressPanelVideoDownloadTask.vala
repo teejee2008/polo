@@ -102,21 +102,14 @@ public class ProgressPanelVideoDownloadTask : ProgressPanel {
 		
 		gtk_container_remove_children(contents);
 
-		string txt = _("Select Format...");
-
-		// heading ----------------
-
-		var label = new Gtk.Label("<b>" + txt + "</b>");
-		label.set_use_markup(true);
-		label.xalign = 0.0f;
-		label.margin_bottom = 12;
-		contents.add(label);
-		
 		var hbox_outer = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		contents.add(hbox_outer);
 
-		var vbox_outer = new Gtk.Box(Orientation.VERTICAL, 6);
-		hbox_outer.add(vbox_outer);
+		var vbox_info = new Gtk.Box(Orientation.VERTICAL, 6);
+		hbox_outer.add(vbox_info);
+
+		var vbox_thumb = new Gtk.Box(Orientation.VERTICAL, 6);
+		hbox_outer.add(vbox_thumb);
 
 		// scrolled
 		var scrolled = new Gtk.ScrolledWindow(null, null);
@@ -129,10 +122,10 @@ public class ProgressPanelVideoDownloadTask : ProgressPanel {
 		vbox.margin = 6;
 		
 		scrolled.add(vbox);
-		vbox_outer.add(scrolled);
+		contents.add(scrolled);
 
 		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
-		vbox_outer.add(hbox);
+		contents.add(hbox);
 
 		// -----------------------------
 
@@ -194,6 +187,32 @@ public class ProgressPanelVideoDownloadTask : ProgressPanel {
 			});
 		}
 
+		// info ----------------------------
+
+		var sg_label = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+		var sg_info = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+		
+		add_info_title(vbox_info, sg_label, sg_info);
+
+		add_info_url(vbox_info, sg_label, sg_info);
+		
+		add_info_duration(vbox_info, sg_label, sg_info);
+
+		add_header(vbox_info);
+		
+		// image ---------------------------
+
+		try {
+			if (file_exists(task.thumb_path)){
+				var pixbuf = new Gdk.Pixbuf.from_file_at_scale(task.thumb_path, -1, 128, true);
+				var img = new Gtk.Image.from_pixbuf(pixbuf);
+				vbox_thumb.add(img);
+			}
+		}
+		catch (Error e){
+			log_error(e.message);
+		}
+
 		// download -----------------------------------------
 		
 		var button = new Gtk.Button.with_label(_("Download"));
@@ -217,6 +236,104 @@ public class ProgressPanelVideoDownloadTask : ProgressPanel {
 		});
 
 		show_all();
+	}
+
+	public void add_header(Gtk.Box box){
+
+		string txt = _("Select Format") + ":";
+		var label = new Gtk.Label("<b>" + txt + "</b>");
+		label.set_use_markup(true);
+		label.xalign = 0.0f;
+		label.yalign = 1.0f;
+		label.margin_top = 6;
+		box.add(label);
+	}
+
+	public void add_info_title(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_info){
+
+		if (task.title.length == 0){ return; }
+		
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
+		box.add(hbox);
+
+		// label ----------------
+		
+		var label = new Gtk.Label (_("Title") + ":");
+		label.xalign = 1.0f;
+		hbox.add(label);
+		
+		sg_label.add_widget(label);
+
+		// entry ----------------
+		
+		var entry = new Gtk.Entry();
+		entry.hexpand = true;
+		entry.set_size_request(200,-1);
+		hbox.add(entry);
+
+		entry.editable = false;
+
+		entry.text = task.title;
+
+		sg_info.add_widget(entry);
+	}
+
+	public void add_info_duration(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_info){
+
+		if (task.duration.length == 0){ return; }
+		
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
+		box.add(hbox);
+
+		// label ----------------
+		
+		var label = new Gtk.Label (_("Duration") + ":");
+		label.xalign = 1.0f;
+		hbox.add(label);
+		
+		sg_label.add_widget(label);
+
+		// entry ----------------
+		
+		var entry = new Gtk.Entry();
+		entry.hexpand = true;
+		entry.set_size_request(200,-1);
+		hbox.add(entry);
+
+		entry.editable = false;
+
+		entry.text = task.duration;
+
+		sg_info.add_widget(entry);
+	}
+
+	public void add_info_url(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_info){
+
+		if (task.url.length == 0){ return; }
+		
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
+		box.add(hbox);
+
+		// label ----------------
+		
+		var label = new Gtk.Label (_("Web Page") + ":");
+		label.xalign = 1.0f;
+		hbox.add(label);
+		
+		sg_label.add_widget(label);
+
+		// entry ----------------
+		
+		var entry = new Gtk.Entry();
+		entry.hexpand = true;
+		entry.set_size_request(200,-1);
+		hbox.add(entry);
+
+		entry.editable = false;
+
+		entry.text = task.url;
+
+		sg_info.add_widget(entry);
 	}
 
 	public void init_ui_download(){
@@ -334,9 +451,9 @@ public class ProgressPanelVideoDownloadTask : ProgressPanel {
 			
 			log_debug("ProgressPanelVideoDownloadTask: update_status()");
 
-			//if (task.current_file.length > 0){
-			//	lbl_status.label = "%s: %s".printf(_("File"), task.current_file);
-			//}
+			if (task.current_file.length > 0){
+				lbl_status.label = "%s: %s".printf(_("File"), task.current_file);
+			}
 			
 			//lbl_stats.label = task.stat_status_line;
 
@@ -383,8 +500,9 @@ public class ProgressPanelVideoDownloadTask : ProgressPanel {
 			log_debug("task.list_size: %d".printf(task.list.size));
 			
 			if (task.list.size > 0){
-				init_ui_selection();
 				task.format = "best";
+				task.current_file = task.title;
+				init_ui_selection();
 			}
 		}
 		else{

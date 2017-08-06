@@ -49,7 +49,12 @@ public class VideoDownloadTask : AsyncTask {
 	public string url = "";
 	public string format = "";
 	public string dest_path = "";
-	
+	public string thumb_url = "";
+	public string thumb_path = "";
+	public string duration = "";
+	public string title = "";
+	public string desc = "";
+
 	public VideoDownloadTaskType action;
 
 	public string error_log = "";
@@ -70,8 +75,10 @@ public class VideoDownloadTask : AsyncTask {
 			
 			regex_list["list"] = new Regex("""^code='(.*)',ext='(.*)',type='(.*)',size='(.*)',note='(.*)'""");
 
+			regex_list["info"] = new Regex("""^thumb_url='(.*)',thumb_path='(.*)',title='(.*)',duration='(.*)'""");
+
 			//[download]   4.8% of 21.77MiB at 343.95KiB/s ETA 01:01
-			regex_list["status"] = new Regex("""\[download\][ \t]*([0-9.]+)% of ([0-9.]+MiB) at ([0-9.]+KiB\/s) ETA ([0-9.:]+)""");
+			regex_list["status"] = new Regex("""\[download\][ \t]*([0-9.]+)% of ([0-9.]+(K|M|G)iB) at ([0-9.]+(K|M|G)iB)\/s ETA ([0-9.:]+)""");
 		}
 		catch (Error e) {
 			log_error (e.message);
@@ -175,9 +182,37 @@ public class VideoDownloadTask : AsyncTask {
 			fmt.description = desc;
 			list.add(fmt);
 		}
+		else if (regex_list["info"].match(line, 0, out match)) {
+			log_debug("info: %s".printf(line));
+
+			thumb_url = match.fetch(1);
+			thumb_path = match.fetch(2);
+			title = match.fetch(3);
+			duration = match.fetch(4);
+		}
 		else if (regex_list["status"].match(line, 0, out match)) {
 			//bytes_completed = int64.parse(match.fetch(1));
 			progress = double.parse(match.fetch(1))/100.0;
+
+			if (prg_bytes_total == 0){  // fetch the value only once
+				switch(match.fetch(3)){
+				case "K":
+					prg_bytes_total = (int64) (double.parse(match.fetch(2)) * KiB);
+					break;
+				case "M":
+					prg_bytes_total = (int64) (double.parse(match.fetch(2)) * MiB);
+					break;
+				case "G":
+					prg_bytes_total = (int64) (double.parse(match.fetch(2)) * GiB);
+					break;
+				}
+			}
+
+			if (prg_bytes_total > 0){
+				prg_bytes = (int64) (progress * prg_bytes_total);
+			}
+
+			rate = match.fetch(4) + "/s";
 		}
 		else if (line.has_prefix("E:")){
 			error_log += "%s\n".printf(line);
@@ -214,8 +249,21 @@ public class VideoDownloadTask : AsyncTask {
 		owned get{
 			var txt = "";
 			
-			txt = "%.2f %% complete, %s elapsed, %s remaining, %s".printf(
-				progress * 100.0, stat_time_elapsed, stat_time_remaining, stat_speed);
+			if (prg_bytes_total > 0){
+				txt = "%.2f %% complete, %s/%s downloaded, %s elapsed, %s remaining, %s".printf(
+					progress * 100.0,
+					format_file_size(prg_bytes, true, "", true),
+					format_file_size(prg_bytes_total, true, "", true),
+					stat_time_elapsed,
+					stat_time_remaining,
+					rate);
+			}
+			else{
+				txt = "%.2f %% complete, %s elapsed, %s remaining".printf(
+					progress * 100.0,
+					stat_time_elapsed,
+					stat_time_remaining);
+			}
 
 			return txt;
 		}
