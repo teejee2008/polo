@@ -1,67 +1,57 @@
 ## Polo File Manager
 
-Polo is a modern, light-weight file manager for Linux with support for multiple panes, tabs, archive browsing/creation/extraction, and much more.
+Polo is a modern, light-weight file manager for Linux with support for multiple panes and tabs; support for archives, and much more.
 
-**Features:**
-* **Multiple panes** - Single-pane, dual-pane (vertical or horizontal split) and quad-pane layouts.
+## **Features**
 
-* **Multiple views** - List view, Icon view, Tiled view and Media view.
-
-* **Device Manager** - Devices can be mounted and unmounted with a single click. Supports locking and unlocking LUKS encrypted devices.
-
-  [![](https://4.bp.blogspot.com/-KSRmPybuvpY/WOm00ZHbLaI/AAAAAAAAGO0/DretRJ5jnB0PR4zVRu40AQv3NHui76ArACLcB/s320/polo_device_dropdown.png)](https://4.bp.blogspot.com/-KSRmPybuvpY/WOm00ZHbLaI/AAAAAAAAGO0/DretRJ5jnB0PR4zVRu40AQv3NHui76ArACLcB/s1600/polo_device_dropdown.png)
-
-* **Archive Support** (using p7zip)
-
-  * Archives can be browsed as normal folders with support for encrypted and split archives.
-  * Archives can be created in multiple formats by selecting files and using the _Compress_ option in the right-click menu. Provides options for all compression settings, encryption and splitting.
-
-    [![](https://3.bp.blogspot.com/-IS1yfrAgVfI/WQ1jQBOOE-I/AAAAAAAAGfc/a3c9wGnVAx4IFHrw5oXFKuF_JzVsOJMSACLcB/s320/polo_compress.png)](https://3.bp.blogspot.com/-IS1yfrAgVfI/WQ1jQBOOE-I/AAAAAAAAGfc/a3c9wGnVAx4IFHrw5oXFKuF_JzVsOJMSACLcB/s1600/polo_compress.png)  [![](https://2.bp.blogspot.com/-s4qwOZ7W3tE/WQ1jP1u-ZfI/AAAAAAAAGfY/J5m6mpYrEU09N2erLx5zb6L3fomF7eH4gCLcB/s320/polo_compress_expanded.png)](https://2.bp.blogspot.com/-s4qwOZ7W3tE/WQ1jP1u-ZfI/AAAAAAAAGfY/J5m6mpYrEU09N2erLx5zb6L3fomF7eH4gCLcB/s1600/polo_compress_expanded.png)
-
-  * Displays detailed progress during compression and extraction. Archive operations can be paused and resumed.
-
-      [![](https://4.bp.blogspot.com/-8nrEdE3U9Pc/WQ1k9S9HytI/AAAAAAAAGfo/izFm14Gu7GEhQbIrnTMFGd0XfEdkKWtbACLcB/s460/polo_compress_progress.png)](https://4.bp.blogspot.com/-8nrEdE3U9Pc/WQ1k9S9HytI/AAAAAAAAGfo/izFm14Gu7GEhQbIrnTMFGd0XfEdkKWtbACLcB/s1600/polo_compress_progress.png)
-
-
+- **Multiple Panes** - Single-pane, dual-pane (vertical or horizontal split) and quad-pane layouts. Supports multiple tabs in each pane. Each tab has an embedded terminal which can be toggled with the F4 key.
+- **Multiple Views** - List view, Icon view, Tiled view and Media view.
+- **Device Manager** - Devices popup displays list of connected devices with options to mount and unmount. Supports locking/unlocking LUKS encrypted devices.
+- **Archive Support** - Support for browsing archives as normal folders. Supports creation of archives in multiple formats with advanced compression settings.
+- **PDF Actions** - Actions in right-click menu: Split and Merge pages, Add or Remove Password, Rotate, etc.
+- **ISO Actions** - Actions in right-click menu: Mount, Boot in VM, Write to USB
+- **Image Actions** - Actions in right-click menu: Rotate, Resize, Reduce Quality, Optimize PNG, Convert to other formats, Boot or Reduce Colors, etc.
 
 ## Screenshots
 
+*Single-pane layout with Sidebar and IconView*
+
 [![](https://2.bp.blogspot.com/-N8kfKyg05gc/WSFeSxoNlHI/AAAAAAAAGv4/4624nEvjAYU7WB5VL-6CMIhfX_7sjJZcACLcB/s1600/polo_layout_classic_icons.png)](https://2.bp.blogspot.com/-N8kfKyg05gc/WSFeSxoNlHI/AAAAAAAAGv4/4624nEvjAYU7WB5VL-6CMIhfX_7sjJZcACLcB/s1600/polo_layout_classic_icons.png)
+
+*Single-pane layout with Sidebar and ListView*
 
 [![](https://2.bp.blogspot.com/-ztn3NTFgZ7g/WSFeSyKB_CI/AAAAAAAAGv0/KqTj5Bd5VKkpqOED08G1fMtMznR980-FQCLcB/s1600/polo_layout_classic_list.png)](https://2.bp.blogspot.com/-ztn3NTFgZ7g/WSFeSyKB_CI/AAAAAAAAGv0/KqTj5Bd5VKkpqOED08G1fMtMznR980-FQCLcB/s1600/polo_layout_classic_list.png)
 
+*Dual-pane layout with IconView*
+
 [![](https://1.bp.blogspot.com/-i0M8VMXGW2E/WSFeS7_XqBI/AAAAAAAAGvw/hWYkNIpn1w8IHvRqorNgjwcopfL6ZofvgCLcB/s1600/polo_layout_commander_icons.png)](https://1.bp.blogspot.com/-i0M8VMXGW2E/WSFeS7_XqBI/AAAAAAAAGvw/hWYkNIpn1w8IHvRqorNgjwcopfL6ZofvgCLcB/s1600/polo_layout_commander_icons.png)
+
+*Dual-pane layout with ListView*
 
 [![](https://4.bp.blogspot.com/-SoXr3INsUYo/WSFeTl19N_I/AAAAAAAAGv8/29ZnneUnWtYZhI-t3rQCx2z_n1JcjLtJQCLcB/s1600/polo_layout_commander_list.png)](https://4.bp.blogspot.com/-SoXr3INsUYo/WSFeTl19N_I/AAAAAAAAGv8/29ZnneUnWtYZhI-t3rQCx2z_n1JcjLtJQCLcB/s1600/polo_layout_commander_list.png)
 
-### Installation
+*Options for creating archives - Simple and Advanced Views - Supports encryption and split archives*
 
-**Ubuntu-based Distributions (Ubuntu, Linux Mint, etc)**
-
-Packages are available in the Launchpad PPA for supported Ubuntu releases.
-Run the following commands in a terminal window:  
-
-```sh
-sudo apt-add-repository -y ppa:teejee2008/ppa
-sudo apt-get update
-sudo apt-get install polo-file-manager
-```
-
-Installers are available on the [Releases](https://github.com/teejee2008/polo/releases) page for older Ubuntu releases which have reached end-of-life.
-
-**Other Linux Distributions**
-
-Installers are available on the [Releases](https://github.com/teejee2008/polo/releases) page.  
-Run the following commands in a terminal window: 
-```sh
-sudo sh polo*amd64.run # 64-bit
-sudo sh polo*i386.run  # 32-bit
-```
+[![](https://3.bp.blogspot.com/-IS1yfrAgVfI/WQ1jQBOOE-I/AAAAAAAAGfc/a3c9wGnVAx4IFHrw5oXFKuF_JzVsOJMSACLcB/s320/polo_compress.png)](https://3.bp.blogspot.com/-IS1yfrAgVfI/WQ1jQBOOE-I/AAAAAAAAGfc/a3c9wGnVAx4IFHrw5oXFKuF_JzVsOJMSACLcB/s1600/polo_compress.png)  [![](https://2.bp.blogspot.com/-s4qwOZ7W3tE/WQ1jP1u-ZfI/AAAAAAAAGfY/J5m6mpYrEU09N2erLx5zb6L3fomF7eH4gCLcB/s460/polo_compress_expanded.png)](https://2.bp.blogspot.com/-s4qwOZ7W3tE/WQ1jP1u-ZfI/AAAAAAAAGfY/J5m6mpYrEU09N2erLx5zb6L3fomF7eH4gCLcB/s1600/polo_compress_expanded.png)
 
 
-### Donate
+*Archive creation progress - with options to pause and resume*
 
-Users who donate get added to the beta mailing list, and would be the first to receive new features and development releases. Beta builds are released every 2 weeks, and public versions are released once a month.
+[![](https://4.bp.blogspot.com/-8nrEdE3U9Pc/WQ1k9S9HytI/AAAAAAAAGfo/izFm14Gu7GEhQbIrnTMFGd0XfEdkKWtbACLcB/s460/polo_compress_progress.png)](https://4.bp.blogspot.com/-8nrEdE3U9Pc/WQ1k9S9HytI/AAAAAAAAGfo/izFm14Gu7GEhQbIrnTMFGd0XfEdkKWtbACLcB/s1600/polo_compress_progress.png)
+
+
+
+## Installation
+
+PPA and DEB files are available for Ubuntu and Ubuntu-based distributions. Binary installers are available for all Linux distributions.
+
+**[Installation](https://github.com/teejee2008/polo/wiki/Installation)**
+
+## Donation Plugins
+
+Polo includes a few extra plugins for people who have contributed to the project through donations, translations, etc. You can make a donation for $10 or more via PayPal to receive the plugins by email. Your contributions will help keep the project alive and support future development.
+
+[**Donation Features**](https://github.com/teejee2008/polo/wiki/Donation-Features)
 
 **PayPal** ~ If you find this application useful and wish to say thanks, you can buy me a coffee by making a one-time donation with Paypal. 
 
