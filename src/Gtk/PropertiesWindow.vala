@@ -43,6 +43,10 @@ public class PropertiesWindow : Gtk.Window {
 	private Device? device;
 	private MediaFile mfile;
 
+	private bool file_is_remote {
+		get { return file_item.file_path.has_prefix(App.rclone_mounts); }
+	}
+
 	private Gtk.Box header_box;
 	private Gtk.StackSwitcher switcher;
 	private Gtk.Stack stack;
@@ -110,13 +114,15 @@ public class PropertiesWindow : Gtk.Window {
 
 		init_tab_properties();
 
-		init_tab_fs();
+		if (!file_is_remote){
+			init_tab_fs();
+		}
 
 		if (file_item.perms.length > 0){
 			init_tab_permissions();
 		}
 
-		if (!file_item.is_directory){
+		if (!file_item.is_directory && !file_is_remote){
 			mfile = new MediaFile(file_item.file_path);
 			mfile.query_mediainfo_formatted();
 			init_tab_mediainfo();
@@ -441,7 +447,7 @@ public class PropertiesWindow : Gtk.Window {
 	// filesystem tab
 
 	private void init_tab_fs(){
-
+		
 		log_debug("PropertiesWindow: init_tab_fs()");
 		
 		var hbox = new Gtk.Box(Orientation.VERTICAL, 12);

@@ -126,6 +126,21 @@ public class CloudLoginWindow : Gtk.Window, IPaneActive {
 		size_combo.add_widget(txt);
 
 		txt.text = "Account 1";
+
+		txt.changed.connect(() => {
+
+			string text = txt.text;
+
+			log_debug(text);
+
+			for (int i = 0; i < text.length; i++){
+				unichar c = text[i];
+				if (!c.isalnum() && (c != ' ') && (c != '_') && (c != '-')){
+					txt.text = text.replace(c.to_string(),"");
+					return;
+				}
+			}
+		});
 	}
 
 	private void init_type() {
@@ -199,7 +214,7 @@ public class CloudLoginWindow : Gtk.Window, IPaneActive {
 		box.add(button);
 		btn_cancel = button;
 		
-		button = new Gtk.Button.with_label(_("Add"));
+		button = new Gtk.Button.with_label(_("Authorize"));
 		button.clicked.connect(btn_add_clicked);
 		box.add(button);
 		btn_add = button;
@@ -297,6 +312,9 @@ public class CloudLoginWindow : Gtk.Window, IPaneActive {
 	private void btn_finish_clicked(){
 
 		log_debug("btn_finish_clicked()");
+
+		terminal.feed_command("n");
+		sleep(200);
 		
 		terminal.feed_command("y");
 		sleep(200);
@@ -317,7 +335,7 @@ public class CloudLoginWindow : Gtk.Window, IPaneActive {
 
 		if (account_added){
 			string txt = _("Account Added");
-			string msg = _("Account was added successfully.\n\nYou can browse the remote storage by selecting account from 'Cloud' menu");
+			string msg = _("Account was added successfully.\n\nYou can browse the remote storage by selecting the account from 'Cloud' menu");
 			gtk_messagebox(txt, msg, this, false);
 		}
 		else{

@@ -303,12 +303,12 @@ public class MainWindow : Gtk.Window {
 		sidebar = new Sidebar(null,null,null);
 		pane_nav.pack1(sidebar, false, false); // resize, shrink
 
-		DeviceMonitor.get_monitor().changed.connect(()=>{
+		/*DeviceMonitor.get_monitor().changed.connect(()=>{
 			if (sidebar == null){ return; }
 			if (window_is_ready) {
 				sidebar.refresh();
 			}
-		});
+		});*/
 
 		App.trashcan.query_completed.connect(()=>{
 			if (sidebar == null){ return; }
@@ -433,6 +433,8 @@ public class MainWindow : Gtk.Window {
 	}
 
 	public void update_accelerators_for_active_pane(){
+
+		log_debug("update_accelerators_for_active_pane()");
 		
 		if (active_pane == null){ return; }
 		if (active_pane.view == null){ return; }
@@ -478,7 +480,7 @@ public class MainWindow : Gtk.Window {
 			menubar.context_edit();
 			break;
 		case AccelContext.NONE:
-			menubar.context_none();
+			//menubar.context_none(); // already executed
 			break;
 		}
 	}
@@ -796,12 +798,55 @@ public class MainWindow : Gtk.Window {
 		layout_box.panel1.run_script_in_new_terminal_tab(cmd, _("Cleaning Thumbnail Cache..."));
 	}
 
-	public void cloud_login(){
+	public void add_rclone_account(){
 
 		err_log_clear();
 
-		var win = new CloudLoginWindow(this);
+		//var win = new CloudLoginWindow(this);
 
+		TermBox term;
+
+		//if (LOG_DEBUG){
+			var tab = layout_box.panel1.add_new_terminal_tab();
+			term = tab.pane.terminal;
+			//terminal = term;
+		//}
+		//else{
+			//term = new TermBox(pane);
+			//term.start_shell();
+			//terminal = term;
+		//}
+		sleep(200);
+		term.feed_command("rclone config");
+
+		sleep(200);
+		term.feed_command("n");
+	}
+
+	public bool remove_rclone_account(CloudAccount acc){
+		
+		err_log_clear();
+
+		var term = new TermBox(active_pane);
+		term.start_shell();
+		
+		sleep(200);
+		term.feed_command("rclone config");
+
+		sleep(200);
+		term.feed_command("d");
+		
+		sleep(200);
+		term.feed_command(acc.name);
+
+		sleep(200);
+		term.feed_command("q");
+
+		App.rclone.load_accounts();
+
+		//window.refre
+		
+		return true;
 	}
 
 	// session -------------------------------------

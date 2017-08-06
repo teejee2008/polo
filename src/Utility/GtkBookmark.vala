@@ -60,12 +60,11 @@ public class GtkBookmark : GLib.Object {
 		uri = _uri;
 
 		if (path != null){
-			name = (_name.length > 0) ? _name : file_basename(path);
+			name = "%s".printf((_name.length > 0) ? _name : file_basename(path));
 		}
 		else{
-			name = (_name.length > 0) ? _name : file_basename(uri);
+			name = "%s".printf((_name.length > 0) ? _name : file_basename(uri));
 		}
-		
 	}
 
 	// static methods
@@ -109,9 +108,9 @@ public class GtkBookmark : GLib.Object {
 					}
 				}
 
-				if (bm_name.length > 0){
+				if (bm_name.length == 0){
 					bm_name = file_basename(bm_uri);
-					//bm_name = uri_decode(bm_name);
+					//bm_name = uri_decode(bm_name); // it's not encoded
 				}
 
 				var bm = new GtkBookmark(bm_uri, bm_name);

@@ -31,13 +31,19 @@ using TeeJee.Misc;
 public class RCloneClient : GLib.Object {
 
 	public string config_file_path = "";
+	public string rclone_mounts = "";
+	public string rclone_logs = "";
 	
 	public Gee.ArrayList<CloudAccount> accounts = new Gee.ArrayList<CloudAccount>();
 	
 	public RCloneClient(){
 
-		config_file_path = path_combine(get_user_home(), ".rclone.conf");
+		string user_home = get_user_home();
+		
+		config_file_path = path_combine(user_home, ".rclone.conf");
 
+		rclone_mounts = path_combine(user_home, ".rclone-mounts");
+		
 		accounts = new Gee.ArrayList<CloudAccount>();
 
 		load_accounts();
@@ -84,7 +90,7 @@ public class RCloneClient : GLib.Object {
 
 	public CloudAccount add_account(string name, string type){
 		
-		var acc = new CloudAccount(name, type);
+		var acc = new CloudAccount(name, type, rclone_mounts);
 		accounts.add(acc);
 		
 		log_debug("Found account: %s, %s".printf(name, type));
@@ -98,6 +104,9 @@ public class CloudAccount : GLib.Object {
 	public string name = "";
 	public string local_path = "";
 	public string type = "";
+
+	public string rclone_mounts = "";
+	public string mount_path = "";
 	
 	public static string[] account_types = {
 		"amazon cloud drive",
@@ -142,12 +151,15 @@ public class CloudAccount : GLib.Object {
 		*/
 	}
 	
-	public CloudAccount(string _name, string _type){
+	public CloudAccount(string _name, string _type, string _rclone_mounts){
 		
 		initialize_types();
 		
 		name = _name;
 		type = _type;
+
+		rclone_mounts = _rclone_mounts;
+		mount_path = path_combine(_rclone_mounts, _name);
 	}
 
 	public string type_name{
@@ -155,6 +167,44 @@ public class CloudAccount : GLib.Object {
 			var list = new Gee.ArrayList<string>.wrap(account_types);
 			return account_type_names[list.index_of(type)];
 		}
+	}
+
+	public void mount(){
+
+		log_debug("CloudAccount: mount(): %s, %s".printf(name, mount_path));
+		
+		dir_create(mount_path);
+
+		string rclone_logs = path_combine(rclone_mounts, "logs");
+		dir_create(rclone_logs);
+
+		string log_name = "%s_%s.log".printf(name, timestamp_for_path());
+		string log_path = path_combine(rclone_logs, log_name);
+		
+		string cmd = "rclone mount %s: '%s' > '%s'".printf(name, escape_single_quote(mount_path), escape_single_quote(log_path));
+
+		log_debug(cmd);
+		
+		exec_process_new_session(cmd);
+	}
+
+	public bool unmount(){
+
+		log_debug("CloudAccount: unmount(): %s, %s".printf(name, mount_path));
+
+		string cmd = "fusermount -u '%s'".printf(escape_single_quote(mount_path));
+
+		log_debug(cmd);
+		
+		string std_out, std_err;
+		int status = exec_sync(cmd, out std_out, out std_err);
+		return (status == 0);
+	}
+
+	public bool check_mounted(){
+		long count = dir_count(mount_path);
+		log_debug("CloudAccount: check_mounted(): %s: %ld".printf(mount_path, count));
+		return (count > 0);
 	}
 }
 

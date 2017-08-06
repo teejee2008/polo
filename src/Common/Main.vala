@@ -92,7 +92,10 @@ public class Main : GLib.Object {
 	public string app_conf_archive = "";
 	public string app_conf_dir_path = "";
 	public string app_conf_dir_path_open = "";
-	
+	public string app_conf_dir_remotes = "";
+
+	public string rclone_mounts = "";
+
 	//public ArchiveTask archive_task;
 	//public DesktopApp crunchy_app;
 	//public Gee.ArrayList<MimeType> mimetype_list;
@@ -117,8 +120,7 @@ public class Main : GLib.Object {
 	public bool sidebar_places = true;
 	public bool sidebar_devices = true;
 	public bool sidebar_dark = false;
-	public bool sidebar_unmount = false;
-	public bool sidebar_lock = false;
+	public bool sidebar_action_button = false;
 	public int sidebar_position = 150;
 	public string sidebar_collapsed_sections = "";
 
@@ -356,17 +358,22 @@ public class Main : GLib.Object {
 
 		IconCache.enable();
 
-		app_conf_dir_path = path_combine(user_home, ".config/polo");
-		app_conf_dir_path_open = path_combine(app_conf_dir_path, "open");
-
-		app_conf_path     = path_combine(app_conf_dir_path, "polo.json");
-		app_conf_folders  = path_combine(app_conf_dir_path, "polo-folders.json");
-		app_conf_session  = path_combine(app_conf_dir_path, "polo-last-session.json");
-		app_conf_archive = path_combine(app_conf_dir_path, "polo-archive.json");
-
+		app_conf_dir_path      = path_combine(user_home, ".config/polo");
 		dir_create(app_conf_dir_path);
+		
+		app_conf_dir_path_open = path_combine(app_conf_dir_path, "open");
 		dir_create(app_conf_dir_path_open);
 		
+		app_conf_dir_remotes   = path_combine(app_conf_dir_path, "remotes");
+		dir_create(app_conf_dir_remotes);
+		
+		app_conf_path    = path_combine(app_conf_dir_path, "polo.json");
+		app_conf_folders = path_combine(app_conf_dir_path, "polo-folders.json");
+		app_conf_session = path_combine(app_conf_dir_path, "polo-last-session.json");
+		app_conf_archive = path_combine(app_conf_dir_path, "polo-archive.json");
+
+		rclone_mounts = path_combine(user_dirs.user_home, ".rclone-mounts");
+
 		supported_formats_open = {
 			".tar",
 			".tar.gz", ".tgz",
@@ -559,8 +566,7 @@ public class Main : GLib.Object {
 		config.set_string_member("sidebar_bookmarks", sidebar_bookmarks.to_string());
 		config.set_string_member("sidebar_devices", sidebar_devices.to_string());
 		config.set_string_member("sidebar_position", sidebar_position.to_string());
-		config.set_string_member("sidebar_unmount", sidebar_unmount.to_string());
-		config.set_string_member("sidebar_lock", sidebar_lock.to_string());
+		config.set_string_member("sidebar_action_button", sidebar_action_button.to_string());
 		config.set_string_member("sidebar_collapsed_sections", sidebar_collapsed_sections);
 		
 		//save headerbar_enabled_temp instead of headerbar_enabled
@@ -736,8 +742,7 @@ public class Main : GLib.Object {
 		sidebar_bookmarks = json_get_bool(config, "sidebar_bookmarks", sidebar_bookmarks);
 		sidebar_devices = json_get_bool(config, "sidebar_devices", sidebar_devices);
 		sidebar_position = json_get_int(config, "sidebar_position", sidebar_position);
-		sidebar_unmount = json_get_bool(config, "sidebar_unmount", sidebar_unmount);
-		sidebar_lock = json_get_bool(config, "sidebar_lock", sidebar_lock);
+		sidebar_action_button = json_get_bool(config, "sidebar_action_button", sidebar_action_button);
 
 		headerbar_enabled = json_get_bool(config, "headerbar_enabled", headerbar_enabled);
 		headerbar_enabled_temp = headerbar_enabled;
@@ -871,8 +876,7 @@ public class Main : GLib.Object {
 		sidebar_bookmarks = json_get_bool(config, "sidebar_bookmarks", sidebar_bookmarks);
 		sidebar_devices = json_get_bool(config, "sidebar_devices", sidebar_devices);
 		sidebar_position = json_get_int(config, "sidebar_position", sidebar_position);
-		sidebar_unmount = json_get_bool(config, "sidebar_unmount", sidebar_unmount);
-		sidebar_lock = json_get_bool(config, "sidebar_lock", sidebar_lock);
+		sidebar_action_button = json_get_bool(config, "sidebar_action_button", sidebar_action_button);
 		sidebar_collapsed_sections = json_get_string(config, "sidebar_collapsed_sections", sidebar_collapsed_sections);
 		
 		load_folder_selections();

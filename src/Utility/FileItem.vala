@@ -1002,10 +1002,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		 *  depth =  X, add child item, add child item's children upto X levels
 		 * */
 
-		if (query_children_aborted) {
-			
-			return null;
-		}
+		if (query_children_aborted){ return null; }
 
 		//log_debug("add_child_from_disk: aborted: %s, %s".printf(query_children_aborted.to_string(), child_item_file_path));
 
@@ -1048,9 +1045,11 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 				item.file_count = 0;
 				item.dir_count = 0;
 
-				if (!item.can_read){
-					return item;
-				}
+				if (!item.can_read){ return item; }
+
+				if (depth == 0){ return item; }
+
+				//log_debug("enumerating children");
 				
 				enumerator = file.enumerate_children ("%s,%s".printf(FileAttribute.STANDARD_NAME,FileAttribute.STANDARD_TYPE), 0);
 				
@@ -1061,7 +1060,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 						item.dir_size_queried = false;
 						return null;
 					}
-
+					
 					string child_path = path_combine(child_item_file_path, info.get_name());
 
 					if (depth == 0){
@@ -1460,8 +1459,12 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 		try {
 
-			FileInfo info;
+			//var timer = timer_start();
+			
+			//log_debug("query_file_info(): %s".printf(file_path));
 
+			FileInfo info;
+			
 			if (file_path.length > 0){
 				file = File.new_for_path(file_path);
 			}
@@ -1478,16 +1481,12 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			
 			// get type without following symlinks
 
-			//log_debug("file.query_info()");
-			
 			info = file.query_info("%s,%s,%s".printf(
 									   FileAttribute.STANDARD_TYPE,
 									   FileAttribute.STANDARD_ICON,
 									   FileAttribute.STANDARD_SYMLINK_TARGET),
 									   FileQueryInfoFlags.NOFOLLOW_SYMLINKS);
 
-			//log_debug("file.query_info(): ok");
-			
 			var item_file_type = info.get_file_type();
 
 			this.icon = info.get_icon();
@@ -1504,10 +1503,11 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 			//NOTE: permissions of symbolic links are never used
 
-			// get file info - follow symlinks
+			//log_trace("query_info: %s".printf(timer_elapsed_string(timer)));
+			//timer_restart(timer);
 
-			//log_debug("file.query_info()");
-			
+			// get file info by follow symlinks ---------------------------------------
+
 			info = file.query_info("%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s".printf(
 									   FileAttribute.STANDARD_TYPE,
 									   FileAttribute.STANDARD_SIZE,
@@ -1529,11 +1529,12 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 									   FileAttribute.ACCESS_CAN_TRASH,
 									   FileAttribute.ACCESS_CAN_WRITE,
 									   FileAttribute.UNIX_MODE,
-									   FileAttribute.ID_FILESYSTEM
+									   FileAttribute.ID_FILESYSTEM//,
+									   //FileAttribute.GVFS_BACKEND
 									   ), 0);
 
-			//log_debug("file.query_info(): ok");
-			
+			//log_trace("query_info: %s".printf(timer_elapsed_string(timer)));
+
 			if (this.is_symlink){
 				// get icon for the resolved file
 				this.icon = info.get_icon();
@@ -1879,7 +1880,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	public void clear_children() {
 		this.children.clear();
 	}
-
 
 	public FileItem? find_descendant(string path){
 		var child = this;

@@ -72,29 +72,31 @@ public class GvfsMounts: GLib.Object {
 
 		//log_debug("item.file_name: %s".printf(item.file_name));
 
+		string file_name_decoded = uri_decode(item.file_name);
+		
 		//mtp:host=%5Busb%3A002%2C010%5D
 		//mtp:host=[usb:002,010]
-		var info = regex_match("""^mtp:host=(\[usb:[0-9]+,[0-9]+\])""", uri_decode(item.file_name));
+		var info = regex_match("""^mtp:host=(\[usb:[0-9]+,[0-9]+\])""", file_name_decoded);
 		if (info != null){
 			item.display_name = "mtp:%s".printf(info.fetch(1));
 			return;
 		}
 
 		//ftp:host=192.168.43.140,port=3721
-		info = regex_match("""^(ftp|sftp|ssh):host=([0-9.]+),port=([0-9.]+)""", uri_decode(item.file_name));
+		info = regex_match("""^(ftp|sftp|ssh):host=([0-9.]+),port=([0-9.]+)""", file_name_decoded);
 		if (info != null){
-			item.display_name = "%s://%s:%s".printf(info.fetch(1), info.fetch(2), info.fetch(2));
+			item.display_name = "%s://%s:%s".printf(info.fetch(1), info.fetch(2), info.fetch(3));
 			return;
 		}
 
 		//smb-share:server=cp8676,share=storage
-		info = regex_match("""^smb-share:server=(.*),share=(.*)""", uri_decode(item.file_name));
+		info = regex_match("""^smb-share:server=(.*),share=(.*)""", file_name_decoded);
 		if (info != null){
 			item.display_name = "smb://%s/%s".printf(info.fetch(1), info.fetch(2));
 			return;
 		}
 		
-		item.display_name = uri_decode(item.file_name);
+		item.display_name = file_name_decoded;
 	}
 
 	public static bool is_gvfs_uri(string uri){

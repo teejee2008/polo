@@ -56,8 +56,6 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		}
 	}
 
-	// file context menu
-
 	private void build_menu(){
 
 		log_debug("DeviceContextMenu: build_menu()");
@@ -82,7 +80,6 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		//add_flush();
 
-
 		//gtk_menu_add_separator(this);
 
 		show_all();
@@ -97,7 +94,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		this.reserve_toggle_size = false;
 
-		//add_eject();
+		add_eject();
 
 		show_all();
 	}
@@ -160,7 +157,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 			this,
 			_("Unmount"),
 			_("Unmount this volume"),
-			new Gtk.Image.from_pixbuf(IconManager.lookup("media-eject", 16, true)),
+			null,
 			sg_icon,
 			sg_label);
 
@@ -192,6 +189,31 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		});
 
 		item.sensitive = device.is_on_encrypted_partition;
+	}
+
+	private void add_eject(){
+
+		log_debug("DeviceContextMenu: add_eject()");
+
+		if (device.type != "disk"){ return; }
+
+		// item  ------------------
+
+		var item = gtk_menu_add_item(
+			this,
+			_("Eject device"),
+			_("Eject the device so that it can be removed safely"),
+			null,
+			sg_icon,
+			sg_label);
+
+		item.activate.connect (() => {
+			eject_disk(device, pane, window);
+		});
+
+		item.sensitive = (device.type == "disk");
+		
+		//new Gtk.Image.from_pixbuf(IconManager.lookup("media-eject", 16, true))
 	}
 
 	private void add_unlock(){
@@ -280,7 +302,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 	public static bool browse_device(Device _device, FileViewPane pane, MainWindow window){
 
-		log_debug("DeviceContextMenu: browse: %s".printf(_device.device));
+		log_debug("DeviceContextMenu: browse_device(): %s".printf(_device.device));
 
 		gtk_set_busy(true, window);
 
@@ -343,7 +365,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 	public static bool mount_device(Device _device, FileViewPane pane, MainWindow window){
 
-		log_debug("DeviceContextMenu: mount: %s".printf(_device.device));
+		log_debug("DeviceContextMenu: mount_device(): %s".printf(_device.device));
 
 		gtk_set_busy(true, window);
 
@@ -378,7 +400,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 	public static bool lock_device(Device _device, FileViewPane pane, MainWindow window){
 
-		log_debug("DeviceContextMenu: lock: %s".printf(_device.device));
+		log_debug("DeviceContextMenu: lock_device(): %s".printf(_device.device));
 
 		gtk_set_busy(true, window);
 
@@ -426,6 +448,29 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		return ok;
 	}
+
+	public static bool eject_disk(Device _device, FileViewPane pane, MainWindow window){
+	
+		log_debug("DeviceContextMenu: eject_device(): %s".printf(_device.device));
+
+		string txt = _("Eject Disk ?");
+		string msg = _("Partitions on following device will be unmounted and device will be ejected:");
+		msg += "\n\n%s".printf(_device.description_simple(true));
+		if (gtk_messagebox_yes_no(txt, msg, window, false) != Gtk.ResponseType.YES){
+			return false;
+		}
+		
+		gtk_set_busy(true, window);
+
+		Device dev = _device;
+		
+		bool ok = true;
+		
+		gtk_set_busy(false, window);
+
+		return ok;
+	}
+
 
 }
 

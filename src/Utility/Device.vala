@@ -734,6 +734,28 @@ public class Device : GLib.Object{
 		}
 	}
 
+	public static void eject_removable_disk(Device dev){
+
+		//http://www.redhatgeek.com/linux/remove-a-disk-from-redhatcentos-linux-without-rebooting-the-system
+
+		
+		string sh = "";
+
+		string kname = dev.device.replace("/dev/","").strip();
+
+		// mark offline
+		string sysfile = "/sys/block/%s/device/state".printf(kname);
+		sh += "echo 'offline' > %s \n".printf(sysfile);
+		
+		// delete entries from system
+		sysfile = "/sys/block/%s/device/delete".printf(kname);
+		sh += "echo '1' > %s \n".printf(sysfile);
+
+		string std_out, std_err;
+		exec_script_sync(sh, out std_out, out std_err, false, true);
+		
+		log_msg("ejected: %s".printf(dev.device));
+	}
 
 	public static Gee.ArrayList<Device> get_block_devices_using_lsblk(string dev_name = ""){
 
