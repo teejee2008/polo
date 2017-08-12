@@ -188,17 +188,13 @@ public class FileViewPane : Gtk.Box {
 		
 		string css = " background-color: #2196F3; ";
 		gtk_apply_css(new Gtk.Widget[] { active_indicator_bottom }, css);
-
-		//css = " color: #ffffff; ";
-		//gtk_apply_css(new Gtk.Widget[] { label }, css);
 	}
 
 	public void set_active_indicator(bool is_active){
-		string css = " background-color: #2196F3; ";
-		if (!is_active){
-			css = " background-color: @content_view_bg; "; //#C0C0C0
+		string css = " background-color: @content_view_bg; ";
+		if (is_active && (App.main_window.layout_box.get_panel_layout() != PanelLayout.SINGLE)){
+			css = " background-color: #2196F3;"; //#C0C0C0
 		}
-		//gtk_apply_css(new Gtk.Widget[] { active_indicator_top }, css);
 		gtk_apply_css(new Gtk.Widget[] { active_indicator_bottom }, css);
 	}
 
