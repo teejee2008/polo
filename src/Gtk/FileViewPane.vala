@@ -112,6 +112,7 @@ public class FileViewPane : Gtk.Box {
 		var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		box.add(pathbar);
 		box.add(view);
+		box.add(selection_bar);
 		box_pathbar_view = box;
 		
 		var paned = new Gtk.Paned (Gtk.Orientation.VERTICAL);
@@ -124,7 +125,7 @@ public class FileViewPane : Gtk.Box {
 		file_operations_box = new Gtk.Box(Orientation.VERTICAL, 6);
 		add(file_operations_box);
 
-		add(selection_bar);
+		//add(selection_bar);
 		
 		add(mediabar);
 
