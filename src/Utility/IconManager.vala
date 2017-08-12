@@ -101,7 +101,7 @@ public class IconManager : GLib.Object {
 				if (file_exists(img_file)){
 
 					try {
-						pixbuf = new Gdk.Pixbuf.from_file_at_scale(img_file, icon_size, icon_size, true);
+						pixbuf = load_pixbuf_from_file(img_file, icon_size);
 						if (pixbuf != null){ return pixbuf; }
 					}
 					catch (Error e) {
@@ -206,12 +206,51 @@ public class IconManager : GLib.Object {
 		}
 
         var emblemed = pixbuf.copy();
-        emblem.composite(emblemed, offset_x, offset_y, emblem_size, emblem_size,
-			offset_x, offset_y, 1.0, 1.0, Gdk.InterpType.BILINEAR, 255);
+        
+        emblem.composite(emblemed, 
+			offset_x, offset_y, 
+			emblem_size, emblem_size,
+			offset_x, offset_y, 
+			1.0, 1.0, 
+			Gdk.InterpType.BILINEAR, 255);
 
         return emblemed;
     }
+    
+    public static Gdk.Pixbuf? add_overlay(Gdk.Pixbuf pixbuf_base, Gdk.Pixbuf pixbuf_overlay) {
 
+        int offset_x = (pixbuf_base.width - pixbuf_overlay.width) / 2 ;
+
+		var offset_y = (pixbuf_base.height - pixbuf_overlay.height) / 2 ;
+
+        var emblemed = pixbuf_base.copy();
+        
+        pixbuf_overlay.composite(emblemed, 
+			offset_x, offset_y, 
+			pixbuf_overlay.width, pixbuf_overlay.height,
+			offset_x, offset_y, 
+			1.0, 1.0, 
+			Gdk.InterpType.BILINEAR, 255);
+
+        return emblemed;
+    }
+    
+    public static Gdk.Pixbuf? resize_icon(Gdk.Pixbuf pixbuf_image, int icon_size) {
+		
+		log_debug("resize_icon()", true);
+		
+		var pixbuf_empty = new Gdk.Pixbuf(Gdk.Colorspace.RGB, true, 8, icon_size, icon_size);
+		pixbuf_empty.fill(0x00000000);
+
+		log_debug("pixbuf_empty: %d, %d".printf(pixbuf_empty.width, pixbuf_empty.height));
+		
+		var pixbuf_resized = add_overlay(pixbuf_empty, pixbuf_image);
+		
+		log_debug("pixbuf_resized: %d, %d".printf(pixbuf_resized.width, pixbuf_resized.height));
+		
+        return pixbuf_resized;
+    }
+    
     public static Gdk.Pixbuf? add_transparency (Gdk.Pixbuf pixbuf, int opacity = 130) {
 
 		var trans = pixbuf.copy();
@@ -231,6 +270,43 @@ public class IconManager : GLib.Object {
 
         return trans;
     }
+    
+    public static Gdk.Pixbuf? load_pixbuf_from_file(string file_path, int icon_size){
+		
+		Gdk.Pixbuf? pixbuf = null;
+		
+		int width, height;
+		Gdk.Pixbuf.get_file_info(file_path, out width, out height);
+		
+		if ((width <= icon_size) && (height <= icon_size)){
+			try{
+				// load without scaling
+				pixbuf = new Gdk.Pixbuf.from_file(file_path);
+				// pad to requested size
+				pixbuf = IconManager.resize_icon(pixbuf, icon_size);
+				// return
+				if (pixbuf != null){ return pixbuf; }
+			}
+			catch (Error e){
+				// ignore
+			}
+		}
+		else {
+			try{
+				// load with scaling - scale down to requested box
+				pixbuf = new Gdk.Pixbuf.from_file_at_scale(file_path, icon_size, icon_size, true);
+				// pad to requested size
+				pixbuf = IconManager.resize_icon(pixbuf, icon_size);
+				// return
+				if (pixbuf != null){ return pixbuf; }
+			}
+			catch (Error e){
+				// ignore
+			}
+		}
+		
+		return null;
+	}
 
     public static Gdk.Pixbuf? generic_icon_image(int icon_size) {
 		return lookup("image-x-generic", icon_size, false);

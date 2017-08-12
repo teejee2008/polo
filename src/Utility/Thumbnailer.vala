@@ -94,14 +94,9 @@ public class Thumbnailer : GLib.Object {
 			int width, height;
 			Gdk.Pixbuf.get_file_info(file_item.file_path, out width, out height);
 
-			if ((width <= icon_size) && (height <= icon_size)){
-				try{
-					pixbuf = new Gdk.Pixbuf.from_file(file_item.file_path);
-					if (pixbuf != null){ return pixbuf; }
-				}
-				catch (Error e){
-					// ignore
-				}
+			if ((width <= icon_size) || (height <= icon_size)){
+				pixbuf = IconManager.load_pixbuf_from_file(file_item.file_path, icon_size);
+				if (pixbuf != null){ return pixbuf; }
 			}
 		}
 
@@ -112,7 +107,7 @@ public class Thumbnailer : GLib.Object {
 			|| file_item.file_location.contains("thumbnails/fail")){
 
 			try {
-				pixbuf = new Gdk.Pixbuf.from_file_at_scale(file_item.file_path, icon_size, icon_size, true);
+				pixbuf = IconManager.load_pixbuf_from_file(file_item.file_path, icon_size);
 				return pixbuf;
 			}
 			catch (Error e){
@@ -131,7 +126,7 @@ public class Thumbnailer : GLib.Object {
 
 				// search normal
 				pixbuf = read_thumbnail_from_directory(thumbdir, "normal", hash, icon_size);
-
+				
 				if ((pixbuf != null) && (pixbuf.get_option("tEXt::Thumb::MTime") == file_item.modified_unix_time.to_string())){
 					//log_debug("MTime: %s, URI: %s".printf(pixbuf.get_option("tEXt::Thumb::MTime"),pixbuf.get_option("tEXt::Thumb::URI")));
 					return pixbuf;
@@ -175,7 +170,7 @@ public class Thumbnailer : GLib.Object {
 
 		return null;
 	}
-
+	
 	public static Gee.ArrayList<Gdk.Pixbuf> lookup_animation(FileItem file_item, int icon_size){
 
 		log_debug("Thumbnailer: lookup_animation(): %s".printf(file_item.file_path));
@@ -218,8 +213,7 @@ public class Thumbnailer : GLib.Object {
 		return list;
 	}
 
-	private static Gdk.Pixbuf? read_thumbnail_from_directory(
-		string thumbdir, string subdir,string hash, int icon_size){
+	private static Gdk.Pixbuf? read_thumbnail_from_directory(string thumbdir, string subdir,string hash, int icon_size){
 
 		string thumb_path = path_combine(thumbdir, subdir);
 		thumb_path = path_combine(thumb_path, hash + ".png");
@@ -229,23 +223,8 @@ public class Thumbnailer : GLib.Object {
 			//log_debug("found thumbnail: %s".printf(thumb_path));
 
 			try {
-
-				int width, height;
-				Gdk.Pixbuf.get_file_info(thumb_path, out width, out height);
-				Gdk.Pixbuf pixbuf = null;
-
-				if ((width <= icon_size) && (height <= icon_size)){
-					// do not upscale, load smaller image
-					pixbuf = new Gdk.Pixbuf.from_file(thumb_path);
-				}
-				else{
-					// scale down
-					pixbuf = new Gdk.Pixbuf.from_file_at_scale(thumb_path, icon_size, icon_size, true);
-				}
-
-				if (pixbuf != null){
-					return pixbuf;
-				}
+				var pixbuf = IconManager.load_pixbuf_from_file(thumb_path, icon_size);
+				if (pixbuf != null){ return pixbuf; }
 			}
 			catch (Error e){
 				// ignore
@@ -255,8 +234,7 @@ public class Thumbnailer : GLib.Object {
 		return null;
 	}
 
-	private static Gee.ArrayList<Gdk.Pixbuf> read_animation_from_directory(
-		string thumbdir, string subdir, string hash, int icon_size){
+	private static Gee.ArrayList<Gdk.Pixbuf> read_animation_from_directory(string thumbdir, string subdir, string hash, int icon_size){
 
 		var list = new Gee.ArrayList<Gdk.Pixbuf>();
 
@@ -410,20 +388,7 @@ public class Thumbnailer : GLib.Object {
 		bool success = false;
 
 		try {
-
-			int width, height;
-			Gdk.Pixbuf.get_file_info(task.file_item.file_path, out width, out height);
-			Gdk.Pixbuf pixbuf = null;
-
-			if ((width <= icon_size) && (height <= icon_size)){
-				// do not upscale, load smaller image
-				pixbuf = new Gdk.Pixbuf.from_file(task.file_item.file_path);
-			}
-			else{
-				// scale down
-				pixbuf = new Gdk.Pixbuf.from_file_at_scale(task.file_item.file_path, icon_size, icon_size, true);
-			}
-
+			var pixbuf = IconManager.load_pixbuf_from_file(task.file_item.file_path, icon_size);
 			if (pixbuf != null){
 				success = save_thumb_image(pixbuf, task, temp_file, thumb_file);
 			}
@@ -472,7 +437,7 @@ public class Thumbnailer : GLib.Object {
 		if (file_exists(temp_file)){
 
 			try {
-				var pixbuf = new Gdk.Pixbuf.from_file_at_scale(temp_file, icon_size, icon_size, true);
+				var pixbuf = IconManager.load_pixbuf_from_file(temp_file, icon_size);
 				if (pixbuf != null){
 					success = save_thumb_image(pixbuf, task, temp_file, thumb_file);
 				}
