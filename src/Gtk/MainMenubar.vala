@@ -1399,6 +1399,8 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 				}
 			});
 		}
+		
+		submenu.show_all();
 	}
 
 	private void add_cloud_account_unmount(Gtk.Menu menu){

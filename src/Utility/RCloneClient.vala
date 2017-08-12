@@ -43,9 +43,9 @@ public class RCloneClient : GLib.Object {
 
 		string user_home = get_user_home();
 		
-		config_file_path = path_combine(user_home, ".rclone.conf");
+		config_file_path = path_combine(user_home, ".config/rclone/rclone.conf");
 
-		rclone_mounts = path_combine(user_home, ".rclone-mounts");
+		rclone_mounts = path_combine(user_home, ".config/rclone/rclone-mounts");
 		
 		accounts = new Gee.ArrayList<CloudAccount>();
 		lookup = new Gee.HashMap<string,CloudAccount>();
@@ -63,6 +63,8 @@ public class RCloneClient : GLib.Object {
 		parse_config_file();
 		
 		query_mounted_remotes();
+		
+		log_debug("RCloneClient: query_accounts(): %d".printf(accounts.size));
 
 		//changed(); // will be called by query_mounted_remotes()
 	}
@@ -109,6 +111,8 @@ public class RCloneClient : GLib.Object {
 			acc._mounted = false;
 			acc._mounted_path = "";
 		}
+		
+		int mounted_count = 0;
 				
 		foreach(string line in txt.split("\n")){
 
@@ -133,6 +137,7 @@ public class RCloneClient : GLib.Object {
 						acc._mounted = true;
 						acc._mounted_path = mpath.replace("""\040"""," ").replace("""\046""","&"); // replace space. TODO: other chars?;
 						log_debug("found remote mount: %s, %s".printf(acc.name, acc._mounted_path));
+						mounted_count++;
 						break;
 					}
 				}
@@ -140,6 +145,8 @@ public class RCloneClient : GLib.Object {
 		}
 
 		changed();
+		
+		log_debug("RCloneClient: query_mounted_remotes(): %d".printf(mounted_count));
 	}
 
 	public CloudAccount add_account(string name, string type){

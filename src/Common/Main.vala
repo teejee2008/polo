@@ -372,8 +372,6 @@ public class Main : GLib.Object {
 		app_conf_session = path_combine(app_conf_dir_path, "polo-last-session.json");
 		app_conf_archive = path_combine(app_conf_dir_path, "polo-archive.json");
 
-		rclone_mounts = path_combine(user_dirs.user_home, ".rclone-mounts");
-
 		supported_formats_open = {
 			".tar",
 			".tar.gz", ".tgz",
@@ -420,7 +418,8 @@ public class Main : GLib.Object {
 		trashcan.query_items(false);
 
 		rclone = new RCloneClient();
-
+		rclone_mounts = rclone.rclone_mounts;
+		
 		/*foreach(var app in DesktopApp.applist.values){
 			if (app.desktop_file_name == "crunchy.desktop"){
 				crunchy_app = app;

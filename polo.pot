@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
-"POT-Creation-Date: 2017-08-12 18:52+0530\n"
+"POT-Creation-Date: 2017-08-12 19:27+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -70,7 +70,7 @@ msgid ""
 "Come back to Polo and click 'Finish' to add the account"
 msgstr ""
 
-#: Gtk/FileViewToolbar.vala:502 Gtk/MainMenubar.vala:1769
+#: Gtk/FileViewToolbar.vala:502 Gtk/MainMenubar.vala:1771
 msgid "About"
 msgstr ""
 
@@ -203,11 +203,11 @@ msgstr ""
 msgid "Another instance of this application is running"
 msgstr ""
 
-#: Common/Main.vala:886 Common/Main.vala:996 Common/Main.vala:1085
+#: Common/Main.vala:885 Common/Main.vala:995 Common/Main.vala:1084
 msgid "App config loaded"
 msgstr ""
 
-#: Common/Main.vala:702 Common/Main.vala:963 Common/Main.vala:1041
+#: Common/Main.vala:701 Common/Main.vala:962 Common/Main.vala:1040
 msgid "App config saved"
 msgstr ""
 
@@ -355,7 +355,7 @@ msgstr ""
 msgid "CPU type to emulate for guest machine"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1580
+#: Gtk/MainMenubar.vala:1582
 msgid "Calculate directory sizes"
 msgstr ""
 
@@ -445,7 +445,7 @@ msgid ""
 "Restart now?"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1645
+#: Gtk/MainMenubar.vala:1647
 msgid "Check external tools"
 msgstr ""
 
@@ -473,7 +473,7 @@ msgstr ""
 msgid "Classic List (Single-pane + Sidebar + ListView)"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1558
+#: Gtk/MainMenubar.vala:1560
 msgid "Clean thumbnail cache"
 msgstr ""
 
@@ -485,7 +485,7 @@ msgstr ""
 msgid "Clear the terminal output"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1559
+#: Gtk/MainMenubar.vala:1561
 msgid ""
 "Clear the thumbnails in system cache. New thumbnails will be generated when "
 "folders are browsed using any file manager."
@@ -578,7 +578,7 @@ msgstr ""
 msgid "Commander Icons (Dual-pane + IconView)"
 msgstr ""
 
-#: Common/Main.vala:471
+#: Common/Main.vala:470
 msgid "Commands listed below are not available on this system"
 msgstr ""
 
@@ -865,15 +865,15 @@ msgstr ""
 msgid "Debian Almquist shell (dash)"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1670
+#: Gtk/MainMenubar.vala:1672
 msgid "Debug: List Devices"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1657
+#: Gtk/MainMenubar.vala:1659
 msgid "Debug: List FileItem Objects"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1683
+#: Gtk/MainMenubar.vala:1685
 msgid "Debug: Monitors"
 msgstr ""
 
@@ -1040,7 +1040,7 @@ msgstr ""
 msgid "Domain"
 msgstr ""
 
-#: Gtk/FileViewToolbar.vala:482 Gtk/MainMenubar.vala:1759
+#: Gtk/FileViewToolbar.vala:482 Gtk/MainMenubar.vala:1761
 #: Utility/Gtk/DonationWindow.vala:40
 msgid "Donate"
 msgstr ""
@@ -1281,7 +1281,7 @@ msgstr ""
 msgid "Exit"
 msgstr ""
 
-#: Common/Main.vala:1136
+#: Common/Main.vala:1135
 msgid "Exiting Application"
 msgstr ""
 
@@ -1289,7 +1289,7 @@ msgstr ""
 msgid "External Tools"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1644
+#: Gtk/MainMenubar.vala:1646
 msgid "External tools"
 msgstr ""
 
@@ -1660,7 +1660,7 @@ msgstr ""
 msgid "Headers"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1697
+#: Gtk/MainMenubar.vala:1699
 msgid "Help"
 msgstr ""
 
@@ -1686,7 +1686,7 @@ msgstr ""
 msgid "Home"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1719
+#: Gtk/MainMenubar.vala:1721
 msgid "Homepage"
 msgstr ""
 
@@ -1781,7 +1781,7 @@ msgstr ""
 msgid "Invalid Server Name"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1729
+#: Gtk/MainMenubar.vala:1731
 msgid "Issue Tracker"
 msgstr ""
 
@@ -1813,7 +1813,7 @@ msgstr ""
 msgid "Key"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1749
+#: Gtk/MainMenubar.vala:1751
 msgid "Keyboard Shortcuts"
 msgstr ""
 
@@ -2323,7 +2323,7 @@ msgstr ""
 msgid "Open selected item"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1619
+#: Gtk/MainMenubar.vala:1621
 msgid "Open style wizard"
 msgstr ""
 
@@ -2591,7 +2591,7 @@ msgstr ""
 msgid "Places"
 msgstr ""
 
-#: Common/Main.vala:472
+#: Common/Main.vala:471
 msgid "Please install required packages and try running again"
 msgstr ""
 
@@ -2603,7 +2603,7 @@ msgstr ""
 msgid "Plugin is Outdated"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1633
+#: Gtk/MainMenubar.vala:1635
 msgid "Polo will be restarted with a fresh session"
 msgstr ""
 
@@ -2705,7 +2705,7 @@ msgstr ""
 msgid "Reading"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1569
+#: Gtk/MainMenubar.vala:1571
 msgid "Rebuild font cache"
 msgstr ""
 
@@ -2713,7 +2713,7 @@ msgstr ""
 msgid "Rebuilding Font Cache..."
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1570
+#: Gtk/MainMenubar.vala:1572
 msgid ""
 "Rebuilds the system font cache, so that newly installed fonts become visible "
 "to applications"
@@ -2884,7 +2884,7 @@ msgstr ""
 msgid "Reset and clear"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1632
+#: Gtk/MainMenubar.vala:1634
 msgid "Reset session and restart"
 msgstr ""
 
@@ -3042,7 +3042,7 @@ msgstr ""
 msgid "Select files to replace:"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1620
+#: Gtk/MainMenubar.vala:1622
 msgid "Select layout and style"
 msgstr ""
 
@@ -3447,7 +3447,7 @@ msgstr ""
 msgid "Toolbar"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1531
+#: Gtk/MainMenubar.vala:1533
 msgid "Tools"
 msgstr ""
 
@@ -3548,7 +3548,7 @@ msgstr ""
 msgid "Unlocked successfully"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:158 Gtk/MainMenubar.vala:1406
+#: Gtk/DeviceContextMenu.vala:158 Gtk/MainMenubar.vala:1408
 msgid "Unmount"
 msgstr ""
 
@@ -3556,7 +3556,7 @@ msgstr ""
 msgid "Unmount and lock encrypted volume"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1407
+#: Gtk/MainMenubar.vala:1409
 msgid "Unmount cloud storage account"
 msgstr ""
 
@@ -3663,7 +3663,7 @@ msgstr ""
 msgid "Website ~ teejeetech.in"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1739
+#: Gtk/MainMenubar.vala:1741
 msgid "Wiki"
 msgstr ""
 
