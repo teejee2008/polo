@@ -499,6 +499,7 @@ public class MainWindow : Gtk.Window {
 		var mount_path = mount.get_root().get_path();
 		foreach(var view in views){
 			if ((view.current_item != null) && (view.current_item.file_path.has_prefix(mount_path))){
+				//view.current_item = null;
 				view.set_overlay_on_unmount();
 			}
 		}
@@ -842,7 +843,7 @@ public class MainWindow : Gtk.Window {
 		sleep(200);
 		term.feed_command("q");
 
-		App.rclone.load_accounts();
+		//App.rclone.query_accounts();
 
 		//window.refre
 		

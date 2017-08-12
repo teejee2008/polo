@@ -217,7 +217,7 @@ public class Main : GLib.Object {
 	
 	// defaults
 	public static double LV_FONT_SCALE = 1.0;
-	public static int LV_ICON_SIZE = 24;
+	public static int LV_ICON_SIZE = 32;
 	public static int LV_ROW_SPACING = 0;
 
 	public static int IV_ICON_SIZE = 64;
@@ -237,7 +237,7 @@ public class Main : GLib.Object {
 	public int listview_icon_size = LV_ICON_SIZE;
 	public int listview_row_spacing = LV_ROW_SPACING;
 	public bool listview_emblems = false;
-	public bool listview_thumbs = false;
+	public bool listview_thumbs = true;
 	public bool listview_transparency = true;
 
 	public int iconview_icon_size = IV_ICON_SIZE;

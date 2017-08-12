@@ -937,8 +937,7 @@ public class Sidebar : Gtk.Box {
 
 	private void add_device_actions_button(Gtk.Box box, Device dev){
 		
-		var icon_size = popup ? 16 : 16;
-		var img = new Gtk.Image.from_pixbuf(IconManager.lookup("preferences-system", icon_size, true));
+		var img = new Gtk.Image.from_pixbuf(IconManager.lookup("preferences-desktop", 12, false, true));
 
 		var ebox = new Gtk.EventBox();
 		ebox.add(img);

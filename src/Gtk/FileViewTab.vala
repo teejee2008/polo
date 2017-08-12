@@ -212,7 +212,7 @@ public class FileViewTab : Gtk.Box {
 
 	private void add_close_button(Gtk.Box box){
 		
-		var img = IconManager.lookup_image("window-close", 16);
+		var img = IconManager.lookup_image("tab-close", 16);
 		var ebox = new Gtk.EventBox();
 		ebox.margin_left = 10;
 		ebox.add(img);

@@ -1303,32 +1303,14 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		menu_shell.add(menu_item);
 
 		var submenu = new Gtk.Menu();
+		submenu.reserve_toggle_size = false;
 		menu_item.set_submenu(submenu);
 
-		context_normal.connect(()=>{
+		App.rclone.changed.connect(()=>{
 			add_cloud_account_refresh(submenu);
 		});
 
-		context_trash.connect(()=>{
-			add_cloud_account_refresh(submenu);
-		});
-
-		context_archive.connect(()=>{
-			add_cloud_account_refresh(submenu);
-		});
-
-		context_term.connect(()=>{
-			add_cloud_account_refresh(submenu);
-		});
-		
-		context_edit.connect(()=>{
-			//add_cloud_account_refresh(submenu);
-		});
-
-		context_none.connect(()=>{
-			log_debug("NainMenu: cloud: clear()");
-			gtk_container_remove_children(submenu);
-		});
+		add_cloud_account_refresh(submenu);
 	}
 
 	private void add_cloud_account_refresh(Gtk.Menu menu){
@@ -1341,11 +1323,15 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 
 		add_cloud_account_remove(menu);
 
+		add_cloud_account_unmount(menu);
+
 		gtk_menu_add_separator(menu);
 
 		add_cloud_account_browse(menu);
 
 		show_all();
+
+		menu.show_all();
 	}
 	
 	private void add_cloud_account_add(Gtk.Menu menu){
@@ -1367,49 +1353,177 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 
 		var submenu = new Gtk.Menu();
 		item.set_submenu(submenu);
+
+		var sg_icon = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+		var sg_label = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
 		
 		foreach(var acc in App.rclone.accounts){
 
-			string acc_name = "%s > %s".printf(acc.type_name, acc.name);
-			
-			var subitem = new Gtk.MenuItem.with_label(acc_name);
-			submenu.add(subitem);
+			Gtk.Image? image = null;
+
+			switch(acc.type){
+			case "dropbox":
+				image = IconManager.lookup_image("dropbox", 16);
+				break;
+			case "drive":
+				image = IconManager.lookup_image("web-google", 16);
+				break;
+			case "onedrive":
+				image = IconManager.lookup_image("web-microsoft", 16);
+				break;
+			case "amazon cloud drive":
+			case "s3":
+				image = IconManager.lookup_image("web-amazon", 16);
+				break;
+			default:
+				image = IconManager.lookup_image("goa-panel", 16);
+				break;
+			}
+
+			var subitem = gtk_menu_add_item(
+				submenu,
+				acc.name,
+				"",
+				image,
+				sg_icon,
+				sg_label);
 
 			subitem.activate.connect (() => {
 				bool ok = window.remove_rclone_account(acc);
 				if (ok){
-					gtk_messagebox(_("Account Removed"), "%s".printf(acc_name), window, false);
+					gtk_messagebox(_("Account Removed"), "%s".printf(acc.name), window, false);
 					submenu.remove(subitem);
 				}
 				else {
-					gtk_messagebox(_("Failed to Remove Account"), "%s".printf(acc_name), window, false);
+					gtk_messagebox(_("Failed to Remove Account"), "%s".printf(acc.name), window, false);
 				}
-				//window.cloud_remove();
 			});
+		}
+	}
+
+	private void add_cloud_account_unmount(Gtk.Menu menu){
+		
+		var item = new Gtk.MenuItem.with_label (_("Unmount"));
+		item.set_tooltip_text(_("Unmount cloud storage account"));
+		menu.add(item);
+
+		var submenu = new Gtk.Menu();
+		item.set_submenu(submenu);
+
+		var sg_icon = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+		var sg_label = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+		
+		foreach(var acc in App.rclone.accounts){
+
+			Gtk.Image? image = null;
+
+			switch(acc.type){
+			case "dropbox":
+				image = IconManager.lookup_image("dropbox", 16);
+				break;
+			case "drive":
+				image = IconManager.lookup_image("web-google", 16);
+				break;
+			case "onedrive":
+				image = IconManager.lookup_image("web-microsoft", 16);
+				break;
+			case "amazon cloud drive":
+			case "s3":
+				image = IconManager.lookup_image("web-amazon", 16);
+				break;
+			default:
+				image = IconManager.lookup_image("goa-panel", 16);
+				break;
+			}
+
+			var subitem = gtk_menu_add_item(
+				submenu,
+				acc.name,
+				"",
+				image,
+				sg_icon,
+				sg_label);
+
+			subitem.activate.connect (() => {
+				acc.unmount();
+			});
+
+			subitem.sensitive = (App.rclone.get_mounted_path(acc.name).length > 0);
 		}
 	}
 
 	private void add_cloud_account_browse(Gtk.Menu menu){
 
+		var sg_icon = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+		var sg_label = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+		
 		foreach(var acc in App.rclone.accounts){
-			
-			var item = new Gtk.MenuItem.with_label("%s > %s".printf(acc.type_name, acc.name));
-			menu.add(item);
+
+			Gtk.Image? image = null;
+
+			switch(acc.type){
+			case "dropbox":
+				image = IconManager.lookup_image("dropbox", 16);
+				break;
+			case "drive":
+				image = IconManager.lookup_image("web-google", 16);
+				break;
+			default:
+				image = IconManager.lookup_image("goa-panel", 16);
+				break;
+			}
+
+			var item = gtk_menu_add_item(
+				menu,
+				acc.name,
+				"",
+				image,
+				sg_icon,
+				sg_label);
 
 			item.activate.connect (() => {
 
-				log_debug("menu_item_clicked: %s".printf(acc.name));
+				App.rclone.query_mounted_remotes();
 				
-				if (!acc.check_mounted()){
+				log_debug("menu_item_clicked: %s".printf(acc.name), true);
+
+				bool delayed_load = false;
+
+				string mpath = App.rclone.get_mounted_path(acc.name);
+				
+				if (mpath.length == 0){
+					
+					log_debug("not_mounted: %s".printf(acc.name));
 					acc.mount();
-					sleep(300);
+					delayed_load = true;
 				}
-				view.open_in_new_tab(acc.mount_path);
+				else {
+					log_debug("is_mounted: %s".printf(acc.name));
+				}
+
+				var tab = panel.add_tab(true);
+
+				tab.view.query_items_delay = 3000;
+
+				tab.view.set_view_path(acc.mount_path);
+
+				//tab.pane.view.set_overlay_on_loading();
+
+				/*log_debug("waiting for 3000ms -------------------");
+				int count = 3000;
+				while (count > 0){
+					sleep(100);
+					count -= 100;
+					gtk_do_events();
+				}
+				log_debug("waiting for 3000ms: done -------------");
+
+				tab.pane.view.set_view_path(acc.mount_path);*/
 			});
 		}
 	}
 
-	
+
 	private void add_menu_tools(Gtk.MenuShell menu_shell){
 
 		log_debug("MainMenuBar: add_menu_tools()");

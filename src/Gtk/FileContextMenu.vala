@@ -1410,7 +1410,7 @@ public class FileContextMenu : Gtk.Menu {
 			sg_label);
 			
 		var sub_menu = new Gtk.Menu();
-		//sub_menu.reserve_toggle_size = false;
+		sub_menu.reserve_toggle_size = false;
 		menu_item.submenu = sub_menu;
 
 		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
@@ -1926,7 +1926,7 @@ public class FileContextMenu : Gtk.Menu {
 			sg_label);
 			
 		var sub_menu = new Gtk.Menu();
-		//sub_menu.reserve_toggle_size = false;
+		sub_menu.reserve_toggle_size = false;
 		menu_item.submenu = sub_menu;
 
 		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);

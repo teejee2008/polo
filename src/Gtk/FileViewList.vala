@@ -37,7 +37,8 @@ public class FileViewList : Gtk.Box {
 	private Gtk.Box contents;
 	private Gtk.Overlay overlay;
 	private Gtk.Label? lbl_overlay;
-
+	private Gtk.Box? box_overlay;
+	 
 	private Gtk.Box active_indicator_top;
 	//private Gtk.Box active_indicator_bottom;
 	
@@ -89,6 +90,7 @@ public class FileViewList : Gtk.Box {
 	public FileContextMenu menu_file;
 
 	public string filter_pattern = "";
+	public int query_items_delay = 0;
 	
 	public Gee.ArrayList<FileItemMonitor> monitors = new Gee.ArrayList<FileItemMonitor>();
 
@@ -693,8 +695,8 @@ public class FileViewList : Gtk.Box {
 			else if (item.query_children_pending){
 				crt.text = "";
 			}
-			else{
-				crt.text = item.file_size_formatted;
+			else {
+				crt.text = (item.size > 0) ? item.file_size_formatted : "";
 			}
 
 			crt.scale = listview_font_scale;
@@ -2064,6 +2066,7 @@ public class FileViewList : Gtk.Box {
 		log_debug("FileViewList: set_view_path(): %s -------------------------------------------".printf(path));
 		
 		if (path.strip().length == 0){
+			clear_views();
 			//gtk_messagebox(_("Path is Empty!"), "Path: (empty)", window, true);
 			return null;
 		}
@@ -2126,12 +2129,16 @@ public class FileViewList : Gtk.Box {
 		log_debug(string.nfill(80, '-'));
 
 		log_trace("view_changed: %s ------------------------".printf(item.file_path));
+
+		//log_debug("0");
 		
 		var previous_item = current_item;
 		current_item = item;
 		current_location = current_item.display_path;
 		current_location_is_remote = current_item.file_path.has_prefix(App.rclone_mounts);
 
+		//log_debug("1");
+		
 		clear_filter();
 		pane.selection_bar.close_panel(true); // force
 
@@ -2140,12 +2147,15 @@ public class FileViewList : Gtk.Box {
 			history_reset();
 		}
 
-		if (!query_items()){
+		query_items();
+		/*if (!query_items()){
 			// do not change view
 			current_item = previous_item;
 			current_location = previous_item.display_path;
 			return previous_item;
-		}
+		}*/
+
+		log_debug("FileViewList: set_view_item(): query_items(): done");
 
 		set_view_mode_for_location();
 
@@ -2388,6 +2398,7 @@ public class FileViewList : Gtk.Box {
 	}
 
 	public void refilter(){
+		if (treefilter == null){ return; }
 		var list = get_selected_items();
 		treefilter.refilter();
 		select_items(list);
@@ -2630,12 +2641,59 @@ public class FileViewList : Gtk.Box {
 		refresh(false);
 	}
 
-	private bool query_items(){
-		
-		if (current_item == null){ return true; }
+	private bool query_items_thread_running = false;
+	
+	private void query_items(){
 
 		log_debug("FileViewList: query_items()");
 
+		if (current_item == null){ log_debug("FileViewList: query_items(): current_item is NULL"); return; }
+		
+		try {
+			//log_debug("FileViewList: query_items(): create thread");
+			query_items_thread_running = true;
+			Thread.create<void> (query_items_thread, true);
+		}
+		catch (Error e) {
+			log_error("FileViewList: query_items_thread()");
+			query_items_thread_running = false;
+			log_error (e.message);
+		}
+
+		int elapsed = 0;
+		bool overlay_added = false;
+		while (query_items_thread_running){
+			sleep(100);
+			elapsed += 100;
+			if (elapsed == 500){
+				set_overlay_on_loading();
+				overlay_added = true;
+			}
+			gtk_do_events();
+		}
+
+		if (current_item != null){ 
+			log_debug("FileViewList: query_items(): %d".printf(current_item.children.size));
+		}
+
+		if (overlay_added){
+			remove_overlay();
+		}
+	}
+	
+	private void query_items_thread(){
+		
+		log_debug("FileViewList: query_items_thread()");
+
+		if (current_item == null){
+			//log_debug("FileViewList: query_items_thread(): current_item is NULL");
+			query_items_thread_running = false;
+			return;
+		}
+
+		sleep(query_items_delay);
+		query_items_delay = 0;
+		
 		//var cached = TreeModelCache.find_file_item(current_item.file_path);
 
 		//if (cached == null){
@@ -2647,18 +2705,20 @@ public class FileViewList : Gtk.Box {
 				current_item = App.trashcan;
 			}
 			else if (current_item.is_archive && (current_item.children.size == 0)){
-				return list_archive(current_item);
+				list_archive(current_item);
+				return;
 			}
 			else{
+				//log_debug("FileViewList: query_items_thread(): current_item.query_children(1)");
 				current_item.query_children(1);
 			}
 
-			log_trace("FileViewList: query_items(): %s".printf(timer_elapsed_string(timer)));
+			log_trace("FileViewList: query_items_thread(): %s".printf(timer_elapsed_string(timer)));
 
-			log_debug("FileViewList: query_items(): %d".printf(current_item.children.size));
+			log_debug("FileViewList: query_items_thread(): %d".printf(current_item.children.size));
 		//}
 
-		return true;
+		query_items_thread_running = false;
 	}
 
 	private int get_adjusted_column_width_for_tileview(){
@@ -2819,64 +2879,101 @@ public class FileViewList : Gtk.Box {
 	}
 
 	// overlay messages ------------
-
-	private void add_overlay(string msg, bool clear_view){
+	
+	private void clear_views(){
+		store = null;
+		treeview.set_model(null);
+		iconview.set_model(null);
+	}
+	
+	private void add_overlay(string msg, bool clear_view, bool show_spinner = false){
 
 		remove_overlay(); // remove existing
 
-		if ((treeview == null) || (iconview == null)){
-			return;
-		}
+		if ((treeview == null) || (iconview == null)){ return; }
 
+		log_debug("add_overlay()");
+		
 		//cancel_monitors();
 		
 		if (clear_view){
 			store = null;
-			current_item = null;
+			//current_item = null;
 			treeview.set_model(null);
 			//treeview.headers_visible = false;
 			iconview.set_model(null);
 		}
 
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
+		hbox.margin_left = 24;
+		hbox.margin_top = 48;
+		box_overlay = hbox;
+		
+		if (show_spinner){
+			var spinner = new Gtk.Spinner();
+			spinner.halign = Gtk.Align.START;
+			spinner.valign = Gtk.Align.START;
+			spinner.start();
+			hbox.add(spinner);
+		}
+
 		var label = new Gtk.Label("<span size=\"large\">%s</span>".printf(msg)); //
 		label.halign = Gtk.Align.START;
 		label.valign = Gtk.Align.START;
-		label.margin_left = 24;
-		label.margin_top = 48;
 		label.sensitive = false;
 		label.set_use_markup(true);
-		overlay.add_overlay(label);
+		hbox.add(label);
 		lbl_overlay = label;
-		label.show_all();
+		
+		overlay.add_overlay(hbox);
 
-		changed();
+		hbox.show_all();
+
+		//changed();
 	}
 
 	private void remove_overlay(){
-		if (lbl_overlay != null){
-			overlay.remove(lbl_overlay);
-			lbl_overlay = null;
+		
+		if ((overlay != null) && (box_overlay != null)){
+
+			log_debug("remove_overlay()");
+			
+			overlay.remove(box_overlay);
+			box_overlay = null;
 			treeview.headers_visible = true;
 		}
 	}
 
 	public void set_overlay_on_unmount(){
+		log_debug("set_overlay_on_unmount()");
+		current_item = null;
 		add_overlay(_("Device was unmounted"), true);
 		pane.statusbar.refresh();
 		cancel_monitors();
 	}
 
 	public void set_overlay_on_invalid_path(){
+		log_debug("set_overlay_on_invalid_path()");
+		current_item = null;
 		add_overlay(_("Could not find path") + " '%s'".printf(current_location), true);
 		pane.statusbar.refresh();
 		cancel_monitors();
 	}
 
 	public void set_overlay_on_empty(){
+		log_debug("set_overlay_on_empty()");
 		add_overlay(_("Folder is empty"), false);
 		//pane.statusbar.refresh(); // not needed
 		//cancel_monitors();// do not cancel
 	}
+
+	public void set_overlay_on_loading(){
+		log_debug("set_overlay_on_loading()");
+		add_overlay(_("Loading..."), true, true);
+		//pane.statusbar.refresh(); // not needed
+		//cancel_monitors();// do not cancel
+	}
+
 
 	// update thumbnails ------------
 
@@ -4083,10 +4180,10 @@ public class FileViewList : Gtk.Box {
 		}
 	}
 
-	public void open_in_new_tab(string folder_path = ""){
+	public FileViewTab? open_in_new_tab(string folder_path = "", bool use_existing = true, bool init_views = false){
 		
 		var selected_items = get_selected_items();
-		if ((folder_path.length == 0) && (selected_items.size != 1)){ return; }
+		if ((folder_path.length == 0) && (selected_items.size != 1)){ return null; }
 
 		log_debug("action.open_in_new_tab()");
 
@@ -4095,17 +4192,20 @@ public class FileViewList : Gtk.Box {
 			path_to_open = selected_items[0].file_path;
 		}
 
-		// focus an existing tab with the requested path, if any
-		foreach(var tab in panel.tabs){
-			if ((tab.view.current_item != null) && (tab.view.current_item.file_path == path_to_open)){
-				tab.select_tab();
-				return;
+		if (use_existing){
+			// focus an existing tab with the requested path, if any
+			foreach(var tab in panel.tabs){
+				if ((tab.view.current_item != null) && (tab.view.current_item.file_path == path_to_open)){
+					tab.select_tab();
+					log_debug("selected existing tab");
+					return tab;
+				}
 			}
 		}
-
-		var tab = panel.add_tab(false);
+		
+		var tab = panel.add_tab(init_views);
 		tab.pane.view.set_view_path(path_to_open);
-		tab.select_tab();
+		return tab;
 	}
 
 	public void open_in_new_window(bool admin_mode = false){

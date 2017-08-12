@@ -632,7 +632,7 @@ public class Statusbar : Gtk.Box {
 		var dev = view.current_item.get_device();
 		
 		if (dev != null){
-			log_debug("file_item is on device: %s".printf(dev.device), true);
+			log_debug("file_item is on device: %s".printf(dev.device));
 
 			if ((view.current_item.filesystem_type != null) && (view.current_item.filesystem_type != "ext3/ext4")){
 				lbl_fs_type.label = "%s".printf(view.current_item.filesystem_type); // prefer this

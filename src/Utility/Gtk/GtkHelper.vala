@@ -561,7 +561,7 @@ namespace TeeJee.GtkHelper{
 		
 		// separator
 		var menu_item = new Gtk.SeparatorMenuItem();
-		menu_item.override_color (StateFlags.NORMAL, gray);
+		//menu_item.override_color (StateFlags.NORMAL, gray);
 		menu.append(menu_item);
 
 		return menu_item;
@@ -571,11 +571,11 @@ namespace TeeJee.GtkHelper{
 		Gtk.Menu menu, string label, string tooltip,
 		Gtk.Image? icon_image, Gtk.SizeGroup? sg_icon = null, Gtk.SizeGroup? sg_label = null){
 
+		//log_debug("gtk_menu_add_item()");
+		
 		var menu_item = new Gtk.MenuItem();
-		menu.append(menu_item);
-			
+
 		var box = new Gtk.Box(Orientation.HORIZONTAL, 3);
-		menu_item.add(box);
 
 		// add icon
 
@@ -607,6 +607,13 @@ namespace TeeJee.GtkHelper{
 		}
 
 		box.set_tooltip_text(tooltip);
+
+		menu_item.add(box);
+		menu.append(menu_item);
+		
+		menu_item.show_all();
+
+		//log_debug("gtk_menu_add_item(): done");
 
 		return menu_item;
 	}

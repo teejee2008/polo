@@ -57,6 +57,10 @@ namespace TeeJee.Logging{
 			msg += "\033[0m";
 		}
 
+		if (highlight){
+			msg += " *********************************************";
+		}
+
 		msg += "\n";
 
 		stdout.printf (msg);

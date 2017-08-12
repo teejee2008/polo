@@ -525,7 +525,7 @@ public class Pathbar : Gtk.Box {
 
 		//Gtk.Label lbl;
 
-		log_debug("update_crumb_labels()", true);
+		log_debug("update_crumb_labels()");
 		log_debug("current_path_saved: %s".printf(view.current_location));
 
 		switch(App.pathbar_style){
