@@ -1801,6 +1801,7 @@ public class FileViewList : Gtk.Box {
 		case "up":
 		case "down":
 		case "tab":
+		case "return":
 			return false;
 		case "space":
 			keychar = " ";
