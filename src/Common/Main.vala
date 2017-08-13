@@ -121,7 +121,7 @@ public class Main : GLib.Object {
 	public bool sidebar_bookmarks = true;
 	public bool sidebar_places = true;
 	public bool sidebar_devices = true;
-	public bool sidebar_dark = false;
+	public bool sidebar_dark = true;
 	public bool sidebar_action_button = false;
 	public int sidebar_position = 150;
 	public string sidebar_collapsed_sections = "";
@@ -134,7 +134,7 @@ public class Main : GLib.Object {
 
 	public bool toolbar_visible = true;
 	public bool toolbar_large_icons = false;
-	public bool toolbar_dark = false;
+	public bool toolbar_dark = true;
 	public bool toolbar_labels = true;
 	public bool toolbar_labels_beside_icons = true;
 
