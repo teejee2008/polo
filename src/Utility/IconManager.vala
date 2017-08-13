@@ -237,16 +237,16 @@ public class IconManager : GLib.Object {
     
     public static Gdk.Pixbuf? resize_icon(Gdk.Pixbuf pixbuf_image, int icon_size) {
 		
-		log_debug("resize_icon()", true);
+		//log_debug("resize_icon()");
 		
 		var pixbuf_empty = new Gdk.Pixbuf(Gdk.Colorspace.RGB, true, 8, icon_size, icon_size);
 		pixbuf_empty.fill(0x00000000);
 
-		log_debug("pixbuf_empty: %d, %d".printf(pixbuf_empty.width, pixbuf_empty.height));
+		//log_debug("pixbuf_empty: %d, %d".printf(pixbuf_empty.width, pixbuf_empty.height));
 		
 		var pixbuf_resized = add_overlay(pixbuf_empty, pixbuf_image);
 		
-		log_debug("pixbuf_resized: %d, %d".printf(pixbuf_resized.width, pixbuf_resized.height));
+		//log_debug("pixbuf_resized: %d, %d".printf(pixbuf_resized.width, pixbuf_resized.height));
 		
         return pixbuf_resized;
     }

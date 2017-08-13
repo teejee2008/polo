@@ -59,7 +59,14 @@ namespace TeeJee.FileSystem{
 
 			text += "/%s".printf(arr[index++]);
 		}
+		
+		if (text.length == 0){
+			// parent for /path
+			text = "/";
+		}
+		
 		return text;
+		
 		//return File.new_for_path(file_path).get_parent().get_path();
 	}
 

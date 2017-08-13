@@ -3311,9 +3311,12 @@ public class FileViewList : Gtk.Box {
 	}
 
 	public string get_location_up(){
-
+		
+		//log_debug("get_location_up(): %s".printf(current_item.file_path));
+		
 		if (current_item != null){
 			var path = file_parent(current_item.file_path);
+			//log_debug("file_parent: %s".printf(path));
 			if (dir_exists(path)){
 				return path;
 			}
