@@ -1149,10 +1149,6 @@ public class Settings : Gtk.Box, IPaneActive {
 			}
 		}
 		
-		if (combo.active == -1){
-			combo.active = 0;
-		}
-
 		combo.changed.connect(() => {
 			App.gtk_theme = gtk_combobox_get_value(combo, 0, App.gtk_theme);
 			GtkTheme.set_gtk_theme(App.gtk_theme);

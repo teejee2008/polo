@@ -51,7 +51,7 @@ all:
 		Gtk/*.vala \
 		Utility/*.vala \
 		Utility/Gtk/*.vala
-
+		
 clean:
 	rm -rf *.o ${app_name}
 
@@ -77,6 +77,7 @@ install:
 	#shared files
 	cp -dpr --no-preserve=ownership -t "$(DESTDIR)$(sharedir)/${app_name}" ./share/${app_name}/*
 	chmod --recursive 0755 $(DESTDIR)$(sharedir)/${app_name}/*
+	chmod a+x $(DESTDIR)$(sharedir)/${app_name}/files/gtk-theme/install-gtk-theme
 
 	#launcher
 	install -m 0644 ${app_name}.desktop "$(DESTDIR)$(launcherdir)"
@@ -87,6 +88,12 @@ install:
 	#translations
 	install -m 0644 ../po/${app_name}-de.mo $(DESTDIR)$(localedir)/de/LC_MESSAGES/${app_name}.mo
 	install -m 0644 ../po/${app_name}-nl.mo $(DESTDIR)$(localedir)/nl/LC_MESSAGES/${app_name}.mo
+	
+	#install gtk theme 'Arc-Darker-Polo'
+	#mkdir -p "$(DESTDIR)$(sharedir)/themes/Arc-Darker-Polo"
+	#ignore errors for below commands
+	#-cp -dpr --no-preserve=ownership -t "$(DESTDIR)$(sharedir)/themes/Arc-Darker-Polo" ../gtk-theme/3.${gtk3_version}/*
+	#-chmod --recursive 0755 $(DESTDIR)$(sharedir)/themes/Arc-Darker-Polo/*
 
 uninstall:
 

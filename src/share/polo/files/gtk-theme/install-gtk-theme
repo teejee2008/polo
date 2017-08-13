@@ -1,0 +1,19 @@
+#!/bin/bash
+
+gtk_version=$( pkg-config --modversion gtk+-3.0 | awk -F "." '{print $1 "." $2}' )
+
+backup=`pwd`
+DIR="$( cd "$( dirname "$0" )" && pwd )"
+cd $DIR
+
+#rsync -avh "$gtk_version" "$HOME/.local/share/themes/Arc-Darker-Polo"
+
+target="$HOME/.local/share/themes/Arc-Darker-Polo"
+mkdir -p "$target"
+cp -Rav $gtk_version/* "$target"
+
+cd "$backup"
+
+
+
+

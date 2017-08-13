@@ -36,7 +36,8 @@ public class GtkTheme : GLib.Object {
 
 	public static string user_name;
 	public static string user_home;
-	public static string preferred_theme = "Arc";
+	public static string preferred_theme = "Arc-Darker-Polo";
+	public static string preferred_theme_alt = "Arc-Darker";
 	
 	public static Gee.ArrayList<GtkTheme> themes = new Gee.ArrayList<GtkTheme>();
 
@@ -80,6 +81,19 @@ public class GtkTheme : GLib.Object {
 		}
 	}
 	
+	public static bool has_theme(string theme_name){
+		
+		foreach(var theme in GtkTheme.themes){
+			
+			if (theme.name == theme_name){
+				
+				return true;
+			}
+		}
+		
+		return false;
+	}
+	
 	public static string get_gtk_theme(){
 		
 		var settings = Gtk.Settings.get_default();
@@ -95,11 +109,31 @@ public class GtkTheme : GLib.Object {
 	
 	public static void set_gtk_theme_preferred(){
 		
+		bool found = false;
+		
+		log_debug("GtkTheme: set_gtk_theme_preferred(): %s".printf(preferred_theme));
+		
 		foreach(var theme in GtkTheme.themes){
 			
 			if (theme.name == preferred_theme){
 				
+				log_debug("GtkTheme: set_gtk_theme_preferred(): found");
 				set_gtk_theme(theme.name);
+				found = true;
+			}
+		}
+		
+		if (!found){
+			
+			log_debug("GtkTheme: set_gtk_theme_preferred(): alt: %s".printf(preferred_theme_alt));
+			
+			foreach(var theme in GtkTheme.themes){
+				
+				if (theme.name == preferred_theme_alt){
+					
+					log_debug("GtkTheme: set_gtk_theme_preferred(): found");
+					set_gtk_theme(theme.name);
+				}
 			}
 		}
 	}

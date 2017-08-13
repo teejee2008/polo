@@ -1028,7 +1028,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			// check if directory
 			if (!item.is_directory) {
 				// add the item to cache, as it has no children
-				add_to_cache(item);
+				//add_to_cache(item);
 				return item;
 			}
 
@@ -1075,7 +1075,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 						item.add_child_from_disk(child_path, depth - 1);
 
 						// add the item to cache, as it's children have been added
-						add_to_cache(item);
+						//add_to_cache(item);
 					}
 				}
 			}
@@ -1388,7 +1388,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			child.file_path = path_combine(child.file_location, new_name);
 			child.display_name = null;
 			child.query_file_info();
-			add_to_cache(child);
+			//add_to_cache(child);
 		}
 
 		return child;
@@ -1803,7 +1803,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			log_error (e.message);
 		}
 
-		add_to_cache(this);
+		//add_to_cache(this);
 
 		query_children_running = false;
 		query_children_pending = false;

@@ -888,19 +888,41 @@ public class Main : GLib.Object {
 
 		GtkBookmark.load_bookmarks(user_name, true);
 		
+		init_gtk_themes();
+
+		log_debug(_("App config loaded") + ": '%s'".printf(this.app_conf_path));
+
+		set_numeric_locale(""); // reset numeric locale
+	}
+	
+	private void init_gtk_themes(){
+		
 		GtkTheme.query(user_name);
 
 		if (gtk_theme.length == 0){
+			
+			log_debug("Main(): gtk_theme not selected");
+			
+			if (!GtkTheme.has_theme("Arc-Darker-Polo")){
+				
+				log_debug("Main(): theme not found: Arc-Darker-Polo");
+				log_debug("Main(): installing theme...");
+				
+				string sh_file = "/usr/share/polo/files/gtk-theme/install-gtk-theme";
+				Posix.system(sh_file);
+				
+				GtkTheme.query(user_name); // requery
+			}
+			else{
+				log_debug("Main(): theme found: Arc-Darker-Polo");
+			}
+			
 			GtkTheme.set_gtk_theme_preferred();
 			gtk_theme = GtkTheme.get_gtk_theme();
 		}
 		else {
 			GtkTheme.set_gtk_theme(gtk_theme);
 		}
-
-		log_debug(_("App config loaded") + ": '%s'".printf(this.app_conf_path));
-
-		set_numeric_locale(""); // reset numeric locale
 	}
 	
 	public void increment_run_count() {
