@@ -436,7 +436,11 @@ public class FileTask : GLib.Object {
 		
 		var src = File.new_for_path(src_path);
 		var dest = File.new_for_path(dest_path);
-
+		
+		if (!src.query_exists()){
+			return true; // ignore, src may have been a symlink which was moved
+		}
+		
 		bytes_file = 0;
 		bytes_file_total = 0;
 
