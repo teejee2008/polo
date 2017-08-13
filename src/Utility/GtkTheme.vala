@@ -59,7 +59,11 @@ public class GtkTheme : GLib.Object {
 		
 		query_from_path("/usr/share/themes"); 
 		query_from_path("%s/.local/share/themes".printf(user_home)); 
-		query_from_path("%s/.themes".printf(user_home)); 
+		query_from_path("%s/.themes".printf(user_home));
+		
+		themes.sort((a,b)=>{
+			return strcmp(a.name, b.name);
+		});
 		
 		log_debug("GtkTheme: current: %s".printf(get_gtk_theme()));
 	}

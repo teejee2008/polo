@@ -1112,6 +1112,8 @@ public class Settings : Gtk.Box, IPaneActive {
 		combo.set_tooltip_text(_("GTK theme to use"));
 		hbox.add (combo);
 		sg_option.add_widget(combo);
+		
+		combo.set_tooltip_text(_("This application is designed for the Arc GTK theme. It may not look right with other themes."));
 
 		// render text
 		var cell_text = new CellRendererText();
