@@ -73,6 +73,13 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		add_mount();
 
 		add_unmount();
+		
+		if (App.tool_exists("gnome-disks")) {
+			
+			add_manage();
+		
+			add_format();
+		}
 
 		add_lock();
 
@@ -94,7 +101,14 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		this.reserve_toggle_size = false;
 
-		add_eject();
+		//add_eject();
+		
+		if (App.tool_exists("gnome-disks")) {
+			
+			add_manage();
+		
+			add_format();
+		}
 
 		show_all();
 	}
@@ -201,7 +215,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		var item = gtk_menu_add_item(
 			this,
-			_("Eject device"),
+			_("Eject"),
 			_("Eject the device so that it can be removed safely"),
 			null,
 			sg_icon,
@@ -212,6 +226,56 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		});
 
 		item.sensitive = (device.type == "disk");
+		
+		//new Gtk.Image.from_pixbuf(IconManager.lookup("media-eject", 16, true))
+	}
+	
+	private void add_manage(){
+
+		log_debug("DeviceContextMenu: add_manage()");
+
+		//if (device.type != "disk"){ return; }
+
+		// item  ------------------
+
+		var item = gtk_menu_add_item(
+			this,
+			_("Manage..."),
+			_("Manage device using GNOME disk utility"),
+			null,
+			sg_icon,
+			sg_label);
+
+		item.activate.connect (() => {
+			manage_disk(device, pane, window);
+		});
+
+		//item.sensitive = (device.type == "disk");
+		
+		//new Gtk.Image.from_pixbuf(IconManager.lookup("media-eject", 16, true))
+	}
+	
+	private void add_format(){
+
+		log_debug("DeviceContextMenu: add_format()");
+
+		//if (device.type != "disk"){ return; }
+
+		// item  ------------------
+
+		var item = gtk_menu_add_item(
+			this,
+			_("Format..."),
+			_("Format device using GNOME disk utility"),
+			null,
+			sg_icon,
+			sg_label);
+
+		item.activate.connect (() => {
+			format_disk(device, pane, window);
+		});
+
+		//item.sensitive = (device.type == "disk");
 		
 		//new Gtk.Image.from_pixbuf(IconManager.lookup("media-eject", 16, true))
 	}
@@ -462,7 +526,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		
 		gtk_set_busy(true, window);
 
-		Device dev = _device;
+		//Device dev = _device;
 		
 		bool ok = true;
 		
@@ -470,8 +534,24 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		return ok;
 	}
+	
+	public static void manage_disk(Device _device, FileViewPane pane, MainWindow window){
+	
+		log_debug("DeviceContextMenu: manage_disk(): %s".printf(_device.device));
+		
+		string cmd = "gnome-disks --block-device %s".printf(_device.device);
+		
+		exec_process_new_session(cmd);
+	}
 
-
+	public static void format_disk(Device _device, FileViewPane pane, MainWindow window){
+	
+		log_debug("DeviceContextMenu: format_disk(): %s".printf(_device.device));
+		
+		string cmd = "gnome-disks --format-device --block-device %s".printf(_device.device);
+		
+		exec_process_new_session(cmd);
+	}
 }
 
 

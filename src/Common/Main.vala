@@ -501,6 +501,9 @@ public class Main : GLib.Object {
 		tools["polo-iso"] = new Tool("polo-iso","polo-iso","Polo ISO Plugin (Donation)");
 		tools["polo-pdf"] = new Tool("polo-pdf","polo-pdf","Polo PDF Plugin (Donation)");
 		tools["polo-image"] = new Tool("polo-image","polo-image","Polo Image Plugin (Donation)");
+		tools["polo-yt"] = new Tool("polo-yt","polo-yt","Polo Video Download Plugin (Donation)");
+		tools["gnome-disks"] = new Tool("gnome-disks","gnome-disks","GNOME Disk Utility");
+		tools["rclone"] = new Tool("rclone","rclone","rsync for Cloud Storage");
 		
 		check_all_tools();
 	}

@@ -638,38 +638,6 @@ public class Sidebar : Gtk.Box {
 			label.margin_top = 6;
 			break;
 
-		case SidebarItemType.HEADER_DISK:
-
-			var dev = item.device;
-			
-			row.margin_left = 0;
-			row.activatable = true;
-
-			label.label = "<i>%s</i>".printf(item.name);
-			label.set_use_markup(true);
-
-			label.margin_left = 0;
-			label.margin_top = 6;
-			label.margin_bottom = 6;
-
-			if (popup){
-				gtk_hide(image);
-			}
-
-			var lbl2 = new Gtk.Label("");
-			lbl2.hexpand = true;
-			box.add(lbl2);
-
-			//add_disk_eject_button(box, dev);
-
-			// connect signal for shift+F10
-			//row.popup_menu.connect(() => { return row_device_button_press_event(null, dev); });
-
-			// connect signal for right-click menu
-			//row.button_press_event.connect((w,e) => { return row_device_button_press_event(e, dev); });
-
-			break;
-
 		case SidebarItemType.BOOKMARK:
 
 			row.activatable = true;
@@ -792,6 +760,40 @@ public class Sidebar : Gtk.Box {
 			//label.yalign = 0.5f;
 			break;
 
+		case SidebarItemType.HEADER_DISK:
+
+			var dev = item.device;
+			
+			row.margin_left = 0;
+			row.activatable = true;
+
+			label.label = "<i>%s</i>".printf(item.name);
+			label.set_use_markup(true);
+
+			label.margin_left = 0;
+			label.margin_top = 6;
+			label.margin_bottom = 6;
+
+			if (popup){
+				gtk_hide(image);
+			}
+
+			var lbl2 = new Gtk.Label("");
+			lbl2.hexpand = true;
+			box.add(lbl2);
+
+			if (popup){
+				add_device_actions_button(box, dev);
+			}
+
+			// connect signal for shift+F10
+			row.popup_menu.connect(() => { return row_device_button_press_event(null, dev); });
+
+			// connect signal for right-click menu
+			row.button_press_event.connect((w,e) => { return row_device_button_press_event(e, dev); });
+
+			break;
+
 		case SidebarItemType.DEVICE:
 
 			row.activatable = true;
@@ -849,7 +851,7 @@ public class Sidebar : Gtk.Box {
 			lbl2.hexpand = true;
 			box.add(lbl2);
 
-			if (popup || App.sidebar_action_button){
+			if (popup){
 				add_device_actions_button(box, dev);
 			}
 
