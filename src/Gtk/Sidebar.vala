@@ -585,7 +585,145 @@ public class Sidebar : Gtk.Box {
 		}
 	}
 
+
 	private void add_item(SidebarItem item, bool allow_edit = false){
+
+		/*var row = new Gtk.ListBoxRow();
+		row.activatable = false;
+		row.selectable = false;
+		listbox.add(row);
+
+		row.set_data<SidebarItem>("item", item);
+
+		var ebox = new Gtk.EventBox();
+		row.add(ebox);
+		var box = new Gtk.Box(Orientation.HORIZONTAL, 3);
+		ebox.add(box);
+
+		// icon
+		var image = new Gtk.Image();
+		box.add(image);
+
+		var vbox = new Gtk.Box(Orientation.VERTICAL, 0);
+		vbox.margin_right = 12;
+		box.add(vbox);
+		var label_box = vbox;
+
+		// name
+		var label = new Gtk.Label("");
+		label.xalign = 0.0f;
+		//label.margin_right = 3;
+		label.ellipsize = Pango.EllipsizeMode.END;
+		vbox.add(label);
+
+		if (item.node_key.length > 0){
+			if (node_expanded[item.node_key]){
+				image.pixbuf = IconManager.lookup("collapse-menu-symbolic", 16, false);
+			}
+			else{
+				image.pixbuf = IconManager.lookup("expand-menu-symbolic", 16, false);
+			}
+		}*/
+
+		switch(item.type){
+
+		case SidebarItemType.HEADER_LOCATIONS:
+		case SidebarItemType.HEADER_BOOKMARKS:
+		case SidebarItemType.HEADER_DEVICES:
+			
+			add_item_header(item, allow_edit);
+			break;
+
+		case SidebarItemType.BOOKMARK:
+			
+			add_item_bookmark(item, allow_edit);
+			break;
+
+		case SidebarItemType.BOOKMARK_ACTION_ADD:
+		case SidebarItemType.BOOKMARK_ACTION_REMOVE:
+		
+			add_item_bookmark_action(item, allow_edit);
+			break;
+		
+		case SidebarItemType.HEADER_DISK:
+
+			add_item_device_header(item, allow_edit);
+			break;
+
+		case SidebarItemType.DEVICE:
+
+			add_item_device(item, allow_edit);
+			break;
+		}
+
+		/*apply_css_row(row, label);
+
+		// label for right margin
+		var lbl = new Gtk.Label("");
+		lbl.margin_right = 12;
+		box.add(lbl);*/
+	}
+	
+	private void add_item_header(SidebarItem item, bool allow_edit = false){
+
+		var row = new Gtk.ListBoxRow();
+		row.activatable = false;
+		row.selectable = false;
+		listbox.add(row);
+
+		row.set_data<SidebarItem>("item", item);
+
+		var ebox = new Gtk.EventBox();
+		row.add(ebox);
+		
+		var box = new Gtk.Box(Orientation.HORIZONTAL, 3);
+		ebox.add(box);
+
+		// icon
+		var image = new Gtk.Image();
+		box.add(image);
+
+		var vbox = new Gtk.Box(Orientation.VERTICAL, 0);
+		vbox.margin_right = 12;
+		box.add(vbox);
+		var label_box = vbox;
+
+		// name
+		var label = new Gtk.Label("");
+		label.xalign = 0.0f;
+		//label.margin_right = 3;
+		label.ellipsize = Pango.EllipsizeMode.END;
+		vbox.add(label);
+
+		if (item.node_key.length > 0){
+			if (node_expanded[item.node_key]){
+				image.pixbuf = IconManager.lookup("collapse-menu-symbolic", 16, false);
+			}
+			else{
+				image.pixbuf = IconManager.lookup("expand-menu-symbolic", 16, false);
+			}
+		}
+
+		// -----------------------------------
+		
+		row.margin_left = 0;
+		row.activatable = true;
+
+		label.label = "<b>%s</b>".printf(item.name);
+		label.set_use_markup(true);
+		label.margin_top = 6;
+		
+		// -----------------------------------
+
+		apply_css_row(row, label);
+
+		// label for right margin
+		var lbl = new Gtk.Label("");
+		lbl.margin_right = 12;
+		box.add(lbl);
+	}
+	
+	private void add_item_device(SidebarItem item, bool allow_edit = false){
 
 		var row = new Gtk.ListBoxRow();
 		row.activatable = false;
@@ -624,103 +762,338 @@ public class Sidebar : Gtk.Box {
 			}
 		}
 
-		switch(item.type){
+		// -----------------------------------
+		
+		row.activatable = true;
 
-		case SidebarItemType.HEADER_LOCATIONS:
-		case SidebarItemType.HEADER_BOOKMARKS:
-		case SidebarItemType.HEADER_DEVICES:
+		var dev = item.device;
+		//row.selectable = true;
 
-			row.margin_left = 0;
-			row.activatable = true;
+		image.pixbuf = dev.get_icon();
+		image.margin_left = 12;
 
-			label.label = "<b>%s</b>".printf(item.name);
-			label.set_use_markup(true);
-			label.margin_top = 6;
-			break;
+		label.label = item.name;
+		label.set_use_markup(true);
+		label.sensitive = dev.is_mounted;
 
-		case SidebarItemType.BOOKMARK:
+		if (dev.is_mounted){
+			row.set_tooltip_markup(_("Click to open in active pane"));
+		}
+		else{
+			row.set_tooltip_markup(_("Click to mount device and open in active pane"));
+		}
 
-			row.activatable = true;
+		if (dev.is_mounted && (dev.size_bytes > 0)){
+			add_fs_bar(vbox, dev);
+		}
 
-			var bm = item.bookmark;
+		sg_label.add_widget(vbox);
 
-			row.set_tooltip_text(item.tooltip);
+		if (popup && (dev.type != "disk") && (dev.size_bytes > 0)){
 
-			image.pixbuf = bm.get_icon();
-			image.margin_left = 12;
+			// size
+			var lbl2 = new Gtk.Label(dev.size_formatted);
+			lbl2.xalign = 1.0f;
+			//lbl2.yalign = 1.0f;
+			lbl2.valign = Gtk.Align.END;
+			//lbl2.margin_bottom = 0;
+			lbl2.margin_right = 6;
+			lbl2.sensitive = dev.is_mounted;
+			box.add(lbl2);
+			sg_size.add_widget(lbl2);
 
-			bool exists = bm.exists();
-			if (!exists){
-				label.sensitive = false;
-				row.set_tooltip_text(_("Location not found") + ": %s".printf(bm.uri));
+			if (dev.is_mounted){
+				// mount
+				string mpath = ellipsize(dev.mount_path, 40);
+				lbl2 = new Gtk.Label(mpath);
+				lbl2.xalign = 0.0f;
+				//lbl2.yalign = 1.0f;
+				lbl2.valign = Gtk.Align.END;
+				//lbl2.margin_bottom = 0;
+				box.add(lbl2);
+				sg_mount.add_widget(lbl2);
+			}
+		}
+
+		var lbl2 = new Gtk.Label("");
+		lbl2.hexpand = true;
+		box.add(lbl2);
+
+		if (popup){
+			add_device_actions_button(box, dev);
+		}
+
+		// connect signal for shift+F10
+		row.popup_menu.connect(() => { return row_device_button_press_event(null, dev); });
+
+		// connect signal for right-click menu
+		row.button_press_event.connect((w,e) => { return row_device_button_press_event(e, dev); });
+
+		
+		// -----------------------------------
+
+		apply_css_row(row, label);
+
+		// label for right margin
+		var lbl = new Gtk.Label("");
+		lbl.margin_right = 12;
+		box.add(lbl);
+	}
+	
+	private void add_item_device_header(SidebarItem item, bool allow_edit = false){
+
+		var row = new Gtk.ListBoxRow();
+		row.activatable = false;
+		row.selectable = false;
+		listbox.add(row);
+
+		row.set_data<SidebarItem>("item", item);
+
+		var ebox = new Gtk.EventBox();
+		row.add(ebox);
+		var box = new Gtk.Box(Orientation.HORIZONTAL, 3);
+		ebox.add(box);
+
+		// icon
+		var image = new Gtk.Image();
+		box.add(image);
+
+		var vbox = new Gtk.Box(Orientation.VERTICAL, 0);
+		vbox.margin_right = 12;
+		box.add(vbox);
+		var label_box = vbox;
+
+		// name
+		var label = new Gtk.Label("");
+		label.xalign = 0.0f;
+		//label.margin_right = 3;
+		label.ellipsize = Pango.EllipsizeMode.END;
+		vbox.add(label);
+
+		if (item.node_key.length > 0){
+			if (node_expanded[item.node_key]){
+				image.pixbuf = IconManager.lookup("collapse-menu-symbolic", 16, false);
 			}
 			else{
-				label.sensitive = true;
-				row.set_tooltip_text("%s".printf(bm.uri));
+				image.pixbuf = IconManager.lookup("expand-menu-symbolic", 16, false);
 			}
+		}
 
-			label.label = item.name;
-			label.set_use_markup(false);
-			label.hexpand = true;
+		// -----------------------------------
+		
+		var dev = item.device;
+			
+		row.margin_left = 0;
+		row.activatable = true;
 
-			if (allow_edit){
+		label.label = "<i>%s</i>".printf(item.name);
+		label.set_use_markup(true);
 
-				var entry = new Gtk.Entry();
-				entry.xalign = 0.0f;
-				entry.hexpand = true;
-				box.add(entry);
-				entry.set_no_show_all(true);
+		label.margin_left = 0;
+		label.margin_top = 6;
+		label.margin_bottom = 6;
 
-				entry.activate.connect(()=>{
-					if ((bm.name != entry.text) && (entry.text.length > 0)){
-						bm.name = entry.text;
-						label.label = entry.text;
-						GtkBookmark.save_bookmarks();
-					}
+		if (popup){
+			gtk_hide(image);
+		}
 
-					gtk_hide(entry);
-					gtk_show(label_box);
-				});
+		var lbl2 = new Gtk.Label("");
+		lbl2.hexpand = true;
+		box.add(lbl2);
 
-				entry.focus_out_event.connect((event) => {
-					entry.activate();
-					return true;
-				});
+		if (popup){
+			add_device_actions_button(box, dev);
+		}
 
-				if (popup || App.sidebar_action_button){
-					add_bookmark_edit_button(box, bm, label_box, entry, row, ebox);
+		// connect signal for shift+F10
+		row.popup_menu.connect(() => { return row_device_button_press_event(null, dev); });
+
+		// connect signal for right-click menu
+		row.button_press_event.connect((w,e) => { return row_device_button_press_event(e, dev); });
+
+		
+		// -----------------------------------
+
+		apply_css_row(row, label);
+
+		// label for right margin
+		var lbl = new Gtk.Label("");
+		lbl.margin_right = 12;
+		box.add(lbl);
+	}
+	
+	private void add_item_bookmark(SidebarItem item, bool allow_edit = false){
+
+		var row = new Gtk.ListBoxRow();
+		row.activatable = false;
+		row.selectable = false;
+		listbox.add(row);
+
+		row.set_data<SidebarItem>("item", item);
+
+		var ebox = new Gtk.EventBox();
+		row.add(ebox);
+		var box = new Gtk.Box(Orientation.HORIZONTAL, 3);
+		ebox.add(box);
+
+		// icon
+		var image = new Gtk.Image();
+		box.add(image);
+
+		var vbox = new Gtk.Box(Orientation.VERTICAL, 0);
+		vbox.margin_right = 12;
+		box.add(vbox);
+		var label_box = vbox;
+
+		// name
+		var label = new Gtk.Label("");
+		label.xalign = 0.0f;
+		//label.margin_right = 3;
+		label.ellipsize = Pango.EllipsizeMode.END;
+		vbox.add(label);
+
+		if (item.node_key.length > 0){
+			if (node_expanded[item.node_key]){
+				image.pixbuf = IconManager.lookup("collapse-menu-symbolic", 16, false);
+			}
+			else{
+				image.pixbuf = IconManager.lookup("expand-menu-symbolic", 16, false);
+			}
+		}
+
+		// -----------------------------------
+		
+		row.activatable = true;
+
+		var bm = item.bookmark;
+
+		row.set_tooltip_text(item.tooltip);
+
+		image.pixbuf = bm.get_icon();
+		image.margin_left = 12;
+
+		bool exists = bm.exists();
+		if (!exists){
+			label.sensitive = false;
+			row.set_tooltip_text(_("Location not found") + ": %s".printf(bm.uri));
+		}
+		else{
+			label.sensitive = true;
+			row.set_tooltip_text("%s".printf(bm.uri));
+		}
+
+		label.label = item.name;
+		label.set_use_markup(false);
+		label.hexpand = true;
+
+		if (allow_edit){
+
+			var entry = new Gtk.Entry();
+			entry.xalign = 0.0f;
+			entry.hexpand = true;
+			box.add(entry);
+			entry.set_no_show_all(true);
+
+			entry.activate.connect(()=>{
+				if ((bm.name != entry.text) && (entry.text.length > 0)){
+					bm.name = entry.text;
+					label.label = entry.text;
+					GtkBookmark.save_bookmarks();
 				}
 
-				// connect signal for shift+F10
-				row.popup_menu.connect(() => { return row_bookmark_button_press_event(null, bm, label_box, entry, row); });
+				gtk_hide(entry);
+				gtk_show(label_box);
+			});
 
-				// connect signal for right-click menu
-				row.button_press_event.connect((w,e) => { return row_bookmark_button_press_event(e, bm, label_box, entry, row); });
-			
-				const Gtk.TargetEntry[] targets = {
-					{"item", Gtk.TargetFlags.SAME_APP, 1}
-				};
-				//Gtk.drag_source_set(row, Gdk.ModifierType.BUTTON1_MASK, targets, Gdk.DragAction.MOVE);
-				//Gtk.drag_dest_set(row, Gtk.DestDefaults.ALL, targets, Gdk.DragAction.MOVE);
+			entry.focus_out_event.connect((event) => {
+				entry.activate();
+				return true;
+			});
 
-				row.drag_data_get.connect((context, data, info, time) => {
-					log_debug("on_drag_data_get");
-					string index = row.get_index().to_string();
-					data.set_text(index, index.length);
-				});
-
-				row.drag_data_received.connect((context, x, y, data, info, time) => {
-					log_debug("on_drag_data_received");
-					int dst_index = row.get_index();
-					int src_index = (int) data.get_text();
-					var src_row = listbox.get_row_at_index(src_index);
-					listbox.insert(src_row, dst_index);
-					Gtk.drag_finish(context, true, false, time);
-				});
+			if (popup || App.sidebar_action_button){
+				add_bookmark_edit_button(box, bm, label_box, entry, row, ebox);
 			}
 
-			break;
+			// connect signal for shift+F10
+			row.popup_menu.connect(() => { return row_bookmark_button_press_event(null, bm, label_box, entry, row); });
 
+			// connect signal for right-click menu
+			row.button_press_event.connect((w,e) => { return row_bookmark_button_press_event(e, bm, label_box, entry, row); });
+		
+			const Gtk.TargetEntry[] targets = {
+				{"item", Gtk.TargetFlags.SAME_APP, 1}
+			};
+			//Gtk.drag_source_set(row, Gdk.ModifierType.BUTTON1_MASK, targets, Gdk.DragAction.MOVE);
+			//Gtk.drag_dest_set(row, Gtk.DestDefaults.ALL, targets, Gdk.DragAction.MOVE);
+
+			row.drag_data_get.connect((context, data, info, time) => {
+				log_debug("on_drag_data_get");
+				string index = row.get_index().to_string();
+				data.set_text(index, index.length);
+			});
+
+			row.drag_data_received.connect((context, x, y, data, info, time) => {
+				log_debug("on_drag_data_received");
+				int dst_index = row.get_index();
+				int src_index = (int) data.get_text();
+				var src_row = listbox.get_row_at_index(src_index);
+				listbox.insert(src_row, dst_index);
+				Gtk.drag_finish(context, true, false, time);
+			});
+		}
+
+		// -----------------------------------
+
+		apply_css_row(row, label);
+
+		// label for right margin
+		var lbl = new Gtk.Label("");
+		lbl.margin_right = 12;
+		box.add(lbl);
+	}
+	
+	private void add_item_bookmark_action(SidebarItem item, bool allow_edit = false){
+
+		var row = new Gtk.ListBoxRow();
+		row.activatable = false;
+		row.selectable = false;
+		listbox.add(row);
+
+		row.set_data<SidebarItem>("item", item);
+
+		var ebox = new Gtk.EventBox();
+		row.add(ebox);
+		var box = new Gtk.Box(Orientation.HORIZONTAL, 3);
+		ebox.add(box);
+
+		// icon
+		var image = new Gtk.Image();
+		box.add(image);
+
+		var vbox = new Gtk.Box(Orientation.VERTICAL, 0);
+		vbox.margin_right = 12;
+		box.add(vbox);
+		var label_box = vbox;
+
+		// name
+		var label = new Gtk.Label("");
+		label.xalign = 0.0f;
+		//label.margin_right = 3;
+		label.ellipsize = Pango.EllipsizeMode.END;
+		vbox.add(label);
+
+		if (item.node_key.length > 0){
+			if (node_expanded[item.node_key]){
+				image.pixbuf = IconManager.lookup("collapse-menu-symbolic", 16, false);
+			}
+			else{
+				image.pixbuf = IconManager.lookup("expand-menu-symbolic", 16, false);
+			}
+		}
+
+		// -----------------------------------
+		
+		switch(item.type){
 		case SidebarItemType.BOOKMARK_ACTION_ADD:
 
 			row.activatable = true;
@@ -759,110 +1132,9 @@ public class Sidebar : Gtk.Box {
 			label.margin_bottom = 6;
 			//label.yalign = 0.5f;
 			break;
-
-		case SidebarItemType.HEADER_DISK:
-
-			var dev = item.device;
-			
-			row.margin_left = 0;
-			row.activatable = true;
-
-			label.label = "<i>%s</i>".printf(item.name);
-			label.set_use_markup(true);
-
-			label.margin_left = 0;
-			label.margin_top = 6;
-			label.margin_bottom = 6;
-
-			if (popup){
-				gtk_hide(image);
-			}
-
-			var lbl2 = new Gtk.Label("");
-			lbl2.hexpand = true;
-			box.add(lbl2);
-
-			if (popup){
-				add_device_actions_button(box, dev);
-			}
-
-			// connect signal for shift+F10
-			row.popup_menu.connect(() => { return row_device_button_press_event(null, dev); });
-
-			// connect signal for right-click menu
-			row.button_press_event.connect((w,e) => { return row_device_button_press_event(e, dev); });
-
-			break;
-
-		case SidebarItemType.DEVICE:
-
-			row.activatable = true;
-
-			var dev = item.device;
-			//row.selectable = true;
-
-			image.pixbuf = dev.get_icon();
-			image.margin_left = 12;
-
-			label.label = item.name;
-			label.set_use_markup(true);
-			label.sensitive = dev.is_mounted;
-
-			if (dev.is_mounted){
-				row.set_tooltip_markup(_("Click to open in active pane"));
-			}
-			else{
-				row.set_tooltip_markup(_("Click to mount device and open in active pane"));
-			}
-
-			if (dev.is_mounted && (dev.size_bytes > 0)){
-				add_fs_bar(vbox, dev);
-			}
-
-			sg_label.add_widget(vbox);
-
-			if (popup && (dev.type != "disk") && (dev.size_bytes > 0)){
-
-				// size
-				var lbl2 = new Gtk.Label(dev.size_formatted);
-				lbl2.xalign = 1.0f;
-				//lbl2.yalign = 1.0f;
-				lbl2.valign = Gtk.Align.END;
-				//lbl2.margin_bottom = 0;
-				lbl2.margin_right = 6;
-				lbl2.sensitive = dev.is_mounted;
-				box.add(lbl2);
-				sg_size.add_widget(lbl2);
-
-				if (dev.is_mounted){
-					// mount
-					string mpath = ellipsize(dev.mount_path, 40);
-					lbl2 = new Gtk.Label(mpath);
-					lbl2.xalign = 0.0f;
-					//lbl2.yalign = 1.0f;
-					lbl2.valign = Gtk.Align.END;
-					//lbl2.margin_bottom = 0;
-					box.add(lbl2);
-					sg_mount.add_widget(lbl2);
-				}
-			}
-
-			var lbl2 = new Gtk.Label("");
-			lbl2.hexpand = true;
-			box.add(lbl2);
-
-			if (popup){
-				add_device_actions_button(box, dev);
-			}
-
-			// connect signal for shift+F10
-			row.popup_menu.connect(() => { return row_device_button_press_event(null, dev); });
-
-			// connect signal for right-click menu
-			row.button_press_event.connect((w,e) => { return row_device_button_press_event(e, dev); });
-
-			break;
 		}
+		
+		// -----------------------------------
 
 		apply_css_row(row, label);
 
@@ -871,7 +1143,8 @@ public class Sidebar : Gtk.Box {
 		lbl.margin_right = 12;
 		box.add(lbl);
 	}
-
+	
+	
 	private bool row_device_button_press_event(Gdk.EventButton? event, Device? dev){
 
 		log_debug("Sidebar: row_device_button_press_event()");
