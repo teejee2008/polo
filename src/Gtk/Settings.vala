@@ -156,10 +156,18 @@ public class Settings : Gtk.Box, IPaneActive {
 		var vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 6);
 		vbox.homogeneous = false;
 		hbox.add(vbox);
+		
+		// --------------------------
+		
+		var sg_label = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		var sg_option = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		
+		var vbox_items = add_group(vbox, _("GTK Theme"), 0);
+		add_option_gtk_theme(vbox_items, sg_label, sg_option);
 
 		// -------------------------
 
-		var vbox_items = add_group(vbox, _("Headerbar"), 0);
+		vbox_items = add_group(vbox, _("Headerbar"), 0);
 		add_headerbar_option_enable(vbox_items);
 		add_headerbar_option_left_window_buttons(vbox_items);
 
@@ -1082,6 +1090,73 @@ public class Settings : Gtk.Box, IPaneActive {
 			}
 		});
 	}
+	
+	private void add_option_gtk_theme(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
+
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL,6);
+		box.add(hbox);
+
+		hbox.margin_bottom = 6;
+
+		// label
+		/*var label = new Gtk.Label(_("GTK+ Theme"));
+		label.xalign = 0.0f;
+		label.margin_left = 6;
+		label.margin_right = 6;
+		label.margin_bottom = 6;
+		hbox.add(label);
+		sg_label.add_widget(label);*/
+
+		// cmb_app
+		var combo = new Gtk.ComboBox();
+		combo.set_tooltip_text(_("GTK theme to use"));
+		hbox.add (combo);
+		sg_option.add_widget(combo);
+
+		// render text
+		var cell_text = new CellRendererText();
+		combo.pack_start(cell_text, false);
+		combo.set_cell_data_func (cell_text, (cell_text, cell, model, iter) => {
+			string text;
+			model.get (iter, 1, out text, -1);
+			(cell as Gtk.CellRendererText).text = text;
+		});
+
+		// add items
+		var store = new Gtk.ListStore(2,
+			typeof(string),
+			typeof(string));
+
+		combo.set_model (store);
+		
+		TreeIter iter;
+		int index = -1;
+		
+		////index++;
+		//store.append(out iter);
+		//store.set (iter, 0, "system", 1, _("System Default"), -1);
+		
+		foreach(var theme in GtkTheme.themes){
+			
+			index++;
+			store.append(out iter);
+			store.set (iter, 0, theme.name, 1,  theme.name, -1);
+
+			if (theme.name == App.gtk_theme){
+				combo.active = index;
+			}
+		}
+		
+		if (combo.active == -1){
+			combo.active = 0;
+		}
+
+		combo.changed.connect(() => {
+			App.gtk_theme = gtk_combobox_get_value(combo, 0, App.gtk_theme);
+			GtkTheme.set_gtk_theme(App.gtk_theme);
+		});
+	}
+
 
 	// Defaults ------------------------
 

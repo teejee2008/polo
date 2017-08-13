@@ -74,6 +74,8 @@ public class Main : GLib.Object {
 
 	public bool first_run = false;
 	public FileItem fs_root = null;
+	
+	public string gtk_theme = "";
 
 	public AppLock session_lock;
 
@@ -557,7 +559,9 @@ public class Main : GLib.Object {
 		config.set_string_member("run-count", run_count.to_string());
 
 		config.set_int_member("format-version", (int64) APP_CONFIG_FORMAT_VERSION);
-
+		
+		config.set_string_member("gtk_theme", gtk_theme);
+		
 		config.set_string_member("middlebar_visible", middlebar_visible.to_string());
 		config.set_string_member("sidebar_visible", sidebar_visible.to_string());
 		config.set_string_member("sidebar_dark", sidebar_dark.to_string());
@@ -733,7 +737,9 @@ public class Main : GLib.Object {
 		run_count = json_get_int(config, "run-count", 0);
 		// set dummy version number, if config file exists but parameter is missing
 		// this will trigger display of change log file
-
+		
+		gtk_theme = json_get_string(config, "gtk_theme", gtk_theme);
+		
 		middlebar_visible = json_get_bool(config, "middlebar_visible", middlebar_visible);
 		sidebar_visible = json_get_bool(config, "sidebar_visible", sidebar_visible);
 		sidebar_dark = json_get_bool(config, "sidebar_dark", sidebar_dark);
@@ -881,6 +887,16 @@ public class Main : GLib.Object {
 		load_folder_selections();
 
 		GtkBookmark.load_bookmarks(user_name, true);
+		
+		GtkTheme.query(user_name);
+
+		if (gtk_theme.length == 0){
+			GtkTheme.set_gtk_theme_preferred();
+			gtk_theme = GtkTheme.get_gtk_theme();
+		}
+		else {
+			GtkTheme.set_gtk_theme(gtk_theme);
+		}
 
 		log_debug(_("App config loaded") + ": '%s'".printf(this.app_conf_path));
 
