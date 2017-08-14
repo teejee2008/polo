@@ -45,6 +45,7 @@ public const string AppAuthorEmail = "teejeetech@gmail.com";
 public const int PLUGIN_VER_ISO = 2;
 public const int PLUGIN_VER_PDF = 2;
 public const int PLUGIN_VER_IMAGE = 2;
+public const int PLUGIN_VER_YT = 2;
 
 const string GETTEXT_PACKAGE = "";
 const string LOCALE_DIR = "/usr/share/locale";
@@ -504,6 +505,7 @@ public class Main : GLib.Object {
 		tools["polo-yt"] = new Tool("polo-yt","polo-yt","Polo Video Download Plugin (Donation)");
 		tools["gnome-disks"] = new Tool("gnome-disks","gnome-disks","GNOME Disk Utility");
 		tools["rclone"] = new Tool("rclone","rclone","rsync for Cloud Storage");
+		tools["youtube-dl"] = new Tool("youtube-dl","youtube-dl","youtube-dl Downloader");
 		
 		check_all_tools();
 	}
@@ -533,6 +535,7 @@ public class Main : GLib.Object {
 		plugins["iso"] = new Plugin("polo-iso", "Polo ISO Plugin", PLUGIN_VER_ISO);
 		plugins["pdf"] = new Plugin("polo-pdf", "Polo PDF Plugin", PLUGIN_VER_PDF);
 		plugins["image"] = new Plugin("polo-image", "Polo Image Plugin", PLUGIN_VER_IMAGE);
+		plugins["yt"] = new Plugin("polo-yt", "Polo Video Download Plugin", PLUGIN_VER_YT);
 
 		check_all_plugins();
 	}

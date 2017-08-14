@@ -3711,7 +3711,11 @@ public class FileViewList : Gtk.Box {
 		if (!can_paste){ return; }
 		
 		if (url.length == 0) { return; }
+		
+		if (!check_youtube_dl()){ return; }
 
+		if (!check_plugin("yt")){ return; }
+		
 		log_debug("action.paste_url()");
 
 		// create
@@ -3733,6 +3737,10 @@ public class FileViewList : Gtk.Box {
 		var selected_items = get_selected_items();
 		if (selected_items.size != 1){ return; }
 		if (!selected_items[0].is_directory){ return; }
+		
+		if (!check_youtube_dl()){ return; }
+
+		if (!check_plugin("yt")){ return; }
 
 		log_debug("action.paste_url_into_folder()");
 
@@ -5077,54 +5085,68 @@ public class FileViewList : Gtk.Box {
 	// common
 
 	private bool check_pngcrush(){
-		var tool = App.tools["pngcrush"];
-		if (!tool.available){
-			gtk_messagebox(_("Missing Dependency"),_("Install the 'pngcrush' package and try again"), window, true);
-			return false;
-		}
-		return true;
+		return check_tool("pngcrush");
 	}
 	
 	private bool check_pdftk(){
-		var tool = App.tools["pdftk"];
-		if (!tool.available){
-			gtk_messagebox(_("Missing Dependency"),_("Install the 'pdftk' package and try again"), window, true);
-			return false;
-		}
-		return true;
-	}
-
-	private bool check_imagemagick(){
-		var tool = App.tools["convert"];
-		if (!tool.available){
-			gtk_messagebox(_("Missing Dependency"),_("Install the 'imagemagick' package and try again"), window, true);
-			return false;
-		}
-		return true;
+		return check_tool("pdftk");
 	}
 
 	private bool check_ghostscript(){
-		var tool = App.tools["gs"];
+		return check_tool("gs");
+	}
+	
+	private bool check_imagemagick(){
+		return check_tool("convert");
+	}
+	
+	private bool check_youtube_dl(){
+		return check_tool("youtube-dl");
+	}
+	
+	private bool check_tool(string tool_cmd){
+		
+		var tool = App.tools[tool_cmd];
+		
 		if (!tool.available){
-			gtk_messagebox(_("Missing Dependency"),_("Install the 'ghostscript' package and try again"), window, true);
+			
+			string txt = _("Missing Dependency") + ": %s".printf(tool.name);
+			string msg = _("Install required packages and try again") + "\n\n▰ %s".printf(tool.name);
+			gtk_messagebox(txt, msg, window, true);
+			
 			return false;
 		}
+		
 		return true;
 	}
 
+
 	private bool check_plugin(string name){
+		
 		var plug = App.plugins[name];
 
 		if (!plug.check_version()){
+			
 			plug.check_availablity(); // check again
 		}
 		
-		if (!plug.check_version()){
-			string txt = _("Plugin is Outdated");
-			string msg = _("Please update the plugin package") + ":\n\n▰ %s".printf(plug.name);
+		if (!plug.available){
+			
+			string txt = _("Missing Plugin");
+			string msg = _("Install required packages and try again") + ":\n\n▰ %s".printf(plug.name);
 			gtk_messagebox(txt, msg, window, true);
+			
 			return false;
 		}
+		else if (!plug.check_version()){
+			
+			string txt = _("Outdated Plugin");
+			string msg = _("Update required packages and try again") + ":\n\n▰ %s".printf(plug.name);
+			gtk_messagebox(txt, msg, window, true);
+			
+			return false;
+		}
+		
 		return true;
 	}
 
