@@ -490,9 +490,9 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			else if (is_trash){
 				txt = "trash:///";
 			}
-			else if (is_trashed_item){
-				txt = "trash://" + file_path[trash_basepath.length : file_path.length];
-			}
+			//else if (is_trashed_item){
+				//txt = "trash://" + file_path[trash_basepath.length : file_path.length];
+			//}
 			//else if (file_uri_scheme != "file"){
 			//	txt = GvfsMounts.get_gvfs_basepath(file_path);
 			//}

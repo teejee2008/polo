@@ -2143,7 +2143,7 @@ public class FileViewList : Gtk.Box {
 		pane.selection_bar.close_panel(true); // force
 
 		if (update_history){
-			visited_locations.add(item.file_path);
+			history_add(item);
 			history_reset();
 		}
 
@@ -3262,17 +3262,25 @@ public class FileViewList : Gtk.Box {
 
 	public string history_go_back(){
 
-		log_debug("history_go_back(): history_index: %d/%d".printf(history_index, (visited_locations.size - 1)));
+		log_debug("history_go_back(): index: %d".printf(history_index));
+		print_history_list();
 		
 		var index = history_index - 1;
 
 		if ((index >= 0) && (index < visited_locations.size)){
 			history_index = index;
-			log_debug("history_index --");
+			log_debug("previous: %s".printf(visited_locations[history_index]));
 			return visited_locations[history_index];
 		}
 		else{
 			return "";
+		}
+	}
+	
+	private void print_history_list(){
+		int index = 0;
+		foreach(var path in visited_locations){
+			log_debug("%d: %s".printf(index++, path));
 		}
 	}
 
@@ -3283,17 +3291,27 @@ public class FileViewList : Gtk.Box {
 
 	public string history_go_forward() {
 
-		log_debug("history_go_forward(): history_index: %d/%d".printf(history_index, (visited_locations.size - 1)));
+		log_debug("history_go_forward(): index: %d".printf(history_index));
+		print_history_list();
 		
 		var index = history_index + 1;
 
 		if ((index >= 0) && (index < visited_locations.size)){
 			history_index = index;
-			log_debug("history_index ++");
+			log_debug("next: %s".printf(visited_locations[history_index]));
 			return visited_locations[history_index];
 		}
 		else{
 			return "";
+		}
+	}
+	
+	public void history_add(FileItem item){
+		
+		string path = item.display_path;
+
+		if (path.length > 0){
+			visited_locations.add(path);
 		}
 	}
 
