@@ -2115,6 +2115,7 @@ public class FileViewList : Gtk.Box {
 			}
 			else{
 				log_debug("uri does not exist");
+				pane.refresh_pathbars();
 				set_overlay_on_invalid_path();
 				return null;
 			}

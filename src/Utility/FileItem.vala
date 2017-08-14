@@ -83,24 +83,10 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	public string filesystem_type = "";
 	public string filesystem_id = "";
 
-	// trash ---------------------
+	// trash support ---------------------
 	
 	public bool is_trash = false;
-
-	private bool _is_trashed_item = false;
-	public bool is_trashed_item{
-		get {
-			if (_is_trashed_item){
-				return true;
-			}
-			else{
-				return !is_trash && (trash_original_path.length > 0);
-			}
-		}
-		set{
-			_is_trashed_item = value;
-		}
-	}
+	public bool is_trashed_item = false;
 
 	public string trash_item_name = "";
 	public string trash_info_file = "";
@@ -110,7 +96,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	public uint32 trash_item_count = 0;
 	public DateTime trash_deletion_date = null;
 
-	// archive ------------------------
+	// archive support ------------------------
 	
 	private bool _is_archive = false;
 	public bool is_archive {
@@ -1196,11 +1182,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		//item.display_path = path_combine(this.display_path, item_name);
 
 		// copy values from parent
-
-		if (this.is_trash || this.is_trashed_item){
-			item.is_trashed_item = true;
-			item.trash_basepath = this.trash_basepath;
-		}
 
 		if (this.is_archive || this.is_archived_item){
 			item.is_archived_item = true;

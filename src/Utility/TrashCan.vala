@@ -214,23 +214,22 @@ public class TrashCan : FileItem {
 		//log_debug("info_file: %s".printf(info_file));
 
 		// set some properties to be passed to children
-		this.trash_basepath = file_parent(trash_file);
+		
 		
 		var item = this.add_child_from_disk(trash_file, 0);
-
+		item.is_trashed_item = true;
+		item.trash_basepath = file_parent(trash_file);
 		item.trash_original_path = uri_decode(orig_path);
-
-		if (item.trash_original_path.length > 0){
-			item.display_name = file_basename(item.trash_original_path);
-		}
-		
 		item.trash_item_name = item_name;
 		item.trash_deletion_date = trash_date;
 		item.trash_info_file = info_file;
 		item.trash_data_file = trash_file;
+		
+		if (item.trash_original_path.length > 0){
+			item.display_name = file_basename(item.trash_original_path);
+		}
 
 		//FileItem.add_to_cache(item); // do not add to cache
-		
 		//log_debug("trashed item: %s".printf(orig_path));
 		//log_debug("trashed on  : %s".printf(item.trash_deletion_date.format ("%Y-%m-%d %H:%M")));
 		//log_debug("trashed type: %s".printf(item.content_type));

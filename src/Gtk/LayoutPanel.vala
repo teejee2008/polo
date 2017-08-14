@@ -188,6 +188,9 @@ public class LayoutPanel : Gtk.Box {
 		if (init_view){
 			tab.pane.view.set_view_path(App.user_home);
 		}
+		else{
+			tab.pane.view.refresh(false); // initalize empty views
+		}
 
 		// add another dummy tab
 		add_dummy_tab();

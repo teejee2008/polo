@@ -170,10 +170,7 @@ public class PropertiesWindow : Gtk.Window {
 		// location -----------
 		
 		txt = file_item.display_location;
-		//if (file_item.is_trashed_item){
-		//	txt = file_item.file_path_prefix + txt;
-		//}
-		
+
 		lbl = add_property(vbox, _("Location"), txt);
 		lbl.max_width_chars = 40;
 		lbl.wrap = true;

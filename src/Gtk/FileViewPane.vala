@@ -210,9 +210,9 @@ public class FileViewPane : Gtk.Box {
 			refresh_view();
 		}
 
-		refresh_pathbar();
+		refresh_pathbars();
 
-		refresh_headerbar();
+		window.headerbar.refresh();
 
 		mediabar.refresh();
 
@@ -222,9 +222,9 @@ public class FileViewPane : Gtk.Box {
 
 		refresh_file_action_panel();
 
-		refresh_terminal();
+		terminal.refresh();
 		
-		refresh_statusbar();
+		statusbar.refresh();
 
 		log_trace("Pane %d refreshed: %s".printf(this.panel.number, timer_elapsed_string(timer)));
 	}
@@ -233,23 +233,11 @@ public class FileViewPane : Gtk.Box {
 		view.refresh(true);
 	}
 
-	public void refresh_pathbar(){
+	public void refresh_pathbars(){
 		window.pathbar.refresh();
 		pathbar.refresh();
 	}
 	
-	public void refresh_headerbar(){
-		window.headerbar.refresh();
-	}
-
-	public void refresh_terminal(){
-		terminal.refresh();
-	}
-	
-	public void refresh_statusbar(){
-		statusbar.refresh();
-	}
-
 	public void refresh_file_action_panel(){
 
 		log_debug("FileActionPanel: refresh()");
