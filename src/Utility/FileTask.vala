@@ -921,4 +921,10 @@ public class FileConflictItem : GLib.Object {
 		dest_base_dir = dest_base;
 		replace = true;
 	}
+	
+	public string location {
+		owned get {
+			return source_item.file_location[source_base_dir.file_path.length + 1: source_item.file_location.length];
+		}
+	}
 }

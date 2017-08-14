@@ -212,7 +212,7 @@ public class Pathbar : Gtk.Box {
 		ebox.add(img);
 		img_disk = img;
 
-		var tt = _("Open Device");
+		var tt = _("Devices");
 		img.set_tooltip_text(tt);
 		ebox.set_tooltip_text(tt);
 
