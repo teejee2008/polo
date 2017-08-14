@@ -47,7 +47,10 @@ public class FileTask : GLib.Object {
 	private bool aborted;
 	private Cancellable cancellable;
 	private FileItem current_query_item;
+	
 	public Gee.HashMap<string, FileConflictItem> conflicts;
+	public Gee.ArrayList<FileConflictItem> conflicts_sorted;
+	
 	private FileReplaceMode replace_mode;
 	private bool first_pass;
 
@@ -67,7 +70,7 @@ public class FileTask : GLib.Object {
 	private Mutex mutex = Mutex();
 
 	public signal void complete();
-
+	
 	private void init_task(){
 
 		// file byte status --------------
@@ -161,9 +164,11 @@ public class FileTask : GLib.Object {
 	}
 
 	private void copy_items_thread(){
+		
+		log_debug("FileTask: copy_items_thread()");
 
 		if (first_pass){
-			build_file_list_for_copy();
+			query_source_items();
 		}
 		else{
 			log_debug("replace_mode: %s".printf(replace_mode.to_string()));
@@ -178,7 +183,13 @@ public class FileTask : GLib.Object {
 			rate_timer.start();
 
 			destination.query_children(1);
-
+			
+			if (first_pass){
+				status = _("Comparing items...");
+			}
+			
+			log_debug("FileTask: copy_items_thread(): starting compare");
+			
 			foreach(var item in items){
 				if (aborted) { break; }
 
@@ -195,10 +206,14 @@ public class FileTask : GLib.Object {
 
 				copy_item_to_dir(item, destination, (action == "move"), dest_item_name);
 			}
+			
+			if (first_pass){
+				sort_conflicts();
+			}
 
 			rate_timer.stop();
 		}
-
+		
 		timer.stop();
 
 		log_debug("FileTask: copy_items_thread(): thread exit");
@@ -207,7 +222,9 @@ public class FileTask : GLib.Object {
 		complete();
 	}
 
-	private void build_file_list_for_copy(){
+	private void query_source_items(){
+		
+		log_debug("FileTask: query_source_items()");
 
 		status = _("Building file list...");
 
@@ -429,6 +446,27 @@ public class FileTask : GLib.Object {
 
 		return replace;
 	}
+	
+	private void sort_conflicts(){
+		
+		var list = new Gee.ArrayList<FileConflictItem>();
+		
+		foreach(var con in conflicts.values){
+			list.add(con);
+		}
+		
+		list.sort((a,b)=>{
+			int val = strcmp(a.location, b.location);
+			if (val == 0){
+				return strcmp(a.source_item.file_name, b.source_item.file_name);
+			}
+			else {
+				return val;
+			}
+		});
+		
+		conflicts_sorted =  list;
+	}
 
 	private bool copy_file(string src_path, string dest_path, bool move){
 
@@ -552,7 +590,7 @@ public class FileTask : GLib.Object {
 
 	private void restore_items_thread(){
 
-		build_file_list_for_copy();
+		query_source_items();
 
 		if (!aborted) {
 
@@ -634,7 +672,7 @@ public class FileTask : GLib.Object {
 	private void delete_items_thread(){
 
 		if (action == "delete"){
-			build_file_list_for_copy();
+			query_source_items();
 		}
 		else if (action == "trash"){
 			bytes_batch_total = 0;
@@ -924,7 +962,12 @@ public class FileConflictItem : GLib.Object {
 	
 	public string location {
 		owned get {
-			return source_item.file_location[source_base_dir.file_path.length + 1: source_item.file_location.length];
+			if (source_item.file_location.length == source_base_dir.file_path.length){
+				return "";
+			}
+			else{
+				return source_item.file_location[source_base_dir.file_path.length + 1: source_item.file_location.length];
+			}
 		}
 	}
 }

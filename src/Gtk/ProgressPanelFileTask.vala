@@ -290,6 +290,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 			
 			log_debug("ProgressPanelFileTask: update_status()");
 			
+			
 			// refresh UI
 			lbl_status.label = task.status;
 			lbl_stats.label = task.stats;

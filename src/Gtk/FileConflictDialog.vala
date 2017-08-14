@@ -346,18 +346,20 @@ public class FileConflictDialog : Gtk.Dialog {
 
 		// column
 		col = new TreeViewColumn();
-		col.title = _("Item Name");
+		col.title = _("Item");
 		col.clickable = false;
 		col.resizable = true;
+		col.min_width = 300;
 		//col.expand = true;
 		treeview.append_column(col);
 
 		// cell icon
-		var cell_pix = new CellRendererPixbuf ();
+		var cell_pix = new CellRendererPixbuf();
 		col.pack_start(cell_pix, false);
 
 		// text
-		var cell_text = new CellRendererText ();
+		var cell_text = new CellRendererText();
+		cell_text.ellipsize = Pango.EllipsizeMode.END;
 		col.pack_start (cell_text, false);
 
 		// render text
@@ -403,11 +405,12 @@ public class FileConflictDialog : Gtk.Dialog {
 		col.title = _("Path");
 		col.clickable = false;
 		col.resizable = true;
-		//col.expand = true;
+		col.expand = true;
 		treeview.append_column(col);
 
 		// text
-		cell_text = new CellRendererText ();
+		cell_text = new CellRendererText();
+		cell_text.ellipsize = Pango.EllipsizeMode.END;
 		col.pack_start (cell_text, false);
 
 		// render text
@@ -449,18 +452,8 @@ public class FileConflictDialog : Gtk.Dialog {
 			typeof(FileConflictItem),
 			typeof(bool)
 		);
-		
-		/*task.conflicts.values.sort((a,b)=>{
-			int val = strcmp(a.location,b.location);
-			if (val == 0){
-				return strcmp(a.source_item.file_name,b.source_item.file_name);
-			}
-			else {
-				return val;
-			}
-		});*/
 
-		foreach(var conflict in task.conflicts.values){
+		foreach(var conflict in task.conflicts_sorted){
 			TreeIter iter0;
 			model.append(out iter0);
 			model.set (iter0, 0, conflict);
