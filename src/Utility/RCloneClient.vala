@@ -33,7 +33,8 @@ public class RCloneClient : GLib.Object {
 	public string config_file_path = "";
 	public string rclone_mounts = "";
 	public string rclone_logs = "";
-
+	public string rclone_cache = "";
+	
 	public signal void changed();
 	
 	public Gee.ArrayList<CloudAccount> accounts = new Gee.ArrayList<CloudAccount>();
@@ -46,6 +47,10 @@ public class RCloneClient : GLib.Object {
 		config_file_path = path_combine(user_home, ".config/rclone/rclone.conf");
 
 		rclone_mounts = path_combine(user_home, ".config/rclone/rclone-mounts");
+		dir_create(rclone_mounts);
+		
+		rclone_cache = path_combine(user_home, ".config/rclone/polo-cache");
+		dir_create(rclone_cache);
 		
 		accounts = new Gee.ArrayList<CloudAccount>();
 		lookup = new Gee.HashMap<string,CloudAccount>();

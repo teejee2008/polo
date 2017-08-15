@@ -257,9 +257,9 @@ public class KvmTask : AsyncTask {
 	public string get_kvm_config(Json.Object config){
 
 		string kvm_cpu = json_get_string(config, "kvm_cpu", "host");
-		int kvm_smp = json_get_int(config, "kvm_smp", 1);
+		int kvm_smp = json_get_int_from_string(config, "kvm_smp", 1);
 		string kvm_vga = json_get_string(config, "kvm_vga", "vmware");
-		int kvm_mem = json_get_int(config, "kvm_mem", 1024);
+		int kvm_mem = json_get_int_from_string(config, "kvm_mem", 1024);
 		string kvm_smb = json_get_string(config, "kvm_smb", "");
 
 		string cmd = "";

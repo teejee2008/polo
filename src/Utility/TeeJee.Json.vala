@@ -50,8 +50,18 @@ namespace TeeJee.JsonHelper{
 			return def_value;
 		}
 	}
-
+	
 	public bool json_get_bool(Json.Object jobj, string member, bool def_value){
+		if (jobj.has_member(member)){
+			return jobj.get_boolean_member(member);
+		}
+		else{
+			log_debug ("Member not found in JSON object: " + member);
+			return def_value;
+		}
+	}
+	
+	public bool json_get_bool_from_string(Json.Object jobj, string member, bool def_value){
 		if (jobj.has_member(member)){
 			return bool.parse(jobj.get_string_member(member));
 		}
@@ -60,8 +70,18 @@ namespace TeeJee.JsonHelper{
 			return def_value;
 		}
 	}
-
+	
 	public int json_get_int(Json.Object jobj, string member, int def_value){
+		if (jobj.has_member(member)){
+			return (int) jobj.get_int_member(member);
+		}
+		else{
+			log_debug ("Member not found in JSON object: " + member);
+			return def_value;
+		}
+	}
+	
+	public int json_get_int_from_string(Json.Object jobj, string member, int def_value){
 		if (jobj.has_member(member)){
 			return int.parse(jobj.get_string_member(member));
 		}
@@ -70,8 +90,18 @@ namespace TeeJee.JsonHelper{
 			return def_value;
 		}
 	}
-	
+
 	public int64 json_get_int64(Json.Object jobj, string member, int64 def_value){
+		if (jobj.has_member(member)){
+			return jobj.get_int_member(member);
+		}
+		else{
+			log_debug ("Member not found in JSON object: " + member);
+			return def_value;
+		}
+	}
+	
+	public int64 json_get_int64_from_string(Json.Object jobj, string member, int64 def_value){
 		if (jobj.has_member(member)){
 			return int64.parse(jobj.get_string_member(member));
 		}
@@ -80,6 +110,8 @@ namespace TeeJee.JsonHelper{
 			return def_value;
 		}
 	}
+	
+	
 
 	public Gee.ArrayList<string> json_get_array(
 		Json.Object jobj,

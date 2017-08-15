@@ -1521,7 +1521,7 @@ public class ArchiveTask : AsyncTask {
 		word_size = json_get_string(task, "word_size", "32");
 		block_size = json_get_string(task, "block_size", "2g");
 		passes = json_get_string(task, "passes", "0");
-		encrypt_header = json_get_bool(task, "encrypt_header", false);
+		encrypt_header = json_get_bool_from_string(task, "encrypt_header", false);
 		encrypt_method = json_get_string(task, "encrypt_method", "AES256");
 		split_mb = json_get_string(task, "split_mb", "0");
 	}

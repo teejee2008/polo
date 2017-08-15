@@ -54,13 +54,14 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 	public string owner_user = "";
 	public string owner_group = "";
-	public string content_type = "";
-	public string content_type_desc = "";
 	public string file_status = "";
 	public string checksum_md5 = "";
 	public string checksum_sha1 = "";
 	public string checksum_sha256 = "";
 	public string checksum_sha512 = "";
+	
+	public string content_type = "";
+	public string content_type_desc = "";
 
 	public uint32 unix_mode = 0;
 	public string permissions = "";
@@ -222,7 +223,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	public bool query_children_aborted = false;
 
 	public GLib.Icon icon;
-	private Gtk.Window? window = null;
+	protected Gtk.Window? window = null;
 
 	public bool is_dummy = false;
 
@@ -318,14 +319,28 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	}
 
 	public static void add_to_cache(FileItem item){
+		
 		cache[item.display_path] = item;
+		
+		if (item.is_directory){
+			cache[item.display_path + "/"] = item;
+		}
+		
 		//log_debug("add cache: %s".printf(item.display_path), true);
 	}
 
 	public static void remove_from_cache(FileItem item){
+		
 		if (cache.has_key(item.display_path)){
 			cache.unset(item.display_path);
 		}
+		
+		if (item.is_directory){
+			if (cache.has_key(item.display_path + "/")){
+				cache.unset(item.display_path + "/");
+			}
+		}
+		
 		//log_debug("add cache: %s".printf(item.display_path), true);
 	}
 
@@ -357,7 +372,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 	}
 
-	private int64 _size_compressed = 0;
+	protected int64 _size_compressed = 0;
 	public int64 size_compressed {
 		get{
 			return _size_compressed;
@@ -442,7 +457,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 	}
 
-	private string _display_name = null;
+	protected string _display_name = null;
 	public string display_name {
 		owned get {
 			if (_display_name != null){
@@ -460,7 +475,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 	}
 
-	private string _display_path = "";
+	protected string _display_path = "";
 	public string display_path {
 		owned get {
 
@@ -1134,7 +1149,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		return current_dir.children[item_name];
 	}
 
-	public FileItem add_child(string item_file_path, FileType item_file_type,
+	public virtual FileItem add_child(string item_file_path, FileType item_file_type,
 		int64 item_size, int64 item_size_compressed, bool item_query_file_info){
 
 		// create new item ------------------------------
@@ -1436,7 +1451,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 	// query info --------------------------
 
-	public void query_file_info() {
+	public virtual void query_file_info() {
 
 		try {
 
@@ -1582,9 +1597,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 				read_hidden_list();
 			}
 
-			if (MimeType.mimetypes.has_key(this.content_type)){
-				this.content_type_desc = MimeType.mimetypes[this.content_type].comment;
-			}
+			set_content_type_desc();
 
 			//if (file_path_prefix == "trash://"){
 
@@ -1612,63 +1625,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		mutex.unlock();
 	}
 
-	private enum ModeMask{
-		FILE_MODE_SUID       = 04000,
-		FILE_MODE_SGID       = 02000,
-		FILE_MODE_STICKY     = 01000,
-		FILE_MODE_USR_ALL    = 00700,
-		FILE_MODE_USR_READ   = 00400,
-		FILE_MODE_USR_WRITE  = 00200,
-		FILE_MODE_USR_EXEC   = 00100,
-		FILE_MODE_GRP_ALL    = 00070,
-		FILE_MODE_GRP_READ   = 00040,
-		FILE_MODE_GRP_WRITE  = 00020,
-		FILE_MODE_GRP_EXEC   = 00010,
-		FILE_MODE_OTH_ALL    = 00007,
-		FILE_MODE_OTH_READ   = 00004,
-		FILE_MODE_OTH_WRITE  = 00002,
-		FILE_MODE_OTH_EXEC   = 00001
-	}
-
-	private void parse_permissions(){
-
-		perms = new string[10];
-		perms[0] = "";
-		perms[1] = ((this.unix_mode & ModeMask.FILE_MODE_USR_READ) != 0)  ? "r" : "-";
-		perms[2] = ((this.unix_mode & ModeMask.FILE_MODE_USR_WRITE) != 0) ? "w" : "-";
-		perms[3] = ((this.unix_mode & ModeMask.FILE_MODE_USR_EXEC) != 0)  ? "x" : "-";
-		perms[4] = ((this.unix_mode & ModeMask.FILE_MODE_GRP_READ) != 0)  ? "r" : "-";
-		perms[5] = ((this.unix_mode & ModeMask.FILE_MODE_GRP_WRITE) != 0) ? "w" : "-";
-		perms[6] = ((this.unix_mode & ModeMask.FILE_MODE_GRP_EXEC) != 0)  ? "x" : "-";
-		perms[7] = ((this.unix_mode & ModeMask.FILE_MODE_OTH_READ) != 0)  ? "r" : "-";
-		perms[8] = ((this.unix_mode & ModeMask.FILE_MODE_OTH_WRITE) != 0) ? "w" : "-";
-		perms[9] = ((this.unix_mode & ModeMask.FILE_MODE_OTH_EXEC) != 0)  ? "x" : "-";
-
-		if ((this.unix_mode & ModeMask.FILE_MODE_SUID) != 0){
-			perms[3] = "s";
-		}
-
-		if ((this.unix_mode & ModeMask.FILE_MODE_SGID) != 0){
-			perms[6] = "s";
-		}
-
-		if ((this.unix_mode & ModeMask.FILE_MODE_STICKY) != 0){
-			perms[9] = "t";
-		}
-
-		string txt = "";
-		int index = 0;
-		foreach(var ch in perms){
-			index++;
-			txt += ch;
-			if (((index - 1) % 3) == 0){
-				txt += " ";
-			}
-		}
-		this.permissions = txt.strip();
-	}
-
-	public void query_children(int depth = -1) {
+	public virtual void query_children(int depth = -1) {
 
 		/* Queries the file item's children using the file_path
 		 * depth = -1, recursively find and add all children from disk
@@ -1790,7 +1747,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		query_children_pending = false;
 	}
 
-	public void query_children_async() {
+	public virtual void query_children_async() {
 
 		log_debug("query_children_async(): %s".printf(file_path));
 
@@ -1814,7 +1771,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		query_children_aborted = false; // reset
 	}
 	
-	public void query_file_system_info(bool fix_fstype = false) {
+	public virtual void query_file_system_info(bool fix_fstype = false) {
 
 		try {
 			var file = File.parse_name(file_path);
@@ -1931,6 +1888,95 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		return list;
 	}
 
+	private enum ModeMask{
+		FILE_MODE_SUID       = 04000,
+		FILE_MODE_SGID       = 02000,
+		FILE_MODE_STICKY     = 01000,
+		FILE_MODE_USR_ALL    = 00700,
+		FILE_MODE_USR_READ   = 00400,
+		FILE_MODE_USR_WRITE  = 00200,
+		FILE_MODE_USR_EXEC   = 00100,
+		FILE_MODE_GRP_ALL    = 00070,
+		FILE_MODE_GRP_READ   = 00040,
+		FILE_MODE_GRP_WRITE  = 00020,
+		FILE_MODE_GRP_EXEC   = 00010,
+		FILE_MODE_OTH_ALL    = 00007,
+		FILE_MODE_OTH_READ   = 00004,
+		FILE_MODE_OTH_WRITE  = 00002,
+		FILE_MODE_OTH_EXEC   = 00001
+	}
+
+	private void parse_permissions(){
+
+		perms = new string[10];
+		perms[0] = "";
+		perms[1] = ((this.unix_mode & ModeMask.FILE_MODE_USR_READ) != 0)  ? "r" : "-";
+		perms[2] = ((this.unix_mode & ModeMask.FILE_MODE_USR_WRITE) != 0) ? "w" : "-";
+		perms[3] = ((this.unix_mode & ModeMask.FILE_MODE_USR_EXEC) != 0)  ? "x" : "-";
+		perms[4] = ((this.unix_mode & ModeMask.FILE_MODE_GRP_READ) != 0)  ? "r" : "-";
+		perms[5] = ((this.unix_mode & ModeMask.FILE_MODE_GRP_WRITE) != 0) ? "w" : "-";
+		perms[6] = ((this.unix_mode & ModeMask.FILE_MODE_GRP_EXEC) != 0)  ? "x" : "-";
+		perms[7] = ((this.unix_mode & ModeMask.FILE_MODE_OTH_READ) != 0)  ? "r" : "-";
+		perms[8] = ((this.unix_mode & ModeMask.FILE_MODE_OTH_WRITE) != 0) ? "w" : "-";
+		perms[9] = ((this.unix_mode & ModeMask.FILE_MODE_OTH_EXEC) != 0)  ? "x" : "-";
+
+		if ((this.unix_mode & ModeMask.FILE_MODE_SUID) != 0){
+			perms[3] = "s";
+		}
+
+		if ((this.unix_mode & ModeMask.FILE_MODE_SGID) != 0){
+			perms[6] = "s";
+		}
+
+		if ((this.unix_mode & ModeMask.FILE_MODE_STICKY) != 0){
+			perms[9] = "t";
+		}
+
+		string txt = "";
+		int index = 0;
+		foreach(var ch in perms){
+			index++;
+			txt += ch;
+			if (((index - 1) % 3) == 0){
+				txt += " ";
+			}
+		}
+		this.permissions = txt.strip();
+	}
+	
+	public void set_content_type_from_extension(){
+		
+		if (content_type.length > 0){ return; }
+		
+		if (file_type == FileType.DIRECTORY){
+			content_type = "inode/directory";
+			return;
+		}
+		
+		bool result_uncertain = false;
+		content_type = GLib.ContentType.guess(file_name, null, out result_uncertain);
+		if (result_uncertain){
+			content_type = "";
+			return;
+		}
+
+		set_content_type_desc();
+		
+		set_content_type_icon();
+	}
+	
+	public void set_content_type_desc(){
+		if ((content_type.length > 0) && MimeType.mimetypes.has_key(this.content_type)){
+			this.content_type_desc = MimeType.mimetypes[this.content_type].comment;
+		}
+	}
+	
+	public void set_content_type_icon(){
+		if ((icon == null) && (content_type.length > 0)){
+			icon = GLib.ContentType.get_icon(content_type);
+		}
+	}
+	
 	// monitor
 
 	public FileMonitor? monitor_for_changes(out Cancellable monitor_cancellable){

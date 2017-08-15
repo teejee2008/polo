@@ -2147,6 +2147,8 @@ public class FileViewList : Gtk.Box {
 			history_add(item);
 			history_reset();
 		}
+		
+		pane.pathbar.refresh(); // update pathbar before starting async query
 
 		query_items();
 		/*if (!query_items()){
@@ -2443,6 +2445,26 @@ public class FileViewList : Gtk.Box {
 		
 		add_monitor(current_item);
 
+		// add overlay --------------------------------------
+		
+		if (current_item is FileItemCloud){
+			
+			var cloud_item = (FileItemCloud) current_item;
+			
+			// check error
+			if ((cloud_item.children.keys.size == 0) && (cloud_item.error_msg.length > 0)){
+				//et_overlay_on_error(cloud_item.error_msg);
+				
+				string txt = _("Error Connecting to Server");
+				string msg = cloud_item.error_msg + "\n\n" + _("Check if internet connection is active");
+				gtk_messagebox(txt, msg, window, true);
+				
+				//string title =  _("Error");
+				//OSDNotify.notify_send("Error", std_err, 1000, "low", "warning");
+			}
+		}
+
+		// check empty
 		if (current_item.children.size == 0){
 			set_overlay_on_empty();
 		}
@@ -2737,6 +2759,7 @@ public class FileViewList : Gtk.Box {
 
 		if (item == null) { return; }
 		if (item.file_uri_scheme != "file") { return; }
+		if (item is FileItemCloud){ return; }
 
 		foreach(var mon in monitors){
 			if (mon.file_item.file_path == item.file_path){
@@ -2923,6 +2946,9 @@ public class FileViewList : Gtk.Box {
 		label.valign = Gtk.Align.START;
 		label.sensitive = false;
 		label.set_use_markup(true);
+		//label.max_width_chars = 100;
+		label.wrap = true;
+		label.wrap_mode = Pango.WrapMode.WORD_CHAR;
 		hbox.add(label);
 		lbl_overlay = label;
 		
@@ -2971,6 +2997,13 @@ public class FileViewList : Gtk.Box {
 	public void set_overlay_on_loading(){
 		log_debug("set_overlay_on_loading()");
 		add_overlay(_("Loading..."), true, true);
+		//pane.statusbar.refresh(); // not needed
+		//cancel_monitors();// do not cancel
+	}
+	
+	public void set_overlay_on_error(string msg){
+		log_debug("set_overlay_on_error()");
+		add_overlay(msg, false);
 		//pane.statusbar.refresh(); // not needed
 		//cancel_monitors();// do not cancel
 	}
@@ -4285,6 +4318,12 @@ public class FileViewList : Gtk.Box {
 
 	public void reload(){
 		log_debug("action.reload()");
+		
+		if ((current_item != null) && (current_item is FileItemCloud)){
+			var cloud_item = (FileItemCloud) current_item;
+			cloud_item.removed_cached_file();
+		}
+		
 		refresh(true);
 	}
 

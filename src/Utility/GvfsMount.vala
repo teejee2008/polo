@@ -130,8 +130,13 @@ public class GvfsMounts: GLib.Object {
 		if (info != null){
 			return info.fetch(1);
 		}
-
-		return "/";
+		
+		if (file_uri.has_prefix("/")){
+			return "/";
+		}
+		else{
+			return file_uri.split("/")[0];
+		}
 	}
 
 	public static FileItem? find_by_uri(string uri){

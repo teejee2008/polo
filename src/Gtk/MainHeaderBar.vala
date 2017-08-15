@@ -375,41 +375,22 @@ public class MainHeaderBar : Gtk.HeaderBar, IPaneActive {
 
 		//if (view.current_item == null) { return; }
 		
-		string link_path = "";
-		//string prefix = view.current_item.file_path_prefix;
-		bool is_trash = false;
-		
-		if ((view.current_item != null) && (view.current_item.is_trash || view.current_item.is_trashed_item)){
-
-			is_trash = true;
-
-			link_path = "trash://";
-			
-			add_crumb(crumbs, "trash://", link_path);
-		}
-		else { //if (view.current_item.is_local){
-
-			link_path = "/";
-
-			add_crumb(crumbs, "/", link_path);
-		}
-
-		var parts = view.current_location.replace("trash://","").split("/");
-
-		int index = -1;
+		var parts = Pathbar.split_path_components(view.current_location);
+		string item_path = "";
 
 		foreach(var part in parts){
-			index++;
+
 			if (part.length == 0){ continue; }
 
-			if (link_path.contains("://")){
-				link_path = link_path + "/" + part; // don't use path_combine()
+			// crumb ----------------
+			
+			if ((item_path.length > 0) && !item_path.has_suffix("/")){
+				item_path += "/";
 			}
-			else{
-				link_path = path_combine(link_path, part); // don't use simple concatenation
-			}
+			
+			item_path += part;
 
-			add_crumb(crumbs, part, link_path);
+			add_crumb(crumbs, part, item_path);
 		}
 
 		crumbs.show_all();

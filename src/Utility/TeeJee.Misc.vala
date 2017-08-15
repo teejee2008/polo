@@ -186,13 +186,76 @@ namespace TeeJee.Misc {
 		}
 		return millis;
 	}
-
+	
+	public DateTime date_now(){
+		return new GLib.DateTime.now_local();
+	}
+	
 	public bool dates_are_equal(DateTime? dt1, DateTime? dt2){
 		if ((dt1 == null)||(dt2 == null)){
 			return false;
 		}
 		return Math.fabs(dt2.difference(dt1)) < (1 * TimeSpan.SECOND);
 	}
+	
+	public static DateTime? parse_date_time (string date_string, bool local_time) {	
+		
+		DateTime? dt = null;
+		bool valid = false;
+		int year, month, day, hr, min, tz_hr, tz_min;
+		double sec;
+		
+		// 2016-01-15T14:23:52.964Z
+		MatchInfo match = regex_match("""([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2}):([.0-9]+)Z""", date_string);
+		
+		if (match != null){
+			
+			year = int.parse(match.fetch(1));
+			month = int.parse(match.fetch(2));
+			day = int.parse(match.fetch(3));
+			hr = int.parse(match.fetch(4));
+			min = int.parse(match.fetch(5));
+			sec = double.parse(match.fetch(6));
+			
+			dt = new DateTime.utc(year, month, day, hr, min, sec);
+			
+			if (local_time){
+				dt = dt.to_local();
+			}
+			
+			return dt;
+		}
+		
+		// 2016-01-15T14:23:52.964+05:30
+		match = regex_match("""([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2}):([.0-9]+)([0-9+-]+):([0-9+-]+)""", date_string);
+		
+		if (match != null){
+			
+			year = int.parse(match.fetch(1));
+			month = int.parse(match.fetch(2));
+			day = int.parse(match.fetch(3));
+			hr = int.parse(match.fetch(4));
+			min = int.parse(match.fetch(5));
+			sec = double.parse(match.fetch(6));
+			
+			tz_hr = int.parse(match.fetch(7));
+			tz_min = int.parse(match.fetch(8));
+
+			dt = new DateTime.utc(year, month, day, hr, min, sec);
+			
+			dt = dt.add_hours(tz_hr).add_minutes(tz_min);
+
+			if (local_time){
+				dt = dt.to_local();
+			}
+			
+			return dt;
+		}
+		
+		return dt;
+	}
+	
+	// string handling ------------------------
 	
 	public string string_replace(string str, string search, string replacement, int count = -1){
 		string[] arr = str.split(search);

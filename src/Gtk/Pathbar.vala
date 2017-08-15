@@ -540,41 +540,41 @@ public class Pathbar : Gtk.Box {
 			break;
 		}
 
-		string[] parts = null;
-
-		string basepath = GvfsMounts.get_gvfs_basepath(view.current_location); // scheme:///
-
-		string link_path = basepath[0:basepath.length-1]; // scheme://
-
-		log_debug("basepath: %s".printf(basepath));
-
-		add_crumb(link_box, basepath.replace("file://",""), link_path);
-
-		parts = view.current_location.replace(link_path, "").split("/");
-		
-		if (App.pathbar_style == PathbarStyle.ARROWS){
-			add_crumb_separator(link_box);
-		}
-
+		var parts = split_path_components(view.current_location);
+		string item_path = "";
 		int index = -1;
-
+		bool is_first_part = true;
+		
 		foreach(var part in parts){
 			index++;
 			if (part.length == 0){ continue; }
 
 			// crumb ----------------
 			
-			link_path = link_path + "/" + part; // don't use path_combine()
+			if ((item_path.length > 0) && !item_path.has_suffix("/")){
+				item_path += "/";
+			}
+			
+			item_path += part;
 
-			add_crumb(link_box, part, link_path);
-
+			add_crumb(link_box, part, item_path, is_first_part);
+			
+			is_first_part = false;
+			
 			// separator ------------
 			
 			bool add_separator = false;
-			if ((App.pathbar_style == PathbarStyle.COMPACT) || (App.pathbar_style == PathbarStyle.ARROWS)){
-				if (index < parts.length - 1){
+			switch (App.pathbar_style){
+			case PathbarStyle.COMPACT:
+				if ((index < parts.size - 1) && (part != "/")){
 					add_separator = true;
 				}
+				break;
+			case PathbarStyle.ARROWS:
+				if (index < parts.size - 1){
+					add_separator = true;
+				}
+				break;
 			}
 
 			if (add_separator){
@@ -586,13 +586,103 @@ public class Pathbar : Gtk.Box {
 
 		log_debug("Pathbar: update_crumbs():exit");
 	}
-
-	private void add_crumb(Gtk.Box box, string text, string link_path){
-
-		log_debug("add_crumb: %s, %s".printf(text, link_path));
+	
+	public static Gee.ArrayList<string> split_path_components(string file_uri){
 		
+		var list = new Gee.ArrayList<string>();
+		string basepath = "";
+		
+		var info = regex_match("""^((file|trash):\/\/\/*)""", file_uri);
+		if (info != null){
+			basepath = info.fetch(1); // file:///  trash:///
+			list.add(basepath);
+		}
+		
+		if (basepath.length == 0){
+			
+			// ftp://user:password@192.168.43.140:3721/sss
+			info = regex_match("""^((ftp|sftp|ssh):*\/*\/*.*[0-9.]*:*[0-9.]*\/*)""", file_uri);
+			if (info != null){
+				basepath = info.fetch(1); // ftp://10.0.0.1:21/
+				list.add(basepath);
+			}
+		}
+		
+		if (basepath.length == 0){
+			
+			// mtp://[usb:002,010]/sss
+			info = regex_match("""^(mtp:\/\/\[usb:[0-9]+,[0-9]+\]\/*)""", file_uri);
+			if (info != null){
+				basepath = info.fetch(1); // mtp://[usb:999,003]/
+				list.add(basepath);
+			}
+		}
+		
+		if (basepath.length == 0){
+			
+			// smb://DATA/share1
+			info = regex_match("""^(smb:\/\/.*\/*.*)""", file_uri);
+			if (info != null){
+				basepath = info.fetch(1); // smb://server/share/
+				list.add(basepath);
+			}
+		}
+		
+		if (basepath.length == 0){
+			
+			// dropbox:/test
+			info = regex_match("""^(.*:\/*)""", file_uri);
+			if (info != null){
+				basepath = info.fetch(1); // smb://server/share/
+				list.add(basepath);
+			}
+		}
+		
+		if (basepath.length == 0){
+			
+			// everything else
+			if (file_uri.has_prefix("/")){
+				basepath = "/"; // /bin
+				list.add(basepath);
+			}
+			else{
+				basepath = "";
+				// ignore
+			}
+		}
+		
+		log_debug("basepath: %s".printf(basepath));
+		
+		if (file_uri.length > basepath.length){
+			
+			var arr = file_uri[basepath.length : file_uri.length].split("/");
+			
+			foreach(var part in arr){
+				list.add(part);
+			}
+		}
+		
+		// print the list
+		foreach(var str in list){
+			log_debug("parts: %s".printf(str));
+		}
+		
+		return list;
+	}
+	
+	private void add_crumb(Gtk.Box box, string part, string link_path, bool is_first_part){
+
+		log_debug("add_crumb: %s, %s".printf(part, link_path));
+		
+		string text = part;
+		
+		// remove trailing /
+		if (text.has_suffix("/") && (text.length > 1)){
+			text = text[0:text.length - 1];
+		}
+
 		if ((App.pathbar_style == PathbarStyle.BUTTONS) || (App.pathbar_style == PathbarStyle.FLAT_BUTTONS)){
-			add_crumb_button(box, text, link_path);
+			add_crumb_button(box, text, link_path, is_first_part);
 		}
 		else{
 			add_crumb_label(box, text, link_path);
@@ -641,7 +731,7 @@ public class Pathbar : Gtk.Box {
 		});
 	}
 
-	private void add_crumb_button(Gtk.Box box, string text, string link_path){
+	private void add_crumb_button(Gtk.Box box, string text, string link_path, bool is_first_part){
 
 		var button = new Gtk.Button();
 		button.set_tooltip_text(link_path);
@@ -660,7 +750,7 @@ public class Pathbar : Gtk.Box {
 		label.margin_left = label.margin_right = 0;
 		button.add(label);
 
-		if ((App.pathbar_style == PathbarStyle.FLAT_BUTTONS) && (text != "/") && !text.contains("://")){
+		if ((App.pathbar_style == PathbarStyle.FLAT_BUTTONS) && !is_first_part){
 			label.label = "➤ " + text;
 		}
 		

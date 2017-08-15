@@ -740,30 +740,30 @@ public class Main : GLib.Object {
 		set_numeric_locale("C"); // switch numeric locale
 
 		app_version_in_config = json_get_string(config, "app-version", "0");
-		run_count = json_get_int(config, "run-count", 0);
+		run_count = json_get_int_from_string(config, "run-count", 0);
 		// set dummy version number, if config file exists but parameter is missing
 		// this will trigger display of change log file
 		
 		gtk_theme = json_get_string(config, "gtk_theme", gtk_theme);
 		
-		middlebar_visible = json_get_bool(config, "middlebar_visible", middlebar_visible);
-		sidebar_visible = json_get_bool(config, "sidebar_visible", sidebar_visible);
-		sidebar_dark = json_get_bool(config, "sidebar_dark", sidebar_dark);
-		sidebar_places = json_get_bool(config, "sidebar_places", sidebar_places);
-		sidebar_bookmarks = json_get_bool(config, "sidebar_bookmarks", sidebar_bookmarks);
-		sidebar_devices = json_get_bool(config, "sidebar_devices", sidebar_devices);
-		sidebar_position = json_get_int(config, "sidebar_position", sidebar_position);
-		sidebar_action_button = json_get_bool(config, "sidebar_action_button", sidebar_action_button);
+		middlebar_visible = json_get_bool_from_string(config, "middlebar_visible", middlebar_visible);
+		sidebar_visible = json_get_bool_from_string(config, "sidebar_visible", sidebar_visible);
+		sidebar_dark = json_get_bool_from_string(config, "sidebar_dark", sidebar_dark);
+		sidebar_places = json_get_bool_from_string(config, "sidebar_places", sidebar_places);
+		sidebar_bookmarks = json_get_bool_from_string(config, "sidebar_bookmarks", sidebar_bookmarks);
+		sidebar_devices = json_get_bool_from_string(config, "sidebar_devices", sidebar_devices);
+		sidebar_position = json_get_int_from_string(config, "sidebar_position", sidebar_position);
+		sidebar_action_button = json_get_bool_from_string(config, "sidebar_action_button", sidebar_action_button);
 
-		headerbar_enabled = json_get_bool(config, "headerbar_enabled", headerbar_enabled);
+		headerbar_enabled = json_get_bool_from_string(config, "headerbar_enabled", headerbar_enabled);
 		headerbar_enabled_temp = headerbar_enabled;
-		headerbar_window_buttons_left = json_get_bool(config, "headerbar_window_buttons_left", headerbar_window_buttons_left);
+		headerbar_window_buttons_left = json_get_bool_from_string(config, "headerbar_window_buttons_left", headerbar_window_buttons_left);
 		
-		show_hidden_files = json_get_bool(config, "show_hidden_files", show_hidden_files);
-		panel_layout = (PanelLayout) json_get_int(config, "panel_layout", panel_layout);
+		show_hidden_files = json_get_bool_from_string(config, "show_hidden_files", show_hidden_files);
+		panel_layout = (PanelLayout) json_get_int_from_string(config, "panel_layout", panel_layout);
 		shell_default = json_get_string(config, "shell_default", shell_default);
 		
-		int vmode = json_get_int(config, "view_mode", view_mode);
+		int vmode = json_get_int_from_string(config, "view_mode", view_mode);
 		if (vmode >= 1 && vmode <= 4){
 			view_mode = (ViewMode) vmode;
 		}
@@ -772,122 +772,122 @@ public class Main : GLib.Object {
 		}
 
 		listview_font_scale = json_get_double(config, "listview_font_scale", LV_FONT_SCALE);
-		listview_icon_size = json_get_int(config, "listview_icon_size", LV_ICON_SIZE);
-		listview_row_spacing = json_get_int(config, "listview_row_spacing", LV_ROW_SPACING);
-		listview_emblems = json_get_bool(config, "listview_emblems", listview_emblems);
-		listview_thumbs = json_get_bool(config, "listview_thumbs", listview_thumbs);
-		listview_transparency = json_get_bool(config, "listview_transparency", listview_transparency);
+		listview_icon_size = json_get_int_from_string(config, "listview_icon_size", LV_ICON_SIZE);
+		listview_row_spacing = json_get_int_from_string(config, "listview_row_spacing", LV_ROW_SPACING);
+		listview_emblems = json_get_bool_from_string(config, "listview_emblems", listview_emblems);
+		listview_thumbs = json_get_bool_from_string(config, "listview_thumbs", listview_thumbs);
+		listview_transparency = json_get_bool_from_string(config, "listview_transparency", listview_transparency);
 
-		iconview_icon_size = json_get_int(config, "iconview_icon_size", IV_ICON_SIZE);
-		iconview_row_spacing = json_get_int(config, "iconview_row_spacing", IV_ROW_SPACING);
-		iconview_column_spacing = json_get_int(config, "iconview_column_spacing", IV_COLUMN_SPACING);
-		iconview_emblems = json_get_bool(config, "iconview_emblems", iconview_emblems);
-		iconview_thumbs = json_get_bool(config, "iconview_thumbs", iconview_thumbs);
-		iconview_transparency = json_get_bool(config, "iconview_transparency", iconview_transparency);
+		iconview_icon_size = json_get_int_from_string(config, "iconview_icon_size", IV_ICON_SIZE);
+		iconview_row_spacing = json_get_int_from_string(config, "iconview_row_spacing", IV_ROW_SPACING);
+		iconview_column_spacing = json_get_int_from_string(config, "iconview_column_spacing", IV_COLUMN_SPACING);
+		iconview_emblems = json_get_bool_from_string(config, "iconview_emblems", iconview_emblems);
+		iconview_thumbs = json_get_bool_from_string(config, "iconview_thumbs", iconview_thumbs);
+		iconview_transparency = json_get_bool_from_string(config, "iconview_transparency", iconview_transparency);
 
-		iconview_trim_names = json_get_bool(config, "iconview_trim_names", iconview_trim_names);
+		iconview_trim_names = json_get_bool_from_string(config, "iconview_trim_names", iconview_trim_names);
 
-		tileview_icon_size = json_get_int(config, "tileview_icon_size", TV_ICON_SIZE);
-		tileview_row_spacing = json_get_int(config, "tileview_row_spacing", TV_ROW_SPACING);
-		tileview_padding = json_get_int(config, "tileview_padding", TV_PADDING);
-		listview_emblems = json_get_bool(config, "listview_emblems", listview_emblems);
-		listview_thumbs = json_get_bool(config, "listview_thumbs", listview_thumbs);
-		listview_transparency = json_get_bool(config, "listview_transparency", listview_transparency);
+		tileview_icon_size = json_get_int_from_string(config, "tileview_icon_size", TV_ICON_SIZE);
+		tileview_row_spacing = json_get_int_from_string(config, "tileview_row_spacing", TV_ROW_SPACING);
+		tileview_padding = json_get_int_from_string(config, "tileview_padding", TV_PADDING);
+		listview_emblems = json_get_bool_from_string(config, "listview_emblems", listview_emblems);
+		listview_thumbs = json_get_bool_from_string(config, "listview_thumbs", listview_thumbs);
+		listview_transparency = json_get_bool_from_string(config, "listview_transparency", listview_transparency);
 
-		toolbar_visible = json_get_bool(config, "toolbar_visible", toolbar_visible);
-		toolbar_large_icons = json_get_bool(config, "toolbar_large_icons", toolbar_large_icons);
-		toolbar_dark = json_get_bool(config, "toolbar_dark", toolbar_dark);
-		//toolbar_unified = json_get_bool(config, "toolbar_unified", toolbar_unified);
-		toolbar_labels = json_get_bool(config, "toolbar_labels", toolbar_labels);
-		toolbar_labels_beside_icons = json_get_bool(config, "toolbar_labels_beside_icons", toolbar_labels_beside_icons);
+		toolbar_visible = json_get_bool_from_string(config, "toolbar_visible", toolbar_visible);
+		toolbar_large_icons = json_get_bool_from_string(config, "toolbar_large_icons", toolbar_large_icons);
+		toolbar_dark = json_get_bool_from_string(config, "toolbar_dark", toolbar_dark);
+		//toolbar_unified = json_get_bool_from_string(config, "toolbar_unified", toolbar_unified);
+		toolbar_labels = json_get_bool_from_string(config, "toolbar_labels", toolbar_labels);
+		toolbar_labels_beside_icons = json_get_bool_from_string(config, "toolbar_labels_beside_icons", toolbar_labels_beside_icons);
 
-		toolbar_item_back = json_get_bool(config, "toolbar_item_back", toolbar_item_back);
-		toolbar_item_next = json_get_bool(config, "toolbar_item_next", toolbar_item_next);
-		toolbar_item_up = json_get_bool(config, "toolbar_item_up", toolbar_item_up);
-		toolbar_item_reload = json_get_bool(config, "toolbar_item_reload", toolbar_item_reload);
-		toolbar_item_home = json_get_bool(config, "toolbar_item_home", toolbar_item_home);
-		toolbar_item_terminal = json_get_bool(config, "toolbar_item_terminal", toolbar_item_terminal);
-		toolbar_item_hidden = json_get_bool(config, "toolbar_item_hidden", toolbar_item_hidden);
-		toolbar_item_dual_pane = json_get_bool(config, "toolbar_item_dual_pane", toolbar_item_dual_pane);
-		toolbar_item_view = json_get_bool(config, "toolbar_item_view", toolbar_item_view);
-		toolbar_item_bookmarks = json_get_bool(config, "toolbar_item_bookmarks", toolbar_item_bookmarks);
-		toolbar_item_devices = json_get_bool(config, "toolbar_item_devices", toolbar_item_devices);
+		toolbar_item_back = json_get_bool_from_string(config, "toolbar_item_back", toolbar_item_back);
+		toolbar_item_next = json_get_bool_from_string(config, "toolbar_item_next", toolbar_item_next);
+		toolbar_item_up = json_get_bool_from_string(config, "toolbar_item_up", toolbar_item_up);
+		toolbar_item_reload = json_get_bool_from_string(config, "toolbar_item_reload", toolbar_item_reload);
+		toolbar_item_home = json_get_bool_from_string(config, "toolbar_item_home", toolbar_item_home);
+		toolbar_item_terminal = json_get_bool_from_string(config, "toolbar_item_terminal", toolbar_item_terminal);
+		toolbar_item_hidden = json_get_bool_from_string(config, "toolbar_item_hidden", toolbar_item_hidden);
+		toolbar_item_dual_pane = json_get_bool_from_string(config, "toolbar_item_dual_pane", toolbar_item_dual_pane);
+		toolbar_item_view = json_get_bool_from_string(config, "toolbar_item_view", toolbar_item_view);
+		toolbar_item_bookmarks = json_get_bool_from_string(config, "toolbar_item_bookmarks", toolbar_item_bookmarks);
+		toolbar_item_devices = json_get_bool_from_string(config, "toolbar_item_devices", toolbar_item_devices);
 
-		pathbar_unified = json_get_bool(config, "pathbar_unified", pathbar_unified);
+		pathbar_unified = json_get_bool_from_string(config, "pathbar_unified", pathbar_unified);
 
 		var text = json_get_string(config, "pathbar_style", "compact");
 		pathbar_style = PathbarStyle.from_string(text);
 
-		pathbar_show_bookmarks = json_get_bool(config, "pathbar_show_bookmarks", pathbar_show_bookmarks);
-		pathbar_show_disks = json_get_bool(config, "pathbar_show_disks", pathbar_show_disks);
-		pathbar_show_back = json_get_bool(config, "pathbar_show_back", pathbar_show_back);
-		pathbar_show_next = json_get_bool(config, "pathbar_show_next", pathbar_show_next);
-		pathbar_show_up = json_get_bool(config, "pathbar_show_up", pathbar_show_up);
-		pathbar_show_home = json_get_bool(config, "pathbar_show_home", pathbar_show_home);
-		pathbar_show_swap = json_get_bool(config, "pathbar_show_swap", pathbar_show_swap);
-		pathbar_show_other = json_get_bool(config, "pathbar_show_other", pathbar_show_other);
-		pathbar_show_close = json_get_bool(config, "pathbar_show_close", pathbar_show_close);
+		pathbar_show_bookmarks = json_get_bool_from_string(config, "pathbar_show_bookmarks", pathbar_show_bookmarks);
+		pathbar_show_disks = json_get_bool_from_string(config, "pathbar_show_disks", pathbar_show_disks);
+		pathbar_show_back = json_get_bool_from_string(config, "pathbar_show_back", pathbar_show_back);
+		pathbar_show_next = json_get_bool_from_string(config, "pathbar_show_next", pathbar_show_next);
+		pathbar_show_up = json_get_bool_from_string(config, "pathbar_show_up", pathbar_show_up);
+		pathbar_show_home = json_get_bool_from_string(config, "pathbar_show_home", pathbar_show_home);
+		pathbar_show_swap = json_get_bool_from_string(config, "pathbar_show_swap", pathbar_show_swap);
+		pathbar_show_other = json_get_bool_from_string(config, "pathbar_show_other", pathbar_show_other);
+		pathbar_show_close = json_get_bool_from_string(config, "pathbar_show_close", pathbar_show_close);
 
-		statusbar_unified = json_get_bool(config, "statusbar_unified", statusbar_unified);
+		statusbar_unified = json_get_bool_from_string(config, "statusbar_unified", statusbar_unified);
 
-		tabs_bottom = json_get_bool(config, "tabs_bottom", tabs_bottom);
-		tabs_close_visible = json_get_bool(config, "tabs_close_visible", tabs_close_visible);
+		tabs_bottom = json_get_bool_from_string(config, "tabs_bottom", tabs_bottom);
+		tabs_close_visible = json_get_bool_from_string(config, "tabs_close_visible", tabs_close_visible);
 
 		var term_font_string = json_get_string(config, "term_font", TERM_FONT_DESC);
 		term_font = Pango.FontDescription.from_string(term_font_string);
 		
 		term_fg_color = json_get_string(config, "term_fg_color", term_fg_color);
 		term_bg_color = json_get_string(config, "term_bg_color", term_bg_color);
-		term_enable_network = json_get_bool(config, "term_enable_network", term_enable_network);
-		term_enable_gui = json_get_bool(config, "term_enable_gui", term_enable_gui);
+		term_enable_network = json_get_bool_from_string(config, "term_enable_network", term_enable_network);
+		term_enable_gui = json_get_bool_from_string(config, "term_enable_gui", term_enable_gui);
 
-		kvm_enable = json_get_bool(config, "kvm_enable", kvm_enable);
+		kvm_enable = json_get_bool_from_string(config, "kvm_enable", kvm_enable);
 		kvm_cpu = json_get_string(config, "kvm_cpu", kvm_cpu);
-		kvm_smp = json_get_int(config, "kvm_smp", kvm_smp);
-		kvm_cpu_limit = json_get_int(config, "kvm_cpu_limit", kvm_cpu_limit);
+		kvm_smp = json_get_int_from_string(config, "kvm_smp", kvm_smp);
+		kvm_cpu_limit = json_get_int_from_string(config, "kvm_cpu_limit", kvm_cpu_limit);
 		kvm_vga = json_get_string(config, "kvm_vga", kvm_vga);
-		kvm_mem = json_get_int(config, "kvm_mem", kvm_mem);
+		kvm_mem = json_get_int_from_string(config, "kvm_mem", kvm_mem);
 		
 		selected_columns = json_get_string(config, "selected_columns", selected_columns);
 		selected_columns = selected_columns.replace(" ",""); // remove spaces
 
-		maximise_on_startup = json_get_bool(config, "maximise_on_startup", maximise_on_startup);
-		//single_click_activate = json_get_bool(config, "single_click_activate", single_click_activate);
-		restore_last_session = json_get_bool(config, "restore_last_session", restore_last_session);
-		single_instance_mode = json_get_bool(config, "single_instance_mode", single_instance_mode);
-		minimize_to_tray = json_get_bool(config, "minimize_to_tray", minimize_to_tray);
-		autostart = json_get_bool(config, "autostart", autostart);
+		maximise_on_startup = json_get_bool_from_string(config, "maximise_on_startup", maximise_on_startup);
+		//single_click_activate = json_get_bool_from_string(config, "single_click_activate", single_click_activate);
+		restore_last_session = json_get_bool_from_string(config, "restore_last_session", restore_last_session);
+		single_instance_mode = json_get_bool_from_string(config, "single_instance_mode", single_instance_mode);
+		minimize_to_tray = json_get_bool_from_string(config, "minimize_to_tray", minimize_to_tray);
+		autostart = json_get_bool_from_string(config, "autostart", autostart);
 
-		confirm_delete = json_get_bool(config, "confirm_delete", confirm_delete);
-		confirm_trash = json_get_bool(config, "confirm_trash", confirm_trash);
+		confirm_delete = json_get_bool_from_string(config, "confirm_delete", confirm_delete);
+		confirm_trash = json_get_bool_from_string(config, "confirm_trash", confirm_trash);
 
-		overwrite_pdf_split = json_get_bool(config, "overwrite_pdf_split", overwrite_pdf_split);
-		overwrite_pdf_merge = json_get_bool(config, "overwrite_pdf_merge", overwrite_pdf_merge);
-		overwrite_pdf_compress = json_get_bool(config, "overwrite_pdf_compress", overwrite_pdf_compress);
-		overwrite_pdf_uncompress = json_get_bool(config, "overwrite_pdf_uncompress", overwrite_pdf_uncompress);
-		overwrite_pdf_protect = json_get_bool(config, "overwrite_pdf_protect", overwrite_pdf_protect);
-		overwrite_pdf_unprotect = json_get_bool(config, "overwrite_pdf_unprotect", overwrite_pdf_unprotect);
-		overwrite_pdf_decolor = json_get_bool(config, "overwrite_pdf_decolor", overwrite_pdf_decolor);
-		overwrite_pdf_rotate = json_get_bool(config, "overwrite_pdf_rotate", overwrite_pdf_rotate);
-		overwrite_pdf_optimize = json_get_bool(config, "overwrite_pdf_optimize", overwrite_pdf_optimize);
+		overwrite_pdf_split = json_get_bool_from_string(config, "overwrite_pdf_split", overwrite_pdf_split);
+		overwrite_pdf_merge = json_get_bool_from_string(config, "overwrite_pdf_merge", overwrite_pdf_merge);
+		overwrite_pdf_compress = json_get_bool_from_string(config, "overwrite_pdf_compress", overwrite_pdf_compress);
+		overwrite_pdf_uncompress = json_get_bool_from_string(config, "overwrite_pdf_uncompress", overwrite_pdf_uncompress);
+		overwrite_pdf_protect = json_get_bool_from_string(config, "overwrite_pdf_protect", overwrite_pdf_protect);
+		overwrite_pdf_unprotect = json_get_bool_from_string(config, "overwrite_pdf_unprotect", overwrite_pdf_unprotect);
+		overwrite_pdf_decolor = json_get_bool_from_string(config, "overwrite_pdf_decolor", overwrite_pdf_decolor);
+		overwrite_pdf_rotate = json_get_bool_from_string(config, "overwrite_pdf_rotate", overwrite_pdf_rotate);
+		overwrite_pdf_optimize = json_get_bool_from_string(config, "overwrite_pdf_optimize", overwrite_pdf_optimize);
 
-		overwrite_image_optimize_png = json_get_bool(config, "overwrite_image_optimize_png", overwrite_image_optimize_png);
-		overwrite_image_reduce_jpeg = json_get_bool(config, "overwrite_image_reduce_jpeg", overwrite_image_reduce_jpeg);
-		overwrite_image_resize = json_get_bool(config, "overwrite_image_resize", overwrite_image_resize);
-		overwrite_image_rotate = json_get_bool(config, "overwrite_image_rotate", overwrite_image_rotate);
-		overwrite_image_convert = json_get_bool(config, "overwrite_image_convert", overwrite_image_convert);
-		overwrite_image_decolor = json_get_bool(config, "overwrite_image_decolor", overwrite_image_decolor);
-		overwrite_image_boost_color = json_get_bool(config, "overwrite_image_boost_color", overwrite_image_boost_color);
-		overwrite_image_reduce_color = json_get_bool(config, "overwrite_image_reduce_color", overwrite_image_reduce_color);
+		overwrite_image_optimize_png = json_get_bool_from_string(config, "overwrite_image_optimize_png", overwrite_image_optimize_png);
+		overwrite_image_reduce_jpeg = json_get_bool_from_string(config, "overwrite_image_reduce_jpeg", overwrite_image_reduce_jpeg);
+		overwrite_image_resize = json_get_bool_from_string(config, "overwrite_image_resize", overwrite_image_resize);
+		overwrite_image_rotate = json_get_bool_from_string(config, "overwrite_image_rotate", overwrite_image_rotate);
+		overwrite_image_convert = json_get_bool_from_string(config, "overwrite_image_convert", overwrite_image_convert);
+		overwrite_image_decolor = json_get_bool_from_string(config, "overwrite_image_decolor", overwrite_image_decolor);
+		overwrite_image_boost_color = json_get_bool_from_string(config, "overwrite_image_boost_color", overwrite_image_boost_color);
+		overwrite_image_reduce_color = json_get_bool_from_string(config, "overwrite_image_reduce_color", overwrite_image_reduce_color);
 
-		middlebar_visible = json_get_bool(config, "middlebar_visible", middlebar_visible);
-		sidebar_visible = json_get_bool(config, "sidebar_visible", sidebar_visible);
-		sidebar_dark = json_get_bool(config, "sidebar_dark", sidebar_dark);
-		sidebar_places = json_get_bool(config, "sidebar_places", sidebar_places);
-		sidebar_bookmarks = json_get_bool(config, "sidebar_bookmarks", sidebar_bookmarks);
-		sidebar_devices = json_get_bool(config, "sidebar_devices", sidebar_devices);
-		sidebar_position = json_get_int(config, "sidebar_position", sidebar_position);
-		sidebar_action_button = json_get_bool(config, "sidebar_action_button", sidebar_action_button);
+		middlebar_visible = json_get_bool_from_string(config, "middlebar_visible", middlebar_visible);
+		sidebar_visible = json_get_bool_from_string(config, "sidebar_visible", sidebar_visible);
+		sidebar_dark = json_get_bool_from_string(config, "sidebar_dark", sidebar_dark);
+		sidebar_places = json_get_bool_from_string(config, "sidebar_places", sidebar_places);
+		sidebar_bookmarks = json_get_bool_from_string(config, "sidebar_bookmarks", sidebar_bookmarks);
+		sidebar_devices = json_get_bool_from_string(config, "sidebar_devices", sidebar_devices);
+		sidebar_position = json_get_int_from_string(config, "sidebar_position", sidebar_position);
+		sidebar_action_button = json_get_bool_from_string(config, "sidebar_action_button", sidebar_action_button);
 		sidebar_collapsed_sections = json_get_string(config, "sidebar_collapsed_sections", sidebar_collapsed_sections);
 		
 		load_folder_selections();
@@ -1119,7 +1119,7 @@ public class Main : GLib.Object {
 		task.word_size = json_get_string(config, "word_size", task.word_size);
 		task.block_size = json_get_string(config, "block_size", task.block_size);
 		task.passes = json_get_string(config, "passes", task.passes);
-		task.encrypt_header = json_get_bool(config, "encrypt_header", task.encrypt_header);
+		task.encrypt_header = json_get_bool_from_string(config, "encrypt_header", task.encrypt_header);
 		task.encrypt_method = json_get_string(config, "encrypt_method", task.encrypt_method);
 		task.split_mb = json_get_string(config, "split_mb", task.split_mb);
 		
