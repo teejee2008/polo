@@ -77,7 +77,7 @@ public class TrashCan : FileItem {
 
 	public void query_items_thread(){
 
-		log_debug("TrashCan: query_items()");
+		log_debug("TrashCan: query_items(): %s".printf(string.nfill(30,'-')));
 		
 		this.children.clear();
 		this.trash_can_size = 0;
@@ -108,7 +108,7 @@ public class TrashCan : FileItem {
 
 		thread_running = false;
 
-		log_msg("Trash: query_completed");
+		log_debug("TrashCan: query_items():end %s".printf(string.nfill(30,'-')));
 		
 		query_completed();		
 	}
@@ -199,7 +199,7 @@ public class TrashCan : FileItem {
 				else if (line.down().has_prefix("size=")){
 					var txt = line[line.index_of("=") + 1: line.length];
 					trash_size = int64.parse(txt);
-					log_debug("Size=%s".printf(txt));
+					//log_debug("Size=%s".printf(txt));
 				}
 			}
 		}

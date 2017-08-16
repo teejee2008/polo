@@ -296,16 +296,11 @@ public class FileItemCloud : FileItem {
 		exec_sync(cmd, out std_out, out std_err);
 		
 		if (std_err.length > 0){
+			error_msg = std_err;
 			log_error("std_err:\n%s\n".printf(std_err));
 		}
 
 		file_write(cached_file_path, std_out);
-		
-		if (std_err.length > 0){
-			error_msg = std_err;
-		}
-		
-		log_debug("error_msg: %s".printf(error_msg));
 		
 		log_debug("save_cache: %s".printf(cached_file_path));
 	}
@@ -315,13 +310,6 @@ public class FileItemCloud : FileItem {
 	}
 	
 	private void read_children_from_cache(){
-		
-		//string txt = file_read(cached_file_path);
-		
-		/*foreach(string line in txt.split("\n")){
-			
-			
-		}*/
 		
 		// mark existing children as stale -------------------
 		

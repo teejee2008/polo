@@ -182,7 +182,7 @@ public class PropertiesWindow : Gtk.Window {
 
 		// size -------------
 		
-		if (file_item.file_type != FileType.DIRECTORY){
+		if (file_item.size > -1){
 
 			txt = "%s (%'ld bytes)".printf(
 				format_file_size(file_item.size),

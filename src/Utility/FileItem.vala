@@ -359,7 +359,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	
 	// properties --------------------------------------
 
-	protected int64 _size = 0;
+	protected int64 _size = -1;
 	public int64 size {
 		get{
 			return _size;
@@ -430,29 +430,27 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 	public string file_size_formatted {
 		owned get{
-			if (!is_dummy) {
-				if (!is_directory){
-					return format_file_size(size);
+			if (is_dummy) {
+				return "-";
+			}
+			else if (!is_directory){
+				return format_file_size(size);
+			}
+			else{
+				if (dir_size_queried || (size > 0)){
+					return format_file_size(size); // directory size will be available for trashed dirs
 				}
 				else{
-					if (dir_size_queried && (size > 0)){
-						return format_file_size(size); // directory size will be available for trashed dirs
+					if (item_count == 1){
+						return "%'lld %s".printf(item_count, _("item"));
+					}
+					else if (item_count > 1){
+						return "%'lld %s".printf(item_count, _("items"));
 					}
 					else{
-						if (item_count == 0){
-							return "%'lld %s".printf(item_count, _("item"));
-						}
-						else if (item_count > 1){
-							return "%'lld %s".printf(item_count, _("items"));
-						}
-						else{
-							return _("empty");
-						}
+						return _("empty");
 					}
 				}
-			}
-			else {
-				return "";
 			}
 		}
 	}
@@ -1234,6 +1232,10 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			if (item_size > 0) {
 				item._size = item_size;
 			}
+			else{
+				item._size = 0;
+			}
+			
 			if (item_size_compressed > 0) {
 				item._size_compressed = item_size_compressed;
 			}
@@ -1695,6 +1697,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		else{
 			query_file_info();
 		}*/
+		
+		_size = 0; // initialize
 
 		query_file_info(); // read folder properties
 		
@@ -1950,14 +1954,14 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		
 		if (file_type == FileType.DIRECTORY){
 			content_type = "inode/directory";
-			return;
 		}
-		
-		bool result_uncertain = false;
-		content_type = GLib.ContentType.guess(file_name, null, out result_uncertain);
-		if (result_uncertain){
-			content_type = "";
-			return;
+		else{
+			bool result_uncertain = false;
+			content_type = GLib.ContentType.guess(file_name, null, out result_uncertain);
+			if (result_uncertain){
+				content_type = "";
+				return;
+			}
 		}
 
 		set_content_type_desc();
