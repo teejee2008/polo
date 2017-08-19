@@ -2179,8 +2179,14 @@ public class FileViewList : Gtk.Box {
 		var previous_item = current_item;
 		current_item = item;
 		current_location = current_item.display_path;
-		current_location_is_remote = current_item.file_path.has_prefix(App.rclone_mounts);
 
+		if ((current_item is FileItemCloud) || current_item.is_remote){
+			current_location_is_remote = true;
+		}
+		else{
+			current_location_is_remote = false;
+		}
+		
 		//log_debug("1");
 		
 		clear_filter();
@@ -2246,222 +2252,6 @@ public class FileViewList : Gtk.Box {
 		}
 	}
 
-	// refresh treeview ------------------------
-
-	private TreeIter? append_item_to_treeview(FileItem item) {
-
-		TreeIter iter1;
-		store.append (out iter1, null);
-		set_iter_from_item(iter1, item, true);
-
-		//log_debug("Append iter: %s".printf(item.file_path));
-
-		return iter1;
-	}
-
-	private TreeIter? append_item_to_treeview_by_file_path(string file_path){
-
-		if (current_item == null) { return null; }
-
-		var item = current_item.add_child_from_disk(file_path, 1);
-
-		//log_debug("Append iter: %s".printf(file_path));
-
-		return append_item_to_treeview(item);
-	}
-
-	private void append_item_children_to_iter(ref TreeIter iter0, FileItem item, bool load_icon) {
-
-		// get list of children ------------------
-
-		var list = new ArrayList<FileItem>();
-		foreach(string key in item.children.keys) {
-			var child = item.children[key];
-			list.add(child);
-		}
-
-		// sort ------------------
-
-		list.sort((a, b) => {
-			if ((a.file_type == FileType.DIRECTORY) && (b.file_type != FileType.DIRECTORY)){
-				return -1;
-			}
-			else if ((a.file_type != FileType.DIRECTORY) && (b.file_type == FileType.DIRECTORY)){
-				return 1;
-			}
-			else{
-				return strcmp(a.file_name.down(), b.file_name.down());
-			}
-		});
-
-		// add new child iters -------------------------
-
-		foreach(var child in list) {
-			append_item_to_treeview_item(ref iter0, child, load_icon);
-		}
-	}
-
-	private TreeIter append_item_to_treeview_item(ref TreeIter iter0, FileItem item, bool load_icon) {
-
-		TreeIter iter1;
-
-		store.append (out iter1, iter0);
-		set_iter_from_item(iter1, item, load_icon);
-
-		return iter1;
-	}
-
-	private void remove_iter_children(ref TreeIter iter0){
-		TreeIter iter1;
-		var list = new Gee.ArrayList<TreeIter?>();
-		bool iterExists = store.iter_children (out iter1, iter0);
-		while (iterExists) {
-			list.add(iter1);
-			iterExists = store.iter_next (ref iter1);
-		}
-
-		foreach(var iter in list){
-			FileItem item;
-			store.get (iter, 0, out item, -1);
-			//log_debug("remove:%s".printf(item.file_path));
-
-			store.remove(ref iter);
-		}
-	}
-
-	private bool remove_iter_by_file_path(string file_path, TreeIter? iter0 = null){
-
-		if (store == null){ return true; }
-
-		bool found = false;
-		
-		TreeIter iter1;
-		bool iterExists = store.iter_children(out iter1, iter0);
-		while (iterExists) {
-
-			FileItem item;
-			store.get (iter1, 0, out item, -1);
-
-			if (item.file_path == file_path){
-				found = true;
-				store.remove(ref iter1);
-				log_debug("Removed iter: %s".printf(file_path));
-				break;
-			}
-
-			found = remove_iter_by_file_path(file_path, iter1);
-			if (found) { break; }
-		
-			iterExists = store.iter_next (ref iter1);
-		}
-
-		return found;
-	}
-
-	private void refresh_iter_by_file_path(string file_path){
-
-		if (store == null){ return; }
-
-		TreeIter iter0;
-		bool iterExists = store.iter_children(out iter0, null);
-		while (iterExists) {
-
-			FileItem item;
-			store.get (iter0, 0, out item, -1);
-
-			if (item.file_path == file_path){
-				item.query_file_info();
-				set_iter_from_item(iter0, item, true);
-				log_debug("Refreshed iter: %s".printf(file_path));
-				return;
-			}
-
-			iterExists = store.iter_next (ref iter0);
-		}
-
-		return;
-	}
-
-	private TreeIter set_iter_from_item(TreeIter iter1, FileItem item, bool load_icon) {
-
-		//log_debug("set_iter_from_item: %s".printf(item.file_path));
-
-		//log_debug("%s, %s, %s".printf(item.file_path,item.file_title, item.file_extension), true);
-		
-		Gdk.Pixbuf pixbuf = null;
-		ThumbTask task = null;
-		
-		if (load_icon){
-			
-			pixbuf = item.get_image(treemodel_icon_size, use_thumbs && !current_location_is_remote, use_transparency, use_emblems, out task);
-
-			if (use_thumbs && (task != null)){
-				thumbnail_update_is_required = true;
-				thumbnail_pending++;
-			}
-		}
-
-		string name = item.display_name;
-		if (App.iconview_trim_names && (name.length > 30)){
-			name = name[0:29] + "...";
-		}
-
-		store.set (iter1, FileViewColumn.ITEM, item); // used by list view
-		store.set (iter1, FileViewColumn.ICON, pixbuf); // used by all views
-		store.set (iter1, FileViewColumn.NAME, name); // only used by icon view
-		store.set (iter1, FileViewColumn.TILE_MARKUP, item.tile_markup); // only used by tile view
-		store.set (iter1, FileViewColumn.THUMBKEY, task); // used by thumbnail updater
-
-		//log_debug("set_iter_from_item: %s: ok".printf(item.file_path));
-
-		return iter1;
-	}
-
-	private bool filter_view (Gtk.TreeModel model, Gtk.TreeIter iter) {
-
-		// filter_view() may be called even for empty rows, so check if file_item is null
-
-		bool display = true;
-		FileItem? item;
-		model.get (iter, 0, out item, -1);
-
-		if (item == null){
-			display = false;
-		}
-		else{
-			if (!show_hidden_files && item.is_backup_or_hidden){
-				display = false;
-			}
-		}
-
-		if (filter_pattern.length > 0){
-			if (item.file_name.down().contains(filter_pattern) && display){
-				display = true;
-			}
-			else{
-				display = false;
-			}
-		}
-		
-		return display;
-	}
-
-	public void refilter(){
-		if (treefilter == null){ return; }
-		var list = get_selected_items();
-		treefilter.refilter();
-		select_items(list);
-	}
-
-	public void filter(string pattern){
-		filter_pattern = pattern;
-		refilter();
-	}
-
-	public void clear_filter(){
-		filter_pattern = "";
-		refilter();
-	}
 
 	// refresh  -----------------
 	
@@ -2853,6 +2643,224 @@ public class FileViewList : Gtk.Box {
 	private int get_adjusted_column_width_for_tileview(){
 		int base_width = 150;
 		return (base_width + (tileview_icon_size - 48));
+	}
+
+	// refresh treeview ------------------------
+
+	private TreeIter? append_item_to_treeview(FileItem item) {
+
+		TreeIter iter1;
+		store.append (out iter1, null);
+		set_iter_from_item(iter1, item, true);
+
+		//log_debug("Append iter: %s".printf(item.file_path));
+
+		return iter1;
+	}
+
+	private TreeIter? append_item_to_treeview_by_file_path(string file_path){
+
+		if (current_item == null) { return null; }
+
+		var item = current_item.add_child_from_disk(file_path, 1);
+
+		//log_debug("Append iter: %s".printf(file_path));
+
+		return append_item_to_treeview(item);
+	}
+
+	private TreeIter set_iter_from_item(TreeIter iter1, FileItem item, bool load_icon) {
+
+		//log_debug("set_iter_from_item: %s".printf(item.file_path));
+
+		//log_debug("%s, %s, %s".printf(item.file_path,item.file_title, item.file_extension), true);
+		
+		Gdk.Pixbuf pixbuf = null;
+		ThumbTask task = null;
+		
+		if (load_icon){
+			
+			pixbuf = item.get_image(treemodel_icon_size, use_thumbs && !current_location_is_remote, use_transparency, use_emblems, out task);
+
+			if (use_thumbs && (task != null)){
+				thumbnail_update_is_required = true;
+				thumbnail_pending++;
+			}
+		}
+
+		string name = item.display_name;
+		if (App.iconview_trim_names && (name.length > 30)){
+			name = name[0:29] + "...";
+		}
+
+		store.set (iter1, FileViewColumn.ITEM, item); // used by list view
+		store.set (iter1, FileViewColumn.ICON, pixbuf); // used by all views
+		store.set (iter1, FileViewColumn.NAME, name); // only used by icon view
+		store.set (iter1, FileViewColumn.TILE_MARKUP, item.tile_markup); // only used by tile view
+		store.set (iter1, FileViewColumn.THUMBKEY, task); // used by thumbnail updater
+
+		//log_debug("set_iter_from_item: %s: ok".printf(item.file_path));
+
+		return iter1;
+	}
+
+	private void append_item_children_to_iter(ref TreeIter iter0, FileItem item, bool load_icon) {
+
+		// get list of children ------------------
+
+		var list = new ArrayList<FileItem>();
+		foreach(string key in item.children.keys) {
+			var child = item.children[key];
+			list.add(child);
+		}
+
+		// sort ------------------
+
+		list.sort((a, b) => {
+			if ((a.file_type == FileType.DIRECTORY) && (b.file_type != FileType.DIRECTORY)){
+				return -1;
+			}
+			else if ((a.file_type != FileType.DIRECTORY) && (b.file_type == FileType.DIRECTORY)){
+				return 1;
+			}
+			else{
+				return strcmp(a.file_name.down(), b.file_name.down());
+			}
+		});
+
+		// add new child iters -------------------------
+
+		foreach(var child in list) {
+			append_item_to_treeview_item(ref iter0, child, load_icon);
+		}
+	}
+
+	private TreeIter append_item_to_treeview_item(ref TreeIter iter0, FileItem item, bool load_icon) {
+
+		TreeIter iter1;
+
+		store.append (out iter1, iter0);
+		set_iter_from_item(iter1, item, load_icon);
+
+		return iter1;
+	}
+
+	private void remove_iter_children(ref TreeIter iter0){
+		TreeIter iter1;
+		var list = new Gee.ArrayList<TreeIter?>();
+		bool iterExists = store.iter_children (out iter1, iter0);
+		while (iterExists) {
+			list.add(iter1);
+			iterExists = store.iter_next (ref iter1);
+		}
+
+		foreach(var iter in list){
+			FileItem item;
+			store.get (iter, 0, out item, -1);
+			//log_debug("remove:%s".printf(item.file_path));
+
+			store.remove(ref iter);
+		}
+	}
+
+	private bool remove_iter_by_file_path(string file_path, TreeIter? iter0 = null){
+
+		if (store == null){ return true; }
+
+		bool found = false;
+		
+		TreeIter iter1;
+		bool iterExists = store.iter_children(out iter1, iter0);
+		while (iterExists) {
+
+			FileItem item;
+			store.get (iter1, 0, out item, -1);
+
+			if (item.file_path == file_path){
+				found = true;
+				store.remove(ref iter1);
+				log_debug("Removed iter: %s".printf(file_path));
+				break;
+			}
+
+			found = remove_iter_by_file_path(file_path, iter1);
+			if (found) { break; }
+		
+			iterExists = store.iter_next (ref iter1);
+		}
+
+		return found;
+	}
+
+	private void refresh_iter_by_file_path(string file_path){
+
+		if (store == null){ return; }
+
+		TreeIter iter0;
+		bool iterExists = store.iter_children(out iter0, null);
+		while (iterExists) {
+
+			FileItem item;
+			store.get (iter0, 0, out item, -1);
+
+			if (item.file_path == file_path){
+				item.query_file_info();
+				set_iter_from_item(iter0, item, true);
+				log_debug("Refreshed iter: %s".printf(file_path));
+				return;
+			}
+
+			iterExists = store.iter_next (ref iter0);
+		}
+
+		return;
+	}
+
+
+	private bool filter_view (Gtk.TreeModel model, Gtk.TreeIter iter) {
+
+		// filter_view() may be called even for empty rows, so check if file_item is null
+
+		bool display = true;
+		FileItem? item;
+		model.get (iter, 0, out item, -1);
+
+		if (item == null){
+			display = false;
+		}
+		else{
+			if (!show_hidden_files && item.is_backup_or_hidden){
+				display = false;
+			}
+		}
+
+		if (filter_pattern.length > 0){
+			if (item.file_name.down().contains(filter_pattern) && display){
+				display = true;
+			}
+			else{
+				display = false;
+			}
+		}
+		
+		return display;
+	}
+
+	public void refilter(){
+		if (treefilter == null){ return; }
+		var list = get_selected_items();
+		treefilter.refilter();
+		select_items(list);
+	}
+
+	public void filter(string pattern){
+		filter_pattern = pattern;
+		refilter();
+	}
+
+	public void clear_filter(){
+		filter_pattern = "";
+		refilter();
 	}
 
 	// monitor directory ------------

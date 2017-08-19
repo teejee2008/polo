@@ -406,7 +406,6 @@ public class ProgressPanelVideoDownloadTask : ProgressPanel {
 		show_all();
 	}
 	
-
 	public override void execute(){
 
 		log_debug("ProgressPanelVideoDownloadTask: execute(%s)");
