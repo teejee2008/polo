@@ -154,11 +154,7 @@ public class FileViewList : Gtk.Box {
 
 		init_active_indicator_top();
 		
-		overlay = new Gtk.Overlay();
-		this.add(overlay);
-
-		contents = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		overlay.add(contents);
+		init_overlay();
 
 		init_treeview();
 
@@ -168,9 +164,57 @@ public class FileViewList : Gtk.Box {
 
 		connect_key_press_handler();
 
+		connect_file_context_menu();
+		
 		show_all();
 	}
 
+	private void init_overlay(){
+
+		/*
+		FileViewList (Box) > Overlay > add(contents) (Box)      |--> IconView
+		                                                        |--> TreeView
+		                             > add_overlay(hbox) (Box)
+		*/
+		
+		overlay = new Gtk.Overlay(); 
+		this.add(overlay);
+    
+		contents = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
+		overlay.add(contents);
+	}
+
+	private void connect_file_context_menu(){
+		
+		/*// connect signal for shift+F10
+        contents.popup_menu.connect(() => {
+			if (current_item == null) {
+				log_debug("current_item is NULL");
+				return false;
+			}
+			menu_file = new FileContextMenu(pane);
+			return menu_file.show_menu(null);
+		});
+
+        // connect signal for right-click
+		contents.button_press_event.connect(treeview_button_press_event);
+		* */
+
+		// connect signal for shift+F10
+        treeview.popup_menu.connect(() => {
+			if (current_item == null) {
+				log_debug("current_item is NULL");
+				return false;
+			}
+			menu_file = new FileContextMenu(pane);
+			return menu_file.show_menu(null);
+		});
+
+        // connect signal for right-click
+		treeview.button_press_event.connect(treeview_button_press_event);
+
+	}
+	
 	// treeview -----------------------------------
 	
 	private void init_treeview() {
@@ -243,16 +287,8 @@ public class FileViewList : Gtk.Box {
 			pane.statusbar.refresh_selection_counts();
 		});
 
-		// connect signal for shift+F10
-        treeview.popup_menu.connect(() => {
-			if (current_item == null) { return false; }
-			menu_file = new FileContextMenu(pane);
-			return menu_file.show_menu(null);
-		});
-
-        // connect signal for right-click
-		treeview.button_press_event.connect(treeview_button_press_event);
-
+		// context menu will be connected in connect_file_context_menu()
+		
 		// tooltip
 		treeview.has_tooltip = true;
 		treeview.query_tooltip.connect(treeview_query_tooltip);
@@ -380,6 +416,8 @@ public class FileViewList : Gtk.Box {
 
 	private bool treeview_button_press_event(Gtk.Widget w, Gdk.EventButton event){
 
+		log_debug("FileViewList: treeview_button_press_event()");
+		
 		window.active_pane = pane;
 
 		window.update_accelerators_for_active_pane();
@@ -408,7 +446,8 @@ public class FileViewList : Gtk.Box {
 	}
 
 	private void treeview_row_activated(TreePath path, TreeViewColumn? column){
-		log_debug("treeview_row_activated()");
+
+		log_debug("FileViewList: treeview_row_activated()");
 
 		TreeIter iter;
 		treefilter.get_iter_from_string(out iter, path.to_string());
@@ -420,6 +459,8 @@ public class FileViewList : Gtk.Box {
 
 	private void treeview_row_expanded(TreeIter iter, TreePath path){
 
+		log_debug("FileViewList: treeview_row_expanded()");
+		
 		gtk_set_busy(true, window);
 
 		treeview.row_expanded.disconnect(treeview_row_expanded);
@@ -469,6 +510,8 @@ public class FileViewList : Gtk.Box {
 	}
 
 	private void treeview_row_collapsed(TreeIter iter, TreePath path){
+
+		log_debug("FileViewList: treeview_row_collapsed()");
 		
 		treeview.row_collapsed.disconnect(treeview_row_collapsed);
 
@@ -3016,7 +3059,10 @@ public class FileViewList : Gtk.Box {
 		lbl_overlay = label;
 		
 		overlay.add_overlay(hbox);
-
+		overlay.set_overlay_pass_through(hbox, true);
+		overlay.set_overlay_pass_through(label, true);
+		//overlay.set_overlay_pass_through(hbox, true);
+		
 		hbox.show_all();
 
 		//changed();
@@ -3324,7 +3370,9 @@ public class FileViewList : Gtk.Box {
 		//treeview.columns_autosize();
 		//col_size.width = col_size.width + 10;
 		
-		while (!view_refresher_cancelled && (!foldersize_queried || !subfolders_queried)){
+		while (!foldersize_queried || !subfolders_queried){
+			
+			if (view_refresher_cancelled){ break; }
 			
 			sleep(1000);
 			redraw_views();
