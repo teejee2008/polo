@@ -282,4 +282,12 @@ public class TrashCan : FileItem {
 
 		return new DateTime.utc(year, month, day, hr, min, sec);
 	}
+
+	public static bool empty_trash(){
+		if (cmd_exists("gvfs-trash")){
+			int status = exec_sync("gvfs-trash --empty");
+			return (status == 0);
+		}
+		return false;
+	}
 }
