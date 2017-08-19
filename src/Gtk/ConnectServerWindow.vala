@@ -1114,7 +1114,7 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 
 		scheme = json_get_string(config, "scheme", scheme);
 		server = json_get_string(config, "server", server);
-		port = json_get_int(config, "port", port);
+		port = json_get_int_from_string(config, "port", port);
 		domain = json_get_string(config, "domain", domain);
 		username = json_get_string(config, "username", username);
 		//password = json_get_string(config, "password", password);

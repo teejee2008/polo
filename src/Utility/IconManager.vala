@@ -247,6 +247,8 @@ public class IconManager : GLib.Object {
 		var pixbuf_resized = add_overlay(pixbuf_empty, pixbuf_image);
 		
 		//log_debug("pixbuf_resized: %d, %d".printf(pixbuf_resized.width, pixbuf_resized.height));
+
+		copy_pixbuf_options(pixbuf_image, pixbuf_resized);
 		
         return pixbuf_resized;
     }
@@ -283,7 +285,7 @@ public class IconManager : GLib.Object {
 				// load without scaling
 				pixbuf = new Gdk.Pixbuf.from_file(file_path);
 				// pad to requested size
-				pixbuf = IconManager.resize_icon(pixbuf, icon_size);
+				pixbuf = resize_icon(pixbuf, icon_size);
 				// return
 				if (pixbuf != null){ return pixbuf; }
 			}
@@ -296,7 +298,7 @@ public class IconManager : GLib.Object {
 				// load with scaling - scale down to requested box
 				pixbuf = new Gdk.Pixbuf.from_file_at_scale(file_path, icon_size, icon_size, true);
 				// pad to requested size
-				pixbuf = IconManager.resize_icon(pixbuf, icon_size);
+				pixbuf = resize_icon(pixbuf, icon_size);
 				// return
 				if (pixbuf != null){ return pixbuf; }
 			}
@@ -306,6 +308,14 @@ public class IconManager : GLib.Object {
 		}
 		
 		return null;
+	}
+
+	public static void copy_pixbuf_options(Gdk.Pixbuf source, Gdk.Pixbuf target){
+
+		var map = source.get_options();
+		foreach(string key in map.get_keys()){
+			target.set_option(key, map[key]);
+		}
 	}
 
     public static Gdk.Pixbuf? generic_icon_image(int icon_size) {
