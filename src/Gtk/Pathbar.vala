@@ -631,7 +631,7 @@ public class Pathbar : Gtk.Box {
 		if (basepath.length == 0){
 			
 			// dropbox:/test
-			info = regex_match("""^(.*:\/*)""", file_uri);
+			info = regex_match("""^([^ \/]+:\/*)""", file_uri);
 			if (info != null){
 				basepath = info.fetch(1); // smb://server/share/
 				list.add(basepath);
