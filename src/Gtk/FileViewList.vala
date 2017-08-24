@@ -476,9 +476,9 @@ public class FileViewList : Gtk.Box {
 		// re-query and re-populate the expanded node (iter0)
 
 		item0.query_children(1);
-		set_iter_from_item(iter0, item0, true);
+		set_iter_from_item(iter0, item0, true, true);
 		remove_iter_children(ref iter0);
-		append_item_children_to_iter(ref iter0, item0, true);
+		append_item_children_to_iter(ref iter0, item0, true, true);
 
 		treeview.expand_row(path, false);
 		treeview.queue_draw();
@@ -494,7 +494,7 @@ public class FileViewList : Gtk.Box {
 			item1.query_children(1);
 			//set_iter_from_item(iter1, item1); // not needed
 			remove_iter_children(ref iter1);
-			append_item_children_to_iter(ref iter1, item1, false);
+			append_item_children_to_iter(ref iter1, item1, false, false);
 
 			iterExists = store.iter_next (ref iter1);
 		}
@@ -2370,7 +2370,7 @@ public class FileViewList : Gtk.Box {
 					 * this will make the node display expanders in treeview
 					 * we will repopulate this node correctly when user tries to expand it
 					 * */
-					append_item_to_treeview_item(ref iter0, item, false);
+					append_item_to_treeview_item(ref iter0, item, false, false);
 				}
 			}
 
@@ -2651,7 +2651,7 @@ public class FileViewList : Gtk.Box {
 
 		TreeIter iter1;
 		store.append (out iter1, null);
-		set_iter_from_item(iter1, item, true);
+		set_iter_from_item(iter1, item, true, true);
 
 		//log_debug("Append iter: %s".printf(item.file_path));
 
@@ -2669,7 +2669,7 @@ public class FileViewList : Gtk.Box {
 		return append_item_to_treeview(item);
 	}
 
-	private TreeIter set_iter_from_item(TreeIter iter1, FileItem item, bool load_icon) {
+	private TreeIter set_iter_from_item(TreeIter iter1, FileItem item, bool load_icon, bool load_thumb) {
 
 		//log_debug("set_iter_from_item: %s".printf(item.file_path));
 
@@ -2680,7 +2680,9 @@ public class FileViewList : Gtk.Box {
 		
 		if (load_icon){
 			
-			pixbuf = item.get_image(treemodel_icon_size, use_thumbs && !current_location_is_remote, use_transparency, use_emblems, out task);
+			pixbuf = item.get_image(treemodel_icon_size,
+				load_thumb && use_thumbs && !current_location_is_remote,
+				use_transparency, use_emblems, out task);
 
 			if (use_thumbs && (task != null)){
 				thumbnail_update_is_required = true;
@@ -2704,7 +2706,7 @@ public class FileViewList : Gtk.Box {
 		return iter1;
 	}
 
-	private void append_item_children_to_iter(ref TreeIter iter0, FileItem item, bool load_icon) {
+	private void append_item_children_to_iter(ref TreeIter iter0, FileItem item, bool load_icon, bool load_thumb) {
 
 		// get list of children ------------------
 
@@ -2731,16 +2733,16 @@ public class FileViewList : Gtk.Box {
 		// add new child iters -------------------------
 
 		foreach(var child in list) {
-			append_item_to_treeview_item(ref iter0, child, load_icon);
+			append_item_to_treeview_item(ref iter0, child, load_icon, load_thumb);
 		}
 	}
 
-	private TreeIter append_item_to_treeview_item(ref TreeIter iter0, FileItem item, bool load_icon) {
+	private TreeIter append_item_to_treeview_item(ref TreeIter iter0, FileItem item, bool load_icon, bool load_thumb) {
 
 		TreeIter iter1;
 
 		store.append (out iter1, iter0);
-		set_iter_from_item(iter1, item, load_icon);
+		set_iter_from_item(iter1, item, load_icon, load_thumb);
 
 		return iter1;
 	}
@@ -2805,7 +2807,7 @@ public class FileViewList : Gtk.Box {
 
 			if (item.file_path == file_path){
 				item.query_file_info();
-				set_iter_from_item(iter0, item, true);
+				set_iter_from_item(iter0, item, true, false);
 				log_debug("Refreshed iter: %s".printf(file_path));
 				return;
 			}
