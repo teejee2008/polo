@@ -192,7 +192,7 @@ namespace TeeJee.Misc {
 	}
 	
 	public bool dates_are_equal(DateTime? dt1, DateTime? dt2){
-		if ((dt1 == null)||(dt2 == null)){
+		if ((dt1 == null) || (dt2 == null)){
 			return false;
 		}
 		return Math.fabs(dt2.difference(dt1)) < (1 * TimeSpan.SECOND);
