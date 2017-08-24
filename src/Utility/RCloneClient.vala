@@ -46,10 +46,14 @@ public class RCloneClient : GLib.Object {
 		
 		config_file_path = path_combine(user_home, ".config/rclone/rclone.conf");
 
-		rclone_mounts = path_combine(user_home, ".config/rclone/rclone-mounts");
+		if (!file_exists(config_file_path)){
+			config_file_path = path_combine(user_home, ".rclone.conf");
+		}
+
+		rclone_mounts = path_combine(user_home, ".config/polo/rclone-mounts");
 		dir_create(rclone_mounts);
 		
-		rclone_cache = path_combine(user_home, ".config/rclone/polo-cache");
+		rclone_cache = path_combine(user_home, ".config/polo/rclone-cache");
 		dir_create(rclone_cache);
 		
 		accounts = new Gee.ArrayList<CloudAccount>();

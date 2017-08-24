@@ -903,7 +903,15 @@ public class MainWindow : Gtk.Window {
 			foreach(var tab in panel.tabs){
 
 				if (tab.is_dummy) { continue; }
-				//if (tab.pane.view.current_item == null) { continue; }
+				
+				if (tab.pane.view.current_item != null){
+					if (tab.pane.view.current_item is FileItemCloud){
+						continue;
+					}
+					else if (tab.pane.view.current_item.file_uri_scheme != "file"){
+						continue;
+					}
+				}
 
 				// tab
 				var node_tab = new Json.Object();
