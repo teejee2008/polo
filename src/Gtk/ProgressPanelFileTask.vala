@@ -62,20 +62,23 @@ public class ProgressPanelFileTask : ProgressPanel {
 		string txt = "";
 		switch(action_type){
 		case FileActionType.COPY:
-			txt = _("Copying items...");
+			txt = _("Copying ...");
 			break;
 		case FileActionType.CUT:
-			txt = _("Moving items...");
+			txt = _("Moving ...");
 			break;
 		case FileActionType.RESTORE:
-			txt = _("Restoring items...");
+			txt = _("Restoring ...");
 			break;
 		case FileActionType.TRASH:
-			txt = _("Moving items to trash...");
+			txt = _("Moving to Trash...");
+			break;
+		case FileActionType.TRASH_EMPTY:
+			txt = _("Emptying Trash...");
 			break;
 		case FileActionType.DELETE:
 		case FileActionType.DELETE_TRASHED:
-			txt = _("Deleting items...");
+			txt = _("Removing ...");
 			break;
 		case FileActionType.PASTE_SYMLINKS_AUTO:
 		case FileActionType.PASTE_SYMLINKS_ABSOLUTE:
@@ -237,7 +240,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 		case FileActionType.DELETE:
 		case FileActionType.DELETE_TRASHED:
 		case FileActionType.TRASH:
-
+		case FileActionType.TRASH_EMPTY:
 			start_task();
 			break;
 		}
@@ -278,6 +281,11 @@ public class ProgressPanelFileTask : ProgressPanel {
 		case FileActionType.TRASH:
 			log_debug("------------------------------------------%d".printf(items.size));
 			task.trash_items(source, items.to_array(), (Gtk.Window) window);
+			break;
+
+		case FileActionType.TRASH_EMPTY:
+			//log_debug("------------------------------------------%d".printf(items.size));
+			task.empty_trash();
 			break;
 		}
 
@@ -417,6 +425,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 		
 		switch (action_type){
 		case FileActionType.TRASH:
+		case FileActionType.TRASH_EMPTY:
 		case FileActionType.DELETE_TRASHED:
 		case FileActionType.RESTORE:
 			window.refresh_trash();

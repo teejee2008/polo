@@ -39,6 +39,7 @@ public enum FileActionType{
 	COPY,
 	PASTE,
 	TRASH,
+	TRASH_EMPTY,
 	DELETE,
 	DELETE_TRASHED,
 	RESTORE,

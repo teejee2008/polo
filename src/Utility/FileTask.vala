@@ -882,7 +882,45 @@ public class FileTask : GLib.Object {
 		remove_items(true);
 	}
 
-	// ---
+
+	public void empty_trash(){
+		
+		//action = send_to_trash ? "trash" : "delete";
+		
+		log_debug("FileTask: empty_trash()");
+
+		is_running = true;
+		init_task();
+
+		status = _("Emptying trash...");
+		timer = new GLib.Timer();
+		timer.start();
+
+		try {
+			// start thread
+			Thread.create<void> (empty_trash_thread, true);
+		}
+		catch (Error e) {
+			log_error ("FileTask: empty_trash_thread(): error");
+			log_error (e.message);
+		}
+	}
+	
+	public void empty_trash_thread(){
+
+		log_debug("FileTask: empty_trash_thread(): enter");
+		
+		TrashCan.empty_trash();
+
+		timer.stop();
+
+		log_debug("FileTask: empty_trash_thread(): exit");
+		is_running = false;
+
+		complete();
+	}
+	
+	// ----------------
 	
 	private void remove_items(bool send_to_trash){
 
