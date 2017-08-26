@@ -197,17 +197,17 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	public string compared_status = "";
 	public string compared_file_path = "";
 
-	public long file_count = 0;
-	public long dir_count = 0;
+	//public long file_count = 0;
+	//public long dir_count = 0;
 	public long hidden_count = 0;
 	public long file_count_total = 0;
 	public long dir_count_total = 0;
 	
-	public long item_count{
+	/*public long item_count{
 		get {
 			return (file_count + dir_count);
 		}
-	}
+	}*/
 
 	public long item_count_total{
 		get {
@@ -357,12 +357,101 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		return null;
 	}
 	
-	// properties --------------------------------------
+	// size and count ---------------
+
+	public int64 file_size {
+		get{
+			if (file_type == FileType.DIRECTORY){
+				int64 dir_size = 0;
+
+				if (query_children_async_is_running){
+					return 0;
+				}
+				
+				foreach(var child in children.values){
+					dir_size += child.file_size;
+				}
+				return dir_size;
+			}
+			else{
+				return _size;
+			}
+		}
+	}
+
+	public int64 item_count {
+		get{
+			if (file_type == FileType.DIRECTORY){
+				
+				if (query_children_async_is_running){
+					return 0;
+				}
+				return children.values.size;
+			}
+			else{
+				return 0;
+			}
+		}
+	}
+
+	public int64 file_count {
+		get{
+			if (file_type == FileType.DIRECTORY){
+				
+				int64 count = 0;
+
+				if (query_children_async_is_running){
+					return 0;
+				}
+				
+				foreach(var child in children.values){
+					if (child.is_directory){
+						count += 1;
+					}
+				}
+				return count;
+			}
+			else{
+				return 0;
+			}
+		}
+	}
+
+	public int64 dir_count {
+		get{
+			if (file_type == FileType.DIRECTORY){
+				
+				int64 count = 0;
+
+				if (query_children_async_is_running){
+					return 0;
+				}
+				
+				foreach(var child in children.values){
+					if (!child.is_directory){
+						count += 1;
+					}
+				}
+				return count;
+			}
+			else{
+				return 0;
+			}
+		}
+	}
 
 	protected int64 _size = -1;
 	public int64 size {
 		get{
 			return _size;
+		}
+	}
+
+	// don't use unless necessary -- used by TrashCan for setting size
+	public void set_size(int64 item_size){
+		_size = item_size;
+		if (is_directory){
+			dir_size_queried = true;
 		}
 	}
 
@@ -378,6 +467,46 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			return _size_compressed;
 		}
 	}
+
+	public string file_size_formatted {
+		owned get{
+
+			string txt = "";
+			
+			if (is_dummy) {
+				txt += "-";
+			}
+			else if (is_directory){
+				
+				if (dir_size_queried){
+					
+					txt += format_file_size(file_size);
+				}
+				else{
+					if (query_children_running){
+						txt += "~ ";
+					}
+					
+					if (item_count == 1){
+						txt += "%'lld %s".printf(item_count, _("item"));
+					}
+					else if (item_count > 1){
+						txt += "%'lld %s".printf(item_count, _("items"));
+					}
+					else{
+						txt += _("empty");
+					}
+				}
+			}
+			else {
+				txt += format_file_size(file_size);
+			}
+
+			return txt;
+		}
+	}
+
+	// name and path -----------------------
 
 	public string file_name {
 		owned get{
@@ -418,40 +547,13 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 	}
 
-	string _thumb_key = null;
+	protected string _thumb_key = null;
 	public string thumb_key {
 		get {
 			if (_thumb_key == null){
 				_thumb_key = string_checksum(file_uri);
 			}
 			return _thumb_key;
-		}
-	}
-
-	public string file_size_formatted {
-		owned get{
-			if (is_dummy) {
-				return "-";
-			}
-			else if (!is_directory){
-				return format_file_size(size);
-			}
-			else{
-				if (dir_size_queried || (size > 0)){
-					return format_file_size(size); // directory size will be available for trashed dirs
-				}
-				else{
-					if (item_count == 1){
-						return "%'lld %s".printf(item_count, _("item"));
-					}
-					else if (item_count > 1){
-						return "%'lld %s".printf(item_count, _("items"));
-					}
-					else{
-						return _("empty");
-					}
-				}
-			}
 		}
 	}
 
@@ -526,6 +628,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 	}
 
+	// helpers ---------------------
+	
 	public bool is_backup {
 		get{
 			return file_name.has_suffix("~");
@@ -1041,9 +1145,11 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 			try {
 
+				/*
 				item.file_count = 0;
 				item.dir_count = 0;
-
+				*/
+				
 				if (!item.can_read){ return item; }
 
 				if (depth == 0){ return item; }
@@ -1061,13 +1167,15 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 					}
 					
 					string child_path = path_combine(child_item_file_path, info.get_name());
-
+		
 					if (depth == 0){
+						/*
 						// count the item's children, do not add
 						if (info.get_file_type() == FileType.DIRECTORY){
 							item.dir_count++;
 						}
 						else{ item.file_count++; }
+						*/
 					}
 					else{
 						// add item's children from disk and drill down further
@@ -1178,6 +1286,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			// set relationships
 			item.parent = this;
 			this.children[item.file_name] = item;
+
+			//log_debug("cached child");
 		}
 		else{
 
@@ -1188,6 +1298,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			// set relationships
 			item.parent = this;
 			this.children[item.file_name] = item;
+
+			//log_debug("new child");
 		}
 
 		item.is_stale = false; // mark fresh
@@ -1201,22 +1313,10 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			item.archive_base_item = this.archive_base_item;
 		}
 
-		// copy unchanged
-		//item.trash_info_file = this.trash_info_file;
-		
-		//item.trash_deletion_date = this.trash_deletion_date;
-		//item.trash_original_path = this.trash_original_path;
-		//item.trash_data_file = this.trash_data_file;
-		
-		// modify
-		//if (this.is_trashed_item){
-		//	item.trash_original_path = path_combine(this.trash_original_path, item.file_name);
-		//	item.trash_data_file = path_combine(this.trash_data_file, item.file_name);
-		//}
-
 		bool item_was_queried = item.fileinfo_queried;
 		
-		// query file properties
+		// query file properties ------------
+		
 		if (item_query_file_info){
 			//log_debug("add_child: item_query_file_info");
 			//log_debug("add_child: query_file_info(): %s".printf(item.file_path));
@@ -1228,7 +1328,10 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 			//log_debug("add_child: regular file");
 
-			// set file sizes
+			// update item size -----------------------------------
+
+			//log_debug("add_child: item_size: %lld".printf(item_size));
+			
 			if (item_size > 0) {
 				item._size = item_size;
 			}
@@ -1239,8 +1342,13 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			if (item_size_compressed > 0) {
 				item._size_compressed = item_size_compressed;
 			}
+			else{
+				item._size_compressed = 0;
+			}
 
-			// update file counts
+			// update parent count -------------------------
+
+			/*
 			if (!existing_file){
 
 				// update this
@@ -1260,9 +1368,14 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 				//log_debug("updated dir counts: %s".printf(item_name));
 			}
+			*/
+			
+			// update parent size -------------------------
+			
+			if (!existing_file && (item_size > 0)){
 
-			if (!existing_file || !item_was_queried){
-
+				//log_debug("add_child: this._size += item_size: %lld".printf(item_size));
+				
 				// update this
 				this._size += item_size;
 				this._size_compressed += item_size_compressed;
@@ -1285,6 +1398,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 			if (!existing_file){
 
+				/*
 				// update this
 				this.dir_count++;
 				this.dir_count_total++;
@@ -1298,6 +1412,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 					//log_debug("dir_count_total += 1, %s".printf(temp.parent.dir_count_total));
 					temp = temp.parent;
 				}
+				*/
 
 				//log_debug("updated dir sizes: %s".printf(item_name));
 			}
@@ -1317,10 +1432,12 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			this.children.unset(child_name);
 
 			if (child.file_type == FileType.REGULAR) {
+				/*
 				//update file counts
 				this.file_count--;
 				this.file_count_total--;
-
+				*/
+				
 				//subtract child size
 				this._size -= child.size;
 				this._size_compressed -= child.size_compressed;
@@ -1337,10 +1454,12 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 				}
 			}
 			else {
+				/*
 				//update dir counts
 				this.dir_count--;
 				this.dir_count_total--;
-
+				*/
+				
 				//subtract child counts
 				this.file_count_total -= child.file_count_total;
 				this.dir_count_total -= child.dir_count_total;
@@ -1643,7 +1762,12 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		// no need to continue if not a directory
 		if (!is_directory) {
 			query_file_info();
+			query_children_running = false;
+			query_children_pending = false;
 			return;
+		}
+		else{
+			_size = 0; // initialize dir size
 		}
 
 		if (depth == 0){ return; } // incorrect method call
@@ -1668,37 +1792,12 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			file = File.new_for_uri(file_uri);
 		}
 
-		//if (is_trashed_item){
-		//	file = File.parse_name(trash_data_file);
-		//}
-
 		if (!file.query_exists()) {
 			log_error("FileItem: query_children(): file not found: %s".printf(file_path), true);
 			query_children_running = false;
+			query_children_pending = false;
 			return;
 		}
-
-		/*var cached = find_in_cache(display_path);
-		
-		if ((cached != null) && (cached.changed != null)){
-			
-			var cached_changed = cached.changed;
-			query_file_info();
-
-			if ((depth == 1) && dates_are_equal(changed, cached_changed)){
-				// the item's 'changed date' has not changed
-				// depth=1 so we are not interested in drilling further
-				this.children = cached.children; // set the children from cache
-				log_debug("FileItem: query_children: %s: depth=1 and no_change".printf(file_path), true);
-				query_children_running = false;
-				return;
-			}
-		}
-		else{
-			query_file_info();
-		}*/
-		
-		_size = 0; // initialize
 
 		query_file_info(); // read folder properties
 		
@@ -1725,6 +1824,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 				if (query_children_aborted) {
 					dir_size_queried = false;
 					query_children_running = false;
+					query_children_pending = false;
 					return;
 				}
 			}

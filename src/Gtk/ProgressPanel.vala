@@ -95,13 +95,27 @@ public abstract class ProgressPanel : Gtk.Box {
 	}
 
 	public void set_source(FileItem source_item){
+		
 		// create new object to avoid conflicts between multiple running operations
-		source = new FileItem.from_path(source_item.file_path);
+		
+		if (source_item is FileItemCloud){
+			source = new FileItemCloud.from_path_and_type(source_item.file_path, FileType.DIRECTORY);
+		}
+		else{
+			source = new FileItem.from_path(source_item.file_path);
+		}
 	}
 
 	public void set_destination(FileItem dest_item){
+		
 		// create new object to avoid conflicts between multiple running operations
-		destination = new FileItem.from_path(dest_item.file_path);
+		
+		if (dest_item is FileItemCloud){
+			destination = new FileItemCloud.from_path_and_type(dest_item.file_path, FileType.DIRECTORY);
+		}
+		else{
+			destination = new FileItem.from_path(dest_item.file_path);
+		}
 	}
 
 	public void set_pane(FileViewPane parent_pane){

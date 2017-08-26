@@ -203,8 +203,10 @@ public class MainWindow : Gtk.Window {
 
 		init_device_events();
 
-		show_all();
+		this.show_all(); // show_all() before hiding
 
+		this.hide(); // hide window while initialization completes
+		
 		tmr_init = Timeout.add(100, init_delayed);
 	}
 
@@ -216,8 +218,6 @@ public class MainWindow : Gtk.Window {
 		}
 
 		gtk_set_busy(true, this);
-
-		this.iconify();
 
 		initialize_views();
 
@@ -256,11 +256,8 @@ public class MainWindow : Gtk.Window {
 			view.start_thumbnail_updater();
 		}
 
-		this.deiconify();
+		this.show_all();
 		this.present();
-		//this.set_keep_above(true);
-		
-		//this.show_all();
 		gtk_do_events();
 		
 		return false;
@@ -268,6 +265,8 @@ public class MainWindow : Gtk.Window {
 
 	private void init_menubar(){
 
+		log_debug("MainWindow: init_menubar()");
+		
 		if (!App.headerbar_enabled){
 			
 			menubar = new MainMenuBar(false);
@@ -611,16 +610,19 @@ public class MainWindow : Gtk.Window {
 
 	// refresh
 
-	/*public void refresh_views(string dir_path){
-		log_debug("MainWindow: refresh_views(%s)".printf(dir_path));
+	public void refresh_remote_views(string dir_path){
+		
+		log_debug("MainWindow: refresh_remote_views(%s)".printf(dir_path));
+		
 		foreach(var view in views){
-			if ((view.current_item != null) && (view.current_item.file_path == dir_path)){
-				//view.query_items();
-				view.pane.refresh();
-			}
+			if (view.current_item == null) { continue; }
+			if (view.current_item is FileItemCloud == false) { continue; }
+			if (view.current_item.file_path != dir_path) { continue; }
+			
+			view.reload();
 		}
-		log_debug("MainWindow: refresh_views(): exit");
-	}*/
+		log_debug("MainWindow: refresh_remote_views(): exit");
+	}
 
 	public void refresh_trash(){
 		log_debug("MainWindow: refresh_trash()");

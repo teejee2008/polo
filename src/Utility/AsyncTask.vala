@@ -191,7 +191,7 @@ public abstract class AsyncTask : GLib.Object{
 				//log_msg("O: " + out_line);
 				if (!is_terminated && (out_line.length > 0)){
 
-					log_msg("ASYNC_O: " + out_line);
+					//log_msg("ASYNC_O: " + out_line);
 					
 					parse_stdout_line(out_line);
 					stdout_line_read(out_line); //signal
@@ -233,7 +233,7 @@ public abstract class AsyncTask : GLib.Object{
 					
 					error_msg += "%s\n".printf(err_line);
 
-					log_msg("ASYNC_E: " + err_line);
+					//log_msg("ASYNC_E: " + err_line);
 
 					parse_stderr_line(err_line);
 					stderr_line_read(err_line); //signal

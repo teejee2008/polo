@@ -53,6 +53,8 @@ public class ProgressPanelFileTask : ProgressPanel {
 		
 	public ProgressPanelFileTask(FileViewPane _pane, Gee.ArrayList<FileItem> _items, FileActionType _action){
 		base(_pane, _items, _action);
+
+		//task = new FileTask();
 	}
 
 	public override void init_ui(){ // TODO: make protected
@@ -161,7 +163,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 	public override void execute(){
 
 		task = new FileTask();
-		
+
 		log_debug("ProgressPanelFileTask: execute(%s): %d".printf(action_type.to_string(), items.size));
 
 		if (items.size == 0){
@@ -271,11 +273,11 @@ public class ProgressPanelFileTask : ProgressPanel {
 		case FileActionType.DELETE:
 		case FileActionType.DELETE_TRASHED:
 			log_debug("------------------------------------------%d".printf(items.size));
-			task.delete_items(items.to_array(), (Gtk.Window) window);
+			task.delete_items(source, items.to_array(), (Gtk.Window) window);
 			break;
 		case FileActionType.TRASH:
 			log_debug("------------------------------------------%d".printf(items.size));
-			task.trash_items(items.to_array(), (Gtk.Window) window);
+			task.trash_items(source, items.to_array(), (Gtk.Window) window);
 			break;
 		}
 
@@ -289,12 +291,13 @@ public class ProgressPanelFileTask : ProgressPanel {
 		if (task.is_running){
 			
 			log_debug("ProgressPanelFileTask: update_status()");
-			
-			
-			// refresh UI
+
 			lbl_status.label = task.status;
+
 			lbl_stats.label = task.stats;
+			
 			progressbar.fraction = task.progress;
+			
 			gtk_do_events();
 
 			// do events ~10 times/sec but refresh stats ~5 times/sec
@@ -418,6 +421,14 @@ public class ProgressPanelFileTask : ProgressPanel {
 		case FileActionType.RESTORE:
 			window.refresh_trash();
 			break;
+		}
+
+		if ((source != null) && (source is FileItemCloud)){
+			window.refresh_remote_views(source.file_path);
+		}
+
+		if ((destination != null) && (destination is FileItemCloud)){
+			window.refresh_remote_views(destination.file_path);
 		}
 
 		pane.file_operations.remove(this);

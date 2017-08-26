@@ -35,9 +35,11 @@ using TeeJee.System;
 using TeeJee.Misc;
 
 public class FileItemCloud : FileItem {
+
+	public string remote_name = "";
 	
 	public static string cache_dir;
-	
+	public DateTime? cached_date = null;
 	public string error_msg = "";
 
 	// contructors -------------------------------
@@ -73,13 +75,25 @@ public class FileItemCloud : FileItem {
 
 		if (file_path == null){ file_path = ""; }
 
-		file_uri_scheme = file.get_uri_scheme();
+		file_uri_scheme = file.get_uri_scheme(); // will be 'file'
+
+		remote_name = _file_path.split(":/")[0];
 		
 		//log_debug("");
 		//log_debug("file_path      : %s".printf(file_path));
 		//log_debug("file.get_path(): %s".printf(file.get_path()));
 		//log_debug("file_uri       : %s".printf(file_uri));
 		//log_debug("file_uri_scheme: %s".printf(file_uri_scheme));
+		//log_debug("remote_name: %s".printf(remote_name));
+	}
+
+	// static helpers ---------------------------------
+
+	public static bool is_remote_path(string _file_path){
+		if (!GvfsMounts.is_gvfs_uri(_file_path) && !_file_path.contains("://") && !_file_path.has_prefix("/")){
+			return true;
+		}
+		return false;
 	}
 	
 	// properties ------------------------------------------------
@@ -204,6 +218,7 @@ public class FileItemCloud : FileItem {
 				item._size = item_size;
 			}
 
+			/*
 			// update file counts
 			if (!existing_file){
 
@@ -213,7 +228,7 @@ public class FileItemCloud : FileItem {
 				if (item.is_backup_or_hidden){
 					this.hidden_count++;
 				}
-
+				
 				// update parents
 				var temp = this;
 				while (temp.parent != null) {
@@ -224,6 +239,7 @@ public class FileItemCloud : FileItem {
 
 				//log_debug("updated dir counts: %s".printf(item_name));
 			}
+			*/
 
 			if (!existing_file){
 
@@ -249,11 +265,14 @@ public class FileItemCloud : FileItem {
 
 			if (!existing_file){
 
+				/*
 				// update this
 				this.dir_count++;
 				this.dir_count_total++;
+				
 				//this.size += _size;
 				//size will be updated when children are added
+				*/
 
 				// update parents
 				var temp = this;
@@ -278,9 +297,9 @@ public class FileItemCloud : FileItem {
 		log_debug("FileItemCloud: save_to_cache()");
 		
 		if (file_exists(cached_file_path)){
-			var modtime = file_get_modified_date(cached_file_path);
+			var file_date = file_get_modified_date(cached_file_path);
 			var now = new GLib.DateTime.now_local();
-			if (modtime.add_minutes(10).compare(now) > 0){
+			if (file_date.add_minutes(60).compare(now) > 0){
 				return;
 			}
 		}
@@ -310,7 +329,14 @@ public class FileItemCloud : FileItem {
 	}
 	
 	private void read_children_from_cache(){
+
+		if (!file_exists(cached_file_path)){ return; }
 		
+		var file_date = file_get_modified_date(cached_file_path);
+		if (dates_are_equal(cached_date, file_date)){
+			return;
+		}
+
 		// mark existing children as stale -------------------
 		
 		foreach(var child in children.values){
@@ -349,12 +375,13 @@ public class FileItemCloud : FileItem {
 			var child_type = isdir ? FileType.DIRECTORY : FileType.REGULAR;
 			var child_modified = parse_date_time(modtime, true);
 			
-			var child = this.add_child(child_path, child_type, size, 0, false);
+			var child = (FileItemCloud) this.add_child(child_path, child_type, size, 0, false);
 			
 			child.set_content_type_from_extension();
 			child.modified = child_modified;
 			child.accessed = child_modified;
 			child.changed = child_modified;
+			child.set_permissions();
 			
 			if (isdir){
 				add_to_cache(child);
@@ -373,6 +400,24 @@ public class FileItemCloud : FileItem {
 			//log_debug("unset: key: %s, name: %s".printf(key, children[key].file_name));
 			children.unset(key);
 		}
+
+		// update timestamp
+
+		cached_date = file_date;
+	}
+
+	protected void set_permissions(){
+		
+		can_read = true;
+		can_write = true;
+		can_execute = false;
+		
+		can_trash = false;
+		can_delete = true;
+		can_rename = true;
+
+		owner_user = App.user_name;
+		owner_group = App.user_name;
 	}
 	
 }

@@ -33,7 +33,8 @@ public class RsyncTask : AsyncTask{
 	// settings
 	public string source_path = "";
 	public string dest_path = "";
-	
+
+	public bool dry_run = false;
 	public bool delete_extra = false;
 	public bool delete_after = false;
 	public bool delete_excluded = false;
@@ -178,6 +179,10 @@ public class RsyncTask : AsyncTask{
 			cmd += " --remove-source-files";
 		}
 
+		if (dry_run){
+			cmd += " --dry-run";
+		}
+
 		cmd += " --force"; // allow deletion of non-empty directories
 
 		//cmd += " --numeric-ids";
@@ -208,6 +213,11 @@ public class RsyncTask : AsyncTask{
 		foreach(string pattern in exclude_list){
 			txt += "%s\n".printf(pattern);
 		}
+
+		log_debug(string.nfill(80,'-'));
+		log_debug("Exclude Patterns:\n%s".printf(txt));
+		log_debug(string.nfill(80,'-'));
+		
 		if (txt.length > 0){
 			exclude_from_file = path_combine(working_dir, "filter.list");
 			file_write(exclude_from_file, txt);
@@ -231,7 +241,7 @@ public class RsyncTask : AsyncTask{
 		cmd += " '%s/'".printf(escape_single_quote(source_path));
 
 		cmd += " '%s/'".printf(escape_single_quote(dest_path));
-		
+
 		return cmd;
 	}
 
@@ -461,7 +471,7 @@ public class RsyncTask : AsyncTask{
 			return;
 		}
 		
-		update_progress_parse_console_output(err_line);
+		//update_progress_parse_console_output(err_line);
 	}
 
 	public bool update_progress_parse_console_output (string line) {
@@ -571,4 +581,34 @@ public class RsyncTask : AsyncTask{
 		}
 		return -1;
 	}
+
+	public string stats{
+		owned get {
+
+			string txt = "";
+
+			txt += "%s".printf(format_file_size(prg_bytes));
+
+			if (prg_bytes_total > 0){
+				txt += " / %s".printf(format_file_size(prg_bytes_total));
+			}
+
+			txt += " %s".printf(_("transferred"));
+			
+			txt += " (%.0f%%),".printf(progress * 100.0);
+
+			txt += " %s,".printf(rate);
+
+			txt += " %s elapsed,".printf(stat_time_elapsed);
+
+			txt += " %s remaining".printf(stat_time_remaining);
+
+			return txt;
+		}
+	}
 }
+
+/*
+Usage
+
+*/

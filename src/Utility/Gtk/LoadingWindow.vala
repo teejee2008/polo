@@ -50,7 +50,7 @@ public class LoadingWindow : Gtk.Window {
 		this.set_skip_taskbar_hint(true);
 		this.set_skip_pager_hint(true);
 
-		this.window_position = WindowPosition.CENTER_ON_PARENT;
+		this.window_position = WindowPosition.CENTER;
 		this.icon = get_app_icon(16);
 		this.resizable = false;
 		this.deletable = false;

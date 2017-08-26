@@ -100,7 +100,7 @@ public class GvfsMounts: GLib.Object {
 	}
 
 	public static bool is_gvfs_uri(string uri){
-		var match = regex_match("""^(file|trash|mtp|ftp|sftp|ssh|smb):\/\/""", uri);
+		var match = regex_match("""^(file|trash|computer|network|recent|mtp|ftp|sftp|ssh|smb):\/\/""", uri);
 		return (match != null);
 	}
 	

@@ -1073,7 +1073,7 @@ namespace TeeJee.FileSystem{
 		int64 unit_t = binary_units ? 1024 * unit_g : 1000 * unit_g;
 
 		string txt = "";
-		
+
 		if ((size > unit_t) && ((unit.length == 0) || (unit == "t"))){
 			txt += ("%%'0.%df".printf(decimals)).printf(size / (1.0 * unit_t));
 			if (show_units){

@@ -259,6 +259,8 @@ public class TrashCan : FileItem {
 
 		log_debug("item: %s, %s".printf(orig_path, format_file_size(trash_size)));
 
+		item.set_size(trash_size);
+
 		this.trash_can_size += trash_size;
 		//log_debug("trash_can_size += %lld".printf(trash_size));
 	}
