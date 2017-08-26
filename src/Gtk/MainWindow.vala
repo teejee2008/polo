@@ -217,6 +217,8 @@ public class MainWindow : Gtk.Window {
 
 		gtk_set_busy(true, this);
 
+		this.iconify();
+
 		initialize_views();
 
 		headerbar.refresh();
@@ -254,6 +256,13 @@ public class MainWindow : Gtk.Window {
 			view.start_thumbnail_updater();
 		}
 
+		this.deiconify();
+		this.present();
+		//this.set_keep_above(true);
+		
+		//this.show_all();
+		gtk_do_events();
+		
 		return false;
 	}
 
