@@ -192,6 +192,8 @@ public class Statusbar : Gtk.Box {
 		ebox_count.add(lbl_hidden_count);
 		add(ebox_count);
 
+		ebox_count.set_tooltip_text(_("Show hidden items"));
+
 		label = new Gtk.Label(_("hidden"));
 		label.xalign = 0.0f;
 		label.set_use_markup(true);

@@ -209,7 +209,6 @@ public class LayoutPanel : Gtk.Box {
 		return tab;
 	}
 
-	
 	public TermBox run_script_in_new_terminal_tab(string command, string desc){
 		
 		var tab = add_new_terminal_tab();

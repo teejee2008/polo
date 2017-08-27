@@ -3412,12 +3412,12 @@ public class FileViewList : Gtk.Box {
 			
 			sleep(1000);
 			log_debug("In loop");
-			if (query_subfolders_running){
-				redraw_views();
-			}
-			else{
+			//if (query_subfolders_running){
+			//	redraw_views();
+			//}
+			//else{
 				gtk_do_events();
-			}
+			//}
 		}
 
 		// finish --------------------------
@@ -4233,17 +4233,9 @@ public class FileViewList : Gtk.Box {
 		}
 
 		if (current_item.is_trash && delete_all){
-			// try the faster empty_trash() method
-			bool ok = TrashCan.empty_trash();
-			if (ok){
-				window.refresh_trash();
-				return;
-			}
+			action_type = FileActionType.TRASH_EMPTY;
 		}
-		else{
-			// continue manual deletion
-		}
-	
+
 		var action = new ProgressPanelFileTask(pane, list, action_type);
 		action.set_source(current_item);
 		pane.file_operations.add(action);

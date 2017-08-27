@@ -1346,8 +1346,16 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 				item._size_compressed = 0;
 			}
 
-			// update parent count -------------------------
+			// update hidden count -------------------------
 
+			if (!existing_file){
+				if (item.is_backup_or_hidden){
+					this.hidden_count++;
+				}
+			}
+
+			// update parent count -------------------------
+			
 			/*
 			if (!existing_file){
 
