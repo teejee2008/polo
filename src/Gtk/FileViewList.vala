@@ -2149,12 +2149,12 @@ public class FileViewList : Gtk.Box {
 			}
 			else if (dir_exists(current_location)){
 				item = new FileItem.from_path_and_type(current_location, FileType.DIRECTORY, true);
-				//FileItem.add_to_cache(item);
+				FileItem.add_to_cache(item);
 				log_debug("created file item: %s".printf(current_location));
 			}
 			else if (uri_exists(current_location)){
 				item = new FileItem.from_path_and_type(current_location, FileType.DIRECTORY, true);
-				//FileItem.add_to_cache(item);
+				FileItem.add_to_cache(item);
 				log_debug("created file item: %s".printf(current_location));
 			}
 			else{
