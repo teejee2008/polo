@@ -3433,12 +3433,11 @@ public class FileViewList : Gtk.Box {
 			
 			sleep(1000);
 			log_debug("In loop");
-			//if (query_subfolders_running){
-			redraw_views();
-			//}
-			//else{
-				//gtk_do_events();
-			//}
+
+			// no need to refresh periodically when session is being restored
+			if (window.window_is_ready){
+				redraw_views();
+			}
 		}
 
 		// finish --------------------------
@@ -3447,13 +3446,6 @@ public class FileViewList : Gtk.Box {
 			sleep(1000);
 			redraw_views();
 		}
-
-		// reset if cancelled -----------------
-		
-		//if (view_refresher_cancelled) {
-		//	query_foldersize_running = false;
-		//	query_subfolders_running = false;
-		//}
 
 		pane.statusbar.hide_spinner();
 		window.statusbar.hide_spinner();

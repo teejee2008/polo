@@ -1069,7 +1069,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 			// add item
 			item = this.add_child(child_item_file_path, item_file_type, 0, 0, true);
-
+			
 			// check if directory and continue ---------------
 			
 			if (!item.is_directory) {
@@ -1084,7 +1084,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 				if (depth == 0){ return item; }
 
-				//log_debug("enumerating children");
+				//log_debug("add_child_from_disk(): enumerate_children");
 				
 				enumerator = file.enumerate_children ("%s,%s".printf(FileAttribute.STANDARD_NAME,FileAttribute.STANDARD_TYPE), 0);
 				
@@ -1637,8 +1637,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			item_count = 0;
 			file_count = 0;
 			dir_count = 0;
-			
-			//children.clear(); // do not clear
 
 			//log_debug("FileItem: query_children(): enumerate_children");
 
@@ -1685,8 +1683,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 			if (depth < 0){
 				get_dir_size_recursively(true);
-				//dir_size_queried = true;
-				//log_debug("FileItem: query_children(): get_dir_size: done");
 			}
 		}
 		catch (Error e) {
@@ -1754,6 +1750,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	public void read_hidden_list(){
 
 		hidden_list = new Gee.ArrayList<string>();
+
+		if (is_remote){ return; }
 
 		string hidden_file = path_combine(file_path, ".hidden");
 

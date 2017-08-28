@@ -190,13 +190,6 @@ public class Sidebar : Gtk.Box {
 
 			log_debug("sidebar: bookmark_activated: %s".printf(item.bookmark.path));
 
-			if (item.bookmark.path.length > 0){
-				pane.view.set_view_path(item.bookmark.path);
-			}
-			else{
-				pane.view.set_view_path(item.bookmark.uri);
-			}
-			
 			if (popup){
 				popover.hide();
 				//window.sidebar.refresh(); // not needed
@@ -204,7 +197,14 @@ public class Sidebar : Gtk.Box {
 			else{
 				//refresh(); // not needed
 			}
-
+			
+			if (item.bookmark.path.length > 0){
+				pane.view.set_view_path(item.bookmark.path);
+			}
+			else{
+				pane.view.set_view_path(item.bookmark.uri);
+			}
+			
 			break;
 
 		case SidebarItemType.BOOKMARK_ACTION_ADD:
