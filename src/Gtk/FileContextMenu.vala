@@ -1011,7 +1011,8 @@ public class FileContextMenu : Gtk.Menu {
 			view.delete_items();
 		});
 
-		menu_item.sensitive = (selected_items.size > 0) && selected_item.can_delete
+		menu_item.sensitive = (selected_items.size > 0)
+			&& (selected_item.can_delete || selected_item.is_remote)
 			&& (!selected_item.is_trashed_item || ((selected_item.parent != null) && selected_item.parent.is_trash));
 	}
 

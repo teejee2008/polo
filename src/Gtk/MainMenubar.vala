@@ -603,6 +603,9 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		string key = "Delete";
 
 		context_normal.connect(()=>{
+			if ((view.current_item != null) && (view.current_item.is_remote)){
+				return;
+			}
 			item.sensitive = true;
 			add_action_accel(item, key);
 		});
@@ -643,6 +646,10 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		context_normal.connect(()=>{
 			item.sensitive = true;
 			add_action_accel(item, key);
+
+			if ((view.current_item != null) && (view.current_item.is_remote)){
+				add_action_accel(item, "Delete");
+			}
 		});
 
 		context_trash.connect(()=>{
