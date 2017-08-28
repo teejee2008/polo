@@ -431,7 +431,7 @@ public class FileTask : GLib.Object {
 					var conflict = new FileConflictItem(src_item, dest_item, source, destination);
 					conflicts[src_item.file_path] = conflict;
 
-					copy_list[src_item.file_path] = new FileCopyItem(src_item.file_path, dest_item.file_path, src_item.size);
+					copy_list[src_item.file_path] = new FileCopyItem(src_item.file_path, dest_item.file_path, src_item.file_size);
 				}
 				else{
 
@@ -456,7 +456,7 @@ public class FileTask : GLib.Object {
 				var dest_item_path = path_combine(dest_dir.file_path, dest_item_name);
 				
 				if (dry_run){
-					copy_list[src_item.file_path] = new FileCopyItem(src_item.file_path, dest_item_path, src_item.size);
+					copy_list[src_item.file_path] = new FileCopyItem(src_item.file_path, dest_item_path, src_item.file_size);
 				}
 				else{
 					return copy_file(src_item.file_path, dest_item_path, move);
@@ -576,7 +576,7 @@ public class FileTask : GLib.Object {
 			if (!get_replace_action(con.source_item, con.dest_item)){
 				var item = con.source_item;
 				copy_list.unset(con.source_item.file_path);
-				bytes_batch_total -= item.size;
+				bytes_batch_total -= item.file_size;
 				count_batch_total -= 1;
 
 				if (rsync != null){
@@ -1004,7 +1004,7 @@ public class FileTask : GLib.Object {
 			log_debug("trash: %s".printf(item.file_path));
 			
 			bool ok = file_trash(item.file_path, null); // pass window=null to avoid weird XWindow issue
-			bytes_completed_files += item.size;
+			bytes_completed_files += item.file_size;
 			count_batch_completed += 1;
 			return ok; 
 		}
@@ -1019,7 +1019,7 @@ public class FileTask : GLib.Object {
 				aborted = true;
 			}
 			else{
-				bytes_completed_files += item.size;
+				bytes_completed_files += item.file_size;
 				count_batch_completed += 1;
 				log_debug("delete: %s".printf(item.file_path));
 			}
@@ -1129,7 +1129,7 @@ public class FileTask : GLib.Object {
 
 					_stats = "%'lld items (%s), %s elapsed".printf(
 						count_batch_total + item.file_count_total + item.dir_count_total,
-						format_file_size(bytes_batch_total + item.size),
+						format_file_size(bytes_batch_total + item.file_size),
 						stat_time_elapsed
 						);
 
@@ -1168,9 +1168,6 @@ public class FileTask : GLib.Object {
 		
 		log_debug("FileTask: calculate_dirsize_async(): %d".printf(items.length));
 
-		calculate_dirsize_is_running = true;
-		calculate_dirsize_aborted = false;
-
 		foreach(var item in items){
 			if (item.is_directory){
 				item.query_children_pending = true;
@@ -1179,6 +1176,8 @@ public class FileTask : GLib.Object {
 		
 		try {
 			//start thread
+			calculate_dirsize_is_running = true;
+			calculate_dirsize_aborted = false;
 			Thread.create<void> (calculate_dirsize_async_thread, true);
 			//Thread<void*> thread = new Thread<void*>.try("", calculate_dirsize_async_thread);
 		}
@@ -1193,7 +1192,7 @@ public class FileTask : GLib.Object {
 		log_debug("FileTask: calculate_dirsize_async_thread()");
 
 		foreach(var item in items){
-			if (aborted){ break; }
+			if (calculate_dirsize_aborted){ break; }
 			if (item.is_directory){
 				item.query_children();
 				//item.query_children_pending = false;

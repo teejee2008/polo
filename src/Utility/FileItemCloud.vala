@@ -62,6 +62,8 @@ public class FileItemCloud : FileItem {
 	
 	private void resolve_file_path(string _file_path){
 
+		GLib.File file;
+		
 		if (_file_path.contains("://")){
 			file_uri = _file_path;
 			file = File.new_for_uri(file_uri);
@@ -126,7 +128,7 @@ public class FileItemCloud : FileItem {
 	
 		if (depth < 0){
 			// we are querying everything under this directory, so the directory size will be accurate; set flag for this
-			dir_size_queried = true;
+			//size_queried = true;
 			//log_debug("dir_size_queried: %s".printf(this.file_name));
 		}
 		
@@ -161,7 +163,7 @@ public class FileItemCloud : FileItem {
 		log_debug("FileItemCloud: query_children_async_thread()");
 		query_children(-1); // always add to cache
 		query_children_async_is_running = false;
-		query_children_aborted = false; // reset
+		//query_children_aborted = false; // reset
 	}
 	
 	public override FileItem add_child(string item_file_path, FileType item_file_type, int64 item_size, 
@@ -188,14 +190,14 @@ public class FileItemCloud : FileItem {
 
 			//log_debug("existing child, queried: %s".printf(item.fileinfo_queried.to_string()));
 		}
-		else if (cache.has_key(item_file_path) && (cache[item_file_path].file_path == item_file_path)){
+		/*else if (cache.has_key(item_file_path) && (cache[item_file_path].file_path == item_file_path)){
 			
 			item = (FileItemCloud) cache[item_file_path];
 
 			// set relationships
 			item.parent = this;
 			this.children[item.file_name] = item;
-		}
+		}*/
 		else{
 
 			if (item == null){
@@ -213,81 +215,20 @@ public class FileItemCloud : FileItem {
 
 			//log_debug("add_child: regular file");
 
-			// set file sizes
-			if (item_size > 0) {
-				item._size = item_size;
-			}
+			item.file_size = item_size;
 
-			/*
-			// update file counts
+			// update hidden count -------------------------
+
 			if (!existing_file){
-
-				// update this
-				this.file_count++;
-				this.file_count_total++;
 				if (item.is_backup_or_hidden){
 					this.hidden_count++;
 				}
-				
-				// update parents
-				var temp = this;
-				while (temp.parent != null) {
-					temp.parent.file_count_total++;
-					//log_debug("file_count_total += 1, %s".printf(temp.parent.file_count_total));
-					temp = (FileItemCloud) temp.parent;
-				}
-
-				//log_debug("updated dir counts: %s".printf(item_name));
-			}
-			*/
-
-			if (!existing_file){
-
-				// update this
-				this._size += item_size;
-				this._size_compressed += item_size_compressed;
-
-				// update parents
-				var temp = this;
-				while (temp.parent != null) {
-					temp.parent._size += item_size;
-					temp.parent._size_compressed += item_size_compressed;
-					//log_debug("size += %lld, %s".printf(item_size, temp.parent.file_path));
-					temp = (FileItemCloud) temp.parent;
-				}
-
-				//log_debug("updated dir sizes: %s".printf(item_name));
 			}
 		}
 		else if (item_file_type == FileType.DIRECTORY) {
 
 			//log_debug("add_child: directory");
-
-			if (!existing_file){
-
-				/*
-				// update this
-				this.dir_count++;
-				this.dir_count_total++;
-				
-				//this.size += _size;
-				//size will be updated when children are added
-				*/
-
-				// update parents
-				var temp = this;
-				while (temp.parent != null) {
-					temp.parent.dir_count_total++;
-					//log_debug("dir_count_total += 1, %s".printf(temp.parent.dir_count_total));
-					temp = (FileItemCloud) temp.parent;
-				}
-
-				//log_debug("updated dir sizes: %s".printf(item_name));
-			}
 		}
-
-		//log_debug("add_child: finished: fc=%lld dc=%lld path=%s".printf(
-		//	file_count, dir_count, item_file_path));
 
 		return item;
 	}

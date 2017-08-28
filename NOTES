@@ -1,11 +1,16 @@
 
 Caching for FileItem objects
 -------------------------------
-All FileItem objects that are directories are cached. This allows the path to be resolved to a FileItem object when user types a path in the pathbar. Children will be queried everytime by calling query_children(). Existing child objects will be reused instead of creating new child objects.
 
-There is no use of caching FileItem objects that are files. query_file_info() is the only method that takes time while creating a new object, and it needs to be queried everytime to determine if the file is stale.
+FileItem.add_to_cache() should be used for all virtual files and directories (Trash, Archive, Cloud, etc) so that FileViewList can map paths to objects. Path is resolved to a FileItem object using the cache when user types a path in the pathbar. Children will be queried everytime by calling query_children(). Existing child objects will be reused instead of creating new child objects.
 
-There is a significant delay in loading thumbnail files from disk. Icons and thumbnails for FileItem objects are cached in memory (using class IconCache) to improve performance. Following parameters are used as key: path, changed timestamp, icon size, load_thumbnail, use_transparency, use_emblems.
+There is no use of caching FileItem objects that are local files. query_file_info() is the only method that takes time while creating a new object, and it needs to be queried everytime to determine if file is stale. FileItem.query_children() always reuses file and directory objects attached to the main directory object, so there is no need to add children to cache.
+
+This caching is necessary to keep memory use under control. Without this, every folder refresh will cause memory use to keep increasing.
+
+IconCache
+------------
+There is a significant delay in loading thumbnail files from disk. Icons and thumbnails for FileItem objects are cached in memory (using class IconCache) to improve performance. Following parameters are used as key to identify objects uniquely: path, changed timestamp, icon size, load_thumbnail, use_transparency, use_emblems.
 
 Archives
 ------------------------

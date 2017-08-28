@@ -182,11 +182,11 @@ public class PropertiesWindow : Gtk.Window {
 
 		// size -------------
 		
-		if (file_item.size > -1){
+		if (file_item.file_size > -1){
 
 			txt = "%s (%'ld bytes)".printf(
-				format_file_size(file_item.size),
-				file_item.size
+				format_file_size(file_item.file_size),
+				file_item.file_size
 			);
 
 			add_property(vbox, _("Size"), txt);
@@ -258,11 +258,11 @@ public class PropertiesWindow : Gtk.Window {
 
 			// unpacked ----------
 			
-			if (archive.size > 0){
+			if (archive.file_size > 0){
 
 				txt = "%s (%'ld bytes)".printf(
-					format_file_size(archive.size),
-					archive.size
+					format_file_size(archive.file_size),
+					archive.file_size
 				);
 
 				add_property(vbox, _("Unpacked"), txt);
@@ -390,7 +390,7 @@ public class PropertiesWindow : Gtk.Window {
 	}
 
 	private bool area_archive_draw(Cairo.Context context) {
-		double ratio = (file_item.archive_size * 1.0) / file_item.size;
+		double ratio = (file_item.archive_size * 1.0) / file_item.file_size;
 
 		var color_blue_100 = Gdk.RGBA();
 		color_blue_100.parse("#BBDEFB");

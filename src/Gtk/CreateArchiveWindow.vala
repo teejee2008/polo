@@ -237,7 +237,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 
 		archive.update_size_from_children();
 
-		log_debug("archive.size=%s".printf(archive.size_formatted));
+		log_debug("archive.size=%s".printf(archive.file_size_formatted));
 		
 		add_files_thread_is_running = false;
 		

@@ -454,6 +454,8 @@ public class FileViewList : Gtk.Box {
 		FileItem item;
 		treefilter.get (iter, 0, out item, -1);
 
+		//log_debug("query_children_running: %s".printf(item.query_children_running.to_string()));
+
 		open(item, null);
 	}
 
@@ -1387,10 +1389,10 @@ public class FileViewList : Gtk.Box {
 				}
 				
 				if (sort_column_desc) {
-					return -1 * ((int)(a.size - b.size));
+					return -1 * ((int)(a.file_size - b.file_size));
 				}
 				else {
-					return ((int)(a.size - b.size));
+					return ((int)(a.file_size - b.file_size));
 				}
 			});
 			break;
@@ -1686,7 +1688,7 @@ public class FileViewList : Gtk.Box {
 
 	private void sort(){
 		update_column_headers();
-		refresh();
+		refresh(false, false);
 	}
 	
 	private void tv_header_clicked(Gtk.TreeViewColumn tv_column){
@@ -2092,7 +2094,7 @@ public class FileViewList : Gtk.Box {
 			view_mode_user = _view_mode;
 		}
 
-		refresh(false);
+		refresh(false, false);
 	}
 
 	public ViewMode get_view_mode(){
@@ -2149,12 +2151,10 @@ public class FileViewList : Gtk.Box {
 			}
 			else if (dir_exists(current_location)){
 				item = new FileItem.from_path_and_type(current_location, FileType.DIRECTORY, true);
-				FileItem.add_to_cache(item);
 				log_debug("created file item: %s".printf(current_location));
 			}
 			else if (uri_exists(current_location)){
 				item = new FileItem.from_path_and_type(current_location, FileType.DIRECTORY, true);
-				FileItem.add_to_cache(item);
 				log_debug("created file item: %s".printf(current_location));
 			}
 			else{
@@ -2175,8 +2175,8 @@ public class FileViewList : Gtk.Box {
 
 		log_trace("view_changed: %s ------------------------".printf(item.file_path));
 
-		//log_debug("0");
-		
+		FileItem.add_to_cache(item);
+
 		var previous_item = current_item;
 		current_item = item;
 		current_location = current_item.display_path;
@@ -2187,9 +2187,7 @@ public class FileViewList : Gtk.Box {
 		else{
 			current_location_is_remote = false;
 		}
-		
-		//log_debug("1");
-		
+
 		clear_filter();
 		pane.selection_bar.close_panel(true); // force
 
@@ -2200,35 +2198,26 @@ public class FileViewList : Gtk.Box {
 		
 		pane.pathbar.refresh(); // update pathbar before starting async query
 		
-		query_subfolders_aborted = true; // cancel any running threads
+		//query_items();
 		
-		query_items();
-		
-		/*if (!query_items()){
-			// do not change view
-			current_item = previous_item;
-			current_location = previous_item.display_path;
-			return previous_item;
-		}*/
+		//log_debug("FileViewList: set_view_item(): query_items(): done");
 
-		log_debug("FileViewList: set_view_item(): query_items(): done");
-
-		set_view_mode_for_location();
+		//set_view_mode_for_location();
 
 		//view_refresher_cancelled = true;
 		
-		refresh(false); // do not requery
+		refresh(true, true); // requery
 
 		set_columns_for_special_locations();
 
 		window.save_session();
 
 		log_debug("FileViewList: set_view_item : done ----------------------------------------------------");
-		
+
 		return current_item;
 	}
 
-	private void set_view_mode_for_location(){
+	/*private void set_view_mode_for_location(){
 
 		if (current_item == null){ return; }
 		
@@ -2245,7 +2234,7 @@ public class FileViewList : Gtk.Box {
 		}
 
 		//log_debug("view_mode: %s, %s".printf(view_mode.to_string(), view_mode_user.to_string()));
-	}
+	}*/
 
 	private void set_columns_for_special_locations(){
 		if (current_item.file_uri_scheme == "trash"){
@@ -2254,9 +2243,9 @@ public class FileViewList : Gtk.Box {
 	}
 
 
-	// refresh  -----------------
+	// refresh  ---------------------------------------
 	
-	public void refresh(bool requery = false) {
+	public void refresh(bool requery, bool requery_subfolders) {
 
 		log_debug("FileViewList: refresh(): %s".printf(requery.to_string()));
 
@@ -2307,6 +2296,10 @@ public class FileViewList : Gtk.Box {
 		}
 
 		changed(); //informs FileViewPane to update other components like statusbar, etc
+
+		if (requery_subfolders){ 
+			query_subfolders();
+		}
 	}
 
 	public void refresh_treeview() {
@@ -2499,9 +2492,11 @@ public class FileViewList : Gtk.Box {
 		log_debug("action.refresh_hidden()");
 		pane.statusbar.refresh_summary();
 		window.statusbar.refresh_summary();
-		refresh(false);
+		refresh(false, false);
 	}
 
+	// query items  ------------------------------
+	
 	private bool query_items_thread_running = false;
 	
 	private void query_items(){
@@ -2531,11 +2526,6 @@ public class FileViewList : Gtk.Box {
 				overlay_added = true;
 			}
 			gtk_do_events();
-		}
-
-		if (current_item != null){ 
-			log_debug("FileViewList: query_items(): %d".printf(current_item.children.size));
-			query_subfolders();
 		}
 
 		if (overlay_added){
@@ -2584,19 +2574,32 @@ public class FileViewList : Gtk.Box {
 	}
 	
 	private bool query_subfolders_thread_running = false;
-	private bool query_subfolders_aborted = false;
+	private bool query_subfolders_thread_cancelled = false;
 	
 	private void query_subfolders(){
 
+		//return;
+		
 		if (current_item == null){ return; }
 		if (pane.file_operations.size > 0){ return; }
 
-		log_debug("FileViewList: query_subfolders()");
+		log_debug("FileViewList: query_subfolders(): enter");
 		
+		// cancel running thread
+		if (query_subfolders_thread_running){
+			query_subfolders_thread_cancelled = true;
+		}
+
+		// wait for thread to exit
+		while (query_subfolders_thread_running){
+			sleep(500);
+			gtk_do_events();
+		}
+
 		try {
 			//log_debug("FileViewList: query_items(): create thread");
 			query_subfolders_thread_running = true;
-			query_subfolders_aborted = false;
+			query_subfolders_thread_cancelled = false;
 			Thread.create<void> (query_subfolders_thread, true);
 		}
 		catch (Error e) {
@@ -2610,30 +2613,38 @@ public class FileViewList : Gtk.Box {
 		
 		log_debug("FileViewList: query_subfolders_thread()");
 
-		if (current_item == null){
-			//log_debug("FileViewList: query_items_thread(): current_item is NULL");
-			query_subfolders_thread_running = false;
-			return;
-		}
-
 		//var timer = timer_start();
-		
-		if (!current_item.is_trash && !current_item.is_archive){
-			
-			query_subfolders_running = true;
-			
-			start_view_redraw();
 
-			//current_item.query_children(2);
+		bool count_changed = false;
+		
+		if ((current_item != null) && !current_item.is_trash && !current_item.is_archive){
 			
-			foreach(var subitem in current_item.children.values){
+			// statusbar  -----------------------
+		
+			string msg = _("Counting items...");
+			pane.statusbar.show_spinner(msg);
+			window.statusbar.show_spinner(msg);
+
+			// query subfolders --------------------
+
+			var list = current_item.children.values;
+			
+			foreach(var subitem in list){
 				
-				if (query_subfolders_aborted) { break; }
+				if (query_subfolders_thread_cancelled) { break; }
 				
 				if (subitem.is_directory){
+					int count_before = subitem.children.size;
 					subitem.query_children(1);
+					int count_after = subitem.children.size;
+					if (count_before != count_after){
+						count_changed = true;
+					}
 				}
 			}
+
+			pane.statusbar.hide_spinner();
+			window.statusbar.hide_spinner();	
 		}
 
 		//log_trace("FileViewList: query_subfolders_thread(): %s".printf(timer_elapsed_string(timer)));
@@ -2641,7 +2652,11 @@ public class FileViewList : Gtk.Box {
 		log_debug("FileViewList: query_subfolders_thread(): exit");
 
 		query_subfolders_thread_running = false;
-		query_subfolders_running = false;
+
+		if (count_changed){
+			//sleep(500);
+			refresh_delayed_add(false, false);
+		}
 	}
 
 	private int get_adjusted_column_width_for_tileview(){
@@ -2953,7 +2968,7 @@ public class FileViewList : Gtk.Box {
 			refresh_iter_by_file_path(dest.get_path());
 			break;
 		case FileMonitorEvent.CHANGES_DONE_HINT:
-			add_refresh_delayed();
+			refresh_delayed_add();
 			break;
 		case FileMonitorEvent.DELETED:
 		case FileMonitorEvent.MOVED_OUT:
@@ -2999,26 +3014,30 @@ public class FileViewList : Gtk.Box {
 	}
 
 	private uint tmr_refresh_delayed = 0;
+	private bool refresh_delayed_requery = true;
+	private bool refresh_delayed_requery_subfolders = true;
 	
-	private void add_refresh_delayed(){
-		clear_refresh_delayed();
-		tmr_refresh_delayed = Timeout.add(300, refresh_delayed);
+	private void refresh_delayed_add(bool requery = true, bool requery_subfolders = true){
+		refresh_delayed_clear();
+		refresh_delayed_requery = requery;
+		refresh_delayed_requery_subfolders = requery_subfolders;
+		tmr_refresh_delayed = Timeout.add(500, refresh_delayed_execute);
 	}
 
-	private void clear_refresh_delayed(){
+	private void refresh_delayed_clear(){
 		if (tmr_refresh_delayed > 0){
 			Source.remove(tmr_refresh_delayed);
 			tmr_refresh_delayed = 0;
 		}
 	}
 	
-	private bool refresh_delayed(){
+	private bool refresh_delayed_execute(){
 
-		clear_refresh_delayed();
+		refresh_delayed_clear();
 
 		log_debug("refresh_delayed()");
 
-		refresh(true);
+		refresh(refresh_delayed_requery, refresh_delayed_requery_subfolders);
 		
 		return false;
 	}
@@ -3363,6 +3382,8 @@ public class FileViewList : Gtk.Box {
 	
 	private void start_view_redraw(){
 
+		//return;
+		
 		// cancel running thread
 		if (view_refresher_thread_running){
 			view_refresher_cancelled = true;
@@ -3413,10 +3434,10 @@ public class FileViewList : Gtk.Box {
 			sleep(1000);
 			log_debug("In loop");
 			//if (query_subfolders_running){
-			//	redraw_views();
+			redraw_views();
 			//}
 			//else{
-				gtk_do_events();
+				//gtk_do_events();
 			//}
 		}
 
@@ -4282,7 +4303,7 @@ public class FileViewList : Gtk.Box {
 			string new_name = gtk_inputbox(_("Rename"),_("Enter new name"), window, false, item.file_name);
 
 			if (try_rename_item(item, new_name)){
-				refresh(false);
+				refresh(false, false);
 			}
 		}
 	}
@@ -4336,7 +4357,7 @@ public class FileViewList : Gtk.Box {
 
 		dir_create(path_combine(current_item.file_path, new_name), false, window);
 
-		refresh(true);
+		refresh(true, false);
 
 		var list = new Gee.ArrayList<string>();
 		list.add(path_combine(current_item.file_path, new_name));
@@ -4368,7 +4389,7 @@ public class FileViewList : Gtk.Box {
 
 		file_write(path_combine(current_item.file_path, new_name), "", window);
 
-		refresh(true);
+		refresh(true, false);
 
 		var list = new Gee.ArrayList<string>();
 		list.add(path_combine(current_item.file_path, new_name));
@@ -4407,7 +4428,7 @@ public class FileViewList : Gtk.Box {
 
 		file_copy(template_path, new_file_path);
 
-		refresh(true);
+		refresh(true, false);
 
 		var list = new Gee.ArrayList<string>();
 		list.add(path_combine(current_item.file_path, new_name));
@@ -4531,7 +4552,7 @@ public class FileViewList : Gtk.Box {
 			cloud_item.removed_cached_file();
 		}
 		
-		refresh(true);
+		refresh(true, true);
 	}
 
 	public void toggle_dual_pane(){

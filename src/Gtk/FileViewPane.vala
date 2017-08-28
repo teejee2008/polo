@@ -230,7 +230,7 @@ public class FileViewPane : Gtk.Box {
 	}
 
 	public void refresh_view(){
-		view.refresh(true);
+		view.refresh(true, true);
 	}
 
 	public void refresh_pathbars(){

@@ -209,7 +209,7 @@ public class MediaBar : Gtk.Box {
 			gtk_hide(this);
 		}
 
-		log_debug("MediaBar: refresh(): exit");
+		//log_debug("MediaBar: refresh(): exit");
 	}
 
 }

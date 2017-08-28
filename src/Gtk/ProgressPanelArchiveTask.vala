@@ -386,7 +386,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 			context.set_line_width (1);
 			Gdk.cairo_set_source_rgba (context, color_ratio);
 
-			x = (int)((task.compressed_bytes * 1.0 * w ) / task.archive.size) ;
+			x = (int)((task.compressed_bytes * 1.0 * w ) / task.archive.file_size) ;
 			context.rectangle(0, 0, x, h);
 
 			context.fill();
@@ -654,7 +654,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 
 			if ((task.archive != null) && (task.archive != previous_archive)){
 				lbl_file_count_value.label = "%'d".printf(task.archive.file_count_total);
-				lbl_data_value.label = format_file_size(task.archive.size);
+				lbl_data_value.label = format_file_size(task.archive.file_size);
 				previous_archive = task.archive;
 			}
 			

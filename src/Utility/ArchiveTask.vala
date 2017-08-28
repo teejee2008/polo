@@ -232,7 +232,7 @@ public class ArchiveTask : AsyncTask {
 				cmd += " '%s'".printf(escape_single_quote(file_basename(item.file_path)));
 			}
 			cmd += " | ";
-			cmd += "pv --size %lld -n".printf(archive.size);
+			cmd += "pv --size %lld -n".printf(archive.file_size);
 			cmd += " | ";
 
 			parser_name = "pv";
@@ -1093,7 +1093,7 @@ public class ArchiveTask : AsyncTask {
 
 		if (!is_terminated && (action == ArchiveAction.LIST)){
 			archive.archive_size = file_get_size(archive_path);
-			archive.compression_ratio = (archive.archive_size * 100.00) / archive.size;
+			archive.compression_ratio = (archive.archive_size * 100.00) / archive.file_size;
 		}
 		
 		if ((status != AppStatus.CANCELLED) && (status != AppStatus.PASSWORD_REQUIRED)) {
@@ -1145,7 +1145,7 @@ public class ArchiveTask : AsyncTask {
 
 		// set some values for estimating progress
 		
-		prg_bytes_total = archive.size;
+		prg_bytes_total = archive.file_size;
 		log_debug("data_size: %s".printf(format_file_size(prg_bytes_total)));
 		
 		prg_count_total = archive.file_count_total;
@@ -1454,8 +1454,8 @@ public class ArchiveTask : AsyncTask {
 			if (proc_read_bytes > 0){
 				return format_file_size(proc_read_bytes);
 			}
-			else if ((progress > 0) && (archive.size > 0)){
-				var bytes = (int64)(progress * (archive.size));
+			else if ((progress > 0) && (archive.file_size > 0)){
+				var bytes = (int64)(progress * (archive.file_size));
 				return format_file_size(bytes);
 			}
 			else {
@@ -1469,8 +1469,8 @@ public class ArchiveTask : AsyncTask {
 			if (proc_write_bytes > 0){
 				return format_file_size(proc_write_bytes);
 			}
-			else if ((progress > 0) && (archive.size > 0)){
-				var bytes = (int64)(progress * (archive.size));
+			else if ((progress > 0) && (archive.file_size > 0)){
+				var bytes = (int64)(progress * (archive.file_size));
 				return format_file_size(bytes);
 			}
 			else {

@@ -651,7 +651,7 @@ public class Pathbar : Gtk.Box {
 			}
 		}
 		
-		log_debug("basepath: %s".printf(basepath));
+		//log_debug("basepath: %s".printf(basepath));
 		
 		if (file_uri.length > basepath.length){
 			
@@ -664,7 +664,7 @@ public class Pathbar : Gtk.Box {
 		
 		// print the list
 		foreach(var str in list){
-			log_debug("parts: %s".printf(str));
+			//log_debug("parts: %s".printf(str));
 		}
 		
 		return list;
@@ -672,7 +672,7 @@ public class Pathbar : Gtk.Box {
 	
 	private void add_crumb(Gtk.Box box, string part, string link_path, bool is_first_part){
 
-		log_debug("add_crumb: %s, %s".printf(part, link_path));
+		//log_debug("add_crumb: %s, %s".printf(part, link_path));
 		
 		string text = part;
 		

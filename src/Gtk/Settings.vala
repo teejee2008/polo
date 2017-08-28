@@ -1639,7 +1639,7 @@ public class Settings : Gtk.Box, IPaneActive {
 
 			foreach(var v in window.views){
 				v.listview_font_scale = App.listview_font_scale;
-				v.refresh();
+				v.refresh(false, false);
 			}
 		});
 
@@ -1680,7 +1680,7 @@ public class Settings : Gtk.Box, IPaneActive {
 			
 			foreach(var v in window.views){
 				v.listview_icon_size = App.listview_icon_size;
-				v.refresh();
+				v.refresh(false, false);
 			}
 		});
 
@@ -1717,7 +1717,7 @@ public class Settings : Gtk.Box, IPaneActive {
 
 			foreach(var v in window.views){
 				v.listview_row_spacing = App.listview_row_spacing;
-				v.refresh();
+				v.refresh(false, false);
 			}
 		});
 
@@ -1831,7 +1831,7 @@ public class Settings : Gtk.Box, IPaneActive {
 
 			foreach(var v in window.views){
 				v.iconview_icon_size = App.iconview_icon_size;
-				v.refresh();
+				v.refresh(false, false);
 			}
 		});
 
@@ -2032,7 +2032,7 @@ public class Settings : Gtk.Box, IPaneActive {
 
 			foreach(var v in window.views){
 				v.tileview_icon_size = App.tileview_icon_size;
-				v.refresh();
+				v.refresh(false, false);
 			}
 		});
 

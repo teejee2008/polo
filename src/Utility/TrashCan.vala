@@ -238,12 +238,12 @@ public class TrashCan : FileItem {
 			if (item.file_type == FileType.DIRECTORY){
 				log_msg("Trash: Calculating trashed folder size: %s".printf(trash_file));
 				trash_size = dir_size(trash_file);
-				item._size = trash_size;
 			}
 			else{
 				trash_size = file_get_size(trash_file);
-				item._size = trash_size;
 			}
+
+			item.file_size = trash_size;
 
 			if (file_exists(info_file)){
 				log_msg("Trash: Updating trashinfo file: %s".printf(info_file));
@@ -259,7 +259,7 @@ public class TrashCan : FileItem {
 
 		log_debug("item: %s, %s".printf(orig_path, format_file_size(trash_size)));
 
-		item.set_size(trash_size);
+		item.file_size = trash_size;
 
 		this.trash_can_size += trash_size;
 		//log_debug("trash_can_size += %lld".printf(trash_size));

@@ -539,7 +539,7 @@ public class FileConflictDialog : Gtk.Dialog {
 		//img_src.set_size_request(32, 32);
 
 		lbl_type_src.label = "%s: %s".printf(_("Type"), item.content_type_desc);
-		lbl_size_src.label = "%s: %s".printf(_("Size"), format_file_size(item.size));
+		lbl_size_src.label = "%s: %s".printf(_("Size"), format_file_size(item.file_size));
 		lbl_modified_src.label = "%s: %s".printf(_("Modified"), item.modified.format ("%Y-%m-%d %H:%M"));
 
 		// dest -------------------------
@@ -551,7 +551,7 @@ public class FileConflictDialog : Gtk.Dialog {
 		//img_dest.set_size_request(32, 32);
 
 		lbl_type_dest.label = "%s: %s".printf(_("Type"), item.content_type_desc);
-		lbl_size_dest.label = "%s: %s".printf(_("Size"), format_file_size(item.size));
+		lbl_size_dest.label = "%s: %s".printf(_("Size"), format_file_size(item.file_size));
 		lbl_modified_dest.label = "%s: %s".printf(_("Modified"), item.modified.format ("%Y-%m-%d %H:%M"));
 
 		gtk_show(preview_box);
