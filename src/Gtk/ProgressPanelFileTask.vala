@@ -432,11 +432,11 @@ public class ProgressPanelFileTask : ProgressPanel {
 			break;
 		}
 
-		if ((source != null) && (source is FileItemCloud)){
+		if ((source != null) && source.is_remote){
 			window.refresh_remote_views(source.file_path);
 		}
 
-		if ((destination != null) && (destination is FileItemCloud)){
+		if ((destination != null) && destination.is_remote){
 			window.refresh_remote_views(destination.file_path);
 		}
 
