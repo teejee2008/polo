@@ -616,7 +616,7 @@ public class MainWindow : Gtk.Window {
 		
 		foreach(var view in views){
 			if (view.current_item == null) { continue; }
-			if (view.current_item is FileItemCloud == false) { continue; }
+			if (view.current_item.is_remote == false) { continue; }
 			if (view.current_item.file_path != dir_path) { continue; }
 			
 			view.reload();
@@ -919,7 +919,7 @@ public class MainWindow : Gtk.Window {
 					if (tab.pane.view.current_item is FileItemCloud){
 						continue;
 					}
-					else if (tab.pane.view.current_item.file_uri_scheme != "file"){
+					else if (tab.pane.view.current_item.is_remote){
 						continue;
 					}
 				}
@@ -1021,6 +1021,10 @@ public class MainWindow : Gtk.Window {
 		var node_panes = (Json.Array) node_session.get_array_member("panes");
 		foreach(var panenode in node_panes.get_elements()){
 			load_session_pane(panenode);
+		}
+
+		if (active_pane == null){
+			active_pane = layout_box.panel1.tabs[0].pane;
 		}
 
 		set_numeric_locale("");
