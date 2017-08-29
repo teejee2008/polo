@@ -1836,7 +1836,7 @@ public class FileViewList : Gtk.Box {
 	
 	private bool on_key_press_event(Gdk.EventKey event){
 
-		log_debug("key: %s, state: %s".printf(Gdk.keyval_name(event.keyval), event.state.to_string()));
+		log_debug("key_name: %s, state: %s".printf(Gdk.keyval_name(event.keyval), event.state.to_string()));
 
         if (event.is_modifier == 1){ return false; }
 
@@ -1850,23 +1850,18 @@ public class FileViewList : Gtk.Box {
 			return false;
 		}
 
-		string keychar = Gdk.keyval_name(event.keyval);
+		string key_name = Gdk.keyval_name(event.keyval);
+		string key_string = event.str;
 		
-		switch(Gdk.keyval_name(event.keyval).down()){
-		case "left":
-		case "right":	
-		case "up":
-		case "down":
-		case "tab":
-		case "return":
+		log_debug("key_string: %s, key_name: %s".printf(key_string, key_name));
+		
+		switch(key_name.down()){
+		case "enter":
 			return false;
-		case "space":
-			keychar = " ";
-			break;
 		}
 
 		if ((current_item != null) && (current_item.is_local) && !pane.selection_bar.visible){
-			pane.selection_bar.open_panel(keychar, false);
+			pane.selection_bar.open_panel(key_string, false);
 			return true;
 		}
 		
