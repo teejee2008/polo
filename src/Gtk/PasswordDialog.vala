@@ -84,7 +84,7 @@ public class PasswordDialog : Gtk.Dialog {
 		label.xalign = 0.0f;
 		label.wrap = true;
 		label.wrap_mode = Pango.WrapMode.WORD;
-		label.max_width_chars = 50;
+		label.max_width_chars = 80;
 		label.use_markup = true;
 		//label.margin_bottom = 12;
 		grid.attach(label, 0, ++row, 1, 1);

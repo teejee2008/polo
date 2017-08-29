@@ -107,6 +107,11 @@ public class FileItemCloud : FileItem {
 	}
 	
 	// actions ---------------------------------------------------
+
+	public override void query_file_info() {
+		// ignore
+		return;
+	}
 	
 	public override void query_children(int depth = -1) {
 
@@ -119,27 +124,182 @@ public class FileItemCloud : FileItem {
 
 		if (query_children_aborted) { return; }
 
-		// no need to continue if not a directory
-		if (!is_directory) { return; }
+		if (query_children_running) { return; }
+
+		// check if directory and continue -------------------
+		
+		if (!is_directory) {
+			//query_file_info();
+			query_children_running = false;
+			query_children_pending = false;
+			return;
+		}
 
 		if (depth == 0){ return; } // incorrect method call
 
-		query_children_running = true;
-	
-		if (depth < 0){
-			// we are querying everything under this directory, so the directory size will be accurate; set flag for this
-			//size_queried = true;
-			//log_debug("dir_size_queried: %s".printf(this.file_name));
-		}
-		
 		log_debug("FileItemCloud: query_children(%d): %s".printf(depth, file_path), true);
 
-		save_to_cache();
+		query_children_running = true;
+		
+		query_children_mutex.lock();
+
+		if (depth < 0){
+			dir_size_queried = false;
+		}
+
+		// query immediate children ---------------
+		
+		save_to_cache(depth);
 			
-		read_children_from_cache();
+		read_children_from_cache(depth);
+
+		// recurse children -----------------------
+
+		foreach(var child in children.values){
+			child.query_children(depth - 1);
+		}
+
+		if (depth < 0){
+			get_dir_size_recursively(true);
+		}
 
 		query_children_running = false;
 		query_children_pending = false;
+
+		query_children_mutex.unlock();
+	}
+
+	private void save_to_cache(int depth = -1){
+		
+		if (file_exists(cached_file_path)){
+			var file_date = file_get_modified_date(cached_file_path);
+			var now = new GLib.DateTime.now_local();
+			if (file_date.add_minutes(60).compare(now) > 0){
+				log_debug("FileItemCloud: save_to_cache(): skipped");
+				return;
+			}
+		}
+
+		log_debug("FileItemCloud: save_to_cache()");
+		
+		error_msg = "";
+		
+		string cmd, std_out, std_err;
+			
+		cmd = "rclone lsjson --max-depth %d '%s'".printf(depth, escape_single_quote(file_path));
+		
+		log_debug(cmd);
+		
+		exec_sync(cmd, out std_out, out std_err);
+		
+		if (std_err.length > 0){
+			error_msg = std_err;
+			log_error("std_err:\n%s\n".printf(std_err));
+		}
+
+		file_write(cached_file_path, std_out);
+		
+		log_debug("save_cache: %s".printf(cached_file_path));
+	}
+	
+	private void read_children_from_cache(int depth = -1){
+
+		if (!file_exists(cached_file_path)){ return; }
+		
+		var file_date = file_get_modified_date(cached_file_path);
+		if (dates_are_equal(cached_date, file_date)){
+			log_debug("FileItemCloud: read_children_from_cache(): skipped");
+			return;
+		}
+
+		log_debug("FileItemCloud: read_children_from_cache()");
+
+		// mark existing children as stale -------------------
+		
+		foreach(var child in children.values){
+			child.is_stale = true;
+		}
+
+		// reset counts --------------
+
+		item_count = 0;
+		file_count = 0;
+		dir_count = 0;
+		
+		// load children from cached file ------------------------
+		
+		var f = File.new_for_path(cached_file_path);
+		if (!f.query_exists()) {
+			return;
+		}
+
+		var parser = new Json.Parser();
+		try {
+			parser.load_from_file(cached_file_path);
+		}
+		catch (Error e) {
+			log_error (e.message);
+		}
+
+		var node = parser.get_root();
+		var arr = node.get_array();
+
+		foreach(var node_child in arr.get_elements()){
+			
+			var obj_child = node_child.get_object();
+			string path = json_get_string(obj_child, "Path", "");
+			string name = json_get_string(obj_child, "Name", "");
+			int64 size = json_get_int64(obj_child, "Size", 0);
+			string modtime = json_get_string(obj_child, "ModTime", "");
+			bool isdir = json_get_bool(obj_child, "IsDir", true);
+
+			string child_name = name;
+			string child_path = path_combine(file_path, child_name);
+			var child_type = isdir ? FileType.DIRECTORY : FileType.REGULAR;
+			var child_modified = parse_date_time(modtime, true);
+			
+			var child = (FileItemCloud) this.add_child(child_path, child_type, size, 0, false);
+			
+			child.set_content_type_from_extension();
+			child.modified = child_modified;
+			child.accessed = child_modified;
+			child.changed = child_modified;
+			child.set_permissions();
+			
+			if (isdir){
+				add_to_cache(child);
+			}
+		}
+
+		// remove stale children ----------------------------
+		
+		var list = new Gee.ArrayList<string>();
+		foreach(var key in children.keys){
+			if (children[key].is_stale){
+				list.add(key);
+			}
+		}
+		foreach(var key in list){
+			//log_debug("unset: key: %s, name: %s".printf(key, children[key].file_name));
+			children.unset(key);
+		}
+
+		// update counts --------------------------
+
+		foreach(var child in children.values){
+			if (child.is_directory){
+				dir_count++;
+			}
+			else{
+				file_count++;
+			}
+			item_count++;
+		}
+		children_queried = true;
+
+		// update timestamp ----------------
+
+		cached_date = file_date;
 	}
 
 	public override void query_children_async() {
@@ -233,120 +393,10 @@ public class FileItemCloud : FileItem {
 		return item;
 	}
 
-	private void save_to_cache(int depth = -1){
-		
-		log_debug("FileItemCloud: save_to_cache()");
-		
-		if (file_exists(cached_file_path)){
-			var file_date = file_get_modified_date(cached_file_path);
-			var now = new GLib.DateTime.now_local();
-			if (file_date.add_minutes(60).compare(now) > 0){
-				return;
-			}
-		}
-		
-		error_msg = "";
-		
-		string cmd, std_out, std_err;
-			
-		cmd = "rclone lsjson --max-depth %d '%s'".printf(depth, escape_single_quote(file_path));
-		
-		log_debug(cmd);
-		
-		exec_sync(cmd, out std_out, out std_err);
-		
-		if (std_err.length > 0){
-			error_msg = std_err;
-			log_error("std_err:\n%s\n".printf(std_err));
-		}
-
-		file_write(cached_file_path, std_out);
-		
-		log_debug("save_cache: %s".printf(cached_file_path));
-	}
-	
-	public void removed_cached_file(){
+	public void remove_cached_file(){
 		file_delete(cached_file_path);
 	}
 	
-	private void read_children_from_cache(){
-
-		if (!file_exists(cached_file_path)){ return; }
-		
-		var file_date = file_get_modified_date(cached_file_path);
-		if (dates_are_equal(cached_date, file_date)){
-			return;
-		}
-
-		// mark existing children as stale -------------------
-		
-		foreach(var child in children.values){
-			child.is_stale = true;
-		}
-		
-		// load children from cached file ------------------------
-		
-		var f = File.new_for_path(cached_file_path);
-		if (!f.query_exists()) {
-			return;
-		}
-
-		var parser = new Json.Parser();
-		try {
-			parser.load_from_file(cached_file_path);
-		}
-		catch (Error e) {
-			log_error (e.message);
-		}
-
-		var node = parser.get_root();
-		var arr = node.get_array();
-
-		foreach(var node_child in arr.get_elements()){
-			
-			var obj_child = node_child.get_object();
-			string path = json_get_string(obj_child, "Path", "");
-			string name = json_get_string(obj_child, "Name", "");
-			int64 size = json_get_int64(obj_child, "Size", 0);
-			string modtime = json_get_string(obj_child, "ModTime", "");
-			bool isdir = json_get_bool(obj_child, "IsDir", true);
-
-			string child_name = name;
-			string child_path = path_combine(file_path, child_name);
-			var child_type = isdir ? FileType.DIRECTORY : FileType.REGULAR;
-			var child_modified = parse_date_time(modtime, true);
-			
-			var child = (FileItemCloud) this.add_child(child_path, child_type, size, 0, false);
-			
-			child.set_content_type_from_extension();
-			child.modified = child_modified;
-			child.accessed = child_modified;
-			child.changed = child_modified;
-			child.set_permissions();
-			
-			if (isdir){
-				add_to_cache(child);
-			}
-		}
-		
-		// remove stale children ----------------------------
-		
-		var list = new Gee.ArrayList<string>();
-		foreach(var key in children.keys){
-			if (children[key].is_stale){
-				list.add(key);
-			}
-		}
-		foreach(var key in list){
-			//log_debug("unset: key: %s, name: %s".printf(key, children[key].file_name));
-			children.unset(key);
-		}
-
-		// update timestamp
-
-		cached_date = file_date;
-	}
-
 	protected void set_permissions(){
 		
 		can_read = true;

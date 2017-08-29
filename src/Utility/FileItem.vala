@@ -215,7 +215,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	public bool children_queried = false;
 	public bool query_children_running = false;
 	public bool query_children_pending = false;
-	private Mutex query_children_mutex = Mutex();
+	protected Mutex query_children_mutex = Mutex();
+	protected Mutex query_file_info_mutex = Mutex();
 	
 	// operation flags
 	public bool query_children_async_is_running = false;
@@ -227,8 +228,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	public bool is_dummy = false;
 
 	private Gee.ArrayList<Gdk.Pixbuf> animation_list = new Gee.ArrayList<Gdk.Pixbuf>();
-
-	public static Mutex mutex = Mutex();
 
 	public static string[] archive_extensions = {
 		".001", ".tar",
@@ -425,10 +424,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 					txt += format_file_size(file_size);
 				}
 				else if (children_queried){
-					
-					if (query_children_running){
-						txt += "~ ";
-					}
 					
 					if (item_count == 1){
 						txt += "%'lld %s".printf(item_count, _("item"));
@@ -1437,7 +1432,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 				return;
 			}
 
-			mutex.lock();
+			query_file_info_mutex.lock();
 			
 			// get type without following symlinks
 
@@ -1567,7 +1562,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			log_error (e.message);
 		}
 
-		mutex.unlock();
+		query_file_info_mutex.unlock();
 	}
 
 	public virtual void query_children(int depth = -1) {
@@ -1596,9 +1591,9 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 		if (depth == 0){ return; } // incorrect method call
 
-		query_children_running = true;
-	
 		log_debug("FileItem: query_children(%d): %s".printf(depth, file_path), true);
+
+		query_children_running = true;
 
 		FileEnumerator enumerator;
 		FileInfo info;
@@ -1629,10 +1624,13 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 				dir_size_queried = false;
 			}
 			
-			// mark existing children as stale
+			// mark existing children as stale -----------------
+			
 			foreach(var child in children.values){
 				child.is_stale = true;
 			}
+
+			// reset counts --------------
 			
 			item_count = 0;
 			file_count = 0;
@@ -1640,7 +1638,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 			//log_debug("FileItem: query_children(): enumerate_children");
 
-			// recurse children
+			// recurse children -----------------------
+			
 			enumerator = file.enumerate_children ("%s".printf(FileAttribute.STANDARD_NAME), 0);
 			while ((info = enumerator.next_file()) != null) {
 				//log_debug("FileItem: query_children(): found: %s".printf(info.get_name()));
@@ -1654,6 +1653,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 			//log_debug("FileItem: query_children(): enumerate_children: done");
 
+			// update counts --------------------------
+			
 			foreach(var child in children.values){
 				if (child.is_directory){
 					dir_count++;
@@ -1667,7 +1668,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 			//log_debug("FileItem: query_children(): count_children: done");
 
-			// remove stale children
+			// remove stale children ----------------------------
+			
 			var list = new Gee.ArrayList<string>();
 			foreach(var key in children.keys){
 				if (children[key].is_stale){

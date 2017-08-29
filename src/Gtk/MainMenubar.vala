@@ -1515,11 +1515,8 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 				//tab.view.query_items_delay = 3000;
 
 				//tab.view.set_view_path(acc.mount_path);
-				
-				var cloud_item = new FileItemCloud.from_path_and_type("%s:".printf(acc.name), FileType.DIRECTORY);
-				FileItem.add_to_cache(cloud_item);
-				
-				tab.view.set_view_item(cloud_item);
+
+				tab.view.set_view_item(acc.fs_root);
 
 				//tab.pane.view.set_overlay_on_loading();
 

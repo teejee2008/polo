@@ -2587,6 +2587,7 @@ public class FileViewList : Gtk.Box {
 		
 		// cancel running thread
 		if (query_subfolders_thread_running){
+			log_debug("FileViewList: query_subfolders(): cancelled running thread");
 			query_subfolders_thread_cancelled = true;
 		}
 
@@ -2838,7 +2839,6 @@ public class FileViewList : Gtk.Box {
 		return;
 	}
 
-
 	private bool filter_view (Gtk.TreeModel model, Gtk.TreeIter iter) {
 
 		// filter_view() may be called even for empty rows, so check if file_item is null
@@ -2968,7 +2968,7 @@ public class FileViewList : Gtk.Box {
 			refresh_iter_by_file_path(dest.get_path());
 			break;
 		case FileMonitorEvent.CHANGES_DONE_HINT:
-			refresh_delayed_add();
+			refresh_delayed_add(true, false);
 			break;
 		case FileMonitorEvent.DELETED:
 		case FileMonitorEvent.MOVED_OUT:
@@ -4541,7 +4541,7 @@ public class FileViewList : Gtk.Box {
 		
 		if ((current_item != null) && (current_item is FileItemCloud)){
 			var cloud_item = (FileItemCloud) current_item;
-			cloud_item.removed_cached_file();
+			cloud_item.remove_cached_file();
 		}
 		
 		refresh(true, true);
@@ -4701,13 +4701,13 @@ public class FileViewList : Gtk.Box {
 		
 		task.complete.connect(()=>{
 			query_foldersize_running = false;
-			log_debug("task.complete(): query_foldersize_running = false;");
+			//log_debug("task.complete(): query_foldersize_running = false;");
 		});
 		
 		task_calculate_dir_size = task;
 		
 		query_foldersize_running = true;
-		log_debug("task.complete(): query_foldersize_running = true;");
+		//log_debug("task.complete(): query_foldersize_running = true;");
 		
 		// execute
 		task.calculate_dirsize_async(selected_items);

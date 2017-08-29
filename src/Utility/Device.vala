@@ -519,9 +519,10 @@ public class Device : GLib.Object{
 
 		log_debug("Device: prompt_for_password()");
 
-		string msg = "<b>%s: %s</b>\n\n".printf(_("Encrypted device"), dev.device);
+		string msg = "<span size=\"large\" weight=\"bold\">%s: %s</span>\n\n".printf(
+			_("Encrypted device"), dev.device);
 		
-		msg += _("Enter Password") + ":";
+		msg += _("Enter Password to Unlock") + ":";
 		
 		return PasswordDialog.prompt_user(parent_window, false, "", msg);
 	}

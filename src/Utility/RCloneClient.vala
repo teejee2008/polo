@@ -190,6 +190,8 @@ public class CloudAccount : GLib.Object {
 	public string _mounted_path = ""; // for use by RCloneClient only
 	
 	private RCloneClient client = null;
+
+	public FileItemCloud fs_root = null;
 	
 	public static string[] account_types = {
 		"amazon cloud drive",
@@ -245,6 +247,15 @@ public class CloudAccount : GLib.Object {
 
 		rclone_mounts = _rclone_mounts;
 		mount_path = path_combine(_rclone_mounts, _name);
+
+		FileItemCloud? cached = (FileItemCloud) FileItem.find_in_cache("%s/".printf(_name));
+		if (cached != null){
+			fs_root = cached;
+		}
+		else{
+			fs_root = new FileItemCloud.from_path_and_type("%s:".printf(_name), FileType.DIRECTORY);
+			FileItem.add_to_cache(fs_root);
+		}
 	}
 
 	public string type_name{
