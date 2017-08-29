@@ -2633,11 +2633,8 @@ public class FileViewList : Gtk.Box {
 		if ((current_item != null) && !current_item.is_trash && !current_item.is_archive){
 
 			Timeout.add (500, () => {
-				//log_debug("tm");
 				store.foreach ((model, path, iter) => {
-					FileItem item;
-					store.get(iter, FileViewColumn.ITEM, out item, -1);
-					store.set(iter, FileViewColumn.LV_SIZE, item.file_size_formatted); // set size
+					refresh_size_column();
 					return false;
 				});
 				return query_subfolders_thread_running;
@@ -2676,16 +2673,85 @@ public class FileViewList : Gtk.Box {
 		log_debug("FileViewList: query_subfolders_thread(): exit");
 
 		query_subfolders_thread_running = false;
-
-		if (count_changed){
-			//sleep(500);
-			refresh_delayed_add(false, false);
-		}
 	}
 
 	private int get_adjusted_column_width_for_tileview(){
 		int base_width = 150;
 		return (base_width + (tileview_icon_size - 48));
+	}
+
+	// used by select_none() to cancel task
+	private bool calculate_dirsize_running = false;
+	private FileTask calculate_dirsize_task = null;
+	
+	public void calculate_directory_sizes(){
+
+		if (!is_normal_directory){ return; }
+		
+		var selected_items = get_selected_items().to_array();
+		if (selected_items.length == 0){
+			selected_items = current_item.children.values.to_array();
+		}
+
+		log_debug("FileViewList: calculate_directory_sizes()");
+
+		// statusbar  -----------------------
+		
+		string msg = _("Calculating dir size...");
+		pane.statusbar.show_spinner(msg);
+		window.statusbar.show_spinner(msg);
+
+		// start task ------------------------
+		
+		var task = new FileTask();
+		
+		task.complete.connect(()=>{
+			
+			calculate_dirsize_running = false;
+			
+			pane.statusbar.hide_spinner();
+			window.statusbar.hide_spinner();
+
+			refresh_size_column();
+		});
+		
+		calculate_dirsize_task = task;
+		
+		// execute
+		task.calculate_dirsize_async(selected_items);
+
+		Timeout.add (500, () => {
+			refresh_size_column();
+			return task.is_running;
+		});
+	}
+
+	private void refresh_size_column(){
+
+		switch (view_mode){
+		case ViewMode.LIST:
+			store.foreach ((model, path, iter) => {
+				FileItem item;
+				store.get(iter, FileViewColumn.ITEM, out item, -1);
+				store.set(iter, FileViewColumn.LV_SIZE, item.file_size_formatted); // update
+				return false;
+			});
+			break;
+		
+		case ViewMode.TILES:
+			store.foreach ((model, path, iter) => {
+				FileItem item;
+				store.get(iter, FileViewColumn.ITEM, out item, -1);
+				store.set(iter, FileViewColumn.TILE_MARKUP, item.tile_markup); // update
+				return false;
+			});
+			break;
+			
+		case ViewMode.ICONS:
+		case ViewMode.MEDIA:
+			// not needed
+			break;
+		}
 	}
 
 	// refresh treeview ------------------------
@@ -4575,57 +4641,6 @@ public class FileViewList : Gtk.Box {
 		else{
 			log_debug("is_trashed_item=false");
 		}
-	}
-
-	// calculate dir size -----------------------------------
-	
-	private bool calculate_dirsize_running = false;
-	private FileTask calculate_dirsize_task = null;
-	
-	public void calculate_directory_sizes(){
-
-		if (!is_normal_directory){ return; }
-		
-		var selected_items = get_selected_items().to_array();
-		if (selected_items.length == 0){
-			selected_items = current_item.children.values.to_array();
-		}
-
-		log_debug("FileViewList: calculate_directory_sizes()");
-
-		// statusbar  -----------------------
-		
-		string msg = _("Calculating dir size...");
-		pane.statusbar.show_spinner(msg);
-		window.statusbar.show_spinner(msg);
-
-		// start task ------------------------
-		
-		var task = new FileTask();
-		
-		task.complete.connect(()=>{
-			
-			calculate_dirsize_running = false;
-
-			pane.statusbar.hide_spinner();
-			window.statusbar.hide_spinner();
-		});
-		
-		calculate_dirsize_task = task;
-		
-		// execute
-		task.calculate_dirsize_async(selected_items);
-
-		Timeout.add (500, () => {
-			//log_debug("tm");
-			store.foreach ((model, path, iter) => {
-				FileItem item;
-				store.get(iter, FileViewColumn.ITEM, out item, -1);
-				store.set(iter, FileViewColumn.LV_SIZE, item.file_size_formatted); // set size
-				return false;
-			});
-			return task.is_running;
-		});
 	}
 
 	// ISO ---------------------------------------
