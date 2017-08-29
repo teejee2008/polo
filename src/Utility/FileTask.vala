@@ -749,11 +749,11 @@ public class FileTask : GLib.Object {
 		return ok;
 	}
 
-	public void cancel_task(){
-		log_debug("FileTask: cancel_task()");
+	public void stop(){
+		log_debug("FileTask: stop()");
 
 		aborted = true;
-
+		
 		if (rsync != null){
 			rsync.stop();
 		}
@@ -1157,12 +1157,10 @@ public class FileTask : GLib.Object {
 
 	// calculate_dirsize ------------------------------------------
 	
-	public bool calculate_dirsize_is_running = false;
-	public bool calculate_dirsize_aborted = false;
-	
 	public void calculate_dirsize_async(FileItem[] _items) {
 
 		is_running = true;
+		aborted = false;
 		
 		items = _items;
 		
@@ -1176,8 +1174,6 @@ public class FileTask : GLib.Object {
 		
 		try {
 			//start thread
-			calculate_dirsize_is_running = true;
-			calculate_dirsize_aborted = false;
 			Thread.create<void> (calculate_dirsize_async_thread, true);
 			//Thread<void*> thread = new Thread<void*>.try("", calculate_dirsize_async_thread);
 		}
@@ -1192,7 +1188,7 @@ public class FileTask : GLib.Object {
 		log_debug("FileTask: calculate_dirsize_async_thread()");
 
 		foreach(var item in items){
-			if (calculate_dirsize_aborted){ break; }
+			if (aborted){ break; }
 			if (item.is_directory){
 				item.query_children();
 				//item.query_children_pending = false;
@@ -1204,9 +1200,6 @@ public class FileTask : GLib.Object {
 				item.query_children_pending = false;
 			}
 		}
-
-		calculate_dirsize_is_running = false;
-		calculate_dirsize_aborted = false; // reset
 
 		is_running = false;
 		complete();

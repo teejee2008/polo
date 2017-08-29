@@ -721,7 +721,28 @@ public class FileViewList : Gtk.Box {
 		//col.sort_column_id = FileViewColumn.SIZE;
 		col.clicked.connect(tv_header_clicked);
 
-		// cell text
+		// cell_spinner -------------------------------------
+
+		/*
+		var cell_spinner = new Gtk.CellRendererSpinner();
+		cell_spinner.pulse = 2;
+		col.pack_start (cell_spinner, false);
+
+		col.set_cell_data_func (cell_spinner, (cell_layout, cell, model, iter) => {
+
+			var cspin = cell as Gtk.CellRendererSpinner;
+
+			FileItem item;
+			model.get (iter, FileViewColumn.ITEM, out item, -1);
+			
+			cspin.visible = item.is_directory && item.query_children_pending;
+			cspin.active = cspin.visible;
+			cspin.pulse = cspin.pulse + 1;
+		});
+		*/
+		
+		// cell_text -------------------------------------
+		
 		var cell_text = new CellRendererText ();
 		cell_text.xalign = 1.0f;
 		col.pack_start (cell_text, false);
@@ -731,20 +752,11 @@ public class FileViewList : Gtk.Box {
 
 			var crt = cell as Gtk.CellRendererText;
 
-			
 			string lv_size;
 			model.get (iter, FileViewColumn.LV_SIZE, out lv_size, -1);
 
 			crt.text = lv_size;
-			
-
-			/*
-			FileItem item;
-			model.get (iter, FileViewColumn.ITEM, out item, -1);
-			
-			crt.text = item.file_size_formatted;
-			*/
-		
+	
 			crt.scale = listview_font_scale;
 		});
 	}
@@ -2619,6 +2631,17 @@ public class FileViewList : Gtk.Box {
 		bool count_changed = false;
 		
 		if ((current_item != null) && !current_item.is_trash && !current_item.is_archive){
+
+			Timeout.add (500, () => {
+				//log_debug("tm");
+				store.foreach ((model, path, iter) => {
+					FileItem item;
+					store.get(iter, FileViewColumn.ITEM, out item, -1);
+					store.set(iter, FileViewColumn.LV_SIZE, item.file_size_formatted); // set size
+					return false;
+				});
+				return query_subfolders_thread_running;
+			});
 			
 			// statusbar  -----------------------
 		
@@ -3371,136 +3394,6 @@ public class FileViewList : Gtk.Box {
 		video_thumb_cycling_in_progress = false;
 
 		log_debug("finished cycle_thumbnail_images_thread");
-	}
-
-	// refresh views --------------------
-
-	private bool view_refresher_thread_running = false;
-	private bool view_refresher_cancelled = false;
-	private bool query_foldersize_running = false;
-	private bool query_subfolders_running = false;
-	
-	private void start_view_redraw(){
-
-		//return;
-		
-		// cancel running thread
-		if (view_refresher_thread_running){
-			view_refresher_cancelled = true;
-		}
-
-		// wait for thread to exit
-		while (view_refresher_thread_running){
-			sleep(500);
-			gtk_do_events();
-		}
-		
-		try {
-			// start new thread
-			Thread.create<void> (view_redraw_thread, true);
-		}
-		catch (Error e) {
-			log_error ("FileViewList: start_view_redraw()");
-			log_error (e.message);
-		}
-	}
-
-	private void view_redraw_thread(){
-
-		log_debug("started view_redraw_thread");
-
-		view_refresher_thread_running = true;
-		view_refresher_cancelled = false;
-
-		// statusbar  -----------------------
-		
-		string msg = "";
-		if (query_foldersize_running){
-			msg = _("Calculating dir size...");
-		}
-		else if (query_subfolders_running){
-			msg = _("Counting items...");
-		}
-		
-		pane.statusbar.show_spinner(msg);
-		window.statusbar.show_spinner(msg);
-
-		// run loop ----------------------------------
-		
-		while (query_foldersize_running || query_subfolders_running){
-			
-			if (view_refresher_cancelled){ break; }
-			
-			sleep(1000);
-			log_debug("In loop");
-
-			// no need to refresh periodically when session is being restored
-			if (window.window_is_ready){
-				redraw_views();
-			}
-		}
-
-		// finish --------------------------
-
-		if (!view_refresher_cancelled){
-			sleep(1000);
-			redraw_views();
-		}
-
-		pane.statusbar.hide_spinner();
-		window.statusbar.hide_spinner();
-		
-		log_debug("finished view_redraw_thread");
-
-		view_refresher_thread_running = false;
-	}
-
-	private void redraw_views(){
-
-		log_debug("redraw_views()");
-
-		if (view_refresher_cancelled){ return; }
-
-		//if (query_foldersize_running || query_subfolders_running){
-
-		// NOTE: Don't modify iter while iterating the treestore
-
-		//refresh(false);
-		
-		var iter_list = new Gee.ArrayList<TreeIter?>();
-		
-		TreeIter iter0;
-		TreeStore store_saved = store;
-		
-		bool iterExists = store_saved.iter_children(out iter0, null);
-		
-		while (iterExists) {
-			
-			if (view_refresher_cancelled) { break; }
-
-			iter_list.add(iter0);
-
-			iterExists = store_saved.iter_next (ref iter0);
-		}
-
-		foreach(var iter in iter_list){
-			
-			if (view_refresher_cancelled) { break; }
-			
-			FileItem item;
-			store_saved.get (iter, FileViewColumn.ITEM, out item, -1);
-			store_saved.set (iter, FileViewColumn.LV_SIZE, item.file_size_formatted); // set size
-		}
-			
-			/*if (scrolled_treeview.visible){
-				treeview.queue_draw();
-			}
-			else{
-				iconview.queue_draw();
-			}*/
-		//}
-
-		gtk_do_events();
 	}
 
 	// history ------------------------------
@@ -4531,8 +4424,8 @@ public class FileViewList : Gtk.Box {
 		log_debug("action.select_none()");
 		treeview.get_selection().unselect_all();
 
-		if (task_calculate_dir_size != null){
-			task_calculate_dir_size.calculate_dirsize_aborted = true;
+		if (calculate_dirsize_task != null){
+			calculate_dirsize_task.stop();
 		}
 	}
 
@@ -4684,7 +4577,10 @@ public class FileViewList : Gtk.Box {
 		}
 	}
 
-	private FileTask task_calculate_dir_size = null;
+	// calculate dir size -----------------------------------
+	
+	private bool calculate_dirsize_running = false;
+	private FileTask calculate_dirsize_task = null;
 	
 	public void calculate_directory_sizes(){
 
@@ -4697,22 +4593,39 @@ public class FileViewList : Gtk.Box {
 
 		log_debug("FileViewList: calculate_directory_sizes()");
 
+		// statusbar  -----------------------
+		
+		string msg = _("Calculating dir size...");
+		pane.statusbar.show_spinner(msg);
+		window.statusbar.show_spinner(msg);
+
+		// start task ------------------------
+		
 		var task = new FileTask();
 		
 		task.complete.connect(()=>{
-			query_foldersize_running = false;
-			//log_debug("task.complete(): query_foldersize_running = false;");
+			
+			calculate_dirsize_running = false;
+
+			pane.statusbar.hide_spinner();
+			window.statusbar.hide_spinner();
 		});
 		
-		task_calculate_dir_size = task;
-		
-		query_foldersize_running = true;
-		//log_debug("task.complete(): query_foldersize_running = true;");
+		calculate_dirsize_task = task;
 		
 		// execute
 		task.calculate_dirsize_async(selected_items);
-		
-		start_view_redraw();
+
+		Timeout.add (500, () => {
+			//log_debug("tm");
+			store.foreach ((model, path, iter) => {
+				FileItem item;
+				store.get(iter, FileViewColumn.ITEM, out item, -1);
+				store.set(iter, FileViewColumn.LV_SIZE, item.file_size_formatted); // set size
+				return false;
+			});
+			return task.is_running;
+		});
 	}
 
 	// ISO ---------------------------------------

@@ -409,7 +409,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 		stop_status_timer();
 		
 		if (task != null){
-			task.cancel_task();
+			task.stop();
 		}
 
 		finish();

@@ -212,7 +212,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 	}
 
-	public bool children_queried = false;
+	public bool children_queried = false; // if children have been added upto 1 level
 	public bool query_children_running = false;
 	public bool query_children_pending = false;
 	protected Mutex query_children_mutex = Mutex();
@@ -422,6 +422,12 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 				if (dir_size_queried){
 					
 					txt += format_file_size(file_size);
+				}
+				else if (query_children_running){
+					txt += "...";
+				}
+				else if (query_children_pending){
+					txt += "";
 				}
 				else if (children_queried){
 					
