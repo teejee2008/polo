@@ -10,7 +10,7 @@ Homepage: http://teejeetech.blogspot.in/
 
 Package: polo-file-manager
 Architecture: any
-Depends: ${shlibs:Depends}, ${misc:Depends}, libgee-0.8-2, libvte-2.91-0, libjson-glib-1.0-0, libxml2, rsync, ffmpeg, mediainfo, p7zip, p7zip-full, p7zip-rar, tar, gzip | pigz, bzip2 | pbzip2, xz-utils, fish, qemu-kvm, qemu-utils
+Depends: ${shlibs:Depends}, ${misc:Depends}, libgee-0.8-2, libvte-2.91-0, libjson-glib-1.0-0, libxml2, rsync, ffmpeg, mediainfo, p7zip, p7zip-full, p7zip-rar, tar, gzip | pigz, bzip2 | pbzip2, xz-utils, fish, qemu-kvm, qemu-utils, gvfs, gvfs-bin, gvfs-backends
 Recommends: libimage-exiftool-perl, ghostscript
-Description: A modern, light-weight file manager for Linux
- A modern, light-weight file manager for Linux
+Description: Modern, light-weight file manager for Linux
+ Modern, light-weight file manager for Linux

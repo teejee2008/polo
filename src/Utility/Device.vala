@@ -373,8 +373,11 @@ public class Device : GLib.Object{
 		}
 	}
 
+	
 	public bool unlock(string mapped_name, string passphrase, Gtk.Window? parent_window, bool show_on_success = false){
 
+		// depends: gvfs-mount cryptsetup
+		
 		/* Unlocks a LUKS device using provided passphrase.
 		 * Prompts the user for passphrase if empty.
 		 * Displays a GTK prompt if parent_window is not null
@@ -419,7 +422,7 @@ public class Device : GLib.Object{
 
 				var counter = new TimeoutCounter();
 				counter.kill_process_on_timeout("cryptsetup", 20, true);
-				string cmd = "cryptsetup luksOpen '%s' '%s'".printf(device, luks_name);
+				string cmd = "gvfs-mount -d '%s'".printf(device);
 
 				log_debug(cmd);
 				Posix.system(cmd);
@@ -432,12 +435,11 @@ public class Device : GLib.Object{
 
 				// use password to unlock
 
-				var cmd = "echo -n -e '%s' | cryptsetup luksOpen --key-file - '%s' '%s'\n".printf(
-					luks_pass, device, luks_name);
+				var cmd = "echo '%s' | gvfs-mount -d '%s'\n".printf(luks_pass, device);
 
 				log_debug(cmd.replace(luks_pass, "**PASSWORD**"));
 
-				int status = exec_script_sync(cmd, out std_out, out std_err, false, true);
+				int status = exec_script_sync(cmd, out std_out, out std_err);
 
 				switch (status){
 				case 512: // invalid passphrase
@@ -475,15 +477,14 @@ public class Device : GLib.Object{
 
 				// use password to unlock
 
-				var cmd = "echo -n -e '%s' | cryptsetup luksOpen --key-file - '%s' '%s'\n".printf(
-					luks_pass, device, luks_name);
+				var cmd = "echo '%s' | gvfs-mount -d '%s'\n".printf(luks_pass, device);
 
 				log_debug(cmd.replace(luks_pass, "**PASSWORD**"));
 
-				int status = exec_script_sync(cmd, out std_out, out std_err, false, true);
+				int status = exec_script_sync(cmd, out std_out, out std_err);
 
 				switch (status){
-				case 512: // invalid passphrase
+				case 2: // invalid passphrase
 					message = _("Wrong password");
 					details = _("Failed to unlock device");
 					show_message(message, details, true, parent_window, show_on_success);
