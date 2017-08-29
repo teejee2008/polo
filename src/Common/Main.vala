@@ -105,7 +105,7 @@ public class Main : GLib.Object {
 	public Json.Object appconfig;
 	public Bash bash_admin_shell;
 
-	public string shell_default = "fish";
+	public string shell_default = "bash";
 
 	public AppMode app_mode = AppMode.OPEN;
 	public Gee.ArrayList<string> cmd_files;
@@ -438,6 +438,14 @@ public class Main : GLib.Object {
 		string dst_path = path_combine(user_home, ".config/fish/functions/fish_prompt.fish");
 		if (!file_exists(dst_path)){
 			dir_create(path_combine(user_home, ".config/fish/functions"));
+			file_copy(src_path, dst_path);
+			chown(dst_path, user_name, user_name, false, null);
+			chmod(dst_path, "u+rw", null);
+		}
+
+		src_path = path_combine(share_dir, "files/bashrc");
+		dst_path = path_combine(app_conf_dir_path, "bashrc");
+		if (!file_exists(dst_path)){
 			file_copy(src_path, dst_path);
 			chown(dst_path, user_name, user_name, false, null);
 			chmod(dst_path, "u+rw", null);

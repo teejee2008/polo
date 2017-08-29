@@ -179,6 +179,10 @@ public class TermBox : Gtk.Box {
 				}
 			});
 
+			if (App.shell_default == "bash"){
+				feed_command("source '%s'".printf(path_combine(App.app_conf_dir_path, "bashrc")));
+			}
+
 			reset();
 
 			log_debug("TermBox: start_shell(): started");
