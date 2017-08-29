@@ -485,7 +485,7 @@ public class Device : GLib.Object{
 
 				switch (status){
 				case 2: // invalid passphrase
-					message = _("Wrong password");
+					message = _("Invalid Passphrase");
 					details = _("Failed to unlock device");
 					show_message(message, details, true, parent_window, show_on_success);
 					return false;
