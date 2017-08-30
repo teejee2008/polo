@@ -141,15 +141,7 @@ public class FileTask : GLib.Object {
 		window = _window;
 
 		source = _source;
-		
-		if (FileItemCloud.is_remote_path(dest_path)){
-			log_debug("FileTask: is_remote_path: %s".printf(dest_path));
-			destination = new FileItemCloud.from_path_and_type(dest_path, FileType.DIRECTORY);
-		}
-		else{	
-			destination = new FileItem.from_path(dest_path);
-		}
-		
+
 		first_pass = (_conflicts == null);
 		if (_conflicts == null){
 			conflicts = new Gee.HashMap<string, FileConflictItem>();
@@ -157,6 +149,16 @@ public class FileTask : GLib.Object {
 		}
 		else{
 			conflicts = _conflicts;
+		}
+
+		if (first_pass){
+			if (FileItemCloud.is_remote_path(dest_path)){
+				log_debug("FileTask: is_remote_path: %s".printf(dest_path));
+				destination = new FileItemCloud.from_path_and_type(dest_path, FileType.DIRECTORY);
+			}
+			else{	
+				destination = new FileItem.from_path(dest_path);
+			}
 		}
 
 		log_debug("FileTask: copy_or_move_items_to_path(%s): %s".printf(dest_path, action));
@@ -194,7 +196,7 @@ public class FileTask : GLib.Object {
 
 	private void check_conflicts_thread(){
 
-		log_debug("FileTask: check_conflicts_thread()");
+		log_debug("FileTask: check_conflicts_thread() ----------");
 		
 		rate_timer = new GLib.Timer();
 		rate_timer.start();
@@ -216,6 +218,7 @@ public class FileTask : GLib.Object {
 			if (aborted) { break; }
 
 			string dest_item_name = item.file_name;
+
 			if (source.file_path == destination.file_path){
 				if (destination.children.has_key(item.file_name)){
 					int index = 1;
@@ -246,7 +249,7 @@ public class FileTask : GLib.Object {
 	
 	private void copy_items_thread(){
 		
-		log_debug("FileTask: copy_items_thread(): start");
+		log_debug("FileTask: copy_items_thread(): start ----------");
 
 		//log_debug("replace_mode: %s".printf(replace_mode.to_string()));
 		//foreach(var con in conflicts.values){
@@ -406,7 +409,7 @@ public class FileTask : GLib.Object {
 	
 	private bool compare_item(FileItem src_item, FileItem dest_dir, bool move, string dest_item_name, bool dry_run){
 
-		//log_debug("copy_item_to_dir: %s".printf(src_item.file_path));
+		//log_debug("compare_item: src_item: %s, dest: %s, dest_item_name: %s".printf(src_item.file_path, dest_dir.file_path, dest_item_name));
 
 		if (aborted) { return false; }
 

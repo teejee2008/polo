@@ -97,7 +97,7 @@ public class FileContextMenu : Gtk.Menu {
 			DesktopApp.query_apps();
 		}
 
-		if (view.current_item.is_trash || view.current_item.is_trashed_item){
+		if (view.current_item.is_trash){ //|| view.current_item.is_trashed_item
 			is_trash = true;
 			build_file_menu_for_trash();
 		}

@@ -54,7 +54,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 	public ProgressPanelFileTask(FileViewPane _pane, Gee.ArrayList<FileItem> _items, FileActionType _action){
 		base(_pane, _items, _action);
 
-		//task = new FileTask();
+		task = new FileTask();
 	}
 
 	public override void init_ui(){ // TODO: make protected
@@ -165,7 +165,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 
 	public override void execute(){
 
-		task = new FileTask();
+		//task = new FileTask(); // we need the same task for 2nd pass
 
 		log_debug("ProgressPanelFileTask: execute(%s): %d".printf(action_type.to_string(), items.size));
 
