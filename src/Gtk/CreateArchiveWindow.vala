@@ -88,7 +88,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		items = _items;
 		dest_directory = _dest_directory;
 
-		task = new ArchiveTask();
+		task = new ArchiveTask(this);
 		task.action = ArchiveAction.CREATE;
 
 		archive = new FileItem();
@@ -233,7 +233,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 			item.query_children(-1);
 		}
 
-		archive.add_items_to_archive(items);
+		//archive.add_items_to_archive(items);
 
 		archive.update_size_from_children();
 

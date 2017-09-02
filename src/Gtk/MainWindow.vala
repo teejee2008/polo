@@ -451,7 +451,7 @@ public class MainWindow : Gtk.Window {
 		if (active_pane.view.current_item.is_trash || active_pane.view.current_item.is_trashed_item){
 			update_accelerators_for_context(AccelContext.TRASH);
 		}
-		else if (active_pane.view.current_item.is_archive || active_pane.view.current_item.is_archived_item){
+		else if (active_pane.view.current_item is FileItemArchive){
 			update_accelerators_for_context(AccelContext.ARCHIVE);
 		}
 		else {

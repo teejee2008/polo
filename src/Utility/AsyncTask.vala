@@ -283,6 +283,27 @@ public abstract class AsyncTask : GLib.Object{
 	protected abstract void parse_stdout_line(string out_line);
 	
 	protected abstract void parse_stderr_line(string err_line);
+
+	public bool threads_are_pending(){
+		
+		bool locked = mutex_parser.trylock();
+
+		if (locked){
+			mutex_parser.unlock();
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+	
+	/*public void wait_for_threads_to_finish(){
+		
+		while (threads_are_pending()){
+			sleep(100);
+			//gtk_do_events();
+		}
+	}*/
 	
 	private void finish(){
 		// finish() gets called by 2 threads but should be executed only once

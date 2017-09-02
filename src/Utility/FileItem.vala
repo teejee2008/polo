@@ -97,78 +97,52 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 	// archive support ------------------------
 	
-	private bool _is_archive = false;
-	public bool is_archive {
-		get {
+	public static bool is_archive_by_extension(string fpath) {
 
-			if (_is_archive){ return true; }
-			
-			foreach(var ext in archive_extensions){
-				if (file_path.has_suffix(ext)) {
-					return true;
-				}
-			}
-
-			if (content_type.contains("compressed")){
-				// ignore
-			}
-
-			return false;
-		}
-		set{
-			_is_archive = value;
-		}
-	}
-
-	// archive properties
-	public int64 archive_size = 0;
-	public int64 archive_unpacked_size = 0;
-	public double compression_ratio = 0.0;
-	public string archive_type = "";
-	public string archive_method = "";
-	public bool archive_is_encrypted = false;
-	public bool archive_is_solid = false;
-	public int archive_blocks = 0;
-	public int64 archive_header_size = 0;
-	public DateTime archive_modified;
-	public string password = "";
-	public string keyfile = "";
-
-	public bool is_package {
-		get {
-
-			foreach(var ext in package_extensions){
-				if (file_path.has_suffix(ext)) {
-					return true;
-				}
-			}
-
-			return false;
-		}
-	}
-
-	public FileItem? archive_base_item; // for use by archived items
-	//public string source_archive_path = ""; // for use by archived items
-
-	private bool _is_archived_item = false;
-	public bool is_archived_item{
-		get {
-			return _is_archived_item;
-			/*if (_is_archived_item){
+		foreach(var ext in archive_extensions){
+			if (fpath.has_suffix(ext)) {
 				return true;
 			}
-			else{
-				return (source_archive_path.length > 0);
-			}*/
 		}
-		set {
-			_is_archived_item = value;
-		}
+
+		return false;
 	}
 
-	public Gee.ArrayList<string> extract_list = new Gee.ArrayList<string>();
-	public string extraction_path = "";
+	public static bool is_package_by_extension(string fpath) {
 	
+		foreach(var ext in package_extensions){
+			if (fpath.has_suffix(ext)) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+
+	public static string[] archive_extensions = {
+		".001", ".tar",
+		".tar.gz", ".tgz",
+		".tar.bzip2", ".tar.bz2", ".tbz", ".tbz2", ".tb2",
+		".tar.lzma", ".tar.lz", ".tlz",
+		".tar.xz", ".txz",
+		".tar.7z",
+		".tar.zip",
+		".7z", ".lzma",
+		".bz2", ".bzip2",
+		".gz", ".gzip",
+		".zip", ".rar", ".cab", ".arj", ".z", ".taz", ".cpio",
+		".rpm", ".deb",
+		".lzh", ".lha",
+		".chm", ".chw", ".hxs",
+		".iso", ".dmg", ".xar", ".hfs", ".ntfs", ".fat", ".vhd", ".mbr",
+		".wim", ".swm", ".squashfs", ".cramfs", ".scap"
+	};
+
+	public static string[] package_extensions = {
+		".rpm", ".deb"
+	};
+
 	// other -----------------
 	
 	public bool is_selected = false;
@@ -215,8 +189,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	public bool children_queried = false; // if children have been added upto 1 level
 	public bool query_children_running = false;
 	public bool query_children_pending = false;
-	protected Mutex query_children_mutex = Mutex();
-	protected Mutex query_file_info_mutex = Mutex();
+	protected Mutex mutex_children = Mutex();
+	protected Mutex mutex_file_info = Mutex();
 	
 	// operation flags
 	public bool query_children_async_is_running = false;
@@ -228,29 +202,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	public bool is_dummy = false;
 
 	private Gee.ArrayList<Gdk.Pixbuf> animation_list = new Gee.ArrayList<Gdk.Pixbuf>();
-
-	public static string[] archive_extensions = {
-		".001", ".tar",
-		".tar.gz", ".tgz",
-		".tar.bzip2", ".tar.bz2", ".tbz", ".tbz2", ".tb2",
-		".tar.lzma", ".tar.lz", ".tlz",
-		".tar.xz", ".txz",
-		".tar.7z",
-		".tar.zip",
-		".7z", ".lzma",
-		".bz2", ".bzip2",
-		".gz", ".gzip",
-		".zip", ".rar", ".cab", ".arj", ".z", ".taz", ".cpio",
-		".rpm", ".deb",
-		".lzh", ".lha",
-		".chm", ".chw", ".hxs",
-		".iso", ".dmg", ".xar", ".hfs", ".ntfs", ".fat", ".vhd", ".mbr",
-		".wim", ".swm", ".squashfs", ".cramfs", ".scap"
-	};
-
-	public static string[] package_extensions = {
-		".rpm", ".deb"
-	};
 
 	// static  ------------------
 
@@ -420,8 +371,12 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			else if (is_directory){
 				
 				if (dir_size_queried){
-					
-					txt += format_file_size(file_size);
+					if (file_size > 0){
+						txt += format_file_size(file_size);
+					}
+					else{
+						txt += _("empty");
+					}
 				}
 				else if (query_children_running){
 					txt += "...";
@@ -523,7 +478,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	}
 
 	protected string _display_path = "";
-	public string display_path {
+	public virtual string display_path {
 		owned get {
 
 			if (_display_path.length > 0){
@@ -532,10 +487,12 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 			string txt = "";
 
-			if (is_archived_item && (archive_base_item != null)){
-				txt = path_combine(archive_base_item.display_path, file_path); 
-			}
-			else if (is_trash){
+			//if (this is FileItemArchive){
+			//	var arch = ()
+			//	txt = path_combine(archive_base_item.display_path, file_path); 
+			//}
+			//else
+			if (is_trash){
 				txt = "trash:///";
 			}
 			//else if (is_trashed_item){
@@ -598,12 +555,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	public bool is_directory {
 		get{
 			return (file_type == FileType.DIRECTORY);
-		}
-	}
-
-	public bool is_virtual {
-		get{
-			return (is_dummy || is_trash || is_trashed_item || is_archive || is_archived_item);
 		}
 	}
 
@@ -1118,8 +1069,10 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	}
 
 	public FileItem add_descendant(string _file_path, FileType? _file_type, int64 item_size,int64 item_size_compressed) {
-
-		//log_debug("add_descendant=%s".printf(_file_path));
+		
+		FileItem? item = null;
+			
+		log_debug("FileItem: add_descendant=%s".printf(_file_path));
 
 		string item_path = _file_path.strip();
 		FileType item_type = (_file_type == null) ? FileType.REGULAR : _file_type;
@@ -1136,16 +1089,21 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		string dir_name = "";
 		string dir_path = "";
 
-		//create dirs and find parent dir
+		// create dirs and find parent dir
 		FileItem current_dir = this;
+		
 		string[] arr = item_path.split("/");
+
+		//mutex_children.lock();
+		
 		for (int i = 0; i < arr.length - 1; i++) {
+			
 			//get dir name
 			dir_name = arr[i];
 
 			//add dir
 			if (!current_dir.children.keys.contains(dir_name)) {
-				if ((current_dir == this) && current_dir.is_archive){
+				if ((current_dir == this) && (current_dir is FileItemArchive)){
 					dir_path = "";
 				}
 				else {
@@ -1158,21 +1116,22 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			current_dir = current_dir.children[dir_name];
 		}
 
-		//get item name
+		//mutex_children.unlock();
+
 		string item_name = arr[arr.length - 1];
 
-		//add item
-		if (!current_dir.children.keys.contains(item_name)) {
+		if (current_dir.children.keys.contains(item_name)) {
 
-			//log_debug("add_descendant: add_child()");
-
-			current_dir.add_child(
-				item_path, item_type, item_size, item_size_compressed, false);
+			item = current_dir.children[item_name];
+		}
+		else{
+			log_debug("add_descendant: add_child()");
+			item = current_dir.add_child(item_path, item_type, item_size, item_size_compressed, false);
 		}
 
-		//log_debug("add_descendant: finished: %s".printf(item_path));
+		log_debug("add_descendant: finished: %s".printf(item_path));
 
-		return current_dir.children[item_name];
+		return item;
 	}
 
 	public virtual FileItem add_child(string item_file_path, FileType item_file_type,
@@ -1180,11 +1139,11 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 		// create new item ------------------------------
 
-		//log_debug("add_child: %s ---------------".printf(item_file_path));
+		//log_debug("FileItem: add_child: %s ---------------".printf(item_file_path));
 
+		mutex_children.lock();
+		
 		FileItem item = null;
-
-		//item.tag = this.tag;
 
 		// check existing ----------------------------
 
@@ -1226,13 +1185,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 		//item.display_path = path_combine(this.display_path, item_name);
 
-		// copy values from parent
-
-		if (this.is_archive || this.is_archived_item){
-			item.is_archived_item = true;
-			item.archive_base_item = this.archive_base_item;
-		}
-
 		bool item_was_queried = item.fileinfo_queried;
 		
 		// query file properties ------------
@@ -1263,6 +1215,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 			//log_debug("add_child: directory");
 		}
+
+		mutex_children.unlock();
 
 		return item;
 	}
@@ -1438,7 +1392,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 				return;
 			}
 
-			query_file_info_mutex.lock();
+			mutex_file_info.lock();
 			
 			// get type without following symlinks
 
@@ -1568,11 +1522,13 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			log_error (e.message);
 		}
 
-		query_file_info_mutex.unlock();
+		mutex_file_info.unlock();
 	}
 
 	public virtual void query_children(int depth = -1) {
 
+		//log_debug("FileItem: query_children(): enter");
+		
 		/* Queries the file item's children using the file_path
 		 * depth = -1, recursively find and add all children from disk
 		 * depth =  1, find and add direct children
@@ -1584,14 +1540,13 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 		if (query_children_running) { return; }
 
-		if (is_archive || is_archived_item) { return; }
-
 		// check if directory and continue -------------------
 		
 		if (!is_directory) {
 			query_file_info();
 			query_children_running = false;
 			query_children_pending = false;
+			log_debug("FileItem: query_children(): FileType != DIRECTORY");
 			return;
 		}
 
@@ -1619,7 +1574,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			return;
 		}
 
-		query_children_mutex.lock();
+		//mutex_children.lock();
 		//log_debug("FileItem: query_children(): lock_acquired");
 		
 		query_file_info(); // read folder properties
@@ -1702,7 +1657,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		query_children_running = false;
 		query_children_pending = false;
 
-		query_children_mutex.unlock();
+		//mutex_children.unlock();
 		//log_debug("FileItem: query_children(): lock_released");
 	}
 
@@ -2015,7 +1970,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 	// archives
 
-	public void add_items_to_archive(Gee.ArrayList<FileItem> item_list){
+	/*public void add_items_to_archive(Gee.ArrayList<FileItem> item_list){
 		
 		if (item_list.size > 0){
 			foreach(var item in item_list){
@@ -2023,13 +1978,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 				child.archive_base_item = this.archive_base_item;
 			}
 		}
-	}
+	}*/
 
-	public ArchiveTask list_archive(){
-		var task = new ArchiveTask();
-		task.open(this);
-		return task;
-	}
 
 	public void update_size_from_children(){
 		file_size = 0;

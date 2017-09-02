@@ -72,7 +72,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 	
 		base(_pane, _items, _action);
 
-		task = new ArchiveTask();
+		task = new ArchiveTask(window);
 		task.extract_to_new_folder = _create_new_folder;
 	}
 
@@ -554,9 +554,14 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		//archive = items[0];
 		init_status();
 
+		var archives = new Gee.ArrayList<FileItemArchive>();
+		foreach(var item in items){
+			archives.add((FileItemArchive) item);
+		}
+
 		switch (action_type){
 		case FileActionType.COMPRESS:
-			task.compress(dest_archive);
+			task.compress((FileItemArchive)dest_archive);
 			break;
 			
 		case FileActionType.EXTRACT:
@@ -564,9 +569,10 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 			string msg = "";
 			bool path_not_set = false;
 			foreach(var item in items){
-				if (item.extraction_path.length == 0){
+				var arch = (FileItemArchive) item;
+				if (arch.extraction_path.length == 0){
 					path_not_set = true;
-					msg += "%s\n".printf(item.file_name);
+					msg += "%s\n".printf(arch.file_name);
 				}
 			}
 
@@ -577,11 +583,11 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 			}
 
 			bool create_new_folder = !was_restarted && task.extract_to_new_folder;
-			task.extract_archives(items, create_new_folder);
+			task.extract_archives(archives, create_new_folder);
 			break;
 
 		case FileActionType.LIST_ARCHIVE:
-			task.open(items[0], false);
+			task.open(archives[0], false);
 			break;
 			
 		case FileActionType.TEST_ARCHIVE:
@@ -666,7 +672,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 			// remove progress timers
 			Source.remove (tmr_password);
 			// prompt for password
-			tmr_password = Timeout.add(200, prompt_for_password_and_restart_task);
+			//tmr_password = Timeout.add(200, prompt_for_password_and_restart_task);
 			return false;
 			
 		case AppStatus.FINISHED:
@@ -793,7 +799,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		return outpath;
 	}
 
-	private bool prompt_for_password_and_restart_task(){
+	/*private bool prompt_for_password_and_restart_task(){
 
 		log_debug("ProgressPanelArchiveTask: prompt_for_password_and_restart_task()");
 		
@@ -804,7 +810,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 
 		this.hide();
 
-		if (FileViewList.prompt_for_password(task.archive)){
+		if (task.archive.prompt_for_password()){
 			this.show();
 			was_restarted = true;
 			start_task(); // start again
@@ -815,7 +821,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		}
 		
 		return true;
-	}
+	}*/
 	
 }
 

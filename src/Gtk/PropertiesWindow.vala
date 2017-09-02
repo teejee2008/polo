@@ -142,7 +142,7 @@ public class PropertiesWindow : Gtk.Window {
 		//hbox.margin_right = 24;
 		stack.add_titled (hbox, _("General"), _("General"));
 
-		if (file_item.is_archive){
+		if (file_item is FileItemArchive){
 
 			//ratio bar
 			var area = new Gtk.DrawingArea();
@@ -205,11 +205,11 @@ public class PropertiesWindow : Gtk.Window {
 			add_property(vbox, _("Contents"), txt);
 		}
 
-		var archive = file_item;
+		var archive = (FileItemArchive) file_item;
 
 		// archive ----------
 		
-		if (file_item.is_archive){
+		if (file_item is FileItemArchive){
 
 			add_separator(vbox);
 
@@ -390,7 +390,11 @@ public class PropertiesWindow : Gtk.Window {
 	}
 
 	private bool area_archive_draw(Cairo.Context context) {
-		double ratio = (file_item.archive_size * 1.0) / file_item.file_size;
+
+		if (file_item is FileItemArchive == false){ return true; }
+		
+		var arch = (FileItemArchive) file_item;
+		double ratio = (arch.archive_size * 1.0) / arch.file_size;
 
 		var color_blue_100 = Gdk.RGBA();
 		color_blue_100.parse("#BBDEFB");
@@ -768,7 +772,7 @@ public class PropertiesWindow : Gtk.Window {
 
 		chk.toggled.connect(chk_permission_toggled);
 
-		chk.sensitive = !file_item.is_virtual;
+		chk.sensitive = file_item.is_local;
 	}
 
 	private void chk_permission_toggled(Gtk.ToggleButton chk){
@@ -845,7 +849,7 @@ public class PropertiesWindow : Gtk.Window {
 
 		combo.changed.connect(combo_owner_changed);
 
-		combo.sensitive = (get_user_id_effective() == 0) && !file_item.is_virtual;
+		combo.sensitive = (get_user_id_effective() == 0) && file_item.is_local;
 
 		if (file_item.is_directory && (get_user_id_effective() == 0)){
 			add_button_user_recursive(hbox, combo);
@@ -902,7 +906,7 @@ public class PropertiesWindow : Gtk.Window {
 
 		combo.changed.connect(combo_group_changed);
 
-		combo.sensitive = (get_user_id_effective() == 0) && !file_item.is_virtual;
+		combo.sensitive = (get_user_id_effective() == 0) && file_item.is_local;
 
 		if (file_item.is_directory && (get_user_id_effective() == 0)){
 			add_button_group_recursive(hbox, combo);
@@ -948,7 +952,7 @@ public class PropertiesWindow : Gtk.Window {
 
 		//gtk_apply_css(new Gtk.Widget[] { button }, "padding-left: 1px; padding-right: 1px; padding-top: 0px; padding-bottom: 0px;");
 
-		button.sensitive = file_item.is_directory && (get_user_id_effective() == 0) &&  !file_item.is_virtual;
+		button.sensitive = file_item.is_directory && (get_user_id_effective() == 0) && file_item.is_local;
 
 		button.clicked.connect(() => {
 			string user = gtk_combobox_get_value(combo, 0, file_item.owner_user);
@@ -966,7 +970,7 @@ public class PropertiesWindow : Gtk.Window {
 
 		//gtk_apply_css(new Gtk.Widget[] { button }, "padding-left: 1px; padding-right: 1px; padding-top: 0px; padding-bottom: 0px;");
 
-		button.sensitive = file_item.is_directory && (get_user_id_effective() == 0) && !file_item.is_virtual;
+		button.sensitive = file_item.is_directory && (get_user_id_effective() == 0) && file_item.is_local;
 
 		button.clicked.connect(() => {
 			string group = gtk_combobox_get_value(combo, 0, file_item.owner_group);
@@ -1098,7 +1102,7 @@ public class PropertiesWindow : Gtk.Window {
 		hbox.add(label);
 		//sg_prop_value.add_widget(label);
 
-		if ((file_item.accessed != null) && file_item.can_write && !file_item.is_virtual){
+		if ((file_item.accessed != null) && file_item.can_write && file_item.is_local){
 
 			var hbox_buttons = new Gtk.Box(Orientation.HORIZONTAL, 0);
 			hbox.add(hbox_buttons);
@@ -1162,7 +1166,7 @@ public class PropertiesWindow : Gtk.Window {
 		hbox.add(label);
 		//sg_prop_value.add_widget(label);
 
-		if ((file_item.modified != null) && file_item.can_write && !file_item.is_virtual){
+		if ((file_item.modified != null) && file_item.can_write && file_item.is_local){
 
 			var hbox_buttons = new Gtk.Box(Orientation.HORIZONTAL, 0);
 			hbox.add(hbox_buttons);

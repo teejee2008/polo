@@ -141,7 +141,7 @@ public class FileItemCloud : FileItem {
 
 		query_children_running = true;
 		
-		query_children_mutex.lock();
+		//mutex_children.lock();
 
 		if (depth < 0){
 			dir_size_queried = false;
@@ -166,7 +166,7 @@ public class FileItemCloud : FileItem {
 		query_children_running = false;
 		query_children_pending = false;
 
-		query_children_mutex.unlock();
+		//mutex_children.unlock();
 	}
 
 	private void save_to_cache(int depth = -1){
@@ -259,13 +259,11 @@ public class FileItemCloud : FileItem {
 			var child_modified = parse_date_time(modtime, true);
 			
 			var child = (FileItemCloud) this.add_child(child_path, child_type, size, 0, false);
-			
-			child.set_content_type_from_extension();
-			child.modified = child_modified;
-			child.accessed = child_modified;
-			child.changed = child_modified;
-			child.set_permissions();
-			
+			child.set_properties();
+			modified = child_modified;
+			accessed = child_modified;
+			changed = child_modified;
+
 			if (isdir){
 				add_to_cache(child);
 			}
@@ -397,7 +395,9 @@ public class FileItemCloud : FileItem {
 		file_delete(cached_file_path);
 	}
 	
-	protected void set_permissions(){
+	protected void set_properties(){
+
+		set_content_type_from_extension();
 		
 		can_read = true;
 		can_write = true;

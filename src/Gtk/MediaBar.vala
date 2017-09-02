@@ -201,7 +201,7 @@ public class MediaBar : Gtk.Box {
 
 		if (view.has_media && (view.get_view_mode() != ViewMode.MEDIA)
 			&& !view.mediaview_include && !view.mediaview_exclude
-			&& !view.current_item.is_trash && !view.current_item.is_archive && !view.current_item.is_archived_item){
+			&& !view.current_item.is_trash && !(view.current_item is FileItemArchive)){
 
 			gtk_show(this);
 		}

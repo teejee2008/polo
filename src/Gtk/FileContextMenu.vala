@@ -101,7 +101,7 @@ public class FileContextMenu : Gtk.Menu {
 			is_trash = true;
 			build_file_menu_for_trash();
 		}
-		else if (view.current_item.is_archive || view.current_item.is_archived_item){
+		else if (view.current_item is FileItemArchive){
 			is_archive = true;
 			build_file_menu_for_archive();
 		}
@@ -305,7 +305,7 @@ public class FileContextMenu : Gtk.Menu {
 
 		// open with default app -------------------------
 
-		if ((selected_item.file_type != FileType.DIRECTORY) && !selected_item.is_archive){
+		if ((selected_item.file_type != FileType.DIRECTORY) && (selected_item is FileItemArchive == false)){
 
 			var app = MimeApp.get_default_app(selected_item.content_type);
 
@@ -1485,7 +1485,7 @@ public class FileContextMenu : Gtk.Menu {
 			view.extract_selected_items_to_another_location();
 		});
 
-		menu_item.sensitive = !selected_item.is_archived_item; //item.is_archive || item.is_archived_item;
+		menu_item.sensitive = FileItem.is_archive_by_extension(selected_item.file_path) && ((FileItemArchive) selected_item).is_base;
 	}
 
 	private void add_extract_across(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
@@ -1506,7 +1506,7 @@ public class FileContextMenu : Gtk.Menu {
 			view.extract_selected_items_to_opposite_location();
 		});
 
-		menu_item.sensitive = !selected_item.is_archived_item; //item.is_archive || item.is_archived_item;
+		menu_item.sensitive = FileItem.is_archive_by_extension(selected_item.file_path) && ((FileItemArchive) selected_item).is_base; //item.is_archive || item.is_archived_item;
 	}
 
 	private void add_extract_here(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
@@ -1527,12 +1527,14 @@ public class FileContextMenu : Gtk.Menu {
 			view.extract_selected_items_to_same_location();
 		});
 
-		menu_item.sensitive = !selected_item.is_archived_item; //item.is_archive && !item.is_archived_item;
+		menu_item.sensitive = FileItem.is_archive_by_extension(selected_item.file_path)
+			&& ((FileItemArchive) selected_item).is_base
+			&& view.current_item.is_local;
 	}
 
 	private bool can_extract {
 		get {
-			return selected_items_contain_archives || view.current_item.is_archive || view.current_item.is_archived_item;
+			return selected_items_contain_archives || (view.current_item is FileItemArchive);
 		}
 	}
 
@@ -2540,7 +2542,7 @@ public class FileContextMenu : Gtk.Menu {
 		get {
 			if (selected_items.size == 0){ return false; }
 			foreach(var item in selected_items){
-				if (item.is_archive){
+				if (item is FileItemArchive){
 					return true;
 				}
 			}

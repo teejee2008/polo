@@ -54,7 +54,7 @@ public class FileItemArchive : FileItem {
 	public FileItemArchive? archive_base_item; // for use by archived items
 	public DateTime? cached_date = null;
 	
-	//public ArchiveTask task = null;
+	public ArchiveTask task = null;
 	public Gee.ArrayList<string> extract_list = new Gee.ArrayList<string>();
 	public string extraction_path = "";
 	
@@ -105,6 +105,8 @@ public class FileItemArchive : FileItem {
 
 	public static FileItemArchive? convert_file_item(FileItem item, FileType _file_type){
 
+		if (item is FileItemArchive){ return (FileItemArchive) item; }
+			
 		log_debug("FileItemArchive: convert_file_item()");
 		
 		if (FileItem.is_archive_by_extension(item.file_path) && !FileItem.is_package_by_extension(item.file_path)){
@@ -117,6 +119,7 @@ public class FileItemArchive : FileItem {
 			arch.file_type = _file_type;
 			return arch;
 		}
+		
 		return null;
 	}
 	
@@ -125,6 +128,7 @@ public class FileItemArchive : FileItem {
 	public override void query_file_info() {
 		if (is_base && file_exists(file_path)){
 			base.query_file_info();
+			file_type = FileType.DIRECTORY;
 		}
 		return;
 	}
@@ -157,7 +161,7 @@ public class FileItemArchive : FileItem {
 
 		var file_date = file_get_modified_date(archive_base_item.file_path);
 		if (dates_are_equal(cached_date, file_date)){
-			log_debug("FileItemCloud: query_children(): skip");
+			log_debug("FileItemArchive: query_children(): skip_date");
 			return;
 		}
 		
@@ -173,7 +177,7 @@ public class FileItemArchive : FileItem {
 
 		log_debug("FileItemArchive: query_children(%d): %s".printf(depth, file_path), true);
 
-		mutex_children.lock();
+		//mutex_children.lock();
 
 		if (depth < 0){
 			dir_size_queried = false;
@@ -181,7 +185,13 @@ public class FileItemArchive : FileItem {
 
 		// query children ----------------------
 		
-		list_archive();
+		window = App.main_window;
+		task = new ArchiveTask(window);
+		task.open(this, true);
+
+		if ((task.status == AppStatus.FINISHED) && (this.children.size > 0)){
+			cached_date = file_get_modified_date(file_path);
+		}
 		
 		// -------------------------------------
 
@@ -194,7 +204,7 @@ public class FileItemArchive : FileItem {
 		query_children_running = false;
 		query_children_pending = false;
 
-		mutex_children.unlock();
+		//mutex_children.unlock();
 	}
 
 	public override void query_children_async() {
@@ -226,6 +236,8 @@ public class FileItemArchive : FileItem {
 
 		//log_debug("FileItemArchive: add_child: %s ---------------".printf(item_file_path));
 
+		mutex_children.lock();
+		
 		FileItemArchive item = null;
 
 		// check existing ----------------------------
@@ -281,19 +293,17 @@ public class FileItemArchive : FileItem {
 		else if (item_file_type == FileType.DIRECTORY) {
 
 			//log_debug("add_child: directory");
+
+			FileItem.add_to_cache(item); // not added by FileTask();
 		}
+
+		mutex_children.unlock();
 
 		return item;
 	}
 
 	// ----------------------------------------------------------
 	
-	public ArchiveTask list_archive(){
-		var task = new ArchiveTask(window);
-		task.open(this);
-		return task;
-	}
-
 	/*private bool list_archive(){
 
 		log_debug("FileItemArchive: list_archive(): %s".printf(this.file_path));
@@ -356,7 +366,7 @@ public class FileItemArchive : FileItem {
 		return true;
 	}*/
 
-	public bool prompt_for_password(Gtk.Window? window){
+	public bool prompt_for_password(){
 
 		log_debug("FileItemArchive: prompt_for_password()");
 
@@ -370,7 +380,7 @@ public class FileItemArchive : FileItem {
 
 		msg += _("Enter Password") + ":";
 		
-		password = PasswordDialog.prompt_user(window, false, "", msg);
+		password = PasswordDialog.prompt_user(App.main_window, false, "", msg);
 
 		return (password.length > 0);
 	}
