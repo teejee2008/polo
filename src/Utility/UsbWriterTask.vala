@@ -121,6 +121,7 @@ public class UsbWriterTask : AsyncTask {
 		if ((line == null) || (line.length == 0)) { return true; }
 
 		// dd and polo-iso write output to stderr
+		mutex_parser.lock();
 		
 		MatchInfo match;
 		if (regex_list["status"].match(line, 0, out match)) {
@@ -131,6 +132,8 @@ public class UsbWriterTask : AsyncTask {
 			error_log += "%s\n".printf(line);
 			log_error(line);
 		}
+
+		mutex_parser.unlock();
 
 		return true;
 	}

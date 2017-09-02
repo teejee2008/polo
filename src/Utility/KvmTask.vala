@@ -362,6 +362,8 @@ public class KvmTask : AsyncTask {
 		
 		if ((line == null) || (line.length == 0)) { return true; }
 
+		mutex_parser.lock();
+		
 		log_debug(line);
 		
 		MatchInfo match;
@@ -371,6 +373,8 @@ public class KvmTask : AsyncTask {
 			progress = count_completed / 100.0;
 			status_line = "%lld%%".printf(count_completed);
 		}
+
+		mutex_parser.unlock();
 		
 		return true;
 	}

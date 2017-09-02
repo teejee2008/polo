@@ -227,6 +227,8 @@ public class RCloneTask : AsyncTask{
 
 		if ((line == null) || (line.length == 0)) { return true; }
 
+		mutex_parser.lock();
+		
 		MatchInfo match;
 		if (regex_list["status"].match(line, 0, out match)) {
 
@@ -288,6 +290,8 @@ public class RCloneTask : AsyncTask{
 		else{
 			error_messages += "%s\n".printf(line);
 		}
+
+		mutex_parser.unlock();
 
 		return true;
 	}

@@ -479,6 +479,8 @@ public class RsyncTask : AsyncTask{
 			return true;
 		}
 
+		mutex_parser.lock();
+
 		status_line_count++;
 
 		if (prg_count_total > 0){
@@ -562,6 +564,8 @@ public class RsyncTask : AsyncTask{
 		else{
 			log_debug("rsync: %s".printf(line));
 		}
+
+		mutex_parser.unlock();
 
 		return true;
 	}

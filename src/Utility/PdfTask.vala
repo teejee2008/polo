@@ -272,6 +272,8 @@ public class PdfTask : AsyncTask {
 
 		if ((line == null) || (line.length == 0)) { return true; }
 
+		mutex_parser.lock();
+		
 		MatchInfo match;
 		if (regex_list["status"].match(line, 0, out match)) {
 			count_completed = int64.parse(match.fetch(1));
@@ -280,6 +282,8 @@ public class PdfTask : AsyncTask {
 		else if (regex_list["file"].match(line, 0, out match)) {
 			current_file = file_basename(match.fetch(1).strip());
 		}
+
+		mutex_parser.unlock();
 
 		return true;
 	}
