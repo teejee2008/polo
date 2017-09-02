@@ -462,7 +462,7 @@ public class FileViewList : Gtk.Box {
 
 			if (item is FileItemArchive == false){
 				
-				FileItemArchive? arch = FileItemArchive.convert_file_item(item, FileType.DIRECTORY);
+				FileItemArchive? arch = FileItemArchive.convert_file_item(item);
 				
 				if (arch != null){
 					item = arch;
@@ -2619,7 +2619,7 @@ public class FileViewList : Gtk.Box {
 		
 	}
 	
-	private bool query____________________(FileItemArchive item){ 
+	private bool list_archive2(FileItemArchive item){ 
  
 		log_debug("FileViewList: list_archive(): %s".printf(item.file_path));  
 		log_debug("item.file_path   : %s".printf(item.file_path)); 
@@ -2653,17 +2653,17 @@ public class FileViewList : Gtk.Box {
 			return false; 
 		} */
 		 
-		/*var task = item.list_archive(); 
+		//var task = item.list_archive(); 
 
-		gtk_set_busy(true, window); 
-		while (task.status != AppStatus.FINISHED){ 
-			sleep(200); 
-			gtk_do_events(); 
-		} 
+		//gtk_set_busy(true, window); 
+		//while (task.status != AppStatus.FINISHED){ 
+		//	sleep(200); 
+			//gtk_do_events(); 
+		//} 
 
-		gtk_set_busy(false, window); 
+		//gtk_set_busy(false, window); 
 
-		log_debug("task.list_archive(): exit"); */
+		//log_debug("task.list_archive(): exit");
 		 
 		/*if (task.status == AppStatus.PASSWORD_REQUIRED){ 
 
@@ -2679,7 +2679,7 @@ public class FileViewList : Gtk.Box {
 			FileItem.add_to_cache(item); // add file to cache as it has children 
 		} */
 
-		log_debug("list_archive(): exit"); 
+		//log_debug("list_archive(): exit"); 
 
 		return true; 
 	} 
@@ -5576,15 +5576,38 @@ public class FileViewList : Gtk.Box {
 
 	// archives - open
 
+	public void browse_archive(){
 
-	
-	public void extract_selected_items_to_same_location(){
+		log_debug("FileViewList: extract_selected_items_to_same_location()");
 		
 		var selected = get_selected_items();
 		if (selected.size == 0) { return; }
 
-		if (current_item is FileItemArchive){
-			gtk_messagebox(_("Cannot extract to this location"),_("Destination path is inside an archive!"), window, false);
+
+		if (FileItem.is_archive_by_extension(selected[0].file_path)){
+
+			FileItemArchive? arch = FileItemArchive.convert_file_item(selected[0]);
+
+			if (arch == null){
+				string txt = _("Not Supported");
+				string msg = _("Could not open file as archive");
+				gtk_messagebox(txt, msg, window, true);
+			}
+			else{
+				set_view_item(arch);
+			}
+		} 
+	}
+
+	public void extract_selected_items_to_same_location(){
+
+		log_debug("FileViewList: extract_selected_items_to_same_location()");
+		
+		var selected = get_selected_items();
+		if (selected.size == 0) { return; }
+
+		if ((current_item is FileItemArchive) || ((current_item is FileItemCloud))){
+			log_debug("Cannot extract inside archive or cloud location");
 			return;
 		}
 
@@ -5592,13 +5615,22 @@ public class FileViewList : Gtk.Box {
 
 		var list = new Gee.ArrayList<FileItem>();
 		foreach(var item in selected){
-			if (item is FileItemArchive){
-				var arch = (FileItemArchive) item;
+			if (FileItem.is_archive_by_extension(item.file_path)){
+				
+				FileItemArchive? arch = FileItemArchive.convert_file_item(item);
+				if (arch == null) {
+					log_error("FileViewList: selected item is not an archive");
+					continue;
+				}
+				
 				arch.extract_list.clear();
-				arch.extraction_path = path_combine(outpath, arch.file_title);
+				// unique path will be generated before execution in FileTask()
+				arch.extraction_path = path_combine(outpath, arch.file_title); 
 				list.add(arch);
 			}
 		}
+
+		if (list.size == 0) { return; }
 
 		// create action
 		var action = new ProgressPanelArchiveTask(pane, list, FileActionType.EXTRACT, true);
@@ -5608,6 +5640,8 @@ public class FileViewList : Gtk.Box {
 	}
 
 	public void extract_selected_items_to_another_location(){
+
+		log_debug("FileViewList: extract_selected_items_to_another_location()");
 		
 		var selected = get_selected_items();
 		if (selected.size == 0) { return; }
@@ -5630,13 +5664,23 @@ public class FileViewList : Gtk.Box {
 
 		var list = new Gee.ArrayList<FileItem>();
 		foreach(var item in selected){
-			if (item is FileItemArchive){
-				var arch = (FileItemArchive) item;
+			
+			if (FileItem.is_archive_by_extension(item.file_path)){
+				
+				FileItemArchive? arch = FileItemArchive.convert_file_item(item);
+				if (arch == null) {
+					log_error("FileViewList: selected item is not an archive");
+					continue;
+				}
+			
 				arch.extract_list.clear();
 				arch.extraction_path = outpath; // use selected path
+				log_debug("FileViewList: extraction_path: %s".printf(arch.extraction_path));
 				list.add(arch);
 			}
 		}
+
+		if (list.size == 0) { return; }
 
 		// create action
 		var action = new ProgressPanelArchiveTask(pane, list, FileActionType.EXTRACT, false);
@@ -5646,6 +5690,8 @@ public class FileViewList : Gtk.Box {
 	}
 
 	public void extract_selected_items_to_opposite_location(){
+
+		log_debug("FileViewList: extract_selected_items_to_opposite_location()");
 		
 		var selected = get_selected_items();
 		if (selected.size == 0) { return; }
@@ -5663,11 +5709,17 @@ public class FileViewList : Gtk.Box {
 
 		var list = new Gee.ArrayList<FileItem>();
 
-		bool is_partial_extraction = selected[0] is FileItemArchive;
+		bool is_partial_extraction = current_item is FileItemArchive;
 		
 		if (is_partial_extraction){
 
-			var arch_base = ((FileItemArchive)selected[0]).archive_base_item;
+			FileItemArchive? arch = FileItemArchive.convert_file_item(selected[0]);
+			if (arch == null) {
+				log_error("FileViewList: selected item is not an archive");
+				return;
+			}
+			
+			var arch_base = arch.archive_base_item;
 
 			if ((arch_base != null) && arch_base.archive_is_solid){
 				gtk_messagebox(_("Partial extraction not supported for solid archives"), "", window, true);
@@ -5675,7 +5727,7 @@ public class FileViewList : Gtk.Box {
 			}
 			
 			// do a partial extract for selected archived_items
-			FileItemArchive arch = ((FileItemArchive)selected[0]).archive_base_item;
+			arch = arch.archive_base_item;
 			arch.extract_list.clear();
 			arch.extraction_path = outpath;
 			list.add(arch);
@@ -5686,14 +5738,24 @@ public class FileViewList : Gtk.Box {
 		}
 		else{
 			foreach(var item in selected){
-				if (item is FileItemArchive){
-					var arch = (FileItemArchive) item;
+				
+				if (FileItem.is_archive_by_extension(item.file_path)){
+					
+					FileItemArchive? arch = FileItemArchive.convert_file_item(item);
+					if (arch == null) {
+						log_error("extract_selected_items_to_opposite_location(): selected item is not an archive");
+						continue;
+					}
+			
 					arch.extract_list.clear();
+					// unique path will be generated before execution in FileTask()
 					arch.extraction_path = path_combine(outpath, arch.file_title);
 					list.add(arch);
 				}
 			}
 		}
+
+		if (list.size == 0) { return; }
 
 		// create action
 		var action = new ProgressPanelArchiveTask(pane, list, FileActionType.EXTRACT, !is_partial_extraction);

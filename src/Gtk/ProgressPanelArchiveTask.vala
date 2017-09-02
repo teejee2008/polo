@@ -38,6 +38,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 	private ArchiveTask task;
 	
 	private FileItem dest_archive;
+	private FileItemArchive? archive;
 
 	// ui for archive_task
 	private Gtk.Grid grid_stats;
@@ -63,9 +64,14 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 	private double progress_prev;
 	
 	private uint tmr_password = 0;
+	private uint tmr_next = 0;
+	
 	private bool was_restarted = false;
 	public bool create_new_folder = true;
 	private FileItem? previous_archive = null;
+
+	private Gee.ArrayList<FileItemArchive> archives = new Gee.ArrayList<FileItemArchive>();
+	private bool file_cancelled = false;
 
 	public ProgressPanelArchiveTask(FileViewPane _pane,
 		Gee.ArrayList<FileItem> _items, FileActionType _action, bool _create_new_folder){
@@ -135,7 +141,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		//grid_stats
 		var grid_stats = new Grid();
 		grid_stats.set_column_spacing (6);
-		grid_stats.set_row_spacing (6);
+		grid_stats.set_row_spacing (3);
 		grid_stats.column_homogeneous = true;
 		//grid_stats.hexpand = true;
 		hbox.add(grid_stats);
@@ -253,7 +259,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 	private void init_progress_bar() {
 		
 		drawing_area = new Gtk.DrawingArea();
-		drawing_area.set_size_request(-1, 40);
+		drawing_area.set_size_request(-1, 20);
 		drawing_area.hexpand = true;
 		
 		var sw_progress = new Gtk.ScrolledWindow(null, null);
@@ -542,6 +548,18 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 
 		pane.refresh_file_action_panel();
 
+		switch (action_type){
+		case FileActionType.EXTRACT:
+			archives = new Gee.ArrayList<FileItemArchive>();
+			foreach(var item in items){
+				if (item is FileItemArchive){
+					var arch = (FileItemArchive) item;
+					archives.add(arch);
+				}
+			}
+			break;
+		}
+		
 		start_task();
 	}
 
@@ -554,11 +572,6 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		//archive = items[0];
 		init_status();
 
-		var archives = new Gee.ArrayList<FileItemArchive>();
-		foreach(var item in items){
-			archives.add((FileItemArchive) item);
-		}
-
 		switch (action_type){
 		case FileActionType.COMPRESS:
 			task.compress((FileItemArchive)dest_archive);
@@ -566,24 +579,23 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 			
 		case FileActionType.EXTRACT:
 
-			string msg = "";
-			bool path_not_set = false;
-			foreach(var item in items){
-				var arch = (FileItemArchive) item;
-				if (arch.extraction_path.length == 0){
-					path_not_set = true;
-					msg += "%s\n".printf(arch.file_name);
+			if (!was_restarted){
+				if (archives.size > 0){
+					archive = archives[0];
+					archives.remove(archive);
 				}
 			}
 
-			if (path_not_set){
-				gtk_messagebox(_("Extraction path not specified"), msg, window, true);
+			if (archive.extraction_path.length == 0){
+				string txt = _("Extraction path not specified");
+				string msg = archive.file_name;
+				gtk_messagebox(txt, msg, window, true);
 				finish();
 				return;
 			}
 
 			bool create_new_folder = !was_restarted && task.extract_to_new_folder;
-			task.extract_archives(archives, create_new_folder);
+			task.extract_archive(archive, create_new_folder);
 			break;
 
 		case FileActionType.LIST_ARCHIVE:
@@ -597,7 +609,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 
 		gtk_do_events();
 		
-		tmr_status = Timeout.add (500, update_status);
+		tmr_status = Timeout.add(500, update_status);
 	}
 
 	public override void init_status(){
@@ -611,6 +623,8 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		lbl_status.label = "Preparing...";
 		progress_prev = 0.0;
 		task.progress = 0.0;
+
+		file_cancelled = false;
 
 		btn_pause.set_tooltip_text (_("Pause"));
 		btn_pause.image = IconManager.lookup_image("gtk-media-pause", 16);
@@ -672,7 +686,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 			// remove progress timers
 			Source.remove (tmr_password);
 			// prompt for password
-			//tmr_password = Timeout.add(200, prompt_for_password_and_restart_task);
+			tmr_password = Timeout.add(200, prompt_for_password_and_restart_task);
 			return false;
 			
 		case AppStatus.FINISHED:
@@ -732,11 +746,12 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 			&& (task.archive.children.keys.size == 0)){
 
 			// invalid archive, error
-			var msg = _("File is not an archive or format is unsupported");
-			gtk_messagebox("Unknown Format", msg, window, true);
+			string txt = _("Unknown Format");
+			string msg = _("File is not an archive or format is unsupported") + "\n\n%s".printf(task.archive.file_name);
+			gtk_messagebox(txt, msg, window, true);
 			//task_is_running = false;
 		}
-		else if (!aborted){
+		else if (!aborted && !file_cancelled){
 			
 			// valid archive, error
 			switch (task.action){
@@ -747,6 +762,16 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 				}
 				break;
 			}
+		}
+
+		switch (task.action){
+		case ArchiveAction.TEST:
+		case ArchiveAction.EXTRACT:
+			if (archives.size > 0){
+				tmr_next = Timeout.add(200, start_next_task);
+				return;
+			}
+			break;
 		}
 		
 		pane.file_operations.remove(this);
@@ -799,7 +824,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		return outpath;
 	}
 
-	/*private bool prompt_for_password_and_restart_task(){
+	private bool prompt_for_password_and_restart_task(){
 
 		log_debug("ProgressPanelArchiveTask: prompt_for_password_and_restart_task()");
 		
@@ -810,19 +835,35 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 
 		this.hide();
 
-		if (task.archive.prompt_for_password()){
+		if (task.archive.prompt_for_password(window)){
 			this.show();
 			was_restarted = true;
 			start_task(); // start again
 		}
 		else{
 			log_msg(_("Cancelled by user"));
+			file_cancelled = true;
 			finish();
 		}
 		
-		return true;
-	}*/
-	
+		return false;
+	}
+
+	private bool start_next_task(){
+
+		log_debug("ProgressPanelArchiveTask: start_next_task()");
+		
+		if (tmr_next > 0) {
+			Source.remove(tmr_next);
+			tmr_next = 0;
+		}
+
+		was_restarted = false;
+		start_task(); // start next
+		
+		return false;
+	}
+
 }
 
 

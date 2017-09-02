@@ -103,20 +103,20 @@ public class FileItemArchive : FileItem {
 
 	// static helpers ---------------------------------
 
-	public static FileItemArchive? convert_file_item(FileItem item, FileType _file_type){
+	public static FileItemArchive? convert_file_item(FileItem item){
 
 		if (item is FileItemArchive){ return (FileItemArchive) item; }
 			
 		log_debug("FileItemArchive: convert_file_item()");
-		
-		if (FileItem.is_archive_by_extension(item.file_path) && !FileItem.is_package_by_extension(item.file_path)){
+
+		if (FileItem.is_archive_by_extension(item.file_path)){ // && !FileItem.is_package_by_extension(item.file_path) // allow package extraction
+			
 			var arch = new FileItemArchive.from_path_and_type(item.file_path, FileType.DIRECTORY, true);
+			
 			if (item.parent != null){
 				arch.parent = item.parent;
 				arch.parent.children[arch.file_name] = arch;
 			}
-			arch.query_file_info();
-			arch.file_type = _file_type;
 			return arch;
 		}
 		
@@ -188,6 +188,20 @@ public class FileItemArchive : FileItem {
 		window = App.main_window;
 		task = new ArchiveTask(window);
 		task.open(this, true);
+
+		log_debug("FileItemArchive: task.open(): done: %s".printf(task.status.to_string()));
+
+		if (task.status == AppStatus.PASSWORD_REQUIRED){
+			if (task.archive.prompt_for_password(App.main_window)){
+				log_debug("FileItemArchive: task.open():2: start");
+				task.open(this, true);
+				log_debug("FileItemArchive: task.open():2: done");
+			}
+			else{
+				task.status = AppStatus.CANCELLED;
+				log_debug("FileItemArchive: AppStatus.CANCELLED");
+			}
+		}
 
 		if ((task.status == AppStatus.FINISHED) && (this.children.size > 0)){
 			cached_date = file_get_modified_date(file_path);
@@ -366,7 +380,7 @@ public class FileItemArchive : FileItem {
 		return true;
 	}*/
 
-	public bool prompt_for_password(){
+	public bool prompt_for_password(Gtk.Window _window){
 
 		log_debug("FileItemArchive: prompt_for_password()");
 
@@ -380,7 +394,7 @@ public class FileItemArchive : FileItem {
 
 		msg += _("Enter Password") + ":";
 		
-		password = PasswordDialog.prompt_user(App.main_window, false, "", msg);
+		password = PasswordDialog.prompt_user(_window, false, "", msg);
 
 		return (password.length > 0);
 	}

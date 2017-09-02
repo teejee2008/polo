@@ -419,18 +419,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 	public string file_extension {
 		owned get{
-			if (file_path.length == 0){ return ""; }
-			string[] parts = file_name.split(".");
-			
-			if (parts.length == 1){ // no extension
-				return "";
-			}
-			else if ((parts.length > 2) && (parts[parts.length-2].length <= 4) && (parts[parts.length-1].length <= 4)){ // 2-part extension
-				return ".%s.%s".printf(parts[parts.length-2], parts[parts.length-1]);
-			}
-			else{
-				return ".%s".printf(parts[parts.length - 1]);
-			}
+			return file_get_extension(file_path);
 		}
 	}
 	
@@ -1072,7 +1061,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		
 		FileItem? item = null;
 			
-		log_debug("FileItem: add_descendant=%s".printf(_file_path));
+		//log_debug("FileItem: add_descendant=%s".printf(_file_path));
 
 		string item_path = _file_path.strip();
 		FileType item_type = (_file_type == null) ? FileType.REGULAR : _file_type;

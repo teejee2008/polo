@@ -221,11 +221,10 @@ public class FileTask : GLib.Object {
 
 			if (source.file_path == destination.file_path){
 				if (destination.children.has_key(item.file_name)){
-					int index = 1;
-					do{
-						dest_item_name = "%s%s%s".printf(item.file_title, " (%d)".printf(index++), item.file_extension);
-					}
-					while(file_or_dir_exists(path_combine(destination.file_path, dest_item_name)));
+
+					string dest_path = path_combine(destination.file_path, dest_item_name);
+					dest_path = file_generate_unique_name(dest_path);
+					dest_item_name = file_basename(dest_path);
 				}
 			}
 
@@ -277,11 +276,10 @@ public class FileTask : GLib.Object {
 			string dest_item_name = item.file_name;
 			if (source.file_path == destination.file_path){
 				if (destination.children.has_key(item.file_name)){
-					int index = 1;
-					do{
-						dest_item_name = "%s%s%s".printf(item.file_title, " (%d)".printf(index++), item.file_extension);
-					}
-					while(file_or_dir_exists(path_combine(destination.file_path, dest_item_name)));
+
+					string dest_path = path_combine(destination.file_path, dest_item_name);
+					dest_path = file_generate_unique_name(dest_path);
+					dest_item_name = file_basename(dest_path);
 				}
 			}
 

@@ -1437,6 +1437,8 @@ public class FileContextMenu : Gtk.Menu {
 		var sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
 		
 		add_compress(sub_menu, sg_icon_sub, sg_label_sub);
+
+		add_browse_archive(sub_menu, sg_icon_sub, sg_label_sub);
 		
 		add_extract_to(sub_menu, sg_icon_sub, sg_label_sub);
 		
@@ -1467,9 +1469,32 @@ public class FileContextMenu : Gtk.Menu {
 		menu_item.sensitive = (selected_items.size > 0);
 	}
 
+	private void add_browse_archive(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		//if (!can_extract){ return; }
+		
+		log_debug("FileContextMenu: add_browse_archive()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Open"),
+			_("Open archive"),
+			null,//IconManager.lookup_image("package-x-generic",16),
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			view.browse_archive();
+		});
+
+		menu_item.sensitive = (selected_items.size > 0)
+			&& FileItem.is_archive_by_extension(selected_item.file_path) // check file
+			; // check destination
+	}
+	
 	private void add_extract_to(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
-		if (!can_extract){ return; }
+		//if (!can_extract){ return; }
 		
 		log_debug("FileContextMenu: add_extract_to()");
 
@@ -1485,12 +1510,14 @@ public class FileContextMenu : Gtk.Menu {
 			view.extract_selected_items_to_another_location();
 		});
 
-		menu_item.sensitive = FileItem.is_archive_by_extension(selected_item.file_path) && ((FileItemArchive) selected_item).is_base;
+		menu_item.sensitive = (selected_items.size > 0)
+			&& FileItem.is_archive_by_extension(selected_item.file_path) // check file
+			; // check destination
 	}
 
 	private void add_extract_across(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
-		if (!can_extract){ return; }
+		//if (!can_extract){ return; }
 		
 		log_debug("FileContextMenu: add_extract_across()");
 
@@ -1506,12 +1533,16 @@ public class FileContextMenu : Gtk.Menu {
 			view.extract_selected_items_to_opposite_location();
 		});
 
-		menu_item.sensitive = FileItem.is_archive_by_extension(selected_item.file_path) && ((FileItemArchive) selected_item).is_base; //item.is_archive || item.is_archived_item;
+		FileItem? opp_item = view.panel.opposite_pane.view.current_item;
+
+		menu_item.sensitive = (selected_items.size > 0)
+			&& FileItem.is_archive_by_extension(selected_item.file_path) // check file
+			&& (opp_item != null) && !(opp_item is FileItemArchive) && !(opp_item is FileItemCloud); // check destination
 	}
 
 	private void add_extract_here(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
-		if (!can_extract){ return; }
+		//if (!can_extract){ return; }
 
 		log_debug("FileContextMenu: add_extract_here()");
 
@@ -1527,17 +1558,10 @@ public class FileContextMenu : Gtk.Menu {
 			view.extract_selected_items_to_same_location();
 		});
 
-		menu_item.sensitive = FileItem.is_archive_by_extension(selected_item.file_path)
-			&& ((FileItemArchive) selected_item).is_base
-			&& view.current_item.is_local;
+		menu_item.sensitive = (selected_items.size > 0)
+			&& FileItem.is_archive_by_extension(selected_item.file_path) // check file
+			&& !(view.current_item is FileItemArchive) && !(view.current_item is FileItemCloud); // check destination
 	}
-
-	private bool can_extract {
-		get {
-			return selected_items_contain_archives || (view.current_item is FileItemArchive);
-		}
-	}
-
 
 	private void add_disk_usage(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 

@@ -58,7 +58,7 @@ public class ArchiveTask : AsyncTask {
 	
 	// archive
 	public FileItemArchive archive;
-	public Gee.ArrayList<FileItem> archives = new Gee.ArrayList<FileItem>();
+	public Gee.ArrayList<FileItemArchive> archives = new Gee.ArrayList<FileItemArchive>();
 	public Gee.ArrayList<FileItem> items = new Gee.ArrayList<FileItem>();
 	
 	public ArchiveAction action = ArchiveAction.CREATE;
@@ -791,25 +791,6 @@ public class ArchiveTask : AsyncTask {
 
 	// actions ----------------------------------
 
-	private bool process_next_archive(){
-
-		log_debug("ArchiveTask: process_next_archive(): %d".printf(archives.size));
-		
-		FileItem arch = null;
-		if (archives.size > 0){
-			arch = archives[0];
-			archives.remove(arch);
-
-			switch (action){
-			case ArchiveAction.EXTRACT:
-				extract_archive((FileItemArchive)arch);
-				return true;
-			}
-		}
-		
-		return false;
-	}
-
 	public void compress(FileItemArchive arch) {
 		
 		this.archive = arch;
@@ -850,10 +831,24 @@ public class ArchiveTask : AsyncTask {
 
 		this.extract_to_new_folder = _extract_to_new_folder;
 
-		process_next_archive();
+		extract_next_archive();
 	}
 
-	public void extract_archive(FileItemArchive arch) {
+	private bool extract_next_archive(){ 
+
+		log_debug("ArchiveTask: extract_next_archive(): %d".printf(archives.size)); 
+
+		if (archives.size > 0){ 
+			var arch = archives[0]; 
+			archives.remove(arch); 
+			extract_archive(arch, extract_to_new_folder);
+			return true;
+		} 
+
+		return false; 
+	} 
+
+	public void extract_archive(FileItemArchive arch, bool _extract_to_new_folder) {
 
 		log_debug("ArchiveTask: extract_archive(): %s".printf(arch.file_path));
 		
@@ -864,10 +859,10 @@ public class ArchiveTask : AsyncTask {
 
 		archive_path = archive.archive_base_item.file_path;
 
-		if (extract_to_new_folder){
-			update_extraction_path(archive);
+		if (_extract_to_new_folder){
+			archive.extraction_path = file_generate_unique_name(archive.extraction_path);
 		}
-
+		
 		this.extraction_path = archive.extraction_path;
 		
 		log_msg("\nAction: EXTRACT");
@@ -896,23 +891,6 @@ public class ArchiveTask : AsyncTask {
 		execute(arch);
 	}
 
-	public static void update_extraction_path(FileItemArchive item){
-
-		log_debug("ArchiveTask: set_extraction_path()");
-		
-		// create a unique extraction directory
-		int count = 0;
-		string outpath = item.extraction_path;
-		while (dir_exists(outpath)||file_exists(outpath)){
-			log_debug("dir_exists: %s".printf(outpath));
-			outpath = "%s (%d)".printf(item.extraction_path, ++count);
-		}
-		
-		item.extraction_path = outpath;
-
-		log_debug("extraction_path: %s".printf(outpath));
-	}
-	
 	public void test(FileItemArchive arch, bool wait = false) {
 
 		this.archive = arch;
@@ -1052,11 +1030,10 @@ public class ArchiveTask : AsyncTask {
 			log_debug("archiver_name: %s".printf(archiver_name));
 			log_debug("archiver_pid: %d".printf(archiver_pid));
 			log_debug("parser_name: %s".printf(parser_name));
-			
 		}
 		
 		if (wait){
-			while((status == AppStatus.RUNNING)||(status == AppStatus.PASSWORD_REQUIRED)){
+			while (status == AppStatus.RUNNING){ // don't wait if AppStatus.PASSWORD_REQUIRED
 				sleep(200);
 				gtk_do_events();
 			}
@@ -1201,7 +1178,7 @@ public class ArchiveTask : AsyncTask {
 
 		case "7z_list":
 
-			log_debug("7z_list: " + line);
+			//log_debug("7z_list: " + line);
 			
 			if (regex_list[parser_name].match(line, 0, out match)) {
 
@@ -1211,7 +1188,7 @@ public class ArchiveTask : AsyncTask {
 				string size_compressed = match.fetch(5).strip();
 				string file_path = match.fetch(6).strip();
 
-				log_debug("file_path=%s".printf(file_path));
+				//log_debug("file_path=%s".printf(file_path));
 
 				var file_type = (attr.contains("D")) ? FileType.DIRECTORY : FileType.REGULAR;
 				var item = (FileItemArchive) archive.add_descendant(file_path, file_type, int64.parse(size), int64.parse(size_compressed));
@@ -1332,7 +1309,7 @@ public class ArchiveTask : AsyncTask {
 
 		wait_for_threads_to_finish();
 		
-		if (status == AppStatus.PASSWORD_REQUIRED){
+		/*if (status == AppStatus.PASSWORD_REQUIRED){
 
 			log_debug("ArchiveTask: finish_task(): password_required");
 			
@@ -1346,21 +1323,21 @@ public class ArchiveTask : AsyncTask {
 				log_debug("ArchiveTask: finish_task(): password_cancelled: finish");
 				status = AppStatus.CANCELLED;
 			}
-		}
+		}*/
 
 		if (!is_terminated && (action == ArchiveAction.LIST)){
 			archive.archive_size = file_get_size(archive_path);
 			archive.compression_ratio = (archive.archive_size * 100.00) / archive.file_size;
 		}
 
-		if (status != AppStatus.CANCELLED){
+		/*if ((status != AppStatus.CANCELLED) && (status != AppStatus.PASSWORD_REQUIRED)) {
 			if (archives.size > 0){
 				log_debug("ArchiveTask: finish_task(): process_next_archive");
 				if (process_next_archive()){
 					return;
 				}
 			}
-		}
+		}*/
 
 		// finish  ---------------------------------
 		
