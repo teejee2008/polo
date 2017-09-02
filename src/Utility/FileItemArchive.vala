@@ -191,7 +191,7 @@ public class FileItemArchive : FileItem {
 
 		log_debug("FileItemArchive: task.open(): done: %s".printf(task.status.to_string()));
 
-		if (task.status == AppStatus.PASSWORD_REQUIRED){
+		while (task.status == AppStatus.PASSWORD_REQUIRED){
 			if (task.archive.prompt_for_password(App.main_window)){
 				log_debug("FileItemArchive: task.open():2: start");
 				task.open(this, true);
@@ -200,6 +200,7 @@ public class FileItemArchive : FileItem {
 			else{
 				task.status = AppStatus.CANCELLED;
 				log_debug("FileItemArchive: AppStatus.CANCELLED");
+				break;
 			}
 		}
 
@@ -385,14 +386,14 @@ public class FileItemArchive : FileItem {
 		log_debug("FileItemArchive: prompt_for_password()");
 
 		bool wrong_pass = (password.length > 0);
-		
-		string msg = "<b>%s: %s</b>\n\n".printf(_("Encrypted archive"), file_name);
-		
+
+		string msg = "<span size=\"large\" weight=\"bold\">%s: %s</span>\n\n".printf(_("Encrypted archive"), file_name);
+
 		if (wrong_pass){
-			msg += "%s\n\n".printf(_("Password was wrong! Try again or Cancel"));
+			msg += "<span weight=\"bold\">%s</span>\n\n".printf(_("Incorrect Password. Try again or Cancel."));
 		}
 
-		msg += _("Enter Password") + ":";
+		msg += _("Enter Password to Unlock") + ":";
 		
 		password = PasswordDialog.prompt_user(_window, false, "", msg);
 

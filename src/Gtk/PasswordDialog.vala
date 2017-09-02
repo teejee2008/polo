@@ -34,6 +34,7 @@ using TeeJee.System;
 using TeeJee.Misc;
 
 public class PasswordDialog : Gtk.Dialog {
+	
 	private Gtk.Box vbox_main;
 	private Gtk.Label lbl_message;
 	private Gtk.Entry txt_password;
@@ -156,12 +157,15 @@ public class PasswordDialog : Gtk.Dialog {
 
 		btn_ok.clicked.connect(btn_ok_clicked);
 		
-		btn_cancel = (Gtk.Button) add_button ("_Cancel", Gtk.ResponseType.CANCEL);
+		btn_cancel = (Gtk.Button) add_button ("_Cancel", Gtk.ResponseType.NONE);
+
+		btn_cancel.clicked.connect(btn_cancel_clicked);
 
 		set_ok_button_state();
 	}
 
 	public static string prompt_user(Gtk.Window parent, bool confirm_password, string dlg_title, string dlg_msg){
+		
 		var dlg = new PasswordDialog.with_parent(parent, confirm_password, dlg_title, dlg_msg);
 
 		int response_id = ResponseType.NONE;
@@ -181,7 +185,7 @@ public class PasswordDialog : Gtk.Dialog {
 			break;
 		case Gtk.ResponseType.CANCEL:
 			//do nothing
-			log_error(_("Password dialog cancelled by user"));
+			//log_error(_("Password dialog cancelled by user"));
 			break;
 		}
 		
@@ -191,6 +195,7 @@ public class PasswordDialog : Gtk.Dialog {
 	}
 	
 	private void password_visibility_toggle(){
+		
 		txt_password.set_visibility(!txt_password.get_visibility());
 		txt_confirm.set_visibility(txt_password.get_visibility());
 
@@ -199,6 +204,7 @@ public class PasswordDialog : Gtk.Dialog {
 	}
 	
 	private void set_ok_button_state(){
+		
 		if (txt_confirm.visible){
 			btn_ok.sensitive = (txt_password.text.length > 0) && (txt_confirm.text.length > 0);
 		}
@@ -214,6 +220,7 @@ public class PasswordDialog : Gtk.Dialog {
 	}
 
 	private void btn_ok_clicked(){
+		
 		if (confirm_password){
 			if (txt_password.text != txt_confirm.text) {
 				gtk_messagebox(_("Password Mismatch"), _("Passwords do not match"), this, true);
@@ -222,6 +229,10 @@ public class PasswordDialog : Gtk.Dialog {
 		}
 		
 		this.response(Gtk.ResponseType.OK);
+	}
+
+	private void btn_cancel_clicked(){
+		this.response(Gtk.ResponseType.CANCEL);
 	}
 }
 

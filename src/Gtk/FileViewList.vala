@@ -458,7 +458,7 @@ public class FileViewList : Gtk.Box {
 		FileItem item;
 		store.get (iter0, FileViewColumn.ITEM, out item, -1);
 
-		if (FileItem.is_archive_by_extension(item.file_path) && !FileItem.is_package_by_extension(item.file_path)){
+		if (!item.is_directory && FileItem.is_archive_by_extension(item.file_path) && !FileItem.is_package_by_extension(item.file_path)){
 
 			if (item is FileItemArchive == false){
 				

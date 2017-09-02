@@ -321,8 +321,8 @@ public class ArchiveTask : AsyncTask {
 		string cmd = "";
 
 		cmd += "7z a -bd";
-		if (archive.password.length > 0) {
-			cmd += " '-p%s'".printf(archive.password);
+		if (password.length > 0) {
+			cmd += " '-p%s'".printf(password);
 			if (encrypt_header) {
 				cmd += " -mhe";
 			}

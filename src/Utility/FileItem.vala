@@ -1969,13 +1969,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 	}*/
 
-
-	public void update_size_from_children(){
-		file_size = 0;
-		foreach(var item in children.values){
-			file_size += item.file_size;
-		}
-	}
 /*
 	public ArchiveTask extract_archive_to_same_location(){
 

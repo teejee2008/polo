@@ -230,12 +230,13 @@ public class CreateArchiveWindow : Gtk.Dialog {
 
 		foreach(var item in items){
 			if (add_files_thread_cancelled) { break; }
-			item.query_children(-1);
+			//item.query_children(-1);
+			archive.add_child_from_disk(item.file_path);
 		}
 
-		//archive.add_items_to_archive(items);
+		archive.get_dir_size_recursively(true);
 
-		archive.update_size_from_children();
+		//archive.update_size_from_children();
 
 		log_debug("archive.size=%s".printf(archive.file_size_formatted));
 		
@@ -1956,7 +1957,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		vbox_main.add(hbox);
 		
 		// label
-		var label = new Gtk.Label(_("Split"));
+		var label = new Gtk.Label(_("Split Size (MB)"));
 		label.xalign = 1.0f;
 		hbox.add(label);
 
