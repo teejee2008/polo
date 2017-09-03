@@ -538,19 +538,35 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 	public static void manage_disk(Device _device, FileViewPane pane, MainWindow window){
 	
 		log_debug("DeviceContextMenu: manage_disk(): %s".printf(_device.device));
-		
-		string cmd = "gnome-disks --block-device %s".printf(_device.device);
-		
-		exec_process_new_session(cmd);
+
+		if (App.tool_exists("gnome-disks")){
+			
+			string cmd = "gnome-disks --block-device %s".printf(_device.device);
+			
+			exec_process_new_session(cmd);
+		}
+		else{
+			string txt = _("Missing Dependency");
+			string msg = _("GNOME Disk Uitility (gnome-disks) is not installed");
+			gtk_messagebox(txt, msg, window, true);
+		}
 	}
 
 	public static void format_disk(Device _device, FileViewPane pane, MainWindow window){
 	
 		log_debug("DeviceContextMenu: format_disk(): %s".printf(_device.device));
+
+		if (App.tool_exists("gnome-disks")){
+			
+			string cmd = "gnome-disks --format-device --block-device %s".printf(_device.device);
 		
-		string cmd = "gnome-disks --format-device --block-device %s".printf(_device.device);
-		
-		exec_process_new_session(cmd);
+			exec_process_new_session(cmd);
+		}
+		else{
+			string txt = _("Missing Dependency");
+			string msg = _("GNOME Disk Uitility (gnome-disks) is not installed");
+			gtk_messagebox(txt, msg, window, true);
+		}
 	}
 }
 
