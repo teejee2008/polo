@@ -333,6 +333,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 
 			var error_message = err_log_read();
 			if (error_message.length > 0){
+				
 				string title = _("Error");
 				string msg = error_message;
 				gtk_messagebox(title, msg, window, true);
@@ -347,6 +348,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 				log_debug("conflicts=%d".printf(task.conflicts.keys.size));
 
 				int response = Gtk.ResponseType.OK;
+				
 				if (task.conflicts.keys.size > 0){
 
 					lbl_status.label = _("Resolving conflicts...");
@@ -360,6 +362,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 					gtk_do_events();
 				}
 				if (response == Gtk.ResponseType.OK){
+					
 					first_pass = false;
 					conflicts = task.conflicts;
 
@@ -403,7 +406,9 @@ public class ProgressPanelFileTask : ProgressPanel {
 		switch (action_type){
 		case FileActionType.CUT:
 		case FileActionType.COPY:
+		
 			if ((copied_bytes > 0) && (stalled_counter < 0) && !stalled_warning_shown){
+				
 				string title = _("Not Responding");
 				string msg = _("The data transfer seems to have stopped. Check if device is working correctly and if connection with the device is reliable.");
 				gtk_messagebox(title, msg, window, true);
@@ -438,6 +443,8 @@ public class ProgressPanelFileTask : ProgressPanel {
 		stop_status_timer();
 		
 		log_debug("ProgressPanelFileTask: finish()");
+
+		// refresh trash --------------------------------
 		
 		switch (action_type){
 		case FileActionType.TRASH:
@@ -448,12 +455,34 @@ public class ProgressPanelFileTask : ProgressPanel {
 			break;
 		}
 
-		if ((source != null) && (source is FileItemCloud)){
-			window.refresh_remote_views(source.file_path);
-		}
+		// refresh cloud location --------------------------------
+		
+		switch (action_type){
+		case FileActionType.COPY:
+		
+			if ((destination != null) && (destination is FileItemCloud)){
+				window.refresh_remote_views(destination.file_path);
+			}
+			break;
 
-		if ((destination != null) && (destination is FileItemCloud)){
-			window.refresh_remote_views(destination.file_path);
+		case FileActionType.CUT:
+		
+			if ((source != null) && (source is FileItemCloud)){
+				window.refresh_remote_views(source.file_path);
+			}
+
+			if ((destination != null) && (destination is FileItemCloud)){
+				window.refresh_remote_views(destination.file_path);
+			}
+			break;
+			
+		case FileActionType.DELETE:
+		case FileActionType.CLOUD_RENAME:
+		
+			if ((source != null) && (source is FileItemCloud)){
+				window.refresh_remote_views(source.file_path);
+			}
+			break;
 		}
 
 		pane.file_operations.remove(this);

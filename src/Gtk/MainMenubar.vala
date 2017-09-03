@@ -1512,7 +1512,7 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 					log_debug("is_mounted: %s".printf(acc.name));
 				}
 
-				var tab = panel.add_tab(true);
+				var tab = panel.add_tab(false);
 
 				//tab.view.query_items_delay = 3000;
 

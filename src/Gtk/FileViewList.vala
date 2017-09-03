@@ -2700,7 +2700,7 @@ public class FileViewList : Gtk.Box {
 		
 		// cancel running thread
 		if (query_subfolders_thread_running){
-			log_debug("FileViewList: query_subfolders(): cancelled running thread");
+			log_debug("FileViewList: query_subfolders(): cancel_running_thread");
 			query_subfolders_thread_cancelled = true;
 		}
 
@@ -3858,9 +3858,21 @@ public class FileViewList : Gtk.Box {
 
 	public void open(FileItem _item, DesktopApp? app){
 
-		log_debug("FileViewList: open(): %s ----------".printf(_item.display_path), true);
+		log_debug("action.open(): %s".printf(_item.display_path), true);
 
 		FileItem item = _item;
+
+		if ((item is FileItemCloud) && !item.is_directory){
+			var cloud_item = (FileItemCloud) item;
+			if (cloud_item.local_path.length > 0){
+				item = new FileItem.from_path_and_type(cloud_item.local_path, FileType.REGULAR, true);
+				// continue
+			}
+			else{
+				open_cloud_item(cloud_item, app);
+				return;
+			}
+		}
 		
 		if (app != null){
 			app.execute(item.file_path);
@@ -3878,6 +3890,41 @@ public class FileViewList : Gtk.Box {
 		else {
 			xdg_open(item.file_path);
 		}
+	}
+
+	private void open_cloud_item(FileItemCloud item, DesktopApp? app){
+
+		log_debug("action.open_cloud_item()");
+
+		var list = new Gee.ArrayList<FileItem>();
+		list.add(item);
+
+		var tempdir = get_temp_file_path();
+		dir_create(tempdir);
+		var dest_dir = new FileItem.from_path_and_type(tempdir, FileType.DIRECTORY, false);
+
+		var action = new ProgressPanelFileTask(pane, list, FileActionType.COPY);
+		action.set_source(current_item);
+		action.set_destination(dest_dir);
+		pane.file_operations.add(action);
+
+		action.task_complete.connect(()=>{
+			
+			//gtk_set_busy(false, window);
+			string dest_file = path_combine(tempdir, item.file_name);
+			
+			if (file_exists(dest_file)){
+				
+				item.local_path = dest_file;
+				var dest_item = new FileItem.from_path_and_type(dest_file, FileType.REGULAR, true);
+				open(dest_item, app);
+			}
+		});
+
+		// execute
+		action.execute();
+
+		//gtk_set_busy(true, window);
 	}
 
 	public void set_default_app(FileItem item, DesktopApp? app){

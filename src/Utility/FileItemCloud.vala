@@ -43,6 +43,30 @@ public class FileItemCloud : FileItem {
 	public DateTime? cached_date = null;
 	public string error_msg = "";
 
+	private string _local_path = "";
+	public string local_path {
+		get {
+			if (_local_path.length == 0){
+				return "";
+			}
+			
+			if (file_exists(_local_path)){
+				var ctl_file = _local_path + ".%lld".printf(modified_unix_time);
+				if (file_exists(ctl_file)){
+					return _local_path;
+				}
+			}
+			
+			_local_path = "";
+			return _local_path;
+		}
+		set {
+			_local_path = value;
+			var ctl_file = _local_path + ".%lld".printf(modified_unix_time);
+			file_write(ctl_file, "");
+		}
+	}
+
 	// contructors -------------------------------
 
 	public FileItemCloud.from_path_and_type(string _file_path, FileType _file_type) {
@@ -190,7 +214,7 @@ public class FileItemCloud : FileItem {
 					
 					if (file_date_parent.compare(file_date) > 0){
 
-						log_debug("FileItemCloud: older_than_parent");
+						//log_debug("FileItemCloud: older_than_parent");
 						return true;
 					}
 				}
@@ -207,7 +231,7 @@ public class FileItemCloud : FileItem {
 			return;
 		}
 
-		log_debug("FileItemCloud: save_to_cache()");
+		//log_debug("FileItemCloud: save_to_cache()");
 		
 		error_msg = "";
 		
@@ -239,7 +263,7 @@ public class FileItemCloud : FileItem {
 			return;
 		}
 
-		log_debug("FileItemCloud: read_children_from_cache()");
+		//log_debug("FileItemCloud: read_children_from_cache()");
 
 		// mark existing children as stale -------------------
 		

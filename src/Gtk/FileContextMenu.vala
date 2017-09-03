@@ -241,9 +241,9 @@ public class FileContextMenu : Gtk.Menu {
 
 		menu_item.sensitive = (selected_items.size > 0);
 
-		if (view.current_item is FileItemCloud){
-			menu_item.sensitive = false;
-		}
+		//if (view.current_item is FileItemCloud){
+		//	menu_item.sensitive = false;
+		//}
 
 		var sub_menu = new Gtk.Menu();
 		sub_menu.reserve_toggle_size = false;
@@ -272,7 +272,7 @@ public class FileContextMenu : Gtk.Menu {
 	private void add_open_with_default(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
 		if (selected_item == null){ return; }
-		
+
 		log_debug("FileContextMenu: add_open_with_default()");
 
 		Gtk.MenuItem menu_item = null;
@@ -431,6 +431,8 @@ public class FileContextMenu : Gtk.Menu {
 		log_debug("FileContextMenu: add_open_with()");
 
 		if (selected_item == null){ return; }
+
+		if (view.current_item is FileItemCloud){ return; }
 
 		var menu_item = gtk_menu_add_item(
 			menu,
