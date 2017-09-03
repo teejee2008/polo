@@ -207,11 +207,13 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 		
 		if ((task.read_status() != 0) && (task.get_error_message().length > 0)){
 			gtk_messagebox("Finished with errors", task.get_error_message(), window, true);
+			//pane.add_message("%s: %s".printf(_("Error"), task.get_error_message()), Gtk.MessageType.ERROR);
 		}		
 		else if (!aborted){
 			string txt = _("Flash Complete");
 			string msg = _("Device safely ejected and ready for use");
 			gtk_messagebox(txt, msg, window, false);
+			//pane.add_message("%s - %s".printf(txt, msg), Gtk.MessageType.INFO);
 		}
 	}
 }

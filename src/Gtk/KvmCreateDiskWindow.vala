@@ -458,6 +458,10 @@ public class KvmCreateDiskWindow : Gtk.Window, IPaneActive {
 
 		var task = new KvmTask();
 		task.create_disk(file_path, disk_size, base_file_path, this);
+
+		if (file_exists(file_path)){
+			pane.add_message("%s: %s".printf(_("Created"), file_basename(file_path)), Gtk.MessageType.INFO);
+		}
 	}
 
 	private void rebase_derived_disk(){

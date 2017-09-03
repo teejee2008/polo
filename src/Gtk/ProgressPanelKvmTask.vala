@@ -153,6 +153,8 @@ public class ProgressPanelKvmTask : ProgressPanel {
 
 		pane.refresh_file_action_panel();
 
+		pane.clear_messages();
+
 		switch (action_type){
 		case FileActionType.KVM_DISK_MERGE:
 		case FileActionType.KVM_DISK_CONVERT:
@@ -215,6 +217,7 @@ public class ProgressPanelKvmTask : ProgressPanel {
 				string title = _("Error");
 				string msg = error_message;
 				gtk_messagebox(title, msg, window, true);
+				pane.add_message("%s: %s".printf(_("Error"), msg), Gtk.MessageType.ERROR);
 			}
 			
 			finish();
@@ -247,6 +250,19 @@ public class ProgressPanelKvmTask : ProgressPanel {
 		
 		log_debug("ProgressPanelKvmTask: finish()");
 
+		if (!aborted && file_exists(file_path)){
+			
+			//var list = new Gee.ArrayList<string>();
+			//list.add(file_path);
+			
+			pane.add_message("%s: %s".printf(_("Created"), file_basename(file_path)), Gtk.MessageType.INFO);
+
+			//view.select_items_by_file_path(list);
+
+			// do not select items when operation completes
+			// it will be dangerous if selection changes while user is executing another action
+		}
+		
 		pane.file_operations.remove(this);
 		pane.refresh_file_action_panel();
 	}

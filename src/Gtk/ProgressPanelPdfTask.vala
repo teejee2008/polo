@@ -206,8 +206,8 @@ public class ProgressPanelPdfTask : ProgressPanel {
 					if (msg.length > 0) { msg += "\n"; }
 
 					if (outline.contains(": ")){
-						var arr = outline.split(": ");
-						list.add(arr[1]);
+						//var arr = outline.split(": ");
+						//list.add(arr[1]);
 						msg += "%s: %s".printf(arr[0], file_basename(arr[1]));
 					}
 					else{
@@ -216,7 +216,10 @@ public class ProgressPanelPdfTask : ProgressPanel {
 				}
 				
 				pane.add_message(msg, Gtk.MessageType.INFO);
-				view.select_items_by_file_path(list);
+				//view.select_items_by_file_path(list);
+
+				// do not select items when operation completes
+				// it will be dangerous if selection changes while user is executing another action
 			}
 		}
 

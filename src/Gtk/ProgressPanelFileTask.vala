@@ -186,6 +186,8 @@ public class ProgressPanelFileTask : ProgressPanel {
 
 		pane.refresh_file_action_panel();
 
+		pane.clear_messages();
+
 		switch (action_type){
 		case FileActionType.PASTE_SYMLINKS_AUTO:
 		case FileActionType.PASTE_SYMLINKS_ABSOLUTE:
