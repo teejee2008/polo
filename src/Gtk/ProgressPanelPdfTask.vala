@@ -200,11 +200,23 @@ public class ProgressPanelPdfTask : ProgressPanel {
 			}
 			else{
 				string msg = "";
+				var list = new Gee.ArrayList<string>();
+				
 				foreach(string outline in task.output_files){
 					if (msg.length > 0) { msg += "\n"; }
-					msg += outline;
+
+					if (outline.contains(": ")){
+						var arr = outline.split(": ");
+						list.add(arr[1]);
+						msg += "%s: %s".printf(arr[0], file_basename(arr[1]));
+					}
+					else{
+						msg += outline;
+					}
 				}
+				
 				pane.add_message(msg, Gtk.MessageType.INFO);
+				view.select_items_by_file_path(list);
 			}
 		}
 

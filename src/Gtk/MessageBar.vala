@@ -50,9 +50,10 @@ public class MessageBar : Gtk.Box {
 	protected LayoutPanel panel {
 		get { return pane.panel; }
 	}
-
+	
 	private string message_text = "";
 	private Gtk.MessageType type = Gtk.MessageType.INFO; // INFO, ERROR, WARNING, QUESTION, OTHER
+	private Gtk.ScrolledWindow scrolled;
 	
 	// -------------------------------
 
@@ -77,11 +78,28 @@ public class MessageBar : Gtk.Box {
 
 	private void init_ui(){
 
+		scrolled = new Gtk.ScrolledWindow(null, null);
+		//scrolled.set_shadow_type (ShadowType.ETCHED_IN);
+		scrolled.hscrollbar_policy = PolicyType.AUTOMATIC;
+		scrolled.vscrollbar_policy = PolicyType.AUTOMATIC;
+		scrolled.margin = 6;
+		add(scrolled);
+
+		if (message_text.split("\n").length > 5){
+			scrolled.set_size_request(-1, 100);
+		}
+		else if (message_text.split("\n").length > 1){
+			scrolled.set_size_request(-1, 50);
+		}
+
+		var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
+		scrolled.add(box);
+		
 		var label = new Gtk.Label(message_text);
 		label.xalign = 0.0f;
 		label.hexpand = true;
-		label.margin = 6;
-		add(label);
+		label.margin = 0;
+		box.add(label);
 
 		string css = "";
 
@@ -108,10 +126,10 @@ public class MessageBar : Gtk.Box {
 		css = " color: #000000; ";
 		gtk_apply_css(new Gtk.Widget[] { label }, css);
 
-		add_close_button();
+		add_close_button(box);
 	}
 
-	private void add_close_button(){
+	private void add_close_button(Gtk.Box box){
 
 		var img = new Gtk.Image.from_pixbuf(IconManager.lookup("window-close", 16, true));
 
@@ -123,7 +141,7 @@ public class MessageBar : Gtk.Box {
 		label.set_use_markup(true);
 		label.margin = 6;
 		ebox.add(label);
-		this.add(ebox);
+		add(ebox);
 		
 		var css = " color: #000000; ";
 		gtk_apply_css(new Gtk.Widget[] { label }, css);

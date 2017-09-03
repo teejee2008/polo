@@ -2337,6 +2337,8 @@ public class FileViewList : Gtk.Box {
 
 		window.layout_box.save_pane_positions();
 
+		var selections = get_selected_file_paths();
+
 		// set model
 		
 		store = new Gtk.TreeStore(6,
@@ -2438,6 +2440,8 @@ public class FileViewList : Gtk.Box {
 			thumbnail_update_is_required = false;
 			start_thumbnail_updater();
 		}
+
+		select_items_by_file_path(selections);
 
 		log_trace("tree refreshed: %s, %s".printf(current_item.file_name, timer_elapsed_string(timer)));
 
@@ -3731,6 +3735,15 @@ public class FileViewList : Gtk.Box {
 		return selected_items;
 	}
 
+	public Gee.ArrayList<string> get_selected_file_paths(){
+		var list = new Gee.ArrayList<string>();
+		foreach(var item in get_selected_items()){
+			list.add(item.file_path);
+		}
+		return list;
+	}
+	
+
 	public void get_selected_counts(out int files, out int dirs){
 
 		log_debug("FileViewList: get_selected_counts()");
@@ -4674,6 +4687,8 @@ public class FileViewList : Gtk.Box {
 			var cloud_item = (FileItemCloud) current_item;
 			cloud_item.remove_cached_file();
 		}
+
+		clear_selections();
 		
 		refresh(true, true);
 	}
