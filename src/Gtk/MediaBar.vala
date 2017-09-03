@@ -199,7 +199,9 @@ public class MediaBar : Gtk.Box {
 		//log_debug("MediaBar: mediaview_excluded(): %s".printf(view.mediaview_excluded.to_string()));
 		//log_debug("MediaBar: refresh(): %s".printf(view.has_media.to_string()));
 
-		if (view.has_media && (view.get_view_mode() != ViewMode.MEDIA)
+		gtk_hide(this);
+		
+		/*if (view.has_media && (view.get_view_mode() != ViewMode.MEDIA)
 			&& !view.mediaview_include && !view.mediaview_exclude
 			&& !view.current_item.is_trash && !(view.current_item is FileItemArchive)){
 
@@ -207,7 +209,7 @@ public class MediaBar : Gtk.Box {
 		}
 		else{
 			gtk_hide(this);
-		}
+		}*/
 
 		//log_debug("MediaBar: refresh(): exit");
 	}
