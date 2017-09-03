@@ -42,10 +42,10 @@ public const string AppWikiVersion = "17.8 (BETA 10)"; // update only if wiki pa
 public const string AppAuthor = "Tony George";
 public const string AppAuthorEmail = "teejeetech@gmail.com";
 
-public const int PLUGIN_VER_ISO = 2;
-public const int PLUGIN_VER_PDF = 2;
-public const int PLUGIN_VER_IMAGE = 2;
-public const int PLUGIN_VER_YT = 2;
+public const int PLUGIN_VER_ISO = 3;
+public const int PLUGIN_VER_PDF = 3;
+public const int PLUGIN_VER_IMAGE = 3;
+public const int PLUGIN_VER_YT = 3;
 
 const string GETTEXT_PACKAGE = "";
 const string LOCALE_DIR = "/usr/share/locale";
@@ -514,7 +514,7 @@ public class Main : GLib.Object {
 		tools["gnome-disks"] = new Tool("gnome-disks","gnome-disks","GNOME Disk Utility");
 		tools["rclone"] = new Tool("rclone","rclone","rsync for Cloud Storage");
 		tools["youtube-dl"] = new Tool("youtube-dl","youtube-dl","youtube-dl Downloader");
-		
+
 		check_all_tools();
 	}
 
