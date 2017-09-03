@@ -126,7 +126,8 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 		log_debug("ProgressPanelUsbWriterTask: execute(%s)");
 
 		pane.refresh_file_action_panel();
-
+		pane.clear_messages();
+		
 		start_task();
 	}
 

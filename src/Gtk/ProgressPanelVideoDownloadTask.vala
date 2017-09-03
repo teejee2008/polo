@@ -413,7 +413,8 @@ public class ProgressPanelVideoDownloadTask : ProgressPanel {
 		task = new VideoDownloadTask(url, destination.file_path);
 		
 		pane.refresh_file_action_panel();
-
+		pane.clear_messages();
+		
 		start_task();
 	}
 

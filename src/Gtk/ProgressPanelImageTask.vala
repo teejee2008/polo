@@ -1,5 +1,5 @@
 /*
- * ProgressPanelPdfTask.vala
+ * ProgressPanelImageTask.vala
  *
  * Copyright 2017 Tony George <teejeetech@gmail.com>
  *
@@ -116,16 +116,17 @@ public class ProgressPanelImageTask : ProgressPanel {
 
 	public override void execute(){
 
-		log_debug("ProgressPanelPdfTask: execute(%s)");
+		log_debug("ProgressPanelImageTask: execute(%s)");
 
 		pane.refresh_file_action_panel();
-
+		pane.clear_messages();
+		
 		start_task();
 	}
 
 	public override void init_status(){
 
-		log_debug("ProgressPanelPdfTask: init_status()");
+		log_debug("ProgressPanelImageTask: init_status()");
 
 		progressbar.fraction = 0.0;
 		lbl_status.label = "Preparing...";
@@ -134,7 +135,7 @@ public class ProgressPanelImageTask : ProgressPanel {
 	
 	public override void start_task(){
 
-		log_debug("ProgressPanelPdfTask: start_task()");
+		log_debug("ProgressPanelImageTask: start_task()");
 
 		err_log_clear();
 
@@ -149,7 +150,7 @@ public class ProgressPanelImageTask : ProgressPanel {
 
 		if (task.is_running){
 			
-			log_debug("ProgressPanelPdfTask: update_status()");
+			log_debug("ProgressPanelImageTask: update_status()");
 
 			if (task.current_file.length > 0){
 				lbl_status.label = "%s: %s".printf(_("File"), task.current_file);
@@ -171,7 +172,7 @@ public class ProgressPanelImageTask : ProgressPanel {
 
 	public override void cancel(){
 
-		log_debug("ProgressPanelPdfTask: cancel()");
+		log_debug("ProgressPanelImageTask: cancel()");
 		
 		aborted = true;
 
@@ -190,13 +191,30 @@ public class ProgressPanelImageTask : ProgressPanel {
 
 		stop_status_timer();
 		
-		log_debug("ProgressPanelPdfTask: finish()");
+		log_debug("ProgressPanelImageTask: finish()");
 
+		if (!aborted){
+			if (task.output_files.size == 0){
+				string msg = _("Error") + ": %s".printf(task.get_error_message());
+				pane.add_message(msg, Gtk.MessageType.ERROR);
+			}
+			else{
+				string msg = "";
+				foreach(string outfile in task.output_files){
+					if (msg.length > 0) { msg += "\n"; }
+					msg += (task.inplace ? _("Replaced") : _("Created")) + ": %s".printf(file_basename(outfile));
+				}
+				pane.add_message(msg, Gtk.MessageType.INFO);
+			}
+		}
+		
 		pane.file_operations.remove(this);
 		pane.refresh_file_action_panel();
+		pane.refresh_message_panel();
 
 		if (task.get_error_message().length > 0){
 			gtk_messagebox(_("Finished with errors"), task.get_error_message(), window, true);
+			//pane.add_message(_("Error") + ": %s: %s".printf(archive.file_name, task.get_error_message()), Gtk.MessageType.ERROR);
 		}
 	}
 }

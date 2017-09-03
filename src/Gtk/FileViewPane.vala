@@ -43,6 +43,7 @@ public class FileViewPane : Gtk.Box {
 	public AdminBar adminbar;
 	public TrashBar trashbar;
 	public Gtk.Box file_operations_box;
+	public Gtk.Box message_box;
 	public TermBox terminal;
 	public Statusbar statusbar;
 
@@ -53,6 +54,8 @@ public class FileViewPane : Gtk.Box {
 	private Gtk.Paned paned_term;
 	
 	public Gee.ArrayList<ProgressPanel> file_operations = new Gee.ArrayList<ProgressPanel>();
+
+	public Gee.ArrayList<MessageBar> messages = new Gee.ArrayList<MessageBar>();
 
 	// parents
 	public FileViewTab tab;
@@ -124,6 +127,9 @@ public class FileViewPane : Gtk.Box {
 
 		file_operations_box = new Gtk.Box(Orientation.VERTICAL, 6);
 		add(file_operations_box);
+
+		message_box = new Gtk.Box(Orientation.VERTICAL, 1);
+		add(message_box);
 
 		//add(selection_bar);
 		
@@ -198,6 +204,17 @@ public class FileViewPane : Gtk.Box {
 		gtk_apply_css(new Gtk.Widget[] { active_indicator_bottom }, css);
 	}
 
+	public void add_message(string msg, Gtk.MessageType type){
+
+		log_debug("FileViewPane: add_message(): %s".printf(msg));
+		
+		var msgbar = new MessageBar(this, msg, type);
+		messages.add(msgbar);
+		//gtk_show(message_box);
+		//message_box.show_all();
+		//refresh_message_panel();
+	}
+
 	// refresh
 
 	public void refresh(bool refresh_view_required = true){
@@ -222,6 +239,8 @@ public class FileViewPane : Gtk.Box {
 
 		refresh_file_action_panel();
 
+		refresh_message_panel();
+
 		terminal.refresh();
 		
 		statusbar.refresh();
@@ -240,12 +259,12 @@ public class FileViewPane : Gtk.Box {
 	
 	public void refresh_file_action_panel(){
 
-		log_debug("FileActionPanel: refresh()");
+		log_debug("FileActionPanel: refresh_file_action_panel()");
 
 		file_operations_box.forall ((element) => file_operations_box.remove (element));
 
-		foreach(var actionbar in file_operations){
-			file_operations_box.add(actionbar);
+		foreach(var item in file_operations){
+			file_operations_box.add(item);
 		}
 
 		if (file_operations.size > 0){
@@ -255,6 +274,31 @@ public class FileViewPane : Gtk.Box {
 		else{
 			file_operations_box.hide();
 		}
+	}
+
+	public void refresh_message_panel(){
+
+		log_debug("FileActionPanel: refresh_message_panel(): %d".printf(messages.size));
+
+		message_box.forall ((element) => message_box.remove (element));
+
+		foreach(var item in messages){
+			message_box.add(item);
+		}
+
+		if (messages.size > 0){
+			gtk_show(message_box);
+		}
+		else{
+			gtk_hide(message_box);
+		}
+
+		log_debug("FileActionPanel: message_box(): %s".printf(message_box.visible.to_string()));
+	}
+
+	public void clear_messages(){
+		messages.clear();
+		refresh_message_panel();
 	}
 
 	public void maximize_terminal(){

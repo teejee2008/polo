@@ -59,6 +59,7 @@ public class ImageTask : AsyncTask {
 	public bool silent = false;
 	public string rotate_direction = "";
 	public string level = "";
+	public Gee.ArrayList<string> output_files = new Gee.ArrayList<string>();
 	
 	public ImageTaskType action;
 
@@ -73,7 +74,8 @@ public class ImageTask : AsyncTask {
 		try {
 			//Batch: 1/1 complete
 			regex_list["status"] = new Regex("""^Batch:[ \t]*([0-9.]+)/([0-9.]+)[ \t]*complete""");
-			regex_list["file"] = new Regex("""^Input:[ \t]*(.*)""");
+			regex_list["input"] = new Regex("""^Input:[ \t]*(.*)""");
+			regex_list["output"] = new Regex("""^(Created|Replaced):[ \t]*(.*)""");
 		}
 		catch (Error e) {
 			log_error (e.message);
@@ -258,8 +260,8 @@ public class ImageTask : AsyncTask {
 
 		if (is_terminated) { return; }
 
-		log_msg("ERR:" + err_line);
-		
+		log_error(err_line);
+
 		update_progress_parse_console_output(err_line);
 	}
 
@@ -274,8 +276,11 @@ public class ImageTask : AsyncTask {
 			count_completed = int64.parse(match.fetch(1));
 			progress = (count_completed * 1.0) / count_total;
 		}
-		else if (regex_list["file"].match(line, 0, out match)) {
+		else if (regex_list["input"].match(line, 0, out match)) {
 			current_file = file_basename(match.fetch(1).strip());
+		}
+		else if (regex_list["output"].match(line, 0, out match)){
+			output_files.add(match.fetch(2).strip());
 		}
 
 		mutex_parser.unlock();
@@ -284,6 +289,7 @@ public class ImageTask : AsyncTask {
 	}
 
 	protected override void finish_task(){
+
 		if ((status != AppStatus.CANCELLED) && (status != AppStatus.PASSWORD_REQUIRED)) {
 			status = AppStatus.FINISHED;
 		}
@@ -297,6 +303,21 @@ public class ImageTask : AsyncTask {
 			return int.parse(txt);
 		}
 		return -1;
+	}
+
+	public override string get_error_message(){
+
+		// cleanup some verbose debug messages from pngcrush
+
+		string msg = "";
+		foreach(string line in error_msg.split("\n")){
+			if ((action == ImageTaskType.OPTIMIZE_PNG) && line.has_prefix(" | ")){
+				continue; // skip line
+			}
+			msg += "%s\n".printf(line);
+		}
+
+		return msg.strip();
 	}
 
 	// stats

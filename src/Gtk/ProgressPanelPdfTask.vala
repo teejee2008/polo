@@ -119,7 +119,8 @@ public class ProgressPanelPdfTask : ProgressPanel {
 		log_debug("ProgressPanelPdfTask: execute(%s)");
 
 		pane.refresh_file_action_panel();
-
+		pane.clear_messages();
+		
 		start_task();
 	}
 
@@ -191,6 +192,21 @@ public class ProgressPanelPdfTask : ProgressPanel {
 		stop_status_timer();
 		
 		log_debug("ProgressPanelPdfTask: finish()");
+
+		if (!aborted){
+			if (task.output_files.size == 0){
+				string msg = _("Error") + ": %s".printf(task.get_error_message());
+				pane.add_message(msg, Gtk.MessageType.ERROR);
+			}
+			else{
+				string msg = "";
+				foreach(string outline in task.output_files){
+					if (msg.length > 0) { msg += "\n"; }
+					msg += outline;
+				}
+				pane.add_message(msg, Gtk.MessageType.INFO);
+			}
+		}
 
 		pane.file_operations.remove(this);
 		pane.refresh_file_action_panel();

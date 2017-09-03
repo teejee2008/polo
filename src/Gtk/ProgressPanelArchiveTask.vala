@@ -547,6 +547,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		}
 
 		pane.refresh_file_action_panel();
+		pane.clear_messages();
 
 		switch (action_type){
 		case FileActionType.EXTRACT:
@@ -729,12 +730,29 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 
 		log_debug("status: %d".printf(status));
 
-		if (status == 0){ // valid archive, success
+		if (file_cancelled){
+
+			switch (task.action){
+			case ArchiveAction.CREATE:
+				pane.add_message(_("Cancelled") + ": %s".printf(task.archive_path), Gtk.MessageType.WARNING);
+				break;
+			case ArchiveAction.EXTRACT:
+				pane.add_message(_("Cancelled") + ": %s".printf(archive.file_name), Gtk.MessageType.WARNING);
+				break;
+			case ArchiveAction.TEST:
+				gtk_messagebox("","Archive is OK", window,false);
+				break;
+			}	
+		}
+		else if (status == 0){ // valid archive, success
 			//task_is_running = false;
 
 			switch (task.action){
 			case ArchiveAction.CREATE:
+				pane.add_message(_("Created") + ": %s".printf(task.archive_path), Gtk.MessageType.INFO);
+				break;
 			case ArchiveAction.EXTRACT:
+				pane.add_message(_("Extracted") + ": %s ➔ %s".printf(archive.file_name, archive.extraction_path), Gtk.MessageType.INFO);
 				break;
 			case ArchiveAction.TEST:
 				gtk_messagebox("","Archive is OK", window,false);
@@ -749,6 +767,8 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 			string txt = _("Unknown Format");
 			string msg = _("File is not an archive or format is unsupported") + "\n\n%s".printf(task.archive.file_name);
 			gtk_messagebox(txt, msg, window, true);
+
+			pane.add_message(_("Error") + ": %s: %s".printf(archive.file_name, _("Unknown Format")), Gtk.MessageType.ERROR);
 			//task_is_running = false;
 		}
 		else if (!aborted && !file_cancelled){
@@ -759,6 +779,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 			case ArchiveAction.EXTRACT:
 				if (task.get_error_message().length > 0){
 					gtk_messagebox("",_("There were errors while processing the archive.") + "\n\n" + task.get_error_message(), window, true);
+					pane.add_message(_("Error") + ": %s: %s".printf(archive.file_name, task.get_error_message()), Gtk.MessageType.ERROR);
 				}
 				break;
 			}
@@ -776,7 +797,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		
 		pane.file_operations.remove(this);
 		pane.refresh_file_action_panel();
-
+		pane.refresh_message_panel();
 		task_complete();
 	}
 

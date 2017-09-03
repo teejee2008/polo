@@ -57,8 +57,10 @@ public abstract class AsyncTask : GLib.Object{
 	public AppStatus status;
 	public string status_line = "";
 	public string stats_line = "";
-	private string error_msg = ""; // call get_error_message()
+	
 	public string current_file = "";
+
+	protected string error_msg = ""; // call get_error_message() for public access
 
 	public Mutex mutex_parser = Mutex();
 	
@@ -365,7 +367,7 @@ public abstract class AsyncTask : GLib.Object{
 
 	protected abstract void finish_task();
 
-	public string get_error_message(){
+	public virtual string get_error_message(){
 		return error_msg.strip();
 	}
 	

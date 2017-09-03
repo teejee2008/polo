@@ -2220,6 +2220,8 @@ public class FileViewList : Gtk.Box {
 			history_add(item);
 			history_reset();
 		}
+
+		pane.messages.clear();
 		
 		pane.pathbar.refresh(); // update pathbar before starting async query
 		
@@ -5430,7 +5432,7 @@ public class FileViewList : Gtk.Box {
 		if (!plug.available){
 			
 			string txt = _("Missing Plugin");
-			string msg = _("Install required packages and try again") + ":\n\n▰ %s".printf(plug.name);
+			string msg = _("Install required packages and try again") + ":\n\n▰ %s %s".printf(plug.name, "(polo-donation-plugins)");
 			gtk_messagebox(txt, msg, window, true);
 			
 			return false;
@@ -5438,7 +5440,7 @@ public class FileViewList : Gtk.Box {
 		else if (!plug.check_version()){
 			
 			string txt = _("Outdated Plugin");
-			string msg = _("Update required packages and try again") + ":\n\n▰ %s".printf(plug.name);
+			string msg = _("Update required packages and try again") + ":\n\n▰ %s %s".printf(plug.name, "(polo-donation-plugins)");
 			gtk_messagebox(txt, msg, window, true);
 			
 			return false;
