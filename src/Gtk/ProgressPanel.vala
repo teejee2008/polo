@@ -57,7 +57,7 @@ public abstract class ProgressPanel : Gtk.Box {
 	public FileActionType action_type;
 	public FileItem source;
 	public FileItem destination;
-
+	
 	protected Gtk.Box contents;
 
 	protected bool aborted = false;

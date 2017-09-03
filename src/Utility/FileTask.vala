@@ -34,6 +34,32 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
+public enum FileActionType{
+	NONE,
+	CUT,
+	COPY,
+	PASTE,
+	TRASH,
+	TRASH_EMPTY,
+	DELETE,
+	DELETE_TRASHED,
+	RESTORE,
+	SHRED,
+	PASTE_SYMLINKS_AUTO,
+	PASTE_SYMLINKS_ABSOLUTE,
+	PASTE_SYMLINKS_RELATIVE,
+	PASTE_HARDLINKS,
+	LIST_ARCHIVE,
+	TEST_ARCHIVE,
+	EXTRACT,
+	COMPRESS,
+	KVM_DISK_MERGE,
+	KVM_DISK_CONVERT,
+	ISO_WRITE,
+	VIDEO_LIST_FORMATS,
+	VIDEO_DOWNLOAD,
+	CLOUD_RENAME
+}
 
 public class FileTask : GLib.Object {
 
@@ -122,6 +148,53 @@ public class FileTask : GLib.Object {
 
 		copy_or_move_items_to_path(_source, dest_path, _items, true, _replace_mode, _conflicts, _window);
 	}
+
+	public void cloud_rename(string _source_file, string new_name, Gtk.Window? _window){
+
+		log_debug("FileTask: cloud_rename(): %s, %s".printf(_source_file, new_name));
+		
+		is_running = true;
+		
+		window = _window;
+
+		init_task();
+
+		status = _("Renaming items...");
+		log_debug(status);
+		
+		timer = new GLib.Timer();
+		timer.start();
+
+
+		// start timers
+		rate_timer = new GLib.Timer();
+		rate_timer.start();
+
+		// init rclone task
+		rclone = new RCloneTask();
+		rclone.source_path = _source_file;
+		rclone.dest_path = path_combine(file_parent(_source_file), new_name);
+		rclone.action = RcloneActionType.RENAME;
+		
+		// ---------------------
+
+		//rclone.dry_run = true;
+
+		rclone.task_complete.connect(()=>{
+
+			rate_timer.stop();
+
+			timer.stop();
+
+			log_debug("FileTask: cloud_rename(): exit");
+			is_running = false;
+
+			complete();
+		});
+
+		rclone.execute();
+	}
+
 
 	// private helpers --------------
 	
@@ -367,10 +440,15 @@ public class FileTask : GLib.Object {
 		rclone = new RCloneTask();
 		rclone.source_path = source.file_path;
 		rclone.dest_path = destination.file_path;
-
-		//if (action == "move"){
-		//	rclone.remove_source_files = true;
-		//}
+		rclone.action = RcloneActionType.COPY;
+		
+		if (action == "move"){
+			rclone.action = RcloneActionType.MOVE;
+			//rclone.remove_source_files = true;
+		}
+		else{
+			rclone.action = RcloneActionType.COPY;
+		}
 
 		// ---------------------
 

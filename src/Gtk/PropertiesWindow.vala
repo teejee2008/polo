@@ -448,6 +448,8 @@ public class PropertiesWindow : Gtk.Window {
 	// filesystem tab
 
 	private void init_tab_fs(){
+
+		if ((file_item is FileItemArchive) || (file_item is FileItemCloud)){ return; }
 		
 		log_debug("PropertiesWindow: init_tab_fs()");
 		
@@ -609,6 +611,8 @@ public class PropertiesWindow : Gtk.Window {
 
 	private void init_tab_permissions(){
 
+		if ((file_item is FileItemArchive) || (file_item is FileItemCloud)){ return; }
+		
 		log_debug("PropertiesWindow: init_tab_permissions()");
 		
 		var vbox = new Gtk.Box(Orientation.VERTICAL, 6);
@@ -1002,6 +1006,8 @@ public class PropertiesWindow : Gtk.Window {
 
 	private void init_tab_mediainfo(){
 
+		if ((file_item is FileItemArchive) || (file_item is FileItemCloud)){ return; }
+		
 		log_debug("PropertiesWindow: init_tab_mediainfo()");
 		
 		var vbox = new Gtk.Box(Orientation.VERTICAL, 12);
@@ -1102,44 +1108,43 @@ public class PropertiesWindow : Gtk.Window {
 		hbox.add(label);
 		//sg_prop_value.add_widget(label);
 
-		if ((file_item.accessed != null) && file_item.can_write && file_item.is_local){
+		if ((file_item is FileItemArchive) || (file_item is FileItemCloud)){ return label; }
 
-			var hbox_buttons = new Gtk.Box(Orientation.HORIZONTAL, 0);
-			hbox.add(hbox_buttons);
-			hbox = hbox_buttons;
+		if ((file_item.accessed == null) || !file_item.can_write || !file_item.is_local){ return label; }
 
-			var button = new Gtk.LinkButton.with_label("",_("Touch"));
+		var hbox_buttons = new Gtk.Box(Orientation.HORIZONTAL, 0);
+		hbox.add(hbox_buttons);
+		hbox = hbox_buttons;
+
+		var button = new Gtk.LinkButton.with_label("",_("Touch"));
+		hbox.add(button);
+
+		gtk_apply_css(new Gtk.Widget[] { button }, "padding-left: 1px; padding-right: 1px; padding-top: 0px; padding-bottom: 0px;");
+
+		button.set_tooltip_text(_("Update last access time to current system time"));
+
+		button.activate_link.connect(()=>{
+			touch(file_item.file_path, true, false, false, this);
+			file_item.query_file_info();
+			file_touched();
+			return true;
+		});
+
+		if (file_item.is_directory){
+
+			button = new Gtk.LinkButton.with_label("",_("All"));
 			hbox.add(button);
 
 			gtk_apply_css(new Gtk.Widget[] { button }, "padding-left: 1px; padding-right: 1px; padding-top: 0px; padding-bottom: 0px;");
 
-			button.set_tooltip_text(_("Update last access time to current system time"));
+			button.set_tooltip_text(_("Update last access time to current system time for directory contents"));
 
 			button.activate_link.connect(()=>{
-				touch(file_item.file_path, true, false, false, this);
+				touch(file_item.file_path, true, false, true, this);
 				file_item.query_file_info();
 				file_touched();
 				return true;
 			});
-
-			if (file_item.is_directory){
-
-				button = new Gtk.LinkButton.with_label("",_("All"));
-				hbox.add(button);
-
-				gtk_apply_css(new Gtk.Widget[] { button }, "padding-left: 1px; padding-right: 1px; padding-top: 0px; padding-bottom: 0px;");
-
-				button.set_tooltip_text(_("Update last access time to current system time for directory contents"));
-
-				button.activate_link.connect(()=>{
-					touch(file_item.file_path, true, false, true, this);
-					file_item.query_file_info();
-					file_touched();
-					return true;
-				});
-			}
-
-			
 		}
 
 		return label;
@@ -1166,42 +1171,43 @@ public class PropertiesWindow : Gtk.Window {
 		hbox.add(label);
 		//sg_prop_value.add_widget(label);
 
-		if ((file_item.modified != null) && file_item.can_write && file_item.is_local){
+		if ((file_item is FileItemArchive) || (file_item is FileItemCloud)){ return label; }
 
-			var hbox_buttons = new Gtk.Box(Orientation.HORIZONTAL, 0);
-			hbox.add(hbox_buttons);
-			hbox = hbox_buttons;
+		if ((file_item.modified == null) || !file_item.can_write || !file_item.is_local){ return label; }
 
-			var button = new Gtk.LinkButton.with_label("",_("Touch"));
+		var hbox_buttons = new Gtk.Box(Orientation.HORIZONTAL, 0);
+		hbox.add(hbox_buttons);
+		hbox = hbox_buttons;
+
+		var button = new Gtk.LinkButton.with_label("",_("Touch"));
+		hbox.add(button);
+
+		gtk_apply_css(new Gtk.Widget[] { button }, "padding-left: 1px; padding-right: 1px; padding-top: 0px; padding-bottom: 0px;");
+
+		button.set_tooltip_text(_("Update last modified time to current system time"));
+
+		button.activate_link.connect(()=>{
+			touch(file_item.file_path, false, true, false, this);
+			file_item.query_file_info();
+			file_touched();
+			return true;
+		});
+
+		if (file_item.is_directory){
+
+			button = new Gtk.LinkButton.with_label("",_("All"));
 			hbox.add(button);
 
 			gtk_apply_css(new Gtk.Widget[] { button }, "padding-left: 1px; padding-right: 1px; padding-top: 0px; padding-bottom: 0px;");
 
-			button.set_tooltip_text(_("Update last modified time to current system time"));
+			button.set_tooltip_text(_("Update last modified time to current system time for directory contents"));
 
 			button.activate_link.connect(()=>{
-				touch(file_item.file_path, false, true, false, this);
+				touch(file_item.file_path, false, true, true, this);
 				file_item.query_file_info();
 				file_touched();
 				return true;
 			});
-
-			if (file_item.is_directory){
-
-				button = new Gtk.LinkButton.with_label("",_("All"));
-				hbox.add(button);
-
-				gtk_apply_css(new Gtk.Widget[] { button }, "padding-left: 1px; padding-right: 1px; padding-top: 0px; padding-bottom: 0px;");
-
-				button.set_tooltip_text(_("Update last modified time to current system time for directory contents"));
-
-				button.activate_link.connect(()=>{
-					touch(file_item.file_path, false, true, true, this);
-					file_item.query_file_info();
-					file_touched();
-					return true;
-				});
-			}
 		}
 
 		return label;

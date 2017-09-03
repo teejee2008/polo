@@ -206,6 +206,7 @@ namespace TeeJee.Misc {
 		double sec;
 		
 		// 2016-01-15T14:23:52.964Z
+		// 2017-07-23T05:14:51.867Z
 		MatchInfo match = regex_match("""([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2}):([.0-9]+)Z""", date_string);
 		
 		if (match != null){

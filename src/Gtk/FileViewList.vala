@@ -4375,14 +4375,37 @@ public class FileViewList : Gtk.Box {
 			gtk_messagebox(_("Another file exists with this name"), _("Enter unique name for selected file"), window, true);
 		}
 		else{
-			bool ok = file_rename(item.file_path, new_name, window);
-			if (ok){
-				item.file_path = file_path_new;
-				return true;
+			if (item is FileItemCloud){
+				cloud_rename((FileItemCloud) item, new_name);
+				// async, no waiting
+			}
+			else{
+				bool ok = file_rename(item.file_path, new_name, window);
+				if (ok){
+					item.file_path = file_path_new;
+					return true;
+				}
 			}
 		}
 
 		return false;
+	}
+
+	public void cloud_rename(FileItemCloud item, string new_name){
+
+		log_debug("action.cloud_rename()");
+
+		var list = new Gee.ArrayList<FileItem>();
+		list.add(item);
+
+		var action = new ProgressPanelFileTask(pane, list, FileActionType.CLOUD_RENAME);
+		action.set_source(current_item);
+		action.source_file = item.file_path;
+		action.new_name = new_name;
+		pane.file_operations.add(action);
+
+		// execute
+		action.execute();
 	}
 
 	public void create_directory(){
@@ -5500,7 +5523,8 @@ public class FileViewList : Gtk.Box {
 		get {
 			return  (current_item != null)
 				&& !current_item.is_trash
-				&& !(current_item is FileItemArchive);
+				&& !(current_item is FileItemArchive)
+				&& !(current_item is FileItemCloud);
 		}
 	}
 
@@ -5518,13 +5542,19 @@ public class FileViewList : Gtk.Box {
 
 	public bool can_paste {
 		get {
-			return is_normal_directory;
+			return (current_item != null)
+				&& !current_item.is_trash
+				&& !(current_item is FileItemArchive);
+				//&& !(current_item is FileItemCloud); // allow paste
 		}
 	}
 		
 	public bool can_rename {
 		get {
-			return is_normal_directory;
+			return (current_item != null)
+				&& !current_item.is_trash
+				&& !(current_item is FileItemArchive);
+				//&& !(current_item is FileItemCloud); // allow rename
 		}
 	}
 
@@ -5537,9 +5567,10 @@ public class FileViewList : Gtk.Box {
 	public bool can_delete {
 		get {
 			return  (current_item != null)
-				//&& !current_item.is_trash
-				&& !current_item.is_trashed_item // don't allow trashed subitems to be deleted
+				//&& !current_item.is_trash // allow delete
+				&& !current_item.is_trashed_item // don't allow trashed subitems to be deleted, not used
 				&& !(current_item is FileItemArchive);
+				//&& !(current_item is FileItemCloud); // allow delete
 		}
 	}
 	

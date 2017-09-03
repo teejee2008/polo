@@ -261,21 +261,21 @@ public class CloudLoginWindow : Gtk.Window, IPaneActive {
 		}
 		
 		string txt = _("Account Authorization");
-		string msg = _("A new browser window will open when you click OK\n\nSelect the account to be added and authorize rclone\n\nClose the browser window when done\n\nCome back to Polo and click 'Finish' to add the account");
+		string msg = _("A new browser window will open.\n\nSelect the account to add and authorize rclone\n\nClose the browser window when done\n\nCome back to Polo and click 'Finish' to add the account");
 		gtk_messagebox(txt, msg, this, false);
 
 		TermBox term;
 
-		if (LOG_DEBUG){
-			var tab = App.main_window.layout_box.panel1.add_new_terminal_tab();
-			term = tab.pane.terminal;
-			terminal = term;
-		}
-		else{
-			term = new TermBox(pane);
-			term.start_shell();
-			terminal = term;
-		}
+		//if (LOG_DEBUG){
+		//	var tab = App.main_window.layout_box.panel1.add_new_terminal_tab();
+		//	term = tab.pane.terminal;
+		//	terminal = term;
+		//}
+		//else{
+		term = new TermBox(pane);
+		term.start_shell();
+		terminal = term;
+		//}
 		sleep(200);
 		
 		term.feed_command("rclone config");
@@ -324,7 +324,7 @@ public class CloudLoginWindow : Gtk.Window, IPaneActive {
 		
 		terminal.exit_shell();
 
-		App.rclone = new RCloneClient();
+		App.rclone.query_accounts();
 		bool account_added = false;
 		foreach(var acc in App.rclone.accounts){
 			if (acc.name == account_name){
@@ -335,7 +335,7 @@ public class CloudLoginWindow : Gtk.Window, IPaneActive {
 
 		if (account_added){
 			string txt = _("Account Added");
-			string msg = _("Account was added successfully.\n\nYou can browse the remote storage by selecting the account from 'Cloud' menu");
+			string msg = _("Account was added successfully.\n\nYou can browse the remote storage by selecting account from 'Cloud' menu");
 			gtk_messagebox(txt, msg, this, false);
 		}
 		else{

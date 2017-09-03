@@ -37,7 +37,8 @@ using TeeJee.Misc;
 public enum RcloneActionType {
 	COPY,
 	MOVE,
-	DELETE
+	DELETE,
+	RENAME
 }
 
 public class RCloneTask : AsyncTask{
@@ -116,6 +117,9 @@ public class RCloneTask : AsyncTask{
 		case RcloneActionType.DELETE:
 			cmd += " delete";
 			break;
+		case RcloneActionType.RENAME:
+			cmd += " moveto";
+			break;
 		}
 
 		cmd += " -v --stats=1s";
@@ -125,30 +129,49 @@ public class RCloneTask : AsyncTask{
 		}
 
 		// filters ---------------------------
+
+		switch (action){
+		case RcloneActionType.COPY:
+		case RcloneActionType.MOVE:
+		case RcloneActionType.DELETE:
 		
-		string txt = "";
-		foreach(string pattern in exclude_list){
-			txt += "%s\n".printf(pattern);
+			string txt = "";
+			foreach(string pattern in exclude_list){
+				txt += "%s\n".printf(pattern);
+			}
+
+			log_debug(string.nfill(80,'-'));
+			log_debug("Exclude Patterns:\n%s".printf(txt));
+			log_debug(string.nfill(80,'-'));
+			
+			if (txt.length > 0){
+				filter_from_file = path_combine(working_dir, "filter.list");
+				file_write(filter_from_file, txt);
+			}
+
+			if (filter_from_file.length > 0){
+				cmd += " --filter-from='%s'".printf(escape_single_quote(filter_from_file));
+			}
+			break;
 		}
 
-		log_debug(string.nfill(80,'-'));
-		log_debug("Exclude Patterns:\n%s".printf(txt));
-		log_debug(string.nfill(80,'-'));
-		
-		if (txt.length > 0){
-			filter_from_file = path_combine(working_dir, "filter.list");
-			file_write(filter_from_file, txt);
+		// source  ---------------------------
+
+		switch (action){
+		case RcloneActionType.COPY:
+		case RcloneActionType.MOVE:
+		case RcloneActionType.DELETE:
+			source_path = remove_trailing_slash(source_path);
+			cmd += " '%s/'".printf(escape_single_quote(source_path));
+			break;
+			
+		case RcloneActionType.RENAME:
+			source_path = remove_trailing_slash(source_path);
+			cmd += " '%s'".printf(escape_single_quote(source_path)); // no slash
+			break;
 		}
 
-		if (filter_from_file.length > 0){
-			cmd += " --filter-from='%s'".printf(escape_single_quote(filter_from_file));
-		}
-
-		// source and dest ---------------------------
-
-		// source
-		source_path = remove_trailing_slash(source_path);
-		cmd += " '%s/'".printf(escape_single_quote(source_path));
+		// dest --------------------------------------
 		
 		switch (action){
 		case RcloneActionType.COPY:
@@ -157,6 +180,13 @@ public class RCloneTask : AsyncTask{
 			dest_path = remove_trailing_slash(dest_path);
 			cmd += " '%s/'".printf(escape_single_quote(dest_path));
 			break;
+
+		case RcloneActionType.RENAME:
+			// dest
+			dest_path = remove_trailing_slash(dest_path);
+			cmd += " '%s'".printf(escape_single_quote(dest_path)); // no slash
+			break;
+			
 		case RcloneActionType.DELETE:
 			// NA
 			break;
@@ -189,11 +219,33 @@ public class RCloneTask : AsyncTask{
 
 		relative_path = relative_path.replace("*","\\*").replace("?","\\?").replace("#","\\#").replace("[","\\[").replace("]","\\]");
 
-		string pattern = "%s%s%s".printf((include ? "+ " : "- "), relative_path, (is_directory ? "/**" : ""));
+		string pattern = "%s%s%s".printf((include ? "+ /" : "- /"), relative_path, (is_directory ? "/**" : ""));
 		exclude_list.add(pattern);
 		
 		return pattern;
 	}
+
+	// static -----------------------------
+
+	/*public static bool file_rename(string file_path, string new_file_name, Gtk.Window? window = null){
+
+		string src = file_path;
+		string dst = path_combine(file_parent(file_path), new_file_name);
+		string cmd = "rclone moveto '%s' '%s'".printf(escape_single_quote(src), escape_single_quote(dst));
+		log_debug(cmd);
+		
+		string std_out, std_err;
+		int status = exec_sync(cmd, out std_out, out std_err);
+		if (status != 0){
+			log_error(std_err);
+			if (window != null){
+				gtk_messagebox(_("Failed to rename item"), std_err, window, true);
+			}
+			return false;
+		}
+		
+		return true;
+	}*/
 	
 	// execution ----------------------------
 

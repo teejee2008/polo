@@ -1400,10 +1400,12 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 				if (ok){
 					gtk_messagebox(_("Account Removed"), "%s".printf(acc.name), window, false);
 					submenu.remove(subitem);
+					window.close_tabs_for_location("%s:".printf(acc.name));
 				}
 				else {
 					gtk_messagebox(_("Failed to Remove Account"), "%s".printf(acc.name), window, false);
 				}
+				App.rclone.query_accounts();
 			});
 		}
 		

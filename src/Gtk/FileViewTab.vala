@@ -349,7 +349,7 @@ public class FileViewTab : Gtk.Box {
 		}
 	}
 	
-	private void close_tab(){
+	public void close_tab(){
 
 		log_debug("FileViewTab: close_tab()");
 

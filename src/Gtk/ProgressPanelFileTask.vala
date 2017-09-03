@@ -37,6 +37,10 @@ public class ProgressPanelFileTask : ProgressPanel {
 
 	public FileTask task;
 
+	// rename
+	public string source_file = "";
+	public string new_name = "";
+
 	// ui 
 	public Gtk.Label lbl_status;
 	public Gtk.Label lbl_stats;
@@ -62,13 +66,13 @@ public class ProgressPanelFileTask : ProgressPanel {
 		string txt = "";
 		switch(action_type){
 		case FileActionType.COPY:
-			txt = _("Copying ...");
+			txt = _("Copying...");
 			break;
 		case FileActionType.CUT:
-			txt = _("Moving ...");
+			txt = _("Moving...");
 			break;
 		case FileActionType.RESTORE:
-			txt = _("Restoring ...");
+			txt = _("Restoring...");
 			break;
 		case FileActionType.TRASH:
 			txt = _("Moving to Trash...");
@@ -78,7 +82,10 @@ public class ProgressPanelFileTask : ProgressPanel {
 			break;
 		case FileActionType.DELETE:
 		case FileActionType.DELETE_TRASHED:
-			txt = _("Removing ...");
+			txt = _("Removing...");
+			break;
+		case FileActionType.CLOUD_RENAME:
+			txt = _("Renaming...");
 			break;
 		case FileActionType.PASTE_SYMLINKS_AUTO:
 		case FileActionType.PASTE_SYMLINKS_ABSOLUTE:
@@ -241,6 +248,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 		case FileActionType.DELETE_TRASHED:
 		case FileActionType.TRASH:
 		case FileActionType.TRASH_EMPTY:
+		case FileActionType.CLOUD_RENAME:
 			start_task();
 			break;
 		}
@@ -266,18 +274,26 @@ public class ProgressPanelFileTask : ProgressPanel {
 			task.move_items_to_path(source, destination.file_path, items.to_array(),
 				replace_mode, conflicts, (Gtk.Window) window);
 			break;
+			
 		case FileActionType.COPY:
 			task.copy_items_to_path(source, destination.file_path, items.to_array(),
 				replace_mode, conflicts, (Gtk.Window) window);
 			break;
+
+		case FileActionType.CLOUD_RENAME:
+			task.cloud_rename(source_file, new_name, (Gtk.Window) window);
+			break;
+			
 		case FileActionType.RESTORE:
 			task.restore_trashed_items(items.to_array(), (Gtk.Window) window);
 			break;
+			
 		case FileActionType.DELETE:
 		case FileActionType.DELETE_TRASHED:
 			log_debug("------------------------------------------%d".printf(items.size));
 			task.delete_items(source, items.to_array(), (Gtk.Window) window);
 			break;
+			
 		case FileActionType.TRASH:
 			log_debug("------------------------------------------%d".printf(items.size));
 			task.trash_items(source, items.to_array(), (Gtk.Window) window);
@@ -432,11 +448,11 @@ public class ProgressPanelFileTask : ProgressPanel {
 			break;
 		}
 
-		if ((source != null) && source.is_remote){
+		if ((source != null) && (source is FileItemCloud)){
 			window.refresh_remote_views(source.file_path);
 		}
 
-		if ((destination != null) && destination.is_remote){
+		if ((destination != null) && (destination is FileItemCloud)){
 			window.refresh_remote_views(destination.file_path);
 		}
 

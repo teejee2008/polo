@@ -37,6 +37,7 @@ using TeeJee.Misc;
 public class FileItemCloud : FileItem {
 
 	public string remote_name = "";
+	public string type = "";
 	
 	public static string cache_dir;
 	public DateTime? cached_date = null;
@@ -44,19 +45,9 @@ public class FileItemCloud : FileItem {
 
 	// contructors -------------------------------
 
-	public FileItemCloud.from_path(string _file_path){
-		// _file_path can be a local path, or GIO uri
-		resolve_file_path(_file_path);
-		//query_file_info();
-		object_count++;
-	}
-
 	public FileItemCloud.from_path_and_type(string _file_path, FileType _file_type) {
 		resolve_file_path(_file_path);
 		file_type = _file_type;
-		//if (query_info){
-		//	query_file_info();
-		//}
 		object_count++;
 	}
 	
@@ -169,15 +160,51 @@ public class FileItemCloud : FileItem {
 		//mutex_children.unlock();
 	}
 
+	public bool is_fresh{
+		get {
+			if (file_exists(cached_file_path)){
+				
+				var file_date = file_get_modified_date(cached_file_path);
+				
+				var now = new GLib.DateTime.now_local();
+				
+				if (file_date.add_hours(24).compare(now) > 0){
+					return true;
+				}
+			}
+			return false;
+		}
+	}
+
+	public bool older_than_parent {
+		get {
+			if (parent != null) {
+
+				var parent_item = (FileItemCloud) parent;
+				
+				if (file_exists(cached_file_path) && file_exists(parent_item.cached_file_path)){
+					
+					var file_date = file_get_modified_date(cached_file_path);
+					
+					var file_date_parent = file_get_modified_date(parent_item.cached_file_path);
+					
+					if (file_date_parent.compare(file_date) > 0){
+
+						log_debug("FileItemCloud: older_than_parent");
+						return true;
+					}
+				}
+			}
+
+			return false;
+		}
+	}
+
 	private void save_to_cache(int depth = -1){
 		
-		if (file_exists(cached_file_path)){
-			var file_date = file_get_modified_date(cached_file_path);
-			var now = new GLib.DateTime.now_local();
-			if (file_date.add_minutes(60).compare(now) > 0){
-				log_debug("FileItemCloud: save_to_cache(): skipped");
-				return;
-			}
+		if (is_fresh && !older_than_parent){ // parent if any must be fresh
+			log_debug("FileItemCloud: save_to_cache(): skipped");
+			return;
 		}
 
 		log_debug("FileItemCloud: save_to_cache()");
@@ -254,15 +281,26 @@ public class FileItemCloud : FileItem {
 			bool isdir = json_get_bool(obj_child, "IsDir", true);
 
 			string child_name = name;
+
 			string child_path = path_combine(file_path, child_name);
+
+			if (CloudAccount.account_is_bucket_based(type) && (parent == null)){
+				child_path = file_path + child_name; // "remote-name:bucket"
+			}
+			
 			var child_type = isdir ? FileType.DIRECTORY : FileType.REGULAR;
 			var child_modified = parse_date_time(modtime, true);
 			
 			var child = (FileItemCloud) this.add_child(child_path, child_type, size, 0, false);
 			child.set_properties();
-			modified = child_modified;
-			accessed = child_modified;
-			changed = child_modified;
+			child.modified = child_modified;
+			child.accessed = child_modified;
+			child.changed = child_modified;
+			child.type = type;
+
+			if (CloudAccount.account_is_bucket_based(type) && (parent == null)){
+				child.display_name = child_name;
+			}
 
 			if (isdir){
 				add_to_cache(child);
@@ -398,7 +436,7 @@ public class FileItemCloud : FileItem {
 	protected void set_properties(){
 
 		set_content_type_from_extension();
-		
+
 		can_read = true;
 		can_write = true;
 		can_execute = false;

@@ -616,7 +616,7 @@ public class MainWindow : Gtk.Window {
 		
 		foreach(var view in views){
 			if (view.current_item == null) { continue; }
-			if (view.current_item.is_remote == false) { continue; }
+			//if (view.current_item.is_remote == false) { continue; }
 			if (view.current_item.file_path != dir_path) { continue; }
 			
 			view.reload();
@@ -624,6 +624,28 @@ public class MainWindow : Gtk.Window {
 		log_debug("MainWindow: refresh_remote_views(): exit");
 	}
 
+	public void close_tabs_for_location(string dir_path){
+
+		log_debug("MainWindow: close_tabs_for_location(%s)".printf(dir_path));
+
+		var list = new Gee.ArrayList<FileViewTab>();
+		
+		foreach(var view in views){
+			
+			if (view.current_item == null) { continue; }
+
+			if (view.current_location.has_prefix(dir_path)){
+				list.add(view.pane.tab);
+			}
+		}
+
+		foreach(var tab in list){
+			tab.close_tab();
+		}
+		
+		log_debug("MainWindow: close_tabs_for_location(): exit");
+	}
+	
 	public void refresh_trash(){
 		log_debug("MainWindow: refresh_trash()");
 		foreach(var view in views){
@@ -814,13 +836,14 @@ public class MainWindow : Gtk.Window {
 
 		err_log_clear();
 
-		//var win = new CloudLoginWindow(this);
+		var win = new CloudLoginWindow(this);
 
-		TermBox term;
-
+		//TermBox term = new TermBox(pane);
+		//term.start_shell();
+		
 		//if (LOG_DEBUG){
-			var tab = layout_box.panel1.add_new_terminal_tab();
-			term = tab.pane.terminal;
+			//var tab = layout_box.panel1.add_new_terminal_tab();
+			//term = tab.pane.terminal;
 			//terminal = term;
 		//}
 		//else{
@@ -828,11 +851,17 @@ public class MainWindow : Gtk.Window {
 			//term.start_shell();
 			//terminal = term;
 		//}
+
+		/*TermBox term;
+
+		var tab = layout_box.panel1.add_new_terminal_tab();
+		term = tab.pane.terminal;
+			
 		sleep(200);
 		term.feed_command("rclone config");
 
 		sleep(200);
-		term.feed_command("n");
+		term.feed_command("n");*/
 	}
 
 	public bool remove_rclone_account(CloudAccount acc){

@@ -33,32 +33,6 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
-public enum FileActionType{
-	NONE,
-	CUT,
-	COPY,
-	PASTE,
-	TRASH,
-	TRASH_EMPTY,
-	DELETE,
-	DELETE_TRASHED,
-	RESTORE,
-	SHRED,
-	PASTE_SYMLINKS_AUTO,
-	PASTE_SYMLINKS_ABSOLUTE,
-	PASTE_SYMLINKS_RELATIVE,
-	PASTE_HARDLINKS,
-	LIST_ARCHIVE,
-	TEST_ARCHIVE,
-	EXTRACT,
-	COMPRESS,
-	KVM_DISK_MERGE,
-	KVM_DISK_CONVERT,
-	ISO_WRITE,
-	VIDEO_LIST_FORMATS,
-	VIDEO_DOWNLOAD
-}
-
 public class FileContextMenu : Gtk.Menu {
 
 	// reference properties ----------

@@ -254,6 +254,7 @@ public class CloudAccount : GLib.Object {
 		}
 		else{
 			fs_root = new FileItemCloud.from_path_and_type("%s:".printf(_name), FileType.DIRECTORY);
+			fs_root.type = type;
 			FileItem.add_to_cache(fs_root);
 		}
 	}
@@ -262,6 +263,25 @@ public class CloudAccount : GLib.Object {
 		owned get {
 			var list = new Gee.ArrayList<string>.wrap(account_types);
 			return account_type_names[list.index_of(type)];
+		}
+	}
+
+	public static bool account_is_bucket_based(string _type) {
+
+		switch(_type){
+		//case "amazon cloud drive":
+		case "s3":
+		case "b2":
+		//case "dropbox":
+		case "google cloud storage":
+		//case "drive":
+		case "hubic":
+		//case "onedrive":
+		case "swift":
+		//case "yandex":
+			return true;
+		default:
+			return false;
 		}
 	}
 

@@ -627,17 +627,27 @@ public class Pathbar : Gtk.Box {
 				list.add(basepath);
 			}
 		}
+
+		if (basepath.length == 0){
+			
+			// hubic:default/
+			info = regex_match("""^([^ \/]+:[^ \/]+\/*)""", file_uri);
+			if (info != null){
+				basepath = info.fetch(1); // hubic:default
+				list.add(basepath);
+			}
+		}
 		
 		if (basepath.length == 0){
 			
 			// dropbox:/test
 			info = regex_match("""^([^ \/]+:\/*)""", file_uri);
 			if (info != null){
-				basepath = info.fetch(1); // smb://server/share/
+				basepath = info.fetch(1); // dropbox:/
 				list.add(basepath);
 			}
 		}
-		
+
 		if (basepath.length == 0){
 			
 			// everything else
