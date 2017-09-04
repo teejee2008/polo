@@ -206,7 +206,7 @@ public class ProgressPanelPdfTask : ProgressPanel {
 					if (msg.length > 0) { msg += "\n"; }
 
 					if (outline.contains(": ")){
-						//var arr = outline.split(": ");
+						var arr = outline.split(": ");
 						//list.add(arr[1]);
 						msg += "%s: %s".printf(arr[0], file_basename(arr[1]));
 					}

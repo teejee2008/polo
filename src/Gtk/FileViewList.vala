@@ -2791,7 +2791,7 @@ public class FileViewList : Gtk.Box {
 	
 	public void calculate_directory_sizes(){
 
-		if (!is_normal_directory){ return; }
+		if ((current_item == null) || current_item.is_trash || (current_item is FileItemArchive)){ return; } // (current_item is FileItemCloud);
 		
 		var selected_items = get_selected_items().to_array();
 		if (selected_items.length == 0){
@@ -3876,7 +3876,9 @@ public class FileViewList : Gtk.Box {
 		FileItem item = _item;
 
 		if ((item is FileItemCloud) && !item.is_directory){
+			
 			var cloud_item = (FileItemCloud) item;
+			
 			if (cloud_item.local_path.length > 0){
 				item = new FileItem.from_path_and_type(cloud_item.local_path, FileType.REGULAR, true);
 				// continue
@@ -3884,6 +3886,22 @@ public class FileViewList : Gtk.Box {
 			else{
 				open_cloud_item(cloud_item, app);
 				return;
+			}
+		}
+
+		if ((item is FileItemArchive) && (current_item is FileItemArchive) && !item.is_directory){
+
+			if (!FileItem.is_archive_by_extension(item.file_path)){ return; }
+
+			var arch = (FileItemArchive) item;
+			
+			if (arch.children.size == 0){
+
+				open_archive_item(arch);
+				return;
+			}
+			else{
+				// continue
 			}
 		}
 		
@@ -3940,6 +3958,66 @@ public class FileViewList : Gtk.Box {
 		//gtk_set_busy(true, window);
 	}
 
+	private void open_archive_item(FileItemArchive item){
+
+		string outpath;
+		var action = extract_selected_item_to_temp_location(item.archive_base_item, out outpath);
+
+		//action.task_complete.connect(() => { open_archive_item_finish(item); });
+		action.task_complete.connect(()=>{
+			
+			//string outpath = item.extraction_path; 
+			log_debug("outpath: %s".printf(outpath));
+			
+			string extracted_item_path = path_combine(outpath, item.file_path);
+			log_debug("extracted_item_path: %s".printf(extracted_item_path));
+
+			if (file_exists(extracted_item_path)){
+
+				// set the display_path and change file_path to point to extracted_item_path 
+				item.display_path = item.display_path;
+				log_debug("item.display_pat: %s".printf(item.display_path));
+				
+				item.file_path = extracted_item_path; 
+				log_debug("item.file_path: %s".printf(item.file_path));
+				
+				//item.archive_base_item = item; 
+				// list the item 
+				//if (list_archive(item)){
+
+				item.file_type = FileType.DIRECTORY;
+				
+				set_view_item(item); 
+				//} 
+			}
+		});
+	}
+
+	private void open_archive_item_finish(FileItemArchive item){
+		
+		string outpath = item.extraction_path; 
+		log_debug("outpath: %s".printf(outpath));
+		
+		string extracted_item_path = path_combine(outpath, item.file_path);
+		log_debug("extracted_item_path: %s".printf(extracted_item_path));
+
+		if (file_exists(extracted_item_path)){
+
+			// set the display_path and change file_path to point to extracted_item_path 
+			item.display_path = item.display_path;
+			log_debug("item.display_pat: %s".printf(item.display_path));
+			
+			item.file_path = extracted_item_path; 
+			log_debug("item.file_path: %s".printf(item.file_path));
+			
+			//item.archive_base_item = item; 
+			// list the item 
+			//if (list_archive(item)){ 
+			set_view_item(item); 
+			//} 
+		}
+	}
+	
 	public void set_default_app(FileItem item, DesktopApp? app){
 
 		log_debug("FileViewList: set_default_app(): %s ----------".printf(item.display_path), true);
@@ -5859,15 +5937,17 @@ public class FileViewList : Gtk.Box {
 		action.execute();
 	}
 
-	public ProgressPanelArchiveTask? extract_selected_item_to_temp_location(FileItem item){
+	public ProgressPanelArchiveTask? extract_selected_item_to_temp_location(FileItem item, out string outpath){
 		
-		string outpath = get_temp_file_path();
+		outpath = get_temp_file_path();
 
 		if (item is FileItemArchive == false){ return null; }
 			
 		var arch = (FileItemArchive) item;
 		arch.extract_list.clear();
-		arch.extraction_path = path_combine(outpath, arch.file_title);
+
+		outpath = path_combine(outpath, arch.file_title);
+		arch.extraction_path = outpath;
 
 		var list = new Gee.ArrayList<FileItem>();
 		list.add(arch);

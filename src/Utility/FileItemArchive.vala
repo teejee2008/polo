@@ -84,6 +84,30 @@ public class FileItemArchive : FileItem {
 			return !file_path.has_prefix("/");
 		}
 	}
+
+	private string _local_path = "";
+	public string local_path {
+		get {
+			if (_local_path.length == 0){
+				return "";
+			}
+			
+			if (file_exists(_local_path)){
+				var ctl_file = _local_path + ".%lld".printf(modified_unix_time);
+				if (file_exists(ctl_file)){
+					return _local_path;
+				}
+			}
+			
+			_local_path = "";
+			return _local_path;
+		}
+		set {
+			_local_path = value;
+			var ctl_file = _local_path + ".%lld".printf(modified_unix_time);
+			file_write(ctl_file, "");
+		}
+	}
 	
 	// contructors -------------------------------
 
@@ -319,68 +343,6 @@ public class FileItemArchive : FileItem {
 
 	// ----------------------------------------------------------
 	
-	/*private bool list_archive(){
-
-		log_debug("FileItemArchive: list_archive(): %s".printf(this.file_path));
-		log_debug("item.display_path: %s".printf(item.display_path));
-		
-		if (!item.file_path.has_prefix("/")){
-			
-			var action = extract_selected_item_to_temp_location(this.archive_base_item);
-			
-			action.task_complete.connect(()=>{
-				
-				string outpath = this.extraction_path;
-				log_debug("outpath: %s".printf(outpath));
-				
-				string extracted_item_path = path_combine(outpath, this.file_path);
-				log_debug("extracted_item_path: %s".printf(extracted_item_path));
-				
-				// set the display_path and change file_path to point to extracted_item_path
-				item.display_path = item.display_path;
-				item.file_path = extracted_item_path;
-				log_debug("item.display_path: %s".printf(item.display_path));
-				log_debug("item.file_path: %s".printf(item.file_path));
-				//item.archive_base_item = item;
-				// list the item
-				//if (list_archive(item)){
-				//	//set_view_item(item);
-				//}
-			});
-			return false;
-		}
-		
-		var task = item.list_archive();
-
-		gtk_set_busy(true, window);
-		while (task.status == AppStatus.RUNNING){
-			sleep(200);
-			gtk_do_events();
-		}
-
-		gtk_set_busy(false, window);
-
-		log_debug("task.list_archive(): exit");
-		
-		if (task.status == AppStatus.PASSWORD_REQUIRED){
-
-			if (prompt_for_password(item)){
-				//restart
-				return list_archive(item);
-			}
-			else{
-				return false;
-			}
-		}
-		else{
-			FileItem.add_to_cache(item); // add file to cache as it has children
-		}
-
-		log_debug("list_archive(): exit");
-
-		return true;
-	}*/
-
 	public bool prompt_for_password(Gtk.Window _window){
 
 		log_debug("FileItemArchive: prompt_for_password()");
