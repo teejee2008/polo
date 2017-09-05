@@ -1629,7 +1629,7 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 	
 	private void add_wizard(Gtk.Menu menu){
 
-		var item = new Gtk.MenuItem.with_label (_("Open style wizard"));
+		var item = new Gtk.MenuItem.with_label (_("Style wizard"));
 		item.set_tooltip_text(_("Select layout and style"));
 		menu.add(item);
 
