@@ -37,11 +37,16 @@ public class TouchFileDateContextMenu : Gtk.Menu {
 	private FileItem file_item;
 	private bool touch_modified;
 	private bool touch_accessed;
-	private Gtk.Window window;
+	private PropertiesWindow window;
+	private Gtk.Entry entry;
+	private bool task_is_running;
+
+	private bool recurse;
+	private bool follow_links;
 
 	public signal void file_touched();
 
-	public TouchFileDateContextMenu(FileItem _file_item, bool _touch_accessed, bool _touch_modified, Gtk.Window _window){
+	public TouchFileDateContextMenu(FileItem _file_item, bool _touch_accessed, bool _touch_modified, PropertiesWindow _window, Gtk.Entry _entry){
 
 		//log_debug("TouchFileDateContextMenu()");
 
@@ -50,6 +55,8 @@ public class TouchFileDateContextMenu : Gtk.Menu {
 		touch_accessed = _touch_accessed;
 
 		window = _window;
+
+		entry = _entry;
 
 		reserve_toggle_size = false;
 		
@@ -78,10 +85,8 @@ public class TouchFileDateContextMenu : Gtk.Menu {
 			null,
 			null);
 
-		item.activate.connect (() => {
-			touch(file_item.file_path, touch_accessed, touch_modified, false, false, window);
-			file_item.query_file_info();
-			file_touched();
+		item.activate.connect(()=>{
+			touch_file_item(false, false);
 		});
 
 		item.sensitive = true;
@@ -102,11 +107,8 @@ public class TouchFileDateContextMenu : Gtk.Menu {
 			null,
 			null);
 
-		item.activate.connect (() => {
-			touch(file_item.file_path, touch_accessed, touch_modified, true, false, window);
-			file_item.query_file_info();
-			file_touched();
-			//return true;
+		item.activate.connect(()=>{
+			touch_file_item(true, false);
 		});
 
 		item.sensitive = file_item.is_directory;
@@ -128,14 +130,53 @@ public class TouchFileDateContextMenu : Gtk.Menu {
 			null,
 			null);
 
-		item.activate.connect (() => {
-			touch(file_item.file_path, touch_accessed, touch_modified, true, true, window);
-			file_item.query_file_info();
-			file_touched();
-			//return true;
+		item.activate.connect(()=>{
+			touch_file_item(true, true);
 		});
 
 		item.sensitive = file_item.is_directory;
+	}
+
+	private void touch_file_item(bool _recurse, bool _follow_links){
+
+		recurse = _recurse;
+		follow_links = _follow_links;
+		
+		try {
+			task_is_running = true;
+			Thread.create<void> (touch_file_item_thread, true);
+		}
+		catch (Error e) {
+			log_error("TouchFileDateContextMenu: touch_file_item_thread()");
+			task_is_running = false;
+			log_error (e.message);
+		}
+
+		while (task_is_running){
+			sleep(200);
+			entry.progress_pulse();
+			gtk_do_events();
+		}
+		
+		entry.set_progress_fraction(0.0);
+		gtk_do_events();
+	}
+
+	private void touch_file_item_thread(){
+		
+		task_is_running = true;
+
+		entry.progress_pulse_step = 0.2;
+
+		touch(file_item.file_path, touch_accessed, touch_modified, recurse, follow_links, window);
+		file_item.query_file_info();
+		file_touched();
+		
+		task_is_running = false;
+	}
+
+	private bool check_task_is_running(){
+		return task_is_running;
 	}
 
 	public bool show_menu(Gdk.EventButton? event) {

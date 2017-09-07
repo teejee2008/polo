@@ -55,10 +55,10 @@ public class PropertiesWindow : Gtk.Window {
 	private Gtk.SizeGroup group1_value;
 	private Gtk.SizeGroup group2_value;
 
-	private Gtk.Entry entry_created;
-	private Gtk.Entry entry_modified;
-	private Gtk.Entry entry_changed;
-	private Gtk.Entry entry_accessed;
+	private Gtk.Entry entry_created; 
+	private Gtk.Entry entry_modified; 
+	private Gtk.Entry entry_changed; 
+	private Gtk.Entry entry_accessed; 
 
 	private TouchFileDateContextMenu menu_accessed;
 	private TouchFileDateContextMenu menu_modified;
@@ -1115,7 +1115,7 @@ public class PropertiesWindow : Gtk.Window {
 		}
 
 		ebox.button_press_event.connect((event)=>{
-			menu_accessed = new TouchFileDateContextMenu(file_item, true, false, this);
+			menu_accessed = new TouchFileDateContextMenu(file_item, true, false, this, entry_accessed);
 			menu_accessed.file_touched.connect(()=> { file_touched(); });
 			return menu_accessed.show_menu(null);
 		});
@@ -1169,7 +1169,7 @@ public class PropertiesWindow : Gtk.Window {
 		}
 
 		ebox.button_press_event.connect((event)=>{
-			menu_modified = new TouchFileDateContextMenu(file_item, false, true, this);
+			menu_modified = new TouchFileDateContextMenu(file_item, false, true, this, entry_modified);
 			menu_modified.file_touched.connect(()=> { file_touched(); });
 			return menu_modified.show_menu(null);
 		});

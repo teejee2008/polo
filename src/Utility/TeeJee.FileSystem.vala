@@ -1201,23 +1201,9 @@ namespace TeeJee.FileSystem{
 		
 		log_debug(cmd);
 
-		string std_out, std_err;
-		int retval = exec_sync (cmd, out std_out, out std_err);
+		int status = Posix.system(cmd);
 
-		if (retval != 0){
-			if (window != null){
-				gtk_messagebox(_("Failed to touch items!"), std_err, window, true);
-			}
-			else{
-				log_error(std_out);	
-				log_error(std_err);
-			}
-		}
-		else{
-			log_msg(std_out);
-		}
-
-		return (retval == 0);
+		return (status == 0);
 	}
 
 	public string resolve_relative_path (string file_path){
