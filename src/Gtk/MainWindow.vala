@@ -244,7 +244,7 @@ public class MainWindow : Gtk.Window {
 		sidebar.refresh(); // after setting flag
 
 		if (App.first_run){
-			open_wizard_window();
+			//open_wizard_window(); // don't
 		}
 		else{
 			if (App.first_run_after_update()){
