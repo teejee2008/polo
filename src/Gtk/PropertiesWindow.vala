@@ -51,11 +51,17 @@ public class PropertiesWindow : Gtk.Window {
 	private Gtk.StackSwitcher switcher;
 	private Gtk.Stack stack;
 
-	private Gtk.SizeGroup sg_prop_name;
-	private Gtk.SizeGroup sg_prop_value;
+	private Gtk.SizeGroup group_label;
+	private Gtk.SizeGroup group1_value;
+	private Gtk.SizeGroup group2_value;
 
-	private Gtk.SizeGroup sg_user_label;
-	private Gtk.SizeGroup sg_user_combo;
+	private Gtk.Entry entry_created;
+	private Gtk.Entry entry_modified;
+	private Gtk.Entry entry_changed;
+	private Gtk.Entry entry_accessed;
+
+	private TouchFileDateContextMenu menu_accessed;
+	private TouchFileDateContextMenu menu_modified;
 
 	private signal void file_touched();
 
@@ -106,11 +112,9 @@ public class PropertiesWindow : Gtk.Window {
 
 		switcher.set_stack(stack);
 
-		sg_prop_name = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
-		sg_prop_value = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
-
-		sg_user_label = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
-		sg_user_combo = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+		group_label = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+		group1_value = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+		group2_value = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
 
 		init_tab_properties();
 
@@ -162,20 +166,14 @@ public class PropertiesWindow : Gtk.Window {
 		// name ----------------
 		
 		var txt = file_item.display_name;
-		var lbl = add_property(vbox, _("Name"), txt);
-		lbl.max_width_chars = 40;
-		lbl.wrap = true;
-		lbl.wrap_mode = Pango.WrapMode.WORD_CHAR;
+		add_property(vbox, _("Name"), txt);
 
 		// location -----------
 		
 		txt = file_item.display_location;
 
-		lbl = add_property(vbox, _("Location"), txt);
-		lbl.max_width_chars = 40;
-		lbl.wrap = true;
-		lbl.wrap_mode = Pango.WrapMode.WORD_CHAR;
-		
+		add_property(vbox, _("Location"), txt);
+
 		if (file_item.is_symlink){
 			add_property(vbox, _("Link Target"), file_item.symlink_target);
 		}
@@ -303,11 +301,11 @@ public class PropertiesWindow : Gtk.Window {
 			date_string = "N/A";
 		}
 
-		add_property(vbox, _("Created"), date_string);
+		entry_created = add_property_created(vbox, _("Created"), date_string);
 
 		// modified ---------------------------
 
-		var lbl_modified = add_property_touch_modified(vbox, _("Modified"), "");
+		entry_modified = add_property_modified(vbox, _("Modified"), "");
 
 		file_touched.connect(() => {
 			if (file_item.modified != null){
@@ -316,12 +314,12 @@ public class PropertiesWindow : Gtk.Window {
 			else{
 				date_string = "N/A";
 			}
-			lbl_modified.label = date_string;
+			entry_modified.text = date_string;
 		});
 
 		// accessed ---------------------------
 		
-		var lbl_accessed  = add_property_touch_accessed (vbox, _("Accessed"), "");
+		entry_accessed = add_property_accessed (vbox, _("Accessed"), "");
 
 		file_touched.connect(() => {
 			if (file_item.accessed != null){
@@ -330,12 +328,12 @@ public class PropertiesWindow : Gtk.Window {
 			else{
 				date_string = "N/A";
 			}
-			lbl_accessed.label = date_string;
+			entry_accessed.text = date_string;
 		});
 		
 		// changed ---------------------------
 	
-		var lbl_changed  = add_property (vbox, _("Changed"), "");
+		entry_changed = add_property_changed (vbox, _("Changed"), "");
 
 		file_touched.connect(() => {
 			if (file_item.changed != null){
@@ -344,7 +342,7 @@ public class PropertiesWindow : Gtk.Window {
 			else{
 				date_string = "N/A";
 			}
-			lbl_changed.label = date_string;
+			entry_changed.text = date_string;
 		});
 
 		file_touched();
@@ -358,11 +356,6 @@ public class PropertiesWindow : Gtk.Window {
 		// group ---------------------------
 
 		add_group_combo(vbox);
-
-		//add_property(vbox, _("Owner"), file_item.owner_user);
-
-		//add_property(vbox, _("Group"), file_item.owner_group);
-
 
 		var image = new Gtk.Image();
 		hbox.add(image);
@@ -384,9 +377,6 @@ public class PropertiesWindow : Gtk.Window {
 				image.pixbuf = IconManager.generic_icon_file(256);
 			}
 		}
-
-
-		//show_all();
 	}
 
 	private bool area_archive_draw(Cairo.Context context) {
@@ -470,8 +460,8 @@ public class PropertiesWindow : Gtk.Window {
 		var vbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		hbox.add(vbox);
 
-		sg_prop_name = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
-		sg_prop_value = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+		group_label = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+		group1_value = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
 
 		if (device != null){
 
@@ -527,18 +517,6 @@ public class PropertiesWindow : Gtk.Window {
 		area_fs = area;
 
 		area.draw.connect(area_fs_draw);
-
-		//var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
-		//vbox.add(sep);
-
-		//add_property(vbox, _("Removable"), ((device.removable ? "Yes" : "No")));
-
-		// buffer
-		//var label = new Gtk.Label("");
-		//label.vexpand = true;
-		//hbox.add(label);
-
-
 	}
 
 	private bool area_fs_draw(Cairo.Context context) {
@@ -813,12 +791,12 @@ public class PropertiesWindow : Gtk.Window {
 		label.use_markup = true;
 		label.label = "<b>%s</b>".printf(label.label);
 		hbox.add(label);
-		sg_prop_name.add_widget(label);
+		group_label.add_widget(label);
 
 		// cmb_app
 		var combo = new Gtk.ComboBox();
 		hbox.add (combo);
-		sg_user_combo.add_widget(combo);
+		group2_value.add_widget(combo);
 
 		// render text
 		var cell_text = new Gtk.CellRendererText();
@@ -871,12 +849,12 @@ public class PropertiesWindow : Gtk.Window {
 		label.use_markup = true;
 		label.label = "<b>%s</b>".printf(label.label);
 		hbox.add(label);
-		sg_prop_name.add_widget(label);
+		group_label.add_widget(label);
 
 		// cmb_app
 		var combo = new Gtk.ComboBox();
 		hbox.add (combo);
-		sg_user_combo.add_widget(combo);
+		group2_value.add_widget(combo);
 
 		// render text
 		var cell_text = new Gtk.CellRendererText();
@@ -1069,11 +1047,11 @@ public class PropertiesWindow : Gtk.Window {
 
 		var label = new Gtk.Label(property_name + ":");
 		label.xalign = 1.0f;
-		label.yalign = 0.0f;
+		label.yalign = 0.0f; // align top if value is multi-line
 		label.use_markup = true;
 		label.label = "<b>%s</b>".printf(label.label);
 		hbox.add(label);
-		sg_prop_name.add_widget(label);
+		group_label.add_widget(label);
 
 		// value
 		label = new Gtk.Label(property_value);
@@ -1081,140 +1059,174 @@ public class PropertiesWindow : Gtk.Window {
 		label.yalign = 0.0f;
 		label.selectable = true;
 		hbox.add(label);
-		sg_prop_value.add_widget(label);
+		group1_value.add_widget(label);
+
+		label.max_width_chars = 40;
+		label.wrap = true;
+		label.wrap_mode = Pango.WrapMode.WORD_CHAR;
 
 		return label;
 	}
 
 
-	private Gtk.Label add_property_touch_accessed(Gtk.Box box, string property_name, string property_value){
+	private Gtk.Entry add_property_accessed(Gtk.Box box, string property_name, string property_value){
 
 		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		box.add(hbox);
 
 		var label = new Gtk.Label(property_name + ":");
 		label.xalign = 1.0f;
-		label.yalign = 0.0f;
+		label.yalign = 0.5f;
 		label.use_markup = true;
 		label.label = "<b>%s</b>".printf(label.label);
 		hbox.add(label);
-		sg_prop_name.add_widget(label);
+		group_label.add_widget(label);
 
 		// value
-		label = new Gtk.Label(property_value);
-		label.xalign = 0.0f;
-		label.yalign = 0.0f;
-		label.selectable = true;
-		hbox.add(label);
-		//sg_prop_value.add_widget(label);
+		var entry = new Gtk.Entry();
+		entry.xalign = 0.0f;
+		entry.set_size_request(200,-1);
+		entry.editable = false;
+		hbox.add(entry);
+		group2_value.add_widget(entry);
 
-		if (file_item is FileItemCloud){ return label; }
+		entry.text = property_value;
+		
+		if (file_item is FileItemCloud){ return entry; }
 
-		if ((file_item is FileItemArchive) && (file_item.parent != null) && (file_item.parent is FileItemArchive)){ return label; }
+		if ((file_item is FileItemArchive) && (file_item.parent != null) && (file_item.parent is FileItemArchive)){ return entry; }
 
-		if ((file_item.accessed == null) || !file_item.can_write){ return label; }
+		if ((file_item.accessed == null) || !file_item.can_write){ return entry; }
 
-		var hbox_buttons = new Gtk.Box(Orientation.HORIZONTAL, 0);
-		hbox.add(hbox_buttons);
-		hbox = hbox_buttons;
+		var img = new Gtk.Image.from_pixbuf(IconManager.lookup("preferences-desktop", 16, true, true));
+		var ebox = new Gtk.EventBox();
+		ebox.add(img);
+		hbox.add(ebox);
+		ebox.set_tooltip_text(_("Actions"));
 
-		var button = new Gtk.LinkButton.with_label("",_("Touch"));
-		hbox.add(button);
-
-		gtk_apply_css(new Gtk.Widget[] { button }, "padding-left: 1px; padding-right: 1px; padding-top: 0px; padding-bottom: 0px;");
-
-		button.set_tooltip_text(_("Update last access time to current system time"));
-
-		button.activate_link.connect(()=>{
-			touch(file_item.file_path, true, false, false, this);
-			file_item.query_file_info();
-			file_touched();
-			return true;
-		});
-
-		if (file_item.is_directory){
-
-			button = new Gtk.LinkButton.with_label("",_("All"));
-			hbox.add(button);
-
-			gtk_apply_css(new Gtk.Widget[] { button }, "padding-left: 1px; padding-right: 1px; padding-top: 0px; padding-bottom: 0px;");
-
-			button.set_tooltip_text(_("Update last access time to current system time for directory contents"));
-
-			button.activate_link.connect(()=>{
-				touch(file_item.file_path, true, false, true, this);
-				file_item.query_file_info();
-				file_touched();
-				return true;
+		// set hand cursor
+		if (ebox.get_realized()){
+			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
+		}
+		else{
+			ebox.realize.connect(()=>{
+				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
 			});
 		}
 
-		return label;
+		ebox.button_press_event.connect((event)=>{
+			menu_accessed = new TouchFileDateContextMenu(file_item, true, false, this);
+			menu_accessed.file_touched.connect(()=> { file_touched(); });
+			return menu_accessed.show_menu(null);
+		});
+
+		return entry;
 	}
 
-	private Gtk.Label add_property_touch_modified(Gtk.Box box, string property_name, string property_value){
+	private Gtk.Entry add_property_modified(Gtk.Box box, string property_name, string property_value){
 
 		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		box.add(hbox);
 
 		var label = new Gtk.Label(property_name + ":");
 		label.xalign = 1.0f;
-		label.yalign = 0.0f;
+		label.yalign = 0.5f;
 		label.use_markup = true;
 		label.label = "<b>%s</b>".printf(label.label);
 		hbox.add(label);
-		sg_prop_name.add_widget(label);
+		group_label.add_widget(label);
 
 		// value
-		label = new Gtk.Label(property_value);
-		label.xalign = 0.0f;
-		label.yalign = 0.0f;
-		label.selectable = true;
-		hbox.add(label);
-		//sg_prop_value.add_widget(label);
+		var entry = new Gtk.Entry();
+		entry.xalign = 0.0f;
+		entry.set_size_request(200,-1);
+		entry.editable = false;
+		hbox.add(entry);
+		group2_value.add_widget(entry);
 
-		if (file_item is FileItemCloud){ return label; }
+		entry.text = property_value;
 
-		if ((file_item is FileItemArchive) && (file_item.parent != null) && (file_item.parent is FileItemArchive)){ return label; }
+		if (file_item is FileItemCloud){ return entry; }
 
-		if ((file_item.accessed == null) || !file_item.can_write){ return label; }
+		if ((file_item is FileItemArchive) && (file_item.parent != null) && (file_item.parent is FileItemArchive)){ return entry; }
 
-		var hbox_buttons = new Gtk.Box(Orientation.HORIZONTAL, 0);
-		hbox.add(hbox_buttons);
-		hbox = hbox_buttons;
+		if ((file_item.accessed == null) || !file_item.can_write){ return entry; }
 
-		var button = new Gtk.LinkButton.with_label("",_("Touch"));
-		hbox.add(button);
+		var img = new Gtk.Image.from_pixbuf(IconManager.lookup("preferences-desktop", 16, true, true));
+		var ebox = new Gtk.EventBox();
+		ebox.add(img);
+		hbox.add(ebox);
+		ebox.set_tooltip_text(_("Actions"));
 
-		gtk_apply_css(new Gtk.Widget[] { button }, "padding-left: 1px; padding-right: 1px; padding-top: 0px; padding-bottom: 0px;");
-
-		button.set_tooltip_text(_("Update last modified time to current system time"));
-
-		button.activate_link.connect(()=>{
-			touch(file_item.file_path, false, true, false, this);
-			file_item.query_file_info();
-			file_touched();
-			return true;
-		});
-
-		if (file_item.is_directory){
-
-			button = new Gtk.LinkButton.with_label("",_("All"));
-			hbox.add(button);
-
-			gtk_apply_css(new Gtk.Widget[] { button }, "padding-left: 1px; padding-right: 1px; padding-top: 0px; padding-bottom: 0px;");
-
-			button.set_tooltip_text(_("Update last modified time to current system time for directory contents"));
-
-			button.activate_link.connect(()=>{
-				touch(file_item.file_path, false, true, true, this);
-				file_item.query_file_info();
-				file_touched();
-				return true;
+		// set hand cursor
+		if (ebox.get_realized()){
+			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
+		}
+		else{
+			ebox.realize.connect(()=>{
+				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
 			});
 		}
 
-		return label;
+		ebox.button_press_event.connect((event)=>{
+			menu_modified = new TouchFileDateContextMenu(file_item, false, true, this);
+			menu_modified.file_touched.connect(()=> { file_touched(); });
+			return menu_modified.show_menu(null);
+		});
+
+		return entry;
+	}
+
+	private Gtk.Entry add_property_changed(Gtk.Box box, string property_name, string property_value){
+
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
+		box.add(hbox);
+
+		var label = new Gtk.Label(property_name + ":");
+		label.xalign = 1.0f;
+		label.yalign = 0.5f;
+		label.use_markup = true;
+		label.label = "<b>%s</b>".printf(label.label);
+		hbox.add(label);
+		group_label.add_widget(label);
+
+		// value
+		var entry = new Gtk.Entry();
+		entry.xalign = 0.0f;
+		entry.set_size_request(200,-1);
+		entry.editable = false;
+		hbox.add(entry);
+		group2_value.add_widget(entry);
+
+		entry.text = property_value;
+
+		return entry;
+	}
+
+	private Gtk.Entry add_property_created(Gtk.Box box, string property_name, string property_value){
+
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
+		box.add(hbox);
+
+		var label = new Gtk.Label(property_name + ":");
+		label.xalign = 1.0f;
+		label.yalign = 0.5f;
+		label.use_markup = true;
+		label.label = "<b>%s</b>".printf(label.label);
+		hbox.add(label);
+		group_label.add_widget(label);
+
+		// value
+		var entry = new Gtk.Entry();
+		entry.xalign = 0.0f;
+		entry.set_size_request(200,-1);
+		entry.editable = false;
+		hbox.add(entry);
+		group2_value.add_widget(entry);
+
+		entry.text = property_value;
+
+		return entry;
 	}
 
 	private void add_separator(Gtk.Box box){

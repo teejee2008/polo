@@ -1391,7 +1391,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 	private void update_access_time(){
 		// update access time (and changed time) - forces cached icon to expire
-		touch(file_path, true, false, false, null); 
+		touch(file_path, true, false, false, false, null); 
 		query_file_info();
 	}
 

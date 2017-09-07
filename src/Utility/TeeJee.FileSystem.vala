@@ -1174,7 +1174,7 @@ namespace TeeJee.FileSystem{
 		return (retval == 0);
 	}
 
-	public bool touch (string file, bool accessed, bool modified, bool recurse, Gtk.Window? window = null){
+	public bool touch (string file, bool accessed, bool modified, bool recurse, bool follow_symlinks, Gtk.Window? window = null){
 
 		string cmd = "touch";
 
@@ -1189,7 +1189,11 @@ namespace TeeJee.FileSystem{
 		}
 
 		if (recurse){
-			cmd = "find '%s' -exec %s {} \\;".printf(escape_single_quote(file), cmd);
+			cmd = "find %s '%s' -print -exec %s {} +".printf(
+				(follow_symlinks ? "-L" : ""),
+				escape_single_quote(file),
+				cmd
+			);
 		}
 		else{
 			cmd += " '%s'".printf(escape_single_quote(file));
@@ -1208,6 +1212,9 @@ namespace TeeJee.FileSystem{
 				log_error(std_out);	
 				log_error(std_err);
 			}
+		}
+		else{
+			log_msg(std_out);
 		}
 
 		return (retval == 0);

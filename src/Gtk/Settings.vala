@@ -674,7 +674,7 @@ public class Settings : Gtk.Box, IPaneActive {
 
 		link.activate_link.connect(()=>{
 			var menu = new PathbarStyleMenu(link);
-			return menu.show_menu(null); 
+			return menu.show_menu(null);
 		});
 
 		gtk_suppress_context_menu(link);
