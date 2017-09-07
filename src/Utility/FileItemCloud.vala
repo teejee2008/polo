@@ -128,7 +128,7 @@ public class FileItemCloud : FileItem {
 		return;
 	}
 	
-	public override void query_children(int depth = -1) {
+	public override void query_children(int depth, bool follow_symlinks) {
 
 		/* Queries the file item's children using the file_path
 		 * depth = -1, recursively find and add all children from disk
@@ -154,6 +154,8 @@ public class FileItemCloud : FileItem {
 
 		log_debug("FileItemCloud: query_children(%d): %s".printf(depth, file_path), true);
 
+		query_children_follow_symlinks = follow_symlinks;
+		
 		query_children_running = true;
 		
 		//mutex_children.lock();
@@ -171,7 +173,7 @@ public class FileItemCloud : FileItem {
 		// recurse children -----------------------
 
 		foreach(var child in children.values){
-			child.query_children(depth - 1);
+			child.query_children(depth - 1, follow_symlinks);
 		}
 
 		if (depth < 0){
@@ -362,10 +364,12 @@ public class FileItemCloud : FileItem {
 		cached_date = file_date;
 	}
 
-	public override void query_children_async() {
+	public override void query_children_async(bool follow_symlinks) {
 
 		log_debug("FileItemCloud: query_children_async(): %s".printf(file_path));
 
+		query_children_follow_symlinks = follow_symlinks;
+		
 		query_children_async_is_running = true;
 		query_children_aborted = false;
 
@@ -381,7 +385,7 @@ public class FileItemCloud : FileItem {
 
 	private void query_children_async_thread() {
 		log_debug("FileItemCloud: query_children_async_thread()");
-		query_children(-1); // always add to cache
+		query_children(-1, query_children_follow_symlinks); // always add to cache
 		query_children_async_is_running = false;
 		//query_children_aborted = false; // reset
 	}

@@ -193,6 +193,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	protected Mutex mutex_file_info = Mutex();
 	
 	// operation flags
+	public bool query_children_follow_symlinks = true;
 	public bool query_children_async_is_running = false;
 	public bool query_children_aborted = false;
 
@@ -350,6 +351,44 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 		
 		return dir_size;
+	}
+
+	public long get_file_count_recursively(bool depth_is_negative){
+		
+		long count = 0;
+
+		foreach(var child in children.values){
+			if (child.is_directory){
+				count += child.get_file_count_recursively(depth_is_negative);
+			}
+			else{
+				count += 1;
+			}
+		}
+
+		if (depth_is_negative){
+			file_count_total = count;
+		}
+
+		return count;
+	}
+
+	public long get_dir_count_recursively(bool depth_is_negative){
+		
+		long count = 0;
+
+		foreach(var child in children.values){
+			if (child.is_directory){
+				count += 1;
+				count += child.get_dir_count_recursively(depth_is_negative);
+			}
+		}
+
+		if (depth_is_negative){
+			dir_count_total = count;
+		}
+
+		return count;
 	}
 
 	public int64 item_count = 0;
@@ -1013,9 +1052,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			
 			// check if directory and continue ---------------
 			
-			if (!item.is_directory) {
-				return item;
-			}
+			if (!item.is_directory) { return item; }
 
 			// enumerate item's children -----------------
 
@@ -1025,6 +1062,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 				if (depth == 0){ return item; }
 
+				if (!query_children_follow_symlinks && item.is_symlink) { return item; }
+				
 				//log_debug("add_child_from_disk(): enumerate_children");
 				
 				enumerator = file.enumerate_children ("%s,%s".printf(FileAttribute.STANDARD_NAME,FileAttribute.STANDARD_TYPE), 0);
@@ -1514,7 +1553,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		mutex_file_info.unlock();
 	}
 
-	public virtual void query_children(int depth = -1) {
+	public virtual void query_children(int depth, bool follow_symlinks) {
 
 		//log_debug("FileItem: query_children(): enter");
 		
@@ -1544,6 +1583,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		log_debug("FileItem: query_children(%d): %s".printf(depth, file_path), true);
 
 		query_children_running = true;
+
+		query_children_follow_symlinks = follow_symlinks;
 
 		FileEnumerator enumerator;
 		FileInfo info;
@@ -1650,10 +1691,12 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		//log_debug("FileItem: query_children(): lock_released");
 	}
 
-	public virtual void query_children_async() {
+	public virtual void query_children_async(bool follow_symlinks) {
 
 		log_debug("query_children_async(): %s".printf(file_path));
 
+		query_children_follow_symlinks = follow_symlinks;
+		
 		query_children_async_is_running = true;
 		query_children_aborted = false;
 
@@ -1669,7 +1712,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 	private void query_children_async_thread() {
 		log_debug("query_children_async_thread()");
-		query_children(-1); // always add to cache
+		query_children(-1, query_children_follow_symlinks); // always add to cache
 		query_children_async_is_running = false;
 		query_children_aborted = false; // reset
 	}
@@ -1732,7 +1775,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			// query children if needed
 			if (child.children.size == 0){
 				if (child.is_directory){
-					child.query_children(1);
+					child.query_children(1, true);
 				}
 				else{
 					break;

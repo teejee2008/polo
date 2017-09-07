@@ -53,7 +53,7 @@ public class FileItemArchive : FileItem {
 	public bool is_base = false;
 	public FileItemArchive? archive_base_item; // for use by archived items
 	public DateTime? cached_date = null;
-	
+
 	public ArchiveTask task = null;
 	public Gee.ArrayList<string> extract_list = new Gee.ArrayList<string>();
 	public string extraction_path = "";
@@ -157,7 +157,7 @@ public class FileItemArchive : FileItem {
 		return;
 	}
 	
-	public override void query_children(int depth = -1) {
+	public override void query_children(int depth, bool follow_symlinks) {
 
 		log_debug("FileItemArchive: query_children(): enter");
 		
@@ -188,6 +188,9 @@ public class FileItemArchive : FileItem {
 			log_debug("FileItemArchive: query_children(): skip_date");
 			return;
 		}
+		else{
+			password = ""; // clear password, since archive has changed
+		}
 		
 		// check if directory and continue -------------------
 		
@@ -202,6 +205,8 @@ public class FileItemArchive : FileItem {
 		log_debug("FileItemArchive: query_children(%d): %s".printf(depth, file_path), true);
 
 		//mutex_children.lock();
+
+		query_children_follow_symlinks = follow_symlinks;
 
 		if (depth < 0){
 			dir_size_queried = false;
@@ -246,10 +251,11 @@ public class FileItemArchive : FileItem {
 		//mutex_children.unlock();
 	}
 
-	public override void query_children_async() {
+	public override void query_children_async(bool follow_symlinks) {
 
 		log_debug("FileItemArchive: query_children_async(): %s".printf(file_path));
 
+		query_children_follow_symlinks = follow_symlinks;
 		query_children_async_is_running = true;
 		query_children_aborted = false;
 
@@ -265,7 +271,7 @@ public class FileItemArchive : FileItem {
 
 	private void query_children_async_thread() {
 		log_debug("FileItemArchive: query_children_async_thread()");
-		query_children(-1); // always add to cache
+		query_children(-1, false); // always add to cache
 		query_children_async_is_running = false;
 		//query_children_aborted = false; // reset
 	}
