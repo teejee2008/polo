@@ -458,7 +458,8 @@ public class FileViewList : Gtk.Box {
 		FileItem item;
 		store.get (iter0, FileViewColumn.ITEM, out item, -1);
 
-		if (!item.is_directory && FileItem.is_archive_by_extension(item.file_path) && !FileItem.is_package_by_extension(item.file_path)){
+		if (!item.is_directory && !(item is FileItemCloud)
+			&& FileItem.is_archive_by_extension(item.file_path) && !FileItem.is_package_by_extension(item.file_path)){
 
 			if (item is FileItemArchive == false){
 				
@@ -495,7 +496,7 @@ public class FileViewList : Gtk.Box {
 
 		// re-query and re-populate the expanded node (iter0)
 
-		item0.query_children(1);
+		item0.query_children(1, false);
 		set_iter_from_item(iter0, item0, true, true);
 		remove_iter_children(ref iter0);
 		append_item_children_to_iter(ref iter0, item0, true, true);
@@ -511,7 +512,7 @@ public class FileViewList : Gtk.Box {
 
 			// re-query and re-populate child nodes
 
-			item1.query_children(1);
+			item1.query_children(1, false);
 			//set_iter_from_item(iter1, item1); // not needed
 			remove_iter_children(ref iter1);
 			append_item_children_to_iter(ref iter1, item1, false, false);
@@ -2602,7 +2603,7 @@ public class FileViewList : Gtk.Box {
 				
 				if (!arch.is_archived_item){
 					log_debug("FileViewList: query_items_thread(): FileItemArchive");
-					arch.query_children(-1); // TODO:2: skip if file date not changed
+					arch.query_children(-1, true); // TODO:2: skip if file date not changed
 					log_debug("FileViewList: query_items_thread(): FileItemArchive: exit");
 				}
 				else{
@@ -2612,7 +2613,7 @@ public class FileViewList : Gtk.Box {
 			else{
 				log_debug("FileViewList: query_items_thread(): current_item is FileItem");
 				//log_debug("FileViewList: query_items_thread(): current_item.query_children(1)");
-				current_item.query_children(1);
+				current_item.query_children(1, false);
 			}
 
 			log_trace("FileViewList: query_items_thread(): %s".printf(timer_elapsed_string(timer)));
@@ -2761,7 +2762,7 @@ public class FileViewList : Gtk.Box {
 				
 				if (subitem.is_directory){
 					int count_before = subitem.children.size;
-					subitem.query_children(1);
+					subitem.query_children(1, false);
 					int count_after = subitem.children.size;
 					if (count_before != count_after){
 						count_changed = true;
@@ -2794,7 +2795,16 @@ public class FileViewList : Gtk.Box {
 		if ((current_item == null) || current_item.is_trash || (current_item is FileItemArchive)){ return; } // (current_item is FileItemCloud);
 		
 		var selected_items = get_selected_items().to_array();
-		if (selected_items.length == 0){
+
+		bool some_folders_selected = false;
+		foreach(var item in selected_items){
+			if (item.is_directory){
+				some_folders_selected = true;
+				break;
+			}
+		}
+		
+		if ((selected_items.length == 0) || !some_folders_selected){
 			selected_items = current_item.children.values.to_array();
 		}
 
@@ -5775,49 +5785,28 @@ public class FileViewList : Gtk.Box {
 	public void extract_selected_items_to_same_location(){
 
 		log_debug("FileViewList: extract_selected_items_to_same_location()");
-		
-		var selected = get_selected_items();
-		if (selected.size == 0) { return; }
 
+		// check destination ----------------
+		
 		if ((current_item is FileItemArchive) || ((current_item is FileItemCloud))){
 			log_debug("Cannot extract inside archive or cloud location");
 			return;
 		}
 
+		// set destination path ----------------------
+		
 		string outpath = current_item.file_path;
 
-		var list = new Gee.ArrayList<FileItem>();
-		foreach(var item in selected){
-			if (FileItem.is_archive_by_extension(item.file_path)){
-				
-				FileItemArchive? arch = FileItemArchive.convert_file_item(item);
-				if (arch == null) {
-					log_error("FileViewList: selected item is not an archive");
-					continue;
-				}
-				
-				arch.extract_list.clear();
-				// unique path will be generated before execution in FileTask()
-				arch.extraction_path = path_combine(outpath, arch.file_title); 
-				list.add(arch);
-			}
-		}
-
-		if (list.size == 0) { return; }
-
-		// create action
-		var action = new ProgressPanelArchiveTask(pane, list, FileActionType.EXTRACT, true);
-		pane.file_operations.add(action);
-		action.set_source(current_item);
-		action.execute();
+		// --------------------
+		
+		extract_selected_items_to_selected_location(outpath, true);
 	}
 
 	public void extract_selected_items_to_another_location(){
 
 		log_debug("FileViewList: extract_selected_items_to_another_location()");
-		
-		var selected = get_selected_items();
-		if (selected.size == 0) { return; }
+
+		// set destination path ----------------------
 		
 		string default_path = App.user_home;
 		if (current_item != null){
@@ -5835,40 +5824,17 @@ public class FileViewList : Gtk.Box {
 			return;
 		}
 
-		var list = new Gee.ArrayList<FileItem>();
-		foreach(var item in selected){
-			
-			if (FileItem.is_archive_by_extension(item.file_path)){
-				
-				FileItemArchive? arch = FileItemArchive.convert_file_item(item);
-				if (arch == null) {
-					log_error("FileViewList: selected item is not an archive");
-					continue;
-				}
-			
-				arch.extract_list.clear();
-				arch.extraction_path = outpath; // use selected path
-				log_debug("FileViewList: extraction_path: %s".printf(arch.extraction_path));
-				list.add(arch);
-			}
-		}
-
-		if (list.size == 0) { return; }
-
-		// create action
-		var action = new ProgressPanelArchiveTask(pane, list, FileActionType.EXTRACT, false);
-		pane.file_operations.add(action);
-		action.set_source(current_item);
-		action.execute();
+		// --------------------
+		
+		extract_selected_items_to_selected_location(outpath, false);
 	}
 
 	public void extract_selected_items_to_opposite_location(){
 
 		log_debug("FileViewList: extract_selected_items_to_opposite_location()");
 		
-		var selected = get_selected_items();
-		if (selected.size == 0) { return; }
-
+		// set destination path ----------------------
+		
 		var opp_item = panel.opposite_pane.view.current_item;
 		string outpath = "";
 		if ((opp_item != null) && (dir_exists(opp_item.file_path))){
@@ -5876,38 +5842,46 @@ public class FileViewList : Gtk.Box {
 		}
 
 		if ((outpath.length == 0) || !dir_exists(outpath)){
-			gtk_messagebox(_("Cannot extract to this location"),_("Destination directory does not exist") + ":\n\n%s".printf(outpath), window, false);
+			gtk_messagebox(_("Invalid Path"),_("Destination directory does not exist") + ":\n\n%s".printf(outpath), window, false);
 			return;
 		}
 
-		var list = new Gee.ArrayList<FileItem>();
-
-		bool is_partial_extraction = current_item is FileItemArchive;
+		// --------------------
 		
-		if (is_partial_extraction){
+		extract_selected_items_to_selected_location(outpath, false);
+	}
 
-			FileItemArchive? arch = FileItemArchive.convert_file_item(selected[0]);
-			if (arch == null) {
-				log_error("FileViewList: selected item is not an archive");
+	public void extract_selected_items_to_selected_location(string outpath, bool new_folder){
+
+		var selected = get_selected_items();
+		if (selected.size == 0) { return; }
+		
+		var list = new Gee.ArrayList<FileItem>();
+		
+		if (current_item is FileItemArchive){
+
+			var arch = ((FileItemArchive) current_item).archive_base_item;
+			
+			if (!file_exists(arch.file_path)) {
+				log_error("FileViewList: base_archive file_not_found");
+				return;
+			}
+
+			if (arch.archive_is_solid){
+				string txt = _("Not Supported");
+				string msg = _("Partial extraction not supported for solid archives");
+				gtk_messagebox(txt, msg, window, true);
 				return;
 			}
 			
-			var arch_base = arch.archive_base_item;
-
-			if ((arch_base != null) && arch_base.archive_is_solid){
-				gtk_messagebox(_("Partial extraction not supported for solid archives"), "", window, true);
-				return;
-			}
+			arch.extraction_path = path_combine(outpath, "." + random_string());
 			
-			// do a partial extract for selected archived_items
-			arch = arch.archive_base_item;
 			arch.extract_list.clear();
-			arch.extraction_path = outpath;
-			list.add(arch);
-
 			foreach(var item in selected){
 				arch.extract_list.add(item.file_path);
 			}
+
+			list.add(arch);
 		}
 		else{
 			foreach(var item in selected){
@@ -5916,7 +5890,7 @@ public class FileViewList : Gtk.Box {
 					
 					FileItemArchive? arch = FileItemArchive.convert_file_item(item);
 					if (arch == null) {
-						log_error("extract_selected_items_to_opposite_location(): selected item is not an archive");
+						log_error("extract_selected_items_to_selected_location(): selected_item_not_archive");
 						continue;
 					}
 			
@@ -5931,19 +5905,28 @@ public class FileViewList : Gtk.Box {
 		if (list.size == 0) { return; }
 
 		// create action
-		var action = new ProgressPanelArchiveTask(pane, list, FileActionType.EXTRACT, !is_partial_extraction);
+		var action = new ProgressPanelArchiveTask(pane, list, FileActionType.EXTRACT, new_folder);
 		pane.file_operations.add(action);
 		action.set_source(current_item);
 		action.execute();
+
+		if (current_item is FileItemArchive){
+
+			action.task_complete.connect(()=>{
+
+				var arch = ((FileItemArchive) current_item).archive_base_item;
+
+				string src_path = path_combine(arch.extraction_path, current_item.file_path);
+				
+			});
+		}
 	}
 
-	public ProgressPanelArchiveTask? extract_selected_item_to_temp_location(FileItem item, out string outpath){
+	public ProgressPanelArchiveTask? extract_selected_item_to_temp_location(FileItemArchive item, out string outpath){
 		
 		outpath = get_temp_file_path();
 
-		if (item is FileItemArchive == false){ return null; }
-			
-		var arch = (FileItemArchive) item;
+		var arch = item;
 		arch.extract_list.clear();
 
 		outpath = path_combine(outpath, arch.file_title);
@@ -5951,6 +5934,32 @@ public class FileViewList : Gtk.Box {
 
 		var list = new Gee.ArrayList<FileItem>();
 		list.add(arch);
+		
+		// create action
+		var action = new ProgressPanelArchiveTask(pane, list, FileActionType.EXTRACT, true);
+		pane.file_operations.add(action);
+		action.set_source(current_item);
+		action.execute();
+
+		return action;
+	}
+
+	public ProgressPanelArchiveTask? extract_selected_items_to_selected_location_temp(Gee.ArrayList<FileItem> items, out string outpath){
+		
+		outpath = get_temp_file_path();
+
+		var arch = ((FileItemArchive) current_item).archive_base_item;
+		arch.extract_list.clear();
+
+		outpath = path_combine(outpath, arch.file_title);
+		arch.extraction_path = outpath;
+
+		var list = new Gee.ArrayList<FileItem>();
+		list.add(arch);
+
+		foreach(var item in items){
+			arch.extract_list.add(item.file_path);
+		}
 		
 		// create action
 		var action = new ProgressPanelArchiveTask(pane, list, FileActionType.EXTRACT, true);

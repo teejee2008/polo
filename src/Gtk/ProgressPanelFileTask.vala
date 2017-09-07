@@ -66,34 +66,34 @@ public class ProgressPanelFileTask : ProgressPanel {
 		string txt = "";
 		switch(action_type){
 		case FileActionType.COPY:
-			txt = _("Copying...");
+			txt = _("File Copy:");
 			break;
 		case FileActionType.CUT:
-			txt = _("Moving...");
+			txt = _("File Move:");
 			break;
 		case FileActionType.RESTORE:
-			txt = _("Restoring...");
+			txt = _("Restore:");
 			break;
 		case FileActionType.TRASH:
-			txt = _("Moving to Trash...");
+			txt = _("Move to Trash:");
 			break;
 		case FileActionType.TRASH_EMPTY:
-			txt = _("Emptying Trash...");
+			txt = _("Empty Trash:");
 			break;
 		case FileActionType.DELETE:
 		case FileActionType.DELETE_TRASHED:
-			txt = _("Removing...");
+			txt = _("Delete Trashed:");
 			break;
 		case FileActionType.CLOUD_RENAME:
-			txt = _("Renaming...");
+			txt = _("Rename:");
 			break;
 		case FileActionType.PASTE_SYMLINKS_AUTO:
 		case FileActionType.PASTE_SYMLINKS_ABSOLUTE:
 		case FileActionType.PASTE_SYMLINKS_RELATIVE:
-			txt = _("Creating symbolic links...");
+			txt = _("Create Symbolic Links:");
 			break;
 		case FileActionType.PASTE_HARDLINKS:
-			txt = _("Creating hard links...");
+			txt = _("Create Hard Links:");
 			break;
 		default:
 			break;
@@ -104,7 +104,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 		var label = new Gtk.Label("<b>" + txt + "</b>");
 		label.set_use_markup(true);
 		label.xalign = 0.0f;
-		label.margin_bottom = 12;
+		//label.margin_bottom = 6;
 		contents.add(label);
 		
 		var hbox_outer = new Gtk.Box(Orientation.HORIZONTAL, 6);
@@ -128,7 +128,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 		//label.set_use_markup(true);
 		label.xalign = 0.0f;
 		//label.margin_top = 12;
-		label.ellipsize = Pango.EllipsizeMode.START;
+		label.ellipsize = Pango.EllipsizeMode.END;
 		label.max_width_chars = 100;
 		hbox.add(label);
 		lbl_status = label;

@@ -72,7 +72,7 @@ public class GtkTheme : GLib.Object {
 	private static void query_from_path(string base_path){
 		
 		var dir = new FileItem.from_path(base_path);
-		dir.query_children(2);
+		dir.query_children(2, false);
 		
 		foreach(var theme_dir in dir.children.values){
 			if (theme_dir.has_child("gtk-3.0")){

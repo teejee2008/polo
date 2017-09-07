@@ -129,7 +129,7 @@ public class TrashCan : FileItem {
 		}
 
 		var fi = new FileItem.from_path(dir_files);
-		fi.query_children(1);
+		fi.query_children(1, false);
 		foreach(var item in fi.children.values){
 			string item_name = item.file_name;
 			read_trash_info(dir_files, dir_info, item_name, mount_path);
@@ -145,7 +145,7 @@ public class TrashCan : FileItem {
 		//string dir_expunged = path_combine(trash_path, "expunged");
 		
 		var dir = new FileItem.from_path(dir_info);
-		dir.query_children(1);
+		dir.query_children(1, false);
 		
 		foreach(var item in dir.children.values){
 			

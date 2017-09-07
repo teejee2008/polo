@@ -1108,9 +1108,11 @@ public class PropertiesWindow : Gtk.Window {
 		hbox.add(label);
 		//sg_prop_value.add_widget(label);
 
-		if ((file_item is FileItemArchive) || (file_item is FileItemCloud)){ return label; }
+		if (file_item is FileItemCloud){ return label; }
 
-		if ((file_item.accessed == null) || !file_item.can_write || !file_item.is_local){ return label; }
+		if ((file_item is FileItemArchive) && (file_item.parent != null) && (file_item.parent is FileItemArchive)){ return label; }
+
+		if ((file_item.accessed == null) || !file_item.can_write){ return label; }
 
 		var hbox_buttons = new Gtk.Box(Orientation.HORIZONTAL, 0);
 		hbox.add(hbox_buttons);
@@ -1171,9 +1173,11 @@ public class PropertiesWindow : Gtk.Window {
 		hbox.add(label);
 		//sg_prop_value.add_widget(label);
 
-		if ((file_item is FileItemArchive) || (file_item is FileItemCloud)){ return label; }
+		if (file_item is FileItemCloud){ return label; }
 
-		if ((file_item.modified == null) || !file_item.can_write || !file_item.is_local){ return label; }
+		if ((file_item is FileItemArchive) && (file_item.parent != null) && (file_item.parent is FileItemArchive)){ return label; }
+
+		if ((file_item.accessed == null) || !file_item.can_write){ return label; }
 
 		var hbox_buttons = new Gtk.Box(Orientation.HORIZONTAL, 0);
 		hbox.add(hbox_buttons);

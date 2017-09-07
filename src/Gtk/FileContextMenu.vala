@@ -758,7 +758,7 @@ public class FileContextMenu : Gtk.Menu {
 		if (!dir_exists(templates_folder)){ return false; }
 
 		var templates = new FileItem.from_path(templates_folder);
-		templates.query_children(1);
+		templates.query_children(1, false);
 
 		bool item_added = false;
 		foreach(var template_file in templates.children.values){
@@ -1477,7 +1477,7 @@ public class FileContextMenu : Gtk.Menu {
 		var menu_item = gtk_menu_add_item(
 			menu,
 			_("Extract To.."),
-			_("Extract archives to another location"),
+			_("Extract archives to another location. Existing files will be overwritten."),
 			null,//IconManager.lookup_image("package-x-generic",16),
 			sg_icon,
 			sg_label);
@@ -1487,7 +1487,7 @@ public class FileContextMenu : Gtk.Menu {
 		});
 
 		menu_item.sensitive = (selected_items.size > 0)
-			&& FileItem.is_archive_by_extension(selected_item.file_path) // check file
+			&& ((view.current_item is FileItemArchive) || FileItem.is_archive_by_extension(selected_item.file_path)) // check file
 			; // check destination
 	}
 
@@ -1500,7 +1500,7 @@ public class FileContextMenu : Gtk.Menu {
 		var menu_item = gtk_menu_add_item(
 			menu,
 			_("Extract Across"),
-			_("Extract archives to the opposite pane"),
+			_("Extract archives to the opposite pane. Existing files will be overwritten."),
 			null,//IconManager.lookup_image("package-x-generic",16),
 			sg_icon,
 			sg_label);
@@ -1512,7 +1512,7 @@ public class FileContextMenu : Gtk.Menu {
 		FileItem? opp_item = view.panel.opposite_pane.view.current_item;
 
 		menu_item.sensitive = (selected_items.size > 0)
-			&& FileItem.is_archive_by_extension(selected_item.file_path) // check file
+			&& ((view.current_item is FileItemArchive) || FileItem.is_archive_by_extension(selected_item.file_path)) // check file
 			&& (opp_item != null) && !(opp_item is FileItemArchive) && !(opp_item is FileItemCloud); // check destination
 	}
 
@@ -1525,7 +1525,7 @@ public class FileContextMenu : Gtk.Menu {
 		var menu_item = gtk_menu_add_item(
 			menu,
 			_("Extract Here"),
-			_("Extract archives to new folders in this location"),
+			_("Extract archives in same location. New folder will be created with archive name."),
 			null,//IconManager.lookup_image("package-x-generic",16),
 			sg_icon,
 			sg_label);

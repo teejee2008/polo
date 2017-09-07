@@ -47,7 +47,7 @@ public class GvfsMounts: GLib.Object {
 		
 		var gvfs = new FileItem.from_path(gvfs_root_path);
 		
-		gvfs.query_children(1);
+		gvfs.query_children(1, false);
 		
 		foreach(var child in gvfs.children.values){
 			

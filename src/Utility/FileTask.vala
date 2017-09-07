@@ -277,7 +277,7 @@ public class FileTask : GLib.Object {
 		status = _("Listing destination items...");
 		log_debug(status);
 		
-		destination.query_children(1);
+		destination.query_children(1, false);
 			
 		status = _("Listing source items...");
 		log_debug(status);
@@ -494,7 +494,7 @@ public class FileTask : GLib.Object {
 			return false;
 		}
 
-		if (src_item.file_type == FileType.REGULAR){
+		if ((src_item.file_type == FileType.REGULAR) || src_item.is_symlink){
 
 			// source is file
 
@@ -560,7 +560,7 @@ public class FileTask : GLib.Object {
 
 					// dest is folder
 					
-					dest_item.query_children(1);
+					dest_item.query_children(1, false);
 
 					if (!dry_run){
 
@@ -774,10 +774,12 @@ public class FileTask : GLib.Object {
 		bytes_file_total = 0;
 
 		if (move){
-			status = "%s".printf(src_path);
+			status = "%s %'lld / %'lld - %s".printf(_("Moving file"),
+				count_batch_completed + 1, count_batch_total, src_path[source.file_path.length + 1:src_path.length]);
 		}
 		else{
-			status = "%s".printf(src_path);
+			status = "%s %'lld / %'lld - %s".printf(_("Copying file"),
+				count_batch_completed + 1, count_batch_total, src_path[source.file_path.length + 1:src_path.length]);
 		}
 
 		cancellable = new Cancellable();
@@ -825,6 +827,7 @@ public class FileTask : GLib.Object {
 		bytes_completed_files += bytes_file_total;
 		bytes_file = 0;
 		bytes_file_total = 0;
+		count_batch_completed++;
 		return ok;
 	}
 
@@ -913,10 +916,10 @@ public class FileTask : GLib.Object {
 				if (aborted) { break; }
 
 				source = new FileItem.from_path(item.trash_data_file);
-				source.query_children();
+				source.query_children(-1, false);
 				
 				destination = new FileItem.from_path(file_parent(item.trash_original_path));
-				destination.query_children(1);
+				destination.query_children(1, false);
 
 				string dest_item_name = item.file_name;
 				if (destination.children.has_key(item.file_name)){
@@ -1202,7 +1205,7 @@ public class FileTask : GLib.Object {
 			if (item.file_type == FileType.DIRECTORY){
 				
 				current_query_item = item;
-				item.query_children_async();
+				item.query_children_async(false);
 
 				while(item.query_children_async_is_running){
 
@@ -1227,7 +1230,7 @@ public class FileTask : GLib.Object {
 			}
 
 			bytes_batch_total += item.file_size;
-			count_batch_total += item.file_count_total + item.dir_count_total + 1;
+			count_batch_total += item.get_file_count_recursively(true);
 		}
 
 		_stats = "";
@@ -1269,7 +1272,7 @@ public class FileTask : GLib.Object {
 		foreach(var item in items){
 			if (aborted){ break; }
 			if (item.is_directory){
-				item.query_children();
+				item.query_children(-1, true);
 				//item.query_children_pending = false;
 			}
 		}
@@ -1336,7 +1339,7 @@ public class FileTask : GLib.Object {
 						txt += " / %s".printf(format_file_size(bytes_batch_total));
 					}
 
-					txt += " %s".printf(_("transferred"));
+					//txt += " %s".printf(_("transferred"));
 					
 					txt += " (%.0f%%),".printf(progress * 100.0);
 
