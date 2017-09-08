@@ -199,7 +199,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 			foreach(var item in items){
 				if (file_or_dir_exists(item.file_path)){
 					string src = item.file_path;
-					string dst = path_combine(destination.file_path, item.file_name);
+					string dst = file_generate_unique_name(path_combine(destination.file_path, item.file_name));
 
 					lbl_status.label = item.file_name;
 
