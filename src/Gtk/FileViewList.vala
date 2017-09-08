@@ -4579,14 +4579,16 @@ public class FileViewList : Gtk.Box {
 		log_debug("action.create_directory()");
 
 		string? new_name = _("New Folder");
-
+		string file_path_new = file_generate_unique_name(path_combine(current_item.file_path, new_name));
+		new_name = file_basename(file_path_new);
+		
 		do {
 			new_name = gtk_inputbox(_("Create Directory"),_("Enter directory name"), window, false, new_name);
 			if ((new_name == null) || (new_name.length == 0)){
 				return;
 			}
 
-			string file_path_new = path_combine(current_item.file_path, new_name);
+			file_path_new = path_combine(current_item.file_path, new_name);
 
 			if (file_or_dir_exists(file_path_new)){
 				gtk_messagebox(_("Directory exists"), _("Enter another name"), window, true);
@@ -4611,14 +4613,16 @@ public class FileViewList : Gtk.Box {
 		log_debug("action.create_file()");
 
 		string? new_name = _("New File");
-
+		string file_path_new = file_generate_unique_name(path_combine(current_item.file_path, new_name));
+		new_name = file_basename(file_path_new);
+		
 		do {
 			new_name = gtk_inputbox(_("Create File"),_("Enter file name"), window, false, new_name);
 			if ((new_name == null) || (new_name.length == 0)){
 				return;
 			}
 
-			string file_path_new = path_combine(current_item.file_path, new_name);
+			file_path_new = path_combine(current_item.file_path, new_name);
 
 			if (file_or_dir_exists(file_path_new)){
 				gtk_messagebox(_("File exists"), _("Enter another name"), window, true);
@@ -4645,7 +4649,8 @@ public class FileViewList : Gtk.Box {
 		FileItem template = new FileItem.from_path(template_path);
 		
 		string? new_name = "New %s".printf(template.file_name);
-		string  new_file_path = "";
+		string  new_file_path = file_generate_unique_name(path_combine(current_item.file_path, new_name));
+		new_name = file_basename(new_file_path);
 		
 		do {
 			new_name = gtk_inputbox(_("Create File"),_("Enter file name"), window, false, new_name);
