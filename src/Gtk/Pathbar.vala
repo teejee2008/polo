@@ -291,11 +291,12 @@ public class Pathbar : Gtk.Box {
 		// will be connected on edit
 		//txt.activate.connect(txt_path_activate);
 
-		txt.focus_out_event.connect((event) => {
+		/*txt.focus_out_event.connect((event) => {
 			txt.activate();
 			return false;
-		});
+		});*/
 
+		/*
 		// connect signal for shift+F10
         txt.popup_menu.connect(() => {
 			return true; // suppress right-click menu
@@ -308,8 +309,15 @@ public class Pathbar : Gtk.Box {
 			}
 			return false;
 		});
+		*/
 		
 		txt.set_no_show_all(true);
+	}
+
+	public void finish_editing(){
+		if (path_edit_mode){
+			txt_path.activate();
+		}
 	}
 
 	private void add_item_path_edit_buffer(){

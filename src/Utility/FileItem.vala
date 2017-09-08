@@ -147,6 +147,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	
 	public bool is_selected = false;
 	public bool is_symlink = false;
+	public bool is_symlink_broken = false;
 	public string symlink_target = "";
 	public bool is_stale = false;
 
@@ -1432,8 +1433,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 			var item_file_type = info.get_file_type();
 
-			this.icon = info.get_icon();
-
 			if (item_file_type == FileType.SYMBOLIC_LINK) {
 				//this.icon = GLib.Icon.new_for_string("emblem-symbolic-link");
 				this.is_symlink = true;
@@ -1443,6 +1442,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 				this.is_symlink = false;
 				this.symlink_target = "";
 			}
+
+			this.icon = info.get_icon();
 
 			//NOTE: permissions of symbolic links are never used
 
@@ -1478,13 +1479,21 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 			//log_trace("query_info: %s".printf(timer_elapsed_string(timer)));
 
-			if (this.is_symlink){
+			// file type resolved
+			this.file_type = info.get_file_type();
+
+			//log_debug("resolved_type: %s, %s".printf(file_name, file_type.to_string()));
+
+			if (file_type == FileType.SYMBOLIC_LINK){
+				this.is_symlink_broken = true;
+				this.file_type = FileType.REGULAR; // fake it, so that sorting is not broken
+				//log_debug("broken_link: %s".printf(file_name));
+			}
+			
+			if (this.is_symlink && !this.is_symlink_broken){
 				// get icon for the resolved file
 				this.icon = info.get_icon();
 			}
-
-			// file type resolved
-			this.file_type = info.get_file_type();
 
 			// content type
 			this.content_type = info.get_content_type();

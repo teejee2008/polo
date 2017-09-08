@@ -378,7 +378,12 @@ public class FileViewList : Gtk.Box {
 
 		if (column == col_indicator){
 			if (item.is_symlink){
-				return "%s: %s".printf(_("Link to"), item.symlink_target);
+				if (item.is_symlink_broken){
+					return "(%s) %s: %s".printf(_("Broken"), _("Link to"), item.symlink_target);
+				}
+				else{
+					return "%s: %s".printf(_("Link to"), item.symlink_target);
+				}
 			}
 			else{
 				return _("Item is not a symbolic link");
@@ -423,6 +428,9 @@ public class FileViewList : Gtk.Box {
 		window.update_accelerators_for_active_pane();
 
 		pane.selection_bar.close_panel(false);
+
+		pane.pathbar.finish_editing();
+		window.pathbar.finish_editing();
 
 		if (event.button == 3) {
 			if (current_item == null) { return false; }
@@ -603,6 +611,9 @@ public class FileViewList : Gtk.Box {
 
 		pane.selection_bar.close_panel(false);
 
+		pane.pathbar.finish_editing();
+		window.pathbar.finish_editing();
+
 		if (event.button == 3) {
 			if (current_item == null) { return false; }
 
@@ -715,8 +726,11 @@ public class FileViewList : Gtk.Box {
 			FileItem item;
 			model.get (iter, 0, out item, -1);
 
-			if (item.is_symlink) {
+			if (item.is_symlink && !item.is_symlink_broken){
 				pixcell.pixbuf = IconManager.lookup("symbolic-link", 16, false, true); //emblem-symbolic-link
+			}
+			else if (item.is_symlink && item.is_symlink_broken){
+				pixcell.pixbuf = IconManager.lookup("error", 16, false, true); //emblem-symbolic-link
 			}
 			else{
 				pixcell.pixbuf = null;
@@ -1876,6 +1890,8 @@ public class FileViewList : Gtk.Box {
 		
 		switch(key_name.down()){
 		case "enter":
+			pane.pathbar.finish_editing();
+			window.pathbar.finish_editing();
 			return false;
 		}
 
