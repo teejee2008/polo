@@ -4322,11 +4322,11 @@ public class FileViewList : Gtk.Box {
 		action.set_destination(current_item);
 		action.set_action(action_type);
 
-		// source and dest should never be same
-		if (action.source.file_path == action.destination.file_path){
+		// source and dest can be same
+		/*if (action.source.file_path == action.destination.file_path){
 			show_msg_for_same_source_and_dest();
 			return;
-		}
+		}*/
 
 		// clear after the check
 		window.pending_action = null;
@@ -4361,11 +4361,13 @@ public class FileViewList : Gtk.Box {
 		action.set_destination(current_item);
 		action.set_action(FileActionType.PASTE_HARDLINKS);
 
-		// source and dest should never be same
+		// source and dest can be same
+		/*
 		if (action.source.file_path == action.destination.file_path){
 			show_msg_for_same_source_and_dest();
 			return;
 		}
+		*/
 
 		// clear after the check
 		window.pending_action = null;

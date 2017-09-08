@@ -363,7 +363,7 @@ public class FileContextMenu : Gtk.Menu {
 				sg_label_sub);
 
 			submenu_item.activate.connect(() => {
-				view.open(view.get_selected_items().get(0), supported_app);
+				view.open(selected_item, supported_app);
 			});
 		}
 
@@ -391,7 +391,7 @@ public class FileContextMenu : Gtk.Menu {
 		menu_item.sensitive = (selected_items.size > 0);
 
 		menu_item.activate.connect(() => {
-			var file = view.get_selected_items().get(0);
+			var file = selected_item;
 			DesktopApp? app = choose_app(file);
 			if (app != null){
 				view.open(file, app);
@@ -472,7 +472,7 @@ public class FileContextMenu : Gtk.Menu {
 				sg_label_sub);
 
 			submenu_item.activate.connect(() => {
-				view.set_default_app(view.get_selected_items().get(0), supported_app);
+				view.set_default_app(selected_item, supported_app);
 			});
 		}
 
@@ -500,7 +500,7 @@ public class FileContextMenu : Gtk.Menu {
 		menu_item.sensitive = (selected_items.size > 0);
 
 		menu_item.activate.connect(() => {
-			var file = view.get_selected_items().get(0);
+			var file = selected_item;
 			DesktopApp? app = choose_app(file);
 			if (app != null){
 				view.set_default_app(file, app);
@@ -1394,6 +1394,8 @@ public class FileContextMenu : Gtk.Menu {
 	private void add_archive_actions(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
 		if (view.current_item is FileItemCloud){ return; }
+
+		if (selected_items.size == 0){ return; }
 		
 		log_debug("FileContextMenu: add_archive_actions()");
 
