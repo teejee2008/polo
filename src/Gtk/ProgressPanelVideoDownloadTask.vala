@@ -340,14 +340,14 @@ public class ProgressPanelVideoDownloadTask : ProgressPanel {
 
 		gtk_container_remove_children(contents);
 		
-		string txt = _("Downloading...");
+		string txt = _("Download");
 
 		// heading ----------------
 
 		var label = new Gtk.Label("<b>" + txt + "</b>");
 		label.set_use_markup(true);
 		label.xalign = 0.0f;
-		label.margin_bottom = 12;
+		//label.margin_bottom = 12;
 		contents.add(label);
 		
 		var hbox_outer = new Gtk.Box(Orientation.HORIZONTAL, 6);
@@ -452,7 +452,7 @@ public class ProgressPanelVideoDownloadTask : ProgressPanel {
 			log_debug("ProgressPanelVideoDownloadTask: update_status()");
 
 			if (task.current_file.length > 0){
-				lbl_status.label = "%s: %s".printf(_("File"), task.current_file);
+				lbl_status.label = "%s: %s".printf(_("Downloading"), task.current_file);
 			}
 			
 			//lbl_stats.label = task.stat_status_line;

@@ -1348,6 +1348,20 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		menu.add(item);
 
 		item.activate.connect (() => {
+			
+			if (!App.tool_exists("rclone", true)){
+				
+				string txt = _("Rclone Not Found");
+				string msg = _("Rclone is needed for cloud storage support.\n\nDownload and install Rclone?");
+				var res = gtk_messagebox_yes_no(txt, msg, window, true);
+				
+				if (res == Gtk.ResponseType.YES){
+					window.install_rclone();
+				}
+				
+				return; // always return
+			}
+
 			window.add_rclone_account();
 		});
 	}
@@ -1547,6 +1561,10 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		var submenu = new Gtk.Menu();
 		menu_item.set_submenu(submenu);
 
+		add_install_rclone(submenu);
+		
+		add_install_p7zip(submenu);
+
 		add_clear_thumbnail_cache(submenu);
 
 		add_rebuild_font_cache(submenu);
@@ -1575,6 +1593,30 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		item.activate.connect (() => {
 			window.clear_thumbnail_cache();
 		});
+	}
+
+	private void add_install_rclone(Gtk.Menu menu){
+
+		var item = new Gtk.MenuItem.with_label (_("Install Rclone (Cloud Storage Support)"));
+		item.set_tooltip_text(_("Download and install the latest version of Rclone"));
+		menu.add(item);
+
+		item.activate.connect (() => {
+			window.install_rclone();
+		});
+	}
+
+	private void add_install_p7zip(Gtk.Menu menu){
+
+		var item = new Gtk.MenuItem.with_label (_("Install p7zip 16.02 (Archive Support)"));
+		item.set_tooltip_text(_("Download and install p7zip v16.02. Installs binaries from p7zip, p7zip-full and p7zip-rar packages."));
+		menu.add(item);
+
+		item.activate.connect (() => {
+			window.install_p7zip();
+		});
+
+		item.sensitive = (ArchiveTask.7zip_version < 16.02);
 	}
 
 	private void add_rebuild_font_cache(Gtk.Menu menu){

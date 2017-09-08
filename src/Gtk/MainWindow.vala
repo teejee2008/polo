@@ -832,6 +832,22 @@ public class MainWindow : Gtk.Window {
 		layout_box.panel1.run_script_in_new_terminal_tab(cmd, _("Cleaning Thumbnail Cache..."));
 	}
 
+	public void install_rclone(){
+
+		string sh_path = path_combine(App.share_dir, "files/install-rclone.sh");
+		string cmd = sh_path;
+
+		layout_box.panel1.run_script_in_new_terminal_tab(cmd, _("Running Rclone Installation Script"));
+	}
+
+	public void install_p7zip(){
+
+		string sh_path = path_combine(App.share_dir, "files/install-p7zip.sh");
+		string cmd = sh_path;
+
+		layout_box.panel1.run_script_in_new_terminal_tab(cmd, _("Running p7zip Installation Script"));
+	}
+
 	public void add_rclone_account(){
 
 		err_log_clear();

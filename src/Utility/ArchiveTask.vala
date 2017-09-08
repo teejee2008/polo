@@ -84,7 +84,7 @@ public class ArchiveTask : AsyncTask {
 	private MatchInfo match;
 	private double dblVal;
 
-	private static string 7zip_version_name = "";
+	private static string 7zip_version_name;
 
 	private Gtk.Window? window = null;
 
@@ -146,7 +146,7 @@ public class ArchiveTask : AsyncTask {
 
 	public static double 7zip_version {
 		get {
-			if (7zip_version_name.length == 0){
+			if ((7zip_version_name == null) || (7zip_version_name.length == 0)){
 				
 				string std_out, std_err;
 				exec_sync("7z", out std_out, out std_err);

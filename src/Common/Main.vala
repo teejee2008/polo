@@ -526,9 +526,9 @@ public class Main : GLib.Object {
 		}
 	}
 
-	public bool tool_exists(string cmd){
+	public bool tool_exists(string cmd, bool check_again = false){
 		
-		if (tools.keys.contains(cmd)){
+		if (tools.keys.contains(cmd) && !check_again){
 			
 			var tool = tools[cmd];
 			return tool.available;
