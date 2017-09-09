@@ -646,11 +646,7 @@ public class Settings : Gtk.Box, IPaneActive {
 
 			App.pathbar_unified = chk.active;
 
-			foreach(var pn in window.panes){
-				pn.pathbar.refresh();
-			}
-
-			window.pathbar.refresh();
+			window.refresh_pathbars();
 		});
 	}
 
@@ -1042,11 +1038,7 @@ public class Settings : Gtk.Box, IPaneActive {
 
 			App.statusbar_unified = chk.active;
 
-			foreach(var pn in window.panes){
-				pn.statusbar.refresh_visibility();
-			}
-
-			window.statusbar.refresh_visibility();
+			window.refresh_statusbars();
 		});
 	}
 

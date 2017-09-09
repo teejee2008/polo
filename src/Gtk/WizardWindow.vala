@@ -220,43 +220,61 @@ public class WizardWindow : Gtk.Window {
 
 		switch(layout_style){
 		case LayoutStyle.SINGLE_ICONS:
+			App.statusbar_unified = false;
+			App.pathbar_unified = false;
 			App.main_window.sidebar.sidebar_show();
 			App.main_window.layout_box.set_panel_layout(PanelLayout.SINGLE);
 			App.main_window.layout_box.panel1.pane.view.set_view_mode(ViewMode.ICONS);
-			App.save_app_config();
 			break;
 			
 		case LayoutStyle.SINGLE_LIST:
+			App.statusbar_unified = false;
+			App.pathbar_unified = false;
 			App.main_window.sidebar.sidebar_show();
 			App.main_window.layout_box.set_panel_layout(PanelLayout.SINGLE);
 			App.main_window.layout_box.panel1.pane.view.set_view_mode(ViewMode.LIST);
-			App.save_app_config();
 			break;
 			
 		case LayoutStyle.DUAL_ICONS:
+			App.statusbar_unified = false;
+			App.pathbar_unified = false;
 			App.main_window.sidebar.sidebar_hide();
 			App.main_window.layout_box.set_panel_layout(PanelLayout.DUAL_VERTICAL);
 			App.main_window.layout_box.panel1.pane.view.set_view_mode(ViewMode.ICONS);
 			App.main_window.layout_box.panel2.pane.view.set_view_mode(ViewMode.ICONS);
-			App.save_app_config();
 			break;
 			
 		case LayoutStyle.DUAL_LIST:
+			App.statusbar_unified = false;
+			App.pathbar_unified = false;
 			App.main_window.sidebar.sidebar_hide();
 			App.main_window.layout_box.set_panel_layout(PanelLayout.DUAL_VERTICAL);
 			App.main_window.layout_box.panel1.pane.view.set_view_mode(ViewMode.LIST);
 			App.main_window.layout_box.panel2.pane.view.set_view_mode(ViewMode.LIST);
-			App.save_app_config();
 			break;
 			
 		case LayoutStyle.QUAD:
+			App.statusbar_unified = true;
+			App.pathbar_unified = true;
 			App.main_window.sidebar.sidebar_hide();
 			App.main_window.layout_box.set_panel_layout(PanelLayout.QUAD);
 			App.main_window.layout_box.panel1.pane.view.set_view_mode(ViewMode.LIST);
 			App.main_window.layout_box.panel2.pane.view.set_view_mode(ViewMode.LIST);
-			App.save_app_config();
 			break;
 		}
+
+		App.main_window.refresh_pathbars();
+		App.main_window.refresh_statusbars();
+
+		App.toolbar_dark = true;
+		App.main_window.toolbar.refresh_style();
+
+		App.sidebar_dark = true;
+		App.main_window.sidebar.refresh();
+
+		GtkTheme.set_gtk_theme_preferred();
+
+		App.save_app_config();
 	}
 	
 	private Gtk.EventBox add_layout_option(Gtk.Box hbox, Gdk.Pixbuf pix, string label){

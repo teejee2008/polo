@@ -124,7 +124,7 @@ public class Main : GLib.Object {
 	public bool sidebar_devices = true;
 	public bool sidebar_dark = true;
 	public bool sidebar_action_button = false;
-	public int sidebar_position = 150;
+	public int sidebar_position = 200;
 	public string sidebar_collapsed_sections = "";
 
 	public bool headerbar_enabled = false;

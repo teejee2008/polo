@@ -245,7 +245,8 @@ public class MainWindow : Gtk.Window {
 		sidebar.refresh(); // after setting flag
 
 		if (App.first_run){
-			//open_wizard_window(); // don't
+
+			Timeout.add(2000, show_wizard_delayed);
 		}
 		else{
 			if (App.first_run_after_update()){
@@ -261,6 +262,12 @@ public class MainWindow : Gtk.Window {
 		this.present();
 		gtk_do_events();
 		
+		return false;
+	}
+
+	private bool show_wizard_delayed(){
+
+		open_wizard_window();
 		return false;
 	}
 
@@ -681,6 +688,15 @@ public class MainWindow : Gtk.Window {
 		}
 
 		this.pathbar.refresh();
+	}
+
+	public void refresh_statusbars(){
+		
+		foreach(var pn in panes){
+			pn.statusbar.refresh_visibility();
+		}
+
+		this.statusbar.refresh_visibility();
 	}
 	
 	public void refresh_treemodels(){

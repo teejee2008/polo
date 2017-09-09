@@ -60,6 +60,9 @@ public class RCloneClient : GLib.Object {
 		lookup = new Gee.HashMap<string,CloudAccount>();
 		
 		query_accounts();
+
+		// load class by creating object
+		var acc = new CloudAccount.dummy();
 	}
 
 	public void query_accounts(){
@@ -234,6 +237,10 @@ public class CloudAccount : GLib.Object {
 		types["sftp"] = "SSH/SFTP Connection";
 		types["yandex"] = "Yandex Disk";
 		*/
+	}
+
+	public CloudAccount.dummy(){
+		
 	}
 	
 	public CloudAccount(RCloneClient _client, string _name, string _type, string _rclone_mounts){
