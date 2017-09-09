@@ -346,7 +346,9 @@ public class FileContextMenu : Gtk.Menu {
 
 		var supported_apps = MimeApp.get_supported_apps(selected_item.content_type);
 		if (selected_item.content_type.has_prefix("text/")
-			|| selected_item.content_type.contains("shellscript")){
+			|| selected_item.content_type.contains("shellscript")
+			|| selected_item.content_type.contains("application/x-desktop")){
+				
 			supported_apps = DesktopApp.text_editors;
 		}
 
