@@ -74,6 +74,9 @@ public class RCloneTask : AsyncTask{
 			//  Transferred:   15.656 MBytes (240.279 kBytes/s)
 			regex_list["status"] = new Regex("""Transferred:[ \t]*([0-9.]+ [MGKTmgkt]*Bytes)[ \t]*\(([0-9.]+ [MGKTmgkt]*Bytes)\/s\)""");
 
+			// 2017/09/09 20:53:30 INFO  : docs/design/Makefile.am: Deleted
+			regex_list["info"] = new Regex("""INFO[ ]*:[ ]*(.*)""");
+			
 			//  Errors:                 0
 			regex_list["errors"] = new Regex("""Errors:[ \t]*([0-9.]+)""");
 
@@ -130,6 +133,8 @@ public class RCloneTask : AsyncTask{
 
 		// filters ---------------------------
 
+		bool no_files_for_deletion = true;
+		 
 		switch (action){
 		case RcloneActionType.COPY:
 		case RcloneActionType.MOVE:
@@ -137,7 +142,12 @@ public class RCloneTask : AsyncTask{
 		
 			string txt = "";
 			foreach(string pattern in exclude_list){
+				if ((action == RcloneActionType.DELETE) && pattern.has_suffix("/**")){ continue; } // do not delete folders
 				txt += "%s\n".printf(pattern);
+
+				if (pattern != rule_exclude_others){
+					no_files_for_deletion = false;
+				}
 			}
 
 			log_debug(string.nfill(80,'-'));
@@ -191,6 +201,45 @@ public class RCloneTask : AsyncTask{
 			// NA
 			break;
 		}
+
+		cmd += "\n";
+
+		if ((action == RcloneActionType.DELETE) && no_files_for_deletion){
+			cmd = "";
+		}
+
+		// remote empty subfolders after deleting files in folder ----
+		
+		switch (action){
+		case RcloneActionType.DELETE:
+
+			// purge folders -------------------------
+			
+			foreach(string pattern in exclude_list){
+
+				if (pattern.has_suffix("/**")){
+
+					cmd += "rclone purge";
+					
+					string dir_path = pattern[0:pattern.length-3];
+					
+					if (dir_path.has_prefix("+ ")){
+						dir_path = dir_path[2:dir_path.length];
+					}
+					else if (dir_path.has_prefix("- ")){
+						dir_path = dir_path[2:dir_path.length];
+					}
+		
+					dir_path = path_combine(source_path, dir_path);
+					
+					dir_path = remove_trailing_slash(dir_path);
+					cmd += " '%s'".printf(escape_single_quote(dir_path));
+					cmd += "\n";
+				}
+			}
+			
+			break;
+		}
 		
 		return cmd;
 	}
@@ -203,8 +252,10 @@ public class RCloneTask : AsyncTask{
 		return add_rule(file_path, is_directory, true);
 	}
 
+	public string rule_exclude_others = "- **";
+	
 	public void add_rule_exclude_others(){
-		exclude_list.add("- **");
+		exclude_list.add(rule_exclude_others);
 	}
 	
 	private string add_rule(string file_path, bool is_directory, bool include){
@@ -322,6 +373,10 @@ public class RCloneTask : AsyncTask{
 			}
 
 			//status_line = "%lld%%".printf(count_completed);
+		}
+		else if (regex_list["info"].match(line, 0, out match)) {
+
+			status_line = match.fetch(1);
 		}
 		else if (regex_list["errors"].match(line, 0, out match)) {
 			

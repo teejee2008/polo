@@ -38,6 +38,7 @@ public enum AccelContext {
 	NORMAL,
 	TRASH,
 	ARCHIVE,
+	CLOUD,
 	EDIT,
 	NONE
 }
@@ -451,6 +452,9 @@ public class MainWindow : Gtk.Window {
 		if (active_pane.view.current_item.is_trash || active_pane.view.current_item.is_trashed_item){
 			update_accelerators_for_context(AccelContext.TRASH);
 		}
+		else if (active_pane.view.current_item is FileItemCloud){
+			update_accelerators_for_context(AccelContext.CLOUD);
+		}
 		else if (active_pane.view.current_item is FileItemArchive){
 			update_accelerators_for_context(AccelContext.ARCHIVE);
 		}
@@ -483,6 +487,9 @@ public class MainWindow : Gtk.Window {
 			break;
 		case AccelContext.ARCHIVE:
 			menubar.context_archive();
+			break;
+		case AccelContext.CLOUD:
+			menubar.context_cloud();
 			break;
 		case AccelContext.EDIT:
 			menubar.context_edit();

@@ -1152,10 +1152,10 @@ public class FileTask : GLib.Object {
 
 		// ---------------------
 		
-		status = _("Building file list...");
-		log_debug(status);
+		//status = _("Building file list...");
+		//log_debug(status);
 		
-		query_source_items();
+		//query_source_items();
 
 		// ---------------------
 		
@@ -1424,6 +1424,9 @@ public class FileTask : GLib.Object {
 		owned get {
 			if ((rsync != null) && (rsync.is_running)){
 				return rsync.status_line;
+			}
+			else if ((rclone != null) && (rclone.is_running)){
+				return "%s %s".printf(_status, rclone.status_line);
 			}
 			else{
 				return _status;

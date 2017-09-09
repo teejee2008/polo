@@ -2777,6 +2777,9 @@ public class FileViewList : Gtk.Box {
 				if (query_subfolders_thread_cancelled) { break; }
 				
 				if (subitem.is_directory){
+
+					if ((subitem is FileItemCloud) && (subitem.children.size > 0)){ continue; } // performance hack for cloud folders
+					
 					int count_before = subitem.children.size;
 					subitem.query_children(1, false);
 					int count_after = subitem.children.size;
