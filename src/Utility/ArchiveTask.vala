@@ -1201,12 +1201,12 @@ public class ArchiveTask : AsyncTask {
 				//log_debug("7z_list: " +line);
 
 				if (line.has_prefix("Type = ")){
-					string val = line.split("=")[1];
+					string val = line.split("=",2)[1];
 					val = (val == null) ? "" : val.strip();
 					archive.archive_type = val;
 				}
 				else if (line.has_prefix("Method = ")){
-					string val = line.split("=")[1];
+					string val = line.split("=",2)[1];
 					val = (val == null) ? "" : val.strip();
 					archive.archive_method = val;
 					
@@ -1233,22 +1233,22 @@ public class ArchiveTask : AsyncTask {
 					}
 				}
 				else if (line.has_prefix("Solid = ")){
-					string val = line.split("=")[1];
+					string val = line.split("=",2)[1];
 					val = (val == null) ? "" : val.strip();
 					archive.archive_is_solid = (val == "+") ? true : false;
 				}
 				else if (line.has_prefix("Blocks = ")){
-					string val = line.split("=")[1];
+					string val = line.split("=",2)[1];
 					val = (val == null) ? "0" : val.strip();
 					archive.archive_blocks = int.parse(val);
 				}
 				else if (line.has_prefix("Headers Size = ")){
-					string val = line.split("=")[1];
+					string val = line.split("=",2)[1];
 					val = (val == null) ? "0" : val.strip();
 					archive.archive_header_size = int64.parse(val);
 				}
 				else if (line.has_prefix("Size = ")){
-					string val = line.split("=")[1];
+					string val = line.split("=",2)[1];
 					val = (val == null) ? "0" : val.strip();
 					archive.archive_unpacked_size = int64.parse(val);
 					
@@ -1263,7 +1263,7 @@ public class ArchiveTask : AsyncTask {
 					}
 				}
 				else if (line.has_prefix("Packed Size = ")){
-					string val = line.split("=")[1];
+					string val = line.split("=",2)[1];
 					val = (val == null) ? "0" : val.strip();
 					archive.archive_size = int64.parse(val);
 				}

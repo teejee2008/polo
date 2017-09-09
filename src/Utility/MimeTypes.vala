@@ -92,6 +92,7 @@ public class MimeApp : GLib.Object {
 
 		string type = "";
 		foreach(string line in file_read(file_path).split("\n")){
+			
 			if (line.down().contains("[added associations]")){
 				type = "added";
 			}
@@ -102,8 +103,12 @@ public class MimeApp : GLib.Object {
 				type = "default";
 			}
 			else if (line.contains("=")){
-				var arr = line.split("=");
+				
+				var arr = line.split("=",2);
+				if (arr.length != 2){ continue; }
+				
 				var mime_app = new MimeApp(arr[0].strip(),arr[1].strip());
+				
 				mime_app.group_type = type;
 				mime_app.is_local = is_local;
 				if (type == "default"){
@@ -185,7 +190,7 @@ public class MimeApp : GLib.Object {
 				index = i;
 			}
 			else if (line.contains("=")){
-				var arr = line.split("=");
+				var arr = line.split("=",2);
 				arr[0] = arr[0].strip();
 				arr[1] = arr[1].strip();
 				
@@ -456,7 +461,7 @@ public class DesktopApp : GLib.Object {
 				break; 
 			}
 
-			var arr = line.split("=");
+			var arr = line.split("=",2);
 			if (arr.length < 2){
 				continue;
 			}
@@ -526,17 +531,13 @@ public class DesktopApp : GLib.Object {
 			.replace("%u","'%s'".printf(escape_single_quote(uri)))
 			.replace("%U","'%s'".printf(escape_single_quote(uri)));
 
-		// workarounds
-		if (cmd.contains("mpv --profile")){
-			cmd = cmd.replace("mpv --profile", "mpv");
-		}
-		
 		if (!cmd.contains(file_path) && !cmd.contains(uri)){
 			cmd += " '%s'".printf(file_path);
 		}
-		
-		log_debug(exec);
-		log_debug(cmd);
+
+		log_debug("desktop_file_path: %s".printf(desktop_file_path));
+		log_debug("exec: %s".printf(exec));
+		log_debug("command: %s".printf(cmd));
 		
 		exec_script_async(cmd);
 	}

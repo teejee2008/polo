@@ -37,6 +37,7 @@ long_line_column=72
 <<<<<<< master
 <<<<<<< master
 <<<<<<< master
+<<<<<<< master
 current_page=119
 =======
 current_page=106
@@ -50,6 +51,9 @@ current_page=34
 =======
 current_page=79
 >>>>>>> Fixed build issues; Handle exceptions for GTK3 version check;
+=======
+current_page=126
+>>>>>>> Fixed parsing issue for desktop, mimetype amd other files
 FILE_NAME_0=1061;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FAdminBar.vala;0;4
 FILE_NAME_1=48865;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FCreateArchiveWindow.vala;0;4
 FILE_NAME_2=16193;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FFileContextMenu.vala;0;4
@@ -625,7 +629,7 @@ FILE_NAME_110=8943;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpol
 FILE_NAME_12=1924;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FPasswordDialog.vala;0;4
 FILE_NAME_13=6869;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FPathbar.vala;0;4
 FILE_NAME_14=1427;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FGvfsMount.vala;0;4
-FILE_NAME_15=1142;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FPoloGtk.vala;0;4
+FILE_NAME_15=1098;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FPoloGtk.vala;0;4
 FILE_NAME_16=876;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressWindow.vala;0;4
 FILE_NAME_17=29589;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FPropertiesWindow.vala;0;4
 FILE_NAME_18=16681;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FSettings.vala;0;4
@@ -636,7 +640,7 @@ FILE_NAME_22=2783;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo
 FILE_NAME_23=4280;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FStatusbar.vala;0;4
 FILE_NAME_24=4788;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FTrashBar.vala;0;4
 FILE_NAME_25=3491;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FWizardWindow.vala;0;4
-FILE_NAME_26=16887;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FCommon%2FMain.vala;0;4
+FILE_NAME_26=10388;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FCommon%2FMain.vala;0;4
 FILE_NAME_27=2021;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FGtkTheme.vala;0;4
 FILE_NAME_28=1374;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FAppLock.vala;0;4
 FILE_NAME_29=1860;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FAsyncTask.vala;0;4
@@ -677,7 +681,7 @@ FILE_NAME_63=26015;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpol
 FILE_NAME_64=2781;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FGtk%2FIconCache.vala;0;4
 FILE_NAME_65=2658;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FGtk%2FLoadingWindow.vala;0;4
 FILE_NAME_66=817;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FGtk%2FTreeModelCache.vala;0;4
-FILE_NAME_67=785;Make;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2Fmakefile;0;4
+FILE_NAME_67=2231;Make;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2Fmakefile;0;4
 FILE_NAME_68=282;Conf;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2Fpolo.desktop;0;4
 FILE_NAME_69=1707;Sh;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2Fpolo-uninstall;0;4
 FILE_NAME_70=747;None;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fdebian%2Fchangelog;0;4
@@ -689,7 +693,7 @@ FILE_NAME_75=9620;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo
 FILE_NAME_76=5176;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FArchiveTask.vala;0;4
 FILE_NAME_77=1617;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanel.vala;0;4
 FILE_NAME_78=16461;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelArchiveTask.vala;0;4
-FILE_NAME_79=1806;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelFileTask.vala;0;4
+FILE_NAME_79=2572;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelFileTask.vala;0;4
 FILE_NAME_80=9711;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FMainHeaderBar.vala;0;4
 FILE_NAME_81=7540;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FViewPopover.vala;0;4
 FILE_NAME_82=32138;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FMainMenubar.vala;0;4
@@ -735,7 +739,12 @@ FILE_NAME_121=7078;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpol
 FILE_NAME_122=2466;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FMessageBar.vala;0;4
 FILE_NAME_123=3728;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FTouchFileDateContextMenu.vala;0;4
 FILE_NAME_124=17057;Vala;0;EUTF-8;1;1;1;%2Fmnt%2Fsdcard%2FDropbox%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FLicenseText.vala;0;4
+<<<<<<< master
 >>>>>>> Fixed build issues; Handle exceptions for GTK3 version check;
+=======
+FILE_NAME_125=1725;Vala;0;EUTF-8;1;1;1;%2Fmnt%2Fsdcard%2FDropbox%2Fprojects%2Flinux%2Fpolo%2Fsrc%2Fgtk3-version.vala;0;4
+FILE_NAME_126=454;Sh;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2Fshare%2Fpolo%2Ffiles%2Fgtk-theme%2Finstall-gtk-theme;0;4
+>>>>>>> Fixed parsing issue for desktop, mimetype amd other files
 
 [VTE]
 last_dir=/home/teejee
