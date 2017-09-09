@@ -339,7 +339,7 @@ public class FileTask : GLib.Object {
 		update_copy_list();
 
 		//count_items_for_copy();
-		
+
 		status = _("Copying items...");
 		log_debug(status);
 
@@ -395,7 +395,7 @@ public class FileTask : GLib.Object {
 
 		//count_items_for_copy();
 		
-		status = _("Copying items...");
+		status = _("Copying...");
 		log_debug(status);
 
 		//rsync.dry_run = true;
@@ -461,7 +461,16 @@ public class FileTask : GLib.Object {
 
 		// ---------------------
 		
-		status = _("Copying items...");
+		if (source is FileItemCloud){ 
+			status = _("Downloading items...");
+		}
+		else if (destination is FileItemCloud){
+			status = _("Uploading items...");
+		}
+		else{
+			status = _("Copying items...");
+		}
+
 		log_debug(status);
 
 		//rclone.dry_run = true;

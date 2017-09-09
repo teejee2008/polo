@@ -375,6 +375,8 @@ public class FileViewTab : Gtk.Box {
 		panel.notebook_switch_page_connect();
 
 		window.active_pane = panel.pane;
+
+		window.update_accelerators_for_active_pane();
 	}
 
 	public void select_tab(){

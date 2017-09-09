@@ -123,6 +123,7 @@ public class LayoutPanel : Gtk.Box {
 			else if (!window.window_is_closing){
 				var tab = add_tab();
 				window.active_pane = tab.pane;
+				window.update_accelerators_for_active_pane();
 			}
 		});
 	}
@@ -151,12 +152,14 @@ public class LayoutPanel : Gtk.Box {
 
 			var tab = add_tab();
 			window.active_pane = tab.pane;
+			window.update_accelerators_for_active_pane();
 			
 			notebook.switch_page.connect(on_notebook_switch_page);
 		}
 		else {
 			var tab = tabs[(int) page_num];
 			window.active_pane = tab.pane;
+			window.update_accelerators_for_active_pane();
 		}
 	}
 

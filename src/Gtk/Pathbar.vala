@@ -999,7 +999,7 @@ public class Pathbar : Gtk.Box {
 			panel.opposite_pane.pathbar.refresh_icon_visibility();
 			//window.layout_box.set_panel_layout(PanelLayout.CUSTOM);
 			window.active_pane = panel.opposite_pane;
-
+			window.update_accelerators_for_active_pane();
 			return true;
 		});
 	}

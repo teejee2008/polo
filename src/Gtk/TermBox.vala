@@ -128,7 +128,6 @@ public class TermBox : Gtk.Box {
 		term.button_press_event.connect((w, event) => {
 
 			window.active_pane = pane;
-			
 			window.update_accelerators_for_terminal();
 
 			pane.selection_bar.close_panel(false);

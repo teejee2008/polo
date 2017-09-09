@@ -66,10 +66,18 @@ public class ProgressPanelFileTask : ProgressPanel {
 		string txt = "";
 		switch(action_type){
 		case FileActionType.COPY:
-			txt = _("File Copy:");
+			if (source is FileItemCloud){ 
+				txt = _("Download:");
+			}
+			else if (destination is FileItemCloud){
+				txt = _("Upload:");
+			}
+			else{
+				txt = _("Copy:");
+			}
 			break;
 		case FileActionType.CUT:
-			txt = _("File Move:");
+			txt = _("Move:");
 			break;
 		case FileActionType.RESTORE:
 			txt = _("Restore:");
@@ -85,7 +93,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 			txt = _("Delete:");
 			break;
 		case FileActionType.CLOUD_RENAME:
-			txt = _("Rename:");
+			txt = _("Remote Rename:");
 			break;
 		case FileActionType.PASTE_SYMLINKS_AUTO:
 		case FileActionType.PASTE_SYMLINKS_ABSOLUTE:

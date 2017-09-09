@@ -345,15 +345,19 @@ public class LayoutBox : Gtk.Box {
 			
 			if (window.layout_box.panel1.visible){
 				window.active_pane = window.layout_box.panel1.pane;
+				window.update_accelerators_for_active_pane();
 			}
 			else if (window.layout_box.panel2.visible){
 				window.active_pane = window.layout_box.panel2.pane;
+				window.update_accelerators_for_active_pane();
 			}
 			else if (window.layout_box.panel3.visible){
 				window.active_pane = window.layout_box.panel3.pane;
+				window.update_accelerators_for_active_pane();
 			}
 			else if (window.layout_box.panel4.visible){
 				window.active_pane = window.layout_box.panel4.pane;
+				window.update_accelerators_for_active_pane();
 			}
 		}
 

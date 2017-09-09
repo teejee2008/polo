@@ -424,9 +424,8 @@ public class FileViewList : Gtk.Box {
 		log_debug("FileViewList: treeview_button_press_event()");
 		
 		window.active_pane = pane;
-
 		window.update_accelerators_for_active_pane();
-
+		
 		pane.selection_bar.close_panel(false);
 
 		pane.pathbar.finish_editing();
@@ -435,6 +434,8 @@ public class FileViewList : Gtk.Box {
 		if (event.button == 3) {
 			if (current_item == null) { return false; }
 
+			//log_debug("FileViewList: treeview_button_press_event(): right_click_select");
+			
 			TreePath? path;
 			TreeViewColumn? column;
 			int cell_x, cell_y;
@@ -445,10 +446,14 @@ public class FileViewList : Gtk.Box {
 				clear_selections();
 				sel.select_path(path);
 			}
+
+			//log_debug("FileViewList: treeview_button_press_event(): right_click_select: exit");
 			
 			menu_file = new FileContextMenu(pane);
 			return menu_file.show_menu(event);
 		}
+
+		//log_debug("FileViewList: treeview_button_press_event(): exit");
 
 		return false;
 	}
@@ -606,7 +611,6 @@ public class FileViewList : Gtk.Box {
 	private bool iconview_button_press_event(Gtk.Widget w, Gdk.EventButton event){
 
 		window.active_pane = pane;
-
 		window.update_accelerators_for_active_pane();
 
 		pane.selection_bar.close_panel(false);
@@ -2727,7 +2731,7 @@ public class FileViewList : Gtk.Box {
 
 		// wait for thread to exit
 		while (query_subfolders_thread_running){
-			sleep(500);
+			sleep(200);
 			gtk_do_events();
 		}
 
@@ -2754,12 +2758,8 @@ public class FileViewList : Gtk.Box {
 		
 		if ((current_item != null) && !current_item.is_trash && (current_item is FileItemArchive == false)){
 
-			Timeout.add (500, () => {
-				store.foreach ((model, path, iter) => {
-					refresh_size_column();
-					return false;
-				});
-				return query_subfolders_thread_running;
+			Timeout.add (1000, () => {
+				return refresh_listview_size_column();
 			});
 			
 			// statusbar  -----------------------
@@ -2795,6 +2795,13 @@ public class FileViewList : Gtk.Box {
 		log_debug("FileViewList: query_subfolders_thread(): exit");
 
 		query_subfolders_thread_running = false;
+	}
+
+	private bool refresh_listview_size_column(){
+		if (!query_subfolders_thread_cancelled){
+			refresh_size_column();
+		}
+		return query_subfolders_thread_running;
 	}
 
 	private int get_adjusted_column_width_for_tileview(){
@@ -4863,6 +4870,7 @@ public class FileViewList : Gtk.Box {
 		}
 
 		window.active_pane = pane;
+		window.update_accelerators_for_active_pane();
 	}
 
 	public void open_location_in_opposite_pane(){
@@ -4890,6 +4898,7 @@ public class FileViewList : Gtk.Box {
 		}
 
 		window.active_pane = pane;
+		window.update_accelerators_for_active_pane();
 	}
 
 	public void follow_symlink(){

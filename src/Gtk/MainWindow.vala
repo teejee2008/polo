@@ -560,7 +560,7 @@ public class MainWindow : Gtk.Window {
 
 			menubar.active_pane_changed();
 
-			this.update_accelerators_for_active_pane();
+			//this.update_accelerators_for_active_pane();
 		}
 	}
 
