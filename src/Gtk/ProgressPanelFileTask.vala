@@ -82,7 +82,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 			break;
 		case FileActionType.DELETE:
 		case FileActionType.DELETE_TRASHED:
-			txt = _("Delete Trashed:");
+			txt = _("Delete:");
 			break;
 		case FileActionType.CLOUD_RENAME:
 			txt = _("Rename:");

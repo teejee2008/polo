@@ -1,12 +1,17 @@
 #!/bin/bash
 
-gtk_version=$( pkg-config --modversion gtk+-3.0 | awk -F "." '{print $1 "." $2}' )
+gtk_major=$( gtk3-version-polo --major )
+gtk_minor=$( gtk3-version-polo --minor )
 
 backup=`pwd`
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 cd $DIR
 
-#rsync -avh "$gtk_version" "$HOME/.local/share/themes/Arc-Darker-Polo"
+if (($gtk_minor == 14)) || (($gtk_minor == 16)) || (($gtk_minor == 18)) || (($gtk_minor == 20)) || (($gtk_minor == 22)); then
+	$gtk_version=$gtk_major.$gtk_minor
+else
+	$gtk_version="3.22"
+fi
 
 target="$HOME/.local/share/themes/Arc-Darker-Polo"
 mkdir -p "$target"

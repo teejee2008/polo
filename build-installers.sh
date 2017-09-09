@@ -6,6 +6,9 @@ cd $DIR
 
 . ./BUILD_CONFIG
 
+rm -vf installer/*.run
+rm -vf installer/*.deb
+
 # build debs
 sh build-deb.sh
 
@@ -47,5 +50,7 @@ echo "--------------------------------------------------------------------------
 
 done
 
+cp -vf *.run ../../PACKAGES/
+cp -vf *.deb ../../PACKAGES/
 
 cd "$backup"

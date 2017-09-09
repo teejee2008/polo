@@ -1,0 +1,5 @@
+broken symlink shows size 1 TB
+calculate dir size, don't follow symlinks
+skip file on copy permission error and continue
+copy: total files is negative for skip all?
+
