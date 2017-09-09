@@ -1,24 +1,30 @@
 #!/bin/bash
 
 gtk_major=$( gtk3-version-polo --major )
+if [ $? -ne 0 ]; then exit 1; fi
+
 gtk_minor=$( gtk3-version-polo --minor )
+if [ $? -ne 0 ]; then exit 1; fi
 
 backup=`pwd`
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 cd $DIR
+if [ $? -ne 0 ]; then exit 1; fi
 
 if (($gtk_minor == 14)) || (($gtk_minor == 16)) || (($gtk_minor == 18)) || (($gtk_minor == 20)) || (($gtk_minor == 22)); then
-	$gtk_version=$gtk_major.$gtk_minor
+	gtk_version="$gtk_major.$gtk_minor"
 else
-	$gtk_version="3.22"
+	gtk_version="3.22"
 fi
+
+echo "GTK3 Version: $gtk_version"
+echo "pwd: $(pwd)"
 
 target="$HOME/.local/share/themes/Arc-Darker-Polo"
 mkdir -p "$target"
 cp -Rav $gtk_version/* "$target"
 
 cd "$backup"
-
 
 
 

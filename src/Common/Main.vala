@@ -724,6 +724,7 @@ public class Main : GLib.Object {
 		var f = File.new_for_path(app_conf_path);
 		if (!f.query_exists()) {
 			first_run = true;
+			load_app_config_finish();
 			return;
 		}
 
@@ -900,13 +901,18 @@ public class Main : GLib.Object {
 		
 		load_folder_selections();
 
-		GtkBookmark.load_bookmarks(user_name, true);
-		
-		init_gtk_themes();
+		load_app_config_finish();
 
 		log_debug(_("App config loaded") + ": '%s'".printf(this.app_conf_path));
 
 		set_numeric_locale(""); // reset numeric locale
+	}
+
+	private void load_app_config_finish(){
+		
+		GtkBookmark.load_bookmarks(user_name, true);
+		
+		init_gtk_themes();
 	}
 	
 	private void init_gtk_themes(){
