@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
-"POT-Creation-Date: 2017-09-10 09:10+0530\n"
+"POT-Creation-Date: 2017-09-10 09:37+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -192,7 +192,7 @@ msgstr ""
 msgid "Analyze disk usage"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4551
+#: Gtk/FileViewList.vala:4572
 msgid "Another file exists with this name"
 msgstr ""
 
@@ -366,7 +366,7 @@ msgstr ""
 msgid "Calculate directory sizes"
 msgstr ""
 
-#: Gtk/FileViewList.vala:2841
+#: Gtk/FileViewList.vala:2846
 msgid "Calculating dir size..."
 msgstr ""
 
@@ -400,11 +400,11 @@ msgstr ""
 msgid "Cancelled by user"
 msgstr ""
 
-#: Gtk/FileViewList.vala:6018
+#: Gtk/FileViewList.vala:6039
 msgid "Cannot create archive in this location"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5858
+#: Gtk/FileViewList.vala:5879
 msgid "Cannot extract to this location"
 msgstr ""
 
@@ -776,19 +776,19 @@ msgstr ""
 msgid "Could not find file"
 msgstr ""
 
-#: Gtk/FileViewList.vala:3358
+#: Gtk/FileViewList.vala:3363
 msgid "Could not find path"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4274
+#: Gtk/FileViewList.vala:4295
 msgid "Could not find the opposite pane!"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5811
+#: Gtk/FileViewList.vala:5832
 msgid "Could not open file as archive"
 msgstr ""
 
-#: Gtk/FileViewList.vala:2767
+#: Gtk/FileViewList.vala:2772
 msgid "Counting items..."
 msgstr ""
 
@@ -804,7 +804,7 @@ msgstr ""
 msgid "Create Derived Disk..."
 msgstr ""
 
-#: Gtk/FileViewList.vala:4596
+#: Gtk/FileViewList.vala:4617
 msgid "Create Directory"
 msgstr ""
 
@@ -812,7 +812,7 @@ msgstr ""
 msgid "Create Disk..."
 msgstr ""
 
-#: Gtk/FileViewList.vala:4630 Gtk/FileViewList.vala:4666
+#: Gtk/FileViewList.vala:4651 Gtk/FileViewList.vala:4687
 msgid "Create File"
 msgstr ""
 
@@ -854,7 +854,7 @@ msgstr ""
 msgid "Create a virtual hard disk file that uses selected disk as the base"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4401
+#: Gtk/FileViewList.vala:4422
 msgid "Create copies of selected items?"
 msgstr ""
 
@@ -955,7 +955,7 @@ msgstr ""
 msgid "Delete selected items permanently"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4478
+#: Gtk/FileViewList.vala:4499
 msgid "Delete selected items?"
 msgstr ""
 
@@ -982,11 +982,11 @@ msgstr ""
 msgid "Desktop"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5858 Gtk/FileViewList.vala:5880
+#: Gtk/FileViewList.vala:5879 Gtk/FileViewList.vala:5901
 msgid "Destination directory does not exist"
 msgstr ""
 
-#: Gtk/FileViewList.vala:6018
+#: Gtk/FileViewList.vala:6039
 msgid "Destination path is inside an archive (!)"
 msgstr ""
 
@@ -1023,7 +1023,7 @@ msgstr ""
 msgid "Device safely ejected and ready for use"
 msgstr ""
 
-#: Gtk/FileViewList.vala:3350
+#: Gtk/FileViewList.vala:3355
 msgid "Device was unmounted"
 msgstr ""
 
@@ -1056,7 +1056,7 @@ msgstr ""
 msgid "Dir not found"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4604
+#: Gtk/FileViewList.vala:4625
 msgid "Directory exists"
 msgstr ""
 
@@ -1064,7 +1064,7 @@ msgstr ""
 msgid "Disk Usage"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5095
+#: Gtk/FileViewList.vala:5116
 msgid "Disk is Read-Only"
 msgstr ""
 
@@ -1289,20 +1289,20 @@ msgstr ""
 msgid "Enter Password to Unlock"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4604 Gtk/FileViewList.vala:4638
-#: Gtk/FileViewList.vala:4678
+#: Gtk/FileViewList.vala:4625 Gtk/FileViewList.vala:4659
+#: Gtk/FileViewList.vala:4699
 msgid "Enter another name"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4596
+#: Gtk/FileViewList.vala:4617
 msgid "Enter directory name"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4630 Gtk/FileViewList.vala:4666
+#: Gtk/FileViewList.vala:4651 Gtk/FileViewList.vala:4687
 msgid "Enter file name"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4532
+#: Gtk/FileViewList.vala:4553
 msgid "Enter new name"
 msgstr ""
 
@@ -1311,7 +1311,7 @@ msgstr ""
 msgid "Enter passphrase to unlock '%s'"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5349
+#: Gtk/FileViewList.vala:5370
 msgid "Enter password for PDF document"
 msgstr ""
 
@@ -1327,21 +1327,26 @@ msgstr ""
 msgid "Enter share name to connect (Required)"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4551
+#: Gtk/FileViewList.vala:4572
 msgid "Enter unique name for selected file"
 msgstr ""
 
 #: Gtk/ProgressPanelArchiveTask.vala:771 Gtk/ProgressPanelArchiveTask.vala:782
-#: Gtk/ProgressPanelFileTask.vala:358 Gtk/ProgressPanelImageTask.vala:198
-#: Gtk/ProgressPanelKvmTask.vala:217 Gtk/ProgressPanelKvmTask.vala:220
-#: Gtk/ProgressPanelPdfTask.vala:198 Utility/Device.vala:1654
-#: Utility/KvmTask.vala:311 Utility/Gtk/GtkHelper.vala:18
+#: Gtk/ProgressPanelImageTask.vala:198 Gtk/ProgressPanelKvmTask.vala:217
+#: Gtk/ProgressPanelKvmTask.vala:220 Gtk/ProgressPanelPdfTask.vala:198
+#: Utility/Device.vala:1654 Utility/KvmTask.vala:311
+#: Utility/Gtk/GtkHelper.vala:18
 #, c-format
 msgid "Error"
 msgstr ""
 
 #: Gtk/FileViewList.vala:2332
 msgid "Error Connecting to Server"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3380
+#, c-format
+msgid "Error opening directory: Permission denied"
 msgstr ""
 
 #: Gtk/ConnectServerWindow.vala:171
@@ -1357,7 +1362,7 @@ msgstr ""
 msgid "Executing action..."
 msgstr ""
 
-#: Gtk/FileViewList.vala:5032
+#: Gtk/FileViewList.vala:5053
 #, c-format
 msgid "Existing data on device will be destroyed"
 msgstr ""
@@ -1537,7 +1542,7 @@ msgstr ""
 msgid "File Name"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4638 Gtk/FileViewList.vala:4678
+#: Gtk/FileViewList.vala:4659 Gtk/FileViewList.vala:4699
 msgid "File exists"
 msgstr ""
 
@@ -1622,7 +1627,7 @@ msgstr ""
 msgid "Flash Complete"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5031
+#: Gtk/FileViewList.vala:5052
 #, c-format
 msgid "Flash ISO to device?"
 msgstr ""
@@ -1643,7 +1648,7 @@ msgstr ""
 msgid "Folder"
 msgstr ""
 
-#: Gtk/FileViewList.vala:3365
+#: Gtk/FileViewList.vala:3371
 msgid "Folder is empty"
 msgstr ""
 
@@ -1721,7 +1726,7 @@ msgstr ""
 msgid "General"
 msgstr ""
 
-#: Gtk/FileViewList.vala:3433
+#: Gtk/FileViewList.vala:3454
 msgid "Generating thumbnails..."
 msgstr ""
 
@@ -1737,7 +1742,7 @@ msgstr ""
 msgid "Go Up"
 msgstr ""
 
-#: Gtk/FileViewList.vala:3722
+#: Gtk/FileViewList.vala:3743
 msgid "Go to location"
 msgstr ""
 
@@ -1886,11 +1891,11 @@ msgstr ""
 msgid "Install p7zip 16.02 (Archive Support)"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5621 Gtk/FileViewList.vala:5643
+#: Gtk/FileViewList.vala:5642 Gtk/FileViewList.vala:5664
 msgid "Install required packages and try again"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4274
+#: Gtk/FileViewList.vala:4295
 msgid "Internal Error"
 msgstr ""
 
@@ -1898,7 +1903,7 @@ msgstr ""
 msgid "Invalid Passphrase"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5880
+#: Gtk/FileViewList.vala:5901
 msgid "Invalid Path"
 msgstr ""
 
@@ -2012,7 +2017,7 @@ msgstr ""
 msgid "Listing source items..."
 msgstr ""
 
-#: Gtk/FileViewList.vala:3372
+#: Gtk/FileViewList.vala:3393
 msgid "Loading..."
 msgstr ""
 
@@ -2089,6 +2094,10 @@ msgstr ""
 msgid "MediaInfo"
 msgstr ""
 
+#: Gtk/FileViewList.vala:3382
+msgid "Menubar: File > New Admin Window"
+msgstr ""
+
 #: Gtk/FileContextMenu.vala:2017 Gtk/Settings.vala:2576
 msgid "Merge"
 msgstr ""
@@ -2139,7 +2148,7 @@ msgid "Missing Dependencies"
 msgstr ""
 
 #: Gtk/DeviceContextMenu.vala:549 Gtk/DeviceContextMenu.vala:566
-#: Gtk/FileViewList.vala:5620
+#: Gtk/FileViewList.vala:5641
 msgid "Missing Dependency"
 msgstr ""
 
@@ -2147,7 +2156,7 @@ msgstr ""
 msgid "Missing Icon"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5642
+#: Gtk/FileViewList.vala:5663
 msgid "Missing Plugin"
 msgstr ""
 
@@ -2188,7 +2197,7 @@ msgstr ""
 msgid "Mount this volume"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4979
+#: Gtk/FileViewList.vala:5000
 #, c-format
 msgid "Mounted ISO"
 msgstr ""
@@ -2288,11 +2297,11 @@ msgstr ""
 msgid "New Admin Window"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4625
+#: Gtk/FileViewList.vala:4646
 msgid "New File"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4591
+#: Gtk/FileViewList.vala:4612
 msgid "New Folder"
 msgstr ""
 
@@ -2326,25 +2335,25 @@ msgstr ""
 msgid "No"
 msgstr ""
 
-#: Gtk/FileViewList.vala:6013
+#: Gtk/FileViewList.vala:6034
 msgid "No Files Selected"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5476 Gtk/FileViewList.vala:5496
-#: Gtk/FileViewList.vala:5516 Gtk/FileViewList.vala:5536
-#: Gtk/FileViewList.vala:5556 Gtk/FileViewList.vala:5576
+#: Gtk/FileViewList.vala:5497 Gtk/FileViewList.vala:5517
+#: Gtk/FileViewList.vala:5537 Gtk/FileViewList.vala:5557
+#: Gtk/FileViewList.vala:5577 Gtk/FileViewList.vala:5597
 msgid "No Images Selected"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5456
+#: Gtk/FileViewList.vala:5477
 msgid "No JPEGs Selected"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5434
+#: Gtk/FileViewList.vala:5455
 msgid "No PNGs Selected"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4548
+#: Gtk/FileViewList.vala:4569
 msgid "No Permission"
 msgstr ""
 
@@ -2360,7 +2369,7 @@ msgstr ""
 msgid "Not Responding"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5810 Gtk/FileViewList.vala:5906
+#: Gtk/FileViewList.vala:5831 Gtk/FileViewList.vala:5927
 msgid "Not Supported"
 msgstr ""
 
@@ -2413,6 +2422,10 @@ msgstr ""
 
 #: Gtk/FileContextMenu.vala:671
 msgid "Open a terminal window"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3381
+msgid "Open an admin window to browse this folder"
 msgstr ""
 
 #: Gtk/FileContextMenu.vala:1461
@@ -2569,7 +2582,7 @@ msgstr ""
 msgid "Others"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5650
+#: Gtk/FileViewList.vala:5671
 msgid "Outdated Plugin"
 msgstr ""
 
@@ -2606,7 +2619,7 @@ msgstr ""
 msgid "Parent Device"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5907
+#: Gtk/FileViewList.vala:5928
 msgid "Partial extraction not supported for solid archives"
 msgstr ""
 
@@ -2834,7 +2847,7 @@ msgstr ""
 msgid "Read"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5095
+#: Gtk/FileViewList.vala:5116
 msgid ""
 "Read-only disks cannot be booted.\n"
 "\n"
@@ -2977,7 +2990,7 @@ msgid "Removing items..."
 msgstr ""
 
 #: Gtk/BookmarkContextMenu.vala:89 Gtk/FileContextMenu.vala:937
-#: Gtk/FileViewList.vala:4532 Gtk/MainMenubar.vala:739 Gtk/Sidebar.vala:1133
+#: Gtk/FileViewList.vala:4553 Gtk/MainMenubar.vala:739 Gtk/Sidebar.vala:1133
 msgid "Rename"
 msgstr ""
 
@@ -3021,7 +3034,7 @@ msgstr ""
 msgid "Replaced"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4395
+#: Gtk/FileViewList.vala:4416
 msgid "Requested operation is not possible"
 msgstr ""
 
@@ -3148,11 +3161,11 @@ msgstr ""
 msgid "Select Columns"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4289
+#: Gtk/FileViewList.vala:4310
 msgid "Select Copy Destination"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5851
+#: Gtk/FileViewList.vala:5872
 msgid "Select Destination"
 msgstr ""
 
@@ -3180,7 +3193,7 @@ msgstr ""
 msgid "Select Format"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5123
+#: Gtk/FileViewList.vala:5144
 msgid "Select ISO File"
 msgstr ""
 
@@ -3192,7 +3205,7 @@ msgstr ""
 msgid "Select ListView Columns"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4289
+#: Gtk/FileViewList.vala:4310
 msgid "Select Move Destination"
 msgstr ""
 
@@ -3224,17 +3237,17 @@ msgstr ""
 msgid "Select single item to move"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5456
+#: Gtk/FileViewList.vala:5477
 msgid "Select the JPEG image files to convert"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5434
+#: Gtk/FileViewList.vala:5455
 msgid "Select the PNG image files to convert"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5476 Gtk/FileViewList.vala:5496
-#: Gtk/FileViewList.vala:5516 Gtk/FileViewList.vala:5536
-#: Gtk/FileViewList.vala:5556 Gtk/FileViewList.vala:5576
+#: Gtk/FileViewList.vala:5497 Gtk/FileViewList.vala:5517
+#: Gtk/FileViewList.vala:5537 Gtk/FileViewList.vala:5557
+#: Gtk/FileViewList.vala:5577 Gtk/FileViewList.vala:5597
 msgid "Select the image files to convert"
 msgstr ""
 
@@ -3290,6 +3303,10 @@ msgstr ""
 
 #: Gtk/ConnectServerWindow.vala:967
 msgid "Share Name Not Specified"
+msgstr ""
+
+#: Gtk/FileViewList.vala:3383
+msgid "Shortcut: [Super] + N"
 msgstr ""
 
 #: Gtk/CreateArchiveWindow.vala:1725 Gtk/CreateArchiveWindow.vala:1805
@@ -3447,7 +3464,7 @@ msgstr ""
 msgid "Source"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4394 Gtk/FileViewList.vala:4400
+#: Gtk/FileViewList.vala:4415 Gtk/FileViewList.vala:4421
 msgid "Source and destination are same"
 msgstr ""
 
@@ -3579,12 +3596,16 @@ msgid ""
 "correctly and if connection with the device is reliable."
 msgstr ""
 
-#: Gtk/FileViewList.vala:6013
+#: Gtk/FileViewList.vala:6034
 msgid "There are no files selected for compression"
 msgstr ""
 
 #: Gtk/ProgressPanelArchiveTask.vala:781
 msgid "There were errors while processing the archive."
+msgstr ""
+
+#: Gtk/ProgressPanelFileTask.vala:358
+msgid "There were some errors:"
 msgstr ""
 
 #: Gtk/TermBox.vala:273
@@ -3670,7 +3691,7 @@ msgid ""
 "Move selected items to recycle bin"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4413
+#: Gtk/FileViewList.vala:4434
 msgid "Trash selected items?"
 msgstr ""
 
@@ -3784,7 +3805,7 @@ msgstr ""
 msgid "Update recursively for all items inside the folder"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5651
+#: Gtk/FileViewList.vala:5672
 msgid "Update required packages and try again"
 msgstr ""
 
@@ -3914,7 +3935,7 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4548
+#: Gtk/FileViewList.vala:4569
 msgid "You do not have permission to rename this item"
 msgstr ""
 
@@ -3958,11 +3979,11 @@ msgstr ""
 msgid "items"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4479
+#: Gtk/FileViewList.vala:4500
 msgid "selected item(s) will be deleted permanently"
 msgstr ""
 
-#: Gtk/FileViewList.vala:4414
+#: Gtk/FileViewList.vala:4435
 msgid "selected item(s) will be moved to trash"
 msgstr ""
 

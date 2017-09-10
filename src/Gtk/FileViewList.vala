@@ -2340,7 +2340,12 @@ public class FileViewList : Gtk.Box {
 
 		// check empty
 		if (current_item.children.size == 0){
-			set_overlay_on_empty();
+			if (current_item.can_read){
+				set_overlay_on_empty();
+			}
+			else{
+				set_overlay_on_not_readable();
+			}
 		}
 
 		changed(); //informs FileViewPane to update other components like statusbar, etc
@@ -3362,13 +3367,29 @@ public class FileViewList : Gtk.Box {
 
 	public void set_overlay_on_empty(){
 		log_debug("set_overlay_on_empty()");
+		//current_item = null;
 		add_overlay(_("Folder is empty"), false);
 		//pane.statusbar.refresh(); // not needed
 		//cancel_monitors();// do not cancel
 	}
 
+	public void set_overlay_on_not_readable(){
+		log_debug("set_overlay_on_not_readable()");
+		//current_item = null;
+		string msg = "%s\n\n%s\n\n%s\n\n%s".printf(
+			_("Error opening directory: Permission denied"),
+			_("Open an admin window to browse this folder"),
+			_("Menubar: File > New Admin Window"),
+			_("Shortcut: [Super] + N")
+			);
+		add_overlay(msg, true);
+		pane.statusbar.refresh();
+		cancel_monitors();
+	}
+
 	public void set_overlay_on_loading(){
 		log_debug("set_overlay_on_loading()");
+		//current_item = null;
 		add_overlay(_("Loading..."), true, true);
 		//pane.statusbar.refresh(); // not needed
 		//cancel_monitors();// do not cancel

@@ -355,7 +355,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 			var error_message = err_log_read();
 			if (error_message.length > 0){
 				
-				string title = _("Error");
+				string title = _("There were some errors:");
 				string msg = error_message;
 				gtk_messagebox(title, msg, window, true);
 				finish();
