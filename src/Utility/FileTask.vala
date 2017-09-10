@@ -660,6 +660,8 @@ public class FileTask : GLib.Object {
 
 	private void update_copy_list(){
 
+		log_debug("FileTask: update_copy_list(): before: %lld items, %s".printf(count_batch_total, format_file_size(bytes_batch_total)));
+		
 		foreach(var con in conflicts.values){
 			if (!get_replace_action(con.source_item, con.dest_item)){
 				var item = con.source_item;
@@ -692,6 +694,8 @@ public class FileTask : GLib.Object {
 
 			rclone.bytes_total = bytes_batch_total; // will be used by rclone.stats
 		}
+
+		log_debug("FileTask: update_copy_list(): done: %lld items, %s".printf(count_batch_total, format_file_size(bytes_batch_total)));
 
 		print_copy_list();
 	}
@@ -1211,7 +1215,7 @@ public class FileTask : GLib.Object {
 
 			if (aborted) { break; }
 
-			if (item.file_type == FileType.DIRECTORY){
+			if ((item.file_type == FileType.DIRECTORY) && !item.is_symlink){
 				
 				current_query_item = item;
 				item.query_children_async(false);
@@ -1297,7 +1301,6 @@ public class FileTask : GLib.Object {
 
 		log_debug("FileTask: calculate_dirsize_async_thread(): exit");
 	}
-
 
 	// stats -------------------------------
 

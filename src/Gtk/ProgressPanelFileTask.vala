@@ -144,20 +144,20 @@ public class ProgressPanelFileTask : ProgressPanel {
 		switch(action_type){
 		case FileActionType.COPY:
 			if (source is FileItemCloud){ 
-				txt = _("Download:");
+				txt = _("File Download:");
 			}
 			else if (destination is FileItemCloud){
-				txt = _("Upload:");
+				txt = _("File Upload:");
 			}
 			else{
-				txt = _("Copy:");
+				txt = _("File Copy:");
 			}
 			break;
 		case FileActionType.CUT:
-			txt = _("Move:");
+			txt = _("File Move:");
 			break;
 		case FileActionType.RESTORE:
-			txt = _("Restore:");
+			txt = _("File Restore:");
 			break;
 		case FileActionType.TRASH:
 			txt = _("Move to Trash:");
@@ -167,7 +167,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 			break;
 		case FileActionType.DELETE:
 		case FileActionType.DELETE_TRASHED:
-			txt = _("Delete:");
+			txt = _("File Delete:");
 			break;
 		case FileActionType.CLOUD_RENAME:
 			txt = _("Remote Rename:");

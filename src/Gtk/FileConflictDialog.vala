@@ -121,7 +121,7 @@ public class FileConflictDialog : Gtk.Dialog {
 
 		var bbox = new Gtk.ButtonBox(Orientation.HORIZONTAL);
 		bbox.set_spacing (6);
-		bbox.set_layout(Gtk.ButtonBoxStyle.START);
+		bbox.set_layout(Gtk.ButtonBoxStyle.EXPAND);
 		bbox.hexpand = true;
 		//bbox.margin_bottom = 12;
 		box.add(bbox);
@@ -394,7 +394,7 @@ public class FileConflictDialog : Gtk.Dialog {
 				}
 			}
 
-			pixcell.stock_size = 16;
+			pixcell.stock_size = Gtk.IconSize.MENU;
 		});
 
 
