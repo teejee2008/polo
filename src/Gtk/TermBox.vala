@@ -178,8 +178,14 @@ public class TermBox : Gtk.Box {
 				}
 			});
 
+			log_debug("TermBox: App.shell_default: %s".printf(App.shell_default));
+			
 			if (App.shell_default == "bash"){
-				feed_command("source '%s'".printf(path_combine(App.app_conf_dir_path, "bashrc")));
+				string bashrc = path_combine(App.app_conf_dir_path, "bashrc");
+				if (file_exists(bashrc)){
+					log_debug("source '%s'".printf(escape_single_quote(bashrc)));
+					feed_command("source '%s'".printf(escape_single_quote(bashrc)));
+				}
 			}
 
 			reset();
