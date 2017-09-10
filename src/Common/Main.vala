@@ -54,6 +54,34 @@ extern void exit(int exit_code);
 
 public class Main : GLib.Object {
 
+	// static defaults ---------------------------------
+	
+	public static double LV_FONT_SCALE = 1.0;
+	public static int LV_ICON_SIZE = 32;
+	public static int LV_ROW_SPACING = 0;
+
+	public static int IV_ICON_SIZE = 64;
+	public static int IV_ROW_SPACING = 10;
+	public static int IV_COLUMN_SPACING = 50;
+
+	public static int TV_ICON_SIZE = 80;
+	public static int TV_ROW_SPACING = 2;
+	public static int TV_PADDING = 2;
+
+	public static int DEFAULT_SIDEBAR_POSITION = 200;
+
+	public static string REQUIRED_COLUMNS = "name,indicator,spacer";
+	public static string REQUIRED_COLUMNS_END = "spacer";
+	public static string DEFAULT_COLUMNS = "name,indicator,size,modified,filetype,spacer";
+	public static string DEFAULT_COLUMN_ORDER = "name,indicator,size,modified,filetype,permissions,user,group,access,mimetype,symlink_target,original_path,deletion_date,compressed,md5,spacer";
+
+	public static int SESSION_FORMAT_VERSION = 1;
+	public static int APP_CONFIG_FORMAT_VERSION = 1;
+	public static int APP_CONFIG_FOLDERS_FORMAT_VERSION = 1;
+	public static int APP_CONFIG_ARCHIVE_FORMAT_VERSION = 1;
+
+	// instance ------------------------------------------------
+	
 	public string[] cmd_args;
 	public bool gui_mode = false;
 	
@@ -117,14 +145,14 @@ public class Main : GLib.Object {
 	public ViewMode view_mode = ViewMode.ICONS;
 	public bool single_click_activate = false;
 	public bool restore_last_session = true;
-
+	
 	public bool sidebar_visible = true;
 	public bool sidebar_bookmarks = true;
 	public bool sidebar_places = true;
 	public bool sidebar_devices = true;
 	public bool sidebar_dark = true;
 	public bool sidebar_action_button = false;
-	public int sidebar_position = 200;
+	public int sidebar_position = DEFAULT_SIDEBAR_POSITION;
 	public string sidebar_collapsed_sections = "";
 
 	public bool headerbar_enabled = false;
@@ -205,10 +233,6 @@ public class Main : GLib.Object {
 	public int kvm_cpu_limit = 80;
 	public string kvm_format = ".qcow2";
 
-	public static string REQUIRED_COLUMNS = "name,indicator,spacer";
-	public static string REQUIRED_COLUMNS_END = "spacer";
-	public static string DEFAULT_COLUMNS = "name,indicator,size,modified,filetype,spacer";
-	public static string DEFAULT_COLUMN_ORDER = "name,indicator,size,modified,filetype,permissions,user,group,access,mimetype,symlink_target,original_path,deletion_date,compressed,md5,spacer";
 	public string selected_columns = DEFAULT_COLUMNS;
 
 	public bool show_hidden_files = false;
@@ -218,24 +242,6 @@ public class Main : GLib.Object {
 	public bool minimize_to_tray = true;
 	public bool autostart = true;
 	
-	// defaults
-	public static double LV_FONT_SCALE = 1.0;
-	public static int LV_ICON_SIZE = 32;
-	public static int LV_ROW_SPACING = 0;
-
-	public static int IV_ICON_SIZE = 64;
-	public static int IV_ROW_SPACING = 10;
-	public static int IV_COLUMN_SPACING = 50;
-
-	public static int TV_ICON_SIZE = 80;
-	public static int TV_ROW_SPACING = 2;
-	public static int TV_PADDING = 2;
-
-	public static int SESSION_FORMAT_VERSION = 1;
-	public static int APP_CONFIG_FORMAT_VERSION = 1;
-	public static int APP_CONFIG_FOLDERS_FORMAT_VERSION = 1;
-	public static int APP_CONFIG_ARCHIVE_FORMAT_VERSION = 1;
-
 	public double listview_font_scale = LV_FONT_SCALE;
 	public int listview_icon_size = LV_ICON_SIZE;
 	public int listview_row_spacing = LV_ROW_SPACING;

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
-"POT-Creation-Date: 2017-09-09 22:18+0530\n"
+"POT-Creation-Date: 2017-09-10 09:10+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -55,7 +55,7 @@ msgid ""
 "will increase gradually as disk is modified."
 msgstr ""
 
-#: Gtk/MainWindow.vala:828
+#: Gtk/MainWindow.vala:860
 msgid "A modern, light-weight file manager for Linux"
 msgstr ""
 
@@ -200,11 +200,11 @@ msgstr ""
 msgid "Another instance of this application is running"
 msgstr ""
 
-#: Common/Main.vala:906 Common/Main.vala:1053 Common/Main.vala:1142
+#: Common/Main.vala:912 Common/Main.vala:1059 Common/Main.vala:1148
 msgid "App config loaded"
 msgstr ""
 
-#: Common/Main.vala:719 Common/Main.vala:1020 Common/Main.vala:1098
+#: Common/Main.vala:725 Common/Main.vala:1026 Common/Main.vala:1104
 msgid "App config saved"
 msgstr ""
 
@@ -499,7 +499,7 @@ msgstr ""
 msgid "Clean thumbnail cache"
 msgstr ""
 
-#: Gtk/MainWindow.vala:855
+#: Gtk/MainWindow.vala:887
 msgid "Cleaning Thumbnail Cache..."
 msgstr ""
 
@@ -533,7 +533,7 @@ msgstr ""
 msgid "Click to open in active pane"
 msgstr ""
 
-#: Gtk/WizardWindow.vala:291
+#: Gtk/WizardWindow.vala:295
 msgid "Click to select"
 msgstr ""
 
@@ -601,7 +601,7 @@ msgstr ""
 msgid "Commander List (Dual-Pane + ListView)"
 msgstr ""
 
-#: Common/Main.vala:481
+#: Common/Main.vala:487
 msgid "Commands listed below are not available on this system"
 msgstr ""
 
@@ -1366,7 +1366,7 @@ msgstr ""
 msgid "Exit"
 msgstr ""
 
-#: Common/Main.vala:1193
+#: Common/Main.vala:1199
 msgid "Exiting Application"
 msgstr ""
 
@@ -2734,7 +2734,7 @@ msgstr ""
 msgid "Places"
 msgstr ""
 
-#: Common/Main.vala:482
+#: Common/Main.vala:488
 msgid "Please install required packages and try running again"
 msgstr ""
 
@@ -2859,7 +2859,7 @@ msgstr ""
 msgid "Rebuild font cache"
 msgstr ""
 
-#: Gtk/MainWindow.vala:843
+#: Gtk/MainWindow.vala:875
 msgid "Rebuilding Font Cache..."
 msgstr ""
 
@@ -3086,7 +3086,7 @@ msgstr ""
 msgid "Restore:"
 msgstr ""
 
-#: Gtk/MainWindow.vala:1051
+#: Gtk/MainWindow.vala:1083
 msgid "Restoring session..."
 msgstr ""
 
@@ -3120,11 +3120,11 @@ msgstr ""
 msgid "Run the selected script in a terminal window"
 msgstr ""
 
-#: Gtk/MainWindow.vala:863
+#: Gtk/MainWindow.vala:895
 msgid "Running Rclone Installation Script"
 msgstr ""
 
-#: Gtk/MainWindow.vala:871
+#: Gtk/MainWindow.vala:903
 msgid "Running p7zip Installation Script"
 msgstr ""
 

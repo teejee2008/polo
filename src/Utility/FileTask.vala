@@ -829,7 +829,7 @@ public class FileTask : GLib.Object {
 			log_error(dest_path);
 			log_error(e.message);
 			log_error("");
-			aborted = true;
+			//aborted = true; // don't abort
 			ok = false;
 		}
 

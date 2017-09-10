@@ -724,6 +724,38 @@ public class MainWindow : Gtk.Window {
 		}
 	}
 
+	public void reset_view_defaults(){
+
+		App.listview_font_scale = Main.LV_FONT_SCALE;
+		App.listview_icon_size = Main.LV_ICON_SIZE;
+		App.listview_row_spacing = Main.LV_ROW_SPACING;
+
+		App.iconview_icon_size = Main.IV_ICON_SIZE;
+		App.iconview_row_spacing = Main.IV_ROW_SPACING;
+		App.iconview_column_spacing = Main.IV_COLUMN_SPACING;
+
+		App.tileview_icon_size = Main.TV_ICON_SIZE;
+		App.tileview_row_spacing = Main.TV_ROW_SPACING;
+		App.tileview_padding = Main.TV_PADDING;
+
+		foreach(var v in views){
+			
+			v.listview_font_scale = App.listview_font_scale;
+			v.listview_icon_size = App.listview_icon_size;
+			v.listview_row_spacing = App.listview_row_spacing;
+			
+			v.iconview_icon_size = App.iconview_icon_size;
+			v.iconview_row_spacing = App.iconview_row_spacing;
+			v.iconview_column_spacing = App.iconview_column_spacing;
+			
+			v.tileview_icon_size = App.tileview_icon_size;
+			v.tileview_row_spacing = App.tileview_row_spacing;
+			v.tileview_padding = App.tileview_padding;
+			
+			v.refresh(false, false);
+		}
+	}
+	
 	public void save_sidebar_position(){
 		if (sidebar.visible && (pane_nav.position > 0)){
 			log_debug("MainWindow: save_sidebar_position: %d".printf(pane_nav.position));
