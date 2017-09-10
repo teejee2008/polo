@@ -224,6 +224,8 @@ public class WizardWindow : Gtk.Window {
 			App.pathbar_unified = false;
 			App.sidebar_position = App.DEFAULT_SIDEBAR_POSITION;
 			App.main_window.sidebar.sidebar_show();
+
+			App.view_mode = ViewMode.ICONS;
 			App.main_window.layout_box.set_panel_layout(PanelLayout.SINGLE);
 			App.main_window.layout_box.panel1.pane.view.set_view_mode(ViewMode.ICONS);
 			break;
@@ -234,6 +236,8 @@ public class WizardWindow : Gtk.Window {
 			App.sidebar_position = App.DEFAULT_SIDEBAR_POSITION;
 			App.main_window.sidebar.sidebar_show();
 			App.main_window.layout_box.set_panel_layout(PanelLayout.SINGLE);
+
+			App.view_mode = ViewMode.LIST;
 			App.main_window.layout_box.panel1.pane.view.set_view_mode(ViewMode.LIST);
 			break;
 			
@@ -242,6 +246,8 @@ public class WizardWindow : Gtk.Window {
 			App.pathbar_unified = false;
 			App.main_window.sidebar.sidebar_hide();
 			App.main_window.layout_box.set_panel_layout(PanelLayout.DUAL_VERTICAL);
+
+			App.view_mode = ViewMode.ICONS;
 			App.main_window.layout_box.panel1.pane.view.set_view_mode(ViewMode.ICONS);
 			App.main_window.layout_box.panel2.pane.view.set_view_mode(ViewMode.ICONS);
 			break;
@@ -251,6 +257,8 @@ public class WizardWindow : Gtk.Window {
 			App.pathbar_unified = false;
 			App.main_window.sidebar.sidebar_hide();
 			App.main_window.layout_box.set_panel_layout(PanelLayout.DUAL_VERTICAL);
+
+			App.view_mode = ViewMode.LIST;
 			App.main_window.layout_box.panel1.pane.view.set_view_mode(ViewMode.LIST);
 			App.main_window.layout_box.panel2.pane.view.set_view_mode(ViewMode.LIST);
 			break;
@@ -260,6 +268,8 @@ public class WizardWindow : Gtk.Window {
 			App.pathbar_unified = true;
 			App.main_window.sidebar.sidebar_hide();
 			App.main_window.layout_box.set_panel_layout(PanelLayout.QUAD);
+
+			App.view_mode = ViewMode.LIST;
 			App.main_window.layout_box.panel1.pane.view.set_view_mode(ViewMode.LIST);
 			App.main_window.layout_box.panel2.pane.view.set_view_mode(ViewMode.LIST);
 			break;
