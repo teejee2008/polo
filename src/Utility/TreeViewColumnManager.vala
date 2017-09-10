@@ -183,7 +183,9 @@ public class TreeViewColumnManager : GLib.Object {
 			}
 		}
 		else{
-			columns.values.foreach((x) => { list.add(x); return true; } );
+			foreach(var item in columns.values){
+				 list.add(item);
+			}
 		}
 		
 		return list;

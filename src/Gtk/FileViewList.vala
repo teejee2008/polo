@@ -3861,7 +3861,11 @@ public class FileViewList : Gtk.Box {
 	public void select_items(Gee.ArrayList<FileItem> items){
 
 		var list = new Gee.ArrayList<string>();
-		items.foreach(x => { list.add(x.file_path); return true; });
+
+		foreach(var x in items){
+			list.add(x.file_path);
+		}
+
 		select_items_by_file_path(list);
 	}
 	
@@ -5173,12 +5177,11 @@ public class FileViewList : Gtk.Box {
 			return files;
 		}
 
-		selected_items.foreach((file) => {
+		foreach(var file in selected_items){
 			if (file.is_pdf){
 				files.add(file.file_path);
 			}
-			return true;
-		});
+		}
 		
 		files.sort((a,b)=> {
 			return strcmp(a,b);
@@ -5389,12 +5392,11 @@ public class FileViewList : Gtk.Box {
 			return files;
 		}
 
-		selected_items.foreach((file) => {
+		foreach(var file in selected_items){
 			if (file.is_png){
 				files.add(file.file_path);
 			}
-			return true;
-		});
+		}
 		
 		files.sort((a,b)=> {
 			return strcmp(a,b);
@@ -5413,12 +5415,11 @@ public class FileViewList : Gtk.Box {
 			return files;
 		}
 
-		selected_items.foreach((file) => {
+		foreach(var file in selected_items){
 			if (file.is_jpeg){
 				files.add(file.file_path);
 			}
-			return true;
-		});
+		}
 		
 		files.sort((a,b)=> {
 			return strcmp(a,b);
@@ -5437,12 +5438,11 @@ public class FileViewList : Gtk.Box {
 			return files;
 		}
 
-		selected_items.foreach((file) => {
+		foreach(var file in selected_items){
 			if (file.is_image){
 				files.add(file.file_path);
 			}
-			return true;
-		});
+		}
 		
 		files.sort((a,b)=> {
 			return strcmp(a,b);

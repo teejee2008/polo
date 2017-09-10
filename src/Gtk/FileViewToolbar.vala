@@ -549,7 +549,7 @@ public class FileViewToolbar : Gtk.Toolbar, IPaneActive {
 
 		log_debug("FileViewToolbar: refresh_items()");
 
-		this.foreach((x) => { this.remove(x); });
+		gtk_container_remove_children(this);
 
 		if (App.toolbar_item_back){
 			this.add(btn_back);
