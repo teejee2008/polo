@@ -348,15 +348,27 @@ public class MainWindow : Gtk.Window {
 			log_debug("opening directories specified as command line arguments");
 
 			foreach(string file_path in App.cmd_files){
+				
 				if (dir_exists(file_path)){
+					
 					var tab = layout_box.panel1.add_tab(false);
 					tab.pane.view.set_view_path(file_path);
 				}
 			}
 
+			foreach(var panel in layout_box.panels){
+
+				if (panel == layout_box.panel1){ continue; }
+				
+				var tab = panel.add_tab(false);
+				//tab.pane.view.set_view_path(App.user_home);
+				//tab.pane.view.set_view_path(file_path);
+			}
+
 			layout_box.set_panel_layout(PanelLayout.SINGLE, false);
 
 			if (layout_box.panel1.tabs.size > 0){
+				
 				active_pane = layout_box.panel1.tabs[0].pane;
 			}
 
@@ -367,15 +379,18 @@ public class MainWindow : Gtk.Window {
 			bool session_loaded = false;
 
 			if (App.restore_last_session && App.session_lock.lock_acquired){
+				
 				session_loaded = load_session();
 			}
 
 			if (!session_loaded){
+				
 				log_debug("opening new session with default settings");
 
 				foreach(var panel in layout_box.panels){
+					
 					var tab = panel.add_tab(false);
-					tab.pane.view.set_view_path(App.user_home);
+					//tab.pane.view.set_view_path(App.user_home);
 				}
 
 				layout_box.apply_panel_layout();
@@ -724,7 +739,7 @@ public class MainWindow : Gtk.Window {
 		}
 	}
 
-	public void reset_view_defaults(){
+	public void reset_view_size_defaults(){
 
 		App.listview_font_scale = Main.LV_FONT_SCALE;
 		App.listview_icon_size = Main.LV_ICON_SIZE;

@@ -88,6 +88,7 @@ public class FileViewList : Gtk.Box {
 	public string current_location = "";
 	public bool current_location_is_virtual = false;
 	public FileContextMenu menu_file;
+	public bool view_initialized = false;
 
 	public string filter_pattern = "";
 	public int query_items_delay = 0;
@@ -2156,7 +2157,7 @@ public class FileViewList : Gtk.Box {
 	public FileItem? set_view_path(string path, bool update_history = true){
 
 		log_debug("FileViewList: set_view_path(): %s -------------------------------------------".printf(path));
-		
+
 		if (path.strip().length == 0){
 			clear_views();
 			//gtk_messagebox(_("Path is Empty!"), "Path: (empty)", window, true);
@@ -2218,7 +2219,7 @@ public class FileViewList : Gtk.Box {
 
 		log_debug("FileViewList: set_view_item(%s): %d".printf(item.file_path, item.children.size));
 		log_debug(string.nfill(80, '-'));
-
+		
 		log_trace("view_changed: %s ------------------------".printf(item.file_path));
 
 		FileItem.add_to_cache(item);
@@ -2259,6 +2260,8 @@ public class FileViewList : Gtk.Box {
 		set_columns_for_special_locations();
 
 		window.save_session();
+
+		view_initialized = true;
 
 		log_debug("FileViewList: set_view_item : done ----------------------------------------------------");
 

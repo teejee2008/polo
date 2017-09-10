@@ -222,7 +222,7 @@ public class WizardWindow : Gtk.Window {
 		case LayoutStyle.SINGLE_ICONS:
 			App.statusbar_unified = false;
 			App.pathbar_unified = false;
-			App.sidebar_position = App.DEFAULT_SIDEBAR_POSITION;
+			App.sidebar_position = Main.DEFAULT_SIDEBAR_POSITION;
 			App.main_window.sidebar.sidebar_show();
 
 			App.view_mode = ViewMode.ICONS;
@@ -233,7 +233,7 @@ public class WizardWindow : Gtk.Window {
 		case LayoutStyle.SINGLE_LIST:
 			App.statusbar_unified = false;
 			App.pathbar_unified = false;
-			App.sidebar_position = App.DEFAULT_SIDEBAR_POSITION;
+			App.sidebar_position = Main.DEFAULT_SIDEBAR_POSITION;
 			App.main_window.sidebar.sidebar_show();
 			App.main_window.layout_box.set_panel_layout(PanelLayout.SINGLE);
 
@@ -275,7 +275,7 @@ public class WizardWindow : Gtk.Window {
 			break;
 		}
 
-		App.main_window.reset_view_defaults();
+		App.main_window.reset_view_size_defaults();
 
 		App.main_window.refresh_pathbars();
 		App.main_window.refresh_statusbars();
