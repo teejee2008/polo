@@ -144,41 +144,41 @@ public class ProgressPanelFileTask : ProgressPanel {
 		switch(action_type){
 		case FileActionType.COPY:
 			if (source is FileItemCloud){ 
-				txt = _("File Download:");
+				txt = _("Downloading files from cloud storage:");
 			}
 			else if (destination is FileItemCloud){
-				txt = _("File Upload:");
+				txt = _("Uploading files to cloud storage:");
 			}
 			else{
-				txt = _("File Copy:");
+				txt = _("Copying files:");
 			}
 			break;
 		case FileActionType.CUT:
-			txt = _("File Move:");
+			txt = _("Moving files:");
 			break;
 		case FileActionType.RESTORE:
-			txt = _("File Restore:");
+			txt = _("Restoring trashed files:");
 			break;
 		case FileActionType.TRASH:
-			txt = _("Move to Trash:");
+			txt = _("Moving files to Trash:");
 			break;
 		case FileActionType.TRASH_EMPTY:
-			txt = _("Empty Trash:");
+			txt = _("Emptying Trash:");
 			break;
 		case FileActionType.DELETE:
 		case FileActionType.DELETE_TRASHED:
-			txt = _("File Delete:");
+			txt = _("Deleting files:");
 			break;
 		case FileActionType.CLOUD_RENAME:
-			txt = _("Remote Rename:");
+			txt = _("Renaming files on cloud storage:");
 			break;
 		case FileActionType.PASTE_SYMLINKS_AUTO:
 		case FileActionType.PASTE_SYMLINKS_ABSOLUTE:
 		case FileActionType.PASTE_SYMLINKS_RELATIVE:
-			txt = _("Create Symbolic Links:");
+			txt = _("Creating symbolic links:");
 			break;
 		case FileActionType.PASTE_HARDLINKS:
-			txt = _("Create Hard Links:");
+			txt = _("Creating hard links:");
 			break;
 		default:
 			break;
