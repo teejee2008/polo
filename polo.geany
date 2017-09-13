@@ -28,6 +28,7 @@ long_line_behaviour=1
 long_line_column=72
 
 [files]
+<<<<<<< Updated upstream
 <<<<<<< master
 <<<<<<< master
 <<<<<<< master
@@ -66,6 +67,9 @@ current_page=107
 =======
 current_page=57
 >>>>>>> Replace .foreach() with for..each loop
+=======
+current_page=79
+>>>>>>> Stashed changes
 FILE_NAME_0=1061;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FAdminBar.vala;0;4
 FILE_NAME_1=48865;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FCreateArchiveWindow.vala;0;4
 FILE_NAME_2=9021;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FFileContextMenu.vala;0;4
@@ -705,7 +709,7 @@ FILE_NAME_75=9620;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo
 FILE_NAME_76=32142;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FUtility%2FArchiveTask.vala;0;4
 FILE_NAME_77=1617;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanel.vala;0;4
 FILE_NAME_78=16461;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelArchiveTask.vala;0;4
-FILE_NAME_79=4395;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelFileTask.vala;0;4
+FILE_NAME_79=1934;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FProgressPanelFileTask.vala;0;4
 FILE_NAME_80=9711;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FMainHeaderBar.vala;0;4
 FILE_NAME_81=7540;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FViewPopover.vala;0;4
 FILE_NAME_82=41110;Vala;0;EUTF-8;1;1;1;%2Fhome%2Fteejee%2Fprojects%2Flinux%2Fpolo%2Fsrc%2FGtk%2FMainMenubar.vala;0;4

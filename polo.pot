@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
-"POT-Creation-Date: 2017-09-10 12:59+0530\n"
+"POT-Creation-Date: 2017-09-11 08:38+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -759,6 +759,10 @@ msgstr ""
 msgid "Copying file"
 msgstr ""
 
+#: Gtk/ProgressPanelFileTask.vala:153
+msgid "Copying files:"
+msgstr ""
+
 #: Utility/FileTask.vala:343 Utility/FileTask.vala:471
 msgid "Copying items..."
 msgstr ""
@@ -812,10 +816,6 @@ msgstr ""
 msgid "Create File"
 msgstr ""
 
-#: Gtk/ProgressPanelFileTask.vala:181
-msgid "Create Hard Links:"
-msgstr ""
-
 #: Gtk/FileContextMenu.vala:1795
 msgid "Create Merged Disk..."
 msgstr ""
@@ -826,10 +826,6 @@ msgstr ""
 
 #: Gtk/MainMenubar.vala:295 Gtk/MiddleToolbar.vala:347
 msgid "Create New Folder"
-msgstr ""
-
-#: Gtk/ProgressPanelFileTask.vala:178
-msgid "Create Symbolic Links:"
 msgstr ""
 
 #: Gtk/KvmCreateDiskWindow.vala:78
@@ -877,8 +873,16 @@ msgstr ""
 msgid "Created directory"
 msgstr ""
 
+#: Gtk/ProgressPanelFileTask.vala:181
+msgid "Creating hard links:"
+msgstr ""
+
 #: Gtk/ProgressPanelKvmTask.vala:72
 msgid "Creating merged disk..."
+msgstr ""
+
+#: Gtk/ProgressPanelFileTask.vala:178
+msgid "Creating symbolic links:"
 msgstr ""
 
 #: Utility/Gtk/AboutWindow.vala:321 Utility/Gtk/AboutWindow.vala:382
@@ -957,6 +961,10 @@ msgstr ""
 
 #: Utility/TeeJee.FileSystem.vala:702
 msgid "Deleted directory"
+msgstr ""
+
+#: Gtk/ProgressPanelFileTask.vala:170
+msgid "Deleting files:"
 msgstr ""
 
 #: Gtk/KvmCreateDiskWindow.vala:231
@@ -1120,6 +1128,10 @@ msgstr ""
 msgid "Downloading"
 msgstr ""
 
+#: Gtk/ProgressPanelFileTask.vala:147
+msgid "Downloading files from cloud storage:"
+msgstr ""
+
 #: Utility/FileTask.vala:465
 msgid "Downloading items..."
 msgstr ""
@@ -1215,12 +1227,12 @@ msgstr ""
 msgid "Empty Trash"
 msgstr ""
 
-#: Gtk/ProgressPanelFileTask.vala:166
-msgid "Empty Trash:"
-msgstr ""
-
 #: Gtk/TrashBar.vala:175
 msgid "Empty trash can"
+msgstr ""
+
+#: Gtk/ProgressPanelFileTask.vala:166
+msgid "Emptying Trash:"
 msgstr ""
 
 #: Utility/FileTask.vala:990
@@ -1522,36 +1534,12 @@ msgstr ""
 msgid "File Conflict"
 msgstr ""
 
-#: Gtk/ProgressPanelFileTask.vala:153
-msgid "File Copy:"
-msgstr ""
-
-#: Gtk/ProgressPanelFileTask.vala:170
-msgid "File Delete:"
-msgstr ""
-
-#: Gtk/ProgressPanelFileTask.vala:147
-msgid "File Download:"
-msgstr ""
-
 #: Gtk/Settings.vala:1352
 msgid "File Manager"
 msgstr ""
 
-#: Gtk/ProgressPanelFileTask.vala:157
-msgid "File Move:"
-msgstr ""
-
 #: Gtk/KvmCreateDiskWindow.vala:136
 msgid "File Name"
-msgstr ""
-
-#: Gtk/ProgressPanelFileTask.vala:160
-msgid "File Restore:"
-msgstr ""
-
-#: Gtk/ProgressPanelFileTask.vala:150
-msgid "File Upload:"
 msgstr ""
 
 #: Gtk/FileViewList.vala:4666 Gtk/FileViewList.vala:4706
@@ -2253,10 +2241,6 @@ msgstr ""
 msgid "Move selected item up"
 msgstr ""
 
-#: Gtk/ProgressPanelFileTask.vala:163
-msgid "Move to Trash:"
-msgstr ""
-
 #: Gtk/FileContextMenu.vala:1172
 msgid "Move to another location"
 msgstr ""
@@ -2268,6 +2252,14 @@ msgstr ""
 #: Utility/FileTask.vala:790
 #, c-format
 msgid "Moving file"
+msgstr ""
+
+#: Gtk/ProgressPanelFileTask.vala:163
+msgid "Moving files to Trash:"
+msgstr ""
+
+#: Gtk/ProgressPanelFileTask.vala:157
+msgid "Moving files:"
 msgstr ""
 
 #: Gtk/ColumnSelectionBox.vala:285 Gtk/ColumnSelectionBox.vala:320
@@ -2944,10 +2936,6 @@ msgstr ""
 msgid "Remember last session"
 msgstr ""
 
-#: Gtk/ProgressPanelFileTask.vala:173
-msgid "Remote Rename:"
-msgstr ""
-
 #: Gtk/ConnectServerWindow.vala:1123
 msgid "Remote config loaded"
 msgstr ""
@@ -3004,6 +2992,10 @@ msgstr ""
 
 #: Gtk/FileContextMenu.vala:938 Gtk/MiddleToolbar.vala:211
 msgid "Rename selected item"
+msgstr ""
+
+#: Gtk/ProgressPanelFileTask.vala:173
+msgid "Renaming files on cloud storage:"
 msgstr ""
 
 #: Utility/FileTask.vala:162
@@ -3105,6 +3097,10 @@ msgstr ""
 
 #: Gtk/MainWindow.vala:1098
 msgid "Restoring session..."
+msgstr ""
+
+#: Gtk/ProgressPanelFileTask.vala:160
+msgid "Restoring trashed files:"
 msgstr ""
 
 #: Gtk/ProgressPanelArchiveTask.vala:489 Gtk/ProgressPanelArchiveTask.vala:490
@@ -3817,6 +3813,10 @@ msgstr ""
 #: Gtk/TouchFileDateContextMenu.vala:120
 #, c-format
 msgid "Update timestamp to current date and time"
+msgstr ""
+
+#: Gtk/ProgressPanelFileTask.vala:150
+msgid "Uploading files to cloud storage:"
 msgstr ""
 
 #: Utility/FileTask.vala:468
