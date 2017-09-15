@@ -1097,7 +1097,7 @@ public class Sidebar : Gtk.Box {
 			return false;
 		}
 			
-		menu_device = new DeviceContextMenu(dev);
+		menu_device = new DeviceContextMenu(dev, popover);
 		return menu_device.show_menu(event);
 	}
 
@@ -1173,7 +1173,7 @@ public class Sidebar : Gtk.Box {
 		}
 
 		ebox.button_press_event.connect((event)=>{
-			menu_device = new DeviceContextMenu(dev);
+			menu_device = new DeviceContextMenu(dev, popover);
 			return menu_device.show_menu(event);
 		});
 	}

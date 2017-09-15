@@ -39,16 +39,16 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 	private Gtk.SizeGroup sg_label;
 
 	public Device device;
-	public Gtk.PopOver popup;
+	public Gtk.Popover parent_popup;
 	
-	public DeviceContextMenu(Device _device, Gtk.PopOver _popup){
+	public DeviceContextMenu(Device _device, Gtk.Popover _parent_popup){
 		
 		margin = 0;
 
 		log_debug("DeviceContextMenu()");
 
 		device = _device;
-		popup = _popup;
+		parent_popup = _parent_popup;
 		
 		if (device.has_parent()){
 			build_menu();
@@ -133,7 +133,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		item.activate.connect (() => {
 			browse_device(device, pane, window);
-			popup.hide();
+			parent_popup.hide();
 		});
 
 		//mi_open.sensitive = (selected_items.size > 0);
@@ -251,7 +251,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		item.activate.connect (() => {
 			manage_disk(device, pane, window);
-			popup.hide();
+			parent_popup.hide();
 		});
 
 		//item.sensitive = (device.type == "disk");
@@ -277,7 +277,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		item.activate.connect (() => {
 			format_disk(device, pane, window);
-			popup.hide();
+			parent_popup.hide();
 		});
 
 		//item.sensitive = (device.type == "disk");

@@ -595,7 +595,16 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 	public bool is_remote {
 		get{
-			return (file_uri_scheme != "file");
+			switch(file_uri_scheme){
+			case "ftp":
+			case "sftp":
+			case "ssh":
+			case "smb":
+			case "mtp":
+				return true;
+			default:
+				return false;
+			}
 		}
 	}
 

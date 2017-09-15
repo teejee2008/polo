@@ -2343,11 +2343,11 @@ public class FileViewList : Gtk.Box {
 
 		// check empty
 		if (current_item.children.size == 0){
-			if (current_item.can_read){
-				set_overlay_on_empty();
+			if (!current_item.can_read && !current_item.is_trash && !current_item.is_remote){
+				set_overlay_on_not_readable();
 			}
 			else{
-				set_overlay_on_not_readable();
+				set_overlay_on_empty();
 			}
 		}
 
