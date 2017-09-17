@@ -133,7 +133,7 @@ public class Main : GLib.Object {
 	public Json.Object appconfig;
 	public Bash bash_admin_shell;
 
-	public string shell_default = "bash";
+	public string shell_default = "fish";
 
 	public AppMode app_mode = AppMode.OPEN;
 	public Gee.ArrayList<string> cmd_files;
@@ -475,7 +475,7 @@ public class Main : GLib.Object {
 	public bool check_dependencies(out string msg) {
 		msg = "";
 
-		string[] dependencies = { "grep", "find", "xdg-mime" }; //"7z", "tar", "gzip",
+		string[] dependencies = { "grep", "awk", "find", "xdg-mime", "7z" }; //"7z", "tar", "gzip",
 
 		foreach(string cmd_tool in dependencies) {
 			if (!command_exists(cmd_tool)) {
