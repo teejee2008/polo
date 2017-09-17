@@ -335,12 +335,12 @@ public class CloudLoginWindow : Gtk.Window, IPaneActive {
 
 		if (account_added){
 			string txt = _("Account Added");
-			string msg = _("Account was added successfully.\n\nYou can browse the remote storage by selecting account from 'Cloud' menu");
+			string msg = _("Account was added successfully.\n\nYou can browse the storage by selecting account from 'Cloud' menu");
 			gtk_messagebox(txt, msg, this, false);
 		}
 		else{
 			string txt = _("Account Not Added");
-			string msg = _("Account could not be added");
+			string msg = _("Type 'rclone config' in a terminal window to add accounts manually.");
 			gtk_messagebox(txt, msg, this, true);
 		}
 		

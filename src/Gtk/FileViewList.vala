@@ -2343,7 +2343,7 @@ public class FileViewList : Gtk.Box {
 
 		// check empty
 		if (current_item.children.size == 0){
-			if (!current_item.can_read && !current_item.is_trash && !current_item.is_remote){
+			if (!current_item.can_read && current_item.permission_denied){
 				set_overlay_on_not_readable();
 			}
 			else{

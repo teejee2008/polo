@@ -73,6 +73,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	public bool can_rename = false;
 	public bool can_trash = false;
 	public bool can_delete = false;
+	public bool permission_denied = false;
 	public string access_flags = "";
 
 	public uint64 filesystem_free = 0;
@@ -1601,7 +1602,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		log_debug("FileItem: query_children(%d): %s".printf(depth, file_path), true);
 
 		query_children_running = true;
-
+		
 		query_children_follow_symlinks = follow_symlinks;
 
 		FileEnumerator enumerator;
@@ -1632,6 +1633,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			if (depth < 0){
 				dir_size_queried = false;
 			}
+
+			permission_denied = false;
 			
 			// mark existing children as stale -----------------
 			
@@ -1698,6 +1701,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 		catch (Error e) {
 			log_error (e.message);
+			permission_denied = true;
 		}
 
 		//add_to_cache(this);

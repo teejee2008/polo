@@ -872,7 +872,7 @@ public class MainWindow : Gtk.Window {
 		dialog.donations = null;
 
 		dialog.program_name = AppName;
-		dialog.comments = _("A modern, light-weight file manager for Linux");
+		dialog.comments = _("A modern file manager for Linux");
 		dialog.copyright = "Copyright © 2017 Tony George (%s)".printf(AppAuthorEmail);
 		dialog.version = AppVersion;
 		dialog.logo = get_app_icon(128,".svg");

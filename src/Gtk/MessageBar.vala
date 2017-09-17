@@ -85,10 +85,10 @@ public class MessageBar : Gtk.Box {
 		scrolled.margin = 6;
 		add(scrolled);
 
-		if (message_text.split("\n").length > 5){
+		if (message_text.strip().split("\n").length > 5){
 			scrolled.set_size_request(-1, 100);
 		}
-		else if (message_text.split("\n").length > 1){
+		else if (message_text.strip().split("\n").length > 1){
 			scrolled.set_size_request(-1, 50);
 		}
 

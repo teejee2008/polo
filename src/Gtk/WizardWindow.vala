@@ -93,7 +93,7 @@ public class WizardWindow : Gtk.Window {
 
 		var bbox = new Gtk.ButtonBox(Orientation.HORIZONTAL);
 		bbox.set_layout(Gtk.ButtonBoxStyle.EXPAND);
-		bbox.set_homogeneous(false);
+		bbox.set_homogeneous(true);
 		hbox.add(bbox);
 
 		var button = new Gtk.Button.with_label(_("Previous"));
@@ -141,7 +141,7 @@ public class WizardWindow : Gtk.Window {
 		hbox.add(label);
 
 		button = new Gtk.Button.with_label(_("Close"));
-		button.image = IconManager.lookup_image("gtk-close", 16);
+		button.image = IconManager.lookup_image("window-close", 16);
 		button.always_show_image = true;
 		hbox.add(button);
 		
