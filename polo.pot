@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
-"POT-Creation-Date: 2017-09-17 14:18+0530\n"
+"POT-Creation-Date: 2017-09-17 14:44+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -196,11 +196,11 @@ msgstr ""
 msgid "Another instance of this application is running"
 msgstr ""
 
-#: Common/Main.vala:912 Common/Main.vala:1058 Common/Main.vala:1147
+#: Common/Main.vala:912 Common/Main.vala:1062 Common/Main.vala:1151
 msgid "App config loaded"
 msgstr ""
 
-#: Common/Main.vala:725 Common/Main.vala:1025 Common/Main.vala:1103
+#: Common/Main.vala:725 Common/Main.vala:1029 Common/Main.vala:1107
 msgid "App config saved"
 msgstr ""
 
@@ -1367,7 +1367,7 @@ msgstr ""
 msgid "Exit"
 msgstr ""
 
-#: Common/Main.vala:1198
+#: Common/Main.vala:1202
 msgid "Exiting Application"
 msgstr ""
 

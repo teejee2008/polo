@@ -37,8 +37,8 @@ using TeeJee.Misc;
 public Main App;
 public const string AppName = "Polo File Manager";
 public const string AppShortName = "polo";
-public const string AppVersion = "17.8 (BETA 10)";
-public const string AppWikiVersion = "17.8 (BETA 10)"; // update only if wiki page exists
+public const string AppVersion = "17.9 (BETA 10)";
+public const string AppWikiVersion = "17.9 (BETA 10)"; // update only if wiki page exists
 public const string AppAuthor = "Tony George";
 public const string AppAuthorEmail = "teejeetech@gmail.com";
 
@@ -922,31 +922,35 @@ public class Main : GLib.Object {
 	}
 	
 	private void init_gtk_themes(){
+
+		log_debug("Main(): gtk_theme: user: %s".printf(user_name_effective));
 		
 		GtkTheme.query(user_name);
 
 		if (!GtkTheme.has_theme("Arc-Darker-Polo")){
 				
-			log_debug("Main(): theme not found: Arc-Darker-Polo");
-			log_debug("Main(): installing theme...");
+			log_debug("Main(): gtk_theme: not_found: Arc-Darker-Polo");
+			log_debug("Main(): gtk_theme: installing: Arc-Darker-Polo");
 			
 			string sh_file = "/usr/share/polo/files/gtk-theme/install-gtk-theme";
 			Posix.system(sh_file);
 			
-			GtkTheme.query(user_name); // requery
+			GtkTheme.query(user_name_effective); // requery
 		}
 		else{
-			log_debug("Main(): theme found: Arc-Darker-Polo");
+			log_debug("Main(): gtk_theme: found: Arc-Darker-Polo");
 		}
 
 		if (gtk_theme.length == 0){
 			
-			log_debug("Main(): gtk_theme not selected");
+			log_debug("Main(): gtk_theme: none_selected");
 			GtkTheme.set_gtk_theme_preferred();
 			gtk_theme = GtkTheme.get_gtk_theme();
+			log_debug("Main(): gtk_theme: applied: Arc-Darker-Polo");
 		}
 		else {
 			GtkTheme.set_gtk_theme(gtk_theme);
+			log_debug("Main(): gtk_theme: applied: %s".printf(gtk_theme));
 		}
 	}
 	
