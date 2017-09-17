@@ -387,10 +387,10 @@ public class FileConflictDialog : Gtk.Dialog {
 				log_error("gicon is null: %s".printf(item.file_name));
 
 				if (item.file_type == FileType.DIRECTORY) {
-					pixcell.stock_id = "gtk-directory";
+					pixcell.icon_name = "folder"; // stock name
 				}
 				else{
-					pixcell.stock_id = "gtk-file";
+					pixcell.icon_name = "text-x-preview"; // stock name
 				}
 			}
 
@@ -570,10 +570,10 @@ public class FileConflictDialog : Gtk.Dialog {
 		}
 		else{
 			if (item.file_type == FileType.DIRECTORY) {
-				image.icon_name = "gtk-directory";
+				image.icon_name = "folder";
 			}
 			else{
-				image.icon_name = "gtk-file";
+				image.icon_name = "text-x-preview";
 			}
 		}
 	}

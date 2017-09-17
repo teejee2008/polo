@@ -127,7 +127,7 @@ public class WizardWindow : Gtk.Window {
 		});
 
 		button = new Gtk.Button.with_label(_("Apply"));
-		button.image = IconManager.lookup_image("gtk-ok", 16);
+		button.image = IconManager.lookup_image("view-refresh", 16);
 		button.always_show_image = true;
 		bbox.add(button);
 		

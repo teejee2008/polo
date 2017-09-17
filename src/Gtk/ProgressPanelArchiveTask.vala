@@ -456,14 +456,14 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		
 		//btn_pause ---------------------------------------------------
 
-		btn_pause = new Gtk.Button.from_stock ("gtk-media-pause");
+		btn_pause = new Gtk.Button.from_stock ("media-playback-pause");
 		btn_pause.set_tooltip_text (_("Pause"));
 		hbox_actions.add(btn_pause);
 
 		btn_pause.label = _("Pause");
 		btn_pause.always_show_image = true;
 		btn_pause.image_position = PositionType.LEFT;
-		btn_pause.image = IconManager.lookup_image("gtk-media-pause", 16);
+		btn_pause.image = IconManager.lookup_image("media-playback-pause", 16);
 
 		btn_pause.clicked.connect(() => {
 			switch (task.status) {
@@ -483,26 +483,26 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 			case AppStatus.RUNNING:
 				btn_pause.label = _("Pause");
 				btn_pause.set_tooltip_text (_("Pause"));
-				btn_pause.image = IconManager.lookup_image("gtk-media-pause", 16);
+				btn_pause.image = IconManager.lookup_image("media-playback-pause", 16);
 				break;
 			case AppStatus.PAUSED:
 				btn_pause.label = _("Resume");
 				btn_pause.set_tooltip_text (_("Resume"));
-				btn_pause.image = IconManager.lookup_image("gtk-media-play", 16);
+				btn_pause.image = IconManager.lookup_image("media-playback-start", 16);
 				break;
 			}
 		});
 
 		//btn_stop -----------------------------------------------------
 		
-		btn_stop = new Gtk.Button.from_stock ("gtk-media-stop");
+		btn_stop = new Gtk.Button.from_stock ("process-stop");
 		btn_stop.set_tooltip_text (_("Stop"));
 		hbox_actions.add(btn_stop);
 
 		btn_stop.label = _("Stop");
 		btn_stop.always_show_image = true;
 		btn_stop.image_position = PositionType.LEFT;
-		btn_stop.image = IconManager.lookup_image("gtk-media-stop", 16);
+		btn_stop.image = IconManager.lookup_image("process-stop", 16);
 
 		btn_stop.clicked.connect(() => {
 			cancel();
@@ -511,7 +511,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 
 		//btn_finish ---------------------------------------------------
 
-		btn_finish = new Gtk.Button.from_stock ("gtk-ok");
+		btn_finish = new Gtk.Button.from_stock ("window-close");
 		btn_finish.set_tooltip_text (_("Close this window"));
 		btn_finish.set_size_request(100,30);
 		btn_finish.no_show_all = true;
@@ -521,7 +521,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		btn_finish.label = _("OK");
 		btn_finish.always_show_image = true;
 		btn_finish.image_position = PositionType.LEFT;
-		btn_finish.image = IconManager.lookup_image("gtk-ok", 16);
+		btn_finish.image = IconManager.lookup_image("window-close", 16);
 
 		btn_finish.clicked.connect(() => {
 			finish();
@@ -628,7 +628,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		file_cancelled = false;
 
 		btn_pause.set_tooltip_text (_("Pause"));
-		btn_pause.image = IconManager.lookup_image("gtk-media-pause", 16);
+		btn_pause.image = IconManager.lookup_image("media-playback-pause", 16);
 	}
 	
 	public override bool update_status(){
