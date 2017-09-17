@@ -925,24 +925,23 @@ public class Main : GLib.Object {
 		
 		GtkTheme.query(user_name);
 
+		if (!GtkTheme.has_theme("Arc-Darker-Polo")){
+				
+			log_debug("Main(): theme not found: Arc-Darker-Polo");
+			log_debug("Main(): installing theme...");
+			
+			string sh_file = "/usr/share/polo/files/gtk-theme/install-gtk-theme";
+			Posix.system(sh_file);
+			
+			GtkTheme.query(user_name); // requery
+		}
+		else{
+			log_debug("Main(): theme found: Arc-Darker-Polo");
+		}
+
 		if (gtk_theme.length == 0){
 			
 			log_debug("Main(): gtk_theme not selected");
-			
-			if (!GtkTheme.has_theme("Arc-Darker-Polo")){
-				
-				log_debug("Main(): theme not found: Arc-Darker-Polo");
-				log_debug("Main(): installing theme...");
-				
-				string sh_file = "/usr/share/polo/files/gtk-theme/install-gtk-theme";
-				Posix.system(sh_file);
-				
-				GtkTheme.query(user_name); // requery
-			}
-			else{
-				log_debug("Main(): theme found: Arc-Darker-Polo");
-			}
-			
 			GtkTheme.set_gtk_theme_preferred();
 			gtk_theme = GtkTheme.get_gtk_theme();
 		}
