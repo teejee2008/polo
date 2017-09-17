@@ -75,10 +75,11 @@ public class LinuxDistro : GLib.Object{
 
 			foreach(string line in file_read(dist_file).split("\n")){
 
-				if (line.split("=").length != 2){ continue; }
+				var arr = line.split("=",2);
+				if (arr.length != 2){ continue; }
 
-				string key = line.split("=")[0].strip();
-				string val = line.split("=")[1].strip();
+				string key = arr[0].strip();
+				string val = arr[1].strip();
 
 				if (val.has_prefix("\"")){
 					val = val[1:val.length];
@@ -124,10 +125,11 @@ public class LinuxDistro : GLib.Object{
 
 				foreach(string line in file_read(dist_file).split("\n")){
 
-					if (line.split("=").length != 2){ continue; }
+					var arr = line.split("=",2);
+					if (arr.length != 2){ continue; }
 
-					string key = line.split("=")[0].strip();
-					string val = line.split("=")[1].strip();
+					string key = arr[0].strip();
+					string val = arr[1].strip();
 
 					switch (key){
 						case "ID":

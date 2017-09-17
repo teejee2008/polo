@@ -38,6 +38,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 	private ArchiveTask task;
 	
 	private FileItem dest_archive;
+	private FileItemArchive? archive;
 
 	// ui for archive_task
 	private Gtk.Grid grid_stats;
@@ -63,16 +64,21 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 	private double progress_prev;
 	
 	private uint tmr_password = 0;
+	private uint tmr_next = 0;
+	
 	private bool was_restarted = false;
 	public bool create_new_folder = true;
 	private FileItem? previous_archive = null;
+
+	private Gee.ArrayList<FileItemArchive> archives = new Gee.ArrayList<FileItemArchive>();
+	private bool file_cancelled = false;
 
 	public ProgressPanelArchiveTask(FileViewPane _pane,
 		Gee.ArrayList<FileItem> _items, FileActionType _action, bool _create_new_folder){
 	
 		base(_pane, _items, _action);
 
-		task = new ArchiveTask();
+		task = new ArchiveTask(window);
 		task.extract_to_new_folder = _create_new_folder;
 	}
 
@@ -111,13 +117,13 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		
 		var label = new Gtk.Label("<b>" + txt + ": </b>");
 		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.margin_bottom = 12;
 		hbox.add(label);
 
 		label = new Gtk.Label("");
 		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.margin_bottom = 12;
 		hbox.add(label);
 		lbl_header = label;
@@ -135,7 +141,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		//grid_stats
 		var grid_stats = new Grid();
 		grid_stats.set_column_spacing (6);
-		grid_stats.set_row_spacing (6);
+		grid_stats.set_row_spacing (3);
 		grid_stats.column_homogeneous = true;
 		//grid_stats.hexpand = true;
 		hbox.add(grid_stats);
@@ -144,88 +150,88 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 
 		//lbl_file_count -----------------------------------------
 		var lbl_file_count = new Gtk.Label(_("Files:"));
-		lbl_file_count.xalign = (float) 0.0;
+		lbl_file_count.xalign = 0.0f;
 		grid_stats.attach(lbl_file_count, 0, ++row, 1, 1);
 
 		//lbl_file_count_value
 		lbl_file_count_value = new Gtk.Label(_("???"));
-		lbl_file_count_value.xalign = (float) 1.0;
+		lbl_file_count_value.xalign = 1.0f;
 		grid_stats.attach(lbl_file_count_value, 1, row, 1, 1);
 
 		//lbl_elapsed -----------------------------------------
 		var lbl_elapsed = new Gtk.Label(_("Elapsed:"));
-		lbl_elapsed.xalign = (float) 0.0;
+		lbl_elapsed.xalign = 0.0f;
 		grid_stats.attach(lbl_elapsed, 0, ++row, 1, 1);
 
 		//lbl_elapsed_value
 		lbl_elapsed_value = new Gtk.Label(_("???"));
-		lbl_elapsed_value.xalign = (float) 1.0;
+		lbl_elapsed_value.xalign = 1.0f;
 		grid_stats.attach(lbl_elapsed_value, 1, row, 1, 1);
 
 		//lbl_remaining -----------------------------------------
 		var lbl_remaining = new Gtk.Label(_("Remaining:"));
-		lbl_remaining.xalign = (float) 0.0;
+		lbl_remaining.xalign = 0.0f;
 		grid_stats.attach(lbl_remaining, 0, ++row, 1, 1);
 
 		//lbl_remaining_value
 		lbl_remaining_value = new Gtk.Label(_("???"));
-		lbl_remaining_value.xalign = (float) 1.0;
+		lbl_remaining_value.xalign = 1.0f;
 		grid_stats.attach(lbl_remaining_value, 1, row, 1, 1);
 
 		//lbl_speed -----------------------------------------
 		var lbl_speed = new Gtk.Label(_("Speed:"));
-		lbl_speed.xalign = (float) 0.0;
+		lbl_speed.xalign = 0.0f;
 		grid_stats.attach(lbl_speed, 0, ++row, 1, 1);
 
 		//lbl_speed_value
 		lbl_speed_value = new Gtk.Label(_("???"));
-		lbl_speed_value.xalign = (float) 1.0;
+		lbl_speed_value.xalign = 1.0f;
 		grid_stats.attach(lbl_speed_value, 1, row, 1, 1);
 
 		row = -1;
 
 		//lbl_data -------------------------------------------------
 		var lbl_data = new Gtk.Label(_("Data:"));
-		lbl_data.xalign = (float) 0.0;
+		lbl_data.xalign = 0.0f;
 		lbl_data.margin_left = 12;
 		grid_stats.attach(lbl_data, 2, ++row, 1, 1);
 
 		//lbl_data_value
 		lbl_data_value = new Gtk.Label(_("???"));
-		lbl_data_value.xalign = (float) 1.0;
+		lbl_data_value.xalign = 1.0f;
 		grid_stats.attach(lbl_data_value, 3, row, 1, 1);
 
 		//lbl_processed ------------------------------------------
 		var lbl_processed = new Gtk.Label(_("Processed:"));
-		lbl_processed.xalign = (float) 0.0;
+		lbl_processed.xalign = 0.0f;
 		lbl_processed.margin_left = 12;
 		grid_stats.attach(lbl_processed, 2, ++row, 1, 1);
 
 		//lbl_processed_value
 		lbl_processed_value = new Gtk.Label(_("???"));
-		lbl_processed_value.xalign = (float) 1.0;
+		lbl_processed_value.xalign = 1.0f;
 		grid_stats.attach(lbl_processed_value, 3, row, 1, 1);
 
 		//lbl_compressed -----------------------------------------
 		var lbl_compressed = new Gtk.Label(_("Compressed:"));
-		lbl_compressed.xalign = (float) 0.0;
+		lbl_compressed.xalign = 0.0f;
 		lbl_compressed.margin_left = 12;
 		grid_stats.attach(lbl_compressed, 2, ++row, 1, 1);
 
 		//lbl_compressed_value
 		lbl_compressed_value = new Gtk.Label(_("???"));
-		lbl_compressed_value.xalign = (float) 1.0;
+		lbl_compressed_value.xalign = 1.0f;
 		grid_stats.attach(lbl_compressed_value, 3, row, 1, 1);
 
 		//lbl_ratio -----------------------------------------
 		var lbl_ratio = new Gtk.Label(_("Ratio:"));
-		lbl_ratio.xalign = (float) 0.0;
+		lbl_ratio.xalign = 0.0f;
 		lbl_ratio.margin_left = 12;
 		grid_stats.attach(lbl_ratio, 2, ++row, 1, 1);
 
 		//lbl_ratio_value
 		lbl_ratio_value = new Gtk.Label(_("???"));
-		lbl_ratio_value.xalign = (float) 1.0;
+		lbl_ratio_value.xalign = 1.0f;
 		grid_stats.attach(lbl_ratio_value, 3, row, 1, 1);
 
 		var label = new Gtk.Label("");
@@ -243,7 +249,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 
 		//lbl_status
 		lbl_status = new Gtk.Label("");
-		lbl_status.xalign = (float) 0.0;
+		lbl_status.xalign = 0.0f;
 		lbl_status.ellipsize = Pango.EllipsizeMode.MIDDLE;
 		lbl_status.max_width_chars = 50;
 		hbox_status_line.add(lbl_status);
@@ -253,7 +259,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 	private void init_progress_bar() {
 		
 		drawing_area = new Gtk.DrawingArea();
-		drawing_area.set_size_request(-1, 40);
+		drawing_area.set_size_request(-1, 20);
 		drawing_area.hexpand = true;
 		
 		var sw_progress = new Gtk.ScrolledWindow(null, null);
@@ -386,7 +392,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 			context.set_line_width (1);
 			Gdk.cairo_set_source_rgba (context, color_ratio);
 
-			x = (int)((task.compressed_bytes * 1.0 * w ) / task.archive.size) ;
+			x = (int)((task.compressed_bytes * 1.0 * w ) / task.archive.file_size) ;
 			context.rectangle(0, 0, x, h);
 
 			context.fill();
@@ -450,14 +456,14 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		
 		//btn_pause ---------------------------------------------------
 
-		btn_pause = new Gtk.Button.from_stock ("gtk-media-pause");
+		btn_pause = new Gtk.Button.from_stock ("media-playback-pause");
 		btn_pause.set_tooltip_text (_("Pause"));
 		hbox_actions.add(btn_pause);
 
 		btn_pause.label = _("Pause");
 		btn_pause.always_show_image = true;
 		btn_pause.image_position = PositionType.LEFT;
-		btn_pause.image = IconManager.lookup_image("gtk-media-pause", 16);
+		btn_pause.image = IconManager.lookup_image("media-playback-pause", 16);
 
 		btn_pause.clicked.connect(() => {
 			switch (task.status) {
@@ -477,26 +483,26 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 			case AppStatus.RUNNING:
 				btn_pause.label = _("Pause");
 				btn_pause.set_tooltip_text (_("Pause"));
-				btn_pause.image = IconManager.lookup_image("gtk-media-pause", 16);
+				btn_pause.image = IconManager.lookup_image("media-playback-pause", 16);
 				break;
 			case AppStatus.PAUSED:
 				btn_pause.label = _("Resume");
 				btn_pause.set_tooltip_text (_("Resume"));
-				btn_pause.image = IconManager.lookup_image("gtk-media-play", 16);
+				btn_pause.image = IconManager.lookup_image("media-playback-start", 16);
 				break;
 			}
 		});
 
 		//btn_stop -----------------------------------------------------
 		
-		btn_stop = new Gtk.Button.from_stock ("gtk-media-stop");
+		btn_stop = new Gtk.Button.from_stock ("process-stop");
 		btn_stop.set_tooltip_text (_("Stop"));
 		hbox_actions.add(btn_stop);
 
 		btn_stop.label = _("Stop");
 		btn_stop.always_show_image = true;
 		btn_stop.image_position = PositionType.LEFT;
-		btn_stop.image = IconManager.lookup_image("gtk-media-stop", 16);
+		btn_stop.image = IconManager.lookup_image("process-stop", 16);
 
 		btn_stop.clicked.connect(() => {
 			cancel();
@@ -505,7 +511,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 
 		//btn_finish ---------------------------------------------------
 
-		btn_finish = new Gtk.Button.from_stock ("gtk-ok");
+		btn_finish = new Gtk.Button.from_stock ("window-close");
 		btn_finish.set_tooltip_text (_("Close this window"));
 		btn_finish.set_size_request(100,30);
 		btn_finish.no_show_all = true;
@@ -515,7 +521,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		btn_finish.label = _("OK");
 		btn_finish.always_show_image = true;
 		btn_finish.image_position = PositionType.LEFT;
-		btn_finish.image = IconManager.lookup_image("gtk-ok", 16);
+		btn_finish.image = IconManager.lookup_image("window-close", 16);
 
 		btn_finish.clicked.connect(() => {
 			finish();
@@ -541,7 +547,20 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		}
 
 		pane.refresh_file_action_panel();
+		pane.clear_messages();
 
+		switch (action_type){
+		case FileActionType.EXTRACT:
+			archives = new Gee.ArrayList<FileItemArchive>();
+			foreach(var item in items){
+				if (item is FileItemArchive){
+					var arch = (FileItemArchive) item;
+					archives.add(arch);
+				}
+			}
+			break;
+		}
+		
 		start_task();
 	}
 
@@ -556,32 +575,32 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 
 		switch (action_type){
 		case FileActionType.COMPRESS:
-			task.compress(dest_archive);
+			task.compress((FileItemArchive)dest_archive);
 			break;
 			
 		case FileActionType.EXTRACT:
 
-			string msg = "";
-			bool path_not_set = false;
-			foreach(var item in items){
-				if (item.extraction_path.length == 0){
-					path_not_set = true;
-					msg += "%s\n".printf(item.file_name);
+			if (!was_restarted){
+				if (archives.size > 0){
+					archive = archives[0];
+					archives.remove(archive);
 				}
 			}
 
-			if (path_not_set){
-				gtk_messagebox(_("Extraction path not specified"), msg, window, true);
+			if (archive.extraction_path.length == 0){
+				string txt = _("Extraction path not specified");
+				string msg = archive.file_name;
+				gtk_messagebox(txt, msg, window, true);
 				finish();
 				return;
 			}
 
 			bool create_new_folder = !was_restarted && task.extract_to_new_folder;
-			task.extract_archives(items, create_new_folder);
+			task.extract_archive(archive, create_new_folder);
 			break;
 
 		case FileActionType.LIST_ARCHIVE:
-			task.open(items[0], false);
+			task.open(archives[0], false);
 			break;
 			
 		case FileActionType.TEST_ARCHIVE:
@@ -591,7 +610,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 
 		gtk_do_events();
 		
-		tmr_status = Timeout.add (500, update_status);
+		tmr_status = Timeout.add(500, update_status);
 	}
 
 	public override void init_status(){
@@ -606,8 +625,10 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		progress_prev = 0.0;
 		task.progress = 0.0;
 
+		file_cancelled = false;
+
 		btn_pause.set_tooltip_text (_("Pause"));
-		btn_pause.image = IconManager.lookup_image("gtk-media-pause", 16);
+		btn_pause.image = IconManager.lookup_image("media-playback-pause", 16);
 	}
 	
 	public override bool update_status(){
@@ -654,7 +675,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 
 			if ((task.archive != null) && (task.archive != previous_archive)){
 				lbl_file_count_value.label = "%'d".printf(task.archive.file_count_total);
-				lbl_data_value.label = format_file_size(task.archive.size);
+				lbl_data_value.label = format_file_size(task.archive.file_size);
 				previous_archive = task.archive;
 			}
 			
@@ -709,12 +730,29 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 
 		log_debug("status: %d".printf(status));
 
-		if (status == 0){ // valid archive, success
+		if (file_cancelled){
+
+			switch (task.action){
+			case ArchiveAction.CREATE:
+				pane.add_message(_("Cancelled") + ": %s".printf(task.archive_path), Gtk.MessageType.WARNING);
+				break;
+			case ArchiveAction.EXTRACT:
+				pane.add_message(_("Cancelled") + ": %s".printf(archive.file_name), Gtk.MessageType.WARNING);
+				break;
+			case ArchiveAction.TEST:
+				gtk_messagebox("","Archive is OK", window,false);
+				break;
+			}	
+		}
+		else if (status == 0){ // valid archive, success
 			//task_is_running = false;
 
 			switch (task.action){
 			case ArchiveAction.CREATE:
+				pane.add_message(_("Created") + ": %s".printf(task.archive_path), Gtk.MessageType.INFO);
+				break;
 			case ArchiveAction.EXTRACT:
+				pane.add_message(_("Extracted") + ": %s ➔ %s".printf(archive.file_name, archive.extraction_path), Gtk.MessageType.INFO);
 				break;
 			case ArchiveAction.TEST:
 				gtk_messagebox("","Archive is OK", window,false);
@@ -726,11 +764,14 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 			&& (task.archive.children.keys.size == 0)){
 
 			// invalid archive, error
-			var msg = _("File is not an archive or format is unsupported");
-			gtk_messagebox("Unknown Format", msg, window, true);
+			string txt = _("Unknown Format");
+			string msg = _("File is not an archive or format is unsupported") + "\n\n%s".printf(task.archive.file_name);
+			gtk_messagebox(txt, msg, window, true);
+
+			pane.add_message(_("Error") + ": %s: %s".printf(archive.file_name, _("Unknown Format")), Gtk.MessageType.ERROR);
 			//task_is_running = false;
 		}
-		else if (!aborted){
+		else if (!aborted && !file_cancelled){
 			
 			// valid archive, error
 			switch (task.action){
@@ -738,14 +779,25 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 			case ArchiveAction.EXTRACT:
 				if (task.get_error_message().length > 0){
 					gtk_messagebox("",_("There were errors while processing the archive.") + "\n\n" + task.get_error_message(), window, true);
+					pane.add_message(_("Error") + ": %s: %s".printf(archive.file_name, task.get_error_message()), Gtk.MessageType.ERROR);
 				}
 				break;
 			}
 		}
+
+		switch (task.action){
+		case ArchiveAction.TEST:
+		case ArchiveAction.EXTRACT:
+			if (archives.size > 0){
+				tmr_next = Timeout.add(200, start_next_task);
+				return;
+			}
+			break;
+		}
 		
 		pane.file_operations.remove(this);
 		pane.refresh_file_action_panel();
-
+		pane.refresh_message_panel();
 		task_complete();
 	}
 
@@ -804,19 +856,35 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 
 		this.hide();
 
-		if (FileViewList.prompt_for_password(task.archive)){
+		if (task.archive.prompt_for_password(window)){
 			this.show();
 			was_restarted = true;
 			start_task(); // start again
 		}
 		else{
 			log_msg(_("Cancelled by user"));
+			file_cancelled = true;
 			finish();
 		}
 		
-		return true;
+		return false;
 	}
-	
+
+	private bool start_next_task(){
+
+		log_debug("ProgressPanelArchiveTask: start_next_task()");
+		
+		if (tmr_next > 0) {
+			Source.remove(tmr_next);
+			tmr_next = 0;
+		}
+
+		was_restarted = false;
+		start_task(); // start next
+		
+		return false;
+	}
+
 }
 
 

@@ -36,7 +36,17 @@ using TeeJee.Misc;
 public class WizardWindow : Gtk.Window {
 
 	private Gtk.Box vbox_main;
+	private Gtk.Box vbox_layout_option;
+	private LayoutStyle current_layout_option = LayoutStyle.SINGLE_ICONS;
 	//private string mode = "";
+
+	enum LayoutStyle {
+		SINGLE_ICONS = 1,
+		SINGLE_LIST = 2,
+		DUAL_ICONS = 3,
+		DUAL_LIST = 4,
+		QUAD = 5
+	}
 	
 	public WizardWindow() {
 
@@ -73,70 +83,214 @@ public class WizardWindow : Gtk.Window {
 	
 	private void init_layout_style(){
 
-		add_label_header(vbox_main, _("Select Layout Style"), true);
-
-		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 12);
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
+		hbox.margin_bottom = 12;
 		vbox_main.add(hbox);
+		
+		var label = add_label_header(hbox, _("Select Layout Style"), true);
+		label.yalign = 0.5f;
+		label.margin_right = 12;
 
-		// classic sidebar icons
-		var ebox = add_layout_option(hbox, IconManager.lookup("polo_layout_classic_icons", 500), _("Classic Icons (Single-pane + Sidebar + IconView)"));
-		ebox.button_press_event.connect((event)=>{
-			App.main_window.sidebar.sidebar_show();
+		var bbox = new Gtk.ButtonBox(Orientation.HORIZONTAL);
+		bbox.set_layout(Gtk.ButtonBoxStyle.EXPAND);
+		bbox.set_homogeneous(true);
+		hbox.add(bbox);
 
-			App.main_window.layout_box.set_panel_layout(PanelLayout.SINGLE);
-			App.main_window.layout_box.panel1.pane.view.set_view_mode(ViewMode.ICONS);
-			App.save_app_config();
-
-			//init_pathbar_style();
-			this.close();
-			return true;
+		var button = new Gtk.Button.with_label(_("Previous"));
+		button.image = IconManager.lookup_image("go-previous", 16);
+		button.always_show_image = true;
+		bbox.add(button);
+		
+		button.clicked.connect(()=>{
+			if (current_layout_option == 1){
+				current_layout_option = (LayoutStyle) 5;
+			}
+			else{
+				current_layout_option = (LayoutStyle) (current_layout_option - 1);
+			}
+			show_layout(current_layout_option);
 		});
 
-		ebox = add_layout_option(hbox, IconManager.lookup("polo_layout_classic_list", 500), _("Classic List (Single-pane + Sidebar + ListView)"));
-		ebox.button_press_event.connect((event)=>{
-			App.main_window.sidebar.sidebar_show();
-
-			App.main_window.layout_box.set_panel_layout(PanelLayout.SINGLE);
-			App.main_window.layout_box.panel1.pane.view.set_view_mode(ViewMode.LIST);
-			App.save_app_config();
-
-			//init_pathbar_style();
-			this.close();
-			return true;
+		button = new Gtk.Button.with_label(_("Next"));
+		button.image = IconManager.lookup_image("go-next", 16);
+		button.always_show_image = true;
+		bbox.add(button);
+		
+		button.clicked.connect(()=>{
+			if (current_layout_option == 5){
+				current_layout_option = (LayoutStyle) 1;
+			}
+			else{
+				current_layout_option = (LayoutStyle) (current_layout_option + 1);
+			}
+			show_layout(current_layout_option);
 		});
 
-		hbox = new Gtk.Box(Orientation.HORIZONTAL, 12);
-		vbox_main.add(hbox);
-
-		ebox = add_layout_option(hbox, IconManager.lookup("polo_layout_commander_list", 500), _("Commander (Dual-pane + ListView)"));
-		ebox.button_press_event.connect((event)=>{
-			App.main_window.sidebar.sidebar_hide();
-			App.main_window.layout_box.set_panel_layout(PanelLayout.DUAL_VERTICAL);
-			App.main_window.layout_box.panel1.pane.view.set_view_mode(ViewMode.LIST);
-			App.main_window.layout_box.panel2.pane.view.set_view_mode(ViewMode.LIST);
-			App.save_app_config();
-
-			//init_pathbar_style();
-			this.close();
-			return true;
+		button = new Gtk.Button.with_label(_("Apply"));
+		button.image = IconManager.lookup_image("view-refresh", 16);
+		button.always_show_image = true;
+		bbox.add(button);
+		
+		button.clicked.connect(()=>{
+			apply_layout(current_layout_option);
+			//this.close();
 		});
 
-		ebox = add_layout_option(hbox, IconManager.lookup("polo_layout_commander_icons", 500), _("Commander Icons (Dual-pane + IconView)"));
-		ebox.button_press_event.connect((event)=>{
-			App.main_window.sidebar.sidebar_hide();
-			App.main_window.layout_box.set_panel_layout(PanelLayout.DUAL_VERTICAL);
-			App.main_window.layout_box.panel1.pane.view.set_view_mode(ViewMode.ICONS);
-			App.main_window.layout_box.panel2.pane.view.set_view_mode(ViewMode.ICONS);
-			App.save_app_config();
+		label = new Gtk.Label("");
+		label.hexpand = true;
+		hbox.add(label);
 
-			//init_pathbar_style();
+		button = new Gtk.Button.with_label(_("Close"));
+		button.image = IconManager.lookup_image("window-close", 16);
+		button.always_show_image = true;
+		hbox.add(button);
+		
+		button.clicked.connect(()=>{
 			this.close();
-			return true;
 		});
+
+		var vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 6);
+		vbox_main.add(vbox);
+		vbox_layout_option = vbox;
+
+		show_layout(current_layout_option);
+		
+		this.show_all();
+	}
+
+	private void show_layout(LayoutStyle layout_style){
+
+		string image_name = "polo_layout_single_icons";
+		string desc = _("Classic Icons (Single-Pane + SideBar + IconView)");
+		
+		switch(layout_style){
+		case LayoutStyle.SINGLE_ICONS:
+			image_name = "polo_layout_single_icons";
+			desc = _("Classic Icons (Single-Pane + SideBar + IconView)");
+			break;
+			
+		case LayoutStyle.SINGLE_LIST:
+			image_name = "polo_layout_single_list";
+			desc = _("Classic List (Single-Pane + SideBar + ListView)");
+			break;
+			
+		case LayoutStyle.DUAL_ICONS:
+			image_name = "polo_layout_dual_icons";
+			desc = _("Commander Icons (Dual-Pane + IconView)");
+			break;
+			
+		case LayoutStyle.DUAL_LIST:
+			image_name = "polo_layout_dual_list";
+			desc = _("Commander List (Dual-Pane + ListView)");
+			break;
+			
+		case LayoutStyle.QUAD:
+			image_name = "polo_layout_quad";
+			desc = _("Extreme (Quad-Pane + ListView + Global Pathbar + Global Statusbar)");
+			break;
+		}
+
+		var vbox = vbox_layout_option;
+
+		gtk_container_remove_children(vbox);
+
+		var label = add_label(vbox, desc, true, true);
+		label.xalign = 0.5f;
+
+		var img = new Gtk.Image.from_pixbuf(IconManager.lookup(image_name, 800));
+		
+		var ebox = new Gtk.EventBox();
+		ebox.add(img);
+		vbox.add(ebox);
+		
+		// set hand cursor
+		if (ebox.get_realized()){
+			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
+		}
+		else{
+			ebox.realize.connect(()=>{
+				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
+			});
+		}
 
 		this.show_all();
 	}
 
+	private void apply_layout(LayoutStyle layout_style){
+
+		switch(layout_style){
+		case LayoutStyle.SINGLE_ICONS:
+			App.statusbar_unified = false;
+			App.pathbar_unified = false;
+			App.sidebar_position = Main.DEFAULT_SIDEBAR_POSITION;
+			App.main_window.sidebar.sidebar_show();
+
+			App.view_mode = ViewMode.ICONS;
+			App.main_window.layout_box.set_panel_layout(PanelLayout.SINGLE);
+			App.main_window.layout_box.panel1.pane.view.set_view_mode(ViewMode.ICONS);
+			break;
+			
+		case LayoutStyle.SINGLE_LIST:
+			App.statusbar_unified = false;
+			App.pathbar_unified = false;
+			App.sidebar_position = Main.DEFAULT_SIDEBAR_POSITION;
+			App.main_window.sidebar.sidebar_show();
+			App.main_window.layout_box.set_panel_layout(PanelLayout.SINGLE);
+
+			App.view_mode = ViewMode.LIST;
+			App.main_window.layout_box.panel1.pane.view.set_view_mode(ViewMode.LIST);
+			break;
+			
+		case LayoutStyle.DUAL_ICONS:
+			App.statusbar_unified = false;
+			App.pathbar_unified = false;
+			App.main_window.sidebar.sidebar_hide();
+			App.main_window.layout_box.set_panel_layout(PanelLayout.DUAL_VERTICAL);
+
+			App.view_mode = ViewMode.ICONS;
+			App.main_window.layout_box.panel1.pane.view.set_view_mode(ViewMode.ICONS);
+			App.main_window.layout_box.panel2.pane.view.set_view_mode(ViewMode.ICONS);
+			break;
+			
+		case LayoutStyle.DUAL_LIST:
+			App.statusbar_unified = false;
+			App.pathbar_unified = false;
+			App.main_window.sidebar.sidebar_hide();
+			App.main_window.layout_box.set_panel_layout(PanelLayout.DUAL_VERTICAL);
+
+			App.view_mode = ViewMode.LIST;
+			App.main_window.layout_box.panel1.pane.view.set_view_mode(ViewMode.LIST);
+			App.main_window.layout_box.panel2.pane.view.set_view_mode(ViewMode.LIST);
+			break;
+			
+		case LayoutStyle.QUAD:
+			App.statusbar_unified = true;
+			App.pathbar_unified = true;
+			App.main_window.sidebar.sidebar_hide();
+			App.main_window.layout_box.set_panel_layout(PanelLayout.QUAD);
+
+			App.view_mode = ViewMode.LIST;
+			App.main_window.layout_box.panel1.pane.view.set_view_mode(ViewMode.LIST);
+			App.main_window.layout_box.panel2.pane.view.set_view_mode(ViewMode.LIST);
+			break;
+		}
+
+		App.main_window.reset_view_size_defaults();
+
+		App.main_window.refresh_pathbars();
+		App.main_window.refresh_statusbars();
+
+		App.toolbar_dark = true;
+		App.main_window.toolbar.refresh_style();
+
+		App.sidebar_dark = true;
+		App.main_window.sidebar.refresh();
+
+		GtkTheme.set_gtk_theme_preferred();
+
+		App.save_app_config();
+	}
+	
 	private Gtk.EventBox add_layout_option(Gtk.Box hbox, Gdk.Pixbuf pix, string label){
 
 		var vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 6);
@@ -167,7 +321,7 @@ public class WizardWindow : Gtk.Window {
 
 	private void init_pathbar_style(){
 
-		gtk_container_remove_children(vbox_main);
+		/*gtk_container_remove_children(vbox_main);
 		
 		add_label_header(vbox_main, _("Select Pathbar Style"), true);
 
@@ -222,7 +376,7 @@ public class WizardWindow : Gtk.Window {
 			return true;
 		});
 
-		this.show_all();
+		this.show_all();*/
 	}
 }
 

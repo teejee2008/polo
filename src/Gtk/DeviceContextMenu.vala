@@ -33,29 +33,23 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
-public class DeviceContextMenu : Gtk.Menu {
-
-	private Gtk.MenuItem mi_open;
-	private Gtk.MenuItem mi_mount;
-	private Gtk.MenuItem mi_unmount;
-	private Gtk.MenuItem mi_lock;
-	private Gtk.MenuItem mi_unlock;
-	private Gtk.MenuItem mi_sync;
-	private Gtk.MenuItem mi_flush;
+public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 	private Gtk.SizeGroup sg_icon;
 	private Gtk.SizeGroup sg_label;
 
 	public Device device;
-
-	public DeviceContextMenu(Device _device){
+	public Gtk.Popover parent_popup;
+	
+	public DeviceContextMenu(Device _device, Gtk.Popover _parent_popup){
 		
 		margin = 0;
 
 		log_debug("DeviceContextMenu()");
 
 		device = _device;
-
+		parent_popup = _parent_popup;
+		
 		if (device.has_parent()){
 			build_menu();
 		}
@@ -63,8 +57,6 @@ public class DeviceContextMenu : Gtk.Menu {
 			build_menu_for_drive();
 		}
 	}
-
-	// file context menu
 
 	private void build_menu(){
 
@@ -83,11 +75,19 @@ public class DeviceContextMenu : Gtk.Menu {
 		add_mount();
 
 		add_unmount();
+		
+		if (App.tool_exists("gnome-disks")) {
+			
+			add_manage();
+		
+			add_format();
+		}
+
+		add_lock();
 
 		//add_sync();
 
 		//add_flush();
-
 
 		//gtk_menu_add_separator(this);
 
@@ -103,6 +103,14 @@ public class DeviceContextMenu : Gtk.Menu {
 
 		this.reserve_toggle_size = false;
 
+		//add_eject();
+		
+		if (App.tool_exists("gnome-disks")) {
+			
+			add_manage();
+		
+			add_format();
+		}
 
 		show_all();
 	}
@@ -113,9 +121,9 @@ public class DeviceContextMenu : Gtk.Menu {
 
 		if (device.type == "disk"){ return; }
 
-		// open ------------------
+		// item ------------------
 
-		mi_open = gtk_menu_add_item(
+		var item = gtk_menu_add_item(
 			this,
 			_("Open"),
 			_("Open in active pane"),
@@ -123,8 +131,9 @@ public class DeviceContextMenu : Gtk.Menu {
 			sg_icon,
 			sg_label);
 
-		mi_open.activate.connect (() => {
-			//view.open(item, null);
+		item.activate.connect (() => {
+			browse_device(device, pane, window);
+			parent_popup.hide();
 		});
 
 		//mi_open.sensitive = (selected_items.size > 0);
@@ -136,9 +145,9 @@ public class DeviceContextMenu : Gtk.Menu {
 
 		if (device.type == "disk"){ return; }
 
-		// mount ------------------
+		// item ------------------
 
-		mi_mount = gtk_menu_add_item(
+		var item = gtk_menu_add_item(
 			this,
 			_("Mount"),
 			_("Mount this volume"),
@@ -146,11 +155,11 @@ public class DeviceContextMenu : Gtk.Menu {
 			sg_icon,
 			sg_label);
 
-		mi_mount.activate.connect (() => {
-			//view.open(item, null);
+		item.activate.connect (() => {
+			mount_device(device, pane, window);
 		});
 
-		mi_mount.sensitive = !device.is_mounted;
+		item.sensitive = !device.is_mounted;
 	}
 
 	private void add_unmount(){
@@ -159,22 +168,146 @@ public class DeviceContextMenu : Gtk.Menu {
 
 		if (device.type == "disk"){ return; }
 
-		// unmount ------------------
+		// item ------------------
 
-		mi_unmount = gtk_menu_add_item(
+		var item = gtk_menu_add_item(
 			this,
 			_("Unmount"),
 			_("Unmount this volume"),
-			new Gtk.Image.from_pixbuf(IconManager.lookup("media-eject", 16, true)),
+			null,
 			sg_icon,
 			sg_label);
 
-		mi_unmount.activate.connect (() => {
-			//view.open(item, null);
+		item.activate.connect (() => {
+			unmount_device(device, pane, window);
 		});
 
-		mi_unmount.sensitive = device.is_mounted;
+		item.sensitive = device.is_mounted && !device.is_system_device;
 	}
+
+	private void add_lock(){
+
+		log_debug("DeviceContextMenu: add_lock()");
+
+		if (device.type == "disk"){ return; }
+
+		// item  ------------------
+
+		var item = gtk_menu_add_item(
+			this,
+			_("Lock"),
+			_("Unmount and lock encrypted volume"),
+			null,
+			sg_icon,
+			sg_label);
+
+		item.activate.connect (() => {
+			lock_device(device, pane, window);
+		});
+
+		item.sensitive = device.is_on_encrypted_partition;
+	}
+
+	private void add_eject(){
+
+		log_debug("DeviceContextMenu: add_eject()");
+
+		if (device.type != "disk"){ return; }
+
+		// item  ------------------
+
+		var item = gtk_menu_add_item(
+			this,
+			_("Eject"),
+			_("Eject the device so that it can be removed safely"),
+			null,
+			sg_icon,
+			sg_label);
+
+		item.activate.connect (() => {
+			eject_disk(device, pane, window);
+		});
+
+		item.sensitive = (device.type == "disk");
+		
+		//new Gtk.Image.from_pixbuf(IconManager.lookup("media-eject", 16, true))
+	}
+	
+	private void add_manage(){
+
+		log_debug("DeviceContextMenu: add_manage()");
+
+		//if (device.type != "disk"){ return; }
+
+		// item  ------------------
+
+		var item = gtk_menu_add_item(
+			this,
+			_("Manage..."),
+			_("Manage device using GNOME disk utility"),
+			null,
+			sg_icon,
+			sg_label);
+
+		item.activate.connect (() => {
+			manage_disk(device, pane, window);
+			parent_popup.hide();
+		});
+
+		//item.sensitive = (device.type == "disk");
+		
+		//new Gtk.Image.from_pixbuf(IconManager.lookup("media-eject", 16, true))
+	}
+	
+	private void add_format(){
+
+		log_debug("DeviceContextMenu: add_format()");
+
+		//if (device.type != "disk"){ return; }
+
+		// item  ------------------
+
+		var item = gtk_menu_add_item(
+			this,
+			_("Format..."),
+			_("Format device using GNOME disk utility"),
+			null,
+			sg_icon,
+			sg_label);
+
+		item.activate.connect (() => {
+			format_disk(device, pane, window);
+			parent_popup.hide();
+		});
+
+		//item.sensitive = (device.type == "disk");
+		
+		//new Gtk.Image.from_pixbuf(IconManager.lookup("media-eject", 16, true))
+	}
+
+	private void add_unlock(){
+
+		log_debug("DeviceContextMenu: add_lock()");
+
+		if (device.type == "disk"){ return; }
+
+		// item  ------------------
+
+		var item = gtk_menu_add_item(
+			this,
+			_("Mount"),
+			_("Mount this volume"),
+			null,
+			sg_icon,
+			sg_label);
+
+		item.activate.connect (() => {
+			lock_device(device, pane, window);
+		});
+
+		item.sensitive = !device.is_mounted;
+	}
+
 
 	private void add_sync(){
 
@@ -182,9 +315,9 @@ public class DeviceContextMenu : Gtk.Menu {
 
 		if (device.type == "disk"){ return; }
 
-		// sync ------------------
+		// item ------------------
 
-		mi_sync = gtk_menu_add_item(
+		var item = gtk_menu_add_item(
 			this,
 			_("Sync Pending Writes"),
 			_("Write any data waiting to be written to the device"),
@@ -192,11 +325,11 @@ public class DeviceContextMenu : Gtk.Menu {
 			sg_icon,
 			sg_label);
 
-		mi_sync.activate.connect (() => {
+		item.activate.connect (() => {
 			//view.open(item, null);
 		});
 
-		mi_sync.sensitive = device.is_mounted;
+		item.sensitive = device.is_mounted;
 	}
 
 	private void add_flush(){
@@ -205,9 +338,9 @@ public class DeviceContextMenu : Gtk.Menu {
 
 		if (device.type != "disk"){ return; }
 
-		// flush ------------------
+		// item ------------------
 
-		mi_flush = gtk_menu_add_item(
+		var item = gtk_menu_add_item(
 			this,
 			_("Flush Read Buffer"),
 			_("Flushes the read buffer for device"),
@@ -215,11 +348,11 @@ public class DeviceContextMenu : Gtk.Menu {
 			sg_icon,
 			sg_label);
 
-		mi_flush.activate.connect (() => {
+		item.activate.connect (() => {
 			device.flush_buffers();
 		});
 
-		mi_flush.sensitive = device.is_mounted;
+		item.sensitive = device.is_mounted;
 	}
 
 	public bool show_menu(Gdk.EventButton? event) {
@@ -232,6 +365,213 @@ public class DeviceContextMenu : Gtk.Menu {
 		}
 
 		return true;
+	}
+
+	// public static actions
+
+	public static bool browse_device(Device _device, FileViewPane pane, MainWindow window){
+
+		log_debug("DeviceContextMenu: browse_device(): %s".printf(_device.device));
+
+		gtk_set_busy(true, window);
+
+		Device dev = _device;
+
+		if (!dev.is_mounted){
+
+			if (dev.is_encrypted_partition){
+
+				log_debug("prompting user to unlock encrypted partition");
+
+				if (!dev.unlock("", "", window, false)){
+					log_debug("device is null or still in locked state!");
+					gtk_set_busy(false, window);
+					return false; // no message needed
+				}
+				else{
+					dev = dev.children[0];
+				}
+			}
+
+			dev.automount(window);
+			DeviceMonitor.notify_change(); // workaround for GLib.VolumeMonitor not detecting some mount events
+		}
+
+		bool mounted = dev.is_mounted;
+
+		if (mounted){
+			var mp = dev.mount_points[0];
+			pane.view.set_view_path(mp.mount_point);
+		}
+
+		gtk_set_busy(false, window);
+
+		return mounted;
+	}
+
+	public static bool unmount_device(Device _device, FileViewPane pane, MainWindow window){
+
+		log_debug("DeviceContextMenu: unmount_device()");
+
+		gtk_set_busy(true, window);
+
+		Device dev = _device;
+		
+		if (dev.is_mounted){
+			if (dev.unmount(window)){
+				string title =  _("Device Unmounted");
+				OSDNotify.notify_send(title, "", 1000, "low", "info");
+			}
+			DeviceMonitor.notify_change(); // workaround for GLib.VolumeMonitor not detecting some mount events
+		}
+
+		bool mounted = dev.is_mounted;
+
+		gtk_set_busy(false, window);
+
+		return mounted;
+	}
+
+	public static bool mount_device(Device _device, FileViewPane pane, MainWindow window){
+
+		log_debug("DeviceContextMenu: mount_device(): %s".printf(_device.device));
+
+		gtk_set_busy(true, window);
+
+		Device dev = _device;
+
+		if (!dev.is_mounted){
+
+			if (dev.is_encrypted_partition){
+
+				log_debug("prompting user to unlock encrypted partition");
+
+				if (!dev.unlock("", "", window, false)){
+					log_debug("device is null or still in locked state!");
+					gtk_set_busy(false, window);
+					return false; // no message needed
+				}
+				else{
+					dev = dev.children[0];
+				}
+			}
+
+			dev.automount(window);
+			DeviceMonitor.notify_change(); // workaround for GLib.VolumeMonitor not detecting some mount events
+		}
+
+		bool mounted = dev.is_mounted;
+
+		gtk_set_busy(false, window);
+
+		return mounted;
+	}
+
+	public static bool lock_device(Device _device, FileViewPane pane, MainWindow window){
+
+		log_debug("DeviceContextMenu: lock_device(): %s".printf(_device.device));
+
+		gtk_set_busy(true, window);
+
+		Device dev = _device;
+		
+		bool ok = true;
+		string mpath = "";
+
+		// unmount if mounted, and save the mount path
+		if (dev.is_mounted){
+			mpath = dev.mount_points[0].mount_point;
+			if (!dev.unmount(window)){
+				log_debug("device is still mounted!");
+				mpath = "";
+			}
+			else{
+				log_debug("device was unmounted");
+			}
+		}
+		else{
+			log_debug("device is not mounted");
+		}
+
+		// lock the device's parent if device is unmounted and encrypted
+		if (dev.is_on_encrypted_partition){
+			log_debug("locking device...");
+			ok = dev.parent.lock_device(window);
+
+			if (ok){
+				string title =  _("Device Locked");
+				OSDNotify.notify_send(title, "", 1000, "low", "info");
+			}
+		}
+		else{
+			log_debug("device is not an encrypted partition");
+		}
+
+		// reset views that were displaying the mounted path
+		if (mpath.length > 0){
+			log_debug("resetting views for the mount path");
+			//window.reset_views_with_path_prefix(mpath);
+		}
+
+		gtk_set_busy(false, window);
+
+		return ok;
+	}
+
+	public static bool eject_disk(Device _device, FileViewPane pane, MainWindow window){
+	
+		log_debug("DeviceContextMenu: eject_device(): %s".printf(_device.device));
+
+		string txt = _("Eject Disk ?");
+		string msg = _("Partitions on following device will be unmounted and device will be ejected:");
+		msg += "\n\n%s".printf(_device.description_simple(true));
+		if (gtk_messagebox_yes_no(txt, msg, window, false) != Gtk.ResponseType.YES){
+			return false;
+		}
+		
+		gtk_set_busy(true, window);
+
+		//Device dev = _device;
+		
+		bool ok = true;
+		
+		gtk_set_busy(false, window);
+
+		return ok;
+	}
+	
+	public static void manage_disk(Device _device, FileViewPane pane, MainWindow window){
+	
+		log_debug("DeviceContextMenu: manage_disk(): %s".printf(_device.device));
+
+		if (App.tool_exists("gnome-disks")){
+			
+			string cmd = "gnome-disks --block-device %s".printf(_device.device);
+			
+			exec_process_new_session(cmd);
+		}
+		else{
+			string txt = _("Missing Dependency");
+			string msg = _("GNOME Disk Uitility (gnome-disks) is not installed");
+			gtk_messagebox(txt, msg, window, true);
+		}
+	}
+
+	public static void format_disk(Device _device, FileViewPane pane, MainWindow window){
+	
+		log_debug("DeviceContextMenu: format_disk(): %s".printf(_device.device));
+
+		if (App.tool_exists("gnome-disks")){
+			
+			string cmd = "gnome-disks --format-device --block-device %s".printf(_device.device);
+		
+			exec_process_new_session(cmd);
+		}
+		else{
+			string txt = _("Missing Dependency");
+			string msg = _("GNOME Disk Uitility (gnome-disks) is not installed");
+			gtk_messagebox(txt, msg, window, true);
+		}
 	}
 }
 

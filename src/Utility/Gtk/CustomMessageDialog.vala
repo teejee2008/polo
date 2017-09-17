@@ -34,6 +34,7 @@ using TeeJee.System;
 using TeeJee.Misc;
 
 public class CustomMessageDialog : Gtk.Dialog {
+	
 	private Gtk.Box vbox_main;
 	private Gtk.Label lbl_msg;
 	private Gtk.ScrolledWindow sw_msg;
@@ -110,20 +111,20 @@ public class CustomMessageDialog : Gtk.Dialog {
 		hbox_contents.margin = 6;
 		vbox_main.add (hbox_contents);
 
-		string icon_name = "gtk-dialog-info";
+		string icon_name = "dialog-info";
 		
 		switch(msg_type){
 		case Gtk.MessageType.INFO:
-			icon_name = "gtk-dialog-info";
+			icon_name = "dialog-info";
 			break;
 		case Gtk.MessageType.WARNING:
-			icon_name = "gtk-dialog-warning";
+			icon_name = "dialog-warning";
 			break;
 		case Gtk.MessageType.QUESTION:
-			icon_name = "gtk-dialog-question";
+			icon_name = "dialog-question";
 			break;
 		case Gtk.MessageType.ERROR:
-			icon_name = "gtk-dialog-error";
+			icon_name = "dialog-error";
 			break;
 		}
 

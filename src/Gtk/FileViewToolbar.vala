@@ -43,7 +43,7 @@ public enum ToolbarItem{
 	NEW_TAB
 }
 
-public class FileViewToolbar : Gtk.Toolbar {
+public class FileViewToolbar : Gtk.Toolbar, IPaneActive {
 
 	private int icon_size_actual = 16;
 	private Gtk.Menu menu_history;
@@ -90,31 +90,6 @@ public class FileViewToolbar : Gtk.Toolbar {
 	private Gtk.Image img_about;
 	private Gtk.Image img_donate;
 
-
-	private FileViewList? view{
-		get{
-			return (pane == null) ? null : pane.view;
-		}
-	}
-
-	private FileViewPane? pane {
-		get{
-			return App.main_window.active_pane;
-		}
-	}
-
-	private LayoutPanel? panel {
-		get{
-			return (pane == null) ? null : pane.panel;
-		}
-	}
-
-	private MainWindow window{
-		get{
-			return App.main_window;
-		}
-	}
-
 	// contruct
 
 	public FileViewToolbar(){
@@ -125,22 +100,12 @@ public class FileViewToolbar : Gtk.Toolbar {
 
 		margin = 0;
 
-		//gtk_apply_css({ this }, "border-width: 20px;");
-
 		init_toolbar();
 
 		this.set_no_show_all(true);
 
         log_debug("FileViewToolbar():exit");
-
-        //this.configure_event.connect(on_configure_event);
 	}
-
-	/*private bool on_configure_event(Gdk.EventConfigure event){
-		log_debug("x=%d,y=%d".printf(event.x, event.y));
-		window.move(event.x, event.y);
-		return true;
-	}*/
 
 	private void init_toolbar() {
 
@@ -370,50 +335,6 @@ public class FileViewToolbar : Gtk.Toolbar {
 		});
 	}
 
-	/*
-	private void add_toolbar_button_for_layout_dual(){
-
-		var button = new Gtk.MenuToolButton(null,null);
-		button.label = _("Layout");
-		button.set_tooltip_text (_("Switch between one-pane and two-pane view"));
-		button.is_important = true;
-		add(button);
-		btn_dual_pane = button;
-
-		img_dual_pane = new Gtk.Image();
-		button.set_icon_widget(img_dual_pane);
-
-		gtk_apply_css({ button }, "padding-left: 2px; padding-right: 2px;");
-
-		button.clicked.connect(() => {
-			view.toggle_dual_pane();
-		});
-
-		button.set_menu(build_layout_menu());
-	}
-	
-	private void add_toolbar_button_for_show_hidden(){
-
-		var button = new Gtk.ToolButton(null,null);
-		button.label = _("Hidden");
-		button.set_tooltip_text (_("Toggle hidden files"));
-		button.is_important = true;
-		add(button);
-		btn_hidden = button;
-
-		img_hidden = new Gtk.Image();
-		button.set_icon_widget(img_hidden);
-
-		gtk_apply_css({ button }, "padding-left: 2px; padding-right: 2px;");
-
-		button.clicked.connect(() => {
-			view.show_hidden_files = !view.show_hidden_files;
-			view.refresh_hidden();
-		});
-	}
-
-	*/
-
 	// common: used by menubar
 	public Gtk.Menu build_layout_menu(){
 
@@ -553,28 +474,6 @@ public class FileViewToolbar : Gtk.Toolbar {
 		});
 	}
 
-/*
-	private void add_toolbar_button_for_wizard(){
-
-		// btn_settings
-		var button = new Gtk.ToolButton(null,null);
-		button.is_important = true;
-		button.label = _("Wizard");
-		button.set_tooltip_text (_("Initialize Application Settings"));
-		add(button);
-		btn_wizard = button;
-
-		img_wizard = new Gtk.Image();
-		button.set_icon_widget(img_wizard);
-
-		gtk_apply_css({ button }, "padding-left: 2px; padding-right: 2px;");
-
-		button.clicked.connect(() => {
-			window.open_wizard_window();
-		});
-	}
-*/
-
 	private void add_toolbar_button_for_donate(){
 
 		// btn_donate
@@ -650,7 +549,7 @@ public class FileViewToolbar : Gtk.Toolbar {
 
 		log_debug("FileViewToolbar: refresh_items()");
 
-		this.foreach((x) => { this.remove(x); });
+		gtk_container_remove_children(this);
 
 		if (App.toolbar_item_back){
 			this.add(btn_back);
@@ -674,10 +573,6 @@ public class FileViewToolbar : Gtk.Toolbar {
 			this.add(btn_home);
 		}
 
-		//if (App.toolbar_item_dual_pane){
-		//	this.add(btn_dual_pane);
-		//}
-
 		if (App.toolbar_item_view){
 			this.add(btn_view);
 		}
@@ -690,19 +585,13 @@ public class FileViewToolbar : Gtk.Toolbar {
 			this.add(btn_devices);
 		}
 
-		//if (App.toolbar_item_hidden){
-		//	this.add(btn_hidden);
-		//}
-
 		if (App.toolbar_item_terminal){
 			this.add(btn_terminal);
 		}
 
 		if (is_global){
 			this.add(separator_spacer);
-			//this.add(btn_test);
 			this.add(btn_settings);
-			//this.add(btn_wizard);
 			this.add(btn_donate);
 			this.add(btn_about);
 		}
@@ -751,8 +640,6 @@ public class FileViewToolbar : Gtk.Toolbar {
 			this.get_style_context().remove_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
 		}
 
-		//apply_css();
-
 		if (App.toolbar_labels){
 			if (App.toolbar_labels_beside_icons){
 				set_style(ToolbarStyle.BOTH_HORIZ);
@@ -768,11 +655,11 @@ public class FileViewToolbar : Gtk.Toolbar {
 	}
 
 	public void refresh_for_active_pane(){
-		log_debug("FileViewToolbar: refresh_for_active_pane()");
-		btn_next.sensitive = (view != null) && view.history_can_go_forward();
-		btn_back.sensitive = (view != null) && view.history_can_go_back();
-		btn_up.sensitive = (view != null) && view.location_can_go_up();
-		log_debug("FileViewToolbar: refresh_for_active_pane(): ok");
+		//log_debug("FileViewToolbar: refresh_for_active_pane()");
+		//btn_next.sensitive = (view != null) && view.history_can_go_forward();
+		//btn_back.sensitive = (view != null) && view.history_can_go_back();
+		//btn_up.sensitive = (view != null) && view.location_can_go_up();
+		//log_debug("FileViewToolbar: refresh_for_active_pane(): ok");
 	}
 
 	public void set_icon_size_actual(int _icon_size){

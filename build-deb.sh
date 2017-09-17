@@ -1,15 +1,14 @@
 #!/bin/bash
 
-app_name=$(cat app_name)
-pkg_name=$(cat pkg_name)
+backup=`pwd`
+DIR="$( cd "$( dirname "$0" )" && pwd )"
+cd $DIR
+
+. ./BUILD_CONFIG
 
 tgz="../../pbuilder/"
 dsc="../../builds/${pkg_name}*.dsc"
 libs="../../libs"
-
-backup=`pwd`
-DIR="$( cd "$( dirname "$0" )" && pwd )"
-cd $DIR
 
 sh build-source.sh
 
@@ -38,7 +37,7 @@ fi
 
 echo "--------------------------------------------------------------------------"
 
-cp -pv --no-preserve=ownership ./${arch}/${pkg_name}*.deb ./${pkg_name}-${arch}.deb 
+cp -pv --no-preserve=ownership ./${arch}/${pkg_name}*.deb ./${pkg_name}-v${pkg_version}-${arch}.deb 
 
 #check for errors
 if [ $? -ne 0 ]; then

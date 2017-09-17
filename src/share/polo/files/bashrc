@@ -1,0 +1,21 @@
+# executed by Polo when terminal panel is initialized
+# used only if bash is selected as terminal shell in Settings
+
+if [ "$PS1" ]; then
+  if [ "$BASH" ] && [ "$BASH" != "/bin/sh" ]; then
+    # The file bash.bashrc already sets the default PS1.
+    # PS1='\h:\w\$ '
+    if [[ ${EUID} == 0 ]] ; then
+            PS1='${debian_chroot:+($debian_chroot)}\[\033[01;31m\]\t\[\033[01;93m\] \W \[\033[00m\]\$ '
+    else
+            PS1='${debian_chroot:+($debian_chroot)}\[\033[01;32m\]\t\[\033[01;93m\] \W \[\033[00m\]\$ '
+    fi
+  else
+    if [ "`id -u`" -eq 0 ]; then
+      PS1='# '
+    else
+      PS1='$ '
+    fi
+  fi
+fi
+

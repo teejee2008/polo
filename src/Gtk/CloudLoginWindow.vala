@@ -33,7 +33,7 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
-public class CloudLoginWindow : Gtk.Window {
+public class CloudLoginWindow : Gtk.Window, IPaneActive {
 	
 	private Gtk.Box vbox_main;
 	private Gtk.SizeGroup size_label;
@@ -51,31 +51,6 @@ public class CloudLoginWindow : Gtk.Window {
 	private Gtk.Button btn_add;
 	private Gtk.Button btn_cancel;
 	private Gtk.Button btn_finish;
-	
-	private FileViewPane _pane;
-
-	private FileViewList? view{
-		get{
-			return (pane == null) ? null : pane.view;
-		}
-	}
-
-	private FileViewPane? pane {
-		get{
-			if (_pane != null){
-				return _pane;
-			}
-			else{
-				return App.main_window.active_pane;
-			}
-		}
-	}
-
-	private LayoutPanel? panel {
-		get{
-			return (pane == null) ? null : pane.panel;
-		}
-	}
 	
 	public CloudLoginWindow(Gtk.Window _window) {
 		
@@ -151,6 +126,21 @@ public class CloudLoginWindow : Gtk.Window {
 		size_combo.add_widget(txt);
 
 		txt.text = "Account 1";
+
+		txt.changed.connect(() => {
+
+			string text = txt.text;
+
+			log_debug(text);
+
+			for (int i = 0; i < text.length; i++){
+				unichar c = text[i];
+				if (!c.isalnum() && (c != ' ') && (c != '_') && (c != '-')){
+					txt.text = text.replace(c.to_string(),"");
+					return;
+				}
+			}
+		});
 	}
 
 	private void init_type() {
@@ -224,7 +214,7 @@ public class CloudLoginWindow : Gtk.Window {
 		box.add(button);
 		btn_cancel = button;
 		
-		button = new Gtk.Button.with_label(_("Add"));
+		button = new Gtk.Button.with_label(_("Authorize"));
 		button.clicked.connect(btn_add_clicked);
 		box.add(button);
 		btn_add = button;
@@ -271,21 +261,21 @@ public class CloudLoginWindow : Gtk.Window {
 		}
 		
 		string txt = _("Account Authorization");
-		string msg = _("A new browser window will open when you click OK\n\nSelect the account to be added and authorize rclone\n\nClose the browser window when done\n\nCome back to Polo and click 'Finish' to add the account");
+		string msg = _("A new browser window will open.\n\nSelect the account to add and authorize rclone\n\nClose the browser window when done\n\nCome back to Polo and click 'Finish' to add the account");
 		gtk_messagebox(txt, msg, this, false);
 
 		TermBox term;
 
-		if (LOG_DEBUG){
-			var tab = App.main_window.layout_box.panel1.add_new_terminal_tab();
-			term = tab.pane.terminal;
-			terminal = term;
-		}
-		else{
-			term = new TermBox(pane);
-			term.start_shell();
-			terminal = term;
-		}
+		//if (LOG_DEBUG){
+		//	var tab = App.main_window.layout_box.panel1.add_new_terminal_tab();
+		//	term = tab.pane.terminal;
+		//	terminal = term;
+		//}
+		//else{
+		term = new TermBox(pane);
+		term.start_shell();
+		terminal = term;
+		//}
 		sleep(200);
 		
 		term.feed_command("rclone config");
@@ -322,6 +312,9 @@ public class CloudLoginWindow : Gtk.Window {
 	private void btn_finish_clicked(){
 
 		log_debug("btn_finish_clicked()");
+
+		terminal.feed_command("n");
+		sleep(200);
 		
 		terminal.feed_command("y");
 		sleep(200);
@@ -331,7 +324,7 @@ public class CloudLoginWindow : Gtk.Window {
 		
 		terminal.exit_shell();
 
-		App.rclone = new RCloneClient();
+		App.rclone.query_accounts();
 		bool account_added = false;
 		foreach(var acc in App.rclone.accounts){
 			if (acc.name == account_name){
@@ -342,12 +335,12 @@ public class CloudLoginWindow : Gtk.Window {
 
 		if (account_added){
 			string txt = _("Account Added");
-			string msg = _("Account was added successfully.\n\nYou can browse the remote storage by selecting account from 'Cloud' menu");
+			string msg = _("Account was added successfully.\n\nYou can browse the storage by selecting account from 'Cloud' menu");
 			gtk_messagebox(txt, msg, this, false);
 		}
 		else{
 			string txt = _("Account Not Added");
-			string msg = _("Account could not be added");
+			string msg = _("Type 'rclone config' in a terminal window to add accounts manually.");
 			gtk_messagebox(txt, msg, this, true);
 		}
 		

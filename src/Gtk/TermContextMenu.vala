@@ -35,15 +35,28 @@ using TeeJee.Misc;
 
 public class TermContextMenu : Gtk.Menu {
 
+	// reference properties ----------
+
+	protected MainWindow window {
+		get { return App.main_window; }
+	}
+	
+	protected FileViewPane pane;
+
+	protected FileViewList view {
+		get{ return pane.view; }
+	}
+
+	protected LayoutPanel panel {
+		get { return pane.panel; }
+	}
+
+	// -------------------------------
+	
 	private Gee.ArrayList<FileItem> selected_items;
 	private FileItem? selected_item = null;
 	private bool is_trash = false;
 	private bool is_archive = false;
-
-	// parents
-	public FileViewList view;
-	public FileViewPane pane;
-	public MainWindow window;
 
 	public TermContextMenu(FileViewPane parent_pane){
 		
@@ -52,8 +65,6 @@ public class TermContextMenu : Gtk.Menu {
 		margin = 0;
 
 		pane = parent_pane;
-		view = pane.view;
-		window = App.main_window;
 
 		build_menu();
 	}

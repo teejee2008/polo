@@ -37,14 +37,15 @@ using TeeJee.Misc;
 public Main App;
 public const string AppName = "Polo File Manager";
 public const string AppShortName = "polo";
-public const string AppVersion = "17.7.1 (BETA 9)";
-public const string AppWikiVersion = "17.7.1 (BETA 9)"; // update only if wiki page exists
+public const string AppVersion = "17.8 (BETA 10)";
+public const string AppWikiVersion = "17.8 (BETA 10)"; // update only if wiki page exists
 public const string AppAuthor = "Tony George";
 public const string AppAuthorEmail = "teejeetech@gmail.com";
 
-public const int PLUGIN_VER_ISO = 2;
-public const int PLUGIN_VER_PDF = 2;
-public const int PLUGIN_VER_IMAGE = 2;
+public const int PLUGIN_VER_ISO = 3;
+public const int PLUGIN_VER_PDF = 3;
+public const int PLUGIN_VER_IMAGE = 3;
+public const int PLUGIN_VER_YT = 3;
 
 const string GETTEXT_PACKAGE = "";
 const string LOCALE_DIR = "/usr/share/locale";
@@ -53,6 +54,34 @@ extern void exit(int exit_code);
 
 public class Main : GLib.Object {
 
+	// static defaults ---------------------------------
+	
+	public static double LV_FONT_SCALE = 1.0;
+	public static int LV_ICON_SIZE = 32;
+	public static int LV_ROW_SPACING = 0;
+
+	public static int IV_ICON_SIZE = 64;
+	public static int IV_ROW_SPACING = 10;
+	public static int IV_COLUMN_SPACING = 50;
+
+	public static int TV_ICON_SIZE = 80;
+	public static int TV_ROW_SPACING = 2;
+	public static int TV_PADDING = 2;
+
+	public static int DEFAULT_SIDEBAR_POSITION = 200;
+
+	public static string REQUIRED_COLUMNS = "name,indicator,spacer";
+	public static string REQUIRED_COLUMNS_END = "spacer";
+	public static string DEFAULT_COLUMNS = "name,indicator,size,modified,filetype,spacer";
+	public static string DEFAULT_COLUMN_ORDER = "name,indicator,size,modified,filetype,permissions,user,group,access,mimetype,symlink_target,original_path,deletion_date,compressed,md5,spacer";
+
+	public static int SESSION_FORMAT_VERSION = 1;
+	public static int APP_CONFIG_FORMAT_VERSION = 1;
+	public static int APP_CONFIG_FOLDERS_FORMAT_VERSION = 1;
+	public static int APP_CONFIG_ARCHIVE_FORMAT_VERSION = 1;
+
+	// instance ------------------------------------------------
+	
 	public string[] cmd_args;
 	public bool gui_mode = false;
 	
@@ -74,6 +103,8 @@ public class Main : GLib.Object {
 
 	public bool first_run = false;
 	public FileItem fs_root = null;
+	
+	public string gtk_theme = "";
 
 	public AppLock session_lock;
 
@@ -92,7 +123,10 @@ public class Main : GLib.Object {
 	public string app_conf_archive = "";
 	public string app_conf_dir_path = "";
 	public string app_conf_dir_path_open = "";
-	
+	public string app_conf_dir_remotes = "";
+
+	public string rclone_mounts = "";
+
 	//public ArchiveTask archive_task;
 	//public DesktopApp crunchy_app;
 	//public Gee.ArrayList<MimeType> mimetype_list;
@@ -111,15 +145,14 @@ public class Main : GLib.Object {
 	public ViewMode view_mode = ViewMode.ICONS;
 	public bool single_click_activate = false;
 	public bool restore_last_session = true;
-
+	
 	public bool sidebar_visible = true;
 	public bool sidebar_bookmarks = true;
 	public bool sidebar_places = true;
 	public bool sidebar_devices = true;
-	public bool sidebar_dark = false;
-	public bool sidebar_unmount = false;
-	public bool sidebar_lock = false;
-	public int sidebar_position = 150;
+	public bool sidebar_dark = true;
+	public bool sidebar_action_button = false;
+	public int sidebar_position = DEFAULT_SIDEBAR_POSITION;
 	public string sidebar_collapsed_sections = "";
 
 	public bool headerbar_enabled = false;
@@ -130,7 +163,7 @@ public class Main : GLib.Object {
 
 	public bool toolbar_visible = true;
 	public bool toolbar_large_icons = false;
-	public bool toolbar_dark = false;
+	public bool toolbar_dark = true;
 	public bool toolbar_labels = true;
 	public bool toolbar_labels_beside_icons = true;
 
@@ -147,13 +180,13 @@ public class Main : GLib.Object {
 	public bool toolbar_item_devices = true;
 
 	public bool pathbar_unified = false;
-	public bool pathbar_use_buttons = false;
-	public bool pathbar_flat_buttons = false;
+	public PathbarStyle pathbar_style = PathbarStyle.COMPACT; 
 	public bool pathbar_show_bookmarks = true;
 	public bool pathbar_show_disks = true;
 	public bool pathbar_show_back = false;
 	public bool pathbar_show_next = false;
 	public bool pathbar_show_up = false;
+	public bool pathbar_show_home = false;
 	public bool pathbar_show_swap = true;
 	public bool pathbar_show_other = true;
 	public bool pathbar_show_close = true;
@@ -200,10 +233,6 @@ public class Main : GLib.Object {
 	public int kvm_cpu_limit = 80;
 	public string kvm_format = ".qcow2";
 
-	public static string REQUIRED_COLUMNS = "name,indicator,spacer";
-	public static string REQUIRED_COLUMNS_END = "spacer";
-	public static string DEFAULT_COLUMNS = "name,indicator,size,modified,filetype,spacer";
-	public static string DEFAULT_COLUMN_ORDER = "name,indicator,size,modified,filetype,permissions,user,group,access,mimetype,symlink_target,original_path,deletion_date,compressed,md5,spacer";
 	public string selected_columns = DEFAULT_COLUMNS;
 
 	public bool show_hidden_files = false;
@@ -213,29 +242,11 @@ public class Main : GLib.Object {
 	public bool minimize_to_tray = true;
 	public bool autostart = true;
 	
-	// defaults
-	public static double LV_FONT_SCALE = 1.0;
-	public static int LV_ICON_SIZE = 24;
-	public static int LV_ROW_SPACING = 0;
-
-	public static int IV_ICON_SIZE = 64;
-	public static int IV_ROW_SPACING = 10;
-	public static int IV_COLUMN_SPACING = 50;
-
-	public static int TV_ICON_SIZE = 80;
-	public static int TV_ROW_SPACING = 2;
-	public static int TV_PADDING = 2;
-
-	public static int SESSION_FORMAT_VERSION = 1;
-	public static int APP_CONFIG_FORMAT_VERSION = 1;
-	public static int APP_CONFIG_FOLDERS_FORMAT_VERSION = 1;
-	public static int APP_CONFIG_ARCHIVE_FORMAT_VERSION = 1;
-
 	public double listview_font_scale = LV_FONT_SCALE;
 	public int listview_icon_size = LV_ICON_SIZE;
 	public int listview_row_spacing = LV_ROW_SPACING;
 	public bool listview_emblems = false;
-	public bool listview_thumbs = false;
+	public bool listview_thumbs = true;
 	public bool listview_transparency = true;
 
 	public int iconview_icon_size = IV_ICON_SIZE;
@@ -244,6 +255,8 @@ public class Main : GLib.Object {
 	public bool iconview_emblems = true;
 	public bool iconview_thumbs = true;
 	public bool iconview_transparency = true;
+
+	public bool iconview_trim_names = true;
 
 	public int tileview_icon_size = TV_ICON_SIZE;
 	public int tileview_row_spacing = TV_ROW_SPACING;
@@ -354,17 +367,20 @@ public class Main : GLib.Object {
 
 		IconCache.enable();
 
-		app_conf_dir_path = path_combine(user_home, ".config/polo");
-		app_conf_dir_path_open = path_combine(app_conf_dir_path, "open");
-
-		app_conf_path     = path_combine(app_conf_dir_path, "polo.json");
-		app_conf_folders  = path_combine(app_conf_dir_path, "polo-folders.json");
-		app_conf_session  = path_combine(app_conf_dir_path, "polo-last-session.json");
-		app_conf_archive = path_combine(app_conf_dir_path, "polo-archive.json");
-
+		app_conf_dir_path      = path_combine(user_home, ".config/polo");
 		dir_create(app_conf_dir_path);
+		
+		app_conf_dir_path_open = path_combine(app_conf_dir_path, "open");
 		dir_create(app_conf_dir_path_open);
 		
+		app_conf_dir_remotes   = path_combine(app_conf_dir_path, "remotes");
+		dir_create(app_conf_dir_remotes);
+		
+		app_conf_path    = path_combine(app_conf_dir_path, "polo.json");
+		app_conf_folders = path_combine(app_conf_dir_path, "polo-folders.json");
+		app_conf_session = path_combine(app_conf_dir_path, "polo-last-session.json");
+		app_conf_archive = path_combine(app_conf_dir_path, "polo-archive.json");
+
 		supported_formats_open = {
 			".tar",
 			".tar.gz", ".tgz",
@@ -411,7 +427,8 @@ public class Main : GLib.Object {
 		trashcan.query_items(false);
 
 		rclone = new RCloneClient();
-
+		rclone_mounts = rclone.rclone_mounts;
+		
 		/*foreach(var app in DesktopApp.applist.values){
 			if (app.desktop_file_name == "crunchy.desktop"){
 				crunchy_app = app;
@@ -427,6 +444,14 @@ public class Main : GLib.Object {
 		string dst_path = path_combine(user_home, ".config/fish/functions/fish_prompt.fish");
 		if (!file_exists(dst_path)){
 			dir_create(path_combine(user_home, ".config/fish/functions"));
+			file_copy(src_path, dst_path);
+			chown(dst_path, user_name, user_name, false, null);
+			chmod(dst_path, "u+rw", null);
+		}
+
+		src_path = path_combine(share_dir, "files/bashrc");
+		dst_path = path_combine(app_conf_dir_path, "bashrc");
+		if (!file_exists(dst_path)){
 			file_copy(src_path, dst_path);
 			chown(dst_path, user_name, user_name, false, null);
 			chmod(dst_path, "u+rw", null);
@@ -450,7 +475,7 @@ public class Main : GLib.Object {
 	public bool check_dependencies(out string msg) {
 		msg = "";
 
-		string[] dependencies = { "grep", "find", "xdg-mime" }; //"7z", "tar", "gzip",
+		string[] dependencies = { "grep", "awk", "find", "xdg-mime", "7z" }; //"7z", "tar", "gzip",
 
 		foreach(string cmd_tool in dependencies) {
 			if (!command_exists(cmd_tool)) {
@@ -491,7 +516,11 @@ public class Main : GLib.Object {
 		tools["polo-iso"] = new Tool("polo-iso","polo-iso","Polo ISO Plugin (Donation)");
 		tools["polo-pdf"] = new Tool("polo-pdf","polo-pdf","Polo PDF Plugin (Donation)");
 		tools["polo-image"] = new Tool("polo-image","polo-image","Polo Image Plugin (Donation)");
-		
+		tools["polo-yt"] = new Tool("polo-yt","polo-yt","Polo Video Download Plugin (Donation)");
+		tools["gnome-disks"] = new Tool("gnome-disks","gnome-disks","GNOME Disk Utility");
+		tools["rclone"] = new Tool("rclone","rclone","rsync for Cloud Storage");
+		tools["youtube-dl"] = new Tool("youtube-dl","youtube-dl","youtube-dl Downloader");
+
 		check_all_tools();
 	}
 
@@ -503,9 +532,9 @@ public class Main : GLib.Object {
 		}
 	}
 
-	public bool tool_exists(string cmd){
+	public bool tool_exists(string cmd, bool check_again = false){
 		
-		if (tools.keys.contains(cmd)){
+		if (tools.keys.contains(cmd) && !check_again){
 			
 			var tool = tools[cmd];
 			return tool.available;
@@ -520,6 +549,7 @@ public class Main : GLib.Object {
 		plugins["iso"] = new Plugin("polo-iso", "Polo ISO Plugin", PLUGIN_VER_ISO);
 		plugins["pdf"] = new Plugin("polo-pdf", "Polo PDF Plugin", PLUGIN_VER_PDF);
 		plugins["image"] = new Plugin("polo-image", "Polo Image Plugin", PLUGIN_VER_IMAGE);
+		plugins["yt"] = new Plugin("polo-yt", "Polo Video Download Plugin", PLUGIN_VER_YT);
 
 		check_all_plugins();
 	}
@@ -549,7 +579,9 @@ public class Main : GLib.Object {
 		config.set_string_member("run-count", run_count.to_string());
 
 		config.set_int_member("format-version", (int64) APP_CONFIG_FORMAT_VERSION);
-
+		
+		config.set_string_member("gtk_theme", gtk_theme);
+		
 		config.set_string_member("middlebar_visible", middlebar_visible.to_string());
 		config.set_string_member("sidebar_visible", sidebar_visible.to_string());
 		config.set_string_member("sidebar_dark", sidebar_dark.to_string());
@@ -557,8 +589,7 @@ public class Main : GLib.Object {
 		config.set_string_member("sidebar_bookmarks", sidebar_bookmarks.to_string());
 		config.set_string_member("sidebar_devices", sidebar_devices.to_string());
 		config.set_string_member("sidebar_position", sidebar_position.to_string());
-		config.set_string_member("sidebar_unmount", sidebar_unmount.to_string());
-		config.set_string_member("sidebar_lock", sidebar_lock.to_string());
+		config.set_string_member("sidebar_action_button", sidebar_action_button.to_string());
 		config.set_string_member("sidebar_collapsed_sections", sidebar_collapsed_sections);
 		
 		//save headerbar_enabled_temp instead of headerbar_enabled
@@ -583,6 +614,8 @@ public class Main : GLib.Object {
 		config.set_string_member("iconview_emblems", iconview_emblems.to_string());
 		config.set_string_member("iconview_thumbs", iconview_thumbs.to_string());
 		config.set_string_member("iconview_transparency", iconview_transparency.to_string());
+
+		config.set_string_member("iconview_trim_names", iconview_trim_names.to_string());
 
 		config.set_string_member("tileview_icon_size", tileview_icon_size.to_string());
 		config.set_string_member("tileview_row_spacing", tileview_row_spacing.to_string());
@@ -611,14 +644,13 @@ public class Main : GLib.Object {
 		config.set_string_member("toolbar_item_devices", toolbar_item_devices.to_string());
 
 		config.set_string_member("pathbar_unified", pathbar_unified.to_string());
-		config.set_string_member("pathbar_use_buttons", pathbar_use_buttons.to_string());
-		config.set_string_member("pathbar_flat_buttons", pathbar_flat_buttons.to_string());
-
+		config.set_string_member("pathbar_style", pathbar_style.to_string());
 		config.set_string_member("pathbar_show_bookmarks", pathbar_show_bookmarks.to_string());
 		config.set_string_member("pathbar_show_disks", pathbar_show_disks.to_string());
 		config.set_string_member("pathbar_show_back", pathbar_show_back.to_string());
 		config.set_string_member("pathbar_show_next", pathbar_show_next.to_string());
 		config.set_string_member("pathbar_show_up", pathbar_show_up.to_string());
+		config.set_string_member("pathbar_show_home", pathbar_show_home.to_string());
 		config.set_string_member("pathbar_show_swap", pathbar_show_swap.to_string());
 		config.set_string_member("pathbar_show_other", pathbar_show_other.to_string());
 		config.set_string_member("pathbar_show_close", pathbar_show_close.to_string());
@@ -698,6 +730,7 @@ public class Main : GLib.Object {
 		var f = File.new_for_path(app_conf_path);
 		if (!f.query_exists()) {
 			first_run = true;
+			load_app_config_finish();
 			return;
 		}
 
@@ -722,29 +755,30 @@ public class Main : GLib.Object {
 		set_numeric_locale("C"); // switch numeric locale
 
 		app_version_in_config = json_get_string(config, "app-version", "0");
-		run_count = json_get_int(config, "run-count", 0);
+		run_count = json_get_int_from_string(config, "run-count", 0);
 		// set dummy version number, if config file exists but parameter is missing
 		// this will trigger display of change log file
-
-		middlebar_visible = json_get_bool(config, "middlebar_visible", middlebar_visible);
-		sidebar_visible = json_get_bool(config, "sidebar_visible", sidebar_visible);
-		sidebar_dark = json_get_bool(config, "sidebar_dark", sidebar_dark);
-		sidebar_places = json_get_bool(config, "sidebar_places", sidebar_places);
-		sidebar_bookmarks = json_get_bool(config, "sidebar_bookmarks", sidebar_bookmarks);
-		sidebar_devices = json_get_bool(config, "sidebar_devices", sidebar_devices);
-		sidebar_position = json_get_int(config, "sidebar_position", sidebar_position);
-		sidebar_unmount = json_get_bool(config, "sidebar_unmount", sidebar_unmount);
-		sidebar_lock = json_get_bool(config, "sidebar_lock", sidebar_lock);
-
-		headerbar_enabled = json_get_bool(config, "headerbar_enabled", headerbar_enabled);
-		headerbar_enabled_temp = headerbar_enabled;
-		headerbar_window_buttons_left = json_get_bool(config, "headerbar_window_buttons_left", headerbar_window_buttons_left);
 		
-		show_hidden_files = json_get_bool(config, "show_hidden_files", show_hidden_files);
-		panel_layout = (PanelLayout) json_get_int(config, "panel_layout", panel_layout);
+		gtk_theme = json_get_string(config, "gtk_theme", gtk_theme);
+		
+		middlebar_visible = json_get_bool_from_string(config, "middlebar_visible", middlebar_visible);
+		sidebar_visible = json_get_bool_from_string(config, "sidebar_visible", sidebar_visible);
+		sidebar_dark = json_get_bool_from_string(config, "sidebar_dark", sidebar_dark);
+		sidebar_places = json_get_bool_from_string(config, "sidebar_places", sidebar_places);
+		sidebar_bookmarks = json_get_bool_from_string(config, "sidebar_bookmarks", sidebar_bookmarks);
+		sidebar_devices = json_get_bool_from_string(config, "sidebar_devices", sidebar_devices);
+		sidebar_position = json_get_int_from_string(config, "sidebar_position", sidebar_position);
+		sidebar_action_button = json_get_bool_from_string(config, "sidebar_action_button", sidebar_action_button);
+
+		headerbar_enabled = json_get_bool_from_string(config, "headerbar_enabled", headerbar_enabled);
+		headerbar_enabled_temp = headerbar_enabled;
+		headerbar_window_buttons_left = json_get_bool_from_string(config, "headerbar_window_buttons_left", headerbar_window_buttons_left);
+		
+		show_hidden_files = json_get_bool_from_string(config, "show_hidden_files", show_hidden_files);
+		panel_layout = (PanelLayout) json_get_int_from_string(config, "panel_layout", panel_layout);
 		shell_default = json_get_string(config, "shell_default", shell_default);
 		
-		int vmode = json_get_int(config, "view_mode", view_mode);
+		int vmode = json_get_int_from_string(config, "view_mode", view_mode);
 		if (vmode >= 1 && vmode <= 4){
 			view_mode = (ViewMode) vmode;
 		}
@@ -753,127 +787,167 @@ public class Main : GLib.Object {
 		}
 
 		listview_font_scale = json_get_double(config, "listview_font_scale", LV_FONT_SCALE);
-		listview_icon_size = json_get_int(config, "listview_icon_size", LV_ICON_SIZE);
-		listview_row_spacing = json_get_int(config, "listview_row_spacing", LV_ROW_SPACING);
-		listview_emblems = json_get_bool(config, "listview_emblems", listview_emblems);
-		listview_thumbs = json_get_bool(config, "listview_thumbs", listview_thumbs);
-		listview_transparency = json_get_bool(config, "listview_transparency", listview_transparency);
+		listview_icon_size = json_get_int_from_string(config, "listview_icon_size", LV_ICON_SIZE);
+		listview_row_spacing = json_get_int_from_string(config, "listview_row_spacing", LV_ROW_SPACING);
+		listview_emblems = json_get_bool_from_string(config, "listview_emblems", listview_emblems);
+		listview_thumbs = json_get_bool_from_string(config, "listview_thumbs", listview_thumbs);
+		listview_transparency = json_get_bool_from_string(config, "listview_transparency", listview_transparency);
 
-		iconview_icon_size = json_get_int(config, "iconview_icon_size", IV_ICON_SIZE);
-		iconview_row_spacing = json_get_int(config, "iconview_row_spacing", IV_ROW_SPACING);
-		iconview_column_spacing = json_get_int(config, "iconview_column_spacing", IV_COLUMN_SPACING);
-		iconview_emblems = json_get_bool(config, "iconview_emblems", iconview_emblems);
-		iconview_thumbs = json_get_bool(config, "iconview_thumbs", iconview_thumbs);
-		iconview_transparency = json_get_bool(config, "iconview_transparency", iconview_transparency);
+		iconview_icon_size = json_get_int_from_string(config, "iconview_icon_size", IV_ICON_SIZE);
+		iconview_row_spacing = json_get_int_from_string(config, "iconview_row_spacing", IV_ROW_SPACING);
+		iconview_column_spacing = json_get_int_from_string(config, "iconview_column_spacing", IV_COLUMN_SPACING);
+		iconview_emblems = json_get_bool_from_string(config, "iconview_emblems", iconview_emblems);
+		iconview_thumbs = json_get_bool_from_string(config, "iconview_thumbs", iconview_thumbs);
+		iconview_transparency = json_get_bool_from_string(config, "iconview_transparency", iconview_transparency);
 
-		tileview_icon_size = json_get_int(config, "tileview_icon_size", TV_ICON_SIZE);
-		tileview_row_spacing = json_get_int(config, "tileview_row_spacing", TV_ROW_SPACING);
-		tileview_padding = json_get_int(config, "tileview_padding", TV_PADDING);
-		listview_emblems = json_get_bool(config, "listview_emblems", listview_emblems);
-		listview_thumbs = json_get_bool(config, "listview_thumbs", listview_thumbs);
-		listview_transparency = json_get_bool(config, "listview_transparency", listview_transparency);
+		iconview_trim_names = json_get_bool_from_string(config, "iconview_trim_names", iconview_trim_names);
 
-		toolbar_visible = json_get_bool(config, "toolbar_visible", toolbar_visible);
-		toolbar_large_icons = json_get_bool(config, "toolbar_large_icons", toolbar_large_icons);
-		toolbar_dark = json_get_bool(config, "toolbar_dark", toolbar_dark);
-		//toolbar_unified = json_get_bool(config, "toolbar_unified", toolbar_unified);
-		toolbar_labels = json_get_bool(config, "toolbar_labels", toolbar_labels);
-		toolbar_labels_beside_icons = json_get_bool(config, "toolbar_labels_beside_icons", toolbar_labels_beside_icons);
+		tileview_icon_size = json_get_int_from_string(config, "tileview_icon_size", TV_ICON_SIZE);
+		tileview_row_spacing = json_get_int_from_string(config, "tileview_row_spacing", TV_ROW_SPACING);
+		tileview_padding = json_get_int_from_string(config, "tileview_padding", TV_PADDING);
+		listview_emblems = json_get_bool_from_string(config, "listview_emblems", listview_emblems);
+		listview_thumbs = json_get_bool_from_string(config, "listview_thumbs", listview_thumbs);
+		listview_transparency = json_get_bool_from_string(config, "listview_transparency", listview_transparency);
 
-		toolbar_item_back = json_get_bool(config, "toolbar_item_back", toolbar_item_back);
-		toolbar_item_next = json_get_bool(config, "toolbar_item_next", toolbar_item_next);
-		toolbar_item_up = json_get_bool(config, "toolbar_item_up", toolbar_item_up);
-		toolbar_item_reload = json_get_bool(config, "toolbar_item_reload", toolbar_item_reload);
-		toolbar_item_home = json_get_bool(config, "toolbar_item_home", toolbar_item_home);
-		toolbar_item_terminal = json_get_bool(config, "toolbar_item_terminal", toolbar_item_terminal);
-		toolbar_item_hidden = json_get_bool(config, "toolbar_item_hidden", toolbar_item_hidden);
-		toolbar_item_dual_pane = json_get_bool(config, "toolbar_item_dual_pane", toolbar_item_dual_pane);
-		toolbar_item_view = json_get_bool(config, "toolbar_item_view", toolbar_item_view);
-		toolbar_item_bookmarks = json_get_bool(config, "toolbar_item_bookmarks", toolbar_item_bookmarks);
-		toolbar_item_devices = json_get_bool(config, "toolbar_item_devices", toolbar_item_devices);
+		toolbar_visible = json_get_bool_from_string(config, "toolbar_visible", toolbar_visible);
+		toolbar_large_icons = json_get_bool_from_string(config, "toolbar_large_icons", toolbar_large_icons);
+		toolbar_dark = json_get_bool_from_string(config, "toolbar_dark", toolbar_dark);
+		//toolbar_unified = json_get_bool_from_string(config, "toolbar_unified", toolbar_unified);
+		toolbar_labels = json_get_bool_from_string(config, "toolbar_labels", toolbar_labels);
+		toolbar_labels_beside_icons = json_get_bool_from_string(config, "toolbar_labels_beside_icons", toolbar_labels_beside_icons);
 
-		pathbar_unified = json_get_bool(config, "pathbar_unified", pathbar_unified);
-		pathbar_use_buttons = json_get_bool(config, "pathbar_use_buttons", pathbar_use_buttons);
-		pathbar_flat_buttons = json_get_bool(config, "pathbar_flat_buttons", pathbar_flat_buttons);
-		pathbar_show_bookmarks = json_get_bool(config, "pathbar_show_bookmarks", pathbar_show_bookmarks);
-		pathbar_show_disks = json_get_bool(config, "pathbar_show_disks", pathbar_show_disks);
-		pathbar_show_back = json_get_bool(config, "pathbar_show_back", pathbar_show_back);
-		pathbar_show_next = json_get_bool(config, "pathbar_show_next", pathbar_show_next);
-		pathbar_show_up = json_get_bool(config, "pathbar_show_up", pathbar_show_up);
-		pathbar_show_swap = json_get_bool(config, "pathbar_show_swap", pathbar_show_swap);
-		pathbar_show_other = json_get_bool(config, "pathbar_show_other", pathbar_show_other);
-		pathbar_show_close = json_get_bool(config, "pathbar_show_close", pathbar_show_close);
+		toolbar_item_back = json_get_bool_from_string(config, "toolbar_item_back", toolbar_item_back);
+		toolbar_item_next = json_get_bool_from_string(config, "toolbar_item_next", toolbar_item_next);
+		toolbar_item_up = json_get_bool_from_string(config, "toolbar_item_up", toolbar_item_up);
+		toolbar_item_reload = json_get_bool_from_string(config, "toolbar_item_reload", toolbar_item_reload);
+		toolbar_item_home = json_get_bool_from_string(config, "toolbar_item_home", toolbar_item_home);
+		toolbar_item_terminal = json_get_bool_from_string(config, "toolbar_item_terminal", toolbar_item_terminal);
+		toolbar_item_hidden = json_get_bool_from_string(config, "toolbar_item_hidden", toolbar_item_hidden);
+		toolbar_item_dual_pane = json_get_bool_from_string(config, "toolbar_item_dual_pane", toolbar_item_dual_pane);
+		toolbar_item_view = json_get_bool_from_string(config, "toolbar_item_view", toolbar_item_view);
+		toolbar_item_bookmarks = json_get_bool_from_string(config, "toolbar_item_bookmarks", toolbar_item_bookmarks);
+		toolbar_item_devices = json_get_bool_from_string(config, "toolbar_item_devices", toolbar_item_devices);
 
-		statusbar_unified = json_get_bool(config, "statusbar_unified", statusbar_unified);
+		pathbar_unified = json_get_bool_from_string(config, "pathbar_unified", pathbar_unified);
 
-		tabs_bottom = json_get_bool(config, "tabs_bottom", tabs_bottom);
-		tabs_close_visible = json_get_bool(config, "tabs_close_visible", tabs_close_visible);
+		var text = json_get_string(config, "pathbar_style", "compact");
+		pathbar_style = PathbarStyle.from_string(text);
+
+		pathbar_show_bookmarks = json_get_bool_from_string(config, "pathbar_show_bookmarks", pathbar_show_bookmarks);
+		pathbar_show_disks = json_get_bool_from_string(config, "pathbar_show_disks", pathbar_show_disks);
+		pathbar_show_back = json_get_bool_from_string(config, "pathbar_show_back", pathbar_show_back);
+		pathbar_show_next = json_get_bool_from_string(config, "pathbar_show_next", pathbar_show_next);
+		pathbar_show_up = json_get_bool_from_string(config, "pathbar_show_up", pathbar_show_up);
+		pathbar_show_home = json_get_bool_from_string(config, "pathbar_show_home", pathbar_show_home);
+		pathbar_show_swap = json_get_bool_from_string(config, "pathbar_show_swap", pathbar_show_swap);
+		pathbar_show_other = json_get_bool_from_string(config, "pathbar_show_other", pathbar_show_other);
+		pathbar_show_close = json_get_bool_from_string(config, "pathbar_show_close", pathbar_show_close);
+
+		statusbar_unified = json_get_bool_from_string(config, "statusbar_unified", statusbar_unified);
+
+		tabs_bottom = json_get_bool_from_string(config, "tabs_bottom", tabs_bottom);
+		tabs_close_visible = json_get_bool_from_string(config, "tabs_close_visible", tabs_close_visible);
 
 		var term_font_string = json_get_string(config, "term_font", TERM_FONT_DESC);
 		term_font = Pango.FontDescription.from_string(term_font_string);
 		
 		term_fg_color = json_get_string(config, "term_fg_color", term_fg_color);
 		term_bg_color = json_get_string(config, "term_bg_color", term_bg_color);
-		term_enable_network = json_get_bool(config, "term_enable_network", term_enable_network);
-		term_enable_gui = json_get_bool(config, "term_enable_gui", term_enable_gui);
+		term_enable_network = json_get_bool_from_string(config, "term_enable_network", term_enable_network);
+		term_enable_gui = json_get_bool_from_string(config, "term_enable_gui", term_enable_gui);
 
-		kvm_enable = json_get_bool(config, "kvm_enable", kvm_enable);
+		kvm_enable = json_get_bool_from_string(config, "kvm_enable", kvm_enable);
 		kvm_cpu = json_get_string(config, "kvm_cpu", kvm_cpu);
-		kvm_smp = json_get_int(config, "kvm_smp", kvm_smp);
-		kvm_cpu_limit = json_get_int(config, "kvm_cpu_limit", kvm_cpu_limit);
+		kvm_smp = json_get_int_from_string(config, "kvm_smp", kvm_smp);
+		kvm_cpu_limit = json_get_int_from_string(config, "kvm_cpu_limit", kvm_cpu_limit);
 		kvm_vga = json_get_string(config, "kvm_vga", kvm_vga);
-		kvm_mem = json_get_int(config, "kvm_mem", kvm_mem);
+		kvm_mem = json_get_int_from_string(config, "kvm_mem", kvm_mem);
 		
 		selected_columns = json_get_string(config, "selected_columns", selected_columns);
 		selected_columns = selected_columns.replace(" ",""); // remove spaces
 
-		maximise_on_startup = json_get_bool(config, "maximise_on_startup", maximise_on_startup);
-		//single_click_activate = json_get_bool(config, "single_click_activate", single_click_activate);
-		restore_last_session = json_get_bool(config, "restore_last_session", restore_last_session);
-		single_instance_mode = json_get_bool(config, "single_instance_mode", single_instance_mode);
-		minimize_to_tray = json_get_bool(config, "minimize_to_tray", minimize_to_tray);
-		autostart = json_get_bool(config, "autostart", autostart);
+		maximise_on_startup = json_get_bool_from_string(config, "maximise_on_startup", maximise_on_startup);
+		//single_click_activate = json_get_bool_from_string(config, "single_click_activate", single_click_activate);
+		restore_last_session = json_get_bool_from_string(config, "restore_last_session", restore_last_session);
+		single_instance_mode = json_get_bool_from_string(config, "single_instance_mode", single_instance_mode);
+		minimize_to_tray = json_get_bool_from_string(config, "minimize_to_tray", minimize_to_tray);
+		autostart = json_get_bool_from_string(config, "autostart", autostart);
 
-		confirm_delete = json_get_bool(config, "confirm_delete", confirm_delete);
-		confirm_trash = json_get_bool(config, "confirm_trash", confirm_trash);
+		confirm_delete = json_get_bool_from_string(config, "confirm_delete", confirm_delete);
+		confirm_trash = json_get_bool_from_string(config, "confirm_trash", confirm_trash);
 
-		overwrite_pdf_split = json_get_bool(config, "overwrite_pdf_split", overwrite_pdf_split);
-		overwrite_pdf_merge = json_get_bool(config, "overwrite_pdf_merge", overwrite_pdf_merge);
-		overwrite_pdf_compress = json_get_bool(config, "overwrite_pdf_compress", overwrite_pdf_compress);
-		overwrite_pdf_uncompress = json_get_bool(config, "overwrite_pdf_uncompress", overwrite_pdf_uncompress);
-		overwrite_pdf_protect = json_get_bool(config, "overwrite_pdf_protect", overwrite_pdf_protect);
-		overwrite_pdf_unprotect = json_get_bool(config, "overwrite_pdf_unprotect", overwrite_pdf_unprotect);
-		overwrite_pdf_decolor = json_get_bool(config, "overwrite_pdf_decolor", overwrite_pdf_decolor);
-		overwrite_pdf_rotate = json_get_bool(config, "overwrite_pdf_rotate", overwrite_pdf_rotate);
-		overwrite_pdf_optimize = json_get_bool(config, "overwrite_pdf_optimize", overwrite_pdf_optimize);
+		overwrite_pdf_split = json_get_bool_from_string(config, "overwrite_pdf_split", overwrite_pdf_split);
+		overwrite_pdf_merge = json_get_bool_from_string(config, "overwrite_pdf_merge", overwrite_pdf_merge);
+		overwrite_pdf_compress = json_get_bool_from_string(config, "overwrite_pdf_compress", overwrite_pdf_compress);
+		overwrite_pdf_uncompress = json_get_bool_from_string(config, "overwrite_pdf_uncompress", overwrite_pdf_uncompress);
+		overwrite_pdf_protect = json_get_bool_from_string(config, "overwrite_pdf_protect", overwrite_pdf_protect);
+		overwrite_pdf_unprotect = json_get_bool_from_string(config, "overwrite_pdf_unprotect", overwrite_pdf_unprotect);
+		overwrite_pdf_decolor = json_get_bool_from_string(config, "overwrite_pdf_decolor", overwrite_pdf_decolor);
+		overwrite_pdf_rotate = json_get_bool_from_string(config, "overwrite_pdf_rotate", overwrite_pdf_rotate);
+		overwrite_pdf_optimize = json_get_bool_from_string(config, "overwrite_pdf_optimize", overwrite_pdf_optimize);
 
-		overwrite_image_optimize_png = json_get_bool(config, "overwrite_image_optimize_png", overwrite_image_optimize_png);
-		overwrite_image_reduce_jpeg = json_get_bool(config, "overwrite_image_reduce_jpeg", overwrite_image_reduce_jpeg);
-		overwrite_image_resize = json_get_bool(config, "overwrite_image_resize", overwrite_image_resize);
-		overwrite_image_rotate = json_get_bool(config, "overwrite_image_rotate", overwrite_image_rotate);
-		overwrite_image_convert = json_get_bool(config, "overwrite_image_convert", overwrite_image_convert);
-		overwrite_image_decolor = json_get_bool(config, "overwrite_image_decolor", overwrite_image_decolor);
-		overwrite_image_boost_color = json_get_bool(config, "overwrite_image_boost_color", overwrite_image_boost_color);
-		overwrite_image_reduce_color = json_get_bool(config, "overwrite_image_reduce_color", overwrite_image_reduce_color);
+		overwrite_image_optimize_png = json_get_bool_from_string(config, "overwrite_image_optimize_png", overwrite_image_optimize_png);
+		overwrite_image_reduce_jpeg = json_get_bool_from_string(config, "overwrite_image_reduce_jpeg", overwrite_image_reduce_jpeg);
+		overwrite_image_resize = json_get_bool_from_string(config, "overwrite_image_resize", overwrite_image_resize);
+		overwrite_image_rotate = json_get_bool_from_string(config, "overwrite_image_rotate", overwrite_image_rotate);
+		overwrite_image_convert = json_get_bool_from_string(config, "overwrite_image_convert", overwrite_image_convert);
+		overwrite_image_decolor = json_get_bool_from_string(config, "overwrite_image_decolor", overwrite_image_decolor);
+		overwrite_image_boost_color = json_get_bool_from_string(config, "overwrite_image_boost_color", overwrite_image_boost_color);
+		overwrite_image_reduce_color = json_get_bool_from_string(config, "overwrite_image_reduce_color", overwrite_image_reduce_color);
 
-		middlebar_visible = json_get_bool(config, "middlebar_visible", middlebar_visible);
-		sidebar_visible = json_get_bool(config, "sidebar_visible", sidebar_visible);
-		sidebar_dark = json_get_bool(config, "sidebar_dark", sidebar_dark);
-		sidebar_places = json_get_bool(config, "sidebar_places", sidebar_places);
-		sidebar_bookmarks = json_get_bool(config, "sidebar_bookmarks", sidebar_bookmarks);
-		sidebar_devices = json_get_bool(config, "sidebar_devices", sidebar_devices);
-		sidebar_position = json_get_int(config, "sidebar_position", sidebar_position);
-		sidebar_unmount = json_get_bool(config, "sidebar_unmount", sidebar_unmount);
-		sidebar_lock = json_get_bool(config, "sidebar_lock", sidebar_lock);
+		middlebar_visible = json_get_bool_from_string(config, "middlebar_visible", middlebar_visible);
+		sidebar_visible = json_get_bool_from_string(config, "sidebar_visible", sidebar_visible);
+		sidebar_dark = json_get_bool_from_string(config, "sidebar_dark", sidebar_dark);
+		sidebar_places = json_get_bool_from_string(config, "sidebar_places", sidebar_places);
+		sidebar_bookmarks = json_get_bool_from_string(config, "sidebar_bookmarks", sidebar_bookmarks);
+		sidebar_devices = json_get_bool_from_string(config, "sidebar_devices", sidebar_devices);
+		sidebar_position = json_get_int_from_string(config, "sidebar_position", sidebar_position);
+		sidebar_action_button = json_get_bool_from_string(config, "sidebar_action_button", sidebar_action_button);
 		sidebar_collapsed_sections = json_get_string(config, "sidebar_collapsed_sections", sidebar_collapsed_sections);
 		
 		load_folder_selections();
 
-		GtkBookmark.load_bookmarks(user_name, true);
+		load_app_config_finish();
 
 		log_debug(_("App config loaded") + ": '%s'".printf(this.app_conf_path));
 
 		set_numeric_locale(""); // reset numeric locale
+	}
+
+	private void load_app_config_finish(){
+		
+		GtkBookmark.load_bookmarks(user_name, true);
+		
+		init_gtk_themes();
+	}
+	
+	private void init_gtk_themes(){
+		
+		GtkTheme.query(user_name);
+
+		if (!GtkTheme.has_theme("Arc-Darker-Polo")){
+				
+			log_debug("Main(): theme not found: Arc-Darker-Polo");
+			log_debug("Main(): installing theme...");
+			
+			string sh_file = "/usr/share/polo/files/gtk-theme/install-gtk-theme";
+			Posix.system(sh_file);
+			
+			GtkTheme.query(user_name); // requery
+		}
+		else{
+			log_debug("Main(): theme found: Arc-Darker-Polo");
+		}
+
+		if (gtk_theme.length == 0){
+			
+			log_debug("Main(): gtk_theme not selected");
+			GtkTheme.set_gtk_theme_preferred();
+			gtk_theme = GtkTheme.get_gtk_theme();
+		}
+		else {
+			GtkTheme.set_gtk_theme(gtk_theme);
+		}
 	}
 	
 	public void increment_run_count() {
@@ -1064,7 +1138,7 @@ public class Main : GLib.Object {
 		task.word_size = json_get_string(config, "word_size", task.word_size);
 		task.block_size = json_get_string(config, "block_size", task.block_size);
 		task.passes = json_get_string(config, "passes", task.passes);
-		task.encrypt_header = json_get_bool(config, "encrypt_header", task.encrypt_header);
+		task.encrypt_header = json_get_bool_from_string(config, "encrypt_header", task.encrypt_header);
 		task.encrypt_method = json_get_string(config, "encrypt_method", task.encrypt_method);
 		task.split_mb = json_get_string(config, "split_mb", task.split_mb);
 		

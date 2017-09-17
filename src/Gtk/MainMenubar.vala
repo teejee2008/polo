@@ -33,31 +33,7 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
-public class MainMenuBar : Gtk.MenuBar {
-
-	private FileViewList? view{
-		get{
-			return (pane == null) ? null : pane.view;
-		}
-	}
-
-	private FileViewPane? pane {
-		get{
-			return App.main_window.active_pane;
-		}
-	}
-
-	private LayoutPanel? panel {
-		get{
-			return (pane == null) ? null : pane.panel;
-		}
-	}
-
-	private MainWindow window{
-		get{
-			return App.main_window;
-		}
-	}
+public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 
 	private Gtk.Menu? menu = null;
 	private bool menu_mode = false;
@@ -67,6 +43,8 @@ public class MainMenuBar : Gtk.MenuBar {
 	public signal void context_term();
 
 	public signal void context_normal();
+
+	public signal void context_cloud();
 
 	public signal void context_trash();
 
@@ -99,7 +77,7 @@ public class MainMenuBar : Gtk.MenuBar {
 		add_menu_edit(menu_shell);
 		add_menu_view(menu_shell);
 		add_menu_go(menu_shell);
-		//add_menu_cloud(menu_shell);
+		add_menu_cloud(menu_shell);
 		add_menu_tools(menu_shell);
 		add_menu_help(menu_shell);
 		
@@ -162,6 +140,10 @@ public class MainMenuBar : Gtk.MenuBar {
 
 		gtk_menu_add_separator(submenu);
 
+		add_connect_to_server(submenu);
+
+		gtk_menu_add_separator(submenu);
+
 		add_terminal_window(submenu);
 
 		gtk_menu_add_separator(submenu);
@@ -181,6 +163,11 @@ public class MainMenuBar : Gtk.MenuBar {
 		string key = "<Control>t";
 
 		context_normal.connect(()=>{
+			item.sensitive = true;
+			add_action_accel(item, key);
+		});
+
+		context_cloud.connect(()=>{
 			item.sensitive = true;
 			add_action_accel(item, key);
 		});
@@ -229,6 +216,11 @@ public class MainMenuBar : Gtk.MenuBar {
 			add_action_accel(item, key);
 		});
 
+		context_cloud.connect(()=>{
+			item.sensitive = true;
+			add_action_accel(item, key);
+		});
+
 		context_trash.connect(()=>{
 			item.sensitive = true;
 			add_action_accel(item, key);
@@ -265,6 +257,11 @@ public class MainMenuBar : Gtk.MenuBar {
 		string key = "<Super>n";
 
 		context_normal.connect(()=>{
+			item.sensitive = true;
+			add_action_accel(item, key);
+		});
+
+		context_cloud.connect(()=>{
 			item.sensitive = true;
 			add_action_accel(item, key);
 		});
@@ -309,6 +306,10 @@ public class MainMenuBar : Gtk.MenuBar {
 			add_action_accel(item, key);
 		});
 
+		context_cloud.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
 		context_trash.connect(()=>{
 			//add_action_accel(item, key);
 		});
@@ -347,6 +348,10 @@ public class MainMenuBar : Gtk.MenuBar {
 			add_action_accel(item, key);
 		});
 
+		context_cloud.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
 		context_trash.connect(()=>{
 			//add_action_accel(item, key);
 		});
@@ -369,6 +374,16 @@ public class MainMenuBar : Gtk.MenuBar {
 		});
 	}
 
+	private void add_connect_to_server(Gtk.Menu submenu){
+
+		var item = new Gtk.MenuItem.with_label (_("Connect to Server..."));
+		submenu.add(item);
+
+		item.activate.connect (() => {
+			var win = new ConnectServerWindow(window, "");
+		});
+	}
+
 	private void add_terminal_window(Gtk.Menu submenu){
 
 		var item = new Gtk.MenuItem.with_label (_("Toggle Terminal Pane"));
@@ -381,6 +396,11 @@ public class MainMenuBar : Gtk.MenuBar {
 		string key = "F4";
 
 		context_normal.connect(()=>{
+			item.sensitive = true;
+			add_action_accel(item, key);
+		});
+
+		context_cloud.connect(()=>{
 			item.sensitive = true;
 			add_action_accel(item, key);
 		});
@@ -420,6 +440,11 @@ public class MainMenuBar : Gtk.MenuBar {
 		string key = "<Control>w";
 
 		context_normal.connect(()=>{
+			item.sensitive = true;
+			add_action_accel(item, key);
+		});
+
+		context_cloud.connect(()=>{
 			item.sensitive = true;
 			add_action_accel(item, key);
 		});
@@ -502,6 +527,10 @@ public class MainMenuBar : Gtk.MenuBar {
 			add_action_accel(item, key);
 		});
 
+		context_cloud.connect(()=>{
+			//add_action_accel(item, key);
+		});
+
 		context_trash.connect(()=>{
 			//add_action_accel(item, key);
 		});
@@ -536,6 +565,11 @@ public class MainMenuBar : Gtk.MenuBar {
 		string key = "<Control>c";
 
 		context_normal.connect(()=>{
+			item.sensitive = true;
+			add_action_accel(item, key);
+		});
+
+		context_cloud.connect(()=>{
 			item.sensitive = true;
 			add_action_accel(item, key);
 		});
@@ -579,6 +613,11 @@ public class MainMenuBar : Gtk.MenuBar {
 			add_action_accel(item, key);
 		});
 
+		context_cloud.connect(()=>{
+			item.sensitive = true;
+			add_action_accel(item, key);
+		});
+
 		context_trash.connect(()=>{
 			//add_action_accel(item, key);
 		});
@@ -613,8 +652,15 @@ public class MainMenuBar : Gtk.MenuBar {
 		string key = "Delete";
 
 		context_normal.connect(()=>{
+			if ((view.current_item != null) && (view.current_item.is_remote)){
+				return;
+			}
 			item.sensitive = true;
 			add_action_accel(item, key);
+		});
+
+		context_cloud.connect(()=>{
+			//add_action_accel(item, key);
 		});
 
 		context_trash.connect(()=>{
@@ -653,6 +699,16 @@ public class MainMenuBar : Gtk.MenuBar {
 		context_normal.connect(()=>{
 			item.sensitive = true;
 			add_action_accel(item, key);
+
+			if ((view.current_item != null) && (view.current_item.is_remote)){
+				add_action_accel(item, "Delete");
+			}
+		});
+
+		context_cloud.connect(()=>{
+			item.sensitive = true;
+			add_action_accel(item, key);
+			add_action_accel(item, "Delete");
 		});
 
 		context_trash.connect(()=>{
@@ -690,6 +746,11 @@ public class MainMenuBar : Gtk.MenuBar {
 		string key = "F2";
 
 		context_normal.connect(()=>{
+			item.sensitive = true;
+			add_action_accel(item, key);
+		});
+
+		context_cloud.connect(()=>{
 			item.sensitive = true;
 			add_action_accel(item, key);
 		});
@@ -732,6 +793,11 @@ public class MainMenuBar : Gtk.MenuBar {
 			add_action_accel(item, key);
 		});
 
+		context_cloud.connect(()=>{
+			item.sensitive = true;
+			add_action_accel(item, key);
+		});
+
 		context_trash.connect(()=>{
 			item.sensitive = true;
 			add_action_accel(item, key);
@@ -768,6 +834,11 @@ public class MainMenuBar : Gtk.MenuBar {
 		string key = "Escape";
 
 		context_normal.connect(()=>{
+			item.sensitive = true;
+			add_action_accel(item, key);
+		});
+
+		context_cloud.connect(()=>{
 			item.sensitive = true;
 			add_action_accel(item, key);
 		});
@@ -855,6 +926,11 @@ public class MainMenuBar : Gtk.MenuBar {
 			add_action_accel(item, key);
 		});
 
+		context_cloud.connect(()=>{
+			item.sensitive = true;
+			add_action_accel(item, key);
+		});
+
 		context_trash.connect(()=>{
 			//add_action_accel(item, key);
 		});
@@ -888,6 +964,16 @@ public class MainMenuBar : Gtk.MenuBar {
 		string key = "<Control>h";
 
 		context_normal.connect(()=>{
+			item.sensitive = true;
+
+			item.activate.disconnect(view_toggle_hidden);
+			item.active = (view == null) ? false : view.show_hidden_files;
+			item.activate.connect(view_toggle_hidden);
+			
+			add_action_accel(item, key);
+		});
+
+		context_cloud.connect(()=>{
 			item.sensitive = true;
 
 			item.activate.disconnect(view_toggle_hidden);
@@ -986,6 +1072,16 @@ public class MainMenuBar : Gtk.MenuBar {
 			add_action_accel(item, key);
 		});
 
+		context_cloud.connect(()=>{
+			item.sensitive = true;
+
+			item.activate.disconnect(view_toggle_dual);
+			item.active = (window.layout_box != null) && (window.layout_box.get_panel_layout() == PanelLayout.DUAL_VERTICAL);
+			item.activate.connect(view_toggle_dual);
+			
+			add_action_accel(item, key);
+		});
+
 		context_trash.connect(()=>{
 			item.sensitive = true;
 
@@ -1043,6 +1139,16 @@ public class MainMenuBar : Gtk.MenuBar {
 		string key = "F11";
 
 		context_normal.connect(()=>{
+			item.sensitive = true;
+			
+			item.activate.disconnect(window.toggle_fullscreen);
+			item.active = window.is_maximized;
+			item.activate.connect(window.toggle_fullscreen);
+
+			add_action_accel(item, key);
+		});
+
+		context_cloud.connect(()=>{
 			item.sensitive = true;
 			
 			item.activate.disconnect(window.toggle_fullscreen);
@@ -1160,6 +1266,11 @@ public class MainMenuBar : Gtk.MenuBar {
 			add_action_accel(item, key);
 		});
 
+		context_cloud.connect(()=>{
+			item.sensitive = true;
+			add_action_accel(item, key);
+		});
+
 		context_trash.connect(()=>{
 			item.sensitive = true;
 			add_action_accel(item, key);
@@ -1196,6 +1307,11 @@ public class MainMenuBar : Gtk.MenuBar {
 		string key = "<Alt>Right";
 
 		context_normal.connect(()=>{
+			item.sensitive = true;
+			add_action_accel(item, key);
+		});
+
+		context_cloud.connect(()=>{
 			item.sensitive = true;
 			add_action_accel(item, key);
 		});
@@ -1240,6 +1356,11 @@ public class MainMenuBar : Gtk.MenuBar {
 			add_action_accel(item, key);
 		});
 
+		context_cloud.connect(()=>{
+			item.sensitive = true;
+			add_action_accel(item, key);
+		});
+
 		context_trash.connect(()=>{
 			item.sensitive = true;
 			add_action_accel(item, key);
@@ -1280,6 +1401,11 @@ public class MainMenuBar : Gtk.MenuBar {
 			add_action_accel(item, key);
 		});
 
+		context_cloud.connect(()=>{
+			item.sensitive = true;
+			add_action_accel(item, key);
+		});
+
 		context_trash.connect(()=>{
 			item.sensitive = true;
 			add_action_accel(item, key);
@@ -1313,17 +1439,37 @@ public class MainMenuBar : Gtk.MenuBar {
 		menu_shell.add(menu_item);
 
 		var submenu = new Gtk.Menu();
+		submenu.reserve_toggle_size = false;
 		menu_item.set_submenu(submenu);
 
-		add_cloud_account_add(submenu);
+		App.rclone.changed.connect(()=>{
+			add_cloud_account_refresh(submenu);
+		});
 
-		add_cloud_account_remove(submenu);
-
-		gtk_menu_add_separator(submenu);
-
-		add_cloud_account_browse(submenu);
+		add_cloud_account_refresh(submenu);
 	}
 
+	private void add_cloud_account_refresh(Gtk.Menu menu){
+		
+		log_debug("mainmenu: cloud: refresh()");
+
+		gtk_container_remove_children(menu);
+		
+		add_cloud_account_add(menu);
+
+		add_cloud_account_remove(menu);
+
+		//add_cloud_account_unmount(menu);
+
+		gtk_menu_add_separator(menu);
+
+		add_cloud_account_browse(menu);
+
+		show_all();
+
+		menu.show_all();
+	}
+	
 	private void add_cloud_account_add(Gtk.Menu menu){
 		
 		var item = new Gtk.MenuItem.with_label (_("Add Account"));
@@ -1331,7 +1477,21 @@ public class MainMenuBar : Gtk.MenuBar {
 		menu.add(item);
 
 		item.activate.connect (() => {
-			window.cloud_login();
+			
+			if (!App.tool_exists("rclone", true)){
+				
+				string txt = _("Rclone Not Found");
+				string msg = _("Rclone is needed for cloud storage support.\n\nDownload and install Rclone?");
+				var res = gtk_messagebox_yes_no(txt, msg, window, true);
+				
+				if (res == Gtk.ResponseType.YES){
+					window.install_rclone();
+				}
+				
+				return; // always return
+			}
+
+			window.add_rclone_account();
 		});
 	}
 
@@ -1341,25 +1501,185 @@ public class MainMenuBar : Gtk.MenuBar {
 		item.set_tooltip_text(_("Logout from cloud storage account"));
 		menu.add(item);
 
-		item.activate.connect (() => {
-			//window.cloud_logout();
-		});
+		var submenu = new Gtk.Menu();
+		item.set_submenu(submenu);
+
+		var sg_icon = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+		var sg_label = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+		
+		foreach(var acc in App.rclone.accounts){
+
+			Gtk.Image? image = null;
+
+			switch(acc.type){
+			case "dropbox":
+				image = IconManager.lookup_image("dropbox", 16);
+				break;
+			case "drive":
+				image = IconManager.lookup_image("web-google", 16);
+				break;
+			case "onedrive":
+				image = IconManager.lookup_image("web-microsoft", 16);
+				break;
+			case "amazon cloud drive":
+			case "s3":
+				image = IconManager.lookup_image("web-amazon", 16);
+				break;
+			default:
+				image = IconManager.lookup_image("goa-panel", 16);
+				break;
+			}
+
+			var subitem = gtk_menu_add_item(
+				submenu,
+				acc.name,
+				"",
+				image,
+				sg_icon,
+				sg_label);
+
+			subitem.activate.connect (() => {
+				bool ok = window.remove_rclone_account(acc);
+				if (ok){
+					gtk_messagebox(_("Account Removed"), "%s".printf(acc.name), window, false);
+					submenu.remove(subitem);
+					window.close_tabs_for_location("%s:".printf(acc.name));
+				}
+				else {
+					gtk_messagebox(_("Failed to Remove Account"), "%s".printf(acc.name), window, false);
+				}
+				App.rclone.query_accounts();
+			});
+		}
+		
+		submenu.show_all();
+	}
+
+	private void add_cloud_account_unmount(Gtk.Menu menu){
+		
+		var item = new Gtk.MenuItem.with_label (_("Unmount"));
+		item.set_tooltip_text(_("Unmount cloud storage account"));
+		menu.add(item);
+
+		var submenu = new Gtk.Menu();
+		item.set_submenu(submenu);
+
+		var sg_icon = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+		var sg_label = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+		
+		foreach(var acc in App.rclone.accounts){
+
+			Gtk.Image? image = null;
+
+			switch(acc.type){
+			case "dropbox":
+				image = IconManager.lookup_image("dropbox", 16);
+				break;
+			case "drive":
+				image = IconManager.lookup_image("web-google", 16);
+				break;
+			case "onedrive":
+				image = IconManager.lookup_image("web-microsoft", 16);
+				break;
+			case "amazon cloud drive":
+			case "s3":
+				image = IconManager.lookup_image("web-amazon", 16);
+				break;
+			default:
+				image = IconManager.lookup_image("goa-panel", 16);
+				break;
+			}
+
+			var subitem = gtk_menu_add_item(
+				submenu,
+				acc.name,
+				"",
+				image,
+				sg_icon,
+				sg_label);
+
+			subitem.activate.connect (() => {
+				acc.unmount();
+			});
+
+			subitem.sensitive = (App.rclone.get_mounted_path(acc.name).length > 0);
+		}
 	}
 
 	private void add_cloud_account_browse(Gtk.Menu menu){
 
+		var sg_icon = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+		var sg_label = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+		
 		foreach(var acc in App.rclone.accounts){
-			
-			var item = new Gtk.MenuItem.with_label("%s: %s".printf(acc.type_name, acc.name));
-			menu.add(item);
+
+			Gtk.Image? image = null;
+
+			switch(acc.type){
+			case "dropbox":
+				image = IconManager.lookup_image("dropbox", 16);
+				break;
+			case "drive":
+				image = IconManager.lookup_image("web-google", 16);
+				break;
+			default:
+				image = IconManager.lookup_image("goa-panel", 16);
+				break;
+			}
+
+			var item = gtk_menu_add_item(
+				menu,
+				acc.name,
+				"",
+				image,
+				sg_icon,
+				sg_label);
 
 			item.activate.connect (() => {
+
+				App.rclone.query_mounted_remotes();
 				
+				log_debug("menu_item_clicked: %s".printf(acc.name), true);
+
+				bool delayed_load = false;
+
+				string mpath = App.rclone.get_mounted_path(acc.name);
+				
+				if (mpath.length == 0){
+					
+					log_debug("not_mounted: %s".printf(acc.name));
+					acc.mount();
+					delayed_load = true;
+				}
+				else {
+					log_debug("is_mounted: %s".printf(acc.name));
+				}
+
+				var tab = panel.add_tab(false);
+
+				//tab.view.query_items_delay = 3000;
+
+				//tab.view.set_view_path(acc.mount_path);
+
+				tab.view.set_view_item(acc.fs_root);
+
+				//tab.pane.view.set_overlay_on_loading();
+
+				/*log_debug("waiting for 3000ms -------------------");
+				int count = 3000;
+				while (count > 0){
+					sleep(100);
+					count -= 100;
+					gtk_do_events();
+				}
+				log_debug("waiting for 3000ms: done -------------");
+
+				tab.pane.view.set_view_path(acc.mount_path);*/
 			});
 		}
 	}
 
-	
+
 	private void add_menu_tools(Gtk.MenuShell menu_shell){
 
 		log_debug("MainMenuBar: add_menu_tools()");
@@ -1369,6 +1689,10 @@ public class MainMenuBar : Gtk.MenuBar {
 
 		var submenu = new Gtk.Menu();
 		menu_item.set_submenu(submenu);
+
+		add_install_rclone(submenu);
+		
+		add_install_p7zip(submenu);
 
 		add_clear_thumbnail_cache(submenu);
 
@@ -1400,6 +1724,30 @@ public class MainMenuBar : Gtk.MenuBar {
 		});
 	}
 
+	private void add_install_rclone(Gtk.Menu menu){
+
+		var item = new Gtk.MenuItem.with_label (_("Install Rclone (Cloud Storage Support)"));
+		item.set_tooltip_text(_("Download and install the latest version of Rclone"));
+		menu.add(item);
+
+		item.activate.connect (() => {
+			window.install_rclone();
+		});
+	}
+
+	private void add_install_p7zip(Gtk.Menu menu){
+
+		var item = new Gtk.MenuItem.with_label (_("Install p7zip 16.02 (Archive Support)"));
+		item.set_tooltip_text(_("Download and install p7zip v16.02. Installs binaries from p7zip, p7zip-full and p7zip-rar packages."));
+		menu.add(item);
+
+		item.activate.connect (() => {
+			window.install_p7zip();
+		});
+
+		item.sensitive = (ArchiveTask.7zip_version < 16.02);
+	}
+
 	private void add_rebuild_font_cache(Gtk.Menu menu){
 
 		var item = new Gtk.MenuItem.with_label(_("Rebuild font cache"));
@@ -1428,6 +1776,11 @@ public class MainMenuBar : Gtk.MenuBar {
 			add_action_accel(item, key);
 		});
 
+		context_cloud.connect(()=>{
+			item.sensitive = true;
+			add_action_accel(item, key);
+		});
+
 		context_trash.connect(()=>{
 			//add_action_accel(item, key);
 		});
@@ -1452,7 +1805,7 @@ public class MainMenuBar : Gtk.MenuBar {
 	
 	private void add_wizard(Gtk.Menu menu){
 
-		var item = new Gtk.MenuItem.with_label (_("Open style wizard"));
+		var item = new Gtk.MenuItem.with_label (_("Style wizard"));
 		item.set_tooltip_text(_("Select layout and style"));
 		menu.add(item);
 

@@ -37,6 +37,10 @@ all:
 		--pkg posix --pkg gtk+-3.0 --pkg gee-0.8 \
 		--pkg json-glib-1.0 --pkg libxml-2.0 --pkg $(vte_version)
 
+		
+	#gtk3-version-polo
+	valac "gtk3-version.vala" -o gtk3-version-polo --pkg gtk+-3.0
+
 	#update translation template
 	xgettext --language=C --keyword=_ \
 		--copyright-holder='Tony George (teejeetech@gmail.com)' \
@@ -51,7 +55,7 @@ all:
 		Gtk/*.vala \
 		Utility/*.vala \
 		Utility/Gtk/*.vala
-
+		
 clean:
 	rm -rf *.o ${app_name}
 
@@ -70,6 +74,7 @@ install:
 	#binary
 	#install -m 0755 ${app_name} "$(DESTDIR)$(bindir)"
 	install -m 0755 ${app_name}-gtk "$(DESTDIR)$(bindir)"
+	install -m 0755 gtk3-version-polo "$(DESTDIR)$(bindir)"
 	install -m 0755 ${app_name}-chroot "$(DESTDIR)$(bindir)"
 	install -m 0755 ${app_name}-uninstall "$(DESTDIR)$(bindir)"
 	#install -m 0755 ${app_name}-launcher "$(DESTDIR)$(bindir)"
@@ -77,6 +82,7 @@ install:
 	#shared files
 	cp -dpr --no-preserve=ownership -t "$(DESTDIR)$(sharedir)/${app_name}" ./share/${app_name}/*
 	chmod --recursive 0755 $(DESTDIR)$(sharedir)/${app_name}/*
+	chmod a+x $(DESTDIR)$(sharedir)/${app_name}/files/gtk-theme/install-gtk-theme
 
 	#launcher
 	install -m 0644 ${app_name}.desktop "$(DESTDIR)$(launcherdir)"
@@ -87,12 +93,19 @@ install:
 	#translations
 	install -m 0644 ../po/${app_name}-de.mo $(DESTDIR)$(localedir)/de/LC_MESSAGES/${app_name}.mo
 	install -m 0644 ../po/${app_name}-nl.mo $(DESTDIR)$(localedir)/nl/LC_MESSAGES/${app_name}.mo
+	
+	#install gtk theme 'Arc-Darker-Polo'
+	#mkdir -p "$(DESTDIR)$(sharedir)/themes/Arc-Darker-Polo"
+	#ignore errors for below commands
+	#-cp -dpr --no-preserve=ownership -t "$(DESTDIR)$(sharedir)/themes/Arc-Darker-Polo" ../gtk-theme/3.${gtk3_version}/*
+	#-chmod --recursive 0755 $(DESTDIR)$(sharedir)/themes/Arc-Darker-Polo/*
 
 uninstall:
 
 	#binary
 	#rm -f "$(DESTDIR)$(bindir)/${app_name}"
 	rm -f "$(DESTDIR)$(bindir)/${app_name}-gtk"
+	rm -f "$(DESTDIR)$(bindir)/gtk3-version-polo"
 	rm -f "$(DESTDIR)$(bindir)/${app_name}-chroot"
 	rm -f "$(DESTDIR)$(bindir)/${app_name}-uninstall"
 	#rm -f "$(DESTDIR)$(bindir)/${app_name}-launcher"

@@ -1,0 +1,6 @@
+
+app_fullname="Polo File Manager"
+app_name="polo"
+pkg_name="polo-file-manager"
+pkg_version=$(dpkg-parsechangelog --show-field Version)
+git_origin="git@github.com:teejee2008/polo.git"

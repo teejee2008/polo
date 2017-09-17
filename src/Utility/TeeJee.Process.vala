@@ -85,6 +85,8 @@ namespace TeeJee.ProcessHelper{
 
 		string sh_file = save_bash_script_temp(script, null, true, supress_errors, run_as_admin);
 
+		//log_debug("exec_script_sync(): %s".printf(sh_file));
+		
 		try {
 			string[] argv = new string[1];
 			argv[0] = sh_file;
@@ -96,7 +98,7 @@ namespace TeeJee.ProcessHelper{
 			if (print_to_terminal){
 				
 				Process.spawn_sync (
-					TEMP_DIR, //working dir
+					file_parent(sh_file), //working dir
 					argv, //argv
 					env, //environment
 					SpawnFlags.SEARCH_PATH,
@@ -109,7 +111,7 @@ namespace TeeJee.ProcessHelper{
 			else{
 		
 				Process.spawn_sync (
-					TEMP_DIR, //working dir
+					file_parent(sh_file), //working dir
 					argv, //argv
 					env, //environment
 					SpawnFlags.SEARCH_PATH,
@@ -119,6 +121,15 @@ namespace TeeJee.ProcessHelper{
 					out exit_code
 					);
 			}
+
+			// Process.spawn_sync() exit_code is not reliable when executed as script
+			
+			string status_file = path_combine(file_parent(sh_file), "status");
+			if (file_exists(status_file)){
+				exit_code = int.parse(file_read(status_file));
+			}
+
+			//log_debug("exec_script_sync(): exit_code: %d".printf(exit_code));
 
 			if (cleanup_tmp){
 				file_delete(sh_file);
@@ -144,16 +155,16 @@ namespace TeeJee.ProcessHelper{
 
 		try {
 
-			string scriptfile = save_bash_script_temp (script, null, false, false, admin_mode);
+			string sh_file = save_bash_script_temp (script, null, false, false, admin_mode);
 
 			string[] argv = new string[1];
-			argv[0] = scriptfile;
+			argv[0] = sh_file;
 
 			string[] env = Environ.get();
 			
 			Pid child_pid;
 			Process.spawn_async_with_pipes(
-			    TEMP_DIR, //working dir
+			    file_parent(sh_file), //working dir
 			    argv, //argv
 			    env, //environment
 			    SpawnFlags.SEARCH_PATH,
@@ -187,7 +198,8 @@ namespace TeeJee.ProcessHelper{
 		sh += "\n\nexitCode=$?\n";
 		sh += "echo ${exitCode} > ${exitCode}\n";
 		sh += "echo ${exitCode} > status\n";
-
+		sh += "exit ${exitCode}\n";
+		
 		if ((sh_path == null) || (sh_path.length == 0)){
 			sh_path = get_temp_file_path() + ".sh";
 		}
@@ -202,7 +214,8 @@ namespace TeeJee.ProcessHelper{
 			sh = "";
 			sh += "#!/bin/bash\n";
 			sh += "pkexec env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY";
-			sh += " '%s'".printf(escape_single_quote(sh_path));
+			sh += " '%s'\n".printf(escape_single_quote(sh_path));
+			sh += "if [ -f status ]; then exit $(cat status); else exit 0; fi\n";
 
 			string sh_path_admin = GLib.Path.build_filename(file_parent(sh_path),"script-admin.sh");
 
@@ -222,11 +235,18 @@ namespace TeeJee.ProcessHelper{
 		}
 	}
 
-	public string get_temp_file_path(){
+	public string get_temp_file_path(bool with_temp_folder = true){
 
 		/* Generates temporary file path */
 
-		return TEMP_DIR + "/" + timestamp_numeric() + (new Rand()).next_int().to_string();
+		string txt = "%s/%s".printf(TEMP_DIR, timestamp_numeric() + (new Rand()).next_int().to_string());
+
+		if (with_temp_folder){
+			dir_create(txt);
+			txt += "/%s".printf(timestamp_numeric() + (new Rand()).next_int().to_string());
+		}
+
+		return txt;
 	}
 
 	public void exec_process_new_session(string command){

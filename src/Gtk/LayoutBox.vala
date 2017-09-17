@@ -336,7 +336,20 @@ public class LayoutBox : Gtk.Box {
 			App.panel_layout = panel_layout;
 		}
 
+		foreach(var panel in App.main_window.panels){
+			
+			if (!panel.visible){ continue; }
+			
+			foreach(var tab in panel.tabs){
+				
+				if (!tab.view.view_initialized){
+					tab.view.set_view_path(App.user_home);
+				}
+			}
+		}
+		
 		foreach(var pane in App.main_window.panes){
+			
 			pane.pathbar.refresh_icon_visibility();
 			pane.statusbar.refresh_for_layout_change();
 		}
@@ -345,15 +358,19 @@ public class LayoutBox : Gtk.Box {
 			
 			if (window.layout_box.panel1.visible){
 				window.active_pane = window.layout_box.panel1.pane;
+				window.update_accelerators_for_active_pane();
 			}
 			else if (window.layout_box.panel2.visible){
 				window.active_pane = window.layout_box.panel2.pane;
+				window.update_accelerators_for_active_pane();
 			}
 			else if (window.layout_box.panel3.visible){
 				window.active_pane = window.layout_box.panel3.pane;
+				window.update_accelerators_for_active_pane();
 			}
 			else if (window.layout_box.panel4.visible){
 				window.active_pane = window.layout_box.panel4.pane;
+				window.update_accelerators_for_active_pane();
 			}
 		}
 

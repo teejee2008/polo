@@ -78,7 +78,7 @@ public class ProgressPanelPdfTask : ProgressPanel {
 		// status message ------------------
 
 		label = new Gtk.Label(_("Preparing..."));
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.ellipsize = Pango.EllipsizeMode.START;
 		label.max_width_chars = 100;
 		hbox.add(label);
@@ -94,7 +94,7 @@ public class ProgressPanelPdfTask : ProgressPanel {
 		// stats label ----------------
 
 		label = new Gtk.Label("...");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.ellipsize = Pango.EllipsizeMode.END;
 		label.max_width_chars = 100;
 		vbox_outer.add(label);
@@ -119,7 +119,8 @@ public class ProgressPanelPdfTask : ProgressPanel {
 		log_debug("ProgressPanelPdfTask: execute(%s)");
 
 		pane.refresh_file_action_panel();
-
+		pane.clear_messages();
+		
 		start_task();
 	}
 
@@ -191,6 +192,36 @@ public class ProgressPanelPdfTask : ProgressPanel {
 		stop_status_timer();
 		
 		log_debug("ProgressPanelPdfTask: finish()");
+
+		if (!aborted){
+			if (task.output_files.size == 0){
+				string msg = _("Error") + ": %s".printf(task.get_error_message());
+				pane.add_message(msg, Gtk.MessageType.ERROR);
+			}
+			else{
+				string msg = "";
+				var list = new Gee.ArrayList<string>();
+				
+				foreach(string outline in task.output_files){
+					if (msg.length > 0) { msg += "\n"; }
+
+					if (outline.contains(": ")){
+						var arr = outline.split(": ");
+						//list.add(arr[1]);
+						msg += "%s: %s".printf(arr[0], file_basename(arr[1]));
+					}
+					else{
+						msg += outline;
+					}
+				}
+				
+				pane.add_message(msg, Gtk.MessageType.INFO);
+				//view.select_items_by_file_path(list);
+
+				// do not select items when operation completes
+				// it will be dangerous if selection changes while user is executing another action
+			}
+		}
 
 		pane.file_operations.remove(this);
 		pane.refresh_file_action_panel();

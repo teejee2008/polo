@@ -137,6 +137,31 @@ namespace TeeJee.Misc {
         return "%02.0lf:%02.0lf:%02.0lf".printf (hr, min, sec);
 	}
 
+	public string format_duration_simple (long millis){
+
+		/* Converts time in milliseconds to format '00:00:00.0' */
+
+	    double time = millis / 1000.0; // time in seconds
+
+	    double hr = Math.floor(time / (60.0 * 60));
+	    time = time - (hr * 60 * 60);
+	    double min = Math.floor(time / 60.0);
+	    time = time - (min * 60);
+	    double sec = Math.floor(time);
+
+	    string txt = "";
+
+	    if (hr > 0){
+			return "%2.0lfh %2.0lfm %2.0lfs".printf(hr, min, sec);
+		}
+		else if (min > 0){
+			return "%2.0lfm %2.0lfs".printf(min, sec);
+		}
+		else {
+			return "%2.0lfs".printf(sec);
+		}
+	}
+
 	public string format_time_left(int64 millis){
 		double mins = (millis * 1.0) / 60000;
 		double secs = ((millis * 1.0) % 60000) / 1000;
@@ -161,13 +186,77 @@ namespace TeeJee.Misc {
 		}
 		return millis;
 	}
-
+	
+	public DateTime date_now(){
+		return new GLib.DateTime.now_local();
+	}
+	
 	public bool dates_are_equal(DateTime? dt1, DateTime? dt2){
-		if ((dt1 == null)||(dt2 == null)){
+		if ((dt1 == null) || (dt2 == null)){
 			return false;
 		}
 		return Math.fabs(dt2.difference(dt1)) < (1 * TimeSpan.SECOND);
 	}
+	
+	public static DateTime? parse_date_time (string date_string, bool local_time) {	
+		
+		DateTime? dt = null;
+		bool valid = false;
+		int year, month, day, hr, min, tz_hr, tz_min;
+		double sec;
+		
+		// 2016-01-15T14:23:52.964Z
+		// 2017-07-23T05:14:51.867Z
+		MatchInfo match = regex_match("""([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2}):([.0-9]+)Z""", date_string);
+		
+		if (match != null){
+			
+			year = int.parse(match.fetch(1));
+			month = int.parse(match.fetch(2));
+			day = int.parse(match.fetch(3));
+			hr = int.parse(match.fetch(4));
+			min = int.parse(match.fetch(5));
+			sec = double.parse(match.fetch(6));
+			
+			dt = new DateTime.utc(year, month, day, hr, min, sec);
+			
+			if (local_time){
+				dt = dt.to_local();
+			}
+			
+			return dt;
+		}
+		
+		// 2016-01-15T14:23:52.964+05:30
+		match = regex_match("""([0-9]{4})-([0-9]{2})-([0-9]{2})T([0-9]{2}):([0-9]{2}):([.0-9]+)([0-9+-]+):([0-9+-]+)""", date_string);
+		
+		if (match != null){
+			
+			year = int.parse(match.fetch(1));
+			month = int.parse(match.fetch(2));
+			day = int.parse(match.fetch(3));
+			hr = int.parse(match.fetch(4));
+			min = int.parse(match.fetch(5));
+			sec = double.parse(match.fetch(6));
+			
+			tz_hr = int.parse(match.fetch(7));
+			tz_min = int.parse(match.fetch(8));
+
+			dt = new DateTime.utc(year, month, day, hr, min, sec);
+			
+			dt = dt.add_hours(tz_hr).add_minutes(tz_min);
+
+			if (local_time){
+				dt = dt.to_local();
+			}
+			
+			return dt;
+		}
+		
+		return dt;
+	}
+	
+	// string handling ------------------------
 	
 	public string string_replace(string str, string search, string replacement, int count = -1){
 		string[] arr = str.split(search);
@@ -241,6 +330,15 @@ namespace TeeJee.Misc {
 
 	public string uri_decode(string path){
 		return Uri.unescape_string(path);
+	}
+
+	public string ellipsize(string txt, int maxchars){
+		if (txt.length > maxchars){
+			return txt[0:maxchars-1] + "...";
+		}
+		else{
+			return txt;
+		}
 	}
 
 	public DateTime datetime_from_string (string date_time_string){

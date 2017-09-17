@@ -1,6 +1,8 @@
 function fish_prompt
-	set_color $fish_color_cwd
-	echo -n (basename $PWD)
-	set_color normal
-	echo -n ' > '
+	set_color green
+	printf '%s' (date "+%H:%M:%S")
+	set_color yellow
+	printf ' %s'(basename $PWD)
+	set_color normal	
+	printf ' $ '
 end

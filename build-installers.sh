@@ -4,8 +4,10 @@ backup=`pwd`
 DIR="$( cd "$( dirname "$0" )" && pwd )"
 cd $DIR
 
-app_name=$(cat app_name)
-pkg_name=$(cat pkg_name)
+. ./BUILD_CONFIG
+
+rm -vf installer/*.run
+rm -vf installer/*.deb
 
 # build debs
 sh build-deb.sh
@@ -42,9 +44,13 @@ if [ $? -ne 0 ]; then
 	cd "$backup"; echo "Failed"; exit 1;
 fi
 
+mv -v ./*${arch}.run ./${pkg_name}-v${pkg_version}-${arch}.run 
+
 echo "--------------------------------------------------------------------------"
 
 done
 
+cp -vf *.run ../../PACKAGES/
+cp -vf *.deb ../../PACKAGES/
 
 cd "$backup"

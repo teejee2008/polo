@@ -123,6 +123,7 @@ public class LayoutPanel : Gtk.Box {
 			else if (!window.window_is_closing){
 				var tab = add_tab();
 				window.active_pane = tab.pane;
+				window.update_accelerators_for_active_pane();
 			}
 		});
 	}
@@ -151,12 +152,14 @@ public class LayoutPanel : Gtk.Box {
 
 			var tab = add_tab();
 			window.active_pane = tab.pane;
+			window.update_accelerators_for_active_pane();
 			
 			notebook.switch_page.connect(on_notebook_switch_page);
 		}
 		else {
 			var tab = tabs[(int) page_num];
 			window.active_pane = tab.pane;
+			window.update_accelerators_for_active_pane();
 		}
 	}
 
@@ -188,6 +191,9 @@ public class LayoutPanel : Gtk.Box {
 		if (init_view){
 			tab.pane.view.set_view_path(App.user_home);
 		}
+		else{
+			tab.pane.view.refresh(false, false); // initalize empty views
+		}
 
 		// add another dummy tab
 		add_dummy_tab();
@@ -206,7 +212,6 @@ public class LayoutPanel : Gtk.Box {
 		return tab;
 	}
 
-	
 	public TermBox run_script_in_new_terminal_tab(string command, string desc){
 		
 		var tab = add_new_terminal_tab();

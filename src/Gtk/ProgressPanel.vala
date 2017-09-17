@@ -35,20 +35,30 @@ using TeeJee.Misc;
 
 public abstract class ProgressPanel : Gtk.Box {
 
+	// reference properties ----------
+
+	protected MainWindow window {
+		get { return App.main_window; }
+	}
+	
+	protected FileViewPane pane;
+
+	protected FileViewList view {
+		get{ return pane.view; }
+	}
+
+	protected LayoutPanel panel {
+		get { return pane.panel; }
+	}
+
+	// -------------------------------
+	
 	public Gee.ArrayList<FileItem> items;
 	public FileActionType action_type;
 	public FileItem source;
 	public FileItem destination;
-
+	
 	protected Gtk.Box contents;
-
-	// parents
-	protected FileViewPane pane;
-	protected MainWindow window {
-		get {
-			return App.main_window;
-		}
-	}
 
 	protected bool aborted = false;
 	protected uint tmr_status = 0;
@@ -85,13 +95,27 @@ public abstract class ProgressPanel : Gtk.Box {
 	}
 
 	public void set_source(FileItem source_item){
+		
 		// create new object to avoid conflicts between multiple running operations
-		source = new FileItem.from_path(source_item.file_path);
+		
+		if (source_item is FileItemCloud){
+			source = new FileItemCloud.from_path_and_type(source_item.file_path, FileType.DIRECTORY);
+		}
+		else{
+			source = new FileItem.from_path(source_item.file_path);
+		}
 	}
 
 	public void set_destination(FileItem dest_item){
+		
 		// create new object to avoid conflicts between multiple running operations
-		destination = new FileItem.from_path(dest_item.file_path);
+		
+		if (dest_item is FileItemCloud){
+			destination = new FileItemCloud.from_path_and_type(dest_item.file_path, FileType.DIRECTORY);
+		}
+		else{
+			destination = new FileItem.from_path(dest_item.file_path);
+		}
 	}
 
 	public void set_pane(FileViewPane parent_pane){

@@ -88,7 +88,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		items = _items;
 		dest_directory = _dest_directory;
 
-		task = new ArchiveTask();
+		task = new ArchiveTask(this);
 		task.action = ArchiveAction.CREATE;
 
 		archive = new FileItem();
@@ -230,14 +230,15 @@ public class CreateArchiveWindow : Gtk.Dialog {
 
 		foreach(var item in items){
 			if (add_files_thread_cancelled) { break; }
-			item.query_children(-1);
+			//item.query_children(-1);
+			archive.add_child_from_disk(item.file_path);
 		}
 
-		archive.add_items_to_archive(items);
+		archive.get_dir_size_recursively(true);
 
-		archive.update_size_from_children();
+		//archive.update_size_from_children();
 
-		log_debug("archive.size=%s".printf(archive.size_formatted));
+		log_debug("archive.size=%s".printf(archive.file_size_formatted));
 		
 		add_files_thread_is_running = false;
 		
@@ -255,7 +256,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		vbox_main.add(hbox);
 
 		// name
-		var label = new Label (_("Name"));
+		var label = new Gtk.Label (_("Name"));
 		label.xalign = 1.0f;
 		hbox.add(label);
 		
@@ -400,7 +401,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		vbox_main.add(hbox);
 		
 		//lbl_location
-		var label = new Label (_("Location"));
+		var label = new Gtk.Label (_("Location"));
 		label.xalign = 1.0f;
 		hbox.add(label);
 
@@ -1572,7 +1573,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 
 		var adj = new Gtk.Adjustment(1, 1, 10, 1, 1, 0); //value, lower, upper, step, page_step, size
 		var spin = new Gtk.SpinButton (adj, 1, 0);
-		spin.xalign = (float) 0.5;
+		spin.xalign = 0.5f;
 		hbox.add(spin);
 		spin_passes = spin;
 
@@ -1956,7 +1957,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		vbox_main.add(hbox);
 		
 		// label
-		var label = new Gtk.Label(_("Split"));
+		var label = new Gtk.Label(_("Split Size (MB)"));
 		label.xalign = 1.0f;
 		hbox.add(label);
 
@@ -1966,7 +1967,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 
 		var adj = new Gtk.Adjustment(0, 0, 100000, 1, 1, 0); //value, lower, upper, step, page_step, size
 		var spin = new Gtk.SpinButton (adj, 1, 0);
-		spin.xalign = (float) 0.5;
+		spin.xalign = 0.5f;
 		hbox.add(spin);
 		spin_split = spin;
 		

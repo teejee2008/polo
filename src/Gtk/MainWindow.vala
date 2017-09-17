@@ -38,6 +38,7 @@ public enum AccelContext {
 	NORMAL,
 	TRASH,
 	ARCHIVE,
+	CLOUD,
 	EDIT,
 	NONE
 }
@@ -203,8 +204,10 @@ public class MainWindow : Gtk.Window {
 
 		init_device_events();
 
-		show_all();
+		this.show_all(); // show_all() before hiding
 
+		this.hide(); // hide window while initialization completes
+		
 		tmr_init = Timeout.add(100, init_delayed);
 	}
 
@@ -225,7 +228,7 @@ public class MainWindow : Gtk.Window {
 
 		pathbar.refresh();
 
-		sidebar.refresh();
+		//sidebar.refresh();
 
 		reset_sidebar_width();
 
@@ -239,8 +242,11 @@ public class MainWindow : Gtk.Window {
 
 		window_is_ready = true;
 
+		sidebar.refresh(); // after setting flag
+
 		if (App.first_run){
-			open_wizard_window();
+
+			Timeout.add(2000, show_wizard_delayed);
 		}
 		else{
 			if (App.first_run_after_update()){
@@ -252,11 +258,23 @@ public class MainWindow : Gtk.Window {
 			view.start_thumbnail_updater();
 		}
 
+		this.show_all();
+		this.present();
+		gtk_do_events();
+		
+		return false;
+	}
+
+	private bool show_wizard_delayed(){
+
+		open_wizard_window();
 		return false;
 	}
 
 	private void init_menubar(){
 
+		log_debug("MainWindow: init_menubar()");
+		
 		if (!App.headerbar_enabled){
 			
 			menubar = new MainMenuBar(false);
@@ -301,11 +319,15 @@ public class MainWindow : Gtk.Window {
 		sidebar = new Sidebar(null,null,null);
 		pane_nav.pack1(sidebar, false, false); // resize, shrink
 
-		DeviceMonitor.get_monitor().changed.connect(()=>{
-			sidebar.refresh();
-		});
+		/*DeviceMonitor.get_monitor().changed.connect(()=>{
+			if (sidebar == null){ return; }
+			if (window_is_ready) {
+				sidebar.refresh();
+			}
+		});*/
 
 		App.trashcan.query_completed.connect(()=>{
+			if (sidebar == null){ return; }
 			if (window_is_ready) {
 				sidebar.refresh();
 			}
@@ -326,15 +348,27 @@ public class MainWindow : Gtk.Window {
 			log_debug("opening directories specified as command line arguments");
 
 			foreach(string file_path in App.cmd_files){
+				
 				if (dir_exists(file_path)){
+					
 					var tab = layout_box.panel1.add_tab(false);
 					tab.pane.view.set_view_path(file_path);
 				}
 			}
 
+			foreach(var panel in layout_box.panels){
+
+				if (panel == layout_box.panel1){ continue; }
+				
+				var tab = panel.add_tab(false);
+				//tab.pane.view.set_view_path(App.user_home);
+				//tab.pane.view.set_view_path(file_path);
+			}
+
 			layout_box.set_panel_layout(PanelLayout.SINGLE, false);
 
 			if (layout_box.panel1.tabs.size > 0){
+				
 				active_pane = layout_box.panel1.tabs[0].pane;
 			}
 
@@ -345,15 +379,18 @@ public class MainWindow : Gtk.Window {
 			bool session_loaded = false;
 
 			if (App.restore_last_session && App.session_lock.lock_acquired){
+				
 				session_loaded = load_session();
 			}
 
 			if (!session_loaded){
+				
 				log_debug("opening new session with default settings");
 
 				foreach(var panel in layout_box.panels){
+					
 					var tab = panel.add_tab(false);
-					tab.pane.view.set_view_path(App.user_home);
+					//tab.pane.view.set_view_path(App.user_home);
 				}
 
 				layout_box.apply_panel_layout();
@@ -427,6 +464,8 @@ public class MainWindow : Gtk.Window {
 	}
 
 	public void update_accelerators_for_active_pane(){
+
+		log_debug("update_accelerators_for_active_pane()");
 		
 		if (active_pane == null){ return; }
 		if (active_pane.view == null){ return; }
@@ -435,7 +474,10 @@ public class MainWindow : Gtk.Window {
 		if (active_pane.view.current_item.is_trash || active_pane.view.current_item.is_trashed_item){
 			update_accelerators_for_context(AccelContext.TRASH);
 		}
-		else if (active_pane.view.current_item.is_archive || active_pane.view.current_item.is_archived_item){
+		else if (active_pane.view.current_item is FileItemCloud){
+			update_accelerators_for_context(AccelContext.CLOUD);
+		}
+		else if (active_pane.view.current_item is FileItemArchive){
 			update_accelerators_for_context(AccelContext.ARCHIVE);
 		}
 		else {
@@ -468,11 +510,14 @@ public class MainWindow : Gtk.Window {
 		case AccelContext.ARCHIVE:
 			menubar.context_archive();
 			break;
+		case AccelContext.CLOUD:
+			menubar.context_cloud();
+			break;
 		case AccelContext.EDIT:
 			menubar.context_edit();
 			break;
 		case AccelContext.NONE:
-			menubar.context_none();
+			//menubar.context_none(); // already executed
 			break;
 		}
 	}
@@ -491,6 +536,7 @@ public class MainWindow : Gtk.Window {
 		var mount_path = mount.get_root().get_path();
 		foreach(var view in views){
 			if ((view.current_item != null) && (view.current_item.file_path.has_prefix(mount_path))){
+				//view.current_item = null;
 				view.set_overlay_on_unmount();
 			}
 		}
@@ -543,7 +589,7 @@ public class MainWindow : Gtk.Window {
 
 			menubar.active_pane_changed();
 
-			this.update_accelerators_for_active_pane();
+			//this.update_accelerators_for_active_pane();
 		}
 	}
 
@@ -593,17 +639,42 @@ public class MainWindow : Gtk.Window {
 
 	// refresh
 
-	/*public void refresh_views(string dir_path){
-		log_debug("MainWindow: refresh_views(%s)".printf(dir_path));
+	public void refresh_remote_views(string dir_path){
+		
+		log_debug("MainWindow: refresh_remote_views(%s)".printf(dir_path));
+		
 		foreach(var view in views){
-			if ((view.current_item != null) && (view.current_item.file_path == dir_path)){
-				//view.query_items();
-				view.pane.refresh();
+			if (view.current_item == null) { continue; }
+			//if (view.current_item.is_remote == false) { continue; }
+			if (view.current_item.file_path != dir_path) { continue; }
+			
+			view.reload();
+		}
+		log_debug("MainWindow: refresh_remote_views(): exit");
+	}
+
+	public void close_tabs_for_location(string dir_path){
+
+		log_debug("MainWindow: close_tabs_for_location(%s)".printf(dir_path));
+
+		var list = new Gee.ArrayList<FileViewTab>();
+		
+		foreach(var view in views){
+			
+			if (view.current_item == null) { continue; }
+
+			if (view.current_location.has_prefix(dir_path)){
+				list.add(view.pane.tab);
 			}
 		}
-		log_debug("MainWindow: refresh_views(): exit");
-	}*/
 
+		foreach(var tab in list){
+			tab.close_tab();
+		}
+		
+		log_debug("MainWindow: close_tabs_for_location(): exit");
+	}
+	
 	public void refresh_trash(){
 		log_debug("MainWindow: refresh_trash()");
 		foreach(var view in views){
@@ -625,6 +696,24 @@ public class MainWindow : Gtk.Window {
 		log_debug("MainWindow: reset_views_with_path_prefix(): exit");
 	}*/
 
+	public void refresh_pathbars(){
+		
+		foreach(var pn in panes){
+			pn.pathbar.refresh();
+		}
+
+		this.pathbar.refresh();
+	}
+
+	public void refresh_statusbars(){
+		
+		foreach(var pn in panes){
+			pn.statusbar.refresh_visibility();
+		}
+
+		this.statusbar.refresh_visibility();
+	}
+	
 	public void refresh_treemodels(){
 
 		log_debug("MainWindow: refresh_treemodels()");
@@ -650,6 +739,38 @@ public class MainWindow : Gtk.Window {
 		}
 	}
 
+	public void reset_view_size_defaults(){
+
+		App.listview_font_scale = Main.LV_FONT_SCALE;
+		App.listview_icon_size = Main.LV_ICON_SIZE;
+		App.listview_row_spacing = Main.LV_ROW_SPACING;
+
+		App.iconview_icon_size = Main.IV_ICON_SIZE;
+		App.iconview_row_spacing = Main.IV_ROW_SPACING;
+		App.iconview_column_spacing = Main.IV_COLUMN_SPACING;
+
+		App.tileview_icon_size = Main.TV_ICON_SIZE;
+		App.tileview_row_spacing = Main.TV_ROW_SPACING;
+		App.tileview_padding = Main.TV_PADDING;
+
+		foreach(var v in views){
+			
+			v.listview_font_scale = App.listview_font_scale;
+			v.listview_icon_size = App.listview_icon_size;
+			v.listview_row_spacing = App.listview_row_spacing;
+			
+			v.iconview_icon_size = App.iconview_icon_size;
+			v.iconview_row_spacing = App.iconview_row_spacing;
+			v.iconview_column_spacing = App.iconview_column_spacing;
+			
+			v.tileview_icon_size = App.tileview_icon_size;
+			v.tileview_row_spacing = App.tileview_row_spacing;
+			v.tileview_padding = App.tileview_padding;
+			
+			v.refresh(false, false);
+		}
+	}
+	
 	public void save_sidebar_position(){
 		if (sidebar.visible && (pane_nav.position > 0)){
 			log_debug("MainWindow: save_sidebar_position: %d".printf(pane_nav.position));
@@ -751,7 +872,7 @@ public class MainWindow : Gtk.Window {
 		dialog.donations = null;
 
 		dialog.program_name = AppName;
-		dialog.comments = _("A modern, light-weight file manager for Linux");
+		dialog.comments = _("A modern file manager for Linux");
 		dialog.copyright = "Copyright © 2017 Tony George (%s)".printf(AppAuthorEmail);
 		dialog.version = AppVersion;
 		dialog.logo = get_app_icon(128,".svg");
@@ -781,12 +902,78 @@ public class MainWindow : Gtk.Window {
 		layout_box.panel1.run_script_in_new_terminal_tab(cmd, _("Cleaning Thumbnail Cache..."));
 	}
 
-	public void cloud_login(){
+	public void install_rclone(){
+
+		string sh_path = path_combine(App.share_dir, "files/install-rclone.sh");
+		string cmd = sh_path;
+
+		layout_box.panel1.run_script_in_new_terminal_tab(cmd, _("Running Rclone Installation Script"));
+	}
+
+	public void install_p7zip(){
+
+		string sh_path = path_combine(App.share_dir, "files/install-p7zip.sh");
+		string cmd = sh_path;
+
+		layout_box.panel1.run_script_in_new_terminal_tab(cmd, _("Running p7zip Installation Script"));
+	}
+
+	public void add_rclone_account(){
 
 		err_log_clear();
 
 		var win = new CloudLoginWindow(this);
 
+		//TermBox term = new TermBox(pane);
+		//term.start_shell();
+		
+		//if (LOG_DEBUG){
+			//var tab = layout_box.panel1.add_new_terminal_tab();
+			//term = tab.pane.terminal;
+			//terminal = term;
+		//}
+		//else{
+			//term = new TermBox(pane);
+			//term.start_shell();
+			//terminal = term;
+		//}
+
+		/*TermBox term;
+
+		var tab = layout_box.panel1.add_new_terminal_tab();
+		term = tab.pane.terminal;
+			
+		sleep(200);
+		term.feed_command("rclone config");
+
+		sleep(200);
+		term.feed_command("n");*/
+	}
+
+	public bool remove_rclone_account(CloudAccount acc){
+		
+		err_log_clear();
+
+		var term = new TermBox(active_pane);
+		term.start_shell();
+		
+		sleep(200);
+		term.feed_command("rclone config");
+
+		sleep(200);
+		term.feed_command("d");
+		
+		sleep(200);
+		term.feed_command(acc.name);
+
+		sleep(200);
+		term.feed_command("q");
+
+		//App.rclone.query_accounts();
+
+		//window.refre
+		
+		return true;
 	}
 
 	// session -------------------------------------
@@ -842,7 +1029,15 @@ public class MainWindow : Gtk.Window {
 			foreach(var tab in panel.tabs){
 
 				if (tab.is_dummy) { continue; }
-				//if (tab.pane.view.current_item == null) { continue; }
+				
+				if (tab.pane.view.current_item != null){
+					if (tab.pane.view.current_item is FileItemCloud){
+						continue;
+					}
+					else if (tab.pane.view.current_item.is_remote){
+						continue;
+					}
+				}
 
 				// tab
 				var node_tab = new Json.Object();
@@ -850,7 +1045,7 @@ public class MainWindow : Gtk.Window {
 
 				string tab_view_path = "";
 				if (tab.pane.view.current_item == null){
-					tab_view_path = tab.pane.view.current_path_saved;
+					tab_view_path = tab.pane.view.current_location;
 				}
 				//else if (tab.pane.view.current_item.is_trash || tab.pane.view.current_item.is_trashed_item){
 				//	tab_view_path = "trash://";
@@ -941,6 +1136,10 @@ public class MainWindow : Gtk.Window {
 		var node_panes = (Json.Array) node_session.get_array_member("panes");
 		foreach(var panenode in node_panes.get_elements()){
 			load_session_pane(panenode);
+		}
+
+		if (active_pane == null){
+			active_pane = layout_box.panel1.tabs[0].pane;
 		}
 
 		set_numeric_locale("");

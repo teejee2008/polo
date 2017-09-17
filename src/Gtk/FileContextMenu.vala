@@ -33,40 +33,30 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
-public enum FileActionType{
-	NONE,
-	CUT,
-	COPY,
-	PASTE,
-	TRASH,
-	DELETE,
-	DELETE_TRASHED,
-	RESTORE,
-	SHRED,
-	PASTE_SYMLINKS_AUTO,
-	PASTE_SYMLINKS_ABSOLUTE,
-	PASTE_SYMLINKS_RELATIVE,
-	PASTE_HARDLINKS,
-	LIST_ARCHIVE,
-	TEST_ARCHIVE,
-	EXTRACT,
-	COMPRESS,
-	KVM_DISK_MERGE,
-	KVM_DISK_CONVERT,
-	ISO_WRITE
-}
-
 public class FileContextMenu : Gtk.Menu {
 
+	// reference properties ----------
+
+	protected MainWindow window {
+		get { return App.main_window; }
+	}
+	
+	protected FileViewPane pane;
+
+	protected FileViewList view {
+		get{ return pane.view; }
+	}
+
+	protected LayoutPanel panel {
+		get { return pane.panel; }
+	}
+
+	// -------------------------------
+	
 	private Gee.ArrayList<FileItem> selected_items;
 	private FileItem? selected_item = null;
 	private bool is_trash = false;
 	private bool is_archive = false;
-
-	// parents
-	public FileViewList view;
-	public FileViewPane pane;
-	public MainWindow window;
 
 	public FileContextMenu(FileViewPane parent_pane){
 		
@@ -75,19 +65,17 @@ public class FileContextMenu : Gtk.Menu {
 		margin = 0;
 
 		pane = parent_pane;
-		view = pane.view;
-		window = App.main_window;
 
 		if (window.refresh_apps_pending){
 			window.refresh_apps_pending = false;
 			DesktopApp.query_apps();
 		}
 
-		if (view.current_item.is_trash || view.current_item.is_trashed_item){
+		if (view.current_item.is_trash){ //|| view.current_item.is_trashed_item
 			is_trash = true;
 			build_file_menu_for_trash();
 		}
-		else if (view.current_item.is_archive || view.current_item.is_archived_item){
+		else if (view.current_item is FileItemArchive){
 			is_archive = true;
 			build_file_menu_for_archive();
 		}
@@ -134,6 +122,8 @@ public class FileContextMenu : Gtk.Menu {
 		add_cut(this, sg_icon, sg_label);
 		
 		add_copy(this, sg_icon, sg_label);
+
+		add_paste_into_folder(this, sg_icon, sg_label);
 
 		add_paste(this, sg_icon, sg_label);
 
@@ -251,6 +241,10 @@ public class FileContextMenu : Gtk.Menu {
 
 		menu_item.sensitive = (selected_items.size > 0);
 
+		//if (view.current_item is FileItemCloud){
+		//	menu_item.sensitive = false;
+		//}
+
 		var sub_menu = new Gtk.Menu();
 		sub_menu.reserve_toggle_size = false;
 		menu_item.submenu = sub_menu;
@@ -278,14 +272,14 @@ public class FileContextMenu : Gtk.Menu {
 	private void add_open_with_default(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
 		if (selected_item == null){ return; }
-		
+
 		log_debug("FileContextMenu: add_open_with_default()");
 
 		Gtk.MenuItem menu_item = null;
 
 		// open with default app -------------------------
 
-		if ((selected_item.file_type != FileType.DIRECTORY) && !selected_item.is_archive){
+		if ((selected_item.file_type != FileType.DIRECTORY) && (selected_item is FileItemArchive == false)){
 
 			var app = MimeApp.get_default_app(selected_item.content_type);
 
@@ -352,7 +346,9 @@ public class FileContextMenu : Gtk.Menu {
 
 		var supported_apps = MimeApp.get_supported_apps(selected_item.content_type);
 		if (selected_item.content_type.has_prefix("text/")
-			|| selected_item.content_type.contains("shellscript")){
+			|| selected_item.content_type.contains("shellscript")
+			|| selected_item.content_type.contains("application/x-desktop")){
+				
 			supported_apps = DesktopApp.text_editors;
 		}
 
@@ -369,7 +365,7 @@ public class FileContextMenu : Gtk.Menu {
 				sg_label_sub);
 
 			submenu_item.activate.connect(() => {
-				view.open(view.get_selected_items().get(0), supported_app);
+				view.open(selected_item, supported_app);
 			});
 		}
 
@@ -397,7 +393,7 @@ public class FileContextMenu : Gtk.Menu {
 		menu_item.sensitive = (selected_items.size > 0);
 
 		menu_item.activate.connect(() => {
-			var file = view.get_selected_items().get(0);
+			var file = selected_item;
 			DesktopApp? app = choose_app(file);
 			if (app != null){
 				view.open(file, app);
@@ -438,6 +434,8 @@ public class FileContextMenu : Gtk.Menu {
 
 		if (selected_item == null){ return; }
 
+		if (view.current_item is FileItemCloud){ return; }
+
 		var menu_item = gtk_menu_add_item(
 			menu,
 			_("Set Default"),
@@ -476,7 +474,7 @@ public class FileContextMenu : Gtk.Menu {
 				sg_label_sub);
 
 			submenu_item.activate.connect(() => {
-				view.set_default_app(view.get_selected_items().get(0), supported_app);
+				view.set_default_app(selected_item, supported_app);
 			});
 		}
 
@@ -504,7 +502,7 @@ public class FileContextMenu : Gtk.Menu {
 		menu_item.sensitive = (selected_items.size > 0);
 
 		menu_item.activate.connect(() => {
-			var file = view.get_selected_items().get(0);
+			var file = selected_item;
 			DesktopApp? app = choose_app(file);
 			if (app != null){
 				view.set_default_app(file, app);
@@ -762,7 +760,7 @@ public class FileContextMenu : Gtk.Menu {
 		if (!dir_exists(templates_folder)){ return false; }
 
 		var templates = new FileItem.from_path(templates_folder);
-		templates.query_children(1);
+		templates.query_children(1, false);
 
 		bool item_added = false;
 		foreach(var template_file in templates.children.values){
@@ -828,6 +826,10 @@ public class FileContextMenu : Gtk.Menu {
 		});
 
 		menu_item.sensitive = (selected_items.size > 0) && (selected_item.can_delete);
+
+		if (view.current_item is FileItemCloud){
+			menu_item.sensitive = false;
+		}
 	}
 	
 	private void add_copy(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
@@ -851,28 +853,80 @@ public class FileContextMenu : Gtk.Menu {
 
 		menu_item.sensitive = (selected_items.size > 0);
 	}
-	
-	private void add_paste(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
-		log_debug("FileContextMenu: add_paste()");
+	private void add_paste_into_folder(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
+		log_debug("FileContextMenu: add_paste_into_folder()");
+
+		string txt = get_clipboard_text();
+		string url = txt.has_prefix("http") ? txt : "";
+
+		if ((window.pending_action == null) || (selected_items.size != 1) || !selected_items[0].is_directory || (url.length == 0)){
+			return;
+		}
+		
 		// paste --------------------------------
 
 		var menu_item = gtk_menu_add_item(
 			menu,
-			_("Paste Here"),
-			_("Paste selected items in this directory"),
+			_("Paste Into Folder"),
+			_("Paste items into selected directory"),
 			IconManager.lookup_image("edit-paste",16),
 			sg_icon,
 			sg_label);
 
 		menu_item.activate.connect (() => {
 			log_debug("file_context_menu.paste()");
-			view.paste();
+			if (window.pending_action != null){
+				view.paste_into_folder();
+			}
+			else if (url.length > 0){
+				view.paste_url_into_folder(url);
+			}
 		});
 
-		menu_item.sensitive = (window.pending_action != null);
+		menu_item.sensitive = ((window.pending_action != null) || (url.length > 0)) && (selected_items.size == 1) && selected_items[0].is_directory;
 	}
+	
+	private void add_paste(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		log_debug("FileContextMenu: add_paste()");
+
+		string txt = get_clipboard_text();
+		string url = txt.has_prefix("http") ? txt : "";
+		
+		// paste --------------------------------
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Paste Here"),
+			_("Paste items in current directory"),
+			IconManager.lookup_image("edit-paste",16),
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			log_debug("file_context_menu.paste()");
+			if (window.pending_action != null){
+				view.paste();
+			}
+			else if (url.length > 0){
+				view.paste_url(url);
+			}
+		});
+
+		menu_item.sensitive = (window.pending_action != null) || (url.length > 0);
+	}
+
+	private string get_clipboard_text(){
+		Gdk.Display display = this.get_display();
+		Gtk.Clipboard clipboard = Gtk.Clipboard.get_for_display(display, Gdk.SELECTION_CLIPBOARD);
+		string txt = clipboard.wait_for_text();
+		if ((txt != null) && (txt.has_prefix("http"))){
+			return txt;
+		}
+		return "";
+	}	
 
 	private void add_rename(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
@@ -935,7 +989,8 @@ public class FileContextMenu : Gtk.Menu {
 			view.delete_items();
 		});
 
-		menu_item.sensitive = (selected_items.size > 0) && selected_item.can_delete
+		menu_item.sensitive = (selected_items.size > 0)
+			&& (selected_item.can_delete || selected_item.is_remote)
 			&& (!selected_item.is_trashed_item || ((selected_item.parent != null) && selected_item.parent.is_trash));
 	}
 
@@ -1125,6 +1180,10 @@ public class FileContextMenu : Gtk.Menu {
 		});
 
 		menu_item.sensitive = (selected_items.size > 0) && (selected_item.can_delete);
+
+		if (view.current_item is FileItemCloud){
+			menu_item.sensitive = false;
+		}
 	}
 
 	private void add_copy_across(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
@@ -1161,6 +1220,10 @@ public class FileContextMenu : Gtk.Menu {
 		});
 
 		menu_item.sensitive = (selected_items.size > 0) && (selected_item.can_delete);
+
+		if (view.current_item is FileItemCloud){
+			menu_item.sensitive = false;
+		}
 	}
 
 	private void add_paste_symlinks_auto(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
@@ -1332,6 +1395,10 @@ public class FileContextMenu : Gtk.Menu {
 
 	private void add_archive_actions(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
+		if (view.current_item is FileItemCloud){ return; }
+
+		if (selected_items.size == 0){ return; }
+		
 		log_debug("FileContextMenu: add_archive_actions()");
 
 		var menu_item = gtk_menu_add_item(
@@ -1343,13 +1410,15 @@ public class FileContextMenu : Gtk.Menu {
 			sg_label);
 			
 		var sub_menu = new Gtk.Menu();
-		//sub_menu.reserve_toggle_size = false;
+		sub_menu.reserve_toggle_size = false;
 		menu_item.submenu = sub_menu;
 
 		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
 		var sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
 		
 		add_compress(sub_menu, sg_icon_sub, sg_label_sub);
+
+		add_browse_archive(sub_menu, sg_icon_sub, sg_label_sub);
 		
 		add_extract_to(sub_menu, sg_icon_sub, sg_label_sub);
 		
@@ -1360,6 +1429,8 @@ public class FileContextMenu : Gtk.Menu {
 	
 	private void add_compress(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
+		if (view.current_item is FileItemCloud){ return; }
+		
 		log_debug("FileContextMenu: add_compress()");
 
 		var menu_item = gtk_menu_add_item(
@@ -1378,16 +1449,39 @@ public class FileContextMenu : Gtk.Menu {
 		menu_item.sensitive = (selected_items.size > 0);
 	}
 
+	private void add_browse_archive(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		//if (!can_extract){ return; }
+		
+		log_debug("FileContextMenu: add_browse_archive()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Open"),
+			_("Open archive"),
+			null,//IconManager.lookup_image("package-x-generic",16),
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			view.browse_archive();
+		});
+
+		menu_item.sensitive = (selected_items.size > 0)
+			&& FileItem.is_archive_by_extension(selected_item.file_path) // check file
+			; // check destination
+	}
+	
 	private void add_extract_to(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
-		if (!can_extract){ return; }
+		//if (!can_extract){ return; }
 		
 		log_debug("FileContextMenu: add_extract_to()");
 
 		var menu_item = gtk_menu_add_item(
 			menu,
 			_("Extract To.."),
-			_("Extract archives to another location"),
+			_("Extract archives to another location. Existing files will be overwritten."),
 			null,//IconManager.lookup_image("package-x-generic",16),
 			sg_icon,
 			sg_label);
@@ -1396,19 +1490,21 @@ public class FileContextMenu : Gtk.Menu {
 			view.extract_selected_items_to_another_location();
 		});
 
-		menu_item.sensitive = !selected_item.is_archived_item; //item.is_archive || item.is_archived_item;
+		menu_item.sensitive = (selected_items.size > 0)
+			&& ((view.current_item is FileItemArchive) || FileItem.is_archive_by_extension(selected_item.file_path)) // check file
+			; // check destination
 	}
 
 	private void add_extract_across(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
-		if (!can_extract){ return; }
+		//if (!can_extract){ return; }
 		
 		log_debug("FileContextMenu: add_extract_across()");
 
 		var menu_item = gtk_menu_add_item(
 			menu,
 			_("Extract Across"),
-			_("Extract archives to the opposite pane"),
+			_("Extract archives to the opposite pane. Existing files will be overwritten."),
 			null,//IconManager.lookup_image("package-x-generic",16),
 			sg_icon,
 			sg_label);
@@ -1417,19 +1513,23 @@ public class FileContextMenu : Gtk.Menu {
 			view.extract_selected_items_to_opposite_location();
 		});
 
-		menu_item.sensitive = !selected_item.is_archived_item; //item.is_archive || item.is_archived_item;
+		FileItem? opp_item = view.panel.opposite_pane.view.current_item;
+
+		menu_item.sensitive = (selected_items.size > 0)
+			&& ((view.current_item is FileItemArchive) || FileItem.is_archive_by_extension(selected_item.file_path)) // check file
+			&& (opp_item != null) && !(opp_item is FileItemArchive) && !(opp_item is FileItemCloud); // check destination
 	}
 
 	private void add_extract_here(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
-		if (!can_extract){ return; }
-		
+		//if (!can_extract){ return; }
+
 		log_debug("FileContextMenu: add_extract_here()");
 
 		var menu_item = gtk_menu_add_item(
 			menu,
 			_("Extract Here"),
-			_("Extract archives to new folders in this location"),
+			_("Extract archives in same location. New folder will be created with archive name."),
 			null,//IconManager.lookup_image("package-x-generic",16),
 			sg_icon,
 			sg_label);
@@ -1438,19 +1538,16 @@ public class FileContextMenu : Gtk.Menu {
 			view.extract_selected_items_to_same_location();
 		});
 
-		menu_item.sensitive = !selected_item.is_archived_item; //item.is_archive && !item.is_archived_item;
+		menu_item.sensitive = (selected_items.size > 0)
+			&& FileItem.is_archive_by_extension(selected_item.file_path) // check file
+			&& !(view.current_item is FileItemArchive) && !(view.current_item is FileItemCloud); // check destination
 	}
-
-	private bool can_extract {
-		get {
-			return selected_items_contain_archives || view.current_item.is_archive || view.current_item.is_archived_item;
-		}
-	}
-
 
 	private void add_disk_usage(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
 		if (!view.is_normal_directory){ return; }
+
+		if (view.current_item is FileItemCloud){ return; }
 
 		log_debug("FileContextMenu: add_disk_usage()");
 
@@ -1612,9 +1709,11 @@ public class FileContextMenu : Gtk.Menu {
 
 	private void add_kvm_actions(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
-		log_debug("FileContextMenu: add_kvm_actions()");
-
 		if (!App.kvm_enable) { return; }
+
+		if (view.current_item is FileItemCloud){ return; }
+
+		log_debug("FileContextMenu: add_kvm_actions()");
 		
 		var menu_item = gtk_menu_add_item(
 			menu,
@@ -1842,6 +1941,8 @@ public class FileContextMenu : Gtk.Menu {
 
 	private void add_pdf_actions(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
+		if (view.current_item is FileItemCloud){ return; }
+		
 		if (selected_item == null){ return; }
 
 		if (!selected_item.is_pdf){ return; }
@@ -1859,7 +1960,7 @@ public class FileContextMenu : Gtk.Menu {
 			sg_label);
 			
 		var sub_menu = new Gtk.Menu();
-		//sub_menu.reserve_toggle_size = false;
+		sub_menu.reserve_toggle_size = false;
 		menu_item.submenu = sub_menu;
 
 		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
@@ -2090,6 +2191,8 @@ public class FileContextMenu : Gtk.Menu {
 
 	private void add_image_actions(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
+		if (view.current_item is FileItemCloud){ return; }
+		
 		if (selected_item == null){ return; }
 
 		if (!selected_item.is_image){ return; }
@@ -2443,7 +2546,7 @@ public class FileContextMenu : Gtk.Menu {
 		get {
 			if (selected_items.size == 0){ return false; }
 			foreach(var item in selected_items){
-				if (item.is_archive){
+				if (item is FileItemArchive){
 					return true;
 				}
 			}
@@ -2463,95 +2566,3 @@ public class FileContextMenu : Gtk.Menu {
 		return true;
 	}
 }
-
-public class SortMenu : Gtk.Menu {
-
-	// parents
-	public FileViewList view;
-	public FileViewPane pane;
-	public MainWindow window;
-
-	public SortMenu(FileViewPane parent_pane){
-
-		log_debug("SortMenu()");
-
-		pane = parent_pane;
-		view = pane.view;
-		window = App.main_window;
-
-		build_menu();
-
-		log_debug("SortMenu(): exit");
-	}
-
-	public void build_menu(){
-		
-		Gtk.RadioMenuItem item_prev = null;
-		
-		foreach(var col in view.get_all_columns()){
-			
-			var col_index = col.get_data<FileViewColumn>("index");
-			if (col_index == FileViewColumn.UNSORTABLE) { continue; }
-
-			bool _active = (view.get_sort_column_index() == col_index);
-			var submenu_item = add_sort_column_item(this, item_prev, col, _active);
-			item_prev = submenu_item;
-		}
-
-		gtk_menu_add_separator(this);
-
-		add_sort_desc_item(this);
-
-		this.show_all();
-	}
-	
-	private Gtk.RadioMenuItem add_sort_column_item(Gtk.Menu sub_menu, Gtk.RadioMenuItem? item_prev, Gtk.TreeViewColumn col, bool _active){
-
-		string txt = (col.title.length > 0) ? col.title.replace("↓","").replace("↑","").strip() : _("Indicator");
-
-		//log_debug("FileContextMenu: add option: %s".printf(txt));
-			
-		var submenu_item = gtk_menu_add_radio_item(
-				sub_menu,
-				txt,
-				"",
-				item_prev);
-
-		var col_index = col.get_data<FileViewColumn>("index");
-		submenu_item.set_data<FileViewColumn>("index", col_index);
-
-		submenu_item.active = _active;
-		
-		submenu_item.toggled.connect(on_sort_column_menu_item_toggled);
-
-		return submenu_item;
-	}
-
-	private Gtk.CheckMenuItem add_sort_desc_item(Gtk.Menu sub_menu){
-
-		var menu_item = gtk_menu_add_check_item(
-					sub_menu,
-					_("Sort Descending"),
-					"");
-
-		menu_item.active = view.get_sort_column_desc();
-
-		menu_item.toggled.connect(on_sort_desc_menu_item_toggled);
-
-		return menu_item;
-	}
-
-	private void on_sort_column_menu_item_toggled(Gtk.CheckMenuItem menu_item){
-		if (!menu_item.active){ return; }
-		log_debug("FileContextMenu: sort column: %s".printf(menu_item.label));
-		var col_index = menu_item.get_data<FileViewColumn>("index");
-		view.set_sort_column_by_index(col_index);
-	}
-
-	private void on_sort_desc_menu_item_toggled(Gtk.CheckMenuItem menu_item){
-		log_debug("FileContextMenu: sort desc: %s".printf(menu_item.active.to_string()));
-		view.set_sort_column_desc(menu_item.active);
-	}
-}
-
-

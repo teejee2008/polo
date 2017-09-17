@@ -50,7 +50,6 @@ public class TrashCan : FileItem {
 
 	public TrashCan(int _user_id, string _user_name, string _user_home) {
 		this.is_trash = true;
-		this.file_path_prefix = "trash://";
 		this.user_id = _user_id.to_string();
 		this.user_name = _user_name;
 		this.user_home = _user_home;
@@ -78,7 +77,7 @@ public class TrashCan : FileItem {
 
 	public void query_items_thread(){
 
-		log_debug("TrashCan: query_items()");
+		log_debug("TrashCan: query_items(): %s".printf(string.nfill(30,'-')));
 		
 		this.children.clear();
 		this.trash_can_size = 0;
@@ -109,7 +108,7 @@ public class TrashCan : FileItem {
 
 		thread_running = false;
 
-		log_msg("Trash: query_completed");
+		log_debug("TrashCan: query_items():end %s".printf(string.nfill(30,'-')));
 		
 		query_completed();		
 	}
@@ -130,7 +129,7 @@ public class TrashCan : FileItem {
 		}
 
 		var fi = new FileItem.from_path(dir_files);
-		fi.query_children(1);
+		fi.query_children(1, false);
 		foreach(var item in fi.children.values){
 			string item_name = item.file_name;
 			read_trash_info(dir_files, dir_info, item_name, mount_path);
@@ -139,14 +138,14 @@ public class TrashCan : FileItem {
 
 	private void remove_orphaned_trashinfo(string trash_path){
 
-		log_debug("Trash: remove_orphaned_trashinfo(): %s".printf(trash_path));
+		//log_debug("Trash: remove_orphaned_trashinfo(): %s".printf(trash_path));
 		
 		string dir_files = path_combine(trash_path, "files");
 		string dir_info = path_combine(trash_path, "info");
 		//string dir_expunged = path_combine(trash_path, "expunged");
 		
 		var dir = new FileItem.from_path(dir_info);
-		dir.query_children(1);
+		dir.query_children(1, false);
 		
 		foreach(var item in dir.children.values){
 			
@@ -200,7 +199,7 @@ public class TrashCan : FileItem {
 				else if (line.down().has_prefix("size=")){
 					var txt = line[line.index_of("=") + 1: line.length];
 					trash_size = int64.parse(txt);
-					log_debug("Size=%s".printf(txt));
+					//log_debug("Size=%s".printf(txt));
 				}
 			}
 		}
@@ -215,36 +214,39 @@ public class TrashCan : FileItem {
 		//log_debug("info_file: %s".printf(info_file));
 
 		// set some properties to be passed to children
-		this.trash_basepath = file_parent(trash_file);
+		
 		
 		var item = this.add_child_from_disk(trash_file, 0);
-
+		item.is_trashed_item = true;
+		item.trash_basepath = file_parent(trash_file);
 		item.trash_original_path = uri_decode(orig_path);
-
-		if (item.trash_original_path.length > 0){
-			item.display_name = file_basename(item.trash_original_path);
-		}
-		
 		item.trash_item_name = item_name;
 		item.trash_deletion_date = trash_date;
 		item.trash_info_file = info_file;
 		item.trash_data_file = trash_file;
+		
+		if (item.trash_original_path.length > 0){
+			item.display_name = file_basename(item.trash_original_path);
+		}
 
 		//FileItem.add_to_cache(item); // do not add to cache
-		
 		//log_debug("trashed item: %s".printf(orig_path));
 		//log_debug("trashed on  : %s".printf(item.trash_deletion_date.format ("%Y-%m-%d %H:%M")));
 		//log_debug("trashed type: %s".printf(item.content_type));
 
-		if ((trash_size == 0) && (item.file_type == FileType.DIRECTORY)){
+		if (trash_size == 0) {
+			if (item.file_type == FileType.DIRECTORY){
+				log_msg("Trash: Calculating trashed folder size: %s".printf(trash_file));
+				trash_size = dir_size(trash_file);
+			}
+			else{
+				trash_size = file_get_size(trash_file);
+			}
 
-			log_msg("Trash: Calculating trashed folder size: %s".printf(trash_file), true);
-			
-			trash_size = dir_size(trash_file);
-			item._size = trash_size;
-			
+			item.file_size = trash_size;
+
 			if (file_exists(info_file)){
-				
+				log_msg("Trash: Updating trashinfo file: %s".printf(info_file));
 				if (!file_info_text.has_suffix("\n")){
 					file_info_text += "\n";
 				}
@@ -254,6 +256,10 @@ public class TrashCan : FileItem {
 				//chown(info_file, App.user_name, App.user_name, false, null);
 			}
 		}
+
+		log_debug("item: %s, %s".printf(orig_path, format_file_size(trash_size)));
+
+		item.file_size = trash_size;
 
 		this.trash_can_size += trash_size;
 		//log_debug("trash_can_size += %lld".printf(trash_size));
@@ -277,5 +283,13 @@ public class TrashCan : FileItem {
 		//log_debug("parsed: %d-%d-%d %d:%d:%.0f".printf(year, month, day, hr, min, sec));
 
 		return new DateTime.utc(year, month, day, hr, min, sec);
+	}
+
+	public static bool empty_trash(){
+		if (cmd_exists("gvfs-trash")){
+			int status = exec_sync("gvfs-trash --empty");
+			return (status == 0);
+		}
+		return false;
 	}
 }

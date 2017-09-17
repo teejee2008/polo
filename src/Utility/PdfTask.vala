@@ -56,6 +56,8 @@ public class PdfTask : AsyncTask {
 	public bool inplace = false;
 	
 	public PdfTaskType action;
+
+	public Gee.ArrayList<string> output_files = new Gee.ArrayList<string>();
 	
 	public PdfTask(){
 		init_regular_expressions();
@@ -68,7 +70,8 @@ public class PdfTask : AsyncTask {
 		try {
 			//Batch: 1/1 complete
 			regex_list["status"] = new Regex("""^Batch:[ \t]*([0-9.]+)/([0-9.]+)[ \t]*complete""");
-			regex_list["file"] = new Regex("""^Input:[ \t]*(.*)""");
+			regex_list["input"] = new Regex("""^Input:[ \t]*(.*)""");
+			regex_list["output"] = new Regex("""^((Created|Replaced|Removed):[ \t]*(.*))""");
 		}
 		catch (Error e) {
 			log_error (e.message);
@@ -272,14 +275,21 @@ public class PdfTask : AsyncTask {
 
 		if ((line == null) || (line.length == 0)) { return true; }
 
+		mutex_parser.lock();
+		
 		MatchInfo match;
 		if (regex_list["status"].match(line, 0, out match)) {
 			count_completed = int64.parse(match.fetch(1));
 			progress = (count_completed * 1.0) / count_total;
 		}
-		else if (regex_list["file"].match(line, 0, out match)) {
+		else if (regex_list["input"].match(line, 0, out match)) {
 			current_file = file_basename(match.fetch(1).strip());
 		}
+		else if (regex_list["output"].match(line, 0, out match)){
+			output_files.add(match.fetch(1).strip());
+		}
+
+		mutex_parser.unlock();
 
 		return true;
 	}

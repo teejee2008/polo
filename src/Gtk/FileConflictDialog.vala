@@ -46,7 +46,10 @@ public class FileConflictDialog : Gtk.Dialog {
 	private Gtk.Button btn_skip;
 
 	private Gtk.Box preview_box;
-
+	
+	private Gtk.Label lbl_header;
+	private Gtk.Label lbl_file_count_message;
+	
 	private Gtk.Image img_src;
 	private Gtk.Label lbl_size_src;
 	private Gtk.Label lbl_modified_src;
@@ -57,7 +60,7 @@ public class FileConflictDialog : Gtk.Dialog {
 	private Gtk.Label lbl_modified_dest;
 	private Gtk.Label lbl_type_dest;
 
-	private static int thumb_size = 128;
+	private static int thumb_size = 64;
 
 	private bool custom_mode = false;
 	public FileReplaceMode replace_mode = FileReplaceMode.NONE;
@@ -92,16 +95,18 @@ public class FileConflictDialog : Gtk.Dialog {
 
 		var label = new Gtk.Label(format_text(_("Replace Existing Files?"), true, false, true));
 		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.margin_bottom = 12;
 		vbox_main.add(label);
+		lbl_header = label;
 
 		label = new Gtk.Label("%'ld %s".printf(task.conflicts.keys.size, _("file(s) exist at the destination")));
 		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.margin_bottom = 12;
 		label.margin_left = 6;
 		vbox_main.add(label);
+		lbl_file_count_message = label;
 
 		add_actions(vbox_main);
 
@@ -116,7 +121,7 @@ public class FileConflictDialog : Gtk.Dialog {
 
 		var bbox = new Gtk.ButtonBox(Orientation.HORIZONTAL);
 		bbox.set_spacing (6);
-		bbox.set_layout(Gtk.ButtonBoxStyle.START);
+		bbox.set_layout(Gtk.ButtonBoxStyle.EXPAND);
 		bbox.hexpand = true;
 		//bbox.margin_bottom = 12;
 		box.add(bbox);
@@ -241,6 +246,10 @@ public class FileConflictDialog : Gtk.Dialog {
 				replace_mode = FileReplaceMode.CUSTOM;
 				gtk_show(scrolled);
 				refresh_treeview();
+				
+				lbl_header.label = format_text(_("Select Files to Replace"), true, false, true);
+				
+				gtk_hide(lbl_file_count_message);
 
 				btn_custom.label = _("OK");
 				btn_custom.set_tooltip_text(_("Replace the selected files"));
@@ -274,14 +283,6 @@ public class FileConflictDialog : Gtk.Dialog {
 
 	private void init_treeview(Gtk.Box box){
 
-		var label = new Gtk.Label(format_text(_("Select files to replace:"), false, false, false));
-		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
-		label.margin_top = 12;
-		box.add(label);
-
-		label.set_no_show_all(true);
-
 		// treeview
 		treeview = new Gtk.TreeView();
 		treeview.get_selection().mode = SelectionMode.SINGLE;
@@ -302,11 +303,6 @@ public class FileConflictDialog : Gtk.Dialog {
 		box.add(scrolled);
 
 		scrolled.set_no_show_all(true);
-
-		scrolled.notify["visible"].connect(()=>{
-			label.no_show_all = scrolled.no_show_all;
-			label.visible = scrolled.visible;
-		});
 
 		// toggle -----------------------------
 
@@ -350,18 +346,20 @@ public class FileConflictDialog : Gtk.Dialog {
 
 		// column
 		col = new TreeViewColumn();
-		col.title = _("Item Name");
+		col.title = _("Item");
 		col.clickable = false;
 		col.resizable = true;
+		col.min_width = 300;
 		//col.expand = true;
 		treeview.append_column(col);
 
 		// cell icon
-		var cell_pix = new CellRendererPixbuf ();
+		var cell_pix = new CellRendererPixbuf();
 		col.pack_start(cell_pix, false);
 
 		// text
-		var cell_text = new CellRendererText ();
+		var cell_text = new CellRendererText();
+		cell_text.ellipsize = Pango.EllipsizeMode.END;
 		col.pack_start (cell_text, false);
 
 		// render text
@@ -389,14 +387,14 @@ public class FileConflictDialog : Gtk.Dialog {
 				log_error("gicon is null: %s".printf(item.file_name));
 
 				if (item.file_type == FileType.DIRECTORY) {
-					pixcell.stock_id = "gtk-directory";
+					pixcell.icon_name = "folder"; // stock name
 				}
 				else{
-					pixcell.stock_id = "gtk-file";
+					pixcell.icon_name = "text-x-preview"; // stock name
 				}
 			}
 
-			pixcell.stock_size = 16;
+			pixcell.stock_size = Gtk.IconSize.MENU;
 		});
 
 
@@ -407,11 +405,12 @@ public class FileConflictDialog : Gtk.Dialog {
 		col.title = _("Path");
 		col.clickable = false;
 		col.resizable = true;
-		//col.expand = true;
+		col.expand = true;
 		treeview.append_column(col);
 
 		// text
-		cell_text = new CellRendererText ();
+		cell_text = new CellRendererText();
+		cell_text.ellipsize = Pango.EllipsizeMode.END;
 		col.pack_start (cell_text, false);
 
 		// render text
@@ -419,7 +418,7 @@ public class FileConflictDialog : Gtk.Dialog {
 			var crt = cell as Gtk.CellRendererText;
 			FileConflictItem conflict;
 			model.get (iter, 0, out conflict, -1);
-			crt.text = conflict.source_item.file_location[conflict.source_base_dir.file_path.length + 1: conflict.source_item.file_location.length];
+			crt.text = conflict.location;
 		});
 
 		treeview.get_selection().changed.connect(on_treeview_selection_changed);
@@ -454,7 +453,7 @@ public class FileConflictDialog : Gtk.Dialog {
 			typeof(bool)
 		);
 
-		foreach(var conflict in task.conflicts.values){
+		foreach(var conflict in task.conflicts_sorted){
 			TreeIter iter0;
 			model.append(out iter0);
 			model.set (iter0, 0, conflict);
@@ -485,17 +484,17 @@ public class FileConflictDialog : Gtk.Dialog {
 		hbox.add(vbox);
 
 		var label = new Gtk.Label("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		vbox.add(label);
 		lbl_type_src = label;
 
 		label = new Gtk.Label("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		vbox.add(label);
 		lbl_size_src = label;
 
 		label = new Gtk.Label("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		vbox.add(label);
 		lbl_modified_src = label;
 
@@ -514,17 +513,17 @@ public class FileConflictDialog : Gtk.Dialog {
 		hbox.add(vbox);
 
 		label = new Gtk.Label("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		vbox.add(label);
 		lbl_type_dest = label;
 
 		label = new Gtk.Label("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		vbox.add(label);
 		lbl_size_dest = label;
 
 		label = new Gtk.Label("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		vbox.add(label);
 		lbl_modified_dest = label;
 	}
@@ -540,7 +539,7 @@ public class FileConflictDialog : Gtk.Dialog {
 		//img_src.set_size_request(32, 32);
 
 		lbl_type_src.label = "%s: %s".printf(_("Type"), item.content_type_desc);
-		lbl_size_src.label = "%s: %s".printf(_("Size"), format_file_size(item.size));
+		lbl_size_src.label = "%s: %s".printf(_("Size"), format_file_size(item.file_size));
 		lbl_modified_src.label = "%s: %s".printf(_("Modified"), item.modified.format ("%Y-%m-%d %H:%M"));
 
 		// dest -------------------------
@@ -552,7 +551,7 @@ public class FileConflictDialog : Gtk.Dialog {
 		//img_dest.set_size_request(32, 32);
 
 		lbl_type_dest.label = "%s: %s".printf(_("Type"), item.content_type_desc);
-		lbl_size_dest.label = "%s: %s".printf(_("Size"), format_file_size(item.size));
+		lbl_size_dest.label = "%s: %s".printf(_("Size"), format_file_size(item.file_size));
 		lbl_modified_dest.label = "%s: %s".printf(_("Modified"), item.modified.format ("%Y-%m-%d %H:%M"));
 
 		gtk_show(preview_box);
@@ -571,10 +570,10 @@ public class FileConflictDialog : Gtk.Dialog {
 		}
 		else{
 			if (item.file_type == FileType.DIRECTORY) {
-				image.icon_name = "gtk-directory";
+				image.icon_name = "folder";
 			}
 			else{
-				image.icon_name = "gtk-file";
+				image.icon_name = "text-x-preview";
 			}
 		}
 	}

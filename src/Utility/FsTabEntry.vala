@@ -44,7 +44,7 @@ public class FsTabEntry : GLib.Object{
 	public string device_uuid {
 		owned get{
 			if (device_string.down().has_prefix("uuid=")){
-				return device_string.replace("\"","").replace("'","").split("=")[1];
+				return device_string.replace("\"","").replace("'","").split("=",2)[1];
 			}
 			else{
 				return "";

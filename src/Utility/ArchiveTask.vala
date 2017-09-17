@@ -57,8 +57,8 @@ public class ArchiveTask : AsyncTask {
 	public string keyfile = "";
 	
 	// archive
-	public FileItem archive;
-	public Gee.ArrayList<FileItem> archives = new Gee.ArrayList<FileItem>();
+	public FileItemArchive archive;
+	public Gee.ArrayList<FileItemArchive> archives = new Gee.ArrayList<FileItemArchive>();
 	public Gee.ArrayList<FileItem> items = new Gee.ArrayList<FileItem>();
 	
 	public ArchiveAction action = ArchiveAction.CREATE;
@@ -84,9 +84,19 @@ public class ArchiveTask : AsyncTask {
 	private MatchInfo match;
 	private double dblVal;
 
-	private static string 7zip_version_name = "";
+	private static string 7zip_version_name;
 
-	public ArchiveTask() {
+	private Gtk.Window? window = null;
+
+	public ArchiveTask(Gtk.Window? _window) {
+
+		if (_window != null){
+			window = _window;
+		}
+		else{
+			window = App.main_window;
+		}
+		
 		init_regular_expressions();
 	}
 
@@ -136,7 +146,7 @@ public class ArchiveTask : AsyncTask {
 
 	public static double 7zip_version {
 		get {
-			if (7zip_version_name.length == 0){
+			if ((7zip_version_name == null) || (7zip_version_name.length == 0)){
 				
 				string std_out, std_err;
 				exec_sync("7z", out std_out, out std_err);
@@ -232,7 +242,7 @@ public class ArchiveTask : AsyncTask {
 				cmd += " '%s'".printf(escape_single_quote(file_basename(item.file_path)));
 			}
 			cmd += " | ";
-			cmd += "pv --size %lld -n".printf(archive.size);
+			cmd += "pv --size %lld -n".printf(archive.file_size);
 			cmd += " | ";
 
 			parser_name = "pv";
@@ -311,8 +321,8 @@ public class ArchiveTask : AsyncTask {
 		string cmd = "";
 
 		cmd += "7z a -bd";
-		if (archive.password.length > 0) {
-			cmd += " '-p%s'".printf(archive.password);
+		if (password.length > 0) {
+			cmd += " '-p%s'".printf(password);
 			if (encrypt_header) {
 				cmd += " -mhe";
 			}
@@ -778,10 +788,209 @@ public class ArchiveTask : AsyncTask {
 			break;
 		}
 	}
+
+	// actions ----------------------------------
+
+	public void compress(FileItemArchive arch) {
+		
+		this.archive = arch;
+		//this.items = _items;
+		this.archive_path = archive.file_path;
+
+		log_msg("\nAction: CREATE");
+		log_msg("Archive: %s".printf(archive_path));
+		action = ArchiveAction.CREATE;
+
+		if (archive_path.length == 0){
+			log_error("Main.compress(): archive_path not set");
+			exit(1);
+		}
+
+		// set some values for estimating progress
+		
+		prg_bytes_total = archive.file_size;
+		log_debug("data_size: %s".printf(format_file_size(prg_bytes_total)));
+		
+		prg_count_total = archive.file_count_total;
+		log_debug("file_count: %lld".printf(prg_count_total));
+
+		// begin
+		
+		execute(arch);
+	}
+
+	public void extract_archives(Gee.ArrayList<FileItemArchive> _archives, bool _extract_to_new_folder) {
+
+		log_debug("ArchiveTask: extract_archives(): %d".printf(_archives.size));
+
+		var list = new Gee.ArrayList<FileItemArchive>();
+		foreach(var item in _archives){ list.add(item); }
+		this.archives = list;
+
+		this.action = ArchiveAction.EXTRACT;
+
+		this.extract_to_new_folder = _extract_to_new_folder;
+
+		extract_next_archive();
+	}
+
+	private bool extract_next_archive(){ 
+
+		log_debug("ArchiveTask: extract_next_archive(): %d".printf(archives.size)); 
+
+		if (archives.size > 0){ 
+			var arch = archives[0]; 
+			archives.remove(arch); 
+			extract_archive(arch, extract_to_new_folder);
+			return true;
+		} 
+
+		return false; 
+	} 
+
+	public void extract_archive(FileItemArchive arch, bool _extract_to_new_folder) {
+
+		log_debug("ArchiveTask: extract_archive(): %s".printf(arch.file_path));
+		
+		this.archive = arch;
+
+		// set some properties to be passed to children
+		this.archive.archive_base_item = this.archive;
+
+		archive_path = archive.archive_base_item.file_path;
+
+		if (_extract_to_new_folder){
+			archive.extraction_path = file_generate_unique_name(archive.extraction_path);
+		}
+		
+		this.extraction_path = archive.extraction_path;
+		
+		log_msg("\nAction: EXTRACT");
+		log_msg("Archive: %s".printf(archive_path));
+		this.action = ArchiveAction.EXTRACT;
+
+		if (archive_path.length == 0){
+			log_error("Main.extract(): archive_path not set");
+			exit(1);
+		}
+
+		if (extraction_path.length == 0){
+			log_error("Main.extract(): extraction_path not set");
+			exit(1);
+		}
+		else{
+			dir_create(extraction_path);
+			log_msg("Extraction Path: %s".printf(extraction_path));
+		}
+
+		// set some values for estimating progress
+		prg_bytes_total = file_get_size(archive_path);
+		log_debug("archive_size: %lld".printf(prg_bytes_total));
+
+		// begin
+		execute(arch);
+	}
+
+	public void test(FileItemArchive arch, bool wait = false) {
+
+		this.archive = arch;
+
+		// set some properties to be passed to children
+		this.archive.archive_base_item = this.archive;
+
+		archive_path = archive.archive_base_item.file_path;
+		
+		log_msg("\nAction: TEST");
+		log_msg("Archive: %s".printf(archive_path));
+		action = ArchiveAction.TEST;
+
+		if (archive_path.length == 0){
+			log_error("Main.extract(): archive_path not set");
+			exit(1);
+		}
+			
+		if (extraction_path.length == 0){
+			log_error("Main.extract(): extraction_path not set");
+			exit(1);
+		}
+		else{
+			dir_create(extraction_path);
+			log_msg("Test Extraction Path: %s".printf(extraction_path));
+		}
+
+		// set some values for estimating progress
+		prg_bytes_total = file_get_size(archive_path);
+		log_debug("archive_size: %lld".printf(prg_bytes_total));
+
+		execute(arch, wait);
+	}
 	
+	public void open(FileItemArchive arch, bool wait = false, bool info_only = false) {
+
+		this.archive = arch;
+
+		// set some properties to be passed to children
+		this.archive.archive_base_item = this.archive;
+
+		archive_path = archive.archive_base_item.file_path;
+
+		if (info_only){
+			log_msg("\nAction: INFO");
+			action = ArchiveAction.INFO;
+		}
+		else{
+			log_msg("\nAction: LIST");
+			action = ArchiveAction.LIST;
+		}
+
+		log_msg("Opening: %s".printf(archive_path));
+
+		if (archive_path.length > 0) {
+			var file = File.parse_name(archive_path);
+			if (file.query_exists()) {
+				try {
+					var finfo = file.query_info("%s,%s".printf(
+						FileAttribute.STANDARD_SIZE, FileAttribute.TIME_MODIFIED), 0);
+
+					archive.archive_size = finfo.get_size();
+					archive.archive_modified = (new DateTime.from_timeval_utc(finfo.get_modification_time())).to_local();
+				}
+				catch (Error e) {
+					log_error(e.message);
+				}
+			}
+		}
+		
+		archive.clear_children();
+
+		if (archive_path.length == 0){
+			log_error("ArchiveTask.open(): archive_path not set");
+			exit(1);
+		}
+
+		if (!file_exists(archive_path)){
+			log_error("ArchiveTask.open(): file not found: %s".printf(archive_path));
+			exit(1);
+		}
+		
+		// set some values for estimating progress
+		//archiver.prg_bytes_total = file_get_size(task.file_path);
+		//log_debug("archive_size: %lld".printf(archiver.prg_bytes_total));
+
+		execute(arch, wait);
+	}
+
+	public void open_info(FileItemArchive arch, bool wait = false) {
+		this.archive = arch;
+		open(arch, wait, true);
+	}
+
 	// execution ----------------------------
 
-	public void execute(FileItem arch, bool wait = false) {
+	public void execute(FileItemArchive arch, bool wait = false) {
+
+		log_debug("ArchiveTask: execute()");
+		
 		this.archive = arch;
 		
 		prepare();
@@ -821,14 +1030,15 @@ public class ArchiveTask : AsyncTask {
 			log_debug("archiver_name: %s".printf(archiver_name));
 			log_debug("archiver_pid: %d".printf(archiver_pid));
 			log_debug("parser_name: %s".printf(parser_name));
-			
 		}
 		
 		if (wait){
-			while(status == AppStatus.RUNNING){
+			while (status == AppStatus.RUNNING){ // don't wait if AppStatus.PASSWORD_REQUIRED
 				sleep(200);
 				gtk_do_events();
 			}
+
+			wait_for_threads_to_finish();
 		}
 	}
 
@@ -870,6 +1080,8 @@ public class ArchiveTask : AsyncTask {
 		if ((line == null) || (line.length == 0)) {
 			return true;
 		}
+
+		mutex_parser.lock();
 
 		switch (parser_name) {
 		case "pv":
@@ -956,8 +1168,7 @@ public class ArchiveTask : AsyncTask {
 					item.owner_group = group;
 					item.symlink_target = symlink_target;
 					item.is_symlink = (type == "l");
-					//item.source_archive = archive;
-					FileItem.add_to_cache(item);
+					//FileItem.add_to_cache(item);  // added by FileItemArchive.add_child()
 
 					//log_debug("added: " + file_path);
 				}
@@ -970,7 +1181,7 @@ public class ArchiveTask : AsyncTask {
 			//log_debug("7z_list: " + line);
 			
 			if (regex_list[parser_name].match(line, 0, out match)) {
-				
+
 				string modified = "%s %s".printf(match.fetch(1).strip(), match.fetch(2).strip());
 				string attr = match.fetch(3).strip();
 				string size = match.fetch(4).strip();
@@ -980,22 +1191,22 @@ public class ArchiveTask : AsyncTask {
 				//log_debug("file_path=%s".printf(file_path));
 
 				var file_type = (attr.contains("D")) ? FileType.DIRECTORY : FileType.REGULAR;
-				var item = archive.add_descendant(file_path, file_type, int64.parse(size), int64.parse(size_compressed));
+				var item = (FileItemArchive) archive.add_descendant(file_path, file_type, int64.parse(size), int64.parse(size_compressed));
 				item.modified = datetime_from_string(modified);
-				//item.source_archive_path = archive;
+				//item.set_archive_base_item(archive);
 				FileItem.add_to_cache(item);
 			}
 			else if (line.contains("=")){
 
 				//log_debug("7z_list: " +line);
-				
+
 				if (line.has_prefix("Type = ")){
-					string val = line.split("=")[1];
+					string val = line.split("=",2)[1];
 					val = (val == null) ? "" : val.strip();
 					archive.archive_type = val;
 				}
 				else if (line.has_prefix("Method = ")){
-					string val = line.split("=")[1];
+					string val = line.split("=",2)[1];
 					val = (val == null) ? "" : val.strip();
 					archive.archive_method = val;
 					
@@ -1022,22 +1233,22 @@ public class ArchiveTask : AsyncTask {
 					}
 				}
 				else if (line.has_prefix("Solid = ")){
-					string val = line.split("=")[1];
+					string val = line.split("=",2)[1];
 					val = (val == null) ? "" : val.strip();
 					archive.archive_is_solid = (val == "+") ? true : false;
 				}
 				else if (line.has_prefix("Blocks = ")){
-					string val = line.split("=")[1];
+					string val = line.split("=",2)[1];
 					val = (val == null) ? "0" : val.strip();
 					archive.archive_blocks = int.parse(val);
 				}
 				else if (line.has_prefix("Headers Size = ")){
-					string val = line.split("=")[1];
+					string val = line.split("=",2)[1];
 					val = (val == null) ? "0" : val.strip();
 					archive.archive_header_size = int64.parse(val);
 				}
 				else if (line.has_prefix("Size = ")){
-					string val = line.split("=")[1];
+					string val = line.split("=",2)[1];
 					val = (val == null) ? "0" : val.strip();
 					archive.archive_unpacked_size = int64.parse(val);
 					
@@ -1052,7 +1263,7 @@ public class ArchiveTask : AsyncTask {
 					}
 				}
 				else if (line.has_prefix("Packed Size = ")){
-					string val = line.split("=")[1];
+					string val = line.split("=",2)[1];
 					val = (val == null) ? "0" : val.strip();
 					archive.archive_size = int64.parse(val);
 				}
@@ -1078,25 +1289,60 @@ public class ArchiveTask : AsyncTask {
 			break;
 		}
 
+		mutex_parser.unlock();
+
 		return true;
 	}
 
-	protected override void finish_task(){
-
-		if (status != AppStatus.PASSWORD_REQUIRED){
-			if (process_next_archive()){
-				return;
-			}
+	private void wait_for_threads_to_finish(){
+		log_debug("ArchiveTask: wait_for_pending_threads");
+		while (threads_are_pending()){
+			sleep(200);
+			gtk_do_events();
 		}
+		log_debug("ArchiveTask: wait_for_pending_threads: done");
+	}
+	
+	protected override void finish_task(){
 
 		log_debug("ArchiveTask: finish_task()");
 
+		wait_for_threads_to_finish();
+		
+		/*if (status == AppStatus.PASSWORD_REQUIRED){
+
+			log_debug("ArchiveTask: finish_task(): password_required");
+			
+			if (archive.prompt_for_password()){
+				log_debug("ArchiveTask: finish_task(): password_entered: execute()");
+				execute(archive);
+				return;
+			}
+			else{
+				// cancel - user did not provide password
+				log_debug("ArchiveTask: finish_task(): password_cancelled: finish");
+				status = AppStatus.CANCELLED;
+			}
+		}*/
+
 		if (!is_terminated && (action == ArchiveAction.LIST)){
 			archive.archive_size = file_get_size(archive_path);
-			archive.compression_ratio = (archive.archive_size * 100.00) / archive.size;
+			archive.compression_ratio = (archive.archive_size * 100.00) / archive.file_size;
 		}
+
+		/*if ((status != AppStatus.CANCELLED) && (status != AppStatus.PASSWORD_REQUIRED)) {
+			if (archives.size > 0){
+				log_debug("ArchiveTask: finish_task(): process_next_archive");
+				if (process_next_archive()){
+					return;
+				}
+			}
+		}*/
+
+		// finish  ---------------------------------
 		
 		if ((status != AppStatus.CANCELLED) && (status != AppStatus.PASSWORD_REQUIRED)) {
+			log_debug("ArchiveTask: finish_task(): set AppStatus.FINISHED");
 			status = AppStatus.FINISHED;
 		}
 
@@ -1107,224 +1353,6 @@ public class ArchiveTask : AsyncTask {
 		log_debug("ArchiveTask: finish_task(): exit");
 	}
 	
-	// actions ----------------------------------
-
-	private bool process_next_archive(){
-
-		log_debug("ArchiveTask: process_next_archive(): %d".printf(archives.size));
-		
-		FileItem arch = null;
-		if (archives.size > 0){
-			arch = archives[0];
-			archives.remove(arch);
-
-			switch (action){
-			case ArchiveAction.EXTRACT:
-				extract_archive(arch);
-				return true;
-			}
-		}
-		
-		return false;
-	}
-
-	public void compress(FileItem arch) {
-		
-		this.archive = arch;
-		//this.items = _items;
-		this.archive_path = archive.file_path;
-
-		log_msg("\nAction: CREATE");
-		log_msg("Archive: %s".printf(archive_path));
-		action = ArchiveAction.CREATE;
-
-		if (archive_path.length == 0){
-			log_error("Main.compress(): archive_path not set");
-			exit(1);
-		}
-
-		// set some values for estimating progress
-		
-		prg_bytes_total = archive.size;
-		log_debug("data_size: %s".printf(format_file_size(prg_bytes_total)));
-		
-		prg_count_total = archive.file_count_total;
-		log_debug("file_count: %lld".printf(prg_count_total));
-
-		// begin
-		
-		execute(arch);
-	}
-
-	public void extract_archives(Gee.ArrayList<FileItem> _archives, bool _extract_to_new_folder) {
-
-		log_debug("ArchiveTask: extract_archives(): %d".printf(_archives.size));
-
-		var list = new Gee.ArrayList<FileItem>();
-		foreach(var item in _archives){ list.add(item); }
-		this.archives = list;
-
-		this.action = ArchiveAction.EXTRACT;
-
-		this.extract_to_new_folder = _extract_to_new_folder;
-
-		process_next_archive();
-	}
-
-	public void extract_archive(FileItem arch) {
-
-		log_debug("ArchiveTask: extract_archive(): %s".printf(arch.file_path));
-		
-		this.archive = arch;
-
-		// set some properties to be passed to children
-		this.archive.archive_base_item = this.archive;
-
-		archive_path = archive.archive_base_item.file_path;
-
-		if (extract_to_new_folder){
-			update_extraction_path(archive);
-		}
-
-		this.extraction_path = archive.extraction_path;
-		
-		log_msg("\nAction: EXTRACT");
-		log_msg("Archive: %s".printf(archive_path));
-		this.action = ArchiveAction.EXTRACT;
-
-		if (archive_path.length == 0){
-			log_error("Main.extract(): archive_path not set");
-			exit(1);
-		}
-
-		if (extraction_path.length == 0){
-			log_error("Main.extract(): extraction_path not set");
-			exit(1);
-		}
-		else{
-			dir_create(extraction_path);
-			log_msg("Extraction Path: %s".printf(extraction_path));
-		}
-
-		// set some values for estimating progress
-		prg_bytes_total = file_get_size(archive_path);
-		log_debug("archive_size: %lld".printf(prg_bytes_total));
-
-		// begin
-		execute(arch);
-	}
-
-	public static void update_extraction_path(FileItem item){
-
-		log_debug("ArchiveTask: set_extraction_path()");
-
-		// create a unique extraction directory
-		int count = 0;
-		string outpath = item.extraction_path;
-		while (dir_exists(outpath)||file_exists(outpath)){
-			log_debug("dir_exists: %s".printf(outpath));
-			outpath = "%s (%d)".printf(item.extraction_path, ++count);
-		}
-		
-		item.extraction_path = outpath;
-
-		log_debug("extraction_path: %s".printf(outpath));
-	}
-	
-	public void test(FileItem arch, bool wait = false) {
-
-		this.archive = arch;
-
-		// set some properties to be passed to children
-		this.archive.archive_base_item = this.archive;
-
-		archive_path = archive.archive_base_item.file_path;
-		
-		log_msg("\nAction: TEST");
-		log_msg("Archive: %s".printf(archive_path));
-		action = ArchiveAction.TEST;
-
-		if (archive_path.length == 0){
-			log_error("Main.extract(): archive_path not set");
-			exit(1);
-		}
-			
-		if (extraction_path.length == 0){
-			log_error("Main.extract(): extraction_path not set");
-			exit(1);
-		}
-		else{
-			dir_create(extraction_path);
-			log_msg("Test Extraction Path: %s".printf(extraction_path));
-		}
-
-		// set some values for estimating progress
-		prg_bytes_total = file_get_size(archive_path);
-		log_debug("archive_size: %lld".printf(prg_bytes_total));
-
-		execute(arch, wait);
-	}
-	
-	public void open(FileItem arch, bool wait = false, bool info_only = false) {
-
-		this.archive = arch;
-
-		// set some properties to be passed to children
-		this.archive.archive_base_item = this.archive;
-
-		archive_path = archive.archive_base_item.file_path;
-
-		if (info_only){
-			log_msg("\nAction: INFO");
-			action = ArchiveAction.INFO;
-		}
-		else{
-			log_msg("\nAction: LIST");
-			action = ArchiveAction.LIST;
-		}
-
-		log_msg("Opening: %s".printf(archive_path));
-
-		if (archive_path.length > 0) {
-			var file = File.parse_name(archive_path);
-			if (file.query_exists()) {
-				try {
-					var finfo = file.query_info("%s,%s".printf(
-						FileAttribute.STANDARD_SIZE, FileAttribute.TIME_MODIFIED), 0);
-
-					archive.archive_size = finfo.get_size();
-					archive.archive_modified = (new DateTime.from_timeval_utc(finfo.get_modification_time())).to_local();
-				}
-				catch (Error e) {
-					log_error(e.message);
-				}
-			}
-		}
-		
-		archive.clear_children();
-
-		if (archive_path.length == 0){
-			log_error("ArchiveTask.open(): archive_path not set");
-			exit(1);
-		}
-
-		if (!file_exists(archive_path)){
-			log_error("ArchiveTask.open(): file not found: %s".printf(archive_path));
-			exit(1);
-		}
-		
-		// set some values for estimating progress
-		//archiver.prg_bytes_total = file_get_size(task.file_path);
-		//log_debug("archive_size: %lld".printf(archiver.prg_bytes_total));
-
-		execute(arch, wait);
-	}
-
-	public void open_info(FileItem arch, bool wait = false) {
-		this.archive = arch;
-		open(arch, wait, true);
-	}
-
 	// query stats ---------------------------
 	
 	public bool query_io_stats () {
@@ -1454,8 +1482,8 @@ public class ArchiveTask : AsyncTask {
 			if (proc_read_bytes > 0){
 				return format_file_size(proc_read_bytes);
 			}
-			else if ((progress > 0) && (archive.size > 0)){
-				var bytes = (int64)(progress * (archive.size));
+			else if ((progress > 0) && (archive.file_size > 0)){
+				var bytes = (int64)(progress * (archive.file_size));
 				return format_file_size(bytes);
 			}
 			else {
@@ -1469,8 +1497,8 @@ public class ArchiveTask : AsyncTask {
 			if (proc_write_bytes > 0){
 				return format_file_size(proc_write_bytes);
 			}
-			else if ((progress > 0) && (archive.size > 0)){
-				var bytes = (int64)(progress * (archive.size));
+			else if ((progress > 0) && (archive.file_size > 0)){
+				var bytes = (int64)(progress * (archive.file_size));
 				return format_file_size(bytes);
 			}
 			else {
@@ -1521,7 +1549,7 @@ public class ArchiveTask : AsyncTask {
 		word_size = json_get_string(task, "word_size", "32");
 		block_size = json_get_string(task, "block_size", "2g");
 		passes = json_get_string(task, "passes", "0");
-		encrypt_header = json_get_bool(task, "encrypt_header", false);
+		encrypt_header = json_get_bool_from_string(task, "encrypt_header", false);
 		encrypt_method = json_get_string(task, "encrypt_method", "AES256");
 		split_mb = json_get_string(task, "split_mb", "0");
 	}

@@ -37,7 +37,12 @@ public class ProgressPanelFileTask : ProgressPanel {
 
 	public FileTask task;
 
-	// ui 
+	// rename
+	public string source_file = "";
+	public string new_name = "";
+
+	// ui
+	public Gtk.Label lbl_header;
 	public Gtk.Label lbl_status;
 	public Gtk.Label lbl_stats;
 	public Gtk.ProgressBar progressbar;
@@ -53,47 +58,22 @@ public class ProgressPanelFileTask : ProgressPanel {
 		
 	public ProgressPanelFileTask(FileViewPane _pane, Gee.ArrayList<FileItem> _items, FileActionType _action){
 		base(_pane, _items, _action);
+
+		task = new FileTask();
 	}
 
 	public override void init_ui(){ // TODO: make protected
 
-		string txt = "";
-		switch(action_type){
-		case FileActionType.COPY:
-			txt = _("Copying items...");
-			break;
-		case FileActionType.CUT:
-			txt = _("Moving items...");
-			break;
-		case FileActionType.RESTORE:
-			txt = _("Restoring items...");
-			break;
-		case FileActionType.TRASH:
-			txt = _("Moving items to trash...");
-			break;
-		case FileActionType.DELETE:
-		case FileActionType.DELETE_TRASHED:
-			txt = _("Deleting items...");
-			break;
-		case FileActionType.PASTE_SYMLINKS_AUTO:
-		case FileActionType.PASTE_SYMLINKS_ABSOLUTE:
-		case FileActionType.PASTE_SYMLINKS_RELATIVE:
-			txt = _("Creating symbolic links...");
-			break;
-		case FileActionType.PASTE_HARDLINKS:
-			txt = _("Creating hard links...");
-			break;
-		default:
-			break;
-		}
-
 		// heading ----------------
 
-		var label = new Gtk.Label("<b>" + txt + "</b>");
+		var label = new Gtk.Label("");
 		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
-		label.margin_bottom = 12;
+		label.xalign = 0.0f;
+		//label.margin_bottom = 6;
 		contents.add(label);
+		lbl_header = label;
+
+		set_header();
 		
 		var hbox_outer = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		contents.add(hbox_outer);
@@ -114,9 +94,9 @@ public class ProgressPanelFileTask : ProgressPanel {
 
 		label = new Gtk.Label(_("Preparing..."));
 		//label.set_use_markup(true);
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		//label.margin_top = 12;
-		label.ellipsize = Pango.EllipsizeMode.START;
+		label.ellipsize = Pango.EllipsizeMode.END;
 		label.max_width_chars = 100;
 		hbox.add(label);
 		lbl_status = label;
@@ -137,7 +117,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 
 		label = new Gtk.Label("...");
 		//label.set_use_markup(true);
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		//label.margin_bottom = 12;
 		label.ellipsize = Pango.EllipsizeMode.END;
 		label.max_width_chars = 100;
@@ -158,10 +138,59 @@ public class ProgressPanelFileTask : ProgressPanel {
 		});
 	}
 
+	private void set_header(){
+
+		string txt = "";
+		switch(action_type){
+		case FileActionType.COPY:
+			if (source is FileItemCloud){ 
+				txt = _("Downloading files from cloud storage:");
+			}
+			else if (destination is FileItemCloud){
+				txt = _("Uploading files to cloud storage:");
+			}
+			else{
+				txt = _("Copying files:");
+			}
+			break;
+		case FileActionType.CUT:
+			txt = _("Moving files:");
+			break;
+		case FileActionType.RESTORE:
+			txt = _("Restoring trashed files:");
+			break;
+		case FileActionType.TRASH:
+			txt = _("Moving files to Trash:");
+			break;
+		case FileActionType.TRASH_EMPTY:
+			txt = _("Emptying Trash:");
+			break;
+		case FileActionType.DELETE:
+		case FileActionType.DELETE_TRASHED:
+			txt = _("Deleting files:");
+			break;
+		case FileActionType.CLOUD_RENAME:
+			txt = _("Renaming files on cloud storage:");
+			break;
+		case FileActionType.PASTE_SYMLINKS_AUTO:
+		case FileActionType.PASTE_SYMLINKS_ABSOLUTE:
+		case FileActionType.PASTE_SYMLINKS_RELATIVE:
+			txt = _("Creating symbolic links:");
+			break;
+		case FileActionType.PASTE_HARDLINKS:
+			txt = _("Creating hard links:");
+			break;
+		default:
+			break;
+		}
+
+		lbl_header.label = "<b>" + txt + "</b>";
+	}
+
 	public override void execute(){
 
-		task = new FileTask();
-		
+		//task = new FileTask(); // we need the same task for 2nd pass
+
 		log_debug("ProgressPanelFileTask: execute(%s): %d".printf(action_type.to_string(), items.size));
 
 		if (items.size == 0){
@@ -169,10 +198,14 @@ public class ProgressPanelFileTask : ProgressPanel {
 			return;
 		}
 
+		set_header();
+
 		replace_mode = FileReplaceMode.NONE;
 		conflicts = null;
 
 		pane.refresh_file_action_panel();
+
+		pane.clear_messages();
 
 		switch (action_type){
 		case FileActionType.PASTE_SYMLINKS_AUTO:
@@ -185,7 +218,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 			foreach(var item in items){
 				if (file_or_dir_exists(item.file_path)){
 					string src = item.file_path;
-					string dst = path_combine(destination.file_path, item.file_name);
+					string dst = file_generate_unique_name(path_combine(destination.file_path, item.file_name));
 
 					lbl_status.label = item.file_name;
 
@@ -235,7 +268,8 @@ public class ProgressPanelFileTask : ProgressPanel {
 		case FileActionType.DELETE:
 		case FileActionType.DELETE_TRASHED:
 		case FileActionType.TRASH:
-
+		case FileActionType.TRASH_EMPTY:
+		case FileActionType.CLOUD_RENAME:
 			start_task();
 			break;
 		}
@@ -261,21 +295,34 @@ public class ProgressPanelFileTask : ProgressPanel {
 			task.move_items_to_path(source, destination.file_path, items.to_array(),
 				replace_mode, conflicts, (Gtk.Window) window);
 			break;
+			
 		case FileActionType.COPY:
 			task.copy_items_to_path(source, destination.file_path, items.to_array(),
 				replace_mode, conflicts, (Gtk.Window) window);
 			break;
+
+		case FileActionType.CLOUD_RENAME:
+			task.cloud_rename(source_file, new_name, (Gtk.Window) window);
+			break;
+			
 		case FileActionType.RESTORE:
 			task.restore_trashed_items(items.to_array(), (Gtk.Window) window);
 			break;
+			
 		case FileActionType.DELETE:
 		case FileActionType.DELETE_TRASHED:
 			log_debug("------------------------------------------%d".printf(items.size));
-			task.delete_items(items.to_array(), (Gtk.Window) window);
+			task.delete_items(source, items.to_array(), (Gtk.Window) window);
 			break;
+			
 		case FileActionType.TRASH:
 			log_debug("------------------------------------------%d".printf(items.size));
-			task.trash_items(items.to_array(), (Gtk.Window) window);
+			task.trash_items(source, items.to_array(), (Gtk.Window) window);
+			break;
+
+		case FileActionType.TRASH_EMPTY:
+			//log_debug("------------------------------------------%d".printf(items.size));
+			task.empty_trash();
 			break;
 		}
 
@@ -289,11 +336,13 @@ public class ProgressPanelFileTask : ProgressPanel {
 		if (task.is_running){
 			
 			log_debug("ProgressPanelFileTask: update_status()");
-			
-			// refresh UI
+
 			lbl_status.label = task.status;
+
 			lbl_stats.label = task.stats;
+			
 			progressbar.fraction = task.progress;
+			
 			gtk_do_events();
 
 			// do events ~10 times/sec but refresh stats ~5 times/sec
@@ -305,7 +354,8 @@ public class ProgressPanelFileTask : ProgressPanel {
 
 			var error_message = err_log_read();
 			if (error_message.length > 0){
-				string title = _("Error");
+				
+				string title = _("There were some errors:");
 				string msg = error_message;
 				gtk_messagebox(title, msg, window, true);
 				finish();
@@ -319,6 +369,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 				log_debug("conflicts=%d".printf(task.conflicts.keys.size));
 
 				int response = Gtk.ResponseType.OK;
+				
 				if (task.conflicts.keys.size > 0){
 
 					lbl_status.label = _("Resolving conflicts...");
@@ -332,6 +383,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 					gtk_do_events();
 				}
 				if (response == Gtk.ResponseType.OK){
+					
 					first_pass = false;
 					conflicts = task.conflicts;
 
@@ -375,7 +427,9 @@ public class ProgressPanelFileTask : ProgressPanel {
 		switch (action_type){
 		case FileActionType.CUT:
 		case FileActionType.COPY:
+		
 			if ((copied_bytes > 0) && (stalled_counter < 0) && !stalled_warning_shown){
+				
 				string title = _("Not Responding");
 				string msg = _("The data transfer seems to have stopped. Check if device is working correctly and if connection with the device is reliable.");
 				gtk_messagebox(title, msg, window, true);
@@ -397,7 +451,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 		stop_status_timer();
 		
 		if (task != null){
-			task.cancel_task();
+			task.stop();
 		}
 
 		finish();
@@ -410,17 +464,50 @@ public class ProgressPanelFileTask : ProgressPanel {
 		stop_status_timer();
 		
 		log_debug("ProgressPanelFileTask: finish()");
+
+		pane.file_operations.remove(this);
+		pane.refresh_file_action_panel();
+
+		// refresh trash --------------------------------
 		
 		switch (action_type){
 		case FileActionType.TRASH:
+		case FileActionType.TRASH_EMPTY:
 		case FileActionType.DELETE_TRASHED:
 		case FileActionType.RESTORE:
 			window.refresh_trash();
 			break;
 		}
 
-		pane.file_operations.remove(this);
-		pane.refresh_file_action_panel();
+		// refresh cloud location --------------------------------
+		
+		switch (action_type){
+		case FileActionType.COPY:
+		
+			if ((destination != null) && (destination is FileItemCloud)){
+				window.refresh_remote_views(destination.file_path);
+			}
+			break;
+
+		case FileActionType.CUT:
+		
+			if ((source != null) && (source is FileItemCloud)){
+				window.refresh_remote_views(source.file_path);
+			}
+
+			if ((destination != null) && (destination is FileItemCloud)){
+				window.refresh_remote_views(destination.file_path);
+			}
+			break;
+			
+		case FileActionType.DELETE:
+		case FileActionType.CLOUD_RENAME:
+		
+			if ((source != null) && (source is FileItemCloud)){
+				window.refresh_remote_views(source.file_path);
+			}
+			break;
+		}
 	}
 }
 

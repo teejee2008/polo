@@ -35,9 +35,23 @@ using TeeJee.Misc;
 
 public class SelectionBar : Gtk.Box {
 
-	private FileViewPane pane;
-	private FileViewList view;
-	private MainWindow window;
+	// reference properties ----------
+
+	protected MainWindow window {
+		get { return App.main_window; }
+	}
+	
+	protected FileViewPane pane;
+
+	protected FileViewList view {
+		get{ return pane.view; }
+	}
+
+	protected LayoutPanel panel {
+		get { return pane.panel; }
+	}
+
+	// -------------------------------
 
 	private Gtk.Entry txt_pattern;
 	private Gtk.RadioButton opt_select;
@@ -58,8 +72,6 @@ public class SelectionBar : Gtk.Box {
 		log_debug("SelectionBar()");
 
 		pane = parent_pane;
-		view = parent_pane.view;
-		window = App.main_window;
 
 		init_ui();
 
@@ -72,7 +84,7 @@ public class SelectionBar : Gtk.Box {
 		add(hbox);
 
 		//var label = new Gtk.Label(_("Pattern:"));
-		//label.xalign = (float) 0.0;
+		//label.xalign = 0.0f;
 		//hbox.add(label);
 		
 		add_entry();
@@ -186,7 +198,7 @@ public class SelectionBar : Gtk.Box {
 		else{
 			opt_select.active = true;
 		}
-		
+
 		execute_action();
 		
 		gtk_show(this);
@@ -206,9 +218,7 @@ public class SelectionBar : Gtk.Box {
 				return;
 			}
 		}
-			
-		txt_pattern.text = "";
-		view.clear_filter(); // always clear
+
 		gtk_hide(this);
 	}
 

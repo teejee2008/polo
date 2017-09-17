@@ -35,6 +35,16 @@ using TeeJee.Misc;
 
 public class FileViewTab : Gtk.Box {
 
+	// reference properties ----------
+
+	protected MainWindow window {
+		get { return App.main_window; }
+	}
+	
+	public LayoutPanel panel; // public, will be referenced by pane
+
+	// -------------------------------
+	
 	private Gtk.Label tab_label;
 	private Gtk.Entry tab_entry;
 	private Gtk.EventBox ebox_close;
@@ -47,8 +57,6 @@ public class FileViewTab : Gtk.Box {
 
 	// parents
 	public Gtk.Notebook notebook;
-	public LayoutPanel panel;
-	private MainWindow window;
 
 	public FileViewTab(LayoutPanel parent_panel, Gtk.Notebook parent_notebook){
 		//base(Gtk.Orientation.VERTICAL, 6); // issue with vala
@@ -58,8 +66,9 @@ public class FileViewTab : Gtk.Box {
 
 		panel = parent_panel;
 		notebook = parent_notebook;
-		window =  App.main_window;
 
+		// pane is set by init_tab()
+		
 		//var timer = timer_start();
 		
 		init_tab();
@@ -188,16 +197,22 @@ public class FileViewTab : Gtk.Box {
 		if (window.active_pane == pane){
 			tab_label.set_use_markup(true);
 			tab_label.label = "<b>%s</b>".printf(_tab_name);
+
+			pane.view.set_active_indicator(true);
+			pane.set_active_indicator(true);
 		}
 		else{
 			tab_label.set_use_markup(false);
 			tab_label.label = tab_name;
-		}	
+
+			pane.view.set_active_indicator(false);
+			pane.set_active_indicator(false);
+		}
 	}
 
 	private void add_close_button(Gtk.Box box){
 		
-		var img = IconManager.lookup_image("window-close", 16);
+		var img = IconManager.lookup_image("tab-close", 16);
 		var ebox = new Gtk.EventBox();
 		ebox.margin_left = 10;
 		ebox.add(img);
@@ -238,7 +253,7 @@ public class FileViewTab : Gtk.Box {
 		menu_tab.append(menu_item);
 		
 		var lbl = new Gtk.Label(_("Edit Tab Name"));
-		lbl.xalign = (float) 0.0;
+		lbl.xalign = 0.0f;
 		lbl.margin_right = 6;
 		menu_item.add(lbl);
 
@@ -256,7 +271,7 @@ public class FileViewTab : Gtk.Box {
 		menu_tab.append(menu_item);
 		
 		lbl = new Gtk.Label(_("Reset Tab Name"));
-		lbl.xalign = (float) 0.0;
+		lbl.xalign = 0.0f;
 		lbl.margin_right = 6;
 		lbl.sensitive = renamed;
 		menu_item.add(lbl);
@@ -272,7 +287,7 @@ public class FileViewTab : Gtk.Box {
 		menu_tab.append(menu_item);
 		
 		lbl = new Gtk.Label(_("Close"));
-		lbl.xalign = (float) 0.0;
+		lbl.xalign = 0.0f;
 		lbl.margin_right = 6;
 		menu_item.add(lbl);
 
@@ -334,7 +349,7 @@ public class FileViewTab : Gtk.Box {
 		}
 	}
 	
-	private void close_tab(){
+	public void close_tab(){
 
 		log_debug("FileViewTab: close_tab()");
 
@@ -360,6 +375,8 @@ public class FileViewTab : Gtk.Box {
 		panel.notebook_switch_page_connect();
 
 		window.active_pane = panel.pane;
+
+		window.update_accelerators_for_active_pane();
 	}
 
 	public void select_tab(){

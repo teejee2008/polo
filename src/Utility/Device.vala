@@ -88,22 +88,31 @@ public class Device : GLib.Object{
 	
 	public static void init(){
 
+		log_debug("Device.init()");
+		
 		get_block_devices();
 		
 		get_monitor();
+
+		log_debug("Device.init(): exit");
 	}
 	
 	public static DeviceMonitor get_monitor(){
 		
 		if (monitor != null){ return monitor; }
 
+		log_debug("Device.get_monitor()");
+		
 		var monitor = DeviceMonitor.get_monitor();
 
 		monitor.changed.connect(()=>{
+			log_debug("Device: get_monitor(): monitor_changed");
 			//get_block_devices_using_lsblk();
 			get_block_devices();
 		});
 
+		log_debug("Device.get_monitor(): exit");
+		
 		return monitor;
 	}
 
@@ -364,8 +373,11 @@ public class Device : GLib.Object{
 		}
 	}
 
+	
 	public bool unlock(string mapped_name, string passphrase, Gtk.Window? parent_window, bool show_on_success = false){
 
+		// depends: gvfs-mount cryptsetup
+		
 		/* Unlocks a LUKS device using provided passphrase.
 		 * Prompts the user for passphrase if empty.
 		 * Displays a GTK prompt if parent_window is not null
@@ -410,7 +422,7 @@ public class Device : GLib.Object{
 
 				var counter = new TimeoutCounter();
 				counter.kill_process_on_timeout("cryptsetup", 20, true);
-				string cmd = "cryptsetup luksOpen '%s' '%s'".printf(device, luks_name);
+				string cmd = "gvfs-mount -d '%s'".printf(device);
 
 				log_debug(cmd);
 				Posix.system(cmd);
@@ -423,12 +435,11 @@ public class Device : GLib.Object{
 
 				// use password to unlock
 
-				var cmd = "echo -n -e '%s' | cryptsetup luksOpen --key-file - '%s' '%s'\n".printf(
-					luks_pass, device, luks_name);
+				var cmd = "echo '%s' | gvfs-mount -d '%s'\n".printf(luks_pass, device);
 
 				log_debug(cmd.replace(luks_pass, "**PASSWORD**"));
 
-				int status = exec_script_sync(cmd, out std_out, out std_err, false, true);
+				int status = exec_script_sync(cmd, out std_out, out std_err);
 
 				switch (status){
 				case 512: // invalid passphrase
@@ -466,16 +477,15 @@ public class Device : GLib.Object{
 
 				// use password to unlock
 
-				var cmd = "echo -n -e '%s' | cryptsetup luksOpen --key-file - '%s' '%s'\n".printf(
-					luks_pass, device, luks_name);
+				var cmd = "echo '%s' | gvfs-mount -d '%s'\n".printf(luks_pass, device);
 
 				log_debug(cmd.replace(luks_pass, "**PASSWORD**"));
 
-				int status = exec_script_sync(cmd, out std_out, out std_err, false, true);
+				int status = exec_script_sync(cmd, out std_out, out std_err);
 
 				switch (status){
-				case 512: // invalid passphrase
-					message = _("Wrong password");
+				case 2: // invalid passphrase
+					message = _("Invalid Passphrase");
 					details = _("Failed to unlock device");
 					show_message(message, details, true, parent_window, show_on_success);
 					return false;
@@ -509,9 +519,10 @@ public class Device : GLib.Object{
 
 		log_debug("Device: prompt_for_password()");
 
-		string msg = "<b>%s: %s</b>\n\n".printf(_("Encrypted device"), dev.device);
+		string msg = "<span size=\"large\" weight=\"bold\">%s: %s</span>\n\n".printf(
+			_("Encrypted device"), dev.device);
 		
-		msg += _("Enter Password") + ":";
+		msg += _("Enter Password to Unlock") + ":";
 		
 		return PasswordDialog.prompt_user(parent_window, false, "", msg);
 	}
@@ -725,6 +736,28 @@ public class Device : GLib.Object{
 		}
 	}
 
+	public static void eject_removable_disk(Device dev){
+
+		//http://www.redhatgeek.com/linux/remove-a-disk-from-redhatcentos-linux-without-rebooting-the-system
+
+		
+		string sh = "";
+
+		string kname = dev.device.replace("/dev/","").strip();
+
+		// mark offline
+		string sysfile = "/sys/block/%s/device/state".printf(kname);
+		sh += "echo 'offline' > %s \n".printf(sysfile);
+		
+		// delete entries from system
+		sysfile = "/sys/block/%s/device/delete".printf(kname);
+		sh += "echo '1' > %s \n".printf(sysfile);
+
+		string std_out, std_err;
+		exec_script_sync(sh, out std_out, out std_err, false, true);
+		
+		log_msg("ejected: %s".printf(dev.device));
+	}
 
 	public static Gee.ArrayList<Device> get_block_devices_using_lsblk(string dev_name = ""){
 
@@ -1160,7 +1193,7 @@ public class Device : GLib.Object{
 						pi.device = val.strip();
 						break;
 					case 2: //mountpoint
-						mp.mount_point = val.strip().replace("""\040"""," "); // replace space. TODO: other chars?
+						mp.mount_point = val.strip().replace("""\040"""," ").replace("""\046""","&"); // replace space. TODO: other chars?
 						if (!mount_list.contains(mp.mount_point)){
 							mount_list.add(mp.mount_point);
 							pi.mount_points.add(mp);
@@ -2588,6 +2621,11 @@ public class DeviceMonitor : GLib.Object{
 	public signal void volume_added (Volume volume);
 	public signal void volume_changed (Volume volume);
 	public signal void volume_removed (Volume volume);
+
+	/*
+	Known Issues:
+	Sometimes when a device is mounted, the event is not detected by GLib.VolumeMonitor
+	*/
 	
 	private DeviceMonitor(){
 
@@ -2684,6 +2722,16 @@ public class DeviceMonitor : GLib.Object{
 			tmr_init = 0;
 		}
 		tmr_init = Timeout.add(500, init_delayed);
+	}
+
+	public static void notify_change(){
+		/*
+		Known Issues:
+		Sometimes when a device is mounted, the event is not detected by GLib.VolumeMonitor
+		Call this explicity after a mount operation
+		*/
+	
+		start_timer();
 	}
 
 	private static bool init_delayed(){

@@ -109,7 +109,7 @@ namespace TeeJee.GtkHelper{
 
 		//lbl_input
 		Gtk.Label lbl_input = new Gtk.Label(title);
-		lbl_input.xalign = (float) 0.0;
+		lbl_input.xalign = 0.0f;
 		lbl_input.label = message;
 
 		//txt_input
@@ -184,6 +184,22 @@ namespace TeeJee.GtkHelper{
 		widget.hide();
 	}
 
+	public void gtk_suppress_context_menu(Gtk.Widget widget){
+		
+		// connect signal for shift+F10
+        widget.popup_menu.connect(() => {
+			return true; // suppress right-click menu
+		});
+
+        // connect signal for right-click
+		widget.button_press_event.connect((w, event) => {
+			if (event.button == 3) {
+				return true; // suppress right-click menu
+			}
+			return false;
+		});
+	}
+	
 	public TreeIter gtk_get_iter_next (Gtk.TreeModel model, Gtk.TreeIter iter_find){
 
 		bool return_next = false;
@@ -545,7 +561,7 @@ namespace TeeJee.GtkHelper{
 		
 		// separator
 		var menu_item = new Gtk.SeparatorMenuItem();
-		menu_item.override_color (StateFlags.NORMAL, gray);
+		//menu_item.override_color (StateFlags.NORMAL, gray);
 		menu.append(menu_item);
 
 		return menu_item;
@@ -555,11 +571,11 @@ namespace TeeJee.GtkHelper{
 		Gtk.Menu menu, string label, string tooltip,
 		Gtk.Image? icon_image, Gtk.SizeGroup? sg_icon = null, Gtk.SizeGroup? sg_label = null){
 
+		//log_debug("gtk_menu_add_item()");
+		
 		var menu_item = new Gtk.MenuItem();
-		menu.append(menu_item);
-			
+
 		var box = new Gtk.Box(Orientation.HORIZONTAL, 3);
-		menu_item.add(box);
 
 		// add icon
 
@@ -582,7 +598,7 @@ namespace TeeJee.GtkHelper{
 		// add label
 		
 		var lbl = new Gtk.Label(label);
-		lbl.xalign = (float) 0.0;
+		lbl.xalign = 0.0f;
 		lbl.margin_right = 6;
 		box.add(lbl);
 
@@ -591,6 +607,13 @@ namespace TeeJee.GtkHelper{
 		}
 
 		box.set_tooltip_text(tooltip);
+
+		menu_item.add(box);
+		menu.append(menu_item);
+		
+		menu_item.show_all();
+
+		//log_debug("gtk_menu_add_item(): done");
 
 		return menu_item;
 	}
@@ -617,7 +640,7 @@ namespace TeeJee.GtkHelper{
 	public Gtk.Label gtk_box_add_header(Gtk.Box box, string text){
 		var label = new Gtk.Label("<b>" + text + "</b>");
 		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.margin_bottom = 6;
 		box.add(label);
 
@@ -857,7 +880,7 @@ namespace TeeJee.GtkHelper{
 		col.title = title;
 		
 		cell = new Gtk.CellRendererText();
-		cell.xalign = (float) 0.0;
+		cell.xalign = 0.0f;
 		col.pack_start (cell, false);
 		treeview.append_column(col);
 		
@@ -895,7 +918,7 @@ namespace TeeJee.GtkHelper{
 		col.pack_start (cell_pix, false);
 		
 		cell_text = new Gtk.CellRendererText();
-		cell_text.xalign = (float) 0.0;
+		cell_text.xalign = 0.0f;
 		col.pack_start (cell_text, false);
 		treeview.append_column(col);
 
@@ -918,7 +941,7 @@ namespace TeeJee.GtkHelper{
 		col.pack_start (cell_radio, false);
 		
 		cell_text = new Gtk.CellRendererText();
-		cell_text.xalign = (float) 0.0;
+		cell_text.xalign = 0.0f;
 		col.pack_start (cell_text, false);
 		treeview.append_column(col);
 
@@ -947,7 +970,7 @@ namespace TeeJee.GtkHelper{
 		col.pack_start (cell_radio, false);
 		
 		cell_text = new Gtk.CellRendererText();
-		cell_text.xalign = (float) 0.0;
+		cell_text.xalign = 0.0f;
 		col.pack_start (cell_text, false);
 		treeview.append_column(col);
 
@@ -967,8 +990,8 @@ namespace TeeJee.GtkHelper{
 		box.add(scroll);
 		
 		var label = new Gtk.Label(text);
-		label.xalign = (float) 0.0;
-		label.yalign = (float) 0.0;
+		label.xalign = 0.0f;
+		label.yalign = 0.0f;
 		label.margin = 6;
 		label.set_use_markup(true);
 		scroll.add(label);
@@ -1029,7 +1052,7 @@ namespace TeeJee.GtkHelper{
 			
 		var label = new Gtk.Label(msg);
 		label.set_use_markup(true);
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.wrap = true;
 		label.wrap_mode = Pango.WrapMode.WORD;
 		box.add(label);
@@ -1127,7 +1150,7 @@ namespace TeeJee.GtkHelper{
 
 		var adj = new Gtk.Adjustment(val, min, max, step, step_page, 0);
 		var spin  = new Gtk.SpinButton(adj, step, digits);
-		spin.xalign = (float) 0.5;
+		spin.xalign = 0.5f;
 		box.add(spin);
 
 		/*

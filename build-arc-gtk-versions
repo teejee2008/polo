@@ -1,0 +1,17 @@
+#!/bin/bash
+basepath=$(pwd)/release
+
+array=( 3.14 3.16 3.18 3.20 3.22 )
+for i in "${array[@]}"
+do
+  ./autogen.sh --prefix="$basepath/$i" --disable-light --disable-dark --disable-cinnamon --disable-gnome-shell --disable-gtk2  --disable-metacity --disable-unity  --disable-xfwm --with-gnome=$i
+  make install
+  rsync -avh "$basepath/$i/share/themes/Arc-Darker/" "$basepath/$i"
+  rm -rf "$basepath/$i/share"
+done
+
+# https://github.com/horst3180/arc-theme
+# place this script in the source folder of arc gtk theme and execute
+# output is created in /releases in same location
+
+

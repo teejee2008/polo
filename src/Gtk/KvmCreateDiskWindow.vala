@@ -33,8 +33,8 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
-public class KvmCreateDiskWindow : Gtk.Window {
-	
+public class KvmCreateDiskWindow : Gtk.Window, IPaneActive {
+
 	private Gtk.Box vbox_main;
 	private Gtk.SizeGroup size_label;
 	private Gtk.SizeGroup size_combo;
@@ -51,31 +51,6 @@ public class KvmCreateDiskWindow : Gtk.Window {
 	private Gtk.ComboBox cmb_extension;
 	private Gtk.SpinButton spin_size;
 
-	private FileViewPane _pane;
-
-	private FileViewList? view{
-		get{
-			return (pane == null) ? null : pane.view;
-		}
-	}
-
-	private FileViewPane? pane {
-		get{
-			if (_pane != null){
-				return _pane;
-			}
-			else{
-				return App.main_window.active_pane;
-			}
-		}
-	}
-
-	private LayoutPanel? panel {
-		get{
-			return (pane == null) ? null : pane.panel;
-		}
-	}
-	
 	public KvmCreateDiskWindow(KvmTaskType _task_type,
 		Gtk.Window _window, string _dest_path, string _base_file_path, string _derived_file_path, string _disk_format) {
 		
@@ -158,7 +133,7 @@ public class KvmCreateDiskWindow : Gtk.Window {
 		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 
-		var label = new Label (_("File Name"));
+		var label = new Gtk.Label (_("File Name"));
 		label.xalign = 1.0f;
 		hbox.add(label);
 		
@@ -253,7 +228,7 @@ public class KvmCreateDiskWindow : Gtk.Window {
 		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 		
-		var label = new Label (_("Derived File"));
+		var label = new Gtk.Label (_("Derived File"));
 		label.xalign = 1.0f;
 		hbox.add(label);
 		
@@ -283,7 +258,7 @@ public class KvmCreateDiskWindow : Gtk.Window {
 		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_main.add(hbox);
 		
-		var label = new Label("");
+		var label = new Gtk.Label("");
 		label.xalign = 1.0f;
 		hbox.add(label);
 		
@@ -326,7 +301,7 @@ public class KvmCreateDiskWindow : Gtk.Window {
 		
 		var adj = new Gtk.Adjustment(20.0, 0.1, 2000000.0, 1.0, 10.0, 0); //value, lower, upper, step, page_step, size
 		var spin = new Gtk.SpinButton (adj, 1, 1);
-		spin.xalign = (float) 0.5;
+		spin.xalign = 0.5f;
 		hbox.add(spin);
 		spin_size = spin;
 
@@ -483,6 +458,10 @@ public class KvmCreateDiskWindow : Gtk.Window {
 
 		var task = new KvmTask();
 		task.create_disk(file_path, disk_size, base_file_path, this);
+
+		if (file_exists(file_path)){
+			pane.add_message("%s: %s".printf(_("Created"), file_basename(file_path)), Gtk.MessageType.INFO);
+		}
 	}
 
 	private void rebase_derived_disk(){

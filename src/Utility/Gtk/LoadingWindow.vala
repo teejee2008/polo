@@ -50,7 +50,7 @@ public class LoadingWindow : Gtk.Window {
 		this.set_skip_taskbar_hint(true);
 		this.set_skip_pager_hint(true);
 
-		this.window_position = WindowPosition.CENTER_ON_PARENT;
+		this.window_position = WindowPosition.CENTER;
 		this.icon = get_app_icon(16);
 		this.resizable = false;
 		this.deletable = false;
@@ -92,7 +92,7 @@ public class LoadingWindow : Gtk.Window {
 			escape_html(msg_title),
 			escape_html(msg_body));
 		lbl_msg = new Gtk.Label(text);
-		lbl_msg.xalign = (float) 0.0;
+		lbl_msg.xalign = 0.0f;
 		lbl_msg.max_width_chars = 70;
 		lbl_msg.wrap = true;
 		lbl_msg.wrap_mode = Pango.WrapMode.WORD_CHAR;

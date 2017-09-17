@@ -33,7 +33,7 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
-public class ViewPopover : Gtk.Popover {
+public class ViewPopover : Gtk.Popover, IPaneActive {
 
 	private Gtk.ToggleButton btn_list;
 	private Gtk.ToggleButton btn_icon;
@@ -61,38 +61,6 @@ public class ViewPopover : Gtk.Popover {
 	private Gtk.SizeGroup sg_switch_label;
 	private Gtk.SizeGroup sg_switch;
 	
-	// parents
-
-	private FileViewList view{
-		get{
-			return pane.view;
-		}
-	}
-
-	FileViewPane _pane;
-	private FileViewPane pane {
-		get{
-			if (_pane != null){
-				return _pane;
-			}
-			else{
-				return App.main_window.active_pane;
-			}
-		}
-	}
-
-	private LayoutPanel panel {
-		get{
-			return pane.panel;
-		}
-	}
-
-	private MainWindow window{
-		get{
-			return App.main_window;
-		}
-	}
-
 	// contructors
 
 	public ViewPopover(Gtk.Widget? _relative_to){

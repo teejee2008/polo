@@ -37,8 +37,6 @@ public class ProgressWindow : Window {
 	
 	private Gtk.Box vbox_main;
 	
-	
-	
 	private uint timerID = 0;
 	private double progress_prev;
 

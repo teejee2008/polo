@@ -57,8 +57,12 @@ public abstract class AsyncTask : GLib.Object{
 	public AppStatus status;
 	public string status_line = "";
 	public string stats_line = "";
-	private string error_msg = ""; // call get_error_message()
+	
 	public string current_file = "";
+
+	protected string error_msg = ""; // call get_error_message() for public access
+
+	public Mutex mutex_parser = Mutex();
 	
 	public GLib.Timer timer;
 	public double progress = 0.0;
@@ -191,7 +195,7 @@ public abstract class AsyncTask : GLib.Object{
 				//log_msg("O: " + out_line);
 				if (!is_terminated && (out_line.length > 0)){
 
-					log_msg("ASYNC_O: " + out_line);
+					//log_msg("ASYNC_O: " + out_line);
 					
 					parse_stdout_line(out_line);
 					stdout_line_read(out_line); //signal
@@ -233,7 +237,7 @@ public abstract class AsyncTask : GLib.Object{
 					
 					error_msg += "%s\n".printf(err_line);
 
-					log_msg("ASYNC_E: " + err_line);
+					//log_msg("ASYNC_E: " + err_line);
 
 					parse_stderr_line(err_line);
 					stderr_line_read(err_line); //signal
@@ -281,6 +285,27 @@ public abstract class AsyncTask : GLib.Object{
 	protected abstract void parse_stdout_line(string out_line);
 	
 	protected abstract void parse_stderr_line(string err_line);
+
+	public bool threads_are_pending(){
+		
+		bool locked = mutex_parser.trylock();
+
+		if (locked){
+			mutex_parser.unlock();
+			return false;
+		}
+		else{
+			return true;
+		}
+	}
+	
+	/*public void wait_for_threads_to_finish(){
+		
+		while (threads_are_pending()){
+			sleep(100);
+			//gtk_do_events();
+		}
+	}*/
 	
 	private void finish(){
 		// finish() gets called by 2 threads but should be executed only once
@@ -342,7 +367,7 @@ public abstract class AsyncTask : GLib.Object{
 
 	protected abstract void finish_task();
 
-	public string get_error_message(){
+	public virtual string get_error_message(){
 		return error_msg.strip();
 	}
 	
@@ -433,6 +458,13 @@ public abstract class AsyncTask : GLib.Object{
 		}
 	}
 
+	public string stat_time_elapsed_simple{
+		owned get{
+			long elapsed = (long) timer_elapsed(timer);
+			return format_duration_simple(elapsed);
+		}
+	}
+
 	public string stat_time_remaining{
 		
 		owned get{
@@ -443,6 +475,23 @@ public abstract class AsyncTask : GLib.Object{
 					remaining = 0;
 				}
 				return format_duration(remaining);
+			}
+			else{
+				return "???";
+			}
+		}
+	}
+
+	public string stat_time_remaining_simple{
+		
+		owned get{
+			if (progress > 0){
+				long elapsed = (long) timer_elapsed(timer);
+				long remaining = (long)((elapsed / progress) * (1.0 - progress));
+				if (remaining < 0){
+					remaining = 0;
+				}
+				return format_duration_simple(remaining);
 			}
 			else{
 				return "???";

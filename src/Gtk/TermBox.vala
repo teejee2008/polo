@@ -35,37 +35,23 @@ using TeeJee.Misc;
 
 public class TermBox : Gtk.Box {
 
-	// parents
-	private FileViewPane _pane;
+	// reference properties ----------
 
-	private FileViewList? view{
-		get{
-			return (pane == null) ? null : pane.view;
-		}
+	protected MainWindow window {
+		get { return App.main_window; }
+	}
+	
+	protected FileViewPane pane;
+
+	protected FileViewList view {
+		get{ return pane.view; }
 	}
 
-	private FileViewPane? pane {
-		get{
-			if (_pane != null){
-				return _pane;
-			}
-			else{
-				return App.main_window.active_pane;
-			}
-		}
+	protected LayoutPanel panel {
+		get { return pane.panel; }
 	}
 
-	private LayoutPanel? panel {
-		get{
-			return (pane == null) ? null : pane.panel;
-		}
-	}
-
-	private MainWindow window{
-		get{
-			return App.main_window;
-		}
-	}
+	// -------------------------------
 	
 	private Vte.Terminal term;
 	private Pid child_pid;
@@ -85,7 +71,7 @@ public class TermBox : Gtk.Box {
 
 		//var timer = timer_start();
 		
-		_pane = parent_pane;
+		pane = parent_pane;
 		
 		init_ui();
 
@@ -142,7 +128,6 @@ public class TermBox : Gtk.Box {
 		term.button_press_event.connect((w, event) => {
 
 			window.active_pane = pane;
-			
 			window.update_accelerators_for_terminal();
 
 			pane.selection_bar.close_panel(false);
@@ -192,6 +177,16 @@ public class TermBox : Gtk.Box {
 					start_shell();
 				}
 			});
+
+			log_debug("TermBox: App.shell_default: %s".printf(App.shell_default));
+			
+			if (App.shell_default == "bash"){
+				string bashrc = path_combine(App.app_conf_dir_path, "bashrc");
+				if (file_exists(bashrc)){
+					log_debug("source '%s'".printf(escape_single_quote(bashrc)));
+					feed_command("source '%s'".printf(escape_single_quote(bashrc)));
+				}
+			}
 
 			reset();
 

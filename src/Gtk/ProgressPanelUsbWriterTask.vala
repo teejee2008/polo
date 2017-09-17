@@ -83,7 +83,7 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 		// status message ------------------
 
 		label = new Gtk.Label(_("Preparing..."));
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.ellipsize = Pango.EllipsizeMode.START;
 		label.max_width_chars = 100;
 		hbox.add(label);
@@ -99,7 +99,7 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 		// stats label ----------------
 
 		label = new Gtk.Label("...");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.ellipsize = Pango.EllipsizeMode.END;
 		label.max_width_chars = 100;
 		vbox_outer.add(label);
@@ -126,7 +126,8 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 		log_debug("ProgressPanelUsbWriterTask: execute(%s)");
 
 		pane.refresh_file_action_panel();
-
+		pane.clear_messages();
+		
 		start_task();
 	}
 
@@ -206,11 +207,13 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 		
 		if ((task.read_status() != 0) && (task.get_error_message().length > 0)){
 			gtk_messagebox("Finished with errors", task.get_error_message(), window, true);
+			//pane.add_message("%s: %s".printf(_("Error"), task.get_error_message()), Gtk.MessageType.ERROR);
 		}		
 		else if (!aborted){
 			string txt = _("Flash Complete");
 			string msg = _("Device safely ejected and ready for use");
 			gtk_messagebox(txt, msg, window, false);
+			//pane.add_message("%s - %s".printf(txt, msg), Gtk.MessageType.INFO);
 		}
 	}
 }

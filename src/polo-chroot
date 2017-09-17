@@ -23,18 +23,18 @@ sudo mount -t proc proc  "$path/proc"
 
 sudo cp /etc/resolv.conf "$path/etc/resolv.conf"
 
-xhost +local: 
+#xhost +local: 
 tput reset
 
 echo "====================================================="
 echo "Entering chroot environment... "
 echo "====================================================="
-echo "Network and display sharing is enabled. "
-echo "You can connect to the internet, and run GUI apps."
+#echo "Network and display sharing is enabled. "
+#echo "You can connect to the internet, and run GUI apps."
 echo "Type 'exit' to quit the session"
 echo ""
 
-sudo chroot "$path" /bin/bash -c "export DISPLAY=$DISPLAY"
+#sudo chroot "$path" /bin/bash -c "export DISPLAY=$DISPLAY"
 sudo chroot "$path"
 
 sync

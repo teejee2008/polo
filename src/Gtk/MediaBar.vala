@@ -35,9 +35,23 @@ using TeeJee.Misc;
 
 public class MediaBar : Gtk.Box {
 
-	private FileViewPane pane;
-	private FileViewList view;
-	private MainWindow window;
+	// reference properties ----------
+
+	protected MainWindow window {
+		get { return App.main_window; }
+	}
+	
+	protected FileViewPane pane;
+
+	protected FileViewList view {
+		get{ return pane.view; }
+	}
+
+	protected LayoutPanel panel {
+		get { return pane.panel; }
+	}
+
+	// -------------------------------
 
 	public MediaBar(FileViewPane parent_pane){
 		//base(Gtk.Orientation.VERTICAL, 6); // issue with vala
@@ -47,8 +61,6 @@ public class MediaBar : Gtk.Box {
 		log_debug("MediaBar()");
 
 		pane = parent_pane;
-		view = parent_pane.view;
-		window = App.main_window;
 
 		init_ui();
 
@@ -187,17 +199,19 @@ public class MediaBar : Gtk.Box {
 		//log_debug("MediaBar: mediaview_excluded(): %s".printf(view.mediaview_excluded.to_string()));
 		//log_debug("MediaBar: refresh(): %s".printf(view.has_media.to_string()));
 
-		if (view.has_media && (view.get_view_mode() != ViewMode.MEDIA)
+		gtk_hide(this);
+		
+		/*if (view.has_media && (view.get_view_mode() != ViewMode.MEDIA)
 			&& !view.mediaview_include && !view.mediaview_exclude
-			&& !view.current_item.is_trash && !view.current_item.is_archive && !view.current_item.is_archived_item){
+			&& !view.current_item.is_trash && !(view.current_item is FileItemArchive)){
 
 			gtk_show(this);
 		}
 		else{
 			gtk_hide(this);
-		}
+		}*/
 
-		log_debug("MediaBar: refresh(): exit");
+		//log_debug("MediaBar: refresh(): exit");
 	}
 
 }

@@ -35,6 +35,30 @@ using TeeJee.Misc;
 
 public class Pathbar : Gtk.Box {
 
+	// reference properties ----------
+
+	private MainWindow window{
+		get { return App.main_window; }
+	}
+	
+	FileViewPane _pane;
+	private FileViewPane? pane {
+		get{
+			if (_pane != null){ return _pane; }
+			else { return window.active_pane; }
+		}
+	}
+
+	private FileViewList? view{
+		get{ return (pane == null) ? null : pane.view; }
+	}
+
+	private LayoutPanel? panel {
+		get { return (pane == null) ? null : pane.panel; }
+	}
+
+	// -------------------------------
+	
 	private Gtk.Box scrolled_box;
 	private Gtk.Box link_box;
 	private Gtk.EventBox ebox_edit_buffer;
@@ -50,6 +74,9 @@ public class Pathbar : Gtk.Box {
 
 	private Gtk.EventBox ebox_up;
 	private Gtk.Image img_up;
+
+	private Gtk.EventBox ebox_home;
+	private Gtk.Image img_home;
 
 	private Gtk.EventBox ebox_bookmark;
 	private Gtk.Image img_bookmark;
@@ -77,38 +104,6 @@ public class Pathbar : Gtk.Box {
 
 	public bool path_edit_mode = false;
 
-	// parents
-	private FileViewPane _pane;
-
-	private FileViewList view{
-		get{
-			return pane.view;
-		}
-	}
-
-	private FileViewPane pane {
-		get{
-			if (_pane != null){
-				return _pane;
-			}
-			else{
-				return App.main_window.active_pane;
-			}
-		}
-	}
-
-	private LayoutPanel panel {
-		get{
-			return pane.panel;
-		}
-	}
-
-	private MainWindow window{
-		get{
-			return App.main_window;
-		}
-	}
-
 	private bool is_global{
 		get{
 			return (_pane == null);
@@ -130,17 +125,13 @@ public class Pathbar : Gtk.Box {
 
 		_pane = parent_pane;
 
-		//var box = new Gtk.Box(Orientation.HORIZONTAL, 6);
-		//box.homogeneous = false;
-		//box.margin_left = 6;
-		//box.margin_right = 3;
-		//add(box);
-		
 		add_item_back(this);
 
 		add_item_next(this);
 
 		add_item_up(this);
+
+		add_item_home(this);
 
 		add_item_bookmarks(this);
 
@@ -202,124 +193,6 @@ public class Pathbar : Gtk.Box {
 		});
 	}
 
-	private bool menu_bookmark_popup (Gdk.EventButton? event) {
-
-		log_debug("Pathbar:menu_bookmark_popup()");
-
-		menu_bookmark = new Gtk.Menu();
-		menu_bookmark.reserve_toggle_size = false;
-
-		// menu_item
-		var menu_item = new Gtk.MenuItem();
-		menu_bookmark.append(menu_item);
-
-		var box = new Gtk.Box(Orientation.HORIZONTAL, 3);
-		menu_item.add(box);
-
-		if (view.current_item != null){
-			var path = view.current_item.file_path;
-
-			if (GtkBookmark.is_bookmarked(path)){
-				var lbl = new Gtk.Label(_("Remove Bookmark"));
-				lbl.xalign = (float) 0.0;
-				lbl.margin_right = 6;
-				box.add(lbl);
-
-				menu_item.activate.connect (() => {
-					if ((path != "/") && (path != App.user_home)){
-						GtkBookmark.remove_bookmark_by_path(path);
-						window.sidebar.refresh();
-					}
-				});
-			}
-			else{
-				var lbl = new Gtk.Label(_("Add Bookmark"));
-				lbl.xalign = (float) 0.0;
-				lbl.margin_right = 6;
-				box.add(lbl);
-
-				menu_item.activate.connect (() => {
-					if (!GtkBookmark.is_bookmarked(path)
-						&& (path != "/")
-						&& (path != App.user_home)){
-
-						GtkBookmark.add_bookmark_from_path(path);
-						window.sidebar.refresh();
-					}
-				});
-			}
-		}
-
-		gtk_menu_add_separator(menu_bookmark);
-
-		add_bookmark_to_menu(new GtkBookmark("file:///","Filesystem"));
-		add_bookmark_to_menu(new GtkBookmark("file://" + App.user_home, "Home"));
-		add_bookmark_to_menu(new GtkBookmark("file://" + path_combine(App.user_home,"Desktop"), "Desktop"));
-		add_bookmark_to_menu(new GtkBookmark("trash:///", "Trash"));
-
-		gtk_menu_add_separator(menu_bookmark);
-
-		foreach(var bm in GtkBookmark.bookmarks){
-			add_bookmark_to_menu(bm);
-		}
-
-		menu_bookmark.show_all();
-
-		if (event != null) {
-			menu_bookmark.popup (null, null, null, event.button, event.time);
-		}
-		else {
-			menu_bookmark.popup (null, null, null, 0, Gtk.get_current_event_time());
-		}
-
-		return true;
-	}
-
-	private void add_bookmark_to_menu(GtkBookmark bm){
-
-		// menu_item
-		var menu_item = new Gtk.MenuItem();
-		menu_bookmark.append(menu_item);
-
-		var box = new Gtk.Box(Orientation.HORIZONTAL, 3);
-		menu_item.add(box);
-
-		var image = new Gtk.Image();
-		image.pixbuf = bm.get_icon();
-		box.add(image);
-
-		// name and label
-
-		var label = new Gtk.Label(bm.name);
-		label.xalign = (float) 0.0;
-		label.margin_right = 6;
-		label.set_tooltip_text(bm.path);
-		box.add(label);
-
-		// check if path exists
-
-		menu_item.sensitive = bm.path_exists();
-		if (!menu_item.sensitive){
-			label.set_tooltip_text(_("Path not found") + ": %s".printf(bm.path));
-		}
-
-		// navigate to path on click
-
-		menu_item.activate.connect (() => {
-			log_debug("bookmark_navigate: %s".printf(bm.path));
-			view.set_view_path(bm.path);
-			//sidebar.refresh();
-		});
-
-		// TODO: Allow user to edit bookmark name
-	}
-
-	public void menu_bookmark_popdown(){
-		if (menu_bookmark != null){
-			menu_bookmark.popdown();
-		}
-	}
-
 	// disk menu
 
 	private Gtk.Popover popup_dev;
@@ -339,7 +212,7 @@ public class Pathbar : Gtk.Box {
 		ebox.add(img);
 		img_disk = img;
 
-		var tt = _("Open Device");
+		var tt = _("Devices");
 		img.set_tooltip_text(tt);
 		ebox.set_tooltip_text(tt);
 
@@ -364,172 +237,6 @@ public class Pathbar : Gtk.Box {
 			//menu_disk_popup(null);
 			return false;
 		});
-	}
-
-	private bool menu_disk_popup (Gdk.EventButton? event) {
-
-		log_debug("Pathbar:menu_disk_popup()");
-
-		menu_disk = new Gtk.Menu();
-		menu_disk.reserve_toggle_size = false;
-
-		var list = Device.get_block_devices_using_lsblk();
-
-		for(int i=0; i < list.size; i++){
-			var dev = list[i];
-			if ((dev.type == "crypt") && (dev.pkname.length > 0)){
-
-				//pi.name = "%s".printf(pi.pkname);
-
-				// this is an unlocked device
-				// find and remove the locked one
-				foreach(var dev_luks in list){
-					if (dev_luks.name == dev.pkname){
-						if (dev_luks.type != "disk"){
-							list.remove(dev_luks);
-						}
-						break;
-					}
-				}
-			}
-		}
-
-		var sg_name = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
-		var sg_size = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
-		var sg_mp = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
-
-		foreach(var dev in list){
-			// menu_item
-			var menu_item = new Gtk.MenuItem();
-			menu_disk.append(menu_item);
-
-			var box = new Gtk.Box(Orientation.HORIZONTAL, 3);
-			menu_item.add(box);
-
-			Gtk.Image img = null;
-			if ((dev.type == "crypt") && (dev.pkname.length > 0)){
-				img = IconManager.lookup_image("unlocked",16);
-				box.add(img);
-			}
-			else if (dev.fstype.contains("luks")){
-				img = IconManager.lookup_image("lock",16);
-				box.add(img);
-			}
-			else if (dev.fstype.contains("iso9660")){
-				img = IconManager.lookup_image("media-cdrom",16);
-				box.add(img);
-			}
-			else{
-				img = IconManager.lookup_image("drive-harddisk",16);
-				box.add(img);
-			}
-
-			if ((dev.type == "disk") || ((dev.type == "loop") && dev.has_children)){
-				img.margin_left = 0;
-				box.remove(img);
-			}
-			else{
-				img.margin_left = 12;
-
-			}
-
-			// name and label -------------
-
-			string name = "";
-			if ((dev.type == "disk") || ((dev.type == "loop") && dev.has_children)){
-				name += "%s".printf(dev.description_simple());
-			}
-			else{
-				name += "" + dev.name + ((dev.label.length > 0) ? " (%s)".printf(dev.label) : "");
-			}
-
-			var lbl = new Gtk.Label(name);
-			lbl.xalign = (float) 0.0;
-			lbl.margin_right = 6;
-			box.add(lbl);
-
-			if ((dev.type == "disk") || ((dev.type == "loop") && dev.has_children)){
-				// skip
-			}
-			else{
-				//lbl.margin_left = 6;
-				sg_name.add_widget(lbl);
-			}
-
-			// size label ------------------
-
-			if ((dev.type == "disk") || ((dev.type == "loop") && dev.has_children)){
-				// skip
-			}
-			else{
-				lbl = new Gtk.Label(dev.size_formatted);
-				lbl.xalign = (float) 1.0;
-				lbl.margin_right = 6;
-				box.add(lbl);
-				sg_size.add_widget(lbl);
-			}
-
-			// mount point label --------------------
-
-			if (dev.mount_points.size > 0){
-				var mp = dev.mount_points[0];
-				lbl = new Gtk.Label(mp.mount_point);
-				lbl.xalign = (float) 0.0;
-				lbl.margin_right = 6;
-				box.add(lbl);
-				sg_mp.add_widget(lbl);
-			}
-
-			// navigate to mount point on click ---------
-
-			menu_item.activate.connect (() => {
-
-				gtk_set_busy(true, window);
-
-				// unlock
-				if (dev.fstype.contains("luks")){
-					string message, details;
-					var unlocked_device = Device.luks_unlock(dev, "", "", pane.window);
-					if (unlocked_device == null){
-						gtk_set_busy(false, pane.window);
-						return;
-					}
-				}
-
-				// mount if unmounted
-				if (dev.mount_points.size == 0){
-					bool ok = Device.automount_udisks(dev, pane.window);
-					if (!ok){
-						gtk_set_busy(false, pane.window);
-						return;
-					}
-				}
-
-				// navigate
-				if (dev.mount_points.size > 0){
-					var mp = dev.mount_points[0];
-					view.set_view_path(mp.mount_point);
-				}
-
-				gtk_set_busy(false, window);
-			});
-		}
-
-		menu_disk.show_all();
-
-		if (event != null) {
-			menu_disk.popup (null, null, null, event.button, event.time);
-		} else {
-			menu_disk.popup (null, null, null, 0, Gtk.get_current_event_time());
-		}
-
-		return true;
-	}
-
-	public void menu_disk_popdown(){
-		if (menu_disk != null){
-			menu_disk.popdown();
-		}
 	}
 
 	// path links
@@ -581,28 +288,15 @@ public class Pathbar : Gtk.Box {
 		txt_path = txt;
 		scrolled_box.add(txt);
 
-		txt.activate.connect(()=>{
+		// will be connected on edit
+		//txt.activate.connect(txt_path_activate);
 
-			path_edit_mode = false;
-
-			if ((view.current_item == null) || (view.current_item.display_path != txt_path.text)){
-				view.set_view_path(txt_path.text);
-				// set_view_path() will show message if not existing
-			}
-
-			gtk_hide(txt_path);
-			gtk_show(link_box);
-			gtk_show(ebox_edit_buffer);
-			update_crumbs();
-
-			window.update_accelerators_for_active_pane();
-		});
-
-		txt.focus_out_event.connect((event) => {
+		/*txt.focus_out_event.connect((event) => {
 			txt.activate();
 			return false;
-		});
+		});*/
 
+		/*
 		// connect signal for shift+F10
         txt.popup_menu.connect(() => {
 			return true; // suppress right-click menu
@@ -615,8 +309,15 @@ public class Pathbar : Gtk.Box {
 			}
 			return false;
 		});
+		*/
 		
 		txt.set_no_show_all(true);
+	}
+
+	public void finish_editing(){
+		if (path_edit_mode){
+			txt_path.activate();
+		}
 	}
 
 	private void add_item_path_edit_buffer(){
@@ -734,6 +435,15 @@ public class Pathbar : Gtk.Box {
 			gtk_hide(ebox_up);
 		}
 
+		// home ---------------
+
+		if (App.pathbar_show_home){
+			gtk_show(ebox_home);
+		}
+		else{
+			gtk_hide(ebox_home);
+		}
+
 		// swap ---------------
 
 		if (panel.visible && panel.opposite_panel.visible && App.pathbar_show_swap){
@@ -812,7 +522,7 @@ public class Pathbar : Gtk.Box {
 
 		link_box.forall ((x) => link_box.remove (x));
 
-		if (view.current_path_saved == null){
+		if (view.current_location == null){
 			// add dummy widget - maintains hbox height when empty
 			var buffer = new Gtk.LinkButton("");
 			buffer.sensitive = false;
@@ -823,72 +533,60 @@ public class Pathbar : Gtk.Box {
 
 		//Gtk.Label lbl;
 
-		/*log_debug("update_crumb_labels()", true);
-		log_debug("file_path: %s".printf(view.current_item.file_path));
-		log_debug("file_path_prefix: %s".printf(view.current_item.file_path_prefix));
-		log_debug("display_path: %s".printf(view.current_item.display_path));
-		log_debug("current_path_saved: %s".printf(view.current_path_saved));*/
+		log_debug("update_crumb_labels()");
+		log_debug("current_path_saved: %s".printf(view.current_location));
 
-		if (App.pathbar_use_buttons && !App.pathbar_flat_buttons){
-			link_box.spacing = 3;
-		}
-		else{
+		switch(App.pathbar_style){
+		case PathbarStyle.COMPACT:
+		case PathbarStyle.FLAT_BUTTONS:
 			link_box.spacing = 0;
-		}
-		
-		string link_path = "";
-		//string prefix = view.current_item.file_path_prefix;
-		bool is_trash = false;
-		
-		if ((view.current_item != null) && (view.current_item.is_trash || view.current_item.is_trashed_item)){
-
-			is_trash = true;
-
-			link_path = "trash://";
+			break;
 			
-			add_crumb(link_box, "trash://", link_path);
-		}
-		else { //if (view.current_item.is_local){
-
-			link_path = "/";
-
-			add_crumb(link_box, "/", link_path);
+		case PathbarStyle.ARROWS:
+		case PathbarStyle.BUTTONS:
+			link_box.spacing = 3;
+			break;
 		}
 
-		if (!App.pathbar_use_buttons){
-			add_crumb_separator(link_box, "");
-		}
-
-		var parts = view.current_path_saved.replace("trash://","").split("/");
-
+		var parts = split_path_components(view.current_location);
+		string item_path = "";
 		int index = -1;
-
+		bool is_first_part = true;
+		
 		foreach(var part in parts){
 			index++;
 			if (part.length == 0){ continue; }
 
-			if (link_path.contains("://")){
-				link_path = link_path + "/" + part; // don't use path_combine()
+			// crumb ----------------
+			
+			if ((item_path.length > 0) && !item_path.has_suffix("/")){
+				item_path += "/";
 			}
-			else{
-				link_path = path_combine(link_path, part); // don't use simple concatenation
-			}
+			
+			item_path += part;
 
+			add_crumb(link_box, part, item_path, is_first_part);
+			
+			is_first_part = false;
+			
+			// separator ------------
+			
 			bool add_separator = false;
-			if (!App.pathbar_use_buttons){
-				if (index < parts.length - 1){
+			switch (App.pathbar_style){
+			case PathbarStyle.COMPACT:
+				if ((index < parts.size - 1) && (part != "/")){
 					add_separator = true;
 				}
+				break;
+			case PathbarStyle.ARROWS:
+				if (index < parts.size - 1){
+					add_separator = true;
+				}
+				break;
 			}
 
-			string txt = part;
-			//if (add_separator){
-			//	txt = txt + "  >  ";
-			//}
-			add_crumb(link_box, txt, link_path);
-
 			if (add_separator){
-				add_crumb_separator(link_box, "");
+				add_crumb_separator(link_box);
 			}
 		}
 
@@ -896,11 +594,113 @@ public class Pathbar : Gtk.Box {
 
 		log_debug("Pathbar: update_crumbs():exit");
 	}
-
-	private void add_crumb(Gtk.Box box, string text, string link_path){
+	
+	public static Gee.ArrayList<string> split_path_components(string file_uri){
 		
-		if (App.pathbar_use_buttons){
-			add_crumb_button(box, text, link_path);
+		var list = new Gee.ArrayList<string>();
+		string basepath = "";
+		
+		var info = regex_match("""^((file|trash):\/\/\/*)""", file_uri);
+		if (info != null){
+			basepath = info.fetch(1); // file:///  trash:///
+			list.add(basepath);
+		}
+		
+		if (basepath.length == 0){
+			
+			// ftp://user:password@192.168.43.140:3721/sss
+			info = regex_match("""^((ftp|sftp|ssh):*\/*\/*.*[0-9.]*:*[0-9.]*\/*)""", file_uri);
+			if (info != null){
+				basepath = info.fetch(1); // ftp://10.0.0.1:21/
+				list.add(basepath);
+			}
+		}
+		
+		if (basepath.length == 0){
+			
+			// mtp://[usb:002,010]/sss
+			info = regex_match("""^(mtp:\/\/\[usb:[0-9]+,[0-9]+\]\/*)""", file_uri);
+			if (info != null){
+				basepath = info.fetch(1); // mtp://[usb:999,003]/
+				list.add(basepath);
+			}
+		}
+		
+		if (basepath.length == 0){
+			
+			// smb://DATA/share1
+			info = regex_match("""^(smb:\/\/.*\/*.*)""", file_uri);
+			if (info != null){
+				basepath = info.fetch(1); // smb://server/share/
+				list.add(basepath);
+			}
+		}
+
+		if (basepath.length == 0){
+			
+			// hubic:default/
+			info = regex_match("""^([^ \/]+:[^ \/]+\/*)""", file_uri);
+			if (info != null){
+				basepath = info.fetch(1); // hubic:default
+				list.add(basepath);
+			}
+		}
+		
+		if (basepath.length == 0){
+			
+			// dropbox:/test
+			info = regex_match("""^([^ \/]+:\/*)""", file_uri);
+			if (info != null){
+				basepath = info.fetch(1); // dropbox:/
+				list.add(basepath);
+			}
+		}
+
+		if (basepath.length == 0){
+			
+			// everything else
+			if (file_uri.has_prefix("/")){
+				basepath = "/"; // /bin
+				list.add(basepath);
+			}
+			else{
+				basepath = "";
+				// ignore
+			}
+		}
+		
+		//log_debug("basepath: %s".printf(basepath));
+		
+		if (file_uri.length > basepath.length){
+			
+			var arr = file_uri[basepath.length : file_uri.length].split("/");
+			
+			foreach(var part in arr){
+				list.add(part);
+			}
+		}
+		
+		// print the list
+		foreach(var str in list){
+			//log_debug("parts: %s".printf(str));
+		}
+		
+		return list;
+	}
+	
+	private void add_crumb(Gtk.Box box, string part, string link_path, bool is_first_part){
+
+		//log_debug("add_crumb: %s, %s".printf(part, link_path));
+		
+		string text = part;
+		
+		// remove trailing /
+		if (text.has_suffix("/") && (text.length > 1)){
+			text = text[0:text.length - 1];
+		}
+
+		if ((App.pathbar_style == PathbarStyle.BUTTONS) || (App.pathbar_style == PathbarStyle.FLAT_BUTTONS)){
+			add_crumb_button(box, text, link_path, is_first_part);
 		}
 		else{
 			add_crumb_label(box, text, link_path);
@@ -949,14 +749,14 @@ public class Pathbar : Gtk.Box {
 		});
 	}
 
-	private void add_crumb_button(Gtk.Box box, string text, string link_path){
+	private void add_crumb_button(Gtk.Box box, string text, string link_path, bool is_first_part){
 
 		var button = new Gtk.Button();
 		button.set_tooltip_text(link_path);
 		button.set_data<string>("link", link_path);
 		box.add(button);
 
-		if (App.pathbar_flat_buttons){
+		if (App.pathbar_style == PathbarStyle.FLAT_BUTTONS){
 			button.relief = Gtk.ReliefStyle.NONE;
 		}
 		else{
@@ -968,7 +768,7 @@ public class Pathbar : Gtk.Box {
 		label.margin_left = label.margin_right = 0;
 		button.add(label);
 
-		if (App.pathbar_flat_buttons && (text != "/") && !text.contains("://")){
+		if ((App.pathbar_style == PathbarStyle.FLAT_BUTTONS) && !is_first_part){
 			label.label = "➤ " + text;
 		}
 		
@@ -979,17 +779,27 @@ public class Pathbar : Gtk.Box {
 		});
 	}
 
-	private void add_crumb_separator(Gtk.Box box, string link_path){
+	private void add_crumb_separator(Gtk.Box box){
 
 		string separator = "➤";
-		
-		if (!App.pathbar_use_buttons){
-			// pad with space
-			separator = " %s ".printf(separator);
-		}
 
+		switch(App.pathbar_style){
+		case PathbarStyle.COMPACT:
+			separator = "/";
+			break;
+			
+		case PathbarStyle.ARROWS:
+			separator = "➤";
+			break;
+			
+		case PathbarStyle.BUTTONS:
+		case PathbarStyle.FLAT_BUTTONS:
+			// pad with space
+			separator = "%s ".printf(separator);
+			break;
+		}
+		
 		var label = new Gtk.Label(separator);
-		//lbl3.margin_bottom = 1;
 		box.add(label);
 	}
 	
@@ -1018,7 +828,7 @@ public class Pathbar : Gtk.Box {
 
 			var path = view.history_go_back();
 			if (path.length > 0){
-				view.set_view_path(path, false); // update_history = false
+				view.set_view_path(path, false); // don't update_history
 			}
 
 			return true;
@@ -1048,7 +858,7 @@ public class Pathbar : Gtk.Box {
 
 			var path = view.history_go_forward();
 			if (path.length > 0){
-				view.set_view_path(path, false); // update_history = false
+				view.set_view_path(path, false); // don't update_history
 			}
 
 			return true;
@@ -1078,8 +888,34 @@ public class Pathbar : Gtk.Box {
 
 			var path = view.get_location_up();
 			if (path.length > 0){
-				view.set_view_path(path, false); // update_history = false
+				view.set_view_path(path, true); // update_history
 			}
+
+			return true;
+		});
+	}
+
+	private void add_item_home(Gtk.Box box){
+
+		log_debug("Pathbar: add_item_home()");
+
+		var ebox = gtk_add_event_box(box);
+		ebox_home = ebox;
+
+		var img = IconManager.lookup_image("go-home", 16);
+		ebox.add(img);
+		img_home = img;
+
+		var tt =  _("Home");
+		img.set_tooltip_text(tt);
+		ebox.set_tooltip_text(tt);
+
+		ebox.button_press_event.connect((event)=>{
+
+			if (event.button != 1) { return false; }
+			
+			if (view == null) { return true; };
+			view.set_view_path(App.user_home, true); // update_history
 
 			return true;
 		});
@@ -1163,7 +999,7 @@ public class Pathbar : Gtk.Box {
 			panel.opposite_pane.pathbar.refresh_icon_visibility();
 			//window.layout_box.set_panel_layout(PanelLayout.CUSTOM);
 			window.active_pane = panel.opposite_pane;
-
+			window.update_accelerators_for_active_pane();
 			return true;
 		});
 	}
@@ -1175,7 +1011,7 @@ public class Pathbar : Gtk.Box {
 		window.update_accelerators_for_edit();
 
 		path_edit_mode = true;
-		txt_path.text = view.current_path_saved;
+		txt_path.text = view.current_location;
 		txt_path.select_region(0, txt_path.text.length);
 
 		gtk_hide(link_box);
@@ -1183,5 +1019,40 @@ public class Pathbar : Gtk.Box {
 		gtk_show(txt_path);
 
 		txt_path.grab_focus();
+
+		txt_path.activate.connect(txt_path_activate);
+	}
+
+	private void txt_path_activate(){
+
+		path_edit_mode = false;
+
+		txt_path.activate.disconnect(txt_path_activate);
+
+		bool handled = false;
+		
+		if (GvfsMounts.is_gvfs_uri(txt_path.text)){
+			var file = File.new_for_uri(txt_path.text);
+			if (file.query_exists()){
+				view.set_view_path(file.get_path());
+				handled = true;
+			}
+			else{
+				var win = new ConnectServerWindow(window, txt_path.text);
+				handled = true;
+			}
+		}
+
+		if (!handled && (view.current_item == null) || (view.current_item.display_path != txt_path.text)){
+			view.set_view_path(txt_path.text);
+			// set_view_path() will show message if not existing
+		}
+
+		gtk_hide(txt_path);
+		gtk_show(link_box);
+		gtk_show(ebox_edit_buffer);
+		update_crumbs();
+
+		window.update_accelerators_for_active_pane();
 	}
 }

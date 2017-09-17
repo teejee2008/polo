@@ -43,13 +43,19 @@ public class FileViewPane : Gtk.Box {
 	public AdminBar adminbar;
 	public TrashBar trashbar;
 	public Gtk.Box file_operations_box;
+	public Gtk.Box message_box;
 	public TermBox terminal;
 	public Statusbar statusbar;
+
+	//private Gtk.Box active_indicator_top;
+	private Gtk.Box active_indicator_bottom;
 
 	private Gtk.Box box_pathbar_view;
 	private Gtk.Paned paned_term;
 	
 	public Gee.ArrayList<ProgressPanel> file_operations = new Gee.ArrayList<ProgressPanel>();
+
+	public Gee.ArrayList<MessageBar> messages = new Gee.ArrayList<MessageBar>();
 
 	// parents
 	public FileViewTab tab;
@@ -109,6 +115,7 @@ public class FileViewPane : Gtk.Box {
 		var box = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
 		box.add(pathbar);
 		box.add(view);
+		box.add(selection_bar);
 		box_pathbar_view = box;
 		
 		var paned = new Gtk.Paned (Gtk.Orientation.VERTICAL);
@@ -121,13 +128,18 @@ public class FileViewPane : Gtk.Box {
 		file_operations_box = new Gtk.Box(Orientation.VERTICAL, 6);
 		add(file_operations_box);
 
-		add(selection_bar);
+		message_box = new Gtk.Box(Orientation.VERTICAL, 1);
+		add(message_box);
+
+		//add(selection_bar);
 		
 		add(mediabar);
 
 		add(trashbar);
 
 		add(adminbar);
+
+		add_active_indicator_bottom();
 
 		add(statusbar);
 
@@ -145,7 +157,7 @@ public class FileViewPane : Gtk.Box {
 				}
 			}
 			else{
-				tab.tab_name = file_basename(view.current_path_saved);
+				tab.tab_name = file_basename(view.current_location);
 			}
 
 			refresh(false);
@@ -174,6 +186,35 @@ public class FileViewPane : Gtk.Box {
 		log_debug("FileViewPane(): created -------------------------");
 	}
 
+	private void add_active_indicator_bottom(){
+
+		active_indicator_bottom = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
+		active_indicator_bottom.set_size_request(-1,2);
+		add(active_indicator_bottom);
+		
+		string css = " background-color: #2196F3; ";
+		gtk_apply_css(new Gtk.Widget[] { active_indicator_bottom }, css);
+	}
+
+	public void set_active_indicator(bool is_active){
+		string css = " background-color: @content_view_bg; ";
+		if (is_active && (App.main_window.layout_box.get_panel_layout() != PanelLayout.SINGLE)){
+			css = " background-color: #2196F3;"; //#C0C0C0
+		}
+		gtk_apply_css(new Gtk.Widget[] { active_indicator_bottom }, css);
+	}
+
+	public void add_message(string msg, Gtk.MessageType type){
+
+		log_debug("FileViewPane: add_message(): %s".printf(msg));
+		
+		var msgbar = new MessageBar(this, msg, type);
+		messages.add(msgbar);
+		//gtk_show(message_box);
+		//message_box.show_all();
+		//refresh_message_panel();
+	}
+
 	// refresh
 
 	public void refresh(bool refresh_view_required = true){
@@ -186,9 +227,9 @@ public class FileViewPane : Gtk.Box {
 			refresh_view();
 		}
 
-		refresh_pathbar();
+		refresh_pathbars();
 
-		refresh_headerbar();
+		window.headerbar.refresh();
 
 		mediabar.refresh();
 
@@ -198,42 +239,32 @@ public class FileViewPane : Gtk.Box {
 
 		refresh_file_action_panel();
 
-		refresh_terminal();
+		refresh_message_panel();
+
+		terminal.refresh();
 		
-		refresh_statusbar();
+		statusbar.refresh();
 
 		log_trace("Pane %d refreshed: %s".printf(this.panel.number, timer_elapsed_string(timer)));
 	}
 
 	public void refresh_view(){
-		view.refresh(true);
+		view.refresh(true, true);
 	}
 
-	public void refresh_pathbar(){
+	public void refresh_pathbars(){
 		window.pathbar.refresh();
 		pathbar.refresh();
 	}
 	
-	public void refresh_headerbar(){
-		window.headerbar.refresh();
-	}
-
-	public void refresh_terminal(){
-		terminal.refresh();
-	}
-	
-	public void refresh_statusbar(){
-		statusbar.refresh();
-	}
-
 	public void refresh_file_action_panel(){
 
-		log_debug("FileActionPanel: refresh()");
+		log_debug("FileActionPanel: refresh_file_action_panel()");
 
 		file_operations_box.forall ((element) => file_operations_box.remove (element));
 
-		foreach(var actionbar in file_operations){
-			file_operations_box.add(actionbar);
+		foreach(var item in file_operations){
+			file_operations_box.add(item);
 		}
 
 		if (file_operations.size > 0){
@@ -243,6 +274,31 @@ public class FileViewPane : Gtk.Box {
 		else{
 			file_operations_box.hide();
 		}
+	}
+
+	public void refresh_message_panel(){
+
+		log_debug("FileActionPanel: refresh_message_panel(): %d".printf(messages.size));
+
+		message_box.forall ((element) => message_box.remove (element));
+
+		foreach(var item in messages){
+			message_box.add(item);
+		}
+
+		if (messages.size > 0){
+			gtk_show(message_box);
+		}
+		else{
+			gtk_hide(message_box);
+		}
+
+		log_debug("FileActionPanel: message_box(): %s".printf(message_box.visible.to_string()));
+	}
+
+	public void clear_messages(){
+		messages.clear();
+		refresh_message_panel();
 	}
 
 	public void maximize_terminal(){

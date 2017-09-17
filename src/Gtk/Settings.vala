@@ -33,7 +33,7 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
-public class Settings : Gtk.Box {
+public class Settings : Gtk.Box, IPaneActive {
 
 	private Gtk.Box header_box;
 	private Gtk.StackSwitcher switcher;
@@ -55,6 +55,10 @@ public class Settings : Gtk.Box {
 	private Gtk.Scale scale_toolbar_icon;
 	private Gtk.TreeView tv_columns;
 
+	private Gtk.Box vbox_toolbar;
+	private Gtk.Box vbox_pathbar;
+	private Gtk.CheckButton chk_headerbar_enabled;
+
 	Gtk.IconSize[] toolbar_icon_sizes = new Gtk.IconSize[] { Gtk.IconSize.MENU, Gtk.IconSize.SMALL_TOOLBAR };
 
 	private int[] ICON_SIZE_MAPPING_LIST = new int[] { 16, 24, 32, 48 };
@@ -65,10 +69,6 @@ public class Settings : Gtk.Box {
 	private Gee.ArrayList<int> iconview_icon_sizes;
 	private Gee.ArrayList<int> tileview_icon_sizes;
 
-	// parents
-	public FileViewList view;
-	public FileViewPane pane;
-	public MainWindow window;
 	public Gtk.Window parent_window;
 
 	// signals
@@ -80,10 +80,6 @@ public class Settings : Gtk.Box {
 		margin = 6;
 
 		log_debug("Settings()");
-
-		window = App.main_window;
-		pane = window.active_pane;
-		view = pane.view;
 
 		parent_window = _parent_window;
 
@@ -155,143 +151,122 @@ public class Settings : Gtk.Box {
 		hbox.margin_left = 6;
 		stack.add_titled (hbox, _("UI"), _("UI"));
 
-		// toolbar ---------------------------------
+		// new column ---------------------------------
 
 		var vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 6);
 		vbox.homogeneous = false;
 		hbox.add(vbox);
-
-		// --------------
-
-		var vbox_items = add_group(vbox, _("Toolbar"), 0);
-
-		add_toolbar_option_visible(vbox_items);
 		
-		add_toolbar_option_large_icons(vbox_items);
+		// --------------------------
+		
+		var sg_label = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		var sg_option = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		
+		var vbox_items = add_group(vbox, _("GTK Theme"), 0);
+		add_option_gtk_theme(vbox_items, sg_label, sg_option);
 
-		add_toolbar_option_dark_theme(vbox_items);
-
-		add_toolbar_option_labels(vbox_items);
-
-		// -------------
-
-		vbox_items = add_sub_group(vbox, _("Items"), 0);
-
-		add_toolbar_item_back(vbox_items);
-
-		add_toolbar_item_next(vbox_items);
-
-		add_toolbar_item_up(vbox_items);
-
-		add_toolbar_item_reload(vbox_items);
-
-		add_toolbar_item_home(vbox_items);
-
-		//add_toolbar_item_dual_pane(vbox_items);
-
-		add_toolbar_item_view(vbox_items);
-
-		//add_toolbar_item_hidden(vbox_items);
-
-		add_toolbar_item_bookmarks(vbox_items);
-
-		add_toolbar_item_devices(vbox_items);
-
-		add_toolbar_item_terminal(vbox_items);
-
-		var separator = new Gtk.Separator(Gtk.Orientation.VERTICAL);
-		separator.margin_left = 24;
-		hbox.add(separator);
-
-		// pathbar ---------------------------------
-
-		vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 6);
-		vbox.homogeneous = false;
-		hbox.add(vbox);
-
-		// --------
+		// -------------------------
 
 		vbox_items = add_group(vbox, _("Headerbar"), 0);
-
 		add_headerbar_option_enable(vbox_items);
-
 		add_headerbar_option_left_window_buttons(vbox_items);
-		
-		// --------
-
-		vbox_items = add_group(vbox, _("Pathbar"), 0);
-
-		add_pathbar_option_unified(vbox_items);
-
-		add_pathbar_option_use_buttons(vbox_items);
-
-		// -----------------------------
-
-		vbox_items = add_sub_group(vbox, _("Items"), 0);
-
-		add_pathbar_item_bookmarks(vbox_items);
-
-		add_pathbar_item_disk(vbox_items);
-
-		add_pathbar_item_back(vbox_items);
-
-		add_pathbar_item_next(vbox_items);
-
-		add_pathbar_item_up(vbox_items);
-
-		add_pathbar_item_swap(vbox_items);
-
-		add_pathbar_item_other(vbox_items);
-
-		//add_pathbar_item_close(vbox_items);
-
-		separator = new Gtk.Separator(Gtk.Orientation.VERTICAL);
-		separator.margin_left = 12;
-		hbox.add(separator);
-
-		// column 2 ---------------------------------
-
-		vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 6);
-		vbox.homogeneous = false;
-		hbox.add(vbox);
 
 		// Sidebar -------------------------------
 
 		vbox_items = add_group(vbox, _("Sidebar"), 0);
-
 		add_sidebar_option_visible(vbox_items);
-
 		add_sidebar_option_dark_theme(vbox_items);
-
 		add_sidebar_option_places(vbox_items);
-
 		add_sidebar_option_bookmarks(vbox_items);
-
 		add_sidebar_option_devices(vbox_items);
-
-		add_sidebar_option_unmount(vbox_items);
-
-		add_sidebar_option_lock(vbox_items);
+		add_sidebar_option_action_button(vbox_items);
 
 		// Statusbar -------------------------------
 
 		vbox_items = add_group(vbox, _("Statusbar"), 0);
-
 		add_statusbar_option_unified(vbox_items);
 
 		// Tabs -------------------------------------
 
 		vbox_items = add_group(vbox, _("Tabs"), 0);
-
 		add_tabbar_option_close(vbox_items);
-		
 		add_tabbar_option_below(vbox_items);
 
-		// buffer ---------------------------------------
+		// new column ---------------------------------------
+
+		var separator = new Gtk.Separator(Gtk.Orientation.VERTICAL);
+		separator.margin_left = 12;
+		hbox.add(separator);
+		
+		vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 6);
+		vbox.homogeneous = false;
+		hbox.add(vbox);
+		vbox_toolbar = vbox;
+		
+		// toolbar --------------
+
+		vbox_items = add_group(vbox, _("Toolbar"), 0);
+		add_toolbar_option_visible(vbox_items);
+		add_toolbar_option_large_icons(vbox_items);
+		add_toolbar_option_dark_theme(vbox_items);
+		add_toolbar_option_labels(vbox_items);
+
+		// ---------------------------
+
+		vbox_items = add_sub_group(vbox, _("Items"), 0);
+		add_toolbar_item_back(vbox_items);
+		add_toolbar_item_next(vbox_items);
+		add_toolbar_item_up(vbox_items);
+		add_toolbar_item_reload(vbox_items);
+		add_toolbar_item_home(vbox_items);
+		add_toolbar_item_view(vbox_items);
+		add_toolbar_item_bookmarks(vbox_items);
+		add_toolbar_item_devices(vbox_items);
+		add_toolbar_item_terminal(vbox_items);
+
+		// new column  ---------------------------------
+
+		separator = new Gtk.Separator(Gtk.Orientation.VERTICAL);
+		separator.margin_left = 24;
+		hbox.add(separator);
+
+		vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 6);
+		vbox.homogeneous = false;
+		hbox.add(vbox);
+		vbox_pathbar = vbox;
+		
+		// pathbar --------------------------
+
+		vbox_items = add_group(vbox, _("Pathbar"), 0);
+		add_pathbar_option_unified(vbox_items);
+		add_pathbar_option_style(vbox_items);
+
+		// -----------------------------
+
+		vbox_items = add_sub_group(vbox, _("Items"), 0);
+		add_pathbar_item_bookmarks(vbox_items);
+		add_pathbar_item_disk(vbox_items);
+		add_pathbar_item_back(vbox_items);
+		add_pathbar_item_next(vbox_items);
+		add_pathbar_item_up(vbox_items);
+		add_pathbar_item_home(vbox_items);
+		add_pathbar_item_swap(vbox_items);
+		add_pathbar_item_other(vbox_items);
+
+		// buffer --------------
 
 		var label = new Gtk.Label("");
 		label.hexpand = true;
 		hbox.add(label);
+
+		// set state after creating controls
+
+		if (vbox_toolbar != null){
+			vbox_toolbar.sensitive = !chk_headerbar_enabled.active;
+		}
+		if (vbox_pathbar != null){
+			vbox_pathbar.sensitive = !chk_headerbar_enabled.active;
+		}
 	}
 
 	private void add_toolbar_option_visible(Gtk.Container box){
@@ -581,7 +556,6 @@ public class Settings : Gtk.Box {
 		});
 	}
 
-
 	private void add_toolbar_item_devices(Gtk.Container box){
 
 		var chk = new Gtk.CheckButton.with_label(_("Devices"));
@@ -605,17 +579,27 @@ public class Settings : Gtk.Box {
 		var chk = new Gtk.CheckButton.with_label(_("Enabled (R)"));
 		chk.set_tooltip_text(_("Show combined HeaderBar instead of Toolbar and Pathbars [Restart Required]"));
 		box.add(chk);
- 
+		chk_headerbar_enabled = chk;
+		
 		chk.active = App.headerbar_enabled_temp;
 
-		chk.toggled.connect(()=>{
+		chk.toggled.connect(chk_headerbar_toggled);
+	}
 
-			if (App.headerbar_enabled_temp == chk.active){ return; }
+	private void chk_headerbar_toggled(){
+		
+		if (App.headerbar_enabled_temp == chk_headerbar_enabled.active){ return; }
 
-			App.headerbar_enabled_temp = chk.active;
-			
-			restart_app();
-		});
+		App.headerbar_enabled_temp = chk_headerbar_enabled.active;
+
+		restart_app();
+
+		if (vbox_toolbar != null){
+			vbox_toolbar.sensitive = !chk_headerbar_enabled.active;
+		}
+		if (vbox_pathbar != null){
+			vbox_pathbar.sensitive = !chk_headerbar_enabled.active;
+		}
 	}
 
 	private void add_headerbar_option_left_window_buttons(Gtk.Container box){
@@ -662,15 +646,41 @@ public class Settings : Gtk.Box {
 
 			App.pathbar_unified = chk.active;
 
-			foreach(var pn in window.panes){
-				pn.pathbar.refresh();
-			}
-
-			window.pathbar.refresh();
+			window.refresh_pathbars();
 		});
 	}
 
-	private void add_pathbar_option_use_buttons(Gtk.Container box){
+	private void add_pathbar_option_style(Gtk.Box box){
+
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL,6);
+		hbox.margin_top = 6;
+		box.add(hbox);
+
+		// label
+		var label = new Gtk.Label(_("Style") + ":");
+		label.xalign = 0.0f;
+		//label.margin_left = 6;
+		hbox.add(label);
+
+		var link = new Gtk.LinkButton(App.pathbar_style.to_string());
+		link.xalign = 0.0f;
+		hbox.add(link);
+
+		gtk_apply_css( { link }, "padding-left: 0px; padding-right: 0px; margin-left: 0px; margin-right: 0px;");
+
+		link.activate_link.connect(()=>{
+			var menu = new PathbarStyleMenu(link);
+			return menu.show_menu(null);
+		});
+
+		gtk_suppress_context_menu(link);
+		
+		label = new Gtk.Label("");
+		label.hexpand = true;
+		hbox.add(label);
+	}
+
+	/*private void add_pathbar_option_use_buttons(Gtk.Container box){
 
 		var chk = new Gtk.CheckButton.with_label(_("Use Buttons"));
 		chk.set_tooltip_text(_("Use buttons for path instead of links"));
@@ -720,7 +730,7 @@ public class Settings : Gtk.Box {
 
 			window.pathbar.refresh();
 		});
-	}
+	}*/
 	
 	private void add_pathbar_item_bookmarks(Gtk.Container box){
 
@@ -814,6 +824,26 @@ public class Settings : Gtk.Box {
 			if (App.pathbar_show_up == chk.active){ return; }
 
 			App.pathbar_show_up = chk.active;
+
+			foreach(var pn in window.panes){
+				pn.pathbar.refresh_icon_visibility();
+			}
+			window.pathbar.refresh_icon_visibility();
+		});
+	}
+
+	private void add_pathbar_item_home(Gtk.Container box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Home"));
+		box.add(chk);
+
+		chk.active = App.pathbar_show_home;
+
+		chk.toggled.connect(()=>{
+
+			if (App.pathbar_show_home == chk.active){ return; }
+
+			App.pathbar_show_home = chk.active;
 
 			foreach(var pn in window.panes){
 				pn.pathbar.refresh_icon_visibility();
@@ -975,38 +1005,19 @@ public class Settings : Gtk.Box {
 		});
 	}
 
-	private void add_sidebar_option_unmount(Gtk.Container box){
+	private void add_sidebar_option_action_button(Gtk.Container box){
 
-		var chk = new Gtk.CheckButton.with_label(_("Unmount button"));
-		chk.set_tooltip_text(_("Show Unmount button for mounted devices"));
+		var chk = new Gtk.CheckButton.with_label(_("Action button"));
+		chk.set_tooltip_text(_("Show Action button for sidebar items"));
 		box.add(chk);
 
-		chk.active = App.sidebar_unmount;
+		chk.active = App.sidebar_action_button;
 
 		chk.toggled.connect(()=>{
 
-			if (App.sidebar_unmount == chk.active){ return; }
+			if (App.sidebar_action_button == chk.active){ return; }
 
-			App.sidebar_unmount = chk.active;
-
-			window.sidebar.refresh();
-		});
-	}
-
-
-	private void add_sidebar_option_lock(Gtk.Container box){
-
-		var chk = new Gtk.CheckButton.with_label(_("Lock button"));
-		chk.set_tooltip_text(_("Show Lock button for encrypted devices"));
-		box.add(chk);
-
-		chk.active = App.sidebar_lock;
-
-		chk.toggled.connect(()=>{
-
-			if (App.sidebar_lock == chk.active){ return; }
-
-			App.sidebar_lock = chk.active;
+			App.sidebar_action_button = chk.active;
 
 			window.sidebar.refresh();
 		});
@@ -1027,11 +1038,7 @@ public class Settings : Gtk.Box {
 
 			App.statusbar_unified = chk.active;
 
-			foreach(var pn in window.panes){
-				pn.statusbar.refresh_visibility();
-			}
-
-			window.statusbar.refresh_visibility();
+			window.refresh_statusbars();
 		});
 	}
 
@@ -1058,7 +1065,7 @@ public class Settings : Gtk.Box {
 
 	private void add_tabbar_option_close(Gtk.Container box){
 
-		var chk = new Gtk.CheckButton.with_label(_("Close button"));
+		var chk = new Gtk.CheckButton.with_label(_("Close button (R)"));
 		chk.set_tooltip_text(_("Show tab close button (requires application restart)"));
 		box.add(chk);
 
@@ -1075,6 +1082,71 @@ public class Settings : Gtk.Box {
 			}
 		});
 	}
+	
+	private void add_option_gtk_theme(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_option){
+
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL,6);
+		box.add(hbox);
+
+		hbox.margin_bottom = 6;
+
+		// label
+		/*var label = new Gtk.Label(_("GTK+ Theme"));
+		label.xalign = 0.0f;
+		label.margin_left = 6;
+		label.margin_right = 6;
+		label.margin_bottom = 6;
+		hbox.add(label);
+		sg_label.add_widget(label);*/
+
+		// cmb_app
+		var combo = new Gtk.ComboBox();
+		combo.set_tooltip_text(_("GTK theme to use"));
+		hbox.add (combo);
+		sg_option.add_widget(combo);
+		
+		combo.set_tooltip_text(_("This application is designed for the Arc GTK theme. It may not look right with other themes."));
+
+		// render text
+		var cell_text = new CellRendererText();
+		combo.pack_start(cell_text, false);
+		combo.set_cell_data_func (cell_text, (cell_text, cell, model, iter) => {
+			string text;
+			model.get (iter, 1, out text, -1);
+			(cell as Gtk.CellRendererText).text = text;
+		});
+
+		// add items
+		var store = new Gtk.ListStore(2,
+			typeof(string),
+			typeof(string));
+
+		combo.set_model (store);
+		
+		TreeIter iter;
+		int index = -1;
+		
+		////index++;
+		//store.append(out iter);
+		//store.set (iter, 0, "system", 1, _("System Default"), -1);
+		
+		foreach(var theme in GtkTheme.themes){
+			
+			index++;
+			store.append(out iter);
+			store.set (iter, 0, theme.name, 1,  theme.name, -1);
+
+			if (theme.name == App.gtk_theme){
+				combo.active = index;
+			}
+		}
+		
+		combo.changed.connect(() => {
+			App.gtk_theme = gtk_combobox_get_value(combo, 0, App.gtk_theme);
+			GtkTheme.set_gtk_theme(App.gtk_theme);
+		});
+	}
+
 
 	// Defaults ------------------------
 
@@ -1154,7 +1226,7 @@ public class Settings : Gtk.Box {
 
 		// label
 		var label = new Gtk.Label(_("View Mode"));
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.margin_left = 6;
 		label.margin_right = 6;
 		label.margin_bottom = 6;
@@ -1223,7 +1295,7 @@ public class Settings : Gtk.Box {
 
 		// label
 		var label = new Gtk.Label(_("Terminal"));
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.margin_left = 6;
 		label.margin_right = 6;
 		label.margin_bottom = 6;
@@ -1278,7 +1350,7 @@ public class Settings : Gtk.Box {
 
 		// label
 		var label = new Gtk.Label(_("File Manager"));
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.margin_left = 6;
 		label.margin_right = 6;
 		label.margin_bottom = 6;
@@ -1559,7 +1631,7 @@ public class Settings : Gtk.Box {
 
 			foreach(var v in window.views){
 				v.listview_font_scale = App.listview_font_scale;
-				v.refresh();
+				v.refresh(false, false);
 			}
 		});
 
@@ -1600,7 +1672,7 @@ public class Settings : Gtk.Box {
 			
 			foreach(var v in window.views){
 				v.listview_icon_size = App.listview_icon_size;
-				v.refresh();
+				v.refresh(false, false);
 			}
 		});
 
@@ -1637,7 +1709,7 @@ public class Settings : Gtk.Box {
 
 			foreach(var v in window.views){
 				v.listview_row_spacing = App.listview_row_spacing;
-				v.refresh();
+				v.refresh(false, false);
 			}
 		});
 
@@ -1668,7 +1740,7 @@ public class Settings : Gtk.Box {
 
 	private void add_options_listview_icons(Gtk.Box box) {
 
-		var vbox = add_sub_group(box, _("Icons"), 0);
+		var vbox = add_sub_group(box, _("Options"), 0);
 
 		add_option_listview_emblems(vbox);
 		
@@ -1751,7 +1823,7 @@ public class Settings : Gtk.Box {
 
 			foreach(var v in window.views){
 				v.iconview_icon_size = App.iconview_icon_size;
-				v.refresh();
+				v.refresh(false, false);
 			}
 		});
 
@@ -1852,13 +1924,15 @@ public class Settings : Gtk.Box {
 
 	private void add_options_iconview_icons(Gtk.Box box) {
 
-		var vbox = add_sub_group(box, _("Icons"), 0);
+		var vbox = add_sub_group(box, _("Options"), 0);
 
 		add_option_iconview_emblems(vbox);
 		
 		add_option_iconview_thumbs(vbox);
 		
 		add_option_iconview_transparency(vbox);
+
+		add_option_iconview_trim_names(vbox);
 	}
 
 	private void add_option_iconview_emblems(Gtk.Box box){
@@ -1906,6 +1980,21 @@ public class Settings : Gtk.Box {
 		});
 	}
 
+	private void add_option_iconview_trim_names(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Ellipsize file name"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("Ellipsize long file names with 3 dots. Uncheck this option to display entire file name."));
+
+		chk.active = App.iconview_trim_names;
+
+		chk.toggled.connect(()=>{
+			App.iconview_trim_names = chk.active;
+			window.refresh_treemodels();
+		});
+	}
+
 
 	private void add_scale_tileview_icon_size(Gtk.Box box, Gtk.SizeGroup sg_label, Gtk.SizeGroup sg_scale) {
 
@@ -1935,7 +2024,7 @@ public class Settings : Gtk.Box {
 
 			foreach(var v in window.views){
 				v.tileview_icon_size = App.tileview_icon_size;
-				v.refresh();
+				v.refresh(false, false);
 			}
 		});
 
@@ -2038,7 +2127,7 @@ public class Settings : Gtk.Box {
 
 	private void add_options_tileview_icons(Gtk.Box box) {
 
-		var vbox = add_sub_group(box, _("Icons"), 0);
+		var vbox = add_sub_group(box, _("Options"), 0);
 
 		add_option_tileview_emblems(vbox);
 		
@@ -2473,7 +2562,7 @@ public class Settings : Gtk.Box {
 		var chk = new Gtk.CheckButton.with_label(_("Split"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'PDF > Split' action in right-click menu will remove the original file on success."));
+		chk.set_tooltip_text(_("If selected, the action will remove original file on success"));
 
 		chk.active = App.overwrite_pdf_split;
 
@@ -2487,7 +2576,7 @@ public class Settings : Gtk.Box {
 		var chk = new Gtk.CheckButton.with_label(_("Merge"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'PDF > Merge' action in right-click menu will remove the original file on success."));
+		chk.set_tooltip_text(_("If selected, the action will remove original file on success"));
 
 		chk.active = App.overwrite_pdf_merge;
 
@@ -2501,7 +2590,7 @@ public class Settings : Gtk.Box {
 		var chk = new Gtk.CheckButton.with_label(_("Reduce File Size"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'PDF > Reduce File Size' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_pdf_compress;
 
@@ -2515,7 +2604,7 @@ public class Settings : Gtk.Box {
 		var chk = new Gtk.CheckButton.with_label(_("Uncompress"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'PDF > Uncompress' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_pdf_uncompress;
 
@@ -2529,7 +2618,7 @@ public class Settings : Gtk.Box {
 		var chk = new Gtk.CheckButton.with_label(_("Add Password"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'PDF > Add Password' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_pdf_protect;
 
@@ -2543,7 +2632,7 @@ public class Settings : Gtk.Box {
 		var chk = new Gtk.CheckButton.with_label(_("Remove Password"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'PDF > Remove Password' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_pdf_unprotect;
 
@@ -2557,7 +2646,7 @@ public class Settings : Gtk.Box {
 		var chk = new Gtk.CheckButton.with_label(_("Remove color"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'PDF > Remove color' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_pdf_decolor;
 
@@ -2571,7 +2660,7 @@ public class Settings : Gtk.Box {
 		var chk = new Gtk.CheckButton.with_label(_("Rotate"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'PDF > Rotate' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_pdf_rotate;
 
@@ -2585,7 +2674,7 @@ public class Settings : Gtk.Box {
 		var chk = new Gtk.CheckButton.with_label(_("Optimize"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'PDF > Optimize' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_pdf_optimize;
 
@@ -2600,7 +2689,7 @@ public class Settings : Gtk.Box {
 		var chk = new Gtk.CheckButton.with_label(_("Optimize PNG"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'Image > Optimize PNG' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_image_optimize_png;
 
@@ -2614,7 +2703,7 @@ public class Settings : Gtk.Box {
 		var chk = new Gtk.CheckButton.with_label(_("Reduce JPEG"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'Image > Reduce JPEG' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_image_reduce_jpeg;
 
@@ -2628,7 +2717,7 @@ public class Settings : Gtk.Box {
 		var chk = new Gtk.CheckButton.with_label(_("Resize"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'Image > Resize' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_image_resize;
 
@@ -2642,7 +2731,7 @@ public class Settings : Gtk.Box {
 		var chk = new Gtk.CheckButton.with_label(_("Rotate"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'Image > Rotate' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_image_rotate;
 
@@ -2656,7 +2745,7 @@ public class Settings : Gtk.Box {
 		var chk = new Gtk.CheckButton.with_label(_("Convert"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'Image > Convert' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_image_convert;
 
@@ -2670,7 +2759,7 @@ public class Settings : Gtk.Box {
 		var chk = new Gtk.CheckButton.with_label(_("Remove Color"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'Image > Remove Color' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_image_decolor;
 
@@ -2684,7 +2773,7 @@ public class Settings : Gtk.Box {
 		var chk = new Gtk.CheckButton.with_label(_("Boost Color"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("If selected, the 'Image > Boost Color' action in right-click menu will replace the original file on success, instead of creating a new file."));
+		chk.set_tooltip_text(_("If selected, the action will replace original file on success, instead of creating new file."));
 
 		chk.active = App.overwrite_image_boost_color;
 
@@ -2704,8 +2793,8 @@ public class Settings : Gtk.Box {
 		if (header_text.length > 0){
 			var label = new Gtk.Label("<b>%s</b>".printf(header_text.replace("&amp;","&").replace("&","&amp;")));
 			label.set_use_markup(true);
-			label.xalign = (float) 0.0;
-			label.yalign = (float) 0.0;
+			label.xalign = 0.0f;
+			label.yalign = 0.0f;
 			vbox.add(label);
 			label.margin_bottom = 6;
 			vbox.margin_bottom = 6; // add box bottom padding only if group has a header
@@ -2723,8 +2812,8 @@ public class Settings : Gtk.Box {
 		if (header_text.length > 0){
 			var label = new Gtk.Label("<i>%s</i>".printf(header_text));
 			label.set_use_markup(true);
-			label.xalign = (float) 0.0;
-			label.yalign = (float) 0.0;
+			label.xalign = 0.0f;
+			label.yalign = 0.0f;
 			vbox.add(label);
 			label.margin_bottom = 6;
 			vbox.margin_bottom = 6; // add box bottom padding only if group has a header

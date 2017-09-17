@@ -1,9 +1,11 @@
 src/polo
 src/polo-gtk*
+src/gtk3-version-polo
 installer/amd64
 installer/i386
 installer/*.deb
 installer/*.run
+polo.geany
 .git/
 .sass-cache/
 bzr-repo/

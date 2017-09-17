@@ -2,7 +2,7 @@
 /*
  * GtkBookmark.vala
  *
- * Copyright 2017 Tony George <teejee2008@gmail.com>
+ * Copyright 2017 Tony George <teejeetech@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -34,28 +34,37 @@ public class GtkBookmark : GLib.Object {
 	public string uri = "";
 	public string name = "";
 
+	private string _path = "";
+	public string path {
+		owned get{
+			if (_path.length > 0){ return _path; }
+			var file = File.new_for_uri(uri);
+			_path = file.get_path();
+			if (_path == null){ _path = ""; }
+			return _path;
+		}
+	}
+
 	public static string user_name;
 	public static string user_home;
 	
 	public static Gee.ArrayList<GtkBookmark> bookmarks = new Gee.ArrayList<GtkBookmark>();
 
-	private static const string config_path_gtk_template = "%s/.config/gtk-3.0/bookmarks";
-	private static const string config_path_custom_template = "%s/.config/%s-bookmarks";
+	private static const string gtk_template = "%s/.config/gtk-3.0/bookmarks";
+	private static const string custom_template = "%s/.config/%s-bookmarks";
 	private static string config_file;
-
-	// properties
 	
-	public string path {
-		owned get{
-			return uri_decode(uri.replace("file://",""));
-		}
-	}
-
 	// constructors
 	
 	public GtkBookmark(string _uri, string _name = ""){
 		uri = _uri;
-		name = (_name.length > 0) ? _name : file_basename(_uri);
+
+		if (path != null){
+			name = "%s".printf((_name.length > 0) ? _name : file_basename(path));
+		}
+		else{
+			name = "%s".printf((_name.length > 0) ? _name : file_basename(uri));
+		}
 	}
 
 	// static methods
@@ -66,10 +75,10 @@ public class GtkBookmark : GLib.Object {
 		user_home = get_user_home(user_name);
 
 		if (use_gtk_bookmarks){
-			config_file = config_path_gtk_template.printf(user_home);
+			config_file = gtk_template.printf(user_home);
 		}
 		else{
-			config_file = config_path_custom_template.printf(user_home, AppShortName);
+			config_file = custom_template.printf(user_home, AppShortName);
 		}
 
 		bookmarks = new Gee.ArrayList<GtkBookmark>();
@@ -77,6 +86,9 @@ public class GtkBookmark : GLib.Object {
 		if (file_exists(config_file)){
 			
 			log_debug("Reading bookmarks: %s".printf(config_file));
+
+			// sample:
+			// file:///path/to/folder Bookmark name with spaces
 			
 			foreach(var line in file_read(config_file).split("\n")){
 			
@@ -88,16 +100,22 @@ public class GtkBookmark : GLib.Object {
 				string bm_name = "";
 				for(int i = 0; i < parts.length; i++){
 					if (i == 0){
-						bm_uri = parts[i];
+						bm_uri = parts[i]; // first part is the uri
 					}
 					else{
+						if (bm_name.length > 0) { bm_name += " "; }
 						bm_name += parts[i];
 					}
 				}
 
+				if (bm_name.length == 0){
+					bm_name = file_basename(bm_uri);
+					//bm_name = uri_decode(bm_name); // it's not encoded
+				}
+
 				var bm = new GtkBookmark(bm_uri, bm_name);
 				bookmarks.add(bm);
-				//log_debug("Read bookmark: %s".printf(bm.uri));
+				log_debug("Bookmark: uri: %s, name: %s".printf(bm.uri, bm.name));
 			}
 		}
 		else{
@@ -121,32 +139,40 @@ public class GtkBookmark : GLib.Object {
 		file_write(config_file, text);
 	}
 
-	public static void add_bookmark_from_path(string location){
+	public static void add_bookmark(string uri){
 
 		foreach(var bm in bookmarks){
-			if (bm.path == location){
+			if (bm.uri == uri){
 				return; // already exists
 			}
 		}
 
-		if (is_bookmarked(location)){
+		if (is_bookmarked(uri)){
 			return; 
 		}
+
+		if (!uri.contains("://")){
+			return;
+		}
 		
-		var bm = new GtkBookmark("file://" + uri_encode(location, false));
+		var bm = new GtkBookmark(uri);
 		bookmarks.add(bm);
 		save_bookmarks();
 	}
 
-	public static void remove_bookmark_by_path(string location){
+	public static void remove_bookmark(string uri){
 
-		if ((location == null) || (location.strip().length == 0)){
+		if ((uri == null) || (uri.strip().length == 0)){
 			return; 
+		}
+
+		if (!uri.contains("://")){
+			return;
 		}
 		
 		GtkBookmark bm_remove = null;
 		foreach(var bm in bookmarks){
-			if (bm.path == location){
+			if (bm.uri == uri){
 				bm_remove = bm;
 				break;
 			}
@@ -158,14 +184,18 @@ public class GtkBookmark : GLib.Object {
 		}
 	}
 
-	public static bool is_bookmarked(string location){
+	public static bool is_bookmarked(string uri){
 
-		if ((location == null) || (location.strip().length == 0)){
+		if ((uri == null) || (uri.strip().length == 0)){
 			return true; 
+		}
+
+		if (!uri.contains("://")){
+			return false;
 		}
 		
 		foreach(var bm in bookmarks){
-			if (bm.path == location){
+			if (bm.uri == uri){
 				return true;
 			}
 		}
@@ -175,17 +205,23 @@ public class GtkBookmark : GLib.Object {
 	
 	// instance methods
 
-	public bool path_exists(){
-		return file_or_dir_exists(uri);
+	public bool exists(){
+		return uri_exists(uri);
 	}
 
 	public Gdk.Pixbuf? get_icon(int icon_size = 16){
-		if (path_exists()){
+
+		if (exists()){
+
 			if (uri == "trash:///"){
 				return IconManager.lookup("user-trash",16);
 			}
 			else{
+				//log_debug("", true);
+				//log_debug("uri      : %s".printf(uri), true);
 				var item = new FileItem.from_path(uri);
+				//log_debug("file_path: %s".printf(item.file_path), true);
+				//log_debug("file_uri : %s".printf(item.file_uri), true);
 				return item.get_icon(icon_size, true, false);
 			}
 		}

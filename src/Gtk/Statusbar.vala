@@ -35,6 +35,30 @@ using TeeJee.Misc;
 
 public class Statusbar : Gtk.Box {
 
+	// reference properties ----------
+
+	private MainWindow window{
+		get { return App.main_window; }
+	}
+	
+	FileViewPane _pane;
+	private FileViewPane? pane {
+		get{
+			if (_pane != null){ return _pane; }
+			else { return window.active_pane; }
+		}
+	}
+
+	private FileViewList? view{
+		get{ return (pane == null) ? null : pane.view; }
+	}
+
+	private LayoutPanel? panel {
+		get { return (pane == null) ? null : pane.panel; }
+	}
+
+	// -------------------------------
+	
 	private Gtk.Label lbl_file_count;
 	private Gtk.Label lbl_dir_count;
 	private Gtk.Label lbl_size;
@@ -52,38 +76,6 @@ public class Statusbar : Gtk.Box {
 	private Gtk.EventBox ebox_terminal;
 	
 	private double fs_bar_value = 0;
-
-	// parents
-	private FileViewPane _pane;
-
-	private FileViewList? view{
-		get{
-			return (pane == null) ? null : pane.view;
-		}
-	}
-
-	private FileViewPane? pane {
-		get{
-			if (_pane != null){
-				return _pane;
-			}
-			else{
-				return App.main_window.active_pane;
-			}
-		}
-	}
-
-	private LayoutPanel? panel {
-		get{
-			return (pane == null) ? null : pane.panel;
-		}
-	}
-
-	private MainWindow window{
-		get{
-			return App.main_window;
-		}
-	}
 
 	private bool is_global{
 		get{
@@ -149,12 +141,12 @@ public class Statusbar : Gtk.Box {
 		add(img);
 		
 		var label = new Gtk.Label ("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		add(label);
 		lbl_dir_count = label;
 
 		//label = new Gtk.Label (_("dirs"));
-		//label.xalign = (float) 0.0;
+		//label.xalign = 0.0f;
 		//add(label);
 
 		lbl_dir_count.notify["visible"].connect(()=>{
@@ -172,12 +164,12 @@ public class Statusbar : Gtk.Box {
 		add(img);
 		
 		var label = new Gtk.Label ("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		add(label);
 		lbl_file_count = label;
 
 		//label = new Gtk.Label(_("files"));
-		//label.xalign = (float) 0.0;
+		//label.xalign = 0.0f;
 		//add(label);
 
 		lbl_file_count.notify["visible"].connect(()=>{
@@ -192,7 +184,7 @@ public class Statusbar : Gtk.Box {
 		add(separator);
 
 		var label = new Gtk.Label ("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.set_use_markup(true);
 		lbl_hidden_count = label;
 		
@@ -200,8 +192,10 @@ public class Statusbar : Gtk.Box {
 		ebox_count.add(lbl_hidden_count);
 		add(ebox_count);
 
+		ebox_count.set_tooltip_text(_("Show hidden items"));
+
 		label = new Gtk.Label(_("hidden"));
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.set_use_markup(true);
 		add(label);
 		lbl_hidden = label;
@@ -233,7 +227,7 @@ public class Statusbar : Gtk.Box {
 		add(separator);
 
 		var label = new Gtk.Label ("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		add(label);
 		lbl_size = label;
 
@@ -273,12 +267,12 @@ public class Statusbar : Gtk.Box {
 		//add(separator);
 
 		var label = new Gtk.Label ("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		add(label);
 		lbl_fs_free = label;
 
 		label = new Gtk.Label(_("free"));
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		add(label);
 
 		add_fs_bar();
@@ -296,7 +290,7 @@ public class Statusbar : Gtk.Box {
 		//add(separator);
 
 		var label = new Gtk.Label ("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		add(label);
 		lbl_fs_read_only = label;
 
@@ -311,7 +305,7 @@ public class Statusbar : Gtk.Box {
 		//add(separator);
 
 		var label = new Gtk.Label ("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		add(label);
 		lbl_fs_type = label;
 
@@ -417,7 +411,7 @@ public class Statusbar : Gtk.Box {
 
 	private void add_spacer(){
 		var label = new Gtk.Label("");
-		label.xalign = (float) 0.0;
+		label.xalign = 0.0f;
 		label.hexpand = true;
 		add(label);
 	}
@@ -640,7 +634,7 @@ public class Statusbar : Gtk.Box {
 		var dev = view.current_item.get_device();
 		
 		if (dev != null){
-			log_debug("file_item is on device: %s".printf(dev.device), true);
+			log_debug("file_item is on device: %s".printf(dev.device));
 
 			if ((view.current_item.filesystem_type != null) && (view.current_item.filesystem_type != "ext3/ext4")){
 				lbl_fs_type.label = "%s".printf(view.current_item.filesystem_type); // prefer this
@@ -716,21 +710,21 @@ public class Statusbar : Gtk.Box {
 
 		log_debug("Statusbar: refresh_selection_counts()");
 
-		if (view.current_item.is_local){
-
-			int files, dirs;
-			view.get_selected_counts(out files, out dirs);
-
-			lbl_dir_count.label = "%'ld / %'ld".printf(dirs, view.current_item.dir_count);
-			
-			lbl_file_count.label = "%'ld / %'ld".printf(files, view.current_item.file_count);
-		}
-		else{
+		/*if (view.current_item.is_virtual){
 
 			lbl_dir_count.label = "%'ld".printf(view.current_item.dir_count);
 			
 			lbl_file_count.label = "%'ld".printf(view.current_item.file_count);
 		}
+		else{*/
+
+			int files, dirs;
+			view.get_selected_counts(out files, out dirs);
+
+			lbl_dir_count.label = "%'ld/%'ld".printf(dirs, view.current_item.dir_count);
+			
+			lbl_file_count.label = "%'ld/%'ld".printf(files, view.current_item.file_count);
+		//}
 	}
 	
 	private void refresh_usage_bar() {
