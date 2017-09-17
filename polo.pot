@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
-"POT-Creation-Date: 2017-09-11 08:38+0530\n"
+"POT-Creation-Date: 2017-09-17 14:18+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -56,7 +56,7 @@ msgid ""
 msgstr ""
 
 #: Gtk/MainWindow.vala:875
-msgid "A modern, light-weight file manager for Linux"
+msgid "A modern file manager for Linux"
 msgstr ""
 
 #: Gtk/CloudLoginWindow.vala:264
@@ -106,10 +106,6 @@ msgstr ""
 msgid "Account Type"
 msgstr ""
 
-#: Gtk/CloudLoginWindow.vala:343
-msgid "Account could not be added"
-msgstr ""
-
 #: Gtk/CloudLoginWindow.vala:258
 msgid "Account name exists"
 msgstr ""
@@ -118,7 +114,7 @@ msgstr ""
 msgid ""
 "Account was added successfully.\n"
 "\n"
-"You can browse the remote storage by selecting account from 'Cloud' menu"
+"You can browse the storage by selecting account from 'Cloud' menu"
 msgstr ""
 
 #: Gtk/Settings.vala:1010
@@ -200,11 +196,11 @@ msgstr ""
 msgid "Another instance of this application is running"
 msgstr ""
 
-#: Common/Main.vala:912 Common/Main.vala:1059 Common/Main.vala:1148
+#: Common/Main.vala:912 Common/Main.vala:1058 Common/Main.vala:1147
 msgid "App config loaded"
 msgstr ""
 
-#: Common/Main.vala:725 Common/Main.vala:1026 Common/Main.vala:1104
+#: Common/Main.vala:725 Common/Main.vala:1025 Common/Main.vala:1103
 msgid "App config saved"
 msgstr ""
 
@@ -379,7 +375,7 @@ msgstr ""
 #: Gtk/ProgressPanelVideoDownloadTask.vala:230
 #: Gtk/ProgressPanelVideoDownloadTask.vala:231
 #: Gtk/ProgressPanelVideoDownloadTask.vala:399
-#: Gtk/SimpleProgressWindow.vala:139 Utility/Gtk/CustomMessageDialog.vala:171
+#: Gtk/SimpleProgressWindow.vala:139 Utility/Gtk/CustomMessageDialog.vala:172
 #: Utility/Gtk/GtkHelper.vala:140
 msgid "Cancel"
 msgstr ""
@@ -1003,11 +999,11 @@ msgstr ""
 msgid "Device"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:497
+#: Gtk/DeviceContextMenu.vala:502
 msgid "Device Locked"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:417
+#: Gtk/DeviceContextMenu.vala:422
 msgid "Device Unmounted"
 msgstr ""
 
@@ -1189,7 +1185,7 @@ msgstr ""
 msgid "Effective permissions for current user"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:218
+#: Gtk/DeviceContextMenu.vala:221
 msgid "Eject"
 msgstr ""
 
@@ -1197,11 +1193,11 @@ msgstr ""
 msgid "Eject Device"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:520
+#: Gtk/DeviceContextMenu.vala:525
 msgid "Eject Disk ?"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:219
+#: Gtk/DeviceContextMenu.vala:222
 msgid "Eject the device so that it can be removed safely"
 msgstr ""
 
@@ -1371,7 +1367,7 @@ msgstr ""
 msgid "Exit"
 msgstr ""
 
-#: Common/Main.vala:1199
+#: Common/Main.vala:1198
 msgid "Exiting Application"
 msgstr ""
 
@@ -1636,11 +1632,11 @@ msgstr ""
 msgid "Flashing ISO to device..."
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:340
+#: Gtk/DeviceContextMenu.vala:345
 msgid "Flush Read Buffer"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:341
+#: Gtk/DeviceContextMenu.vala:346
 msgid "Flushes the read buffer for device"
 msgstr ""
 
@@ -1681,11 +1677,11 @@ msgstr ""
 msgid "Format"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:269
+#: Gtk/DeviceContextMenu.vala:273
 msgid "Format device using GNOME disk utility"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:268
+#: Gtk/DeviceContextMenu.vala:272
 msgid "Format..."
 msgstr ""
 
@@ -1710,7 +1706,7 @@ msgstr ""
 msgid "Fullscreen Mode"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:550 Gtk/DeviceContextMenu.vala:567
+#: Gtk/DeviceContextMenu.vala:555 Gtk/DeviceContextMenu.vala:572
 msgid "GNOME Disk Uitility (gnome-disks) is not installed"
 msgstr ""
 
@@ -2029,7 +2025,7 @@ msgstr ""
 msgid "Location not found"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:195
+#: Gtk/DeviceContextMenu.vala:198
 msgid "Lock"
 msgstr ""
 
@@ -2058,11 +2054,11 @@ msgstr ""
 msgid "Make a donation"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:244
+#: Gtk/DeviceContextMenu.vala:247
 msgid "Manage device using GNOME disk utility"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:243
+#: Gtk/DeviceContextMenu.vala:246
 msgid "Manage..."
 msgstr ""
 
@@ -2114,7 +2110,7 @@ msgstr ""
 msgid "Method"
 msgstr ""
 
-#: Gtk/PropertiesWindow.vala:290 Utility/FileItem.vala:650
+#: Gtk/PropertiesWindow.vala:290 Utility/FileItem.vala:660
 #, c-format
 msgid "Mime"
 msgstr ""
@@ -2147,7 +2143,7 @@ msgstr ""
 msgid "Missing Dependencies"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:549 Gtk/DeviceContextMenu.vala:566
+#: Gtk/DeviceContextMenu.vala:554 Gtk/DeviceContextMenu.vala:571
 #: Gtk/FileViewList.vala:5644
 msgid "Missing Dependency"
 msgstr ""
@@ -2167,7 +2163,7 @@ msgstr ""
 
 #: Gtk/FileConflictDialog.vala:543 Gtk/FileConflictDialog.vala:555
 #: Gtk/FileViewList.vala:806 Gtk/PropertiesWindow.vala:308
-#: Utility/FileItem.vala:647
+#: Utility/FileItem.vala:657
 #, c-format
 msgid "Modified"
 msgstr ""
@@ -2176,7 +2172,7 @@ msgstr ""
 msgid "More options"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:149 Gtk/DeviceContextMenu.vala:293
+#: Gtk/DeviceContextMenu.vala:152 Gtk/DeviceContextMenu.vala:298
 #: Gtk/FileContextMenu.vala:1611 Gtk/PropertiesWindow.vala:481
 msgid "Mount"
 msgstr ""
@@ -2193,7 +2189,7 @@ msgstr ""
 msgid "Mount the selected disk"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:150 Gtk/DeviceContextMenu.vala:294
+#: Gtk/DeviceContextMenu.vala:153 Gtk/DeviceContextMenu.vala:299
 msgid "Mount this volume"
 msgstr ""
 
@@ -2284,7 +2280,7 @@ msgstr ""
 
 #: Gtk/ColumnSelectionBox.vala:111 Gtk/CreateArchiveWindow.vala:259
 #: Gtk/FileViewList.vala:648 Gtk/PropertiesWindow.vala:169
-#: Utility/FileItem.vala:644
+#: Utility/FileItem.vala:654
 #, c-format
 msgid "Name"
 msgstr ""
@@ -2331,7 +2327,7 @@ msgid "Next"
 msgstr ""
 
 #: Gtk/MediaBar.vala:147 Gtk/PropertiesWindow.vala:230
-#: Gtk/PropertiesWindow.vala:235 Utility/Gtk/CustomMessageDialog.vala:176
+#: Gtk/PropertiesWindow.vala:235 Utility/Gtk/CustomMessageDialog.vala:177
 msgid "No"
 msgstr ""
 
@@ -2380,13 +2376,13 @@ msgid ""
 msgstr ""
 
 #: Gtk/FileConflictDialog.vala:254 Gtk/ProgressPanelArchiveTask.vala:521
-#: Utility/Gtk/CustomMessageDialog.vala:166
-#: Utility/Gtk/CustomMessageDialog.vala:170 Utility/Gtk/GtkHelper.vala:139
+#: Utility/Gtk/CustomMessageDialog.vala:167
+#: Utility/Gtk/CustomMessageDialog.vala:171 Utility/Gtk/GtkHelper.vala:139
 #: Utility/Gtk/LoadingWindow.vala:110
 msgid "OK"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:126 Gtk/FileContextMenu.vala:236
+#: Gtk/DeviceContextMenu.vala:128 Gtk/FileContextMenu.vala:236
 #: Gtk/FileContextMenu.vala:305 Gtk/FileContextMenu.vala:1460
 #: Gtk/MainMenubar.vala:1241
 msgid "Open"
@@ -2456,7 +2452,7 @@ msgstr ""
 msgid "Open in New Window"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:127
+#: Gtk/DeviceContextMenu.vala:129
 msgid "Open in active pane"
 msgstr ""
 
@@ -2623,7 +2619,7 @@ msgstr ""
 msgid "Partial extraction not supported for solid archives"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:521
+#: Gtk/DeviceContextMenu.vala:526
 msgid ""
 "Partitions on following device will be unmounted and device will be ejected:"
 msgstr ""
@@ -3430,7 +3426,7 @@ msgstr ""
 #: Gtk/FileConflictDialog.vala:542 Gtk/FileConflictDialog.vala:554
 #: Gtk/FileViewList.vala:750 Gtk/PropertiesWindow.vala:190
 #: Gtk/PropertiesWindow.vala:493 Gtk/Sidebar.vala:1265 Gtk/Statusbar.vala:365
-#: Utility/Device.vala:2402 Utility/Device.vala:2417 Utility/FileItem.vala:645
+#: Utility/Device.vala:2402 Utility/Device.vala:2417 Utility/FileItem.vala:655
 #, c-format
 msgid "Size"
 msgstr ""
@@ -3548,7 +3544,7 @@ msgstr ""
 msgid "Symlink Target"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:317
+#: Gtk/DeviceContextMenu.vala:322
 msgid "Sync Pending Writes"
 msgstr ""
 
@@ -3706,9 +3702,13 @@ msgstr ""
 #: Gtk/ConnectServerWindow.vala:220 Gtk/FileConflictDialog.vala:541
 #: Gtk/FileConflictDialog.vala:553 Gtk/FileViewList.vala:1107
 #: Gtk/PropertiesWindow.vala:218 Gtk/PropertiesWindow.vala:286
-#: Utility/Device.vala:2413 Utility/FileItem.vala:649
+#: Utility/Device.vala:2413 Utility/FileItem.vala:659
 #, c-format
 msgid "Type"
+msgstr ""
+
+#: Gtk/CloudLoginWindow.vala:343
+msgid "Type 'rclone config' in a terminal window to add accounts manually."
 msgstr ""
 
 #: Gtk/Settings.vala:152
@@ -3768,11 +3768,11 @@ msgstr ""
 msgid "Unlocked successfully"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:172 Gtk/MainMenubar.vala:1560
+#: Gtk/DeviceContextMenu.vala:175 Gtk/MainMenubar.vala:1560
 msgid "Unmount"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:196
+#: Gtk/DeviceContextMenu.vala:199
 msgid "Unmount and lock encrypted volume"
 msgstr ""
 
@@ -3780,7 +3780,7 @@ msgstr ""
 msgid "Unmount cloud storage account"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:173
+#: Gtk/DeviceContextMenu.vala:176
 msgid "Unmount this volume"
 msgstr ""
 
@@ -3918,7 +3918,7 @@ msgstr ""
 msgid "Write ISO file to USB drive"
 msgstr ""
 
-#: Gtk/DeviceContextMenu.vala:318
+#: Gtk/DeviceContextMenu.vala:323
 msgid "Write any data waiting to be written to the device"
 msgstr ""
 
@@ -3931,7 +3931,7 @@ msgid "Wrong password"
 msgstr ""
 
 #: Gtk/MediaBar.vala:95 Gtk/PropertiesWindow.vala:230
-#: Gtk/PropertiesWindow.vala:235 Utility/Gtk/CustomMessageDialog.vala:175
+#: Gtk/PropertiesWindow.vala:235 Utility/Gtk/CustomMessageDialog.vala:176
 msgid "Yes"
 msgstr ""
 
@@ -3955,7 +3955,7 @@ msgstr ""
 msgid "deleted"
 msgstr ""
 
-#: Utility/FileItem.vala:418 Utility/FileItem.vala:436
+#: Utility/FileItem.vala:419 Utility/FileItem.vala:437
 msgid "empty"
 msgstr ""
 
@@ -3971,11 +3971,11 @@ msgstr ""
 msgid "hidden"
 msgstr ""
 
-#: Utility/FileItem.vala:430
+#: Utility/FileItem.vala:431
 msgid "item"
 msgstr ""
 
-#: Utility/FileItem.vala:433
+#: Utility/FileItem.vala:434
 msgid "items"
 msgstr ""
 
