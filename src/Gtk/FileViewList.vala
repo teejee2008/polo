@@ -5630,7 +5630,7 @@ public class FileViewList : Gtk.Box {
 	private bool check_imagemagick(){
 		return check_tool("convert");
 	}
-	
+
 	private bool check_youtube_dl(){
 		return check_tool("youtube-dl");
 	}
