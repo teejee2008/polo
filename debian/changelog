@@ -1,8 +1,22 @@
+polo-file-manager (17.9.1) xenial; urgency=low
+
+  * Beta 10 Update 1
+
+  * [Fixed] Unity launcher shows 2 icons for single instance of Polo
+
+  * [Fixed] Progress not parsed correctly for video download plugin
+
+  * Added French translation by sheychen290
+
+ -- Tony George <tony.george.kol@gmail.com>  Mon, 18 Sep 2017 08:00:00 +0530
+
+
 polo-file-manager (17.9) xenial; urgency=low
 
   * Beta 10
 
  -- Tony George <tony.george.kol@gmail.com>  Sun, 17 Sep 2017 10:00:00 +0530
+
 
 polo-file-manager (17.7.1) xenial; urgency=low
 
