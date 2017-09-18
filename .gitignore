@@ -1,6 +1,7 @@
 src/polo
-src/polo-gtk*
-src/gtk3-version-polo
+src/polo-gtk
+src/polo-gtk-*
+src/polo-gtk3-version
 installer/amd64
 installer/i386
 installer/*.deb

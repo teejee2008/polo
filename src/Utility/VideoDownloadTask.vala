@@ -78,7 +78,7 @@ public class VideoDownloadTask : AsyncTask {
 			regex_list["info"] = new Regex("""^thumb_url='(.*)',thumb_path='(.*)',title='(.*)',duration='(.*)'""");
 
 			//[download]   4.8% of 21.77MiB at 343.95KiB/s ETA 01:01
-			regex_list["status"] = new Regex("""\[download\][ \t]*([0-9.]+)% of ([0-9.]+(K|M|G)iB) at ([0-9.]+(K|M|G)iB)\/s ETA ([0-9.:]+)""");
+			regex_list["status"] = new Regex("""\[download\][ \t]*([0-9.]+)%[ \t]*of[ \t]*([0-9.]+(K|M|G)iB)[ \t]*at[ \t]*([0-9.]+(K|M|G)iB)\/s[ \t]*ETA[ \t]*([0-9.:]+)""");
 		}
 		catch (Error e) {
 			log_error (e.message);

@@ -70,6 +70,7 @@ install:
 	mkdir -p "$(DESTDIR)/var/log/polo"
 	mkdir -p "$(DESTDIR)$(localedir)/de/LC_MESSAGES"
 	mkdir -p "$(DESTDIR)$(localedir)/nl/LC_MESSAGES"
+	mkdir -p "$(DESTDIR)$(localedir)/fr/LC_MESSAGES"
 	
 	#binary
 	#install -m 0755 ${app_name} "$(DESTDIR)$(bindir)"
@@ -85,7 +86,7 @@ install:
 	chmod a+x $(DESTDIR)$(sharedir)/${app_name}/files/gtk-theme/install-gtk-theme
 
 	#launcher
-	install -m 0644 ${app_name}.desktop "$(DESTDIR)$(launcherdir)"
+	install -m 0644 ${app_name}-gtk.desktop "$(DESTDIR)$(launcherdir)"
 
 	#app icon
 	install -m 0755 ./share/pixmaps/${app_name}.png "$(DESTDIR)$(sharedir)/pixmaps/"
@@ -93,6 +94,7 @@ install:
 	#translations
 	install -m 0644 ../po/${app_name}-de.mo $(DESTDIR)$(localedir)/de/LC_MESSAGES/${app_name}.mo
 	install -m 0644 ../po/${app_name}-nl.mo $(DESTDIR)$(localedir)/nl/LC_MESSAGES/${app_name}.mo
+	install -m 0644 ../po/${app_name}-fr.mo $(DESTDIR)$(localedir)/fr/LC_MESSAGES/${app_name}.mo
 	
 	#install gtk theme 'Arc-Darker-Polo'
 	#mkdir -p "$(DESTDIR)$(sharedir)/themes/Arc-Darker-Polo"
@@ -114,7 +116,7 @@ uninstall:
 	rm -rf "$(DESTDIR)$(sharedir)/${app_name}"
 
 	#launcher
-	rm -f "$(DESTDIR)$(launcherdir)/${app_name}.desktop"
+	rm -f "$(DESTDIR)$(launcherdir)/${app_name}-gtk.desktop"
 
 	#app icon
 	rm -f "$(DESTDIR)$(sharedir)/pixmaps/${app_name}.png"

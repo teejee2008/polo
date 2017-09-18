@@ -844,7 +844,8 @@ public class MainWindow : Gtk.Window {
 
 		dialog.translators = {
 			"Heimen Stoffels (Dutch):vistausss@outlook.com",
-			"Thomas Gorzka (German):thomas.gorzka@gmail.com"
+			"Thomas Gorzka (German):thomas.gorzka@gmail.com",
+			"sheychen290 (French):https://github.com/sheychen290"
 			//"Jorge Jamhour (Brazilian Portuguese):https://launchpad.net/~jorge-jamhour",
 			//"B. W. Knight (Korean):https://launchpad.net/~kbd0651",
 			//"Rodion R. (Russian):https://launchpad.net/~r0di0n"
