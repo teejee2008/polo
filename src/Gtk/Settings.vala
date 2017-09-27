@@ -405,7 +405,7 @@ public class Settings : Gtk.Box, IPaneActive {
 
 	private void add_toolbar_item_next(Gtk.Container box){
 
-		var chk = new Gtk.CheckButton.with_label(_("Next"));
+		var chk = new Gtk.CheckButton.with_label(_("Forward"));
 		box.add(chk);
 
 		chk.active = App.toolbar_item_next;
@@ -794,7 +794,7 @@ public class Settings : Gtk.Box, IPaneActive {
 
 	private void add_pathbar_item_next(Gtk.Container box){
 
-		var chk = new Gtk.CheckButton.with_label(_("Next"));
+		var chk = new Gtk.CheckButton.with_label(_("Forward"));
 		box.add(chk);
 
 		chk.active = App.pathbar_show_next;

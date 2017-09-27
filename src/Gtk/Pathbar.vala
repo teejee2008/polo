@@ -846,7 +846,7 @@ public class Pathbar : Gtk.Box {
 		ebox.add(img);
 		img_next = img;
 
-		var tt =  _("Next");
+		var tt =  _("Forward");
 		img.set_tooltip_text(tt);
 		ebox.set_tooltip_text(tt);
 
