@@ -248,7 +248,7 @@ public class SystemUser : GLib.Object {
 	
 	public bool is_system{
 		get {
-			return (uid < 1000);
+			return ((uid != 0) && (uid < 1000)) || (uid == 65534) || (name == "PinguyBuilder"); // 65534 - nobody
 		}
 	}
 
