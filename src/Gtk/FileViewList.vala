@@ -1894,6 +1894,12 @@ public class FileViewList : Gtk.Box {
 		log_debug("key_string: %s, key_name: %s".printf(key_string, key_name));
 		
 		switch(key_name.down()){
+		case "up":
+		case "down":
+		case "left":
+		case "right":
+		case "tab":
+			return false;
 		case "enter":
 			pane.pathbar.finish_editing();
 			window.pathbar.finish_editing();
