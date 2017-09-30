@@ -49,9 +49,11 @@ public class FileViewTab : Gtk.Box {
 	private Gtk.Entry tab_entry;
 	private Gtk.EventBox ebox_close;
 	private Gtk.Image img_active;
+	private Gtk.Image img_locked;
 	public FileViewPane pane;
 	public bool renamed = false;
 	private Gtk.Menu menu_tab;
+	public string locked_path = "";
 
 	private int TAB_NAME_MAX_LENGTH = 20;
 
@@ -91,6 +93,8 @@ public class FileViewTab : Gtk.Box {
 		var box_label = new Gtk.Box(Orientation.HORIZONTAL, 0);
 		//add_active_icon(box_label);
 
+		add_locked_icon(box_label);
+		
 		var ebox_label = gtk_add_event_box(box_label);
 		tab_label = new Gtk.Label(App.user_name);
 		//tab_label.hexpand = true;
@@ -219,16 +223,7 @@ public class FileViewTab : Gtk.Box {
 		box.add(ebox);
 		ebox_close = ebox;
 		
-		// set hand cursor
-		
-		if (ebox.get_realized()){
-			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-		}
-		else{
-			ebox.realize.connect(()=>{
-				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-			});
-		}
+		set_pointer_cursor_for_eventbox(ebox);
 
 		// click event
 		
@@ -238,6 +233,15 @@ public class FileViewTab : Gtk.Box {
 			}
 			return true;
 		});
+	}
+
+	private void add_locked_icon(Gtk.Box box){
+		
+		var img = IconManager.lookup_image("lock", 16);
+		box.add(img);
+		img_locked = img;
+
+		gtk_hide(img_locked);
 	}
 
 	private bool menu_tab_popup (Gdk.EventButton? event) {
@@ -252,7 +256,7 @@ public class FileViewTab : Gtk.Box {
 		var menu_item = new Gtk.MenuItem();
 		menu_tab.append(menu_item);
 		
-		var lbl = new Gtk.Label(_("Edit Tab Name"));
+		var lbl = new Gtk.Label(_("Edit Name"));
 		lbl.xalign = 0.0f;
 		lbl.margin_right = 6;
 		menu_item.add(lbl);
@@ -270,7 +274,7 @@ public class FileViewTab : Gtk.Box {
 		menu_item = new Gtk.MenuItem();
 		menu_tab.append(menu_item);
 		
-		lbl = new Gtk.Label(_("Reset Tab Name"));
+		lbl = new Gtk.Label(_("Reset Name"));
 		lbl.xalign = 0.0f;
 		lbl.margin_right = 6;
 		lbl.sensitive = renamed;
@@ -280,6 +284,40 @@ public class FileViewTab : Gtk.Box {
 			renamed = false;
 			tab_name = pane.view.current_item.file_name;
 		});
+
+		gtk_menu_add_separator(menu_tab);
+
+		// lock path ---------------
+		
+		menu_item = new Gtk.MenuItem();
+		menu_tab.append(menu_item);
+		
+		lbl = new Gtk.Label(_("Lock Path"));
+		lbl.xalign = 0.0f;
+		lbl.margin_right = 6;
+		lbl.sensitive = true;
+		menu_item.add(lbl);
+
+		menu_item.activate.connect (() => {
+			lock_path();
+		});
+
+		// unlock path ---------------
+		
+		menu_item = new Gtk.MenuItem();
+		menu_tab.append(menu_item);
+		
+		lbl = new Gtk.Label(_("Unlock Path"));
+		lbl.xalign = 0.0f;
+		lbl.margin_right = 6;
+		lbl.sensitive = (locked_path.length > 0);
+		menu_item.add(lbl);
+
+		menu_item.activate.connect (() => {
+			unlock_path();
+		});
+
+		gtk_menu_add_separator(menu_tab);
 
 		// close tab ---------------
 		
@@ -381,6 +419,26 @@ public class FileViewTab : Gtk.Box {
 
 	public void select_tab(){
 		notebook.page = tab_index;
+	}
+
+	public void lock_path(){
+		locked_path = pane.view.current_item.display_path;
+		gtk_show(img_locked);
+	}
+
+	public void unlock_path(){
+		locked_path = "";
+		gtk_hide(img_locked);
+	}
+
+	public void refresh_lock_icon(){
+		
+		if (locked_path.length > 0){
+			gtk_show(img_locked);
+		}
+		else{
+			gtk_hide(img_locked);
+		}
 	}
 	
 	public Gtk.ResponseType show_file_operation_warning_on_close(){

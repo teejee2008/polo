@@ -1061,6 +1061,7 @@ public class MainWindow : Gtk.Window {
 				node_tab.set_boolean_member("renamed", tab.renamed);
 				node_tab.set_string_member("name", tab.tab_name);
 				node_tab.set_string_member("path", tab_view_path);
+				node_tab.set_string_member("locked_path", tab.locked_path);
 				node_tab.set_int_member("view", ((int64) tab.pane.view.get_view_mode_user())); // save view mode user
 				node_tab.set_boolean_member("show_hidden", tab.pane.view.show_hidden_files);
 				node_tab.set_boolean_member("active", (active_pane == tab.pane));
@@ -1205,6 +1206,11 @@ public class MainWindow : Gtk.Window {
 		var tab = panel.add_tab();
 		tab.tab_name = node_tab.get_string_member("name");
 		tab.renamed = node_tab.get_boolean_member("renamed");
+
+		if (node_tab.has_member("locked_path")){
+			tab.locked_path = node_tab.get_string_member("locked_path");
+			tab.refresh_lock_icon();
+		}
 
 		var path = node_tab.get_string_member("path");
 		var vmode = (int) node_tab.get_int_member("view");

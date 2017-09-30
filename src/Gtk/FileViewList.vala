@@ -2170,6 +2170,23 @@ public class FileViewList : Gtk.Box {
 			return null;
 		}
 
+		if (pane.tab.locked_path.length > 0){
+			
+			if (!path.has_prefix(pane.tab.locked_path)){
+				
+				string txt = _("Tab is Locked");
+				
+				string msg = "%s:\n\n%s\n\n%s".printf(
+					_("Tab is locked to path"),
+					pane.tab.locked_path,
+					_("You can only navigate to folders under this location.\n\nTo remove the lock, right-click on the tab and select 'Unlock Path'."));
+
+				gtk_messagebox(txt, msg, window, true);
+
+				return null;
+			}
+		}
+
 		current_location = "";
 		if (path.contains("://")){
 			log_debug("path is uri");
@@ -4548,9 +4565,6 @@ public class FileViewList : Gtk.Box {
 		if (selected_items.size != 1){ return; }
 
 		log_debug("action.rename()");
-
-		TreeIter iter;
-		TreePath path;
 
 		if (view_mode == ViewMode.LIST){
 
