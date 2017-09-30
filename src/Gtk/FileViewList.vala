@@ -2174,14 +2174,7 @@ public class FileViewList : Gtk.Box {
 			
 			if (!path.has_prefix(pane.tab.locked_path)){
 				
-				string txt = _("Tab is Locked");
-				
-				string msg = "%s:\n\n%s\n\n%s".printf(
-					_("Tab is locked to path"),
-					pane.tab.locked_path,
-					_("You can only navigate to folders under this location.\n\nTo remove the lock, right-click on the tab and select 'Unlock Path'."));
-
-				gtk_messagebox(txt, msg, window, true);
+				open_in_new_tab(path);
 
 				return null;
 			}
