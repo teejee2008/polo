@@ -639,7 +639,7 @@ public class MainWindow : Gtk.Window {
 
 	// refresh
 
-	public void refresh_remote_views(string dir_path){
+	public void refresh_views(string dir_path){
 		
 		log_debug("MainWindow: refresh_remote_views(%s)".printf(dir_path));
 		

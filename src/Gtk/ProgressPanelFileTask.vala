@@ -479,32 +479,33 @@ public class ProgressPanelFileTask : ProgressPanel {
 			break;
 		}
 
-		// refresh cloud location --------------------------------
+		// refresh cloud and remote locations --------------------------------
 		
 		switch (action_type){
 		case FileActionType.COPY:
 		
-			if ((destination != null) && (destination is FileItemCloud)){
-				window.refresh_remote_views(destination.file_path);
+			if ((destination != null) && ((destination is FileItemCloud) || destination.is_remote)){
+				window.refresh_views(destination.file_path);
 			}
 			break;
 
 		case FileActionType.CUT:
 		
-			if ((source != null) && (source is FileItemCloud)){
-				window.refresh_remote_views(source.file_path);
+			if ((source != null) && ((source is FileItemCloud) || source.is_remote)){
+				window.refresh_views(source.file_path);
 			}
 
-			if ((destination != null) && (destination is FileItemCloud)){
-				window.refresh_remote_views(destination.file_path);
+			if ((destination != null) && ((destination is FileItemCloud) || destination.is_remote)){
+				window.refresh_views(destination.file_path);
 			}
 			break;
-			
+
+		case FileActionType.TRASH:
 		case FileActionType.DELETE:
 		case FileActionType.CLOUD_RENAME:
 		
-			if ((source != null) && (source is FileItemCloud)){
-				window.refresh_remote_views(source.file_path);
+			if ((source != null) && ((source is FileItemCloud) || source.is_remote)){
+				window.refresh_views(source.file_path);
 			}
 			break;
 		}
