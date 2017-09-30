@@ -422,11 +422,18 @@ public class FileViewTab : Gtk.Box {
 	}
 
 	public void lock_path(){
+		
 		locked_path = pane.view.current_item.display_path;
 		gtk_show(img_locked);
+
+		if (!renamed){
+			tab_name = tab_name;
+			renamed = true;
+		}
 	}
 
 	public void unlock_path(){
+		
 		locked_path = "";
 		gtk_hide(img_locked);
 	}
