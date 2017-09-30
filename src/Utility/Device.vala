@@ -1530,7 +1530,7 @@ public class Device : GLib.Object{
 			pixbuf = IconManager.lookup("media-cdrom", icon_size, symbolic);
 		}
 		else{
-			pixbuf = IconManager.lookup("drive-harddisk", icon_size, symbolic);
+			pixbuf = IconManager.lookup("drive-harddisk-symbolic", icon_size, symbolic);
 		}
 
 		if (!is_mounted){

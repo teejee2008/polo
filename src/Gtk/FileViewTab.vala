@@ -216,7 +216,7 @@ public class FileViewTab : Gtk.Box {
 
 	private void add_close_button(Gtk.Box box){
 		
-		var img = IconManager.lookup_image("tab-close", 16);
+		var img = IconManager.lookup_image("tab-close", 16, false, true);
 		var ebox = new Gtk.EventBox();
 		ebox.margin_left = 10;
 		ebox.add(img);
@@ -237,7 +237,7 @@ public class FileViewTab : Gtk.Box {
 
 	private void add_locked_icon(Gtk.Box box){
 		
-		var img = IconManager.lookup_image("lock", 16);
+		var img = IconManager.lookup_image("lock-symbolic", 16, false, true);
 		box.add(img);
 		img_locked = img;
 

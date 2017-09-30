@@ -612,19 +612,19 @@ public class FileViewToolbar : Gtk.Toolbar, IPaneActive {
 			this.icon_size = Gtk.IconSize.SMALL_TOOLBAR;
 		}
 
-		img_back.pixbuf = IconManager.lookup("go-previous", icon_size_actual);
-		img_next.pixbuf = IconManager.lookup("go-next", icon_size_actual);
-		img_up.pixbuf = IconManager.lookup("go-up", icon_size_actual);
-		img_home.pixbuf = IconManager.lookup("go-home", icon_size_actual);
-		img_reload.pixbuf = IconManager.lookup("view-refresh", icon_size_actual);
-		img_view.pixbuf = IconManager.lookup("view-grid", icon_size_actual);
-		img_bookmarks.pixbuf = IconManager.lookup("user-bookmarks", icon_size_actual);
-		img_devices.pixbuf = IconManager.lookup("drive-harddisk", icon_size_actual);
-		img_terminal.pixbuf = IconManager.lookup("terminal", icon_size_actual);
+		img_back.pixbuf = IconManager.lookup("go-previous-symbolic", icon_size_actual);
+		img_next.pixbuf = IconManager.lookup("go-next-symbolic", icon_size_actual);
+		img_up.pixbuf = IconManager.lookup("go-up-symbolic", icon_size_actual);
+		img_home.pixbuf = IconManager.lookup("go-home-symbolic", icon_size_actual);
+		img_reload.pixbuf = IconManager.lookup("view-refresh-symbolic", icon_size_actual);
+		img_view.pixbuf = IconManager.lookup("view-grid-symbolic", icon_size_actual);
+		img_bookmarks.pixbuf = IconManager.lookup("user-bookmarks-symbolic", icon_size_actual);
+		img_devices.pixbuf = IconManager.lookup("drive-harddisk-symbolic", icon_size_actual);
+		img_terminal.pixbuf = IconManager.lookup("terminal-symbolic", icon_size_actual);
 
-		img_settings.pixbuf = IconManager.lookup("preferences-system", icon_size_actual);
+		img_settings.pixbuf = IconManager.lookup("preferences-system-symbolic", icon_size_actual);
 		img_donate.pixbuf = IconManager.lookup("donate", icon_size_actual);
-		img_about.pixbuf = IconManager.lookup("help-about", icon_size_actual);
+		img_about.pixbuf = IconManager.lookup("help-about-symbolic", icon_size_actual);
 	}
 
 	public void refresh_style(){

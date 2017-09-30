@@ -504,26 +504,26 @@ public class MiddleToolbar : Gtk.Toolbar, IPaneActive {
 
 		icon_size_actual = 16;
 
-		img_cut.pixbuf = IconManager.lookup("edit-cut", icon_size_actual);
-		img_copy.pixbuf = IconManager.lookup("edit-copy", icon_size_actual);
-		img_paste.pixbuf = IconManager.lookup("edit-paste", icon_size_actual);
+		img_cut.pixbuf = IconManager.lookup("edit-cut-symbolic", icon_size_actual);
+		img_copy.pixbuf = IconManager.lookup("edit-copy-symbolic", icon_size_actual);
+		img_paste.pixbuf = IconManager.lookup("edit-paste-symbolic", icon_size_actual);
 
 		img_rename.pixbuf = IconManager.lookup("edit-rename", icon_size_actual);
-		img_trash.pixbuf = IconManager.lookup("user-trash", icon_size_actual);
-		img_delete.pixbuf = IconManager.lookup("edit-delete", icon_size_actual);
+		img_trash.pixbuf = IconManager.lookup("user-trash-symbolic", icon_size_actual);
+		img_delete.pixbuf = IconManager.lookup("edit-delete-symbolic", icon_size_actual);
 		
 		img_move_across.pixbuf = IconManager.lookup("folder-move", icon_size_actual);
 		img_copy_across.pixbuf = IconManager.lookup("folder-copy", icon_size_actual);
 
 		img_new_file.pixbuf = IconManager.lookup("document-new", icon_size_actual);
 		img_new_folder.pixbuf = IconManager.lookup("folder-new", icon_size_actual);
-		img_open_terminal.pixbuf = IconManager.lookup("terminal", icon_size_actual);
+		img_open_terminal.pixbuf = IconManager.lookup("terminal-symbolic", icon_size_actual);
 
 		img_props.pixbuf = IconManager.lookup("document-properties", icon_size_actual);
 
 		img_swap_panels.pixbuf = IconManager.lookup("switch", icon_size_actual);
-		img_open_left.pixbuf = IconManager.lookup("go-previous", icon_size_actual);
-		img_open_right.pixbuf = IconManager.lookup("go-next", icon_size_actual);
+		img_open_left.pixbuf = IconManager.lookup("go-previous-symbolic", icon_size_actual);
+		img_open_right.pixbuf = IconManager.lookup("go-next-symbolic", icon_size_actual);
 	}
 	
 	public void refresh_style(){

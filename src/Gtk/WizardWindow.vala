@@ -97,7 +97,7 @@ public class WizardWindow : Gtk.Window {
 		hbox.add(bbox);
 
 		var button = new Gtk.Button.with_label(_("Previous"));
-		button.image = IconManager.lookup_image("go-previous", 16);
+		button.image = IconManager.lookup_image("go-previous-symbolic", 16);
 		button.always_show_image = true;
 		bbox.add(button);
 		
@@ -112,7 +112,7 @@ public class WizardWindow : Gtk.Window {
 		});
 
 		button = new Gtk.Button.with_label(_("Next"));
-		button.image = IconManager.lookup_image("go-next", 16);
+		button.image = IconManager.lookup_image("go-next-symbolic", 16);
 		button.always_show_image = true;
 		bbox.add(button);
 		

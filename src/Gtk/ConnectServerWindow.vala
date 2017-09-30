@@ -602,7 +602,7 @@ public class ConnectServerWindow : Gtk.Window, IPaneActive {
 		var ebox = gtk_add_event_box(box);
 		ebox.margin_left = 6;
 
-		var img = IconManager.lookup_image("preferences-system", 16);
+		var img = IconManager.lookup_image("preferences-system-symbolic", 16);
 		ebox.add(img);
 
 		var tt = _("History");

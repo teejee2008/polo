@@ -213,7 +213,7 @@ public class ColumnSelectionBox : Gtk.Box, IPaneActive {
 
 		if (popup){
 			button.label = "";
-			button.image = IconManager.lookup_image("go-up", 16);
+			button.image = IconManager.lookup_image("go-up-symbolic", 16);
 			button.always_show_image = true;
 		}
 

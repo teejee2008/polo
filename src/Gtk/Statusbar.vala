@@ -445,7 +445,7 @@ public class Statusbar : Gtk.Box {
 
 	private void add_terminal_toggle(){
 
-		var img = IconManager.lookup_image("terminal",16);
+		var img = IconManager.lookup_image("terminal-symbolic",16);
 		img.set_tooltip_text(_("Toggle terminal panel"));
 		//img.margin_left = 6;
 		//img.margin_right = 6;

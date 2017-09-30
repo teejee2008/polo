@@ -85,7 +85,7 @@ public class DevicesMenu : Gtk.Menu, IPaneActive {
 				box.add(img);
 			}
 			else if (dev.fstype.contains("luks")){
-				img = IconManager.lookup_image("lock",16);
+				img = IconManager.lookup_image("locked",16);
 				box.add(img);
 			}
 			else if (dev.fstype.contains("iso9660")){
@@ -93,7 +93,7 @@ public class DevicesMenu : Gtk.Menu, IPaneActive {
 				box.add(img);
 			}
 			else{
-				img = IconManager.lookup_image("drive-harddisk",16);
+				img = IconManager.lookup_image("drive-harddisk-symbolic",16);
 				box.add(img);
 			}
 

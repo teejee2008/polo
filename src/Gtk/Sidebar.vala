@@ -296,6 +296,8 @@ public class Sidebar : Gtk.Box {
 
 	public void refresh() {
 
+		Device.print_device_list();
+
 		if (listbox == null){ return; }
 
 		if (!window.window_is_ready) { return; }
@@ -1042,7 +1044,7 @@ public class Sidebar : Gtk.Box {
 			row.set_tooltip_text(item.tooltip);
 			//row.selected = false;
 
-			image.pixbuf = IconManager.lookup("list-add", 16, false);
+			image.pixbuf = IconManager.lookup("list-add-symbolic", 16, false);
 			image.margin_left = 12;
 
 			label.label = item.name;
@@ -1062,7 +1064,7 @@ public class Sidebar : Gtk.Box {
 			row.set_tooltip_text(item.tooltip);
 			//row.selected = false;
 
-			image.pixbuf = IconManager.lookup("list-remove", 16, false);
+			image.pixbuf = IconManager.lookup("list-remove-symbolic", 16, false);
 
 			label.label = item.name;
 			label.set_use_markup(false);

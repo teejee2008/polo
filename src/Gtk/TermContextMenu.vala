@@ -118,7 +118,7 @@ public class TermContextMenu : Gtk.Menu {
 			menu,
 			_("Copy"),
 			_("Copy selected text to clipboard"),
-			IconManager.lookup_image("edit-copy", 16),
+			IconManager.lookup_image("edit-copy-symbolic", 16),
 			sg_icon,
 			sg_label);
 
@@ -139,7 +139,7 @@ public class TermContextMenu : Gtk.Menu {
 			menu,
 			_("Paste"),
 			_("Paste clipboard contents"),
-			IconManager.lookup_image("edit-paste", 16),
+			IconManager.lookup_image("edit-paste-symbolic", 16),
 			sg_icon,
 			sg_label);
 
@@ -392,7 +392,7 @@ public class TermContextMenu : Gtk.Menu {
 			menu,
 			_("Fish Config"),
 			"",
-			IconManager.lookup_image("preferences-system", 16),
+			IconManager.lookup_image("preferences-system-symbolic", 16),
 			sg_icon,
 			sg_label);
 

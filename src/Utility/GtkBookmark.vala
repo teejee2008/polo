@@ -214,7 +214,7 @@ public class GtkBookmark : GLib.Object {
 		if (exists()){
 
 			if (uri == "trash:///"){
-				return IconManager.lookup("user-trash",16);
+				return IconManager.lookup("user-trash-symbolic",16);
 			}
 			else{
 				//log_debug("", true);
