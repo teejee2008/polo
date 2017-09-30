@@ -100,14 +100,8 @@ public class IconManager : GLib.Object {
 
 				if (file_exists(img_file)){
 
-					try {
-						pixbuf = load_pixbuf_from_file(img_file, icon_size);
-						if (pixbuf != null){ return pixbuf; }
-					}
-					catch (Error e) {
-						log_debug(e.message);
-					}
-
+					pixbuf = load_pixbuf_from_file(img_file, icon_size);
+					if (pixbuf != null){ return pixbuf; }
 				}
 			}
 		}
@@ -260,15 +254,9 @@ public class IconManager : GLib.Object {
 
 		//log_debug("add_transparency");
 
-        try {
-			int width = pixbuf.get_width();
-			int height = pixbuf.get_height();
-			pixbuf.composite(trans, 0, 0, width, height, 0, 0, 1.0, 1.0, Gdk.InterpType.BILINEAR, opacity);
-        }
-        catch (GLib.Error e) {
-			log_error("get_icon_transparent(): %s".printf(e.message));
-            return pixbuf;
-        }
+		int width = pixbuf.get_width();
+		int height = pixbuf.get_height();
+		pixbuf.composite(trans, 0, 0, width, height, 0, 0, 1.0, 1.0, Gdk.InterpType.BILINEAR, opacity);
 
         return trans;
     }
