@@ -170,15 +170,7 @@ public class Pathbar : Gtk.Box {
 		img.set_tooltip_text(tt);
 		ebox.set_tooltip_text(tt);
 
-		// set hand cursor
-		if (ebox.get_realized()){
-			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-		}
-		else{
-			ebox.realize.connect(()=>{
-				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-			});
-		}
+		set_pointer_cursor_for_eventbox(ebox);
 
 		popup_bm = new Gtk.Popover(ebox);
 		sidebar_bm = new Sidebar(popup_bm, "bm", pane);
@@ -216,15 +208,7 @@ public class Pathbar : Gtk.Box {
 		img.set_tooltip_text(tt);
 		ebox.set_tooltip_text(tt);
 
-		// set hand cursor
-		if (ebox.get_realized()){
-			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-		}
-		else{
-			ebox.realize.connect(()=>{
-				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-			});
-		}
+		set_pointer_cursor_for_eventbox(ebox);
 
 		popup_dev = new Gtk.Popover(ebox);
 		sidebar_dev = new Sidebar(popup_dev, "device", pane);

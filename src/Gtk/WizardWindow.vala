@@ -203,15 +203,7 @@ public class WizardWindow : Gtk.Window {
 		ebox.add(img);
 		vbox.add(ebox);
 		
-		// set hand cursor
-		if (ebox.get_realized()){
-			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-		}
-		else{
-			ebox.realize.connect(()=>{
-				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-			});
-		}
+		set_pointer_cursor_for_eventbox(ebox);
 
 		this.show_all();
 	}
@@ -304,15 +296,7 @@ public class WizardWindow : Gtk.Window {
 		
 		ebox.set_tooltip_text(_("Click to select"));
 
-		// set hand cursor
-		if (ebox.get_realized()){
-			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-		}
-		else{
-			ebox.realize.connect(()=>{
-				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-			});
-		}
+		set_pointer_cursor_for_eventbox(ebox);
 
 		add_label(vbox, label);
 

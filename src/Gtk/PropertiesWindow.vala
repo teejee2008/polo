@@ -1104,15 +1104,7 @@ public class PropertiesWindow : Gtk.Window {
 		hbox.add(ebox);
 		ebox.set_tooltip_text(_("Actions"));
 
-		// set hand cursor
-		if (ebox.get_realized()){
-			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-		}
-		else{
-			ebox.realize.connect(()=>{
-				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-			});
-		}
+		set_pointer_cursor_for_eventbox(ebox);
 
 		ebox.button_press_event.connect((event)=>{
 			menu_accessed = new TouchFileDateContextMenu(file_item, true, false, this, entry_accessed);
@@ -1158,15 +1150,7 @@ public class PropertiesWindow : Gtk.Window {
 		hbox.add(ebox);
 		ebox.set_tooltip_text(_("Actions"));
 
-		// set hand cursor
-		if (ebox.get_realized()){
-			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-		}
-		else{
-			ebox.realize.connect(()=>{
-				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-			});
-		}
+		set_pointer_cursor_for_eventbox(ebox);
 
 		ebox.button_press_event.connect((event)=>{
 			menu_modified = new TouchFileDateContextMenu(file_item, false, true, this, entry_modified);
