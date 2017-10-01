@@ -39,9 +39,9 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 	private Gtk.SizeGroup sg_label;
 
 	public Device device;
-	public Gtk.Popover parent_popup;
+	public Gtk.Popover? parent_popup;
 	
-	public DeviceContextMenu(Device _device, Gtk.Popover _parent_popup){
+	public DeviceContextMenu(Device _device, Gtk.Popover? _parent_popup){
 		
 		margin = 0;
 
@@ -133,7 +133,9 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		item.activate.connect (() => {
 			browse_device(device, pane, window);
-			parent_popup.hide();
+			if (parent_popup != null){
+				parent_popup.hide();
+			}
 		});
 
 		//mi_open.sensitive = (selected_items.size > 0);
@@ -251,7 +253,9 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		item.activate.connect (() => {
 			manage_disk(device, pane, window);
-			parent_popup.hide();
+			if (parent_popup != null){
+				parent_popup.hide();
+			}
 		});
 
 		//item.sensitive = (device.type == "disk");
@@ -277,7 +281,9 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		item.activate.connect (() => {
 			format_disk(device, pane, window);
-			parent_popup.hide();
+			if (parent_popup != null){
+				parent_popup.hide();
+			}
 		});
 
 		//item.sensitive = (device.type == "disk");
@@ -569,7 +575,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		}
 		else{
 			string txt = _("Missing Dependency");
-			string msg = _("GNOME Disk Uitility (gnome-disks) is not installed");
+			string msg = _("GNOME Disk Utility (gnome-disks) is not installed");
 			gtk_messagebox(txt, msg, window, true);
 		}
 	}
