@@ -70,6 +70,8 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		sg_icon = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
 		sg_label = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
 
+		add_header();
+
 		add_open();
 
 		add_mount();
@@ -113,6 +115,25 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		}
 
 		show_all();
+	}
+
+	private void add_header(){
+
+		log_debug("DeviceContextMenu: add_header()");
+
+		// item ------------------
+
+		var item = gtk_menu_add_item(
+			this,
+			"<b>%s</b>".printf(device.device),
+			"",
+			null,
+			sg_icon,
+			sg_label);
+
+		item.sensitive = false;
+
+		gtk_menu_add_separator(this);
 	}
 	
 	private void add_open(){
