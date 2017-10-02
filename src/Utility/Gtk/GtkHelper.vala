@@ -53,6 +53,20 @@ namespace TeeJee.GtkHelper{
 		gtk_do_events();
 	}
 
+	public void set_pointer_cursor_for_eventbox(Gtk.EventBox ebox){
+		
+		var cursor = new Gdk.Cursor.from_name(Gdk.Display.get_default(), "pointer");
+
+		if (ebox.get_realized()){
+			ebox.get_window().set_cursor(cursor);
+		}
+		else{
+			ebox.realize.connect(()=>{
+				ebox.get_window().set_cursor(cursor);
+			});
+		}
+	}
+	
 	public void gtk_messagebox(
 		string title, string message, Gtk.Window? parent_win, bool is_error = false){
 
@@ -600,6 +614,7 @@ namespace TeeJee.GtkHelper{
 		var lbl = new Gtk.Label(label);
 		lbl.xalign = 0.0f;
 		lbl.margin_right = 6;
+		lbl.set_use_markup(true);
 		box.add(lbl);
 
 		if (sg_label != null){
@@ -666,15 +681,7 @@ namespace TeeJee.GtkHelper{
 		var ebox = new Gtk.EventBox();
 		box.add(ebox);
 
-		// set hand cursor
-		if (ebox.get_realized()){
-			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-		}
-		else{
-			ebox.realize.connect(()=>{
-				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-			});
-		}
+		set_pointer_cursor_for_eventbox(ebox);
 		
 		/*
 		var tt = _("Edit Path");

@@ -73,12 +73,10 @@ install:
 	mkdir -p "$(DESTDIR)$(localedir)/fr/LC_MESSAGES"
 	
 	#binary
-	#install -m 0755 ${app_name} "$(DESTDIR)$(bindir)"
 	install -m 0755 ${app_name}-gtk "$(DESTDIR)$(bindir)"
 	install -m 0755 gtk3-version-polo "$(DESTDIR)$(bindir)"
 	install -m 0755 ${app_name}-chroot "$(DESTDIR)$(bindir)"
 	install -m 0755 ${app_name}-uninstall "$(DESTDIR)$(bindir)"
-	#install -m 0755 ${app_name}-launcher "$(DESTDIR)$(bindir)"
 
 	#shared files
 	cp -dpr --no-preserve=ownership -t "$(DESTDIR)$(sharedir)/${app_name}" ./share/${app_name}/*
@@ -95,22 +93,14 @@ install:
 	install -m 0644 ../po/${app_name}-de.mo $(DESTDIR)$(localedir)/de/LC_MESSAGES/${app_name}.mo
 	install -m 0644 ../po/${app_name}-nl.mo $(DESTDIR)$(localedir)/nl/LC_MESSAGES/${app_name}.mo
 	install -m 0644 ../po/${app_name}-fr.mo $(DESTDIR)$(localedir)/fr/LC_MESSAGES/${app_name}.mo
-	
-	#install gtk theme 'Arc-Darker-Polo'
-	#mkdir -p "$(DESTDIR)$(sharedir)/themes/Arc-Darker-Polo"
-	#ignore errors for below commands
-	#-cp -dpr --no-preserve=ownership -t "$(DESTDIR)$(sharedir)/themes/Arc-Darker-Polo" ../gtk-theme/3.${gtk3_version}/*
-	#-chmod --recursive 0755 $(DESTDIR)$(sharedir)/themes/Arc-Darker-Polo/*
 
 uninstall:
 
 	#binary
-	#rm -f "$(DESTDIR)$(bindir)/${app_name}"
 	rm -f "$(DESTDIR)$(bindir)/${app_name}-gtk"
 	rm -f "$(DESTDIR)$(bindir)/gtk3-version-polo"
 	rm -f "$(DESTDIR)$(bindir)/${app_name}-chroot"
 	rm -f "$(DESTDIR)$(bindir)/${app_name}-uninstall"
-	#rm -f "$(DESTDIR)$(bindir)/${app_name}-launcher"
 
 	#shared files
 	rm -rf "$(DESTDIR)$(sharedir)/${app_name}"

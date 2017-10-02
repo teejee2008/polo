@@ -296,6 +296,8 @@ public class Sidebar : Gtk.Box {
 
 	public void refresh() {
 
+		Device.print_device_list();
+
 		if (listbox == null){ return; }
 
 		if (!window.window_is_ready) { return; }
@@ -385,11 +387,12 @@ public class Sidebar : Gtk.Box {
 					
 					foreach(var dev in list){
 						
-						if (dev.pkname.length == 0){
+						if (dev.pkname.length == 0){ // type = disk, loop
 							
 							item = add_device(dev);
 
 							if (!node_expanded.has_key(item.node_key) || node_expanded[item.node_key]){
+								
 								foreach(var child1 in dev.children){
 									if (child1.has_children){
 										foreach(var child2 in child1.children){
@@ -399,6 +402,14 @@ public class Sidebar : Gtk.Box {
 									else{
 										add_device(child1);
 									}
+								}
+
+								if (dev.children.size == 0){
+									var dev2 = dev.copy();
+									dev2.type = "crypt";
+									dev2.pkname = dev.device.replace("/dev/","");
+									dev2.parent = dev;
+									add_device(dev2);
 								}
 							}
 						}
@@ -1042,7 +1053,7 @@ public class Sidebar : Gtk.Box {
 			row.set_tooltip_text(item.tooltip);
 			//row.selected = false;
 
-			image.pixbuf = IconManager.lookup("list-add", 16, false);
+			image.pixbuf = IconManager.lookup("list-add-symbolic", 16, false);
 			image.margin_left = 12;
 
 			label.label = item.name;
@@ -1062,7 +1073,7 @@ public class Sidebar : Gtk.Box {
 			row.set_tooltip_text(item.tooltip);
 			//row.selected = false;
 
-			image.pixbuf = IconManager.lookup("list-remove", 16, false);
+			image.pixbuf = IconManager.lookup("list-remove-symbolic", 16, false);
 
 			label.label = item.name;
 			label.set_use_markup(false);
@@ -1132,15 +1143,7 @@ public class Sidebar : Gtk.Box {
 
 		ebox.set_tooltip_text(_("Rename"));
 
-		// set hand cursor
-		if (ebox.get_realized()){
-			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-		}
-		else{
-			ebox.realize.connect(()=>{
-				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-			});
-		}
+		set_pointer_cursor_for_eventbox(ebox);
 
 		ebox.button_press_event.connect((event)=>{
 			menu_bookmark = new BookmarkContextMenu(bm, entry, label_box, row, listbox);
@@ -1162,15 +1165,7 @@ public class Sidebar : Gtk.Box {
 
 		ebox.set_tooltip_text(_("Actions"));
 
-		// set hand cursor
-		if (ebox.get_realized()){
-			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-		}
-		else{
-			ebox.realize.connect(()=>{
-				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-			});
-		}
+		set_pointer_cursor_for_eventbox(ebox);
 
 		ebox.button_press_event.connect((event)=>{
 			menu_device = new DeviceContextMenu(dev, popover);
@@ -1189,15 +1184,7 @@ public class Sidebar : Gtk.Box {
 
 		ebox.set_tooltip_text(_("Eject Device"));
 
-		// set hand cursor
-		if (ebox.get_realized()){
-			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-		}
-		else{
-			ebox.realize.connect(()=>{
-				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-			});
-		}
+		set_pointer_cursor_for_eventbox(ebox);
 
 		ebox.button_press_event.connect((event)=>{
 			DeviceContextMenu.eject_disk(dev, pane, window);

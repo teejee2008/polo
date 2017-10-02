@@ -39,9 +39,9 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 	private Gtk.SizeGroup sg_label;
 
 	public Device device;
-	public Gtk.Popover parent_popup;
+	public Gtk.Popover? parent_popup;
 	
-	public DeviceContextMenu(Device _device, Gtk.Popover _parent_popup){
+	public DeviceContextMenu(Device _device, Gtk.Popover? _parent_popup){
 		
 		margin = 0;
 
@@ -50,11 +50,11 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		device = _device;
 		parent_popup = _parent_popup;
 		
-		if (device.has_parent()){
-			build_menu();
+		if (device.pkname.length == 0){
+			build_menu_for_drive();
 		}
 		else{
-			build_menu_for_drive();
+			build_menu();
 		}
 	}
 
@@ -69,6 +69,8 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		sg_icon = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
 		sg_label = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+
+		add_header();
 
 		add_open();
 
@@ -114,6 +116,25 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		show_all();
 	}
+
+	private void add_header(){
+
+		log_debug("DeviceContextMenu: add_header()");
+
+		// item ------------------
+
+		var item = gtk_menu_add_item(
+			this,
+			"<b>%s</b>".printf(device.device),
+			"",
+			null,
+			sg_icon,
+			sg_label);
+
+		item.sensitive = false;
+
+		gtk_menu_add_separator(this);
+	}
 	
 	private void add_open(){
 
@@ -133,7 +154,9 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		item.activate.connect (() => {
 			browse_device(device, pane, window);
-			parent_popup.hide();
+			if (parent_popup != null){
+				parent_popup.hide();
+			}
 		});
 
 		//mi_open.sensitive = (selected_items.size > 0);
@@ -229,15 +252,11 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		});
 
 		item.sensitive = (device.type == "disk");
-		
-		//new Gtk.Image.from_pixbuf(IconManager.lookup("media-eject", 16, true))
 	}
 	
 	private void add_manage(){
 
 		log_debug("DeviceContextMenu: add_manage()");
-
-		//if (device.type != "disk"){ return; }
 
 		// item  ------------------
 
@@ -251,19 +270,17 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		item.activate.connect (() => {
 			manage_disk(device, pane, window);
-			parent_popup.hide();
+			if (parent_popup != null){
+				parent_popup.hide();
+			}
 		});
 
-		//item.sensitive = (device.type == "disk");
-		
-		//new Gtk.Image.from_pixbuf(IconManager.lookup("media-eject", 16, true))
+		item.sensitive = (device.type != "loop");
 	}
 	
 	private void add_format(){
 
 		log_debug("DeviceContextMenu: add_format()");
-
-		//if (device.type != "disk"){ return; }
 
 		// item  ------------------
 
@@ -277,12 +294,12 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		item.activate.connect (() => {
 			format_disk(device, pane, window);
-			parent_popup.hide();
+			if (parent_popup != null){
+				parent_popup.hide();
+			}
 		});
 
-		//item.sensitive = (device.type == "disk");
-		
-		//new Gtk.Image.from_pixbuf(IconManager.lookup("media-eject", 16, true))
+		item.sensitive = (device.type != "loop");
 	}
 
 	private void add_unlock(){
@@ -569,7 +586,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		}
 		else{
 			string txt = _("Missing Dependency");
-			string msg = _("GNOME Disk Uitility (gnome-disks) is not installed");
+			string msg = _("GNOME Disk Utility (gnome-disks) is not installed");
 			gtk_messagebox(txt, msg, window, true);
 		}
 	}

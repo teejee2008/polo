@@ -123,7 +123,6 @@ public class MediaBar : Gtk.Box {
 			refresh();
 
 			gtk_set_busy(false, window);
-			////ebox.get_window().set_cursor(null);
 			return false;
 		});
 
@@ -173,7 +172,6 @@ public class MediaBar : Gtk.Box {
 			refresh();
 
 			gtk_set_busy(false, window);
-			////ebox.get_window().set_cursor(null);
 			return false;
 		});
 

@@ -145,6 +145,8 @@ public class Main : GLib.Object {
 	public ViewMode view_mode = ViewMode.ICONS;
 	public bool single_click_activate = false;
 	public bool restore_last_session = true;
+
+	public bool query_subfolders = false;
 	
 	public bool sidebar_visible = true;
 	public bool sidebar_bookmarks = true;
@@ -681,6 +683,8 @@ public class Main : GLib.Object {
 		config.set_string_member("minimize_to_tray", minimize_to_tray.to_string());
 		config.set_string_member("autostart", autostart.to_string());
 
+		config.set_string_member("query_subfolders", query_subfolders.to_string());
+
 		config.set_string_member("confirm_delete", confirm_delete.to_string());
 		config.set_string_member("confirm_trash", confirm_trash.to_string());
 
@@ -872,6 +876,8 @@ public class Main : GLib.Object {
 		single_instance_mode = json_get_bool_from_string(config, "single_instance_mode", single_instance_mode);
 		minimize_to_tray = json_get_bool_from_string(config, "minimize_to_tray", minimize_to_tray);
 		autostart = json_get_bool_from_string(config, "autostart", autostart);
+
+		query_subfolders = json_get_bool_from_string(config, "query_subfolders", query_subfolders);
 
 		confirm_delete = json_get_bool_from_string(config, "confirm_delete", confirm_delete);
 		confirm_trash = json_get_bool_from_string(config, "confirm_trash", confirm_trash);
@@ -1221,15 +1227,19 @@ public class Main : GLib.Object {
 		foreach(var dev in Device.get_devices()){
 
 			if ((dev.fstype.length == 0) && (dev.type == "part")){
+				// partition with uknown filsystem
 				continue;
 			}
 			else if (dev.is_encrypted_partition && dev.has_children){
+				// unlocked LUKS partition
 				continue;
 			}
 			else if (dev.is_snap_volume || dev.is_swap_volume){
+				// snap loop device, or swap volume
 				continue;
 			}
 			else if (dev.size_bytes < 100 * KB){
+				// very small partition, ???
 				continue;
 			}
 			else{

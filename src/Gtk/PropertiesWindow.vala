@@ -203,12 +203,12 @@ public class PropertiesWindow : Gtk.Window {
 			add_property(vbox, _("Contents"), txt);
 		}
 
-		var archive = (FileItemArchive) file_item;
-
 		// archive ----------
 		
 		if (file_item is FileItemArchive){
 
+			var archive = (FileItemArchive) file_item;
+			
 			add_separator(vbox);
 
 			// type ----------
@@ -357,17 +357,34 @@ public class PropertiesWindow : Gtk.Window {
 
 		add_group_combo(vbox);
 
+		// preview ---------------------
+		
+		init_preview_image(hbox); 
+	} 
+ 
+	private void init_preview_image(Gtk.Box hbox){
+	  
 		var image = new Gtk.Image();
 		hbox.add(image);
 
 		ThumbTask task;
 		var thumb = file_item.get_image(256, true, false, false, out task);
 
+		if (task != null){
+			while (!task.completed){
+				sleep(100);
+				gtk_do_events();
+			}
+			thumb = file_item.get_image(256, true, false, false, out task);
+		}
+		
 		if (thumb != null) {
 			image.pixbuf = thumb;
+			log_debug("setting from file_item.get_image()");
 		}
 		else if (file_item.icon != null) {
 			image.gicon = file_item.icon;
+			log_debug("setting from file_item.gicon");
 		}
 		else{
 			if (file_item.file_type == FileType.DIRECTORY) {
@@ -1104,15 +1121,7 @@ public class PropertiesWindow : Gtk.Window {
 		hbox.add(ebox);
 		ebox.set_tooltip_text(_("Actions"));
 
-		// set hand cursor
-		if (ebox.get_realized()){
-			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-		}
-		else{
-			ebox.realize.connect(()=>{
-				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-			});
-		}
+		set_pointer_cursor_for_eventbox(ebox);
 
 		ebox.button_press_event.connect((event)=>{
 			menu_accessed = new TouchFileDateContextMenu(file_item, true, false, this, entry_accessed);
@@ -1158,15 +1167,7 @@ public class PropertiesWindow : Gtk.Window {
 		hbox.add(ebox);
 		ebox.set_tooltip_text(_("Actions"));
 
-		// set hand cursor
-		if (ebox.get_realized()){
-			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-		}
-		else{
-			ebox.realize.connect(()=>{
-				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-			});
-		}
+		set_pointer_cursor_for_eventbox(ebox);
 
 		ebox.button_press_event.connect((event)=>{
 			menu_modified = new TouchFileDateContextMenu(file_item, false, true, this, entry_modified);

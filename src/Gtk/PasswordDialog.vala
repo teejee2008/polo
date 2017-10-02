@@ -103,7 +103,7 @@ public class PasswordDialog : Gtk.Dialog {
 		txt_password = txt;
 		
 		// icon
-		var img = IconManager.lookup_image("lock",16);
+		var img = IconManager.lookup_image("lock-symbolic",16);
 		if (img != null){
 			txt.secondary_icon_pixbuf = img.pixbuf;
 		}

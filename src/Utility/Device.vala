@@ -249,6 +249,13 @@ public class Device : GLib.Object{
 		return (type == "part") && fstype.down().contains("lvm2_member");
 	}
 
+	public bool is_top_level {
+		get {
+			//return ((type == "disk") || (type == "loop")) && (parent == null);
+			return (pkname.length == 0);
+		}
+	}
+	
 	public bool has_children {
 		get{
 			return (children.size > 0);
@@ -313,7 +320,7 @@ public class Device : GLib.Object{
 		var cmd = "udisksctl unmount -b '%s'".printf(device);
 		log_debug(cmd);
 		string std_err, std_out;
-		int status = exec_sync(cmd, out std_out,  out std_err);
+		int status = exec_sync(cmd, out std_out, out std_err);
 
 		if (status != 0){
 			if (parent_window != null){
@@ -324,7 +331,7 @@ public class Device : GLib.Object{
 		}
 
 		query_mount_points();
-		return is_mounted;
+		return !is_mounted;
 	}
 
 	public bool automount(Gtk.Window? parent_window, bool show_on_success = false){
@@ -1530,7 +1537,7 @@ public class Device : GLib.Object{
 			pixbuf = IconManager.lookup("media-cdrom", icon_size, symbolic);
 		}
 		else{
-			pixbuf = IconManager.lookup("drive-harddisk", icon_size, symbolic);
+			pixbuf = IconManager.lookup("drive-harddisk-symbolic", icon_size, symbolic);
 		}
 
 		if (!is_mounted){
@@ -1574,6 +1581,12 @@ public class Device : GLib.Object{
 		this.symlinks = dev2.symlinks;
 		this.parent = dev2.parent;
 		this.children = dev2.children;
+	}
+
+	public Device copy(){
+		var dev = new Device();
+		dev.copy_fields_from(this);
+		return dev;
 	}
 
 	public Device? query_changes(){
@@ -1693,8 +1706,14 @@ public class Device : GLib.Object{
 			return loop_dev;
 		}
 
-		var cmd = "udisksctl loop-setup -r -f '%s'".printf(
-			escape_single_quote(iso_file_path));
+		var cmd = "udisksctl loop-setup";
+
+		
+		//if (iso_file_path.down().has_suffix("-o loop,rw,sync")){
+			//cmd += " -r";
+		//}
+
+		cmd += " -f '%s'".printf(escape_single_quote(iso_file_path));
 
 		log_debug(cmd);
 		string std_out, std_err;

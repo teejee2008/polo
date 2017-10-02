@@ -131,6 +131,11 @@ public class SelectionBar : Gtk.Box {
 		});
 
 		txt.key_press_event.connect((event) => {
+			string key_name = Gdk.keyval_name(event.keyval);
+			if (key_name.down() == "escape"){
+				close_panel(true);
+				return false;
+			}
 			add_action_delayed();
 			return false;
 		});
@@ -202,6 +207,8 @@ public class SelectionBar : Gtk.Box {
 		execute_action();
 		
 		gtk_show(this);
+
+		window.update_accelerators_for_edit();
 	}
 
 	public void close_panel(bool force){
@@ -220,6 +227,8 @@ public class SelectionBar : Gtk.Box {
 		}
 
 		gtk_hide(this);
+
+		window.update_accelerators_for_active_pane();
 	}
 
 	private uint tmr_action = 0;

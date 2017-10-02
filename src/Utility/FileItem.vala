@@ -438,7 +438,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 					}
 				}
 				else{
-					txt += "";
+					txt += format_file_size(file_size);
 				}
 			}
 			else {
@@ -738,11 +738,39 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 	}
 
+	public bool is_gif{
+		get{
+			return file_extension.down().has_suffix(".gif")
+				|| (content_type == "image/gif");
+		}
+	}
+
 	public bool is_iso{
 		get{
 			return file_extension.down().has_suffix(".iso")
 				|| (content_type == "application/iso-image")
 				|| (content_type == "application/x-iso-image");
+		}
+	}
+
+	public bool is_squashfs {
+		get {
+			return file_extension.down().has_suffix(".sfs")
+				|| file_extension.down().has_suffix(".squashfs")
+				|| (content_type == "application/vnd.squashfs");
+		}
+	}
+
+	public bool is_img {
+		get {
+			return file_extension.down().has_suffix(".img")
+				|| (content_type == "application/x-raw-disk-image");
+		}
+	}
+
+	public bool is_disk_image{
+		get{
+			return is_iso || is_squashfs || is_img;
 		}
 	}
 
@@ -1509,9 +1537,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			this.content_type = info.get_content_type();
 
 			// size
-			if (this.file_type == FileType.REGULAR) {
-				this.file_size = info.get_size();
-			}
+			this._file_size = info.get_size();
 
 			// modified
 			this.modified = (new DateTime.from_timeval_utc(info.get_modification_time())).to_local();

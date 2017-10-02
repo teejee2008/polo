@@ -314,12 +314,12 @@ public class AboutWindow : Dialog {
 
 		//btn_license
 		btn_license = new Gtk.Button.with_label("  " + _("License"));
-		btn_license.image = IconManager.lookup_image("help-about", 16);
+		btn_license.image = IconManager.lookup_image("help-about-symbolic", 16);
 		hbox_action.add(btn_license);
 
 		//btn_credits
 		btn_credits = new Gtk.Button.with_label("  " + _("Credits"));
-		btn_credits.image = IconManager.lookup_image("help-about", 16);
+		btn_credits.image = IconManager.lookup_image("help-about-symbolic", 16);
 		hbox_action.add(btn_credits);
 
 		// handlers
@@ -342,7 +342,7 @@ public class AboutWindow : Dialog {
 
 			if (vbox_license.visible){
 				btn_license.label = "  " + _("Back");
-				btn_license.image = IconManager.lookup_image("go-previous", 16);
+				btn_license.image = IconManager.lookup_image("go-previous-symbolic", 16);
 				btn_license.always_show_image = true;
 				btn_credits.hide();
 				this.resize(600, 500);
@@ -374,7 +374,7 @@ public class AboutWindow : Dialog {
 
 			if (vbox_credits.visible){
 				btn_credits.label = "  " + _("Back");
-				btn_credits.image = IconManager.lookup_image("go-previous", 16);
+				btn_credits.image = IconManager.lookup_image("go-previous-symbolic", 16);
 				btn_credits.always_show_image = true;
 				btn_license.hide();
 			}

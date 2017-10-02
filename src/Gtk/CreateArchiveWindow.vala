@@ -1718,7 +1718,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		//txt.set_icon_tooltip_text(EntryIconPosition.PRIMARY, _("Generate Random Password"));
 
 		// icon right
-		img = IconManager.lookup_image("lock",16);
+		img = IconManager.lookup_image("lock-symbolic",16);
 		if (img != null){
 			txt_password.secondary_icon_pixbuf = img.pixbuf;
 		}

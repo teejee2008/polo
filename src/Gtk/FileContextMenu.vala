@@ -585,7 +585,7 @@ public class FileContextMenu : Gtk.Menu {
 					menu,
 					_("New"),
 					"",
-					IconManager.lookup_image("list-add", 16),
+					IconManager.lookup_image("list-add-symbolic", 16),
 					sg_icon,
 					sg_label);
 
@@ -669,7 +669,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Terminal"),
 			_("Open a terminal window"),
-			IconManager.lookup_image("list-add",16),
+			IconManager.lookup_image("list-add-symbolic",16),
 			sg_icon,
 			sg_label);
 
@@ -688,7 +688,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Tab"),
 			_("Open new tab"),
-			IconManager.lookup_image("list-add",16),
+			IconManager.lookup_image("list-add-symbolic",16),
 			sg_icon,
 			sg_label);
 
@@ -707,7 +707,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Window"),
 			_("Open new window"),
-			IconManager.lookup_image("list-add",16),
+			IconManager.lookup_image("list-add-symbolic",16),
 			sg_icon,
 			sg_label);
 
@@ -726,7 +726,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Admin Window"),
 			_("Open window as administrator"),
-			IconManager.lookup_image("list-add",16),
+			IconManager.lookup_image("list-add-symbolic",16),
 			sg_icon,
 			sg_label);
 
@@ -802,9 +802,7 @@ public class FileContextMenu : Gtk.Menu {
 		menu_item.activate.connect (() => {
 			view.open_in_new_tab(App.user_dirs.user_templates);
 		});
-
 	}
-
 
 	private void add_cut(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
@@ -816,7 +814,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Cut"),
 			_("Cut selected items"),
-			IconManager.lookup_image("edit-cut",16),
+			IconManager.lookup_image("edit-cut-symbolic",16),
 			sg_icon,
 			sg_label);
 
@@ -842,7 +840,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Copy"),
 			_("Copy selected items"),
-			IconManager.lookup_image("edit-copy",16),
+			IconManager.lookup_image("edit-copy-symbolic",16),
 			sg_icon,
 			sg_label);
 
@@ -871,7 +869,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Paste Into Folder"),
 			_("Paste items into selected directory"),
-			IconManager.lookup_image("edit-paste",16),
+			IconManager.lookup_image("edit-paste-symbolic",16),
 			sg_icon,
 			sg_label);
 
@@ -901,7 +899,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Paste Here"),
 			_("Paste items in current directory"),
-			IconManager.lookup_image("edit-paste",16),
+			IconManager.lookup_image("edit-paste-symbolic",16),
 			sg_icon,
 			sg_label);
 
@@ -958,7 +956,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Trash"),
 			_("Move files to recycle bin"),
-			IconManager.lookup_image("list-remove",16),
+			IconManager.lookup_image("user-trash-symbolic",16),
 			sg_icon,
 			sg_label);
 
@@ -980,7 +978,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Delete"),
 			_("Delete selected items permanently"),
-			IconManager.lookup_image("list-remove",16),
+			IconManager.lookup_image("edit-delete-symbolic",16),
 			sg_icon,
 			sg_label);
 
@@ -1011,7 +1009,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Run in Terminal"),
 			_("Run the selected script in a terminal window"),
-			IconManager.lookup_image("terminal",16),
+			IconManager.lookup_image("terminal-symbolic",16),
 			sg_icon,
 			sg_label);
 
@@ -1152,7 +1150,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Copy To..."),
 			_("Copy to another location"),
-			IconManager.lookup_image("edit-copy",16),
+			IconManager.lookup_image("edit-copy-symbolic",16),
 			sg_icon,
 			sg_label);
 
@@ -1170,7 +1168,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Move To..."),
 			_("Move to another location"),
-			IconManager.lookup_image("edit-cut",16),
+			IconManager.lookup_image("edit-cut-symbolic",16),
 			sg_icon,
 			sg_label);
 
@@ -1192,7 +1190,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Copy Across"),
 			_("Copy to other pane"),
-			IconManager.lookup_image("edit-copy",16),
+			IconManager.lookup_image("edit-copy-symbolic",16),
 			sg_icon,
 			sg_label);
 
@@ -1210,7 +1208,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Move Across"),
 			_("Move to other pane"),
-			IconManager.lookup_image("edit-cut",16),
+			IconManager.lookup_image("edit-cut-symbolic",16),
 			sg_icon,
 			sg_label);
 
@@ -1232,7 +1230,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Paste Symlinks"),
 			_("Paste symbolic links to selected items in this directory. Absolute path will be used for symlink target."),
-			IconManager.lookup_image("edit-paste",16),
+			IconManager.lookup_image("edit-paste-symbolic",16),
 			sg_icon,
 			sg_label);
 
@@ -1251,7 +1249,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Paste Symlinks (relative)"),
 			_("Paste symbolic links to selected items in this directory. Relative paths will be used for symlink target.\n\nThis is useful if the files are on a removable disk, since absolute paths will change if disk is mounted at another path."),
-			IconManager.lookup_image("edit-paste",16),
+			IconManager.lookup_image("edit-paste-symbolic",16),
 			sg_icon,
 			sg_label);
 
@@ -1269,7 +1267,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Paste Hardlinks"),
 			_("Paste hard links to selected items in this directory.\n\nHard links to a file point to the same data on disk. So the files can appear in multiple directories without taking up additional space."),
-			IconManager.lookup_image("edit-paste",16),
+			IconManager.lookup_image("edit-paste-symbolic",16),
 			sg_icon,
 			sg_label);
 
@@ -1358,7 +1356,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Copy Path(s)"),
 			_("Copy file path to clipboard"),
-			IconManager.lookup_image("edit-copy",16),
+			IconManager.lookup_image("edit-copy-symbolic",16),
 			sg_icon,
 			sg_label);
 
@@ -1380,7 +1378,7 @@ public class FileContextMenu : Gtk.Menu {
 			menu,
 			_("Restore"),
 			_("Restore item to the original location"),
-			IconManager.lookup_image("list-add",16),
+			IconManager.lookup_image("list-add-symbolic",16),
 			sg_icon,
 			sg_label);
 
@@ -1572,13 +1570,13 @@ public class FileContextMenu : Gtk.Menu {
 
 		if (selected_item == null){ return; }
 
-		if (!selected_item.file_name.has_suffix(".iso")){ return; }
+		if (!selected_item.is_disk_image){ return; }
 		
 		log_debug("FileContextMenu: add_iso_actions()");
 	
 		var menu_item = gtk_menu_add_item(
 			menu,
-			_("ISO"),
+			_("Disk Image"),
 			"",
 			gtk_image_from_pixbuf(IconManager.generic_icon_iso(16)),
 			sg_icon,
@@ -1602,14 +1600,14 @@ public class FileContextMenu : Gtk.Menu {
 		
 		if (selected_item == null){ return; }
 
-		if (!selected_item.file_name.has_suffix(".iso")){ return; }
+		if (!selected_item.is_disk_image){ return; }
 
 		log_debug("FileContextMenu: add_mount_iso()");
 
 		var menu_item = gtk_menu_add_item(
 			menu,
 			_("Mount"),
-			_("Mount the ISO file as a read-only disk"),
+			_("Mount the disk image as read-only device"),
 			null,
 			sg_icon,
 			sg_label);

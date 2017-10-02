@@ -170,15 +170,7 @@ public class Pathbar : Gtk.Box {
 		img.set_tooltip_text(tt);
 		ebox.set_tooltip_text(tt);
 
-		// set hand cursor
-		if (ebox.get_realized()){
-			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-		}
-		else{
-			ebox.realize.connect(()=>{
-				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-			});
-		}
+		set_pointer_cursor_for_eventbox(ebox);
 
 		popup_bm = new Gtk.Popover(ebox);
 		sidebar_bm = new Sidebar(popup_bm, "bm", pane);
@@ -208,7 +200,7 @@ public class Pathbar : Gtk.Box {
 		//ebox.margin_right = 6;
 		ebox_disk = ebox;
 
-		var img = IconManager.lookup_image("drive-harddisk",16);
+		var img = IconManager.lookup_image("drive-harddisk-symbolic",16);
 		ebox.add(img);
 		img_disk = img;
 
@@ -216,15 +208,7 @@ public class Pathbar : Gtk.Box {
 		img.set_tooltip_text(tt);
 		ebox.set_tooltip_text(tt);
 
-		// set hand cursor
-		if (ebox.get_realized()){
-			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-		}
-		else{
-			ebox.realize.connect(()=>{
-				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-			});
-		}
+		set_pointer_cursor_for_eventbox(ebox);
 
 		popup_dev = new Gtk.Popover(ebox);
 		sidebar_dev = new Sidebar(popup_dev, "device", pane);
@@ -463,10 +447,10 @@ public class Pathbar : Gtk.Box {
 		}
 
 		if ((panel.number == 1)||(panel.number == 3)){
-			img_open_other.pixbuf = IconManager.lookup_image("go-next",ICON_SIZE).pixbuf;
+			img_open_other.pixbuf = IconManager.lookup_image("go-next-symbolic",ICON_SIZE).pixbuf;
 		}
 		else if ((panel.number == 2)||(panel.number == 4)){
-			img_open_other.pixbuf = IconManager.lookup_image("go-previous",ICON_SIZE).pixbuf;
+			img_open_other.pixbuf = IconManager.lookup_image("go-previous-symbolic",ICON_SIZE).pixbuf;
 		}
 
 		// margins ----------------------------
@@ -812,7 +796,7 @@ public class Pathbar : Gtk.Box {
 		var ebox = gtk_add_event_box(box);
 		ebox_back = ebox;
 
-		var img = IconManager.lookup_image("go-previous", 16);
+		var img = IconManager.lookup_image("go-previous-symbolic", 16);
 		ebox.add(img);
 		img_back = img;
 
@@ -842,7 +826,7 @@ public class Pathbar : Gtk.Box {
 		var ebox = gtk_add_event_box(box);
 		ebox_next = ebox;
 
-		var img = IconManager.lookup_image("go-next", 16);
+		var img = IconManager.lookup_image("go-next-symbolic", 16);
 		ebox.add(img);
 		img_next = img;
 
@@ -872,7 +856,7 @@ public class Pathbar : Gtk.Box {
 		var ebox = gtk_add_event_box(box);
 		ebox_up = ebox;
 
-		var img = IconManager.lookup_image("go-up", 16);
+		var img = IconManager.lookup_image("go-up-symbolic", 16);
 		ebox.add(img);
 		img_up = img;
 
@@ -902,7 +886,7 @@ public class Pathbar : Gtk.Box {
 		var ebox = gtk_add_event_box(box);
 		ebox_home = ebox;
 
-		var img = IconManager.lookup_image("go-home", 16);
+		var img = IconManager.lookup_image("go-home-symbolic", 16);
 		ebox.add(img);
 		img_home = img;
 
@@ -932,7 +916,7 @@ public class Pathbar : Gtk.Box {
 		ebox.margin_right = 0;
 		ebox_open_other = ebox;
 
-		var img = IconManager.lookup_image("go-next", 16);
+		var img = IconManager.lookup_image("go-next-symbolic", 16);
 		ebox.add(img);
 		img_open_other = img;
 

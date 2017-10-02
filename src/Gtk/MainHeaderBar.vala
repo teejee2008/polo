@@ -121,7 +121,7 @@ public class MainHeaderBar : Gtk.HeaderBar, IPaneActive {
 		
 		var button = new Gtk.Button();
 		button.always_show_image = true;
-		button.image = IconManager.lookup_image("go-previous", 20);
+		button.image = IconManager.lookup_image("go-previous-symbolic", 20);
 		button.set_tooltip_text (_("Open the previous visited location"));
 		this.pack_start(button);
 
@@ -137,7 +137,7 @@ public class MainHeaderBar : Gtk.HeaderBar, IPaneActive {
 		
 		var button = new Gtk.Button();
 		button.always_show_image = true;
-		button.image = IconManager.lookup_image("go-next", 20);
+		button.image = IconManager.lookup_image("go-next-symbolic", 20);
 		button.set_tooltip_text (_("Open the next visited location"));
 		this.pack_start(button);
 
@@ -153,7 +153,7 @@ public class MainHeaderBar : Gtk.HeaderBar, IPaneActive {
 		
 		var button = new Gtk.Button();
 		button.always_show_image = true;
-		button.image = IconManager.lookup_image("go-up", 20);
+		button.image = IconManager.lookup_image("go-up-symbolic", 20);
 		button.set_tooltip_text (_("Open the parent location"));
 		this.pack_start(button);
 
@@ -169,7 +169,7 @@ public class MainHeaderBar : Gtk.HeaderBar, IPaneActive {
 		
 		var button = new Gtk.Button();
 		button.always_show_image = true;
-		button.image = IconManager.lookup_image("go-home", 20);
+		button.image = IconManager.lookup_image("go-home-symbolic", 20);
 		button.set_tooltip_text (_("Open Home folder"));
 		this.pack_start(button);
 		
@@ -188,7 +188,7 @@ public class MainHeaderBar : Gtk.HeaderBar, IPaneActive {
 
 		var button = new Gtk.Button();
 		button.always_show_image = true;
-		button.image = IconManager.lookup_image("user-bookmarks", 20);
+		button.image = IconManager.lookup_image("user-bookmarks-symbolic", 20);
 		//button.set_tooltip_text (_("Bookmarks"));
 		this.pack_start(button);
 		
@@ -213,7 +213,7 @@ public class MainHeaderBar : Gtk.HeaderBar, IPaneActive {
 
 		var button = new Gtk.Button();
 		button.always_show_image = true;
-		button.image = IconManager.lookup_image("drive-harddisk", 20);
+		button.image = IconManager.lookup_image("drive-harddisk-symbolic", 20);
 		//button.set_tooltip_text (_("Bookmarks"));
 		this.pack_start(button);
 		
@@ -252,7 +252,7 @@ public class MainHeaderBar : Gtk.HeaderBar, IPaneActive {
 		
 		var button = new Gtk.Button();
 		button.always_show_image = true;
-		button.image = IconManager.lookup_image("view-grid", 20);
+		button.image = IconManager.lookup_image("view-grid-symbolic", 20);
 		//button.set_tooltip_text (_("Change Application Settings"));
 		this.pack_end(button);
 		
@@ -269,7 +269,7 @@ public class MainHeaderBar : Gtk.HeaderBar, IPaneActive {
 		
 		var button = new Gtk.Button();
 		button.always_show_image = true;
-		button.image = IconManager.lookup_image("preferences-system", 20);
+		button.image = IconManager.lookup_image("preferences-system-symbolic", 20);
 		button.set_tooltip_text (_("Change Application Settings"));
 		this.pack_end(button);
 		

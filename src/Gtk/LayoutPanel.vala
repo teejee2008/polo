@@ -94,19 +94,9 @@ public class LayoutPanel : Gtk.Box {
 		notebook.scrollable = true;
 		add(notebook);
 
-		notebook.group_name = "polo-pane"; // allows tabs to be detached and dropped to another notebook with same group_name
+		//notebook.group_name = "polo-pane"; // allows tabs to be detached and dropped to another notebook with same group_name
 
 		refresh_tab_style();
-
-		//notebook.page_added.connect((page, page_num) => {
-			// show or hide tab bar
-			//notebook.show_tabs = (notebook.get_n_pages() > 1);
-		//});
-		
-		//notebook.page_removed.connect((page, page_num) => {
-			// show or hide tab bar
-			//notebook.show_tabs = (notebook.get_n_pages() > 1);
-		//});
 
 		notebook.page_removed.connect((page, page_num) => {
 			

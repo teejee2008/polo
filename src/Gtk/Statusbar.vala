@@ -188,11 +188,11 @@ public class Statusbar : Gtk.Box {
 		label.set_use_markup(true);
 		lbl_hidden_count = label;
 		
-		var ebox_count = new Gtk.EventBox();
-		ebox_count.add(lbl_hidden_count);
-		add(ebox_count);
+		var ebox = new Gtk.EventBox();
+		ebox.add(lbl_hidden_count);
+		add(ebox);
 
-		ebox_count.set_tooltip_text(_("Show hidden items"));
+		ebox.set_tooltip_text(_("Show hidden items"));
 
 		label = new Gtk.Label(_("hidden"));
 		label.xalign = 0.0f;
@@ -205,17 +205,9 @@ public class Statusbar : Gtk.Box {
 			separator.visible = lbl_hidden_count.visible;
 		});
 
-		// set hand cursor
-		if (ebox_count.get_realized()){
-			ebox_count.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-		}
-		else{
-			ebox_count.realize.connect(()=>{
-				ebox_count.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-			});
-		}
+		set_pointer_cursor_for_eventbox(ebox);
 
-		ebox_count.button_press_event.connect((event)=>{
+		ebox.button_press_event.connect((event)=>{
 			view.show_hidden();
 			return true;
 		});
@@ -434,15 +426,7 @@ public class Statusbar : Gtk.Box {
 			ebox.set_tooltip_text(_("Toggle Middle Toolbar"));
 		}
 
-		// set hand cursor
-		if (ebox.get_realized()){
-			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-		}
-		else{
-			ebox.realize.connect(()=>{
-				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-			});
-		}
+		set_pointer_cursor_for_eventbox(ebox);
 
 		ebox.button_press_event.connect((event)=>{
 
@@ -461,7 +445,7 @@ public class Statusbar : Gtk.Box {
 
 	private void add_terminal_toggle(){
 
-		var img = IconManager.lookup_image("terminal",16);
+		var img = IconManager.lookup_image("terminal-symbolic",16);
 		img.set_tooltip_text(_("Toggle terminal panel"));
 		//img.margin_left = 6;
 		//img.margin_right = 6;
@@ -471,15 +455,7 @@ public class Statusbar : Gtk.Box {
 		add(ebox);
 		ebox_terminal = ebox;
 		
-		// set hand cursor
-		if (ebox.get_realized()){
-			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-		}
-		else{
-			ebox.realize.connect(()=>{
-				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-			});
-		}
+		set_pointer_cursor_for_eventbox(ebox);
 
 		ebox.button_press_event.connect((event)=>{
 
@@ -501,15 +477,7 @@ public class Statusbar : Gtk.Box {
 		add(ebox);
 		ebox_filter = ebox;	
 		
-		// set hand cursor
-		if (ebox.get_realized()){
-			ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-		}
-		else{
-			ebox.realize.connect(()=>{
-				ebox.get_window().set_cursor(new Gdk.Cursor(Gdk.CursorType.HAND1));
-			});
-		}
+		set_pointer_cursor_for_eventbox(ebox);
 
 		ebox.button_press_event.connect((event)=>{
 
