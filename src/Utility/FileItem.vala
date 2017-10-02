@@ -738,6 +738,13 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 	}
 
+	public bool is_gif{
+		get{
+			return file_extension.down().has_suffix(".gif")
+				|| (content_type == "image/gif");
+		}
+	}
+
 	public bool is_iso{
 		get{
 			return file_extension.down().has_suffix(".iso")

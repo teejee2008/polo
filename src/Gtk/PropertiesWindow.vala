@@ -203,12 +203,12 @@ public class PropertiesWindow : Gtk.Window {
 			add_property(vbox, _("Contents"), txt);
 		}
 
-		var archive = (FileItemArchive) file_item;
-
 		// archive ----------
 		
 		if (file_item is FileItemArchive){
 
+			var archive = (FileItemArchive) file_item;
+			
 			add_separator(vbox);
 
 			// type ----------
@@ -361,13 +361,23 @@ public class PropertiesWindow : Gtk.Window {
 		hbox.add(image);
 
 		ThumbTask task;
-		var thumb = file_item.get_image(256, true, false, false, out task);
+		var thumb = file_item.get_image(512, true, false, false, out task);
 
+		if (task != null){
+			while (!task.completed){
+				sleep(100);
+				gtk_do_events();
+			}
+			thumb = file_item.get_image(512, true, false, false, out task);
+		}
+		
 		if (thumb != null) {
 			image.pixbuf = thumb;
+			log_debug("setting from file_item.get_image()");
 		}
 		else if (file_item.icon != null) {
 			image.gicon = file_item.icon;
+			log_debug("setting from file_item.gicon");
 		}
 		else{
 			if (file_item.file_type == FileType.DIRECTORY) {

@@ -87,17 +87,23 @@ public class Thumbnailer : GLib.Object {
 		
 		Gdk.Pixbuf? pixbuf = null;
 
-		//string file_uri = file_item.file_path_prefix + file_item.file_path;
 		string hash = file_item.thumb_key;
-
-		// use images smaller than 128px directly, instead of generating thumbnails
 
 		if (file_item.is_image){
 
 			int width, height;
 			Gdk.Pixbuf.get_file_info(file_item.file_path, out width, out height);
 
+			// use images directly, if image size is smaller than requested size
+			
 			if ((width <= icon_size) || (height <= icon_size)){
+				pixbuf = IconManager.load_pixbuf_from_file_at_scale(file_item.file_path, icon_size);
+				if (pixbuf != null){ return pixbuf; }
+			}
+
+			// use images directly, if requested size is larger than 256px
+
+			if (icon_size > 256){
 				pixbuf = IconManager.load_pixbuf_from_file_at_scale(file_item.file_path, icon_size);
 				if (pixbuf != null){ return pixbuf; }
 			}
@@ -488,7 +494,7 @@ public class Thumbnailer : GLib.Object {
 	}
 }
 
-public class ThumbTask : GLib.Object {
+	public class ThumbTask : GLib.Object {
 
 	public FileItem file_item;
 	public int icon_size;

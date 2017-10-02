@@ -100,7 +100,7 @@ public class IconManager : GLib.Object {
 
 				if (file_exists(img_file)){
 
-					pixbuf = load_pixbuf_from_file(img_file, icon_size);
+					pixbuf = load_pixbuf_from_file_at_scale(img_file, icon_size);
 					if (pixbuf != null){ return pixbuf; }
 				}
 			}
@@ -260,8 +260,26 @@ public class IconManager : GLib.Object {
 
         return trans;
     }
-    
-    public static Gdk.Pixbuf? load_pixbuf_from_file(string file_path, int icon_size){
+
+	public static Gdk.Pixbuf? load_pixbuf_from_file(string file_path){
+		
+		Gdk.Pixbuf? pixbuf = null;
+		
+		try{
+			// load without scaling
+			pixbuf = new Gdk.Pixbuf.from_file(file_path);
+
+			// return
+			if (pixbuf != null){ return pixbuf; }
+		}
+		catch (Error e){
+			// ignore
+		}
+
+		return null;
+	}
+	
+    public static Gdk.Pixbuf? load_pixbuf_from_file_at_scale(string file_path, int icon_size){
 		
 		Gdk.Pixbuf? pixbuf = null;
 		
@@ -269,11 +287,14 @@ public class IconManager : GLib.Object {
 		Gdk.Pixbuf.get_file_info(file_path, out width, out height);
 		
 		if ((width <= icon_size) && (height <= icon_size)){
+			
 			try{
 				// load without scaling
 				pixbuf = new Gdk.Pixbuf.from_file(file_path);
+				
 				// pad to requested size
 				pixbuf = resize_icon(pixbuf, icon_size);
+				
 				// return
 				if (pixbuf != null){ return pixbuf; }
 			}
@@ -283,10 +304,24 @@ public class IconManager : GLib.Object {
 		}
 		else {
 			try{
-				// load with scaling - scale down to requested box
-				pixbuf = new Gdk.Pixbuf.from_file_at_scale(file_path, icon_size, icon_size, true);
+
+				if (file_path.down().has_suffix(".gif")){
+
+					pixbuf = new Gdk.Pixbuf.from_file(file_path);
+
+					int ow, oh;
+					get_dimensions_fit_to_box(width, height, icon_size, icon_size, out ow, out oh);
+					pixbuf = pixbuf.scale_simple(ow, oh, Gdk.InterpType.HYPER);
+				}
+				else{
+
+					// load with scaling - scale down to requested box
+					pixbuf = new Gdk.Pixbuf.from_file_at_scale(file_path, icon_size, icon_size, true);
+				}
+
 				// pad to requested size
 				pixbuf = resize_icon(pixbuf, icon_size);
+				
 				// return
 				if (pixbuf != null){ return pixbuf; }
 			}
@@ -303,6 +338,22 @@ public class IconManager : GLib.Object {
 		var map = source.get_options();
 		foreach(string key in map.get_keys()){
 			target.set_option(key, map[key]);
+		}
+	}
+
+	public static void get_dimensions_fit_to_box(int in_width, int in_height, int req_width, int req_height, out int out_width, out int out_height){
+
+		out_width  = in_width;
+		out_height = in_height;
+		
+		if (out_width > req_width){
+			out_width = req_width;
+			out_height = (int) (((out_width * 1.0) / in_width) * in_height);
+		}
+		
+		if (out_height > req_height){
+			out_height = req_height;
+			out_width = (int) (((out_height * 1.0) / in_height) * in_width);
 		}
 	}
 
