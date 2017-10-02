@@ -438,7 +438,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 					}
 				}
 				else{
-					txt += "";
+					txt += format_file_size(file_size);
 				}
 			}
 			else {
@@ -1537,9 +1537,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			this.content_type = info.get_content_type();
 
 			// size
-			if (this.file_type == FileType.REGULAR) {
-				this.file_size = info.get_size();
-			}
+			this._file_size = info.get_size();
 
 			// modified
 			this.modified = (new DateTime.from_timeval_utc(info.get_modification_time())).to_local();

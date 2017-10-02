@@ -2548,7 +2548,7 @@ public class FileViewList : Gtk.Box {
 		refresh(false, false);
 	}
 
-	// query items  ------------------------------
+	// ------------------------------------------
 	
 	private bool query_items_thread_running = false;
 	
@@ -2644,8 +2644,9 @@ public class FileViewList : Gtk.Box {
 
 		log_debug("FileViewList: query_items_thread(): exit");
 		query_items_thread_running = false;
-		
 	}
+
+	// ------------------------------------------
 	
 	private bool query_subfolders_thread_running = false;
 	private bool query_subfolders_thread_cancelled = false;
@@ -2656,6 +2657,8 @@ public class FileViewList : Gtk.Box {
 		
 		if (current_item == null){ return; }
 		if (pane.file_operations.size > 0){ return; }
+
+		if (!App.query_subfolders) { return; }
 
 		log_debug("FileViewList: query_subfolders(): enter");
 		
@@ -2748,6 +2751,8 @@ public class FileViewList : Gtk.Box {
 		return (base_width + (tileview_icon_size - 48));
 	}
 
+	// ------------------------------------------
+	
 	// used by select_none() to cancel task
 	private bool calculate_dirsize_running = false;
 	private FileTask calculate_dirsize_task = null;

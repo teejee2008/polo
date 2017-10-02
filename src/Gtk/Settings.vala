@@ -1203,6 +1203,13 @@ public class Settings : Gtk.Box, IPaneActive {
 		//add_option_minimize_to_tray(vbox_group);
 
 		//add_option_autostart(vbox_group);
+
+		vbox_group = add_group(vbox, _("Performance"), 0);
+
+		sg_label = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		sg_option = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+
+		add_option_query_subfolders(vbox_group);
 	}
 
 	private void add_option_maximize_on_startup(Gtk.Box box){
@@ -1523,6 +1530,20 @@ public class Settings : Gtk.Box, IPaneActive {
 
 		chk.toggled.connect(()=>{
 			App.confirm_trash = chk.active;
+		});
+	}
+
+	private void add_option_query_subfolders(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Query subfolders"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("Query items in subfolders when a folder is loaded.\n\nEnabled - Folders display item count in 'Size' column\n\nDisabled - Folders display size of directory file in 'Size' column"));
+		
+		chk.active = App.query_subfolders;
+
+		chk.toggled.connect(()=>{
+			App.query_subfolders = chk.active;
 		});
 	}
 
