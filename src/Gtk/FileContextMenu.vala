@@ -802,9 +802,7 @@ public class FileContextMenu : Gtk.Menu {
 		menu_item.activate.connect (() => {
 			view.open_in_new_tab(App.user_dirs.user_templates);
 		});
-
 	}
-
 
 	private void add_cut(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 

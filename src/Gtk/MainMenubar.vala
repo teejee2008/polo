@@ -1900,7 +1900,6 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		add_donate(submenu);
 
 		add_about(submenu);
-
 	}
 
 	private void add_homepage(Gtk.Menu menu){

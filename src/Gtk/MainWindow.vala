@@ -63,7 +63,6 @@ public class MainWindow : Gtk.Window {
 
 	public bool refresh_apps_pending = false;
 
-	// window
 	private int def_width = 700;
 	private int def_height = 500;
 
@@ -171,7 +170,7 @@ public class MainWindow : Gtk.Window {
 		return response;
 	}
 
-	//init
+	// init ------------------------------
 
 	private void init_window () {
 
@@ -560,7 +559,7 @@ public class MainWindow : Gtk.Window {
 		}*/
 	}
 
-	// properties ------------------------
+	// properties ----------------------------
 
 	private FileViewPane _active_pane;
 	public FileViewPane active_pane{
@@ -637,7 +636,7 @@ public class MainWindow : Gtk.Window {
 		}
 	}
 
-	// refresh
+	// refresh  ------------------------------------
 
 	public void refresh_views(string dir_path){
 		
@@ -803,7 +802,7 @@ public class MainWindow : Gtk.Window {
 
 	}
 	
-	// actions
+	// actions ----------------------------
 
 	public void open_settings_window(){
 
@@ -977,7 +976,7 @@ public class MainWindow : Gtk.Window {
 		return true;
 	}
 
-	// session -------------------------------------
+	// session -------------------------------
 	
 	public void save_session(){
 
