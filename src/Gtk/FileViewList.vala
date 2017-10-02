@@ -2302,12 +2302,12 @@ public class FileViewList : Gtk.Box {
 	}*/
 
 	private void set_columns_for_special_locations(){
-		if (current_item.file_uri_scheme == "trash"){
-			set_columns("name,size,modified,filetype,deletion_date,original_path");
+		
+		if (current_item.is_trash){
+			set_columns("name,size,deletion_date,original_path");
 		}
 	}
-
-
+	
 	// refresh  ---------------------------------------
 	
 	public void refresh(bool requery, bool requery_subfolders) {
