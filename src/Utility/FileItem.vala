@@ -753,6 +753,20 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 	}
 
+	public bool is_squashfs {
+		get {
+			return file_extension.down().has_suffix(".sfs")
+				|| file_extension.down().has_suffix(".squashfs")
+				|| (content_type == "application/vnd.squashfs");
+		}
+	}
+
+	public bool is_disk_image{
+		get{
+			return is_iso || is_squashfs;
+		}
+	}
+
 	public bool is_media_directory{
 		get{
 			int media_count = count_photos + count_videos;

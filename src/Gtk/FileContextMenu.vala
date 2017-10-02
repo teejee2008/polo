@@ -1572,13 +1572,13 @@ public class FileContextMenu : Gtk.Menu {
 
 		if (selected_item == null){ return; }
 
-		if (!selected_item.file_name.has_suffix(".iso")){ return; }
+		if (!selected_item.is_disk_image){ return; }
 		
 		log_debug("FileContextMenu: add_iso_actions()");
 	
 		var menu_item = gtk_menu_add_item(
 			menu,
-			_("ISO"),
+			_("Disk Image"),
 			"",
 			gtk_image_from_pixbuf(IconManager.generic_icon_iso(16)),
 			sg_icon,
@@ -1602,14 +1602,14 @@ public class FileContextMenu : Gtk.Menu {
 		
 		if (selected_item == null){ return; }
 
-		if (!selected_item.file_name.has_suffix(".iso")){ return; }
+		if (!selected_item.is_disk_image){ return; }
 
 		log_debug("FileContextMenu: add_mount_iso()");
 
 		var menu_item = gtk_menu_add_item(
 			menu,
 			_("Mount"),
-			_("Mount the ISO file as a read-only disk"),
+			_("Mount the disk image as read-only device"),
 			null,
 			sg_icon,
 			sg_label);

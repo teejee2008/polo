@@ -1221,15 +1221,19 @@ public class Main : GLib.Object {
 		foreach(var dev in Device.get_devices()){
 
 			if ((dev.fstype.length == 0) && (dev.type == "part")){
+				// partition with uknown filsystem
 				continue;
 			}
 			else if (dev.is_encrypted_partition && dev.has_children){
+				// unlocked LUKS partition
 				continue;
 			}
 			else if (dev.is_snap_volume || dev.is_swap_volume){
+				// snap loop device, or swap volume
 				continue;
 			}
 			else if (dev.size_bytes < 100 * KB){
+				// very small partition, ???
 				continue;
 			}
 			else{

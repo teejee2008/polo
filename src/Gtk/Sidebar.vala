@@ -387,11 +387,12 @@ public class Sidebar : Gtk.Box {
 					
 					foreach(var dev in list){
 						
-						if (dev.pkname.length == 0){
+						if (dev.pkname.length == 0){ // type = disk, loop
 							
 							item = add_device(dev);
 
 							if (!node_expanded.has_key(item.node_key) || node_expanded[item.node_key]){
+								
 								foreach(var child1 in dev.children){
 									if (child1.has_children){
 										foreach(var child2 in child1.children){
@@ -401,6 +402,14 @@ public class Sidebar : Gtk.Box {
 									else{
 										add_device(child1);
 									}
+								}
+
+								if (dev.children.size == 0){
+									var dev2 = dev.copy();
+									dev2.type = "crypt";
+									dev2.pkname = dev.device.replace("/dev/","");
+									dev2.parent = dev;
+									add_device(dev2);
 								}
 							}
 						}

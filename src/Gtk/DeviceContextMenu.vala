@@ -50,11 +50,11 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		device = _device;
 		parent_popup = _parent_popup;
 		
-		if (device.has_parent()){
-			build_menu();
+		if (device.pkname.length == 0){
+			build_menu_for_drive();
 		}
 		else{
-			build_menu_for_drive();
+			build_menu();
 		}
 	}
 
@@ -252,15 +252,11 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		});
 
 		item.sensitive = (device.type == "disk");
-		
-		//new Gtk.Image.from_pixbuf(IconManager.lookup("media-eject", 16, true))
 	}
 	
 	private void add_manage(){
 
 		log_debug("DeviceContextMenu: add_manage()");
-
-		//if (device.type != "disk"){ return; }
 
 		// item  ------------------
 
@@ -279,16 +275,12 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 			}
 		});
 
-		//item.sensitive = (device.type == "disk");
-		
-		//new Gtk.Image.from_pixbuf(IconManager.lookup("media-eject", 16, true))
+		item.sensitive = (device.type != "loop");
 	}
 	
 	private void add_format(){
 
 		log_debug("DeviceContextMenu: add_format()");
-
-		//if (device.type != "disk"){ return; }
 
 		// item  ------------------
 
@@ -307,9 +299,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 			}
 		});
 
-		//item.sensitive = (device.type == "disk");
-		
-		//new Gtk.Image.from_pixbuf(IconManager.lookup("media-eject", 16, true))
+		item.sensitive = (device.type != "loop");
 	}
 
 	private void add_unlock(){

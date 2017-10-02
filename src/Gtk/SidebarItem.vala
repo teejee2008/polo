@@ -46,6 +46,7 @@ public enum SidebarItemType{
 }
 
 public class SidebarItem : GLib.Object {
+	
 	public string name = "";
 	public string tooltip = "";
 	public string node_key = "";
@@ -59,6 +60,7 @@ public class SidebarItem : GLib.Object {
 	}
 
 	public SidebarItem.from_bookmark(GtkBookmark _bookmark){
+		
 		type = SidebarItemType.BOOKMARK;
 		bookmark = _bookmark;
 
@@ -67,6 +69,7 @@ public class SidebarItem : GLib.Object {
 	}
 
 	public SidebarItem.from_device(Device _dev, bool show_device_file_name){
+		
 		type = SidebarItemType.DEVICE;
 		device = _dev;
 
@@ -74,12 +77,15 @@ public class SidebarItem : GLib.Object {
 		tooltip = device.tooltip_text();
 
 		if (device.pkname.length == 0){
+			
 			name = device.description_simple(show_device_file_name);
 			type = SidebarItemType.HEADER_DISK;
 			node_key = device.kname;
 		}
 		else{
+			
 			name = device.kname;
+			
 			if (device.is_on_encrypted_partition){
 				//name = "%s%s".printf(device.pkname, _(" (unlocked)"));
 				name = "%s".printf(device.pkname);
