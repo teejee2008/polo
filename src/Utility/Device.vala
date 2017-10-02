@@ -1706,8 +1706,14 @@ public class Device : GLib.Object{
 			return loop_dev;
 		}
 
-		var cmd = "udisksctl loop-setup -r -f '%s'".printf(
-			escape_single_quote(iso_file_path));
+		var cmd = "udisksctl loop-setup";
+
+		
+		//if (iso_file_path.down().has_suffix("-o loop,rw,sync")){
+			//cmd += " -r";
+		//}
+
+		cmd += " -f '%s'".printf(escape_single_quote(iso_file_path));
 
 		log_debug(cmd);
 		string std_out, std_err;

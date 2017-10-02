@@ -4930,35 +4930,33 @@ public class FileViewList : Gtk.Box {
 
 		err_log_disable();
 
-		if (loop_dev != null){
+		if (loop_dev == null){ return; }
 
-			// notify
-			string title = "%s".printf(_("Mounted ISO"));
-			string msg = "%s".printf(loop_dev.device);
-			OSDNotify.notify_send(title, msg, 2000, "normal", "info");
+		// notify
+		string title = "%s".printf(_("Mounted ISO"));
+		string msg = "%s".printf(loop_dev.device);
+		OSDNotify.notify_send(title, msg, 2000, "normal", "info");
 
-			if (loop_dev.has_children){
-				// get first iso9660 partition
-				var list = Device.get_block_devices_using_lsblk();
-				foreach(var dev in list){
-					if ((dev.pkname == loop_dev.device.replace("/dev/","")) && (dev.fstype == "iso9660")){
-						loop_dev = dev;
-						break;
-					}
-				}
-			}
+		if (loop_dev.has_children){
 			
-			// browse
-			if (loop_dev != null){
-				var mps = Device.get_device_mount_points(loop_dev.device);
-				if (mps.size > 0){
-					var mp = mps[0];
-					exo_open_folder(mp.mount_point);
+			// get first iso9660 partition ------------------------
+			
+			var list = Device.get_block_devices_using_lsblk();
+			
+			foreach(var dev in list){
+				
+				if ((dev.pkname == loop_dev.device.replace("/dev/","")) && (dev.fstype == "iso9660")){
+					
+					loop_dev = dev;
+					break;
 				}
 			}
 		}
-
+			
+		// browse --------------------
+		
 		if (loop_dev.mount_points.size > 0){
+			
 			var mp = loop_dev.mount_points[0];
 			set_view_path(mp.mount_point);
 		}

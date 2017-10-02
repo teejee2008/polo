@@ -761,9 +761,16 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 	}
 
+	public bool is_img {
+		get {
+			return file_extension.down().has_suffix(".img")
+				|| (content_type == "application/x-raw-disk-image");
+		}
+	}
+
 	public bool is_disk_image{
 		get{
-			return is_iso || is_squashfs;
+			return is_iso || is_squashfs || is_img;
 		}
 	}
 
