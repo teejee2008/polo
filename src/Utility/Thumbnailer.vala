@@ -98,7 +98,7 @@ public class Thumbnailer : GLib.Object {
 			Gdk.Pixbuf.get_file_info(file_item.file_path, out width, out height);
 
 			if ((width <= icon_size) || (height <= icon_size)){
-				pixbuf = IconManager.load_pixbuf_from_file(file_item.file_path, icon_size);
+				pixbuf = IconManager.load_pixbuf_from_file_at_scale(file_item.file_path, icon_size);
 				if (pixbuf != null){ return pixbuf; }
 			}
 		}
@@ -109,14 +109,8 @@ public class Thumbnailer : GLib.Object {
 			|| file_item.file_location.contains("thumbnails/large")
 			|| file_item.file_location.contains("thumbnails/fail")){
 
-			try {
-				pixbuf = IconManager.load_pixbuf_from_file(file_item.file_path, icon_size);
-				return pixbuf;
-			}
-			catch (Error e){
-				// file itself is unreadable?
-				return pixbuf;
-			}
+			pixbuf = IconManager.load_pixbuf_from_file_at_scale(file_item.file_path, icon_size);
+			return pixbuf;
 		}
 
 		foreach(string thumbdir in search_paths){
@@ -228,7 +222,7 @@ public class Thumbnailer : GLib.Object {
 			log_msg("found thumb: %s".printf(thumb_path));
 
 			try {
-				var pixbuf = IconManager.load_pixbuf_from_file(thumb_path, icon_size);
+				var pixbuf = IconManager.load_pixbuf_from_file_at_scale(thumb_path, icon_size);
 				//log_debug("MTime: %s, URI: %s".printf(pixbuf.get_option("tEXt::Thumb::MTime"),pixbuf.get_option("tEXt::Thumb::URI")));
 				if (pixbuf != null){ return pixbuf; }
 			}
@@ -364,13 +358,6 @@ public class Thumbnailer : GLib.Object {
 
 		log_debug("Thumbnailer: generate_thumbnail(): %s".printf(task.file_item.file_path));
 
-		//string thumb_dir = path_combine(default_thumbdir, (task.icon_size <= 128 ? "normal" : "large"));
-		//dir_create(thumb_dir);
-
-		//string temp_file = path_combine(thumb_dir, random_string(16));
-		//var thumb_file = path_combine(thumb_dir, hash + ".png");
-		//int icon_size = (task.icon_size <= 128 ? 128 : 256);
-
 		if (task.file_item.is_image){
 			generate_thumbnail_for_image(task);
 		}
@@ -393,14 +380,9 @@ public class Thumbnailer : GLib.Object {
 
 		bool success = false;
 
-		try {
-			var pixbuf = IconManager.load_pixbuf_from_file(task.file_item.file_path, icon_size);
-			if (pixbuf != null){
-				success = save_thumb_image(pixbuf, task, temp_file, thumb_file);
-			}
-		}
-		catch (Error e){
-			log_error(e.message);
+		var pixbuf = IconManager.load_pixbuf_from_file_at_scale(task.file_item.file_path, icon_size);
+		if (pixbuf != null){
+			success = save_thumb_image(pixbuf, task, temp_file, thumb_file);
 		}
 
 		if (!success){
@@ -422,10 +404,6 @@ public class Thumbnailer : GLib.Object {
 
 		int icon_size = (task.icon_size <= 128 ? 128 : 256);
 
-		//string images_dir = path_combine(thumb_dir, hash);
-		//dir_create(images_dir);
-
-		//ThumbnailImagePath = get_temp_file_path() + ".png";
 		string std_out, std_err;
 
 		string cmd = "%s -ss 00:00:03 -i '%s' -y -f image2 -vf \"select='eq(pict_type,PICT_TYPE_I)',scale=256:-1\" -vsync vfr -vframes 1 -r 1 '%s'".printf(
@@ -436,20 +414,13 @@ public class Thumbnailer : GLib.Object {
 
 		exec_sync(cmd, out std_out, out std_err);
 
-		//string first_image_file = path_combine(thumb_dir, hash + "-001.png");
-
 		bool success = false;
 
 		if (file_exists(temp_file)){
 
-			try {
-				var pixbuf = IconManager.load_pixbuf_from_file(temp_file, icon_size);
-				if (pixbuf != null){
-					success = save_thumb_image(pixbuf, task, temp_file, thumb_file);
-				}
-			}
-			catch (Error e){
-				log_error(e.message);
+			var pixbuf = IconManager.load_pixbuf_from_file_at_scale(temp_file, icon_size);
+			if (pixbuf != null){
+				success = save_thumb_image(pixbuf, task, temp_file, thumb_file);
 			}
 		}
 
