@@ -357,18 +357,25 @@ public class PropertiesWindow : Gtk.Window {
 
 		add_group_combo(vbox);
 
+		// preview ---------------------
+		
+		init_preview_image(hbox); 
+	} 
+ 
+	private void init_preview_image(Gtk.Box hbox){
+	  
 		var image = new Gtk.Image();
 		hbox.add(image);
 
 		ThumbTask task;
-		var thumb = file_item.get_image(512, true, false, false, out task);
+		var thumb = file_item.get_image(256, true, false, false, out task);
 
 		if (task != null){
 			while (!task.completed){
 				sleep(100);
 				gtk_do_events();
 			}
-			thumb = file_item.get_image(512, true, false, false, out task);
+			thumb = file_item.get_image(256, true, false, false, out task);
 		}
 		
 		if (thumb != null) {
