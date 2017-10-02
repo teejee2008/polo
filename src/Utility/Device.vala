@@ -249,6 +249,13 @@ public class Device : GLib.Object{
 		return (type == "part") && fstype.down().contains("lvm2_member");
 	}
 
+	public bool is_top_level {
+		get {
+			//return ((type == "disk") || (type == "loop")) && (parent == null);
+			return (pkname.length == 0);
+		}
+	}
+	
 	public bool has_children {
 		get{
 			return (children.size > 0);
@@ -313,7 +320,7 @@ public class Device : GLib.Object{
 		var cmd = "udisksctl unmount -b '%s'".printf(device);
 		log_debug(cmd);
 		string std_err, std_out;
-		int status = exec_sync(cmd, out std_out,  out std_err);
+		int status = exec_sync(cmd, out std_out, out std_err);
 
 		if (status != 0){
 			if (parent_window != null){
@@ -324,7 +331,7 @@ public class Device : GLib.Object{
 		}
 
 		query_mount_points();
-		return is_mounted;
+		return !is_mounted;
 	}
 
 	public bool automount(Gtk.Window? parent_window, bool show_on_success = false){
@@ -1574,6 +1581,12 @@ public class Device : GLib.Object{
 		this.symlinks = dev2.symlinks;
 		this.parent = dev2.parent;
 		this.children = dev2.children;
+	}
+
+	public Device copy(){
+		var dev = new Device();
+		dev.copy_fields_from(this);
+		return dev;
 	}
 
 	public Device? query_changes(){
