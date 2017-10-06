@@ -1,3 +1,37 @@
+polo-file-manager (17.10) xenial; urgency=low
+
+  * Display directory entry size by default instead of item count
+
+  * Added option to query subfolders
+
+  * Close selection bar on pressing Esc key
+
+  * Added support for browsing and mounting squashfs and IMG files
+
+  * Use symbolic icons for toolbar
+
+  * Added tab locking
+
+  * [Fixed] Inverted mouse cursor displayed for cursor themes on KDE
+  
+  * [Fixed] Trash: Display Trashed Date and Original Location
+
+  * [Fixed] Success message is displayed even when unmount action fails
+
+  * [Fixed] Thumbnail generation for GIF files
+
+  * [Fixed] Enable context menu for devices in sidebar
+
+  * [Fixed] Refresh remote folders after file operation
+
+  * [Fixed] It was not possible to mount or browse LUKS-encrypted
+  devices where the entire disk is encrypted instead of just partitions
+
+  * [Removed] Option to detach and drag tabs between panes
+
+ -- Tony George <tony.george.kol@gmail.com>  Fri, 06 Oct 2017 20:00:00 +0530
+
+
 polo-file-manager (17.9.2) xenial; urgency=low
 
   * Beta 10 Update 2
