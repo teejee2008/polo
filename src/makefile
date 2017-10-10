@@ -33,11 +33,15 @@ all:
 		Utility/*.vala \
 		Utility/Gtk/*.vala \
 		-o "${app_name}-gtk" \
-		--pkg glib-2.0 --pkg gio-unix-2.0 \
-		--pkg posix --pkg gtk+-3.0 --pkg gee-0.8 \
-		--pkg json-glib-1.0 --pkg libxml-2.0 --pkg $(vte_version)
+		--target-glib 2.32 --pkg glib-2.0 \
+		--pkg gio-unix-2.0 \
+		--pkg posix \
+		--pkg gtk+-3.0 \
+		--pkg gee-0.8 \
+		--pkg json-glib-1.0 \
+		--pkg libxml-2.0 \
+		--pkg $(vte_version)
 
-		
 	#gtk3-version-polo
 	valac "gtk3-version.vala" -o gtk3-version-polo --pkg gtk+-3.0
 
@@ -57,7 +61,14 @@ all:
 		Utility/Gtk/*.vala
 		
 clean:
-	rm -rf *.o ${app_name}
+	rm -rfv ../release/source
+	rm -rfv ../release/i386
+	rm -rfv ../release/amd64
+	rm -rfv ../release/armel
+	rm -rfv ../release/armhf
+	rm -rfv ../po/*.mo
+	rm -fv ${app_name}-gtk
+	rm -fv gtk3-version-polo
 
 install:
 	mkdir -p "$(DESTDIR)$(bindir)"
@@ -90,10 +101,10 @@ install:
 	install -m 0755 ./share/pixmaps/${app_name}.png "$(DESTDIR)$(sharedir)/pixmaps/"
 
 	#translations
-	install -m 0644 ../po/${app_name}-de.mo $(DESTDIR)$(localedir)/de/LC_MESSAGES/${app_name}.mo
-	install -m 0644 ../po/${app_name}-nl.mo $(DESTDIR)$(localedir)/nl/LC_MESSAGES/${app_name}.mo
-	install -m 0644 ../po/${app_name}-fr.mo $(DESTDIR)$(localedir)/fr/LC_MESSAGES/${app_name}.mo
-
+	msgfmt --check --verbose -o "$(DESTDIR)$(localedir)/de/LC_MESSAGES/${app_name}.mo" ../po/${app_name}-de.po
+	msgfmt --check --verbose -o "$(DESTDIR)$(localedir)/nl/LC_MESSAGES/${app_name}.mo" ../po/${app_name}-nl.po
+	msgfmt --check --verbose -o "$(DESTDIR)$(localedir)/fr/LC_MESSAGES/${app_name}.mo" ../po/${app_name}-fr.po
+	
 uninstall:
 
 	#binary
