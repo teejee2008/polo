@@ -73,10 +73,8 @@ install:
 	mkdir -p "$(DESTDIR)$(launcherdir)"
 	mkdir -p "$(DESTDIR)$(sharedir)/${app_name}"
 	mkdir -p "$(DESTDIR)$(sharedir)/pixmaps"
+	mkdir -p "$(DESTDIR)$(sharedir)/appdata"
 	mkdir -p "$(DESTDIR)/var/log/polo"
-	mkdir -p "$(DESTDIR)$(localedir)/de/LC_MESSAGES"
-	mkdir -p "$(DESTDIR)$(localedir)/nl/LC_MESSAGES"
-	mkdir -p "$(DESTDIR)$(localedir)/fr/LC_MESSAGES"
 	
 	#binary
 	install -m 0755 ${app_name}-gtk "$(DESTDIR)$(bindir)"
@@ -95,7 +93,14 @@ install:
 	#app icon
 	install -m 0755 ./share/pixmaps/${app_name}.png "$(DESTDIR)$(sharedir)/pixmaps/"
 
+	# appdata
+	install -m 0755 ../debian/${app_name}-gtk.appdata.xml "$(DESTDIR)$(sharedir)/appdata"
+
 	#translations
+	mkdir -p "$(DESTDIR)$(localedir)/de/LC_MESSAGES"
+	mkdir -p "$(DESTDIR)$(localedir)/nl/LC_MESSAGES"
+	mkdir -p "$(DESTDIR)$(localedir)/fr/LC_MESSAGES"
+	
 	msgfmt --check --verbose -o "$(DESTDIR)$(localedir)/de/LC_MESSAGES/${app_name}.mo" ../po/${app_name}-de.po
 	msgfmt --check --verbose -o "$(DESTDIR)$(localedir)/nl/LC_MESSAGES/${app_name}.mo" ../po/${app_name}-nl.po
 	msgfmt --check --verbose -o "$(DESTDIR)$(localedir)/fr/LC_MESSAGES/${app_name}.mo" ../po/${app_name}-fr.po
@@ -116,6 +121,9 @@ uninstall:
 
 	#app icon
 	rm -f "$(DESTDIR)$(sharedir)/pixmaps/${app_name}.png"
+
+	# appdata
+	rm -f "$(DESTDIR)$(sharedir)/appdata/${app_name}-gtk.appdata.xml"
 
 	#translations
 	rm -f $(DESTDIR)$(localedir)/*/LC_MESSAGES/${app_name}.mo

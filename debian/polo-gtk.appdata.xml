@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Copyright 2017 suve <veg@svgames.pl> -->
+<component type="desktop">
+	<id>polo-gtk.desktop</id>
+	<metadata_license>CC-BY-SA-3.0</metadata_license>
+	<project_license>GPL-3.0</project_license>
+	<name>Polo File Manager</name>
+	<summary>A modern file manager for Linux</summary>
+	<description>
+		<p>
+			A modern file manager for Linux. Supports single, dual and quad-pane
+			layouts with multiple tabs in each pane. Support for browsing archives
+			and cloud storage accounts.
+		</p>
+	</description>
+	<screenshots>
+		<screenshot type="default">
+			<image>https://raw.githubusercontent.com/teejee2008/polo/master/src/share/polo/images/polo_layout_single_icons.png</image>
+		</screenshot>
+		<screenshot>
+			<image>https://raw.githubusercontent.com/teejee2008/polo/master/src/share/polo/images/polo_layout_single_list.png</image>
+		</screenshot>
+		<screenshot>
+			<image>https://raw.githubusercontent.com/teejee2008/polo/master/src/share/polo/images/polo_layout_dual_icons.png</image>
+		</screenshot>
+		<screenshot>
+			<image>https://raw.githubusercontent.com/teejee2008/polo/master/src/share/polo/images/polo_layout_dual_list.png</image>
+		</screenshot>
+		<screenshot>
+			<image>https://raw.githubusercontent.com/teejee2008/polo/master/images/polo_compress_expanded.png</image>
+		</screenshot>
+		<screenshot>
+			<image>https://raw.githubusercontent.com/teejee2008/polo/master/images/polo_compress_progress.png</image>
+		</screenshot>
+		<screenshot>
+			<image>https://raw.githubusercontent.com/teejee2008/polo/master/images/cloud_storage.png</image>
+		</screenshot>
+	</screenshots>
+	<url type="homepage">https://github.com/teejee2008/polo</url>
+</component>
+
