@@ -1,0 +1,5 @@
+# build
+make all
+
+# install
+sudo make install

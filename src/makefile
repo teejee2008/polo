@@ -1,3 +1,6 @@
+SHELL=/bin/bash
+CFLAGS=--std=c99
+
 prefix=/usr
 bindir=$(prefix)/bin
 sharedir=$(prefix)/share
@@ -5,7 +8,7 @@ localedir=$(sharedir)/locale
 launcherdir=$(sharedir)/applications
 mandir=$(sharedir)/man
 man1dir=$(mandir)/man1
-CFLAGS=--std=c99
+
 app_name=polo
 app_fullname='Polo'
 
@@ -34,12 +37,8 @@ all:
 		Utility/Gtk/*.vala \
 		-o "${app_name}-gtk" \
 		--target-glib 2.32 --pkg glib-2.0 \
-		--pkg gio-unix-2.0 \
-		--pkg posix \
-		--pkg gtk+-3.0 \
-		--pkg gee-0.8 \
-		--pkg json-glib-1.0 \
-		--pkg libxml-2.0 \
+		--pkg gio-unix-2.0 --pkg posix --pkg gtk+-3.0 \
+		--pkg gee-0.8 --pkg json-glib-1.0 --pkg libxml-2.0 \
 		--pkg $(vte_version)
 
 	#gtk3-version-polo
@@ -61,14 +60,10 @@ all:
 		Utility/Gtk/*.vala
 		
 clean:
-	rm -rfv ../release/source
-	rm -rfv ../release/i386
-	rm -rfv ../release/amd64
-	rm -rfv ../release/armel
-	rm -rfv ../release/armhf
-	rm -rfv ../po/*.mo
-	rm -fv ${app_name}-gtk
-	rm -fv gtk3-version-polo
+	rm -rfv ../release/{source,i386,amd64,armel,armhf}
+	rm -rfv ../release/*.{run,deb}
+	rm -rfv *.c *.o *.mo
+	rm -fv ${app_name}-gtk gtk3-version-polo
 
 install:
 	mkdir -p "$(DESTDIR)$(bindir)"

@@ -6,8 +6,8 @@ cd $DIR
 
 . ./BUILD_CONFIG
 
-rm -vf installer/*.run
-rm -vf installer/*.deb
+rm -vf release/*.run
+rm -vf release/*.deb
 
 # build debs
 sh build-deb.sh
@@ -27,20 +27,15 @@ echo ""
 
 dpkg-deb -x release/${pkg_name}-v${pkg_version}-${arch}.deb release/${arch}/files
 
-#check for errors
-if [ $? -ne 0 ]; then
-	cd "$backup"; echo "Failed"; exit 1;
-fi
+if [ $? -ne 0 ]; then cd "$backup"; echo "Failed"; exit 1;fi
 
 echo "--------------------------------------------------------------------------"
 
+rm -rfv release/${arch}/${pkg_name}*.* # remove source files created by pbuilder
 cp -pv --no-preserve=ownership release/sanity.config release/${arch}/sanity.config
 sanity --generate --base-path release/${arch} --out-path release --arch ${arch}
 
-#check for errors
-if [ $? -ne 0 ]; then
-	cd "$backup"; echo "Failed"; exit 1;
-fi
+if [ $? -ne 0 ]; then cd "$backup"; echo "Failed"; exit 1; fi
 
 mv -v release/*${arch}.run release/${pkg_name}-v${pkg_version}-${arch}.run 
 

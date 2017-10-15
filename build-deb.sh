@@ -21,8 +21,8 @@ echo " build-deb.sh : $dist-$arch"
 echo "=========================================================================="
 echo ""
 
-rm -rfv ${arch}
-mkdir -pv ${arch}
+rm -rfv release/${arch}
+mkdir -pv release/${arch}
 
 echo "-------------------------------------------------------------------------"
 
