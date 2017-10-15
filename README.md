@@ -16,29 +16,28 @@ Polo is a modern, light-weight file manager for Linux with support for multiple 
 
 *Single-pane layout with Sidebar and IconView*
 
-[![](https://2.bp.blogspot.com/-N8kfKyg05gc/WSFeSxoNlHI/AAAAAAAAGv4/4624nEvjAYU7WB5VL-6CMIhfX_7sjJZcACLcB/s1600/polo_layout_classic_icons.png)](https://2.bp.blogspot.com/-N8kfKyg05gc/WSFeSxoNlHI/AAAAAAAAGv4/4624nEvjAYU7WB5VL-6CMIhfX_7sjJZcACLcB/s1600/polo_layout_classic_icons.png)
+![](src/share/polo/images/polo_layout_single_icons.png)
 
 *Single-pane layout with Sidebar and ListView*
 
-[![](https://2.bp.blogspot.com/-ztn3NTFgZ7g/WSFeSyKB_CI/AAAAAAAAGv0/KqTj5Bd5VKkpqOED08G1fMtMznR980-FQCLcB/s1600/polo_layout_classic_list.png)](https://2.bp.blogspot.com/-ztn3NTFgZ7g/WSFeSyKB_CI/AAAAAAAAGv0/KqTj5Bd5VKkpqOED08G1fMtMznR980-FQCLcB/s1600/polo_layout_classic_list.png)
+![](src/share/polo/images/polo_layout_single_list.png)
 
 *Dual-pane layout with IconView*
 
-[![](https://1.bp.blogspot.com/-i0M8VMXGW2E/WSFeS7_XqBI/AAAAAAAAGvw/hWYkNIpn1w8IHvRqorNgjwcopfL6ZofvgCLcB/s1600/polo_layout_commander_icons.png)](https://1.bp.blogspot.com/-i0M8VMXGW2E/WSFeS7_XqBI/AAAAAAAAGvw/hWYkNIpn1w8IHvRqorNgjwcopfL6ZofvgCLcB/s1600/polo_layout_commander_icons.png)
+![](src/share/polo/images/polo_layout_dual_icons.png)
 
 *Dual-pane layout with ListView*
 
-[![](https://4.bp.blogspot.com/-SoXr3INsUYo/WSFeTl19N_I/AAAAAAAAGv8/29ZnneUnWtYZhI-t3rQCx2z_n1JcjLtJQCLcB/s1600/polo_layout_commander_list.png)](https://4.bp.blogspot.com/-SoXr3INsUYo/WSFeTl19N_I/AAAAAAAAGv8/29ZnneUnWtYZhI-t3rQCx2z_n1JcjLtJQCLcB/s1600/polo_layout_commander_list.png)
+![](src/share/polo/images/polo_layout_dual_list.png)
 
-*Options for creating archives - Simple and Advanced Views - Supports encryption and split archives*
+*Options for creating archives - Supports all encoder options, encryption, and split archives*
 
-[![](https://3.bp.blogspot.com/-IS1yfrAgVfI/WQ1jQBOOE-I/AAAAAAAAGfc/a3c9wGnVAx4IFHrw5oXFKuF_JzVsOJMSACLcB/s320/polo_compress.png)](https://3.bp.blogspot.com/-IS1yfrAgVfI/WQ1jQBOOE-I/AAAAAAAAGfc/a3c9wGnVAx4IFHrw5oXFKuF_JzVsOJMSACLcB/s1600/polo_compress.png)  [![](https://2.bp.blogspot.com/-s4qwOZ7W3tE/WQ1jP1u-ZfI/AAAAAAAAGfY/J5m6mpYrEU09N2erLx5zb6L3fomF7eH4gCLcB/s460/polo_compress_expanded.png)](https://2.bp.blogspot.com/-s4qwOZ7W3tE/WQ1jP1u-ZfI/AAAAAAAAGfY/J5m6mpYrEU09N2erLx5zb6L3fomF7eH4gCLcB/s1600/polo_compress_expanded.png)
+![](images/polo_compress.png)![](images/polo_compress_expanded.png)   
+![](images/polo_compress_progress.png)
 
+*Support for browsing cloud storage accounts*
 
-*Archive creation progress - with options to pause and resume*
-
-[![](https://4.bp.blogspot.com/-8nrEdE3U9Pc/WQ1k9S9HytI/AAAAAAAAGfo/izFm14Gu7GEhQbIrnTMFGd0XfEdkKWtbACLcB/s460/polo_compress_progress.png)](https://4.bp.blogspot.com/-8nrEdE3U9Pc/WQ1k9S9HytI/AAAAAAAAGfo/izFm14Gu7GEhQbIrnTMFGd0XfEdkKWtbACLcB/s1600/polo_compress_progress.png)
-
+![](images/cloud_storage.png)
 
 
 ## Installation
