@@ -133,7 +133,7 @@ public class Main : GLib.Object {
 	public Json.Object appconfig;
 	public Bash bash_admin_shell;
 
-	public string shell_default = "fish";
+	public string shell_default = "bash";
 
 	public AppMode app_mode = AppMode.OPEN;
 	public Gee.ArrayList<string> cmd_files;
@@ -522,6 +522,7 @@ public class Main : GLib.Object {
 		tools["gnome-disks"] = new Tool("gnome-disks","gnome-disks","GNOME Disk Utility");
 		tools["rclone"] = new Tool("rclone","rclone","rsync for Cloud Storage");
 		tools["youtube-dl"] = new Tool("youtube-dl","youtube-dl","youtube-dl Downloader");
+		tools["diffuse"] = new Tool("diffuse","diffuse","File Compare Utility");
 
 		check_all_tools();
 	}
