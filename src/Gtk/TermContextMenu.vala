@@ -197,17 +197,17 @@ public class TermContextMenu : Gtk.Menu {
 		var menu_item = gtk_menu_add_item(
 			menu,
 			_("Chroot"),
-			"",
+			_("Start chroot session in current directory"),
 			null,
 			sg_icon,
 			sg_label);
 
-		menu_item.sensitive = view.is_normal_directory && (view.current_item != null) && view.current_item.is_sys_root;
+		menu_item.sensitive = true; // view.is_normal_directory && (view.current_item != null) && view.current_item.is_sys_root;
 
 		if (!view.is_normal_directory || (view.current_item == null)) { return; }
 		
 		menu_item.activate.connect(()=>{
-			pane.terminal.chroot(view.current_item.file_path);
+			pane.terminal.chroot_current();
 		});
 	}
 

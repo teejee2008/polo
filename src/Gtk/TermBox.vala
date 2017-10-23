@@ -202,6 +202,11 @@ public class TermBox : Gtk.Box {
 		feed_command("exit");
 	}
 
+	public void restart_shell(){
+		exit_shell();
+		start_shell();
+	}
+
 	public void terminate_child(){
 		//btn_cancel.sensitive = false;
 		//process_quit(child_pid);
@@ -219,11 +224,14 @@ public class TermBox : Gtk.Box {
 	}
 
 	public void feed_command(string command, bool newline = true){
-		string txt = command;
+
+		string cmd = command;
+
 		if (newline){
-			txt += "\n";
+			cmd = "%s\n".printf(cmd);
 		}
-		term.feed_child(txt, -1);
+		
+		term.feed_child(cmd, -1);
 	}
 
 	public void refresh(){
@@ -269,7 +277,7 @@ public class TermBox : Gtk.Box {
 		//}
 		
 		log_debug("TermBox: change_directory()");
-		
+
 		feed_command("cd '%s'".printf(escape_single_quote(dir_path)));
 	}
 
@@ -309,14 +317,14 @@ public class TermBox : Gtk.Box {
 	public void reset(){
 
 		log_debug("TermBox: reset()");
-		
+
 		feed_command("tput reset");
 	}
 
 	public void open_settings(){
 
 		log_debug("TermBox: open_settings()");
-		
+
 		feed_command("fish_config");
 	}
 
@@ -352,6 +360,11 @@ public class TermBox : Gtk.Box {
 		set_color_background(DEF_COLOR_BG);
 	}
 
+	public void chroot_current(){
+		
+		feed_command("sudo polo-chroot $(pwd)");
+	}
+
 	public void chroot(string path){
 
 		var cmd = "sudo polo-chroot '%s' \n".printf(
@@ -360,17 +373,6 @@ public class TermBox : Gtk.Box {
 			escape_single_quote(path));
 		
 		feed_command(cmd);
-	}
-
-	public void unchroot(string path){
-
-		feed_command("exit");
-
-		foreach(string txt in new string[] { "dev", "dev/pts", "proc", "run", "sys" }){
-			string dest = path_combine(path, txt);
-			var cmd = "sudo umount '%s'".printf(escape_single_quote(dest));
-			feed_command(cmd);
-		}
 	}
 }
 
