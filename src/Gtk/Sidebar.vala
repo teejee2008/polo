@@ -406,7 +406,7 @@ public class Sidebar : Gtk.Box {
 
 								if (dev.children.size == 0){
 									var dev2 = dev.copy();
-									dev2.type = "crypt";
+									dev2.type = "part";
 									dev2.pkname = dev.device.replace("/dev/","");
 									dev2.parent = dev;
 									add_device(dev2);
