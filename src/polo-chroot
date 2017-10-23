@@ -16,11 +16,18 @@ done
 sudo echo ""
 if [ $? -ne 0 ]; then echo "Error"; exit 1; fi
 
-sudo mount --rbind /dev  "$path/dev"
-sudo mount --rbind /run  "$path/run"
-sudo mount --rbind /sys  "$path/sys"
-sudo mount -t proc proc  "$path/proc"
+#sudo mount --rbind /dev  "$path/dev"
+#sudo mount --rbind /run  "$path/run"
+#sudo mount --rbind /sys  "$path/sys"
+#sudo mount --rbind /proc  "$path/proc"
 
+sudo mount proc   "$path/proc"    -t proc     -o nosuid,noexec,nodev
+sudo mount sys    "$path/sys"     -t sysfs    -o nosuid,noexec,nodev,ro
+sudo mount udev   "$path/dev"     -t devtmpfs -o mode=0755,nosuid
+sudo mount devpts "$path/dev/pts" -t devpts   -o mode=0620,gid=5,nosuid,noexec
+sudo mount shm    "$path/dev/shm" -t tmpfs    -o mode=1777,nosuid,nodev
+sudo mount run    "$path/run"     -t tmpfs    -o nosuid,nodev,mode=0755
+sudo mount tmp    "$path/tmp"     -t tmpfs    -o mode=1777,strictatime,nodev,nosuid
 sudo cp /etc/resolv.conf "$path/etc/resolv.conf"
 
 #xhost +local: 
@@ -43,6 +50,7 @@ sudo umount --lazy --force --recursive "$path/dev"
 sudo umount --lazy --force --recursive "$path/run"
 sudo umount --lazy --force --recursive "$path/sys"
 sudo umount --lazy --force --recursive "$path/proc"
+sudo umount --lazy --force --recursive "$path/tmp"
 
 echo "==============================="
 echo "Exited chroot environment"
