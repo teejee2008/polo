@@ -4915,6 +4915,44 @@ public class FileViewList : Gtk.Box {
 		}
 	}
 
+	public void compare_diffuse(){
+
+		log_debug("FileViewList: compare_diffuse()");
+		
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+
+		log_debug("check_diffuse(): enter");
+		
+		if (!check_diffuse()){ return; }
+
+		log_debug("check_diffuse(): ok");
+
+		err_log_clear();
+
+		if (panel.opposite_pane == null){
+			log_debug("panel.opposite_pane is null");
+		}
+		else{
+			log_debug("panel.opposite_pane: ok");
+		}
+
+		var view2 = panel.opposite_pane.view;
+
+		if (view2 == null){
+			log_debug("view2 is null");
+		}
+		else{
+			log_debug("view2: ok");
+		}
+
+		var file1 = selected_items[0];
+		if (view2.current_item.children.has_key(file1.file_name)){
+			var file2 = view2.current_item.children[file1.file_name];
+			Posix.system("diffuse '%s' '%s'".printf(escape_single_quote(file1.file_path), escape_single_quote(file2.file_path)));
+		}
+	}
+	
 	// ISO ---------------------------------------
 	
 	public void mount_iso(){
@@ -5553,6 +5591,10 @@ public class FileViewList : Gtk.Box {
 	
 	private bool check_pdftk(){
 		return check_tool("pdftk");
+	}
+
+	private bool check_diffuse(){
+		return check_tool("diffuse");
 	}
 
 	private bool check_ghostscript(){

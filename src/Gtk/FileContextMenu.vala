@@ -138,6 +138,8 @@ public class FileContextMenu : Gtk.Menu {
 		gtk_menu_add_separator(this); //----------------------
 
 		add_disk_usage(this, sg_icon, sg_label);
+
+		add_file_compare(this, sg_icon, sg_label);
 		
 		add_archive_actions(this, sg_icon, sg_label);
 		
@@ -1074,18 +1076,13 @@ public class FileContextMenu : Gtk.Menu {
 		var menu_item = gtk_menu_add_item(
 			menu,
 			_("Compare"),//TODO: show dialog for selecting second file
-			_("Compare file with file of same name in other pane"),
-			IconManager.lookup_image("folder-open",16),
+			_("Compare file with file of same name in opposite pane"),
+			IconManager.lookup_image("compare",16),
 			sg_icon,
 			sg_label);
 
 		menu_item.activate.connect (() => {
-
-			//var file1 = selected_items[0];
-			//if (current_tab.view2.current_item.children.has_key(file1.file_name)){
-				//var file2 = current_tab.view2.current_item.children[file1.file_name];
-				//Posix.system("diffuse '%s' '%s'".printf(escape_single_quote(file1.file_path), escape_single_quote(file2.file_path)));
-			//}
+			view.compare_diffuse();
 		});
 	}
 
