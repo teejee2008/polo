@@ -698,6 +698,36 @@ public class Sidebar : Gtk.Box {
 
 		row.set_data<SidebarItem>("item", item);
 
+		var dev = item.device;
+
+		// create tooltip -----------------------------------------
+		
+		string tt = "";
+		
+		tt += "%s: %s\n".printf(_("Device"), dev.device);
+		
+		if (dev.mapped_name.length > 0){
+			tt += "%s: %s\n".printf(_("Mapped"), "/dev/mapper/%s".printf(dev.mapped_name));
+		}
+		
+		tt += "%s: %s\n".printf(_("UUID"), dev.uuid);
+		
+		tt += "%s: %s\n".printf(_("Label"), ((dev.label.length > 0) ? dev.label : _("(empty)")));
+
+		tt += "%s: %s\n".printf(_("PartLabel"), ((dev.partlabel.length > 0) ? dev.partlabel : _("(empty)")));
+		
+		tt += "%s: %s\n".printf(_("Filesystem"), dev.fstype);
+
+		if (dev.is_mounted){
+			tt += "%s: %s\n".printf(_("Mount"), dev.mount_points[0].mount_point);
+		}
+		
+		tt += "%s: %s".printf(_("ReadOnly"), (dev.read_only ? "Yes" : "No"));
+
+		row.set_tooltip_markup(tt);
+
+		// create widgets ------------------------------------
+		
 		var ebox = new Gtk.EventBox();
 		row.add(ebox);
 		
@@ -722,8 +752,6 @@ public class Sidebar : Gtk.Box {
 
 		// -----------------------------------
 		
-		var dev = item.device;
-		
 		image.pixbuf = dev.get_icon();
 		image.margin_left = 12;
 
@@ -731,12 +759,12 @@ public class Sidebar : Gtk.Box {
 		label.set_use_markup(true);
 		label.sensitive = dev.is_mounted;
 
-		if (dev.is_mounted){
-			row.set_tooltip_markup(_("Click to open in active pane"));
-		}
-		else{
-			row.set_tooltip_markup(_("Click to mount device and open in active pane"));
-		}
+		//if (dev.is_mounted){
+		//	row.set_tooltip_markup(_("Click to open in active pane"));
+		//}
+		//else{
+		//	row.set_tooltip_markup(_("Click to mount device and open in active pane"));
+		//}
 
 		add_fs_bar(vbox, dev);
 

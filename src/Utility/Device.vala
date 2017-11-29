@@ -49,6 +49,7 @@ public class Device : GLib.Object{
 	public string mapped_name = "";
 	public string uuid = "";
 	public string label = "";
+	public string partlabel = "";
 	public int major = -1;
 	public int minor = -1;
 
@@ -788,7 +789,7 @@ public class Device : GLib.Object{
 			cmd = "lsblk --bytes --pairs --output NAME,KNAME,LABEL,UUID,TYPE,FSTYPE,SIZE,MOUNTPOINT,MODEL,RO,RM,MAJ:MIN";
 		}
 		else{
-			cmd = "lsblk --bytes --pairs --output NAME,KNAME,LABEL,UUID,TYPE,FSTYPE,SIZE,MOUNTPOINT,MODEL,RO,HOTPLUG,MAJ:MIN,PKNAME,VENDOR,SERIAL,REV";
+			cmd = "lsblk --bytes --pairs --output NAME,KNAME,LABEL,PARTLABEL,UUID,TYPE,FSTYPE,SIZE,MOUNTPOINT,MODEL,RO,HOTPLUG,MAJ:MIN,PKNAME,VENDOR,SERIAL,REV";
 		}
 
 		if (dev_name.length > 0){
@@ -838,46 +839,48 @@ public class Device : GLib.Object{
 					rex = new Regex("""NAME="(.*)" KNAME="(.*)" LABEL="(.*)" UUID="(.*)" TYPE="(.*)" FSTYPE="(.*)" SIZE="(.*)" MOUNTPOINT="(.*)" MODEL="(.*)" RO="([0-9]+)" RM="([0-9]+)" MAJ:MIN="([0-9:]+)"""");
 				}
 				else{
-					rex = new Regex("""NAME="(.*)" KNAME="(.*)" LABEL="(.*)" UUID="(.*)" TYPE="(.*)" FSTYPE="(.*)" SIZE="(.*)" MOUNTPOINT="(.*)" MODEL="(.*)" RO="([0-9]+)" HOTPLUG="([0-9]+)" MAJ:MIN="([0-9:]+)" PKNAME="(.*)" VENDOR="(.*)" SERIAL="(.*)" REV="(.*)"""");
+					rex = new Regex("""NAME="(.*)" KNAME="(.*)" LABEL="(.*)" PARTLABEL="(.*)" UUID="(.*)" TYPE="(.*)" FSTYPE="(.*)" SIZE="(.*)" MOUNTPOINT="(.*)" MODEL="(.*)" RO="([0-9]+)" HOTPLUG="([0-9]+)" MAJ:MIN="([0-9:]+)" PKNAME="(.*)" VENDOR="(.*)" SERIAL="(.*)" REV="(.*)"""");
 				}
 
 				if (rex.match (line, 0, out match)){
 
 					Device pi = new Device();
-					pi.name = match.fetch(1).strip();
-					pi.kname = match.fetch(2).strip();
-					pi.label = match.fetch(3); // do not strip - labels can have leading or trailing spaces
-					pi.uuid = match.fetch(4).strip();
-					pi.type = match.fetch(5).strip().down();
+					int pos = 0;
+					pi.name = match.fetch(++pos).strip();
+					pi.kname = match.fetch(++pos).strip();
+					pi.label = match.fetch(++pos); // do not strip - labels can have leading or trailing spaces
+					pi.partlabel = match.fetch(++pos); // do not strip - labels can have leading or trailing spaces
+					pi.uuid = match.fetch(++pos).strip();
+					pi.type = match.fetch(++pos).strip().down();
 
-					pi.fstype = match.fetch(6).strip().down();
+					pi.fstype = match.fetch(++pos).strip().down();
 					pi.fstype = (pi.fstype == "crypto_luks") ? "luks" : pi.fstype;
 					pi.fstype = (pi.fstype == "lvm2_member") ? "lvm2" : pi.fstype;
 
-					pi.size_bytes = int64.parse(match.fetch(7).strip());
+					pi.size_bytes = int64.parse(match.fetch(++pos).strip());
 
-					var mp = match.fetch(8).strip();
+					var mp = match.fetch(++pos).strip();
 					if (mp.length > 0){
 						pi.mount_points.add(new MountEntry(pi,mp,""));
 					}
 
-					pi.model = match.fetch(9).strip();
+					pi.model = match.fetch(++pos).strip();
 
-					pi.read_only = (match.fetch(10).strip() == "1");
+					pi.read_only = (match.fetch(++pos).strip() == "1");
 
-					pi.removable = (match.fetch(11).strip() == "1");
+					pi.removable = (match.fetch(++pos).strip() == "1");
 
-					string txt = match.fetch(12).strip();
+					string txt = match.fetch(++pos).strip();
 					if (txt.contains(":")){
 						pi.major = int.parse(txt.split(":")[0]);
 						pi.minor = int.parse(txt.split(":")[1]);
 					}
 					
 					if (!lsblk_is_ancient){
-						pi.pkname = match.fetch(13).strip();
-						pi.vendor = match.fetch(14).strip();
-						pi.serial = match.fetch(15).strip();
-						pi.revision = match.fetch(16).strip();
+						pi.pkname = match.fetch(++pos).strip();
+						pi.vendor = match.fetch(++pos).strip();
+						pi.serial = match.fetch(++pos).strip();
+						pi.revision = match.fetch(++pos).strip();
 					}
 
 					pi.order = ++index;
