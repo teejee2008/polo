@@ -38,13 +38,13 @@ public class PropertiesWindow : Gtk.Window {
 	private Gtk.Box vbox_main;
 	private Gtk.DrawingArea area_archive;
 	private Gtk.DrawingArea area_fs;
-	private FileItem file_item;
-	private FileItem dir_item;
+	private FileItem? file_item;
+	private FileItem? dir_item;
 	private Device? device;
 	private MediaFile mfile;
 
 	private bool file_is_remote {
-		get { return file_item.file_path.has_prefix(App.rclone_mounts); }
+		get { return (file_item != null) && file_item.file_path.has_prefix(App.rclone_mounts); }
 	}
 
 	private Gtk.Box header_box;
@@ -65,7 +65,25 @@ public class PropertiesWindow : Gtk.Window {
 
 	private signal void file_touched();
 
-	public PropertiesWindow.with_parent(FileItem _file_item, Window parent) {
+	public PropertiesWindow.for_file(FileItem _file_item) {
+
+		file_item = _file_item;
+		dir_item = file_item.is_directory ? file_item : (new FileItem.from_path(file_item.file_location));
+
+		file_item.query_file_info();
+		
+		init_window();
+	}
+
+	public PropertiesWindow.for_device(Device _device) {
+		
+		device = _device;
+
+		init_window();
+	}
+
+	public void init_window () {
+
 		set_transient_for(App.main_window);
 		set_modal(true);
 		//set_type_hint(Gdk.WindowTypeHint.DIALOG); // Do not use; Hides close button on some window managers
@@ -76,20 +94,10 @@ public class PropertiesWindow : Gtk.Window {
 		resizable = true;
 		icon = get_app_icon(16,".svg");
 		title = _("Properties");
-
-		file_item = _file_item;
-		dir_item = file_item.is_directory ? file_item : (new FileItem.from_path(file_item.file_location));
-
-		file_item.query_file_info();
 		
-		init_window();
-	}
-
-	public void init_window () {
-
 		// vbox_main
 		var vbox_main = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		//vbox_main.set_size_request(300, 400);
+		vbox_main.set_size_request(600, 400);
 		add(vbox_main);
 
 		header_box = new Gtk.Box(Orientation.HORIZONTAL, 6);
@@ -112,30 +120,29 @@ public class PropertiesWindow : Gtk.Window {
 
 		switcher.set_stack(stack);
 
+		// hide tabs when showing only device properties
+		bool show_tabs = (device == null);
+		switcher.set_no_show_all(!show_tabs);
+		header_box.set_no_show_all(!show_tabs);
+
 		group_label = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
 		group1_value = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
 		group2_value = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
-
+		
 		init_tab_properties();
 
-		if (!file_is_remote){
-			init_tab_fs();
-		}
+		init_tab_fs();
 
-		if (file_item.perms.length > 0){
-			init_tab_permissions();
-		}
+		init_tab_permissions();
 
-		if (!file_item.is_directory && !file_is_remote){
-			mfile = new MediaFile(file_item.file_path);
-			mfile.query_mediainfo_formatted();
-			init_tab_mediainfo();
-		}
+		init_tab_mediainfo();
 	}
 
 	// properties tab
 
 	private void init_tab_properties(){
+
+		if (file_item == null){ return; }
 
 		log_debug("PropertiesWindow: init_tab_properties()");
 		
@@ -456,23 +463,29 @@ public class PropertiesWindow : Gtk.Window {
 
 	private void init_tab_fs(){
 
-		if ((file_item is FileItemArchive) || (file_item is FileItemCloud)){ return; }
-		
+		if ((file_item != null) && ((file_item is FileItemArchive) || (file_item is FileItemCloud) || file_is_remote)){ return; }
+
 		log_debug("PropertiesWindow: init_tab_fs()");
 		
 		var hbox = new Gtk.Box(Orientation.VERTICAL, 12);
 		hbox.margin = 12;
-		//hbox.margin_bottom = 24;
-		//hbox.margin_right = 24;
 		stack.add_titled (hbox, _("Filesystem"), _("Filesystem"));
 
-		device = Device.get_device_by_path(dir_item.file_path);
-		if (device != null){
-			device = Device.get_device_by_name(device.device);
+		// get device for file_item ---------------------------
+		
+		if ((device == null) && (file_item != null)){
+			
+			device = Device.get_device_by_path(dir_item.file_path);
+			
+			if (device != null){
+				device = Device.get_device_by_name(device.device);
+			}
+			else{
+				log_error("device is NULL: Device.get_device_by_path(%s)".printf(dir_item.file_path));
+			}
 		}
-		else{
-			log_error("device is NULL: Device.get_device_by_path(%s)".printf(dir_item.file_path));
-		}
+
+		// create ui ---------------------------------------------
 
 		var vbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		hbox.add(vbox);
@@ -492,6 +505,8 @@ public class PropertiesWindow : Gtk.Window {
 
 			add_property(vbox, _("Label"), ((device.label.length > 0) ? device.label : _("(empty)")));
 
+			add_property(vbox, _("PartLabel"), ((device.partlabel.length > 0) ? device.partlabel : _("(empty)")));
+
 			add_property(vbox, _("Filesystem"), device.fstype);
 
 			if (device.is_mounted){
@@ -500,32 +515,38 @@ public class PropertiesWindow : Gtk.Window {
 
 			add_property(vbox, _("ReadOnly"), ((device.read_only ? "Yes" : "No")));
 
-
 			var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
 			vbox.add(sep);
 		}
 
-		string txt = "%s (%'ld bytes)".printf(format_file_size(dir_item.filesystem_size), dir_item.filesystem_size);
+		// create tooltip ---------------------------
+
+		string txt = "%s (%'ld bytes)".printf(format_file_size(device.size_bytes), device.size_bytes);
 
 		add_property(vbox, _("Size"), txt);
 
 		txt = "%s (%'ld bytes) (%.0f%%)".printf(
-			format_file_size(dir_item.filesystem_used),
-			dir_item.filesystem_used,
-			(dir_item.filesystem_used * 100.0) / dir_item.filesystem_size);
+			format_file_size(device.used_bytes),
+			device.used_bytes,
+			(device.used_bytes * 100.0) / device.size_bytes);
 
 		add_property(vbox, _("Used"), txt);
 
 		txt = "%s (%'ld bytes) (%.0f%%)".printf(
-			format_file_size(dir_item.filesystem_free),
-			dir_item.filesystem_free,
-			(dir_item.filesystem_free * 100.0) / dir_item.filesystem_size);
+			format_file_size(device.free_bytes),
+			device.free_bytes,
+			(device.free_bytes * 100.0) / device.size_bytes);
 
 		add_property(vbox, _("Available"), txt);
 
-		//ratio bar
+		var dummy = new Gtk.Label("");
+		dummy.vexpand = true;
+		vbox.add(dummy);
+
+		// ratio bar ------------------------------------------
+		
 		var area = new Gtk.DrawingArea();
-		area.set_size_request(-1, 20);
+		area.set_size_request(-1, 30);
 		area.hexpand = true;
 		area.margin_top = 6;
 		area.margin_left = 6;
@@ -538,7 +559,9 @@ public class PropertiesWindow : Gtk.Window {
 
 	private bool area_fs_draw(Cairo.Context context) {
 
-		double used = (dir_item.filesystem_used * 1.0) / dir_item.filesystem_size;
+		if (device == null) { return true; }
+
+		double used = (device.used_bytes * 1.0) / device.size_bytes;
 
 		var color_white = Gdk.RGBA();
 		color_white.parse("white");
@@ -606,14 +629,14 @@ public class PropertiesWindow : Gtk.Window {
 
 	private void init_tab_permissions(){
 
+		if ((file_item == null) || (file_item.perms.length == 0)){ return; }
+			
 		if ((file_item is FileItemArchive) || (file_item is FileItemCloud)){ return; }
 		
 		log_debug("PropertiesWindow: init_tab_permissions()");
 		
 		var vbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		vbox.margin = 12;
-		//hbox.margin_bottom = 24;
-		//vbox.margin_right = 24;
 		stack.add_titled (vbox, _("Permissions"), _("Permissions"));
 
 		var label = new Gtk.Label("<b>%s:</b>".printf(_("Permissions")));
@@ -672,27 +695,6 @@ public class PropertiesWindow : Gtk.Window {
 		add_option(grid, 2, 5, "g", "s", "SGID");
 
 		add_option(grid, 3, 5, "", "t", "Sticky");
-
-		//sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
-		//sep.margin_bottom = 12;
-		//grid.attach(sep, 0, 6, 5, 1);
-
-		/*label = new Gtk.Label("<b>%s:</b>".printf(_("Ownership")));
-		label.set_use_markup(true);
-		label.xalign = 0.0f;
-		label.margin_top = 6;
-		label.margin_bottom = 12;
-		vbox.add(label);*/
-
-
-
-		//add_user_combo(vbox);
-
-		//add_group_combo(vbox);
-
-		//if (App.user_uid != 0){
-			//add_info_bar(vbox);
-		//}
 	}
 
 	private void add_option(Gtk.Grid grid, int col,  int row, string user, string mode_bit, string? text = null){
@@ -1001,14 +1003,16 @@ public class PropertiesWindow : Gtk.Window {
 
 	private void init_tab_mediainfo(){
 
+		if ((file_item == null) || file_item.is_directory || file_is_remote){ return; }
+
 		if ((file_item is FileItemArchive) || (file_item is FileItemCloud)){ return; }
-		
+
 		log_debug("PropertiesWindow: init_tab_mediainfo()");
 		
+		mfile = new MediaFile(file_item.file_path);
+		mfile.query_mediainfo_formatted();
+
 		var vbox = new Gtk.Box(Orientation.VERTICAL, 12);
-		//vbox.margin = 12;
-		//vbox.margin_bottom = 24;
-		//vbox.margin_right = 24;
 		stack.add_titled (vbox, _("MediaInfo"), _("MediaInfo"));
 
 		//tv_info

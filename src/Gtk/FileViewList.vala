@@ -4818,7 +4818,7 @@ public class FileViewList : Gtk.Box {
 		if (get_selected_items().size > 0){
 			item = get_selected_items()[0];
 		}
-		var win = new PropertiesWindow.with_parent(item, window);
+		var win = new PropertiesWindow.for_file(item);
 		win.show_all();
 	}
 

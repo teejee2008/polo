@@ -78,6 +78,8 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		add_unmount();
 		
+		gtk_menu_add_separator(this);
+		
 		if (App.tool_exists("gnome-disks")) {
 			
 			add_manage();
@@ -91,7 +93,9 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		//add_flush();
 
-		//gtk_menu_add_separator(this);
+		gtk_menu_add_separator(this);
+
+		add_properties();
 
 		show_all();
 	}
@@ -297,6 +301,29 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 			if (parent_popup != null){
 				parent_popup.hide();
 			}
+		});
+
+		item.sensitive = (device.type != "loop");
+	}
+
+	private void add_properties(){
+
+		log_debug("DeviceContextMenu: add_properties()");
+
+		// item  ------------------
+
+		var item = gtk_menu_add_item(
+			this,
+			_("Properties"),
+			_("Show device properties"),
+			null,
+			sg_icon,
+			sg_label);
+
+		item.activate.connect (() => {
+			var win = new PropertiesWindow.for_device(device);
+			log_msg("111");
+			win.show_all();
 		});
 
 		item.sensitive = (device.type != "loop");
