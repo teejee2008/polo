@@ -1076,7 +1076,7 @@ public class FileContextMenu : Gtk.Menu {
 		var menu_item = gtk_menu_add_item(
 			menu,
 			_("Compare"),//TODO: show dialog for selecting second file
-			_("Compare file with file of same name in opposite pane"),
+			_("Compare text file with another text file in opposite pane having same file name"),
 			IconManager.lookup_image("compare",16),
 			sg_icon,
 			sg_label);
