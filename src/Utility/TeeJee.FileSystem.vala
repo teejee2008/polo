@@ -755,14 +755,14 @@ namespace TeeJee.FileSystem{
 				
 			log_debug(cmd);
 
-			int status = exec_sync(cmd);
+			string std_out, std_err;
+			int status = exec_sync(cmd, out std_out, out std_err);
 
 			cmd = "stat --printf '%%h' '%s'".printf(
 				escape_single_quote(test_file));
 
 			log_debug(cmd);
 			
-			string std_out, std_err;
 			status = exec_sync(cmd, out std_out, out std_err);
 			log_debug("stdout: %s".printf(std_out));
 			

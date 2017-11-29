@@ -286,10 +286,17 @@ public class TrashCan : FileItem {
 	}
 
 	public static bool empty_trash(){
+		
 		if (cmd_exists("gvfs-trash")){
-			int status = exec_sync("gvfs-trash --empty");
+			
+			string cmd = "gvfs-trash --empty";
+			
+			string std_out, std_err;
+			int status = exec_sync(cmd, out std_out, out std_err);
+			
 			return (status == 0);
 		}
+		
 		return false;
 	}
 }

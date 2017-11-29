@@ -57,10 +57,6 @@ namespace TeeJee.Logging{
 			msg += "\033[0m";
 		}
 
-		if (highlight){
-			msg += " %s".printf(string.nfill(20, '-'));
-		}
-
 		msg += "\n";
 
 		stdout.printf (msg);

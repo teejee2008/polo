@@ -60,8 +60,6 @@ namespace TeeJee.System{
 
 		// returns actual user id of current user (even for applications executed with sudo and pkexec)
 		
-		//int user_id = -1;
-
 		string pkexec_uid = GLib.Environment.get_variable("PKEXEC_UID");
 
 		if (pkexec_uid != null){

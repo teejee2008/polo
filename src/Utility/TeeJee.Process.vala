@@ -55,7 +55,7 @@ namespace TeeJee.ProcessHelper{
 		return temp;
 	}
 	
-	public int exec_sync (string cmd, out string? std_out = null, out string? std_err = null){
+	public int exec_sync (string cmd, out string? std_out, out string? std_err){
 
 		/* Executes single command synchronously.
 		 * Pipes and multiple commands are not supported.
