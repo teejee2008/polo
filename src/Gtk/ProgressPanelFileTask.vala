@@ -52,7 +52,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 	private Gee.HashMap<string, FileConflictItem> conflicts;
 
 	private int64 copied_bytes = 0;
-	private int stalled_counter_limit = 10 * (1000 / 200);
+	private const int stalled_counter_limit = 10 * (1000 / 200);
 	private int stalled_counter = (int) stalled_counter_limit;
 	private bool stalled_warning_shown = false;
 		

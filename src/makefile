@@ -24,8 +24,9 @@ endif
 
 define_symbols=$(shell { echo "${vte_symbols} ${gtk3_symbols}"; } )
 
-all:
-	#build binaries
+all: app-gtk app-translations
+
+app-gtk:
 
 	#polo-gtk
 	valac -X -D'GETTEXT_PACKAGE="${app_name}"' \
@@ -44,7 +45,9 @@ all:
 	#gtk3-version-polo
 	valac "gtk3-version.vala" -o gtk3-version-polo --pkg gtk+-3.0
 
-	#update translation template
+app-translations:
+
+	# update translation template
 	xgettext --language=C --keyword=_ \
 		--copyright-holder='Tony George (teejeetech@gmail.com)' \
 		--package-name='${app_name}' \
@@ -58,6 +61,13 @@ all:
 		Gtk/*.vala \
 		Utility/*.vala \
 		Utility/Gtk/*.vala
+
+	# update translation files
+	for lang in de nl fr; do \
+		msgmerge --update -v ../po/${app_name}-$$lang.po ../${app_name}.pot ; \
+	done
+	
+	# am ar az bg ca cs da de el en_GB es et eu fr he hi hr hu ia id is it ko lt nb ne nl pl pt pt_BR ro ru sk sr sv tr uk vi zh_CN
 		
 clean:
 	rm -rfv ../release/{source,i386,amd64,armel,armhf}
@@ -96,14 +106,11 @@ install:
 	# appdata
 	install -m 0755 ../debian/${app_name}-gtk.appdata.xml "$(DESTDIR)$(sharedir)/appdata"
 
-	#translations
-	mkdir -p "$(DESTDIR)$(localedir)/de/LC_MESSAGES"
-	mkdir -p "$(DESTDIR)$(localedir)/nl/LC_MESSAGES"
-	mkdir -p "$(DESTDIR)$(localedir)/fr/LC_MESSAGES"
-	
-	msgfmt --check --verbose -o "$(DESTDIR)$(localedir)/de/LC_MESSAGES/${app_name}.mo" ../po/${app_name}-de.po
-	msgfmt --check --verbose -o "$(DESTDIR)$(localedir)/nl/LC_MESSAGES/${app_name}.mo" ../po/${app_name}-nl.po
-	msgfmt --check --verbose -o "$(DESTDIR)$(localedir)/fr/LC_MESSAGES/${app_name}.mo" ../po/${app_name}-fr.po
+	# translations
+	for lang in de nl fr; do \
+		mkdir -p "$(DESTDIR)$(localedir)/$$lang/LC_MESSAGES"; \
+		msgfmt --check --verbose -o "$(DESTDIR)$(localedir)/$$lang/LC_MESSAGES/${app_name}.mo" ../po/${app_name}-$$lang.po ; \
+	done
 	
 uninstall:
 
