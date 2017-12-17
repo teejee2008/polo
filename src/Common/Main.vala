@@ -127,13 +127,10 @@ public class Main : GLib.Object {
 
 	public string rclone_mounts = "";
 
-	//public ArchiveTask archive_task;
-	//public DesktopApp crunchy_app;
-	//public Gee.ArrayList<MimeType> mimetype_list;
 	public Json.Object appconfig;
 	public Bash bash_admin_shell;
 
-	public string shell_default = "bash";
+	public string shell_default = "fish";
 
 	public AppMode app_mode = AppMode.OPEN;
 	public Gee.ArrayList<string> cmd_files;
