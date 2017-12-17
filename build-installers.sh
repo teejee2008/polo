@@ -33,11 +33,11 @@ echo "--------------------------------------------------------------------------
 
 rm -rfv release/${arch}/${pkg_name}*.* # remove source files created by pbuilder
 cp -pv --no-preserve=ownership release/sanity.config release/${arch}/sanity.config
-sanity --generate --base-path release/${arch} --out-path release --arch ${arch}
+sanity --generate --base-path release/${arch} --out-path release --arch ${arch} --xz
 
 if [ $? -ne 0 ]; then cd "$backup"; echo "Failed"; exit 1; fi
 
-mv -v release/*${arch}.run release/${pkg_name}-v${pkg_version}-${arch}.run 
+mv -v release/*${arch}.run release/${pkg_name}-v${pkg_version}-${arch}.run
 
 echo "--------------------------------------------------------------------------"
 
