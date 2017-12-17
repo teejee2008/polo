@@ -28,8 +28,13 @@ sudo mount devpts "$path/dev/pts" -t devpts   -o mode=0620,gid=5,nosuid,noexec
 sudo mount shm    "$path/dev/shm" -t tmpfs    -o mode=1777,nosuid,nodev
 sudo mount run    "$path/run"     -t tmpfs    -o nosuid,nodev,mode=0755
 sudo mount tmp    "$path/tmp"     -t tmpfs    -o mode=1777,strictatime,nodev,nosuid
+
 #sudo cp -vfL /etc/resolv.conf "$path/etc/resolv.conf" # -L not working
-sudo rsync -avhL --include=resolv.conf --exclude="*" "/etc/" "$path/etc/"
+#sudo rsync -avhL --include=resolv.conf --exclude="*" "/etc/" "$path/etc/"
+
+timestamp=$(date "+%Y%m%d-%H%M%S")
+sudo mv -vf "$path/etc/resolv.conf" "$path/etc/resolv.conf.bkup-$timestamp"
+sudo cp -vfL /etc/resolv.conf "$path/etc/resolv.conf"
 
 xhost +local: 
 tput reset
@@ -50,6 +55,9 @@ sudo chroot "$path" /bin/bash -c "export DISPLAY=$DISPLAY"
 sudo chroot "$path"
 
 sync
+
+sudo rm -vf "$path/etc/resolv.conf"
+sudo mv -vf "$path/etc/resolv.conf.bkup-$timestamp" "$path/etc/resolv.conf"
 
 sudo umount --lazy --force --recursive "$path/dev"
 sudo umount --lazy --force --recursive "$path/run"
