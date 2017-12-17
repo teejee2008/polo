@@ -4915,42 +4915,76 @@ public class FileViewList : Gtk.Box {
 		}
 	}
 
-	public void compare_diffuse(){
+	public void compare_diffuse_opposite(){
 
 		log_debug("FileViewList: compare_diffuse()");
 		
 		var selected_items = get_selected_items();
 		if (selected_items.size == 0){ return; }
 
-		log_debug("check_diffuse(): enter");
-		
 		if (!check_diffuse()){ return; }
-
-		log_debug("check_diffuse(): ok");
 
 		err_log_clear();
 
-		if (panel.opposite_pane == null){
-			log_debug("panel.opposite_pane is null");
-		}
-		else{
-			log_debug("panel.opposite_pane: ok");
-		}
-
 		var view2 = panel.opposite_pane.view;
+		
+		var file1 = selected_items[0];
 
-		if (view2 == null){
-			log_debug("view2 is null");
+		if (view2.current_item.children.has_key(file1.file_name)){
+			
+			var file2 = view2.current_item.children[file1.file_name];
+
+			compare_diffuse(file1, file2);
 		}
 		else{
-			log_debug("view2: ok");
+			string txt = _("File Not Found");
+			string msg = "%s:\n\n%s".printf(_("Could not find file in opposite pane"), file1.file_name);
+			gtk_messagebox(txt, msg, window, true);
+			return;
 		}
+	}
+
+	public void compare_diffuse_select_second(){
+
+		log_debug("FileViewList: compare_diffuse_select_second()");
+		
+		var selected_items = get_selected_items();
+		if (selected_items.size == 0){ return; }
+
+		if (!check_diffuse()){ return; }
+
+		err_log_clear();
 
 		var file1 = selected_items[0];
-		if (view2.current_item.children.has_key(file1.file_name)){
-			var file2 = view2.current_item.children[file1.file_name];
-			Posix.system("diffuse '%s' '%s'".printf(escape_single_quote(file1.file_path), escape_single_quote(file2.file_path)));
+
+		var list = gtk_select_files(window, true, false, null, null, "", "");
+		if (list.size == 0){ return; }
+
+		var file2 = new FileItem.from_path(list[0]);
+		
+		compare_diffuse(file1, file2);
+	}
+	
+	public void compare_diffuse(FileItem file1, FileItem file2){
+
+		string txt, msg;
+		
+		if (!file_is_regular(file1.file_path)){
+			
+			txt = _("Not Supported");
+			msg = "%s:\n\n> %s".printf(_("Selected item is not a text file"), file1.file_name);
+			gtk_messagebox(txt, msg, window, true);
+			return;
 		}
+
+		if (!file_is_regular(file2.file_path)){
+			txt = _("Not Supported");
+			msg = "%s:\n\n> %s".printf(_("Selected item is not a text file"), file2.file_name);
+			gtk_messagebox(txt, msg, window, true);
+			return;
+		}
+		
+		Posix.system("diffuse '%s' '%s'".printf(escape_single_quote(file1.file_path), escape_single_quote(file2.file_path)));
 	}
 	
 	// ISO ---------------------------------------

@@ -994,8 +994,6 @@ public class FileContextMenu : Gtk.Menu {
 			&& (!selected_item.is_trashed_item || ((selected_item.parent != null) && selected_item.parent.is_trash));
 	}
 
-
-
 	private void add_run_in_terminal(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
 		if (selected_item == null){ return; }
@@ -1019,7 +1017,6 @@ public class FileContextMenu : Gtk.Menu {
 			view.run_in_terminal();
 		});
 	}
-
 
 	private void add_trash_open_original_location(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
@@ -1066,8 +1063,41 @@ public class FileContextMenu : Gtk.Menu {
 
 		menu_item.sensitive = (selected_items.size == 1) && selected_item.can_rename && view.current_item.is_trash;
 	}
-	
+
+
 	private void add_file_compare(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		log_debug("FileContextMenu: add_compare()");
+
+		if (selected_item == null){ return; }
+
+		// ... -------------------------
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Compare"),
+			_("Compare text files side-by-side"),
+			IconManager.lookup_image("compare",16),
+			sg_icon,
+			sg_label);
+
+		menu_item.sensitive = (selected_items.size > 0) || (window.pending_action != null);
+
+		var sub_menu = new Gtk.Menu();
+		sub_menu.reserve_toggle_size = false;
+		menu_item.submenu = sub_menu;
+
+		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		var sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+
+		// items ------------------------------
+
+		add_file_compare_opposite(sub_menu, sg_icon_sub, sg_label_sub);
+
+		add_file_compare_select_second(sub_menu, sg_icon_sub, sg_label_sub);
+	}
+	
+	private void add_file_compare_opposite(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
 		log_debug("FileContextMenu: add_file_compare()");
 
@@ -1075,17 +1105,35 @@ public class FileContextMenu : Gtk.Menu {
 
 		var menu_item = gtk_menu_add_item(
 			menu,
-			_("Compare"),//TODO: show dialog for selecting second file
-			_("Compare text file with another text file in opposite pane having same file name"),
-			IconManager.lookup_image("compare",16),
+			_("To File in Opposite Pane"),//TODO: show dialog for selecting second file
+			_("Compare text file with file in opposite pane"),
+			null,
 			sg_icon,
 			sg_label);
 
 		menu_item.activate.connect (() => {
-			view.compare_diffuse();
+			view.compare_diffuse_opposite();
 		});
 	}
 
+	private void add_file_compare_select_second(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		log_debug("FileContextMenu: add_file_compare_select_second()");
+
+		// compare with Diffuse --------------------------
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Select Second File..."),
+			_("Select second file for compare"),
+			null,
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			view.compare_diffuse_select_second();
+		});
+	}
 
 	private void add_actions(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 

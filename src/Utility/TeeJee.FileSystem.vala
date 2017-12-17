@@ -155,16 +155,96 @@ namespace TeeJee.FileSystem{
 		return item.query_exists();
 	}
 	
-	public bool file_exists (string file_path){
-		/* Check if file exists */
-		return (FileUtils.test(file_path, GLib.FileTest.EXISTS)
-			&& !FileUtils.test(file_path, GLib.FileTest.IS_DIR));
+	public bool file_exists(string item_path){
+		
+		/* check if item exists on disk*/
+
+		var item = File.parse_name(item_path);
+		return item.query_exists();
+	}
+	
+	public bool file_is_dir(string file_path){
+
+		try {
+			var file = File.new_for_path (file_path);
+			
+			if (file.query_exists()) {
+
+				var info = file.query_info("%s".printf(FileAttribute.STANDARD_TYPE),0); // follow symlinks
+
+				var file_type = info.get_file_type();
+
+				return (file_type == FileType.DIRECTORY);
+			}
+		}
+		catch (Error e) {
+	        log_error (e.message);
+	    }
+	    
+		return false;
 	}
 
-	public bool file_exists_regular (string file_path){
-		/* Check if file exists */
-		return ( FileUtils.test(file_path, GLib.FileTest.EXISTS)
-		&& FileUtils.test(file_path, GLib.FileTest.IS_REGULAR));
+	public bool file_is_regular(string file_path){
+
+		try {
+			var file = File.new_for_path (file_path);
+			
+			if (file.query_exists()) {
+
+				var info = file.query_info("%s".printf(FileAttribute.STANDARD_TYPE),0); // follow symlinks
+
+				var file_type = info.get_file_type();
+
+				return (file_type == FileType.REGULAR);
+			}
+		}
+		catch (Error e) {
+	        log_error (e.message);
+	    }
+	    
+		return false;
+	}
+
+	public bool file_is_special(string file_path){
+
+		try {
+			var file = File.new_for_path (file_path);
+			
+			if (file.query_exists()) {
+
+				var info = file.query_info("%s".printf(FileAttribute.STANDARD_TYPE), 0); // follow symlinks
+
+				var file_type = info.get_file_type();
+
+				return (file_type != FileType.REGULAR) && (file_type != FileType.DIRECTORY);
+			}
+		}
+		catch (Error e) {
+	        log_error (e.message);
+	    }
+	    
+		return false;
+	}
+
+	public bool file_is_symlink(string file_path){
+
+		try {
+			var file = File.new_for_path (file_path);
+			
+			if (file.query_exists()) {
+
+				var info = file.query_info("%s".printf(FileAttribute.STANDARD_TYPE), FileQueryInfoFlags.NOFOLLOW_SYMLINKS); // don't follow symlinks
+
+				var file_type = info.get_file_type();
+
+				return (file_type == FileType.SYMBOLIC_LINK);
+			}
+		}
+		catch (Error e) {
+	        log_error (e.message);
+	    }
+	    
+		return false;
 	}
 
 	public bool file_delete(string file_path, Gtk.Window? window = null, out string error_msg = null){
