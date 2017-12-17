@@ -1071,6 +1071,10 @@ public class FileContextMenu : Gtk.Menu {
 
 		if (selected_item == null){ return; }
 
+		if (selected_items.size > 1){ return; }
+
+		if (!file_is_regular(selected_item.file_path)){ return; }
+
 		// ... -------------------------
 
 		var menu_item = gtk_menu_add_item(
@@ -1105,7 +1109,7 @@ public class FileContextMenu : Gtk.Menu {
 
 		var menu_item = gtk_menu_add_item(
 			menu,
-			_("To File in Opposite Pane"),//TODO: show dialog for selecting second file
+			_("To '%s' in Opposite Pane").printf(selected_item.file_name_ellipsized),//TODO: show dialog for selecting second file
 			_("Compare text file with file in opposite pane"),
 			null,
 			sg_icon,
