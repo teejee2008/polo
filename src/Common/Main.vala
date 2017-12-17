@@ -131,6 +131,7 @@ public class Main : GLib.Object {
 	public Bash bash_admin_shell;
 
 	public string shell_default = "fish";
+	public string compare_default = "bcompare";
 
 	public AppMode app_mode = AppMode.OPEN;
 	public Gee.ArrayList<string> cmd_files;

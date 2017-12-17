@@ -1099,7 +1099,7 @@ public class FileContextMenu : Gtk.Menu {
 	
 	private void add_file_compare_opposite(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
-		log_debug("FileContextMenu: add_file_compare()");
+		log_debug("FileContextMenu: add_file_compare_opposite()");
 
 		// compare with Diffuse --------------------------
 
@@ -1112,7 +1112,7 @@ public class FileContextMenu : Gtk.Menu {
 			sg_label);
 
 		menu_item.activate.connect (() => {
-			view.compare_diffuse_opposite();
+			view.compare_files_opposite();
 		});
 	}
 
@@ -1131,7 +1131,7 @@ public class FileContextMenu : Gtk.Menu {
 			sg_label);
 
 		menu_item.activate.connect (() => {
-			view.compare_diffuse_select_second();
+			view.compare_files_select_second();
 		});
 	}
 

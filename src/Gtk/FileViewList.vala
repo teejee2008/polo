@@ -4915,14 +4915,12 @@ public class FileViewList : Gtk.Box {
 		}
 	}
 
-	public void compare_diffuse_opposite(){
+	public void compare_files_opposite(){
 
-		log_debug("FileViewList: compare_diffuse()");
+		log_debug("FileViewList: compare_files_opposite()");
 		
 		var selected_items = get_selected_items();
 		if (selected_items.size == 0){ return; }
-
-		if (!check_diffuse()){ return; }
 
 		err_log_clear();
 
@@ -4934,7 +4932,7 @@ public class FileViewList : Gtk.Box {
 			
 			var file2 = view2.current_item.children[file1.file_name];
 
-			compare_diffuse(file1, file2);
+			compare_files(file1, file2);
 		}
 		else{
 			string txt = _("File Not Found");
@@ -4944,14 +4942,12 @@ public class FileViewList : Gtk.Box {
 		}
 	}
 
-	public void compare_diffuse_select_second(){
+	public void compare_files_select_second(){
 
-		log_debug("FileViewList: compare_diffuse_select_second()");
+		log_debug("FileViewList: compare_files_select_second()");
 		
 		var selected_items = get_selected_items();
 		if (selected_items.size == 0){ return; }
-
-		if (!check_diffuse()){ return; }
 
 		err_log_clear();
 
@@ -4962,12 +4958,14 @@ public class FileViewList : Gtk.Box {
 
 		var file2 = new FileItem.from_path(list[0]);
 		
-		compare_diffuse(file1, file2);
+		compare_files(file1, file2);
 	}
 	
-	public void compare_diffuse(FileItem file1, FileItem file2){
+	public void compare_files(FileItem file1, FileItem file2){
 
-		string txt, msg;
+		log_debug("FileViewList: compare_files()");
+		
+		string txt, msg, cmd;
 		
 		if (!file_is_regular(file1.file_path)){
 			
@@ -4983,8 +4981,22 @@ public class FileViewList : Gtk.Box {
 			gtk_messagebox(txt, msg, window, true);
 			return;
 		}
-		
-		Posix.system("diffuse '%s' '%s'".printf(escape_single_quote(file1.file_path), escape_single_quote(file2.file_path)));
+
+		if ((App.compare_default == "bcompare") && cmd_exists("bcompare")){
+			cmd = "bcompare '%s' '%s'".printf(escape_single_quote(file1.file_path), escape_single_quote(file2.file_path));
+			log_debug(cmd);
+			exec_script_async(cmd);
+			return;
+		}
+
+		if (cmd_exists("diffuse")){
+			cmd = "diffuse '%s' '%s'".printf(escape_single_quote(file1.file_path), escape_single_quote(file2.file_path));
+			log_debug(cmd);
+			exec_script_async(cmd);
+			return;
+		}
+
+		check_diffuse(); // show message for installing diffuse
 	}
 	
 	// ISO ---------------------------------------
@@ -5629,6 +5641,10 @@ public class FileViewList : Gtk.Box {
 
 	private bool check_diffuse(){
 		return check_tool("diffuse");
+	}
+
+	private bool check_bcompare(){
+		return check_tool("bcompare");
 	}
 
 	private bool check_ghostscript(){
