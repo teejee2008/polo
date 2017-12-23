@@ -2572,6 +2572,8 @@ public class FileViewList : Gtk.Box {
 			log_error (e.message);
 		}
 
+		sleep(100);
+
 		int elapsed = 0;
 		bool overlay_added = false;
 		while (query_items_thread_running){
