@@ -35,7 +35,7 @@ using TeeJee.Misc;
 
 public class ProgressWindow : Window {
 	
-	private Gtk.Box vbox_main;
+	/*private Gtk.Box vbox_main;
 	
 	private uint timerID = 0;
 	private double progress_prev;
@@ -53,7 +53,7 @@ public class ProgressWindow : Window {
 	private int def_width = 460;
 	private uint tmr_init = 0;
 	private uint tmr_task = 0;
-	private bool task_is_running = false;
+	private bool task_is_running = false;*/
 
 	//public ProgressWindow() {
 	//	destroy.connect(Gtk.main_quit);

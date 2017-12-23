@@ -36,10 +36,10 @@ using TeeJee.Misc;
 public class MiddleToolbar : Gtk.Toolbar, IPaneActive {
 
 	private int icon_size_actual = 16;
-	private Gtk.Menu menu_history;
-	private Gtk.Menu menu_disk;     
-	private Gtk.Menu menu_bookmark;
-	private Gtk.Menu menu_layout; 
+	//private Gtk.Menu menu_history;
+	//private Gtk.Menu menu_disk;     
+	//private Gtk.Menu menu_bookmark;
+	//private Gtk.Menu menu_layout; 
 	public bool is_global = true;
 
 	private Gtk.ToolButton btn_cut;
@@ -550,7 +550,7 @@ public class MiddleToolbar : Gtk.Toolbar, IPaneActive {
 			this.sensitive = true;
 		}
 
-		var list = view.get_selected_items();
+		//var list = view.get_selected_items();
 
 		btn_cut.sensitive = view.can_cut;
 		btn_copy.sensitive =  view.can_copy;

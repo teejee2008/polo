@@ -124,9 +124,9 @@ public class FileViewList : Gtk.Box {
 	public signal void changed();
 
 	// helper
-	private Gtk.Image video_image;
-	private FileItem video_item;
-	private bool video_thumb_cycling_in_progress = false;
+	//private Gtk.Image video_image;
+	//private FileItem video_item;
+	//private bool video_thumb_cycling_in_progress = false;
 
 	// contructor ------------------
 
@@ -621,8 +621,8 @@ public class FileViewList : Gtk.Box {
 			if (current_item == null) { return false; }
 
 			TreePath? path;
-			TreeViewColumn? column;
-			int cell_x, cell_y;
+			//TreeViewColumn? column;
+			//int cell_x, cell_y;
 			path = iconview.get_path_at_pos((int) event.x, (int) event.y);
 			
 			if (!iconview.path_is_selected(path)){
@@ -1865,10 +1865,10 @@ public class FileViewList : Gtk.Box {
 		iconview.key_press_event.connect(on_key_press_event);
 	}
 
-	private void disconnect_key_press_handler(){
+	/*private void disconnect_key_press_handler(){
 		treeview.key_press_event.disconnect(on_key_press_event);
 		iconview.key_press_event.disconnect(on_key_press_event);
-	}
+	}*/
 	
 	private bool on_key_press_event(Gdk.EventKey event){
 
@@ -1957,7 +1957,7 @@ public class FileViewList : Gtk.Box {
 		paste();
     }
 
-	private void set_as_drag_source(bool set_dnd){
+	/*private void set_as_drag_source(bool set_dnd){
 		if (set_dnd){
 			Gtk.drag_source_set(treeview, Gdk.ModifierType.BUTTON1_MASK, MainWindow.drop_target_types, Gdk.DragAction.COPY);
 		}
@@ -1973,7 +1973,7 @@ public class FileViewList : Gtk.Box {
 		else{
 			Gtk.drag_dest_unset(treeview);
 		}
-	}
+	}*/
 
 	// properties -----------------------------
 
@@ -3505,7 +3505,7 @@ public class FileViewList : Gtk.Box {
 
 	// cycle video thumbnails --------------------
 
-	private void start_thumbnail_cycler(){
+	/*private void start_thumbnail_cycler(){
 		return;
 		if (!video_thumb_cycling_in_progress){
 			try {
@@ -3564,7 +3564,7 @@ public class FileViewList : Gtk.Box {
 		video_thumb_cycling_in_progress = false;
 
 		log_debug("finished cycle_thumbnail_images_thread");
-	}
+	}*/
 
 	// history ------------------------------
 
@@ -3996,7 +3996,7 @@ public class FileViewList : Gtk.Box {
 		});
 	}
 
-	private void open_archive_item_finish(FileItemArchive item){
+	/*private void open_archive_item_finish(FileItemArchive item){
 		
 		string outpath = item.extraction_path; 
 		log_debug("outpath: %s".printf(outpath));
@@ -4019,7 +4019,7 @@ public class FileViewList : Gtk.Box {
 			set_view_item(item); 
 			//} 
 		}
-	}
+	}*/
 	
 	public void set_default_app(FileItem item, DesktopApp? app){
 
@@ -5093,7 +5093,7 @@ public class FileViewList : Gtk.Box {
 		
 		err_log_clear();
 
-		var win = new KvmCreateDiskWindow(KvmTaskType.CREATE_DISK, window, current_item.file_path, "", "", "");
+		new KvmCreateDiskWindow(KvmTaskType.CREATE_DISK, window, current_item.file_path, "", "", "");
 	}
 
 	public void kvm_create_derived_disk(){
@@ -5104,7 +5104,7 @@ public class FileViewList : Gtk.Box {
 		if (selected_items.size == 0){ return; }
 		var item = selected_items[0];
 
-		var win = new KvmCreateDiskWindow(KvmTaskType.CREATE_DISK_DERIVED, window, current_item.file_path, item.file_path, "", "");
+		new KvmCreateDiskWindow(KvmTaskType.CREATE_DISK_DERIVED, window, current_item.file_path, item.file_path, "", "");
 	}
 
 	public void kvm_create_merged_disk(){
@@ -5115,7 +5115,7 @@ public class FileViewList : Gtk.Box {
 		if (selected_items.size == 0){ return; }
 		var item = selected_items[0];
 
-		var win = new KvmCreateDiskWindow(KvmTaskType.CONVERT_MERGE, window, current_item.file_path, "", item.file_path, "");
+		new KvmCreateDiskWindow(KvmTaskType.CONVERT_MERGE, window, current_item.file_path, "", item.file_path, "");
 	}
 
 	public void kvm_convert_disk(string disk_format){
@@ -5126,7 +5126,7 @@ public class FileViewList : Gtk.Box {
 		if (selected_items.size == 0){ return; }
 		var item = selected_items[0];
 		
-		var win = new KvmCreateDiskWindow(KvmTaskType.CONVERT_DISK, window, current_item.file_path, item.file_path, "", disk_format);
+		new KvmCreateDiskWindow(KvmTaskType.CONVERT_DISK, window, current_item.file_path, item.file_path, "", disk_format);
 	}
 	
 	public void kvm_boot_disk(){
@@ -5645,17 +5645,17 @@ public class FileViewList : Gtk.Box {
 		return check_tool("diffuse");
 	}
 
-	private bool check_bcompare(){
+	/*private bool check_bcompare(){
 		return check_tool("bcompare");
-	}
+	}*/
 
 	private bool check_ghostscript(){
 		return check_tool("gs");
 	}
 	
-	private bool check_imagemagick(){
+	/*private bool check_imagemagick(){
 		return check_tool("convert");
-	}
+	}*/
 
 	private bool check_youtube_dl(){
 		return check_tool("youtube-dl");
@@ -5999,9 +5999,9 @@ public class FileViewList : Gtk.Box {
 
 			action.task_complete.connect(()=>{
 
-				var arch = ((FileItemArchive) current_item).archive_base_item;
+				//var arch = ((FileItemArchive) current_item).archive_base_item;
 
-				string src_path = path_combine(arch.extraction_path, current_item.file_path);
+				//string src_path = path_combine(arch.extraction_path, current_item.file_path);
 				
 			});
 		}
@@ -6086,7 +6086,7 @@ public class FileViewList : Gtk.Box {
 
 	// columns menu
 
-	private bool menu_columns_popup (Gdk.EventButton? event) {
+	/*private bool menu_columns_popup (Gdk.EventButton? event) {
 
 		var menu_columns = build_menu_columns();
 
@@ -6097,11 +6097,11 @@ public class FileViewList : Gtk.Box {
 		}
 
 		return true;
-	}
+	}*/
 
-	private Gtk.Menu build_menu_columns(){
-		var menu = new Gtk.Menu();
-		menu.reserve_toggle_size = false;
+	//private Gtk.Menu build_menu_columns(){
+		//var menu = new Gtk.Menu();
+		//menu.reserve_toggle_size = false;
 		//menu_columns = menu;
 
 		/*foreach(var col in column_list){
@@ -6134,11 +6134,11 @@ public class FileViewList : Gtk.Box {
 			});
 		}*/
 
-		menu.show_all();
+		//menu.show_all();
 
-		return menu;
+		//return menu;
 		//menu_item_columns.set_submenu(menu);
-	}
+	//}
 
 }
 

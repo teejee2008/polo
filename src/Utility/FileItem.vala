@@ -1252,7 +1252,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 		//item.display_path = path_combine(this.display_path, item_name);
 
-		bool item_was_queried = item.fileinfo_queried;
+		//bool item_was_queried = item.fileinfo_queried;
 		
 		// query file properties ------------
 		
@@ -1643,7 +1643,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 
 		if (!file.query_exists()) {
-			log_error("FileItem: query_children(): file not found: %s".printf(file_path), true);
+			log_error("FileItem: query_children(): file not found: %s".printf(file_path));
 			query_children_running = false;
 			query_children_pending = false;
 			return;

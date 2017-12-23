@@ -161,7 +161,6 @@ public class DevicesMenu : Gtk.Menu, IPaneActive {
 
 				// unlock
 				if (dev.fstype.contains("luks")){
-					string message, details;
 					var unlocked_device = Device.luks_unlock(dev, "", "", pane.window);
 					if (unlocked_device == null){
 						gtk_set_busy(false, pane.window);

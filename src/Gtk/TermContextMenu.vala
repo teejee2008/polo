@@ -55,8 +55,8 @@ public class TermContextMenu : Gtk.Menu {
 	
 	private Gee.ArrayList<FileItem> selected_items;
 	private FileItem? selected_item = null;
-	private bool is_trash = false;
-	private bool is_archive = false;
+	//private bool is_trash = false;
+	//private bool is_archive = false;
 
 	public TermContextMenu(FileViewPane parent_pane){
 		
@@ -347,8 +347,8 @@ public class TermContextMenu : Gtk.Menu {
 		
 		if (dlg.run() == Gtk.ResponseType.OK) {
 			
-			string alpha = dlg.use_alpha.to_string();
-			string col = dlg.rgba.to_string();
+			//string alpha = dlg.use_alpha.to_string();
+			//string col = dlg.rgba.to_string();
 			
 			color_hex = rgba_to_hex(dlg.rgba, false, true);
 

@@ -1993,7 +1993,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 
 	// action buttons --------------------------------------------------
 
-	private void init_tooltip_messages() {
+	//private void init_tooltip_messages() {
 		/*string tt_method = _("<b>Compression Method</b>\n\n<b>Store</b> - Store files without compression\n\n<b>LZMA</b> - Good compression and very fast decompression\n\n<b>LZMA2</b> - Modified version of LZMA with better compression ratio for partially-compressible data, and better multi-threading support\n\n<b>PPMd</b> - Very good compression for text files (better than LZMA)\n\n<b>Deflate</b> - Very fast compression and decompression");
 		//lbl_method.set_tooltip_markup(tt_method);
 		//cmb_method.set_tooltip_markup(tt_method);
@@ -2004,7 +2004,7 @@ public class CreateArchiveWindow : Gtk.Dialog {
 		string tt_encrypt_headers = _("Archive header will be also encrypted (if supported by format)");
 		//chk_encrypt_header.set_tooltip_markup(tt_encrypt_headers);
 		* */
-	}
+	//}
 
 	private void init_action_area() {
 

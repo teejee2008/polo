@@ -50,8 +50,8 @@ public class GtkBookmark : GLib.Object {
 	
 	public static Gee.ArrayList<GtkBookmark> bookmarks = new Gee.ArrayList<GtkBookmark>();
 
-	private static const string gtk_template = "%s/.config/gtk-3.0/bookmarks";
-	private static const string custom_template = "%s/.config/%s-bookmarks";
+	private const string gtk_template = "%s/.config/gtk-3.0/bookmarks";
+	private const string custom_template = "%s/.config/%s-bookmarks";
 	private static string config_file;
 	
 	// constructors
@@ -202,7 +202,7 @@ public class GtkBookmark : GLib.Object {
 
 		return false;
 	}
-	
+
 	// instance methods
 
 	public bool exists(){

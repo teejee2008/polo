@@ -37,7 +37,7 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 
 	private Gtk.Menu? menu = null;
 	private bool menu_mode = false;
-	private bool refreshed_once = false;
+	//private bool refreshed_once = false;
 	private Gtk.CheckMenuItem chk_hidden;
 
 	public signal void context_term();
@@ -109,7 +109,7 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		
 		uint accel_key;
 		Gdk.ModifierType accel_mods;
-		var accel_flags = Gtk.AccelFlags.VISIBLE;
+		//var accel_flags = Gtk.AccelFlags.VISIBLE;
 		Gtk.accelerator_parse(keycode, out accel_key, out accel_mods);
 		item.remove_accelerator (Hotkeys.accel_group, accel_key, accel_mods);
 		
@@ -380,7 +380,7 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		submenu.add(item);
 
 		item.activate.connect (() => {
-			var win = new ConnectServerWindow(window, "");
+			new ConnectServerWindow(window, "");
 		});
 	}
 
@@ -1555,7 +1555,7 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		submenu.show_all();
 	}
 
-	private void add_cloud_account_unmount(Gtk.Menu menu){
+	/*private void add_cloud_account_unmount(Gtk.Menu menu){
 		
 		var item = new Gtk.MenuItem.with_label (_("Unmount"));
 		item.set_tooltip_text(_("Unmount cloud storage account"));
@@ -1604,7 +1604,7 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 
 			subitem.sensitive = (App.rclone.get_mounted_path(acc.name).length > 0);
 		}
-	}
+	}*/
 
 	private void add_cloud_account_browse(Gtk.Menu menu){
 
@@ -1835,7 +1835,7 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		menu.add(item);
 
 		item.activate.connect (() => {
-			var win = new ToolsWindow(window);
+			new ToolsWindow(window);
 		});
 	}
 

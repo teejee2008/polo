@@ -41,7 +41,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 	private FileItemArchive? archive;
 
 	// ui for archive_task
-	private Gtk.Grid grid_stats;
+	//private Gtk.Grid grid_stats;
 	private Gtk.Spinner spinner;
 	private Gtk.Label lbl_header;
 	private Gtk.Label lbl_status;
@@ -56,7 +56,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 	private Gtk.Label lbl_remaining_value;
 	private Gtk.Label lbl_speed_value;
 	//actions
-	private Gtk.Box hbox_actions;
+	//private Gtk.Box hbox_actions;
 	private Gtk.Button btn_background;
 	private Gtk.Button btn_pause;
 	private Gtk.Button btn_stop;
@@ -801,7 +801,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		task_complete();
 	}
 
-	private string prompt_for_extraction_path(){
+	/*private string prompt_for_extraction_path(){
 		
 		log_debug("ProgressPanelArchiveTask: prompt_for_extraction_path()");
 		
@@ -843,7 +843,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		gtk_do_events();
 
 		return outpath;
-	}
+	}*/
 
 	private bool prompt_for_password_and_restart_task(){
 

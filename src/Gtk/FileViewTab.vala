@@ -48,7 +48,7 @@ public class FileViewTab : Gtk.Box {
 	private Gtk.Label tab_label;
 	private Gtk.Entry tab_entry;
 	private Gtk.EventBox ebox_close;
-	private Gtk.Image img_active;
+	//private Gtk.Image img_active;
 	private Gtk.Image img_locked;
 	public FileViewPane pane;
 	public bool renamed = false;
@@ -173,13 +173,13 @@ public class FileViewTab : Gtk.Box {
 		}
 	}
 
-	private void add_active_icon(Gtk.Box box){
+	/*private void add_active_icon(Gtk.Box box){
 		var img = IconManager.lookup_image("item-gray",16);
 		img_active = img;
 		box.add(img);
 
 		refresh_active_indicator();
-	}
+	}*/
 	
 	public void refresh_active_indicator(){
 
@@ -397,7 +397,7 @@ public class FileViewTab : Gtk.Box {
 
 		panel.notebook_switch_page_disconnect();
 
-		var index = tab_index;
+		//var index = tab_index;
 		panel.tabs.remove(this);
 		notebook.remove_page(tab_index);
 

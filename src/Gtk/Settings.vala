@@ -52,14 +52,14 @@ public class Settings : Gtk.Box, IPaneActive {
 	private Gtk.Scale scale_tileview_row_spacing;
 	private Gtk.Scale scale_tileview_padding;
 
-	private Gtk.Scale scale_toolbar_icon;
-	private Gtk.TreeView tv_columns;
+	//private Gtk.Scale scale_toolbar_icon;
+	//private Gtk.TreeView tv_columns;
 
 	private Gtk.Box vbox_toolbar;
 	private Gtk.Box vbox_pathbar;
 	private Gtk.CheckButton chk_headerbar_enabled;
 
-	Gtk.IconSize[] toolbar_icon_sizes = new Gtk.IconSize[] { Gtk.IconSize.MENU, Gtk.IconSize.SMALL_TOOLBAR };
+	//Gtk.IconSize[] toolbar_icon_sizes = new Gtk.IconSize[] { Gtk.IconSize.MENU, Gtk.IconSize.SMALL_TOOLBAR };
 
 	private int[] ICON_SIZE_MAPPING_LIST = new int[] { 16, 24, 32, 48 };
 	private int[] ICON_SIZE_MAPPING_ICONS = new int[] { 24, 32, 48, 64, 80, 96, 128, 256 };
@@ -488,7 +488,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		});
 	}
 
-	private void add_toolbar_item_hidden(Gtk.Container box){
+	/*private void add_toolbar_item_hidden(Gtk.Container box){
 
 		var chk = new Gtk.CheckButton.with_label(_("Hidden"));
 		box.add(chk);
@@ -520,7 +520,7 @@ public class Settings : Gtk.Box, IPaneActive {
 
 			window.toolbar.refresh_items();
 		});
-	}
+	}*/
 
 	private void add_toolbar_item_view(Gtk.Container box){
 
@@ -892,7 +892,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		});
 	}
 
-	private void add_pathbar_item_close(Gtk.Container box){
+	/*private void add_pathbar_item_close(Gtk.Container box){
 
 		var chk = new Gtk.CheckButton.with_label(_("Close"));
 		box.add(chk);
@@ -910,7 +910,7 @@ public class Settings : Gtk.Box, IPaneActive {
 			}
 			window.pathbar.refresh_icon_visibility();
 		});
-	}
+	}*/
 
 
 	private void add_sidebar_option_visible(Gtk.Container box){
@@ -1435,7 +1435,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		});
 	}
 
-	private void add_option_single_click_browse(Gtk.Box box){
+	/*private void add_option_single_click_browse(Gtk.Box box){
 
 		var chk = new Gtk.CheckButton.with_label(_("Single click to activate"));
 		box.add(chk);
@@ -1450,7 +1450,7 @@ public class Settings : Gtk.Box, IPaneActive {
 			//	v.refresh_single_click();
 			//}
 		});
-	}
+	}*/
 
 	private void add_option_single_instance_mode(Gtk.Box box){
 
@@ -1481,7 +1481,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		});
 	}
 
-	private void add_option_minimize_to_tray(Gtk.Box box){
+	/*private void add_option_minimize_to_tray(Gtk.Box box){
 
 		var chk = new Gtk.CheckButton.with_label(_("Minimize to tray"));
 		box.add(chk);
@@ -1507,7 +1507,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		chk.toggled.connect(()=>{
 			App.autostart = chk.active;
 		});
-	}
+	}*/
 
 	private void add_option_confirm_delete(Gtk.Box box){
 
@@ -2236,7 +2236,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		stack.add_titled (box, _("Columns"), _("Columns"));
 	}
 
-	private void add_option_tree_navigation(Gtk.Container box){
+	/*private void add_option_tree_navigation(Gtk.Container box){
 
 		var chk = new Gtk.CheckButton.with_label(_("Tree navigation"));
 		//chk.active = App.list_view_tree_nav;
@@ -2251,7 +2251,7 @@ public class Settings : Gtk.Box, IPaneActive {
 			//	v.pane.refresh();
 			//}
 		});
-	}
+	}*/
 
 	public void refresh(){
 
@@ -2549,7 +2549,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		});
 	}
 	
-	private void add_option_network(Gtk.Box box){
+	/*private void add_option_network(Gtk.Box box){
 
 		var chk = new Gtk.CheckButton.with_label(_("Chroot: Enable network"));
 		box.add(chk);
@@ -2575,7 +2575,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		chk.toggled.connect(()=>{
 			App.term_enable_gui = chk.active;
 		});
-	}
+	}*/
 
 
 	private void add_option_pdf_split(Gtk.Box box){

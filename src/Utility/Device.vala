@@ -326,7 +326,7 @@ public class Device : GLib.Object{
 		if (status != 0){
 			if (parent_window != null){
 				string title = "Error unmounting %s".printf(device);
-				string msg = std_err;
+				//string msg = std_err;
 				gtk_messagebox(title, std_err, parent_window, true);
 			}
 		}
@@ -1756,7 +1756,7 @@ public class Device : GLib.Object{
 		if (status != 0){
 			if (parent_window != null){
 				string title = "Error unmounting %s".printf(dev_name_or_uuid);
-				string msg = std_err;
+				//string msg = std_err;
 				gtk_messagebox(title, std_err, parent_window, true);
 			}
 		}

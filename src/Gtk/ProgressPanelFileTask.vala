@@ -53,8 +53,8 @@ public class ProgressPanelFileTask : ProgressPanel {
 
 	private int64 copied_bytes = 0;
 	private const int stalled_counter_limit = 10 * (1000 / 200);
-	private int stalled_counter = (int) stalled_counter_limit;
-	private bool stalled_warning_shown = false;
+	//private int stalled_counter = (int) stalled_counter_limit;
+	//private bool stalled_warning_shown = false;
 		
 	public ProgressPanelFileTask(FileViewPane _pane, Gee.ArrayList<FileItem> _items, FileActionType _action){
 		base(_pane, _items, _action);
@@ -405,7 +405,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 		return true;
 	}
 
-	private bool check_if_stalled(){
+	/*private bool check_if_stalled(){
 
 		switch (action_type){
 		case FileActionType.DELETE:
@@ -440,7 +440,7 @@ public class ProgressPanelFileTask : ProgressPanel {
 		}
 
 		return false;
-	}
+	}*/
 
 	public override void cancel(){
 

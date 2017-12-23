@@ -131,7 +131,7 @@ public class MessageBar : Gtk.Box {
 
 	private void add_close_button(Gtk.Box box){
 
-		var img = new Gtk.Image.from_pixbuf(IconManager.lookup("window-close", 16, true));
+		//var img = new Gtk.Image.from_pixbuf(IconManager.lookup("window-close", 16, true));
 
 		var ebox = new Gtk.EventBox();
 		//ebox.add(img);

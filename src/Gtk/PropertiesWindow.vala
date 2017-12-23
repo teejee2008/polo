@@ -35,7 +35,7 @@ using TeeJee.Misc;
 
 public class PropertiesWindow : Gtk.Window {
 
-	private Gtk.Box vbox_main;
+	//private Gtk.Box vbox_main;
 	private Gtk.DrawingArea area_archive;
 	private Gtk.DrawingArea area_fs;
 	private FileItem? file_item;
@@ -168,7 +168,7 @@ public class PropertiesWindow : Gtk.Window {
 		var vbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		hbox.add(vbox);
 
-		Label label;
+		//Label label;
 
 		// name ----------------
 		
@@ -980,7 +980,7 @@ public class PropertiesWindow : Gtk.Window {
 		});
 	}
 
-	private void add_info_bar(Gtk.Box box){
+	/*private void add_info_bar(Gtk.Box box){
 
 		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		hbox.margin_top = 6;
@@ -997,7 +997,7 @@ public class PropertiesWindow : Gtk.Window {
 
 		css = " color: #000000; ";
 		gtk_apply_css(new Gtk.Widget[] { label }, css);
-	}
+	}*/
 
 	// mediainfo tab
 

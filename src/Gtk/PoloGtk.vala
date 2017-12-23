@@ -54,7 +54,7 @@ public class PoloGtk : GLib.Object {
 		//Device.test_all();
 		//exit(0);
 
-		var window = new MainWindow();
+		new MainWindow();
 		//window.destroy.connect(Gtk.main_quit);
 
 		//start event loop

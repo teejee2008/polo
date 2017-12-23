@@ -47,7 +47,7 @@ public class MainWindow : Gtk.Window {
 
 	private Gtk.Box vbox_main;
 	private Gtk.Paned pane_nav;
-	private Gtk.Notebook notebook;
+	//private Gtk.Notebook notebook;
 
 	public MainMenuBar menubar;
 	public Sidebar sidebar;
@@ -66,9 +66,9 @@ public class MainWindow : Gtk.Window {
 	private int def_width = 700;
 	private int def_height = 500;
 
-	private uint tmr_task = 0;
+	//private uint tmr_task = 0;
 	private uint tmr_init = 0;
-	private uint tmr_init_tab_delayed = 0;
+	//private uint tmr_init_tab_delayed = 0;
 
 	public bool window_is_ready = false;
 	public bool window_is_closing = false;
@@ -359,7 +359,7 @@ public class MainWindow : Gtk.Window {
 
 				if (panel == layout_box.panel1){ continue; }
 				
-				var tab = panel.add_tab(false);
+				panel.add_tab(false);
 				//tab.pane.view.set_view_path(App.user_home);
 				//tab.pane.view.set_view_path(file_path);
 			}
@@ -388,7 +388,7 @@ public class MainWindow : Gtk.Window {
 
 				foreach(var panel in layout_box.panels){
 					
-					var tab = panel.add_tab(false);
+					panel.add_tab(false);
 					//tab.pane.view.set_view_path(App.user_home);
 				}
 
@@ -811,7 +811,7 @@ public class MainWindow : Gtk.Window {
 			//add_tab();
 		//}
 
-		var dlg = new SettingsWindow();
+		new SettingsWindow();
 	}
 
 	public void open_wizard_window(){
@@ -821,7 +821,7 @@ public class MainWindow : Gtk.Window {
 			//add_tab();
 		//}
 
-		var dlg = new WizardWindow();
+		new WizardWindow();
 	}
 
 	public void open_donate_window(){
@@ -922,7 +922,7 @@ public class MainWindow : Gtk.Window {
 
 		err_log_clear();
 
-		var win = new CloudLoginWindow(this);
+		new CloudLoginWindow(this);
 
 		//TermBox term = new TermBox(pane);
 		//term.start_shell();
@@ -1162,7 +1162,7 @@ public class MainWindow : Gtk.Window {
 
 		int num = (int) node_pane.get_int_member("number");
 		int active_tab = (int) node_pane.get_int_member("active_tab");
-		bool is_visible = node_pane.get_boolean_member("visible");
+		//bool is_visible = node_pane.get_boolean_member("visible");
 
 		log_debug("session-load: pane: %d".printf(num));
 

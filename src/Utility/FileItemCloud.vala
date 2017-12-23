@@ -300,7 +300,7 @@ public class FileItemCloud : FileItem {
 		foreach(var node_child in arr.get_elements()){
 			
 			var obj_child = node_child.get_object();
-			string path = json_get_string(obj_child, "Path", "");
+			//string path = json_get_string(obj_child, "Path", "");
 			string name = json_get_string(obj_child, "Name", "");
 			int64 size = json_get_int64(obj_child, "Size", 0);
 			string modtime = json_get_string(obj_child, "ModTime", "");

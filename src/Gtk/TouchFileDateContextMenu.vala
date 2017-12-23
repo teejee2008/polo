@@ -175,9 +175,9 @@ public class TouchFileDateContextMenu : Gtk.Menu {
 		task_is_running = false;
 	}
 
-	private bool check_task_is_running(){
-		return task_is_running;
-	}
+	//private bool check_task_is_running(){
+	//	return task_is_running;
+	//}
 
 	public bool show_menu(Gdk.EventButton? event) {
 

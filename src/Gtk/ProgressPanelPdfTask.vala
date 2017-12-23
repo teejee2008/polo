@@ -200,7 +200,7 @@ public class ProgressPanelPdfTask : ProgressPanel {
 			}
 			else{
 				string msg = "";
-				var list = new Gee.ArrayList<string>();
+				//var list = new Gee.ArrayList<string>();
 				
 				foreach(string outline in task.output_files){
 					if (msg.length > 0) { msg += "\n"; }

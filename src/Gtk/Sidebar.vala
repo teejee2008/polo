@@ -61,7 +61,7 @@ public class Sidebar : Gtk.Box {
 	
 	private Gtk.ListBox listbox;
 	private Gtk.ScrolledWindow scrolled;
-	private Gtk.ListBoxRow current_row;
+	//private Gtk.ListBoxRow current_row;
 
 	private Gee.HashMap<string, bool> node_expanded = new Gee.HashMap<string, bool>();
 	private Gtk.SizeGroup sg_label;
@@ -652,7 +652,7 @@ public class Sidebar : Gtk.Box {
 		var vbox = new Gtk.Box(Orientation.VERTICAL, 0);
 		vbox.margin_right = 12;
 		box.add(vbox);
-		var label_box = vbox;
+		//var label_box = vbox;
 
 		// name
 		var label = new Gtk.Label("");
@@ -741,7 +741,7 @@ public class Sidebar : Gtk.Box {
 		var vbox = new Gtk.Box(Orientation.VERTICAL, 0);
 		vbox.margin_right = 12;
 		box.add(vbox);
-		var label_box = vbox;
+		//var label_box = vbox;
 
 		// name
 		var label = new Gtk.Label("");
@@ -840,7 +840,7 @@ public class Sidebar : Gtk.Box {
 		var vbox = new Gtk.Box(Orientation.VERTICAL, 0);
 		vbox.margin_right = 12;
 		box.add(vbox);
-		var label_box = vbox;
+		//var label_box = vbox;
 
 		// name
 		var label = new Gtk.Label("");
@@ -1000,9 +1000,9 @@ public class Sidebar : Gtk.Box {
 			// connect signal for right-click menu
 			row.button_press_event.connect((w,e) => { return row_bookmark_button_press_event(e, bm, label_box, entry, row); });
 		
-			const Gtk.TargetEntry[] targets = {
-				{"item", Gtk.TargetFlags.SAME_APP, 1}
-			};
+			//const Gtk.TargetEntry[] targets = {
+			//	{"item", Gtk.TargetFlags.SAME_APP, 1}
+			//};
 			//Gtk.drag_source_set(row, Gdk.ModifierType.BUTTON1_MASK, targets, Gdk.DragAction.MOVE);
 			//Gtk.drag_dest_set(row, Gtk.DestDefaults.ALL, targets, Gdk.DragAction.MOVE);
 
@@ -1054,7 +1054,7 @@ public class Sidebar : Gtk.Box {
 		var vbox = new Gtk.Box(Orientation.VERTICAL, 0);
 		vbox.margin_right = 12;
 		box.add(vbox);
-		var label_box = vbox;
+		//var label_box = vbox;
 
 		// name
 		var label = new Gtk.Label("");
@@ -1201,7 +1201,7 @@ public class Sidebar : Gtk.Box {
 		});
 	}
 
-	private void add_disk_eject_button(Gtk.Box box, Device dev){
+	/*private void add_disk_eject_button(Gtk.Box box, Device dev){
 		
 		var icon_size = popup ? 16 : 16;
 		var img = new Gtk.Image.from_pixbuf(IconManager.lookup("media-eject", icon_size, true));
@@ -1218,7 +1218,7 @@ public class Sidebar : Gtk.Box {
 			DeviceContextMenu.eject_disk(dev, pane, window);
 			return true;
 		});
-	}
+	}*/
 
 	private void add_fs_bar(Gtk.Box box, Device dev){
 
@@ -1330,9 +1330,9 @@ public class Sidebar : Gtk.Box {
 		});
 	}
 
-	private void on_drag_data_get (Gdk.DragContext context, Gtk.SelectionData data, uint info, uint time) {
+	//private void on_drag_data_get (Gdk.DragContext context, Gtk.SelectionData data, uint info, uint time) {
 
-		log_debug("on_drag_data_get");
+		//log_debug("on_drag_data_get");
 
 
 
@@ -1345,19 +1345,19 @@ public class Sidebar : Gtk.Box {
 		}
 		data.set_uris((string[])uris.to_array());*/
 
-		log_debug("on_drag_data_get: exit");
-	}
+		//log_debug("on_drag_data_get: exit");
+	//}
 
-	private void on_drag_data_received (Gdk.DragContext drag_context, int x, int y, Gtk.SelectionData data, uint info, uint time) {
+	//private void on_drag_data_received (Gdk.DragContext drag_context, int x, int y, Gtk.SelectionData data, uint info, uint time) {
 
-		log_debug("on_drag_data_received");
+		//log_debug("on_drag_data_received");
 
 
-		if ((data != null) && (data.get_length() >= 0)) {
-			log_debug("dnd: selection_length=%d".printf(data.get_length()));
-			var text = (string) data.get_data();
-			log_debug(text);
-		}
+		//if ((data != null) && (data.get_length() >= 0)) {
+		//	log_debug("dnd: selection_length=%d".printf(data.get_length()));
+		//	var text = (string) data.get_data();
+		//	log_debug(text);
+		//}
 
 		/*// get selected_items
 		var selected_items = new Gee.ArrayList<FileItem>();
@@ -1377,10 +1377,10 @@ public class Sidebar : Gtk.Box {
 		window.pending_action = action;
 		*/
 
-		Gtk.drag_finish (drag_context, true, false, time);
+		//Gtk.drag_finish (drag_context, true, false, time);
 
 		//paste();
-    }
+    //}
 /*
 	private void set_as_drag_source(bool set_dnd, Gtk.ListBoxRow row){
 		if (set_dnd){

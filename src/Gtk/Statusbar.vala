@@ -75,7 +75,7 @@ public class Statusbar : Gtk.Box {
 	private Gtk.EventBox ebox_filter;
 	private Gtk.EventBox ebox_terminal;
 	
-	private double fs_bar_value = 0;
+	//private double fs_bar_value = 0;
 
 	private bool is_global{
 		get{

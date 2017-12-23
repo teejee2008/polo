@@ -281,11 +281,11 @@ public class TermBox : Gtk.Box {
 		feed_command("cd '%s'".printf(escape_single_quote(dir_path)));
 	}
 
-	private void show_running_process_message(){
+	//private void show_running_process_message(){
 		// TODO: Add check to ignore background process
-		gtk_messagebox(_("Terminal is busy"),
-			_("This action cannot be executed while a process is running"), window, true);
-	}
+		//gtk_messagebox(_("Terminal is busy"),
+		//	_("This action cannot be executed while a process is running"), window, true);
+	//}
 
 	public void copy(){
 

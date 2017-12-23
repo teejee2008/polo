@@ -283,7 +283,7 @@ public class WizardWindow : Gtk.Window {
 		App.save_app_config();
 	}
 	
-	private Gtk.EventBox add_layout_option(Gtk.Box hbox, Gdk.Pixbuf pix, string label){
+	/*private Gtk.EventBox add_layout_option(Gtk.Box hbox, Gdk.Pixbuf pix, string label){
 
 		var vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 6);
 		hbox.add(vbox);
@@ -301,9 +301,9 @@ public class WizardWindow : Gtk.Window {
 		add_label(vbox, label);
 
 		return ebox;
-	}
+	}*/
 
-	private void init_pathbar_style(){
+	//private void init_pathbar_style(){
 
 		/*gtk_container_remove_children(vbox_main);
 		
@@ -361,7 +361,7 @@ public class WizardWindow : Gtk.Window {
 		});
 
 		this.show_all();*/
-	}
+	//}
 }
 
 

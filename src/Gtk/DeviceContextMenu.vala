@@ -235,7 +235,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		item.sensitive = device.is_on_encrypted_partition;
 	}
 
-	private void add_eject(){
+	/*private void add_eject(){
 
 		log_debug("DeviceContextMenu: add_eject()");
 
@@ -256,7 +256,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		});
 
 		item.sensitive = (device.type == "disk");
-	}
+	}*/
 	
 	private void add_manage(){
 
@@ -329,7 +329,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		item.sensitive = (device.type != "loop");
 	}
 
-	private void add_unlock(){
+	/*private void add_unlock(){
 
 		log_debug("DeviceContextMenu: add_lock()");
 
@@ -350,10 +350,10 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		});
 
 		item.sensitive = !device.is_mounted;
-	}
+	}*/
 
 
-	private void add_sync(){
+	/*private void add_sync(){
 
 		log_debug("DeviceContextMenu: add_sync()");
 
@@ -374,9 +374,9 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		});
 
 		item.sensitive = device.is_mounted;
-	}
+	}*/
 
-	private void add_flush(){
+	/*private void add_flush(){
 
 		log_debug("DeviceContextMenu: add_flush()");
 
@@ -397,7 +397,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		});
 
 		item.sensitive = device.is_mounted;
-	}
+	}*/
 
 	public bool show_menu(Gdk.EventButton? event) {
 
