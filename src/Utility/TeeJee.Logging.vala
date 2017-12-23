@@ -32,28 +32,37 @@ namespace TeeJee.Logging{
 	public string err_log;
 	public bool LOG_ENABLE = true;
 	public bool LOG_TIMESTAMP = false;
-	public bool LOG_COLORS = false;
+	public bool LOG_COLORS = true;
 	public bool LOG_DEBUG = false;
 	public bool LOG_TRACE = false;
 	public bool LOG_COMMANDS = false;
 
-	public void log_msg (string message, bool highlight = false){
+	public void log_msg (string message, bool highlight = false, bool is_warning = false){
 
 		if (!LOG_ENABLE) { return; }
 
 		string msg = "";
 
-		if (highlight && LOG_COLORS){
-			msg += "\033[1;38;5;34m";
+		if (LOG_COLORS){
+			if (highlight){
+				msg += "\033[1;38;5;34m";
+			}
+			else if (is_warning){
+				msg += "\033[1;38;5;93m";
+			}
 		}
 
 		if (LOG_TIMESTAMP){
 			msg += "[" + timestamp(true) +  "] ";
 		}
 
+		if (is_warning){
+			msg += "W: ";
+		}
+			
 		msg += message;
 
-		if (highlight && LOG_COLORS){
+		if (LOG_COLORS){
 			msg += "\033[0m";
 		}
 
@@ -72,13 +81,13 @@ namespace TeeJee.Logging{
 		}
 	}
 
-	public void log_error (string message, bool highlight = false, bool is_warning = false){
+	public void log_error(string message){
 			
 		if (!LOG_ENABLE) { return; }
 
 		string msg = "";
 
-		if (highlight && LOG_COLORS){
+		if (LOG_COLORS){
 			msg += "\033[1;38;5;160m";
 		}
 
@@ -86,27 +95,27 @@ namespace TeeJee.Logging{
 			msg += "[" + timestamp(true) +  "] ";
 		}
 
-		string prefix = (is_warning) ? _("W") : _("E");
+		msg += "E: ";
 
-		msg += prefix + ": " + message;
+		msg += message;
 
-		if (highlight && LOG_COLORS){
+		if (LOG_COLORS){
 			msg += "\033[0m";
 		}
 
 		msg += "\n";
 
-		stderr.printf (msg);
+		stderr.printf(msg);
 		stderr.flush();
 		
 		try {
-			string str = "[%s] %s: %s\n".printf(timestamp(), prefix, message);
+			string str = "[%s] E: %s\n".printf(timestamp(), message);
 			
 			if (dos_log != null){
 				dos_log.put_string (str);
 			}
 
-			if ((err_log != null) && !is_warning){
+			if (err_log != null){
 				err_log += "%s\n".printf(message);
 			}
 		}
@@ -115,8 +124,8 @@ namespace TeeJee.Logging{
 		}
 	}
 
-	public void log_warning (string message, bool highlight = false, bool is_warning = false){
-		log_error(message, highlight, true);
+	public void log_warning (string message){
+		log_msg(message, true, true);
 	}
 	
 	public void log_debug (string message, bool highlight = false){
