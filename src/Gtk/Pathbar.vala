@@ -64,7 +64,7 @@ public class Pathbar : Gtk.Box {
 	private Gtk.EventBox ebox_edit_buffer;
 	private Gtk.ScrolledWindow scrolled;
 
-	private Gtk.Box box_left;
+	//private Gtk.Box box_left;
 
 	private Gtk.EventBox ebox_back;
 	private Gtk.Image img_back;
@@ -90,17 +90,17 @@ public class Pathbar : Gtk.Box {
 	private Gtk.EventBox ebox_open_other;
 	private Gtk.Image img_open_other;
 
-	private Gtk.EventBox ebox_close;
-	private Gtk.Image img_close;
+	//private Gtk.EventBox ebox_close;
+	//private Gtk.Image img_close;
 
-	private Gtk.Image img_edit;
+	//private Gtk.Image img_edit;
 	private int ICON_SIZE = 16;
 
 	private Gtk.Entry txt_path;
-	private int BOX_SPACING = 3;
+	//private int BOX_SPACING = 3;
 
-	private Gtk.Menu menu_disk;
-	private Gtk.Menu menu_bookmark;
+	//private Gtk.Menu menu_disk;
+	//private Gtk.Menu menu_bookmark;
 
 	public bool path_edit_mode = false;
 
@@ -152,8 +152,7 @@ public class Pathbar : Gtk.Box {
 
 	// bookmarks
 
-	private Gtk.Popover popup_bm;
-	private Sidebar sidebar_bm;
+	private PlacesPopover popup_bm;
 
 	private void add_item_bookmarks(Gtk.Box box){
 
@@ -172,15 +171,10 @@ public class Pathbar : Gtk.Box {
 
 		set_pointer_cursor_for_eventbox(ebox);
 
-		popup_bm = new Gtk.Popover(ebox);
-		sidebar_bm = new Sidebar(popup_bm, "bm", pane);
-		popup_bm.add(sidebar_bm);
+		popup_bm = new PlacesPopover(ebox, pane);
 		
 		ebox.button_press_event.connect((event)=>{
-			//menu_bookmark_popup(null);
-			sidebar_bm.show();
-			sidebar_bm.refresh();
-			gtk_show(popup_bm);
+			popup_bm.show_popup();
 			return false;
 		});
 	}
@@ -665,9 +659,9 @@ public class Pathbar : Gtk.Box {
 		}
 		
 		// print the list
-		foreach(var str in list){
+		//foreach(var str in list){
 			//log_debug("parts: %s".printf(str));
-		}
+		//}
 		
 		return list;
 	}
@@ -955,7 +949,7 @@ public class Pathbar : Gtk.Box {
 		});
 	}
 
-	private void add_item_close(){
+	/*private void add_item_close(){
 
 		log_debug("Pathbar: add_item_close()");
 
@@ -986,7 +980,7 @@ public class Pathbar : Gtk.Box {
 			window.update_accelerators_for_active_pane();
 			return true;
 		});
-	}
+	}*/
 
 	// actions
 
@@ -1022,7 +1016,7 @@ public class Pathbar : Gtk.Box {
 				handled = true;
 			}
 			else{
-				var win = new ConnectServerWindow(window, txt_path.text);
+				new ConnectServerWindow(window, txt_path.text);
 				handled = true;
 			}
 		}

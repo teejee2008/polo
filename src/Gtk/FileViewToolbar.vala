@@ -46,10 +46,10 @@ public enum ToolbarItem{
 public class FileViewToolbar : Gtk.Toolbar, IPaneActive {
 
 	private int icon_size_actual = 16;
-	private Gtk.Menu menu_history;
-	private Gtk.Menu menu_disk;
-	private Gtk.Menu menu_bookmark;
-	private Gtk.Menu menu_layout;
+	//private Gtk.Menu menu_history;
+	//private Gtk.Menu menu_disk;
+	//private Gtk.Menu menu_bookmark;
+	//private Gtk.Menu menu_layout;
 	private ViewPopover view_popover;
 	public bool is_global = true;
 
@@ -279,9 +279,8 @@ public class FileViewToolbar : Gtk.Toolbar, IPaneActive {
 		//button.set_menu(build_view_menu());
 	}
 
-	private Gtk.Popover popup_bm;
-	private Sidebar sidebar_bm;
-	
+	private PlacesPopover popup_bm;
+
 	private void add_toolbar_button_for_bookmarks(){
 
 		var button = new Gtk.ToolButton(null,null);
@@ -295,15 +294,12 @@ public class FileViewToolbar : Gtk.Toolbar, IPaneActive {
 
 		gtk_apply_css({ button }, "padding-left: 2px; padding-right: 2px;");
 
-		popup_bm = new Gtk.Popover(btn_bookmarks);
-		sidebar_bm = new Sidebar(popup_bm, "bm", pane);
-		popup_bm.add(sidebar_bm);
+		popup_bm = new PlacesPopover(button, pane);
 
 		button.clicked.connect(() => {
-			if (view == null) { return; };
-			sidebar_bm.show();
-			sidebar_bm.refresh();
-			gtk_show(popup_bm);
+			if (view != null){
+				popup_bm.show_popup();
+			}
 		});
 	}
 
