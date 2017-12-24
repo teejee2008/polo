@@ -155,6 +155,8 @@ public class Main : GLib.Object {
 	public int sidebar_position = DEFAULT_SIDEBAR_POSITION;
 	public string sidebar_collapsed_sections = "";
 
+	public int bookmarks_position = 300;
+
 	public bool headerbar_enabled = false;
 	public bool headerbar_enabled_temp = false;
 	public bool headerbar_window_buttons_left = false;
@@ -592,7 +594,9 @@ public class Main : GLib.Object {
 		config.set_string_member("sidebar_position", sidebar_position.to_string());
 		config.set_string_member("sidebar_action_button", sidebar_action_button.to_string());
 		config.set_string_member("sidebar_collapsed_sections", sidebar_collapsed_sections);
-		
+
+		config.set_string_member("bookmarks_position", bookmarks_position.to_string());
+
 		//save headerbar_enabled_temp instead of headerbar_enabled
 		config.set_string_member("headerbar_enabled", headerbar_enabled_temp.to_string());
 		config.set_string_member("headerbar_window_buttons_left", headerbar_window_buttons_left.to_string());
@@ -773,6 +777,8 @@ public class Main : GLib.Object {
 		sidebar_position = json_get_int_from_string(config, "sidebar_position", sidebar_position);
 		sidebar_action_button = json_get_bool_from_string(config, "sidebar_action_button", sidebar_action_button);
 
+		bookmarks_position = json_get_int_from_string(config, "bookmarks_position", bookmarks_position);
+		
 		headerbar_enabled = json_get_bool_from_string(config, "headerbar_enabled", headerbar_enabled);
 		headerbar_enabled_temp = headerbar_enabled;
 		headerbar_window_buttons_left = json_get_bool_from_string(config, "headerbar_window_buttons_left", headerbar_window_buttons_left);

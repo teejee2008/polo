@@ -135,6 +135,8 @@ public class PlacesPopover : Gtk.Popover {
 
 		GtkBookmark.bookmarks = list;
 		GtkBookmark.save_bookmarks();
+
+		App.bookmarks_position = paned.position;
 	}
 	
 	// places ---------------------------------------
@@ -213,6 +215,9 @@ public class PlacesPopover : Gtk.Popover {
 		});
 
 		treeview.set_tooltip_column(ColumnItem.TOOLTIP);
+
+		var cursor = new Gdk.Cursor.from_name(Gdk.Display.get_default(), "pointer");
+		scrolled.get_window().set_cursor(cursor);
 		
 		// events -------------------------------
 
@@ -392,9 +397,11 @@ public class PlacesPopover : Gtk.Popover {
 		// tooltip
 		treeview.has_tooltip = true;
 		treeview.query_tooltip.connect(treeview_query_tooltip);
-		
-		//treeview.set_tooltip_column(ColumnItem.TOOLTIP);
-		
+
+		// cursor
+		var cursor = new Gdk.Cursor.from_name(Gdk.Display.get_default(), "pointer");
+		scrolled.get_window().set_cursor(cursor);
+
 		treeview.row_activated.connect(treeview_bookmarks_row_activated);
 	}
 
@@ -603,7 +610,7 @@ public class PlacesPopover : Gtk.Popover {
 
 		this.show_all();
 
-		paned.set_position((int) (def_width * (40.0 / 100.0)));
+		paned.set_position(App.bookmarks_position);
 	}
 
 	private void refresh_places(){
