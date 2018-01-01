@@ -61,16 +61,14 @@ public class PlacesPopover : Gtk.Popover {
 
 	private Gtk.TreeView treeview_places;
 	private Gtk.TreeView treeview_bm;
-	//private Gtk.TreeIter iter_places;
 	private Gtk.Paned paned;
-	//private Gtk.Overlay overlay;
-	////private Gtk.ButtonBox bbox_actions;
 
 	private int def_width = 600;
 	private int def_height = 500;
 	
 	private Gtk.Box vbox_main;
 	private Gtk.Box vbox_right;
+	private Gtk.Box vbox_left;
 
 	private Gtk.Button btn_bookmark;
 	private Gtk.Button btn_edit;
@@ -95,17 +93,12 @@ public class PlacesPopover : Gtk.Popover {
 
 	private void init_ui(){
 
-		//overlay = new Gtk.Overlay(); 
-		//this.add(overlay);
-
 		//vbox_main
 		vbox_main = new Gtk.Box(Orientation.VERTICAL, 0);
 		vbox_main.margin = 0;
 		vbox_main.set_size_request(def_width, def_height);
 		add(vbox_main);
 
-		//overlay.add(vbox_main);
-		
 		paned = new Gtk.Paned(Gtk.Orientation.HORIZONTAL);
 		vbox_main.add(paned);
 		
@@ -118,23 +111,7 @@ public class PlacesPopover : Gtk.Popover {
 
 	private void on_closed(){
 
-		var list = new Gee.ArrayList<GtkBookmark>();
-
-		var model = (Gtk.ListStore) treeview_bm.model;
-
-		TreeIter iter;
-		bool iterExists = model.get_iter_first (out iter);
-		while (iterExists){
-
-			GtkBookmark bm;
-			model.get (iter, ColumnItem.BOOKMARK, out bm, -1);
-			list.add(bm);
-			
-			iterExists = model.iter_next(ref iter);
-		}
-
-		GtkBookmark.bookmarks = list;
-		GtkBookmark.save_bookmarks();
+		save_bookmarks();
 
 		App.bookmarks_position = paned.position;
 	}
@@ -143,6 +120,11 @@ public class PlacesPopover : Gtk.Popover {
 	
 	private void init_places() {
 
+		var vbox = new Gtk.Box(Orientation.VERTICAL, 0);
+		vbox.margin = 0;
+		paned.pack1(vbox, true, true); // resize, shrink
+		vbox_left = vbox;
+		
 		// treeview
 		var treeview = new Gtk.TreeView();
 		treeview.get_selection().mode = Gtk.SelectionMode.MULTIPLE;
@@ -153,6 +135,7 @@ public class PlacesPopover : Gtk.Popover {
 		treeview.enable_search = false;
 		treeview.set_rules_hint(false);
 		treeview.activate_on_single_click = true;
+		treeview.expand = true;
 		treeview_places = treeview;
 		
 		// scrolled
@@ -161,15 +144,19 @@ public class PlacesPopover : Gtk.Popover {
 		scrolled.hscrollbar_policy = PolicyType.AUTOMATIC;
 		scrolled.vscrollbar_policy = PolicyType.AUTOMATIC;
 		scrolled.add (treeview);
-		scrolled.hexpand = true;
-		scrolled.vexpand = true;
-		paned.pack1(scrolled, true, true); // resize, shrink
+		//scrolled.hexpand = true;
+		//scrolled.vexpand = true;
+		//paned.pack1(scrolled, true, true); // resize, shrink
 
+		scrolled.add(treeview);
+		
+		vbox.add(scrolled);
+		
+		//paned.pack1(vbox, true, true);
+		
 		// columns -------------------------------
 
 		var col = new TreeViewColumn();
-		col.clickable = false;
-		col.resizable = false;
 		col.expand = true;
 		treeview.append_column(col);
 
@@ -264,6 +251,7 @@ public class PlacesPopover : Gtk.Popover {
 		treeview.enable_search = false;
 		treeview.set_rules_hint(false);
 		treeview.activate_on_single_click = true;
+		treeview.expand = true;
 		treeview_bm = treeview;
 		
 		// scrolled
@@ -271,11 +259,12 @@ public class PlacesPopover : Gtk.Popover {
 		scrolled.set_shadow_type (ShadowType.ETCHED_IN);
 		scrolled.hscrollbar_policy = PolicyType.AUTOMATIC;
 		scrolled.vscrollbar_policy = PolicyType.AUTOMATIC;
-		scrolled.add (treeview);
-		scrolled.hexpand = true;
-		scrolled.vexpand = true;
+		//scrolled.hexpand = true;
+		//scrolled.vexpand = true;
 		//paned.pack2(scrolled, true, true); // resize, shrink
-	
+
+		scrolled.add(treeview);
+		
 		vbox.add(scrolled);
 
 		// grip --------------------------------------------
@@ -537,7 +526,7 @@ public class PlacesPopover : Gtk.Popover {
 
 		// edit -----------------------------------------------------
 
-		button = new Gtk.Button.with_label(_("Edit Mode"));
+		button = new Gtk.Button.with_label(_("Edit"));
 		button.set_image(IconManager.lookup_image("item-gray", 16, false, true));
 		button.always_show_image = true;
 		bbox.add(button);
@@ -583,6 +572,10 @@ public class PlacesPopover : Gtk.Popover {
 		col_delete.visible = edit_mode;
 		col_reorder.visible = edit_mode;
 		treeview_bm.reorderable = edit_mode;
+
+		if (!edit_mode){
+			save_bookmarks();
+		}
 		
 		refresh_bookmarks();
 		
@@ -610,11 +603,17 @@ public class PlacesPopover : Gtk.Popover {
 
 		this.show_all();
 
+		if ((App.bookmarks_position < 10) || (App.bookmarks_position > (def_width - 10))){
+			App.bookmarks_position = (int) (def_width * 0.4);
+		}
+
 		paned.set_position(App.bookmarks_position);
 	}
 
 	private void refresh_places(){
 
+		log_debug("refresh_places()");
+		
 		var model = new Gtk.ListStore(6, typeof(GtkBookmark), typeof(string), typeof(string), typeof(Gdk.Pixbuf?), typeof(bool), typeof(string));
 		
 		treeview_places.set_model(model);
@@ -643,6 +642,7 @@ public class PlacesPopover : Gtk.Popover {
 	private void refresh_bookmarks(){
 
 		var model = new Gtk.ListStore(6, typeof(GtkBookmark), typeof(string), typeof(string), typeof(Gdk.Pixbuf?), typeof(bool), typeof(string));
+		
 		treeview_bm.set_model(model);
 
 		foreach(var bm in GtkBookmark.bookmarks){
@@ -701,7 +701,30 @@ public class PlacesPopover : Gtk.Popover {
 		ENABLED = 4,
 		TOOLTIP = 5
 	}
-	
+
+	// save
+
+	private void save_bookmarks(){
+
+		var list = new Gee.ArrayList<GtkBookmark>();
+
+		var model = (Gtk.ListStore) treeview_bm.model;
+
+		TreeIter iter;
+		bool iterExists = model.get_iter_first (out iter);
+		
+		while (iterExists){
+
+			GtkBookmark bm;
+			model.get (iter, ColumnItem.BOOKMARK, out bm, -1);
+			list.add(bm);
+			
+			iterExists = model.iter_next(ref iter);
+		}
+
+		GtkBookmark.bookmarks = list;
+		GtkBookmark.save_bookmarks();
+	}
 }
 
 
