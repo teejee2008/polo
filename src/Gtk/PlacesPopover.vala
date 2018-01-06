@@ -560,6 +560,8 @@ public class PlacesPopover : Gtk.Popover {
 		refresh_bookmarks();
 		
 		refresh_actions();
+
+		this.hide();
 	}
 
 	private void btn_edit_clicked(){
