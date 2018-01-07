@@ -1,8 +1,21 @@
-polo-file-manager (17.11) xenial; urgency=low
+polo-file-manager (18.1) xenial; urgency=low
 
-  * v17.11
+  * Bookmarks popup was redesigned
 
- -- Tony George <tony.george.kol@gmail.com>  Sat, 04 Nov 2017 20:00:00 +0530
+  * Added "File Compare" option to right-click menu of text files
+
+  * Added appdata file for displaying app info and screenshots
+
+  * Added "Properties" to right-click menu in Devices popup
+
+  * Fixed a lag while navigating folders. The lag was due to changes
+  that were done in previous version for querying folders asynchronously
+
+  * GPT label info will be displayed in filesystem properties
+
+  * Installers now use XZ compression and are much smaller in size
+
+ -- Tony George <tony.george.kol@gmail.com>  Sun, 07 Jan 2017 10:00:00 +0530
 
 
 polo-file-manager (17.10) xenial; urgency=low
