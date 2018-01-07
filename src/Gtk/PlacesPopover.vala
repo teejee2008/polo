@@ -506,15 +506,18 @@ public class PlacesPopover : Gtk.Popover {
 
 		// spacer -----------------------------------
 		
-		var dummy = new Gtk.Label("");
-		dummy.hexpand = true;
-		hbox.add(dummy);
+		//var dummy = new Gtk.Label("");
+		//dummy.hexpand = true;
+		//hbox.add(dummy);
 		
 		// bookmark ---------------------------------------
 		
 		var bbox = new Gtk.ButtonBox(Gtk.Orientation.HORIZONTAL);
-		bbox.set_layout(Gtk.ButtonBoxStyle.EXPAND);
+		bbox.set_layout(Gtk.ButtonBoxStyle.CENTER);
+		bbox.spacing = 6;
 		hbox.add(bbox);
+
+		bbox.hexpand = true;
 
 		var button = new Gtk.Button.with_label(_("Bookmark"));
 		button.set_image(IconManager.lookup_image("user-bookmarks", 16, false, true));
