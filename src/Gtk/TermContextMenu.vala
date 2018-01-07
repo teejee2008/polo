@@ -95,7 +95,7 @@ public class TermContextMenu : Gtk.Menu {
 		
 		add_clear_output(this, sg_icon, sg_label);
 
-		add_chroot(this, sg_icon, sg_label);
+		//add_chroot(this, sg_icon, sg_label);
 
 		gtk_menu_add_separator(this); //---------------------------
 
