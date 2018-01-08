@@ -86,31 +86,31 @@ msgstr "Zugegriffen"
 
 #: Gtk/CloudLoginWindow.vala:337
 msgid "Account Added"
-msgstr ""
+msgstr "Account hinzugefügt"
 
 #: Gtk/CloudLoginWindow.vala:263
 msgid "Account Authorization"
-msgstr ""
+msgstr "Account Autorisierung"
 
 #: Gtk/CloudLoginWindow.vala:114
 msgid "Account Name"
-msgstr ""
+msgstr "Account Name"
 
 #: Gtk/CloudLoginWindow.vala:342
 msgid "Account Not Added"
-msgstr ""
+msgstr "Account nicht hinzugefügt"
 
 #: Gtk/MainMenubar.vala:1544
 msgid "Account Removed"
-msgstr ""
+msgstr "Account entfernt"
 
 #: Gtk/CloudLoginWindow.vala:152
 msgid "Account Type"
-msgstr ""
+msgstr "Account Typ"
 
 #: Gtk/CloudLoginWindow.vala:258
 msgid "Account name exists"
-msgstr ""
+msgstr "Account-Name existiert bereits"
 
 #: Gtk/CloudLoginWindow.vala:338
 msgid ""
@@ -121,28 +121,28 @@ msgstr ""
 
 #: Gtk/Settings.vala:1010
 msgid "Action button"
-msgstr ""
+msgstr "Aktionstaste"
 
 #: Gtk/PropertiesWindow.vala:1126 Gtk/PropertiesWindow.vala:1172
 #: Gtk/Sidebar.vala:1194
 msgid "Actions"
-msgstr ""
+msgstr "Aktionen"
 
 #: Gtk/MainMenubar.vala:1475
 msgid "Add Account"
-msgstr ""
+msgstr "Account hinzufügen"
 
 #: Gtk/BookmarksMenu.vala:74
 msgid "Add Bookmark"
-msgstr ""
+msgstr "Lesezeichen hinzufügen"
 
 #: Gtk/CloudLoginWindow.vala:78
 msgid "Add Cloud Storage Account"
-msgstr ""
+msgstr "Cloud-Speicher-Account hinzufügen"
 
 #: Gtk/FileContextMenu.vala:2081 Gtk/Settings.vala:2639
 msgid "Add Password"
-msgstr ""
+msgstr "Passwort hinzufügen"
 
 #: Gtk/Sidebar.vala:533
 msgid "Add bookmark"
@@ -158,7 +158,7 @@ msgstr "Admin Fenster"
 
 #: Gtk/Settings.vala:2271
 msgid "Advanced"
-msgstr ""
+msgstr "Fortgeschritten"
 
 #: Gtk/CreateArchiveWindow.vala:795 Gtk/CreateArchiveWindow.vala:1746
 msgid "Advanced options"
@@ -170,11 +170,11 @@ msgstr ""
 
 #: Gtk/Settings.vala:2530
 msgid "Amount of RAM to allocate for guest machine"
-msgstr ""
+msgstr "RAM-Menge für Gastmaschinen zuteilen"
 
 #: Gtk/CloudLoginWindow.vala:258
 msgid "An account exists with this name. Enter a new name for the account."
-msgstr ""
+msgstr "Ein Account mit gleichem Namen existiert bereits. Wähle einen neuen Namen aus."
 
 #: Gtk/FileContextMenu.vala:1607
 msgid "Analyze disk usage"
@@ -186,7 +186,7 @@ msgstr "Eine andere Datei mit dem gleichen Namen existiert bereits"
 
 #: Utility/AppLock.vala:59
 msgid "Another instance of this application is running"
-msgstr ""
+msgstr "Es läuft Bereits eine Programm-Instanz"
 
 #: Common/Main.vala:923 Common/Main.vala:1073 Common/Main.vala:1162
 msgid "App config loaded"
@@ -202,7 +202,7 @@ msgstr "Info Anwendung"
 
 #: Gtk/WizardWindow.vala:129
 msgid "Apply"
-msgstr ""
+msgstr "Übernehmen"
 
 #: Gtk/PropertiesWindow.vala:951 Gtk/PropertiesWindow.vala:969
 msgid "Apply recursively to directory contents"
@@ -210,24 +210,24 @@ msgstr "Rekursiv auf Verzeichnisinhalt anwenden"
 
 #: Gtk/FileContextMenu.vala:1453
 msgid "Archive"
-msgstr ""
+msgstr "Archivieren"
 
 #: Utility/Gtk/AboutWindow.vala:443
 msgid "Artists"
-msgstr ""
+msgstr "Künstler"
 
 #: Gtk/CloudLoginWindow.vala:190
 #, c-format
 msgid "Authorization was started"
-msgstr ""
+msgstr "Autorisation wurde gestartet"
 
 #: Gtk/CloudLoginWindow.vala:217
 msgid "Authorize"
-msgstr ""
+msgstr "Autorisieren"
 
 #: Utility/Gtk/AboutWindow.vala:427
 msgid "Authors"
-msgstr ""
+msgstr "Autoren"
 
 #: Gtk/PropertiesWindow.vala:540
 msgid "Available"
@@ -249,23 +249,23 @@ msgstr ""
 
 #: Utility/Gtk/DonationWindow.vala:104
 msgid "Become a Patron"
-msgstr ""
+msgstr "Bekomme ein Patron"
 
 #: Gtk/ProgressPanelVideoDownloadTask.vala:136
 msgid "Best (audio + video)"
-msgstr ""
+msgstr "Beste (audio + video)"
 
 #: Gtk/ProgressPanelVideoDownloadTask.vala:147
 msgid "Best (audio only)"
-msgstr ""
+msgstr "Beste (audio only)"
 
 #: Gtk/ProgressPanelVideoDownloadTask.vala:158
 msgid "Best (video only)"
-msgstr ""
+msgstr "Beste (video only)"
 
 #: Gtk/ProgressPanelVideoDownloadTask.vala:169
 msgid "Best Video + Best Audio (merge)"
-msgstr ""
+msgstr "Beste Video + Beste Audio (kombiniert)"
 
 #: Gtk/CreateArchiveWindow.vala:1444
 msgid "Block Size"
@@ -287,7 +287,7 @@ msgstr "Lesezeichen"
 
 #: Gtk/FileContextMenu.vala:2406 Gtk/Settings.vala:2794
 msgid "Boost Color"
-msgstr ""
+msgstr "Farben kräftigen"
 
 #: Gtk/FileContextMenu.vala:2407
 msgid ""
@@ -297,7 +297,7 @@ msgstr ""
 
 #: Gtk/FileContextMenu.vala:1862
 msgid "Boot Disk"
-msgstr ""
+msgstr "Boot-Disk"
 
 #: Gtk/FileContextMenu.vala:1680
 msgid "Boot ISO file in QEMU-KVM virtual machine"
@@ -317,7 +317,7 @@ msgstr ""
 
 #: Utility/Shell.vala:40
 msgid "Bourne again shell (bash)"
-msgstr ""
+msgstr "Bourne again shell (bash)"
 
 #: Gtk/FileViewList.vala:381
 #, c-format
@@ -331,23 +331,23 @@ msgstr ""
 
 #: Utility/Shell.vala:52
 msgid "C shell (csh)"
-msgstr ""
+msgstr "C shell (csh)"
 
 #: Gtk/Settings.vala:2359
 msgid "CPU"
-msgstr ""
+msgstr "CPU"
 
 #: Gtk/Settings.vala:2460
 msgid "CPU Cores"
-msgstr ""
+msgstr "CPU-Kerne"
 
 #: Gtk/Settings.vala:2488
 msgid "CPU Limit (%)"
-msgstr ""
+msgstr "CPU Limit (%)"
 
 #: Gtk/Settings.vala:2397
 msgid "CPU type to emulate for guest machine"
-msgstr ""
+msgstr "CPU-Typ für die Gastmaschinen-Emulation"
 
 #: Gtk/MainMenubar.vala:1764
 msgid "Calculate directory sizes"
@@ -355,7 +355,7 @@ msgstr "Berechne Verzeichnisgröße"
 
 #: Gtk/FileViewList.vala:2784
 msgid "Calculating dir size..."
-msgstr ""
+msgstr "Berechne Verzeichnisgröße..."
 
 #: Gtk/CloudLoginWindow.vala:212 Gtk/ConnectServerWindow.vala:538
 #: Gtk/ConnectServerWindow.vala:583 Gtk/CreateArchiveWindow.vala:2029
@@ -381,7 +381,7 @@ msgstr "Diese Dateioperation abbrechen"
 
 #: Gtk/ProgressPanelArchiveTask.vala:737 Gtk/ProgressPanelArchiveTask.vala:740
 msgid "Cancelled"
-msgstr ""
+msgstr "Abgebrochen"
 
 #: Gtk/ProgressPanelArchiveTask.vala:865
 msgid "Cancelled by user"
@@ -500,7 +500,7 @@ msgstr ""
 
 #: Gtk/CloudLoginWindow.vala:190
 msgid "Click 'Cancel' to close this window"
-msgstr ""
+msgstr "Klicke 'Abbrechen' um das Fenster zu schließen"
 
 #: Gtk/CloudLoginWindow.vala:190
 msgid "Click 'Finish' to add the account"
@@ -1618,17 +1618,17 @@ msgstr ""
 
 #: Gtk/CloudLoginWindow.vala:222
 msgid "Finish"
-msgstr ""
+msgstr "Beenden"
 
 #: Gtk/ProgressPanelImageTask.vala:224 Gtk/ProgressPanelPdfTask.vala:230
 #: Gtk/ProgressPanelVideoDownloadTask.vala:516 Utility/KvmTask.vala:195
 msgid "Finished with errors"
-msgstr ""
+msgstr "Mit Fehlern beendet"
 
 #: Gtk/LayoutPanel.vala:219
 #, c-format
 msgid "Finished ~ Close Tab to exit"
-msgstr ""
+msgstr "Beendet ~ Tab schließen"
 
 #: Gtk/TermContextMenu.vala:393
 msgid "Fish Config"
@@ -1662,7 +1662,7 @@ msgstr "Ordner ist leer"
 #: Gtk/PlacesPopover.vala:478
 msgid ""
 "Folder may have been deleted or renamed, or device may have been unmounted"
-msgstr ""
+msgstr "Ordner wurde gelöscht oder umbenannt, oder das Gerät wurde ausgehängt"
 
 #: Gtk/FileContextMenu.vala:1387
 msgid "Follow Symlink Path"
@@ -1674,7 +1674,7 @@ msgstr ""
 
 #: Gtk/TermContextMenu.vala:255
 msgid "Font"
-msgstr ""
+msgstr "Schrift"
 
 #: Gtk/Settings.vala:1635
 msgid "Font scale"
@@ -1699,7 +1699,7 @@ msgstr ""
 
 #: Gtk/DeviceContextMenu.vala:293
 msgid "Format..."
-msgstr ""
+msgstr "Format..."
 
 #: Gtk/FileViewToolbar.vala:176 Gtk/MainMenubar.vala:1300 Gtk/Pathbar.vala:827
 #: Gtk/Settings.vala:408 Gtk/Settings.vala:797
@@ -1717,7 +1717,7 @@ msgstr "Frei"
 
 #: Utility/Shell.vala:43
 msgid "Friendly interactive shell (fish)"
-msgstr ""
+msgstr "Friendly interactive shell (fish)"
 
 #: Gtk/MainMenubar.vala:1134
 msgid "Fullscreen Mode"
@@ -1725,19 +1725,19 @@ msgstr "Vollbild Modus"
 
 #: Gtk/DeviceContextMenu.vala:599
 msgid "GNOME Disk Uitility (gnome-disks) is not installed"
-msgstr ""
+msgstr "GNOME Disk Uitility (gnome-disks) is nicht installiert"
 
 #: Gtk/DeviceContextMenu.vala:616
 msgid "GNOME Disk Utility (gnome-disks) is not installed"
-msgstr ""
+msgstr "GNOME Disk Uitility (gnome-disks) ist nicht installiert"
 
 #: Gtk/Settings.vala:165
 msgid "GTK Theme"
-msgstr ""
+msgstr "GTK-Theme"
 
 #: Gtk/Settings.vala:1104
 msgid "GTK theme to use"
-msgstr ""
+msgstr "GTK-Theme benutzen"
 
 #: Gtk/PropertiesWindow.vala:154 Gtk/Settings.vala:1159
 msgid "General"
@@ -1765,7 +1765,7 @@ msgstr "Gehe zu Ort"
 
 #: Gtk/Settings.vala:2411
 msgid "Graphics"
-msgstr ""
+msgstr "Grafiken"
 
 #: Gtk/Settings.vala:2447
 msgid ""
@@ -1800,7 +1800,7 @@ msgstr "Kopfzeilen"
 
 #: Gtk/MainMenubar.vala:1886
 msgid "Help"
-msgstr ""
+msgstr "Hilfe"
 
 #: Gtk/CreateArchiveWindow.vala:1802 Gtk/FileContextMenu.vala:1342
 #: Gtk/PasswordDialog.vala:202
@@ -1813,7 +1813,7 @@ msgstr "Verstecke gewählte Objekte"
 
 #: Gtk/ConnectServerWindow.vala:608
 msgid "History"
-msgstr ""
+msgstr "Verlauf"
 
 #: Gtk/FileViewToolbar.vala:217 Gtk/Pathbar.vala:887 Gtk/PlacesPopover.vala:622
 #: Gtk/Settings.vala:459 Gtk/Settings.vala:837 Gtk/Sidebar.vala:340
@@ -1822,7 +1822,7 @@ msgstr "Home"
 
 #: Gtk/MainMenubar.vala:1907
 msgid "Homepage"
-msgstr ""
+msgstr "Startseite"
 
 #: Gtk/ViewPopover.vala:221
 msgid "Horizontal"
@@ -1830,7 +1830,7 @@ msgstr "Horizontal"
 
 #: Gtk/ConnectServerWindow.vala:659
 msgid "Host IP (Eg: 192.0.10.1)"
-msgstr ""
+msgstr "Host-IP (Bspw.: 192.0.10.1)"
 
 #: Utility/Gtk/AboutWindow.vala:467
 msgid "Icon Themes & Utilities"
@@ -1850,7 +1850,7 @@ msgstr "Symbole"
 
 #: Gtk/Settings.vala:2586 Gtk/Settings.vala:2600
 msgid "If selected, the action will remove original file on success"
-msgstr ""
+msgstr "Wenn ausgewählt, wird diese Aktion die Originaldatei bei erfolg entfernen"
 
 #: Gtk/Settings.vala:2614 Gtk/Settings.vala:2628 Gtk/Settings.vala:2642
 #: Gtk/Settings.vala:2656 Gtk/Settings.vala:2670 Gtk/Settings.vala:2684
@@ -1864,20 +1864,20 @@ msgstr ""
 
 #: Gtk/FileContextMenu.vala:2253
 msgid "Image"
-msgstr ""
+msgstr "Bild"
 
 #: Gtk/Settings.vala:2335
 msgid "Image Actions"
-msgstr ""
+msgstr "Bild-Aktionen"
 
 #: Utility/FileItemArchive.vala:361
 #, c-format
 msgid "Incorrect Password. Try again or Cancel."
-msgstr ""
+msgstr "Falsches Passwort. Versuche es erneut oder brich ab"
 
 #: Utility/ArchiveTask.vala:1069
 msgid "Incorrect password for encrypted archive"
-msgstr ""
+msgstr "Falsches Password für das verschlüsselte Archiv"
 
 #: Gtk/ColumnSelectionBox.vala:131 Gtk/SortMenu.vala:90
 #: Gtk/ViewPopover.vala:375
@@ -1890,19 +1890,19 @@ msgstr "Sperr Schaltfläche"
 
 #: Gtk/MainMenubar.vala:1729
 msgid "Install Rclone (Cloud Storage Support)"
-msgstr ""
+msgstr "Installiere Rclone (Cloud Storage Support)"
 
 #: Gtk/FileContextMenu.vala:1902
 msgid "Install from ISO..."
-msgstr ""
+msgstr "Installiere von ISO-Datei..."
 
 #: Gtk/MainMenubar.vala:1740
 msgid "Install p7zip 16.02 (Archive Support)"
-msgstr ""
+msgstr "Installiere p7zip 16.02 (Archive Support)"
 
 #: Gtk/FileViewList.vala:5671 Gtk/FileViewList.vala:5693
 msgid "Install required packages and try again"
-msgstr ""
+msgstr "Installiere notwendige Pakete und versuche es erneut"
 
 #: Gtk/FileViewList.vala:4241
 msgid "Internal Error"
@@ -1910,27 +1910,27 @@ msgstr "Interner Fehler"
 
 #: Utility/Device.vala:496
 msgid "Invalid Passphrase"
-msgstr ""
+msgstr "Ungütlige Passphrase"
 
 #: Gtk/FileViewList.vala:5930
 msgid "Invalid Path"
-msgstr ""
+msgstr "Ungültiger Pfad"
 
 #: Gtk/ConnectServerWindow.vala:952 Gtk/ConnectServerWindow.vala:962
 msgid "Invalid Server Name"
-msgstr ""
+msgstr "Ungültiger Server-Name"
 
 #: Gtk/MainMenubar.vala:1917
 msgid "Issue Tracker"
-msgstr ""
+msgstr "Issue-Tracker"
 
 #: Utility/Gtk/DonationWindow.vala:112
 msgid "Issue Tracker ~ Report Issues, Request Features, Ask Questions"
-msgstr ""
+msgstr "Issue-Tracker ~ Berichte von Fehlern, Erbitte Funktionen, Stelle Fragen"
 
 #: Gtk/FileConflictDialog.vala:349 Utility/FileTask.vala:1097
 msgid "Item"
-msgstr ""
+msgstr "Objekte"
 
 #: Gtk/FileViewList.vala:388
 msgid "Item is not a symbolic link"
@@ -1942,7 +1942,7 @@ msgstr "Objekte"
 
 #: Gtk/FileContextMenu.vala:1767
 msgid "KVM"
-msgstr ""
+msgstr "KVM"
 
 #: Gtk/PropertiesWindow.vala:1023
 msgid "Key"
@@ -1950,11 +1950,11 @@ msgstr "Schlüssel"
 
 #: Gtk/MainMenubar.vala:1937
 msgid "Keyboard Shortcuts"
-msgstr ""
+msgstr "Tastaturkürzel"
 
 #: Utility/Shell.vala:46
 msgid "Korn shell (ksh)"
-msgstr ""
+msgstr "Korn shell (ksh)"
 
 #: Gtk/PropertiesWindow.vala:506 Gtk/Sidebar.vala:715 Utility/Device.vala:2437
 #, c-format
@@ -1993,14 +1993,15 @@ msgstr "Ebene"
 
 #: Utility/Gtk/AboutWindow.vala:316 Utility/Gtk/AboutWindow.vala:351
 msgid "License"
-msgstr ""
+msgstr "Lizenz"
 
 #: Gtk/Settings.vala:2502
 msgid ""
 "Limit the CPU usage for VM process. It is recommended to keep this below 90 "
 "to prevent the host system from becoming unresponsive when intensive tasks "
 "are running in the guest OS."
-msgstr ""
+msgstr "Limitiere die CPU-Last für den VM-Prozess. Es wird empfohlen diesen Wert unter 90 zu belassen,"
+"um zu verhinderns, dass das Host-System bei rechenintensiven Aufgaben im Gastsystem unansprechbar wird." 
 
 #: Gtk/PropertiesWindow.vala:185
 msgid "Link Target"
@@ -2029,7 +2030,7 @@ msgstr ""
 
 #: Gtk/FileViewList.vala:3331
 msgid "Loading..."
-msgstr ""
+msgstr "Lade..."
 
 #: Gtk/CreateArchiveWindow.vala:404 Gtk/PropertiesWindow.vala:182
 msgid "Location"
@@ -2041,7 +2042,7 @@ msgstr "Ort nicht gefunden"
 
 #: Gtk/DeviceContextMenu.vala:225
 msgid "Lock"
-msgstr ""
+msgstr "Sperren"
 
 #: Gtk/FileViewTab.vala:295
 #, fuzzy
@@ -2051,11 +2052,11 @@ msgstr "Pfad"
 #: Utility/Device.vala:569 Utility/Device.vala:1931
 #, c-format
 msgid "Locked"
-msgstr ""
+msgstr "Gesperrt"
 
 #: Utility/Device.vala:568 Utility/Device.vala:1930
 msgid "Locked successfully"
-msgstr ""
+msgstr "Erfolgreich gesperrt"
 
 #: Gtk/MainMenubar.vala:1476
 msgid "Login to cloud storage account"
@@ -2159,16 +2160,16 @@ msgstr ""
 
 #: Utility/Gtk/GtkHelper.vala:376
 msgid "Missing Icon"
-msgstr ""
+msgstr "Fehlendes Icon"
 
 #: Gtk/FileViewList.vala:5692
 msgid "Missing Plugin"
-msgstr ""
+msgstr "Fehlendes Plugin"
 
 #: Utility/Device.vala:2420
 #, c-format
 msgid "Model"
-msgstr ""
+msgstr "Modell"
 
 #: Gtk/FileConflictDialog.vala:543 Gtk/FileConflictDialog.vala:555
 #: Gtk/FileViewList.vala:804 Gtk/PropertiesWindow.vala:315
@@ -2198,7 +2199,7 @@ msgstr "ISO als `nur lesen` einhängen"
 
 #: Gtk/FileContextMenu.vala:1883
 msgid "Mount the selected disk"
-msgstr ""
+msgstr "Hänge das ausgewählte Gerät ein"
 
 #: Gtk/DeviceContextMenu.vala:180
 msgid "Mount this volume"
@@ -2211,7 +2212,7 @@ msgstr "Eingehängte ISO"
 
 #: Utility/KvmTask.vala:314
 msgid "Mounted successfully"
-msgstr ""
+msgstr "Erfolgreich eingehängt"
 
 #: Gtk/FileContextMenu.vala:1258
 msgid "Move Across"
@@ -2259,15 +2260,15 @@ msgstr "Verschiebe zum anderen Fenster"
 #: Utility/FileTask.vala:790
 #, c-format
 msgid "Moving file"
-msgstr ""
+msgstr "Verschiebe Datei"
 
 #: Gtk/ProgressPanelFileTask.vala:163
 msgid "Moving files to Trash:"
-msgstr ""
+msgstr "Verschiebe in den Mülleimer"
 
 #: Gtk/ProgressPanelFileTask.vala:157
 msgid "Moving files:"
-msgstr ""
+msgstr "Verschiebe Dateien:"
 
 #: Gtk/ColumnSelectionBox.vala:285 Gtk/ColumnSelectionBox.vala:320
 msgid "Multiple items selected"
@@ -2283,7 +2284,7 @@ msgstr ""
 
 #: Gtk/ConnectServerWindow.vala:678
 msgid "NETBIOS Name"
-msgstr ""
+msgstr "NETBIOS-Name"
 
 #: Gtk/FileViewList.vala:394
 msgid "NTD = Rename Trash Delete"
@@ -2306,11 +2307,11 @@ msgstr "Neues Admin Fenster"
 
 #: Gtk/FileViewList.vala:4589
 msgid "New File"
-msgstr ""
+msgstr "Neue Datei"
 
 #: Gtk/FileViewList.vala:4555
 msgid "New Folder"
-msgstr ""
+msgstr "Neuer Ordner"
 
 #: Gtk/FileViewTab.vala:361 Gtk/MainMenubar.vala:158
 msgid "New Tab"
@@ -2349,15 +2350,15 @@ msgstr "Keine Dateien gewählt"
 #: Gtk/FileViewList.vala:5558 Gtk/FileViewList.vala:5578
 #: Gtk/FileViewList.vala:5598 Gtk/FileViewList.vala:5618
 msgid "No Images Selected"
-msgstr ""
+msgstr "Keine Bilder ausgewählt"
 
 #: Gtk/FileViewList.vala:5498
 msgid "No JPEGs Selected"
-msgstr ""
+msgstr "Keine JPEGs ausgewählt"
 
 #: Gtk/FileViewList.vala:5476
 msgid "No PNGs Selected"
-msgstr ""
+msgstr "Keine PNGs ausgewählt"
 
 #: Gtk/FileViewList.vala:4512
 msgid "No Permission"
@@ -2365,7 +2366,7 @@ msgstr "Keine Berechtigung"
 
 #: Gtk/FileContextMenu.vala:1746
 msgid "No USB devices found"
-msgstr ""
+msgstr "Kein USB-Gerät gefunden"
 
 #: Gtk/CreateArchiveWindow.vala:852 Gtk/CreateArchiveWindow.vala:871
 msgid "Normal"
@@ -2374,7 +2375,7 @@ msgstr "Normal"
 #: Gtk/FileViewList.vala:4974 Gtk/FileViewList.vala:4981
 #: Gtk/FileViewList.vala:5860 Gtk/FileViewList.vala:5956
 msgid "Not Supported"
-msgstr ""
+msgstr "Nicht unterstützt"
 
 #: Gtk/Settings.vala:2475
 msgid ""
@@ -2429,11 +2430,11 @@ msgstr "Öffne im Terminal Fenster"
 
 #: Gtk/FileViewList.vala:3319
 msgid "Open an admin window to browse this folder"
-msgstr ""
+msgstr "Öffne ein Admin-Fenster um diesen Ordner zu durchsuchen"
 
 #: Gtk/FileContextMenu.vala:1508
 msgid "Open archive"
-msgstr ""
+msgstr "Öffne Archiv"
 
 #: Gtk/FileContextMenu.vala:566
 msgid "Open as Admin"
@@ -2541,19 +2542,19 @@ msgstr "Mit andere Anwendung öffnen"
 
 #: Gtk/Settings.vala:2695
 msgid "Optimize"
-msgstr ""
+msgstr "Optimiere"
 
 #: Gtk/FileContextMenu.vala:2166
 msgid "Optimize For"
-msgstr ""
+msgstr "Optimiere für"
 
 #: Gtk/Settings.vala:2710
 msgid "Optimize PNG"
-msgstr ""
+msgstr "Optmiere PNG"
 
 #: Gtk/FileContextMenu.vala:2316
 msgid "Optimize PNG (lossless)"
-msgstr ""
+msgstr "Optimiere PNG (verlustfrei)"
 
 #: Gtk/ConnectServerWindow.vala:304 Gtk/ConnectServerWindow.vala:347
 #: Gtk/ConnectServerWindow.vala:390 Gtk/ConnectServerWindow.vala:434
@@ -2562,15 +2563,15 @@ msgstr ""
 
 #: Gtk/ConnectServerWindow.vala:684
 msgid "Optional: WORKGROUP (default)"
-msgstr ""
+msgstr "Optional: WORKGROUP (default)"
 
 #: Gtk/ConnectServerWindow.vala:668
 msgid "Optional: anonymous (default)"
-msgstr ""
+msgstr "Optional: anonym (default)"
 
 #: Gtk/ConnectServerWindow.vala:689
 msgid "Optional: guest (default)"
-msgstr ""
+msgstr "Optional: gast (default)"
 
 #: Gtk/PoloGtk.vala:144 Gtk/Settings.vala:1764 Gtk/Settings.vala:1948
 #: Gtk/Settings.vala:2151
@@ -2583,7 +2584,7 @@ msgstr "Ursprünglicher Ort"
 
 #: Gtk/FileContextMenu.vala:389
 msgid "Other"
-msgstr ""
+msgstr "Anderer"
 
 #: Gtk/FileContextMenu.vala:498 Gtk/PropertiesWindow.vala:664
 msgid "Others"
@@ -2591,11 +2592,11 @@ msgstr "Andere"
 
 #: Gtk/FileViewList.vala:5700
 msgid "Outdated Plugin"
-msgstr ""
+msgstr "Veraltetes Plugin"
 
 #: Gtk/KvmCreateDiskWindow.vala:428
 msgid "Overwrite existing file?"
-msgstr ""
+msgstr "Überschreibe bestehende Datei?"
 
 #: Gtk/FileViewList.vala:890 Gtk/PropertiesWindow.vala:807
 msgid "Owner"
@@ -2603,11 +2604,11 @@ msgstr "Eigentümer"
 
 #: Gtk/FileContextMenu.vala:2003
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: Gtk/Settings.vala:2312
 msgid "PDF Actions"
-msgstr ""
+msgstr "PDF-Aktionen"
 
 #: Gtk/FileViewList.vala:847 Gtk/PropertiesWindow.vala:261
 msgid "Packed"
@@ -2624,7 +2625,7 @@ msgstr "Felder"
 #: Utility/Device.vala:2432
 #, c-format
 msgid "Parent Device"
-msgstr ""
+msgstr "Übergeordnetes Gerät"
 
 #: Gtk/PropertiesWindow.vala:508 Gtk/Sidebar.vala:717
 #, fuzzy, c-format
@@ -2646,11 +2647,11 @@ msgstr "Passieren"
 
 #: Gtk/ConnectServerWindow.vala:419
 msgid "Password"
-msgstr ""
+msgstr "Passwort"
 
 #: Gtk/PasswordDialog.vala:226
 msgid "Password Mismatch"
-msgstr ""
+msgstr "Passwort stimmt nicht überein"
 
 #: Utility/ArchiveTask.vala:1066 Utility/ArchiveTask.vala:1223
 msgid "Password not set for encrypted archive"
@@ -2658,7 +2659,7 @@ msgstr ""
 
 #: Gtk/PasswordDialog.vala:226
 msgid "Passwords do not match"
-msgstr ""
+msgstr "Passwörter stimmen nicht überein"
 
 #: Gtk/MainMenubar.vala:602 Gtk/TermContextMenu.vala:140
 msgid "Paste"
@@ -2684,7 +2685,7 @@ msgstr "Hier einfügen"
 
 #: Gtk/FileContextMenu.vala:872
 msgid "Paste Into Folder"
-msgstr ""
+msgstr "In Ordner einfügen"
 
 #: Gtk/FileContextMenu.vala:1280
 msgid "Paste Symlinks"
@@ -2713,11 +2714,11 @@ msgstr ""
 
 #: Gtk/FileContextMenu.vala:903
 msgid "Paste items in current directory"
-msgstr ""
+msgstr "Füge Elemente in aktuelles Verzeichnis ein"
 
 #: Gtk/FileContextMenu.vala:873
 msgid "Paste items into selected directory"
-msgstr ""
+msgstr "Füge Elemente in ausgewähltes Verzeichnis ein"
 
 #: Gtk/FileContextMenu.vala:1281
 msgid ""
@@ -2767,7 +2768,7 @@ msgstr "Pause"
 
 #: Gtk/Settings.vala:1207
 msgid "Performance"
-msgstr ""
+msgstr "Leistung"
 
 #: Gtk/FileViewList.vala:415 Gtk/FileViewList.vala:976
 #: Gtk/PropertiesWindow.vala:640 Gtk/PropertiesWindow.vala:642
@@ -2793,7 +2794,7 @@ msgstr "Polo wird mit einer neuen Sitzung gestartet"
 
 #: Gtk/ConnectServerWindow.vala:185
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 #: Gtk/ColumnSelectionBox.vala:306 Gtk/ColumnSelectionBox.vala:341
 msgid "Position of fixed columns cannot be changed"
@@ -2813,7 +2814,7 @@ msgstr "Vorbereiten..."
 
 #: Gtk/WizardWindow.vala:99
 msgid "Previous"
-msgstr ""
+msgstr "Vorherige"
 
 #: Gtk/ProgressPanelArchiveTask.vala:205
 msgid "Processed:"
@@ -2826,7 +2827,7 @@ msgstr "Eigenschaften"
 
 #: Gtk/FileContextMenu.vala:2082
 msgid "Protect the PDF document by adding password"
-msgstr ""
+msgstr "Schütze das PDF-Dokument durch Hinzufügen eines Passworts"
 
 #: Gtk/PropertiesWindow.vala:710
 msgid ""
@@ -2877,7 +2878,7 @@ msgstr ""
 
 #: Gtk/Settings.vala:2515
 msgid "RAM (MB)"
-msgstr ""
+msgstr "RAM (MB)"
 
 #: Gtk/FileViewList.vala:394
 msgid "RWX = Read Write Execute"
@@ -2889,7 +2890,7 @@ msgstr "Verhältnis:"
 
 #: Gtk/MainMenubar.vala:1483
 msgid "Rclone Not Found"
-msgstr ""
+msgstr "Rclone nicht gefunden"
 
 #: Gtk/MainMenubar.vala:1484
 msgid ""
@@ -2941,19 +2942,19 @@ msgstr ""
 
 #: Gtk/FileContextMenu.vala:2367
 msgid "Reduce Color"
-msgstr ""
+msgstr "Reduziere Farben"
 
 #: Gtk/FileContextMenu.vala:2149 Gtk/Settings.vala:2611
 msgid "Reduce File Size"
-msgstr ""
+msgstr "Reduziere Dateigröße"
 
 #: Gtk/Settings.vala:2724
 msgid "Reduce JPEG"
-msgstr ""
+msgstr "Vermindere JPEG"
 
 #: Gtk/FileContextMenu.vala:2333
 msgid "Reduce JPEG Quality"
-msgstr ""
+msgstr "Vermindere JPEG-Qualität"
 
 #: Gtk/FileContextMenu.vala:2368
 msgid ""
@@ -3007,20 +3008,20 @@ msgstr "Löschen"
 
 #: Gtk/MainMenubar.vala:1500
 msgid "Remove Account"
-msgstr ""
+msgstr "Lösche Account"
 
 #: Gtk/BookmarksMenu.vala:61
 msgid "Remove Bookmark"
-msgstr ""
+msgstr "Lösche Lesezeichen"
 
 #: Gtk/FileContextMenu.vala:2115 Gtk/FileContextMenu.vala:2350
 #: Gtk/Settings.vala:2780
 msgid "Remove Color"
-msgstr ""
+msgstr "Lösche Farbe"
 
 #: Gtk/FileContextMenu.vala:2098 Gtk/Settings.vala:2653
 msgid "Remove Password"
-msgstr ""
+msgstr "Lösche Password"
 
 #: Gtk/Sidebar.vala:528
 msgid "Remove bookmark"
@@ -3032,15 +3033,15 @@ msgstr "Lösche Lesezeichen für diese Position"
 
 #: Gtk/Settings.vala:2667
 msgid "Remove color"
-msgstr ""
+msgstr "Lösche Farben"
 
 #: Gtk/FileContextMenu.vala:2116
 msgid "Remove colors from PDF document"
-msgstr ""
+msgstr "Lösche Farben des PDF-Dokuments"
 
 #: Utility/FileTask.vala:1175
 msgid "Removing items..."
-msgstr ""
+msgstr "Lösche Elemente..."
 
 #: Gtk/BookmarkContextMenu.vala:89 Gtk/FileContextMenu.vala:937
 #: Gtk/FileViewList.vala:4496 Gtk/MainMenubar.vala:739 Gtk/Sidebar.vala:1172
@@ -3057,7 +3058,7 @@ msgstr ""
 
 #: Utility/FileTask.vala:162
 msgid "Renaming items..."
-msgstr ""
+msgstr "Umbenennung der Elemente..."
 
 #: Gtk/FileConflictDialog.vala:131
 msgid "Replace All"
@@ -3073,7 +3074,7 @@ msgstr "Ersetze ältere"
 
 #: Gtk/Settings.vala:2307
 msgid "Replace Original Files ?"
-msgstr ""
+msgstr "Originaldateien ersetzen ?"
 
 #: Gtk/FileConflictDialog.vala:132
 msgid "Replace all existing files"
@@ -3089,7 +3090,7 @@ msgstr "Ersetze die gewählten Dateien"
 
 #: Gtk/ProgressPanelImageTask.vala:207
 msgid "Replaced"
-msgstr ""
+msgstr "Ersetzt"
 
 #: Gtk/FileViewList.vala:4362
 msgid "Requested operation is not possible"
@@ -3117,7 +3118,7 @@ msgstr "TAB Name zurücksetzen"
 
 #: Gtk/TermContextMenu.vala:180
 msgid "Reset and clear"
-msgstr ""
+msgstr "Zurücksetzen und leeren"
 
 #: Gtk/MainMenubar.vala:1821
 msgid "Reset session and restart"
@@ -3129,11 +3130,11 @@ msgstr "Auf Standardspalten zurücksetzen"
 
 #: Gtk/Settings.vala:2738
 msgid "Resize"
-msgstr ""
+msgstr "Größenänderung"
 
 #: Gtk/FileContextMenu.vala:2445
 msgid "Resize to"
-msgstr ""
+msgstr "Größe ändern zu"
 
 #: Gtk/ProgressPanelFileTask.vala:375
 msgid "Resolving conflicts..."
@@ -3161,7 +3162,7 @@ msgstr "Stelle Sitzung wieder her..."
 
 #: Gtk/ProgressPanelFileTask.vala:160
 msgid "Restoring trashed files:"
-msgstr ""
+msgstr "Wiederherstellung in den Papierkorb geschobener Elemente:"
 
 #: Gtk/ProgressPanelArchiveTask.vala:489 Gtk/ProgressPanelArchiveTask.vala:490
 msgid "Resume"
@@ -3175,7 +3176,7 @@ msgstr ""
 #: Gtk/FileContextMenu.vala:2205 Gtk/FileContextMenu.vala:2484
 #: Gtk/Settings.vala:2681 Gtk/Settings.vala:2752
 msgid "Rotate"
-msgstr ""
+msgstr "Drehen"
 
 #: Gtk/Settings.vala:1712 Gtk/Settings.vala:1862 Gtk/Settings.vala:2063
 msgid "Row spacing"
@@ -3203,7 +3204,7 @@ msgstr "Admin Recht (!)"
 
 #: Gtk/SelectionBar.vala:148
 msgid "Select"
-msgstr ""
+msgstr "Auswählen"
 
 #: Gtk/FileConflictDialog.vala:257 Gtk/MainMenubar.vala:782
 msgid "Select All"
