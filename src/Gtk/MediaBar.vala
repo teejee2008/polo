@@ -53,6 +53,9 @@ public class MediaBar : Gtk.Box {
 
 	// -------------------------------
 
+	private Gtk.Label label_folders;
+	private Gtk.Label label_other_files;
+	
 	public MediaBar(FileViewPane parent_pane){
 		//base(Gtk.Orientation.VERTICAL, 6); // issue with vala
 		Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 6); // work-around
@@ -69,8 +72,8 @@ public class MediaBar : Gtk.Box {
 
 	private void init_ui(){
 
-		var label = new Gtk.Label(_("Switch to media browser view?"));
-		label.xalign = 0.5f;
+		var label = new Gtk.Label(_("Showing photos and videos in Media View"));
+		label.xalign = 0.0f;
 		label.hexpand = true;
 		label.margin = 6;
 		add(label);
@@ -78,42 +81,126 @@ public class MediaBar : Gtk.Box {
 		string css = " background-color: #2196F3; ";
 		gtk_apply_css(new Gtk.Widget[] { this }, css);
 
-		css = " color: #ffffff; ";
+		css = " color: #ffffff; font-weight: bold; ";
 		gtk_apply_css(new Gtk.Widget[] { label }, css);
 
-		add_include_button();
+		// actions ------------------------------
+		
+		add_show_other_files_button();
 
-		add_exclude_button();
+		add_hide_folders_button();
+		
+		add_ignore_button();
 
-		//add_exit_button();
+		add_exit_button();
 	}
 
-	private void add_include_button(){
+	private void add_show_other_files_button(){
+
+		var ebox = gtk_add_event_box(this);
+		var label = new Gtk.Label("");
+		label.set_use_markup(true);
+		label.margin = 6;
+		ebox.add(label);
+
+		label_other_files = label;
+		
+		var css = " color: #ffffff; ";
+		gtk_apply_css(new Gtk.Widget[] { label }, css);
+
+		ebox.button_press_event.connect((event) => {
+			
+			gtk_set_busy(true, window);
+			gtk_do_events();
+
+			view.show_other_files_in_media_view = !view.show_other_files_in_media_view;
+			view.refilter();
+
+			refresh();
+			
+			gtk_set_busy(false, window);
+			return false;
+		});
+
+		ebox.enter_notify_event.connect((event) => {
+			//log_debug("lbl.enter_notify_event()");
+			label.label = "<u>%s</u>".printf(label.label);
+			return false;
+		});
+
+		ebox.leave_notify_event.connect((event) => {
+			//log_debug("lbl.leave_notify_event()");
+			label.label = "%s".printf(label.label.replace("<u>", "").replace("</u>", ""));
+			return false;
+		});
+	}
+
+	private void add_hide_folders_button(){
+
+		var ebox = gtk_add_event_box(this);
+		var label = new Gtk.Label("");
+		label.set_use_markup(true);
+		label.margin = 6;
+		ebox.add(label);
+
+		label_folders = label;
+
+		var css = " color: #ffffff; ";
+		gtk_apply_css(new Gtk.Widget[] { label }, css);
+
+		ebox.button_press_event.connect((event) => {
+			
+			gtk_set_busy(true, window);
+			gtk_do_events();
+
+			view.show_folders_in_media_view = !view.show_folders_in_media_view;
+			view.refilter();
+
+			refresh();
+			
+			gtk_set_busy(false, window);
+			return false;
+		});
+
+		ebox.enter_notify_event.connect((event) => {
+			//log_debug("lbl.enter_notify_event()");
+			label.label = "<u>%s</u>".printf(label.label);
+			return false;
+		});
+
+		ebox.leave_notify_event.connect((event) => {
+			//log_debug("lbl.leave_notify_event()");
+			label.label = "%s".printf(label.label.replace("<u>", "").replace("</u>", ""));
+			return false;
+		});
+	}
+
+
+	private void add_ignore_button(){
 
 		var ebox = gtk_add_event_box(this);
 
-		var text = _("Yes");
+		var text = _("[Ignore]");
 		var label = new Gtk.Label(text);
-		//link.ellipsize = Pango.EllipsizeMode.MIDDLE;
 		label.set_use_markup(true);
 		label.margin = 6;
-		//label.margin_right = 12;
-		label.set_tooltip_text(_("Switch to media browser view mode"));
+		label.set_tooltip_text(_("Ignore photos and videos in this location and do not switch to Media View automatically."));
 		ebox.add(label);
 
 		var css = " color: #ffffff; ";
 		gtk_apply_css(new Gtk.Widget[] { label }, css);
 
 		ebox.button_press_event.connect((event) => {
+			
 			gtk_set_busy(true, window);
 			gtk_do_events();
 
 			string path = view.current_item.file_path;
 
-			App.mediaview_include.add(path);
+			App.mediaview_exclude.add(path);
 
-			if (App.mediaview_exclude.contains(path)){
-				App.mediaview_exclude.remove(path);
+			if (App.mediaview_include.contains(path)){
+				App.mediaview_include.remove(path);
 			}
 
 			App.save_folder_selections();
@@ -139,36 +226,28 @@ public class MediaBar : Gtk.Box {
 		});
 	}
 
-	private void add_exclude_button(){
+	private void add_exit_button(){
 
 		var ebox = gtk_add_event_box(this);
 
-		var text = _("No");
+		var text = _("[Exit]");
 		var label = new Gtk.Label(text);
-		//link.ellipsize = Pango.EllipsizeMode.MIDDLE;
 		label.set_use_markup(true);
 		label.margin = 6;
 		label.margin_right = 12;
-		label.set_tooltip_text(_("Stay in current view"));
+		label.set_tooltip_text(_("Exit Media View"));
 		ebox.add(label);
 
 		var css = " color: #ffffff; ";
 		gtk_apply_css(new Gtk.Widget[] { label }, css);
 
 		ebox.button_press_event.connect((event) => {
+			
 			gtk_set_busy(true, window);
 			gtk_do_events();
 
-			string path = view.current_item.file_path;
-
-			App.mediaview_exclude.add(path);
-
-			if (App.mediaview_include.contains(path)){
-				App.mediaview_include.remove(path);
-			}
-
-			App.save_folder_selections();
-
+			view.set_view_mode_user();
+			
 			refresh();
 
 			gtk_set_busy(false, window);
@@ -192,24 +271,27 @@ public class MediaBar : Gtk.Box {
 
 		log_debug("MediaBar: refresh()");
 
-		//log_debug("MediaBar: view.has_media(): %s".printf(view.has_media.to_string()));
-		//log_debug("MediaBar: mediaview_included(): %s".printf(view.mediaview_included.to_string()));
-		//log_debug("MediaBar: mediaview_excluded(): %s".printf(view.mediaview_excluded.to_string()));
-		//log_debug("MediaBar: refresh(): %s".printf(view.has_media.to_string()));
+		if (view.get_view_mode() == ViewMode.MEDIA){
 
-		gtk_hide(this);
-		
-		/*if (view.has_media && (view.get_view_mode() != ViewMode.MEDIA)
-			&& !view.mediaview_include && !view.mediaview_exclude
-			&& !view.current_item.is_trash && !(view.current_item is FileItemArchive)){
+			if (view.show_folders_in_media_view){
+				label_folders.label = "[%s]".printf(_("Hide Folders"));
+			}
+			else{
+				label_folders.label = "[%s]".printf(_("Show Folders"));
+			}
+
+			if (view.show_other_files_in_media_view){
+				label_other_files.label = "[%s]".printf(_("Hide Other Files"));
+			}
+			else{
+				label_other_files.label = "[%s]".printf(_("Show Other Files"));
+			}
 
 			gtk_show(this);
 		}
 		else{
 			gtk_hide(this);
-		}*/
-
-		//log_debug("MediaBar: refresh(): exit");
+		}
 	}
 
 }

@@ -260,6 +260,8 @@ public class MainWindow : Gtk.Window {
 		this.show_all();
 		this.present();
 		gtk_do_events();
+
+		log_debug("Initialization complete -----------------", true);
 		
 		return false;
 	}

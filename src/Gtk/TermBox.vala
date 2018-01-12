@@ -329,16 +329,18 @@ public class TermBox : Gtk.Box {
 	}
 
 	public void set_font_size(int size_pts){
+		
 		term.font_desc = Pango.FontDescription.from_string("normal %d".printf(size_pts));
 	}
 
 	public void set_font_desc(Pango.FontDescription font_desc){
+		
 		term.set_font(font_desc);
 	}
 
 	public void set_color_foreground(string color){
 
-		log_debug("TermBox: set_color_foreground(): %s".printf(color));
+		//log_debug("TermBox: set_color_foreground(): %s".printf(color));
 		
 		var rgba = Gdk.RGBA();
 		rgba.parse(color);
@@ -347,7 +349,7 @@ public class TermBox : Gtk.Box {
 	
 	public void set_color_background(string color){
 		
-		log_debug("TermBox: set_color_background(): %s".printf(color));
+		//log_debug("TermBox: set_color_background(): %s".printf(color));
 		
 		var rgba = Gdk.RGBA();
 		rgba.parse(color);

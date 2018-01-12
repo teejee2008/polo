@@ -93,6 +93,8 @@ public class PlacesPopover : Gtk.Popover {
 
 	private void init_ui(){
 
+		log_debug("PlacesPopover(): init_ui()");
+		
 		//vbox_main
 		vbox_main = new Gtk.Box(Orientation.VERTICAL, 0);
 		vbox_main.margin = 0;
@@ -143,7 +145,7 @@ public class PlacesPopover : Gtk.Popover {
 		scrolled.set_shadow_type (ShadowType.ETCHED_IN);
 		scrolled.hscrollbar_policy = PolicyType.AUTOMATIC;
 		scrolled.vscrollbar_policy = PolicyType.AUTOMATIC;
-		scrolled.add (treeview);
+		//scrolled.add (treeview);
 		//scrolled.hexpand = true;
 		//scrolled.vexpand = true;
 		//paned.pack1(scrolled, true, true); // resize, shrink

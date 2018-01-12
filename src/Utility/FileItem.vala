@@ -777,7 +777,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	public bool is_media_directory{
 		get{
 			int media_count = count_photos + count_videos;
-			return (file_count > 10) && (media_count >= (file_count / 2));
+			if (media_count == 0){ return false; }
+			return (media_count >= (file_count / 2)) || (media_count >= 4);
 		}
 	}
 

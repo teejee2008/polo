@@ -120,6 +120,10 @@ public class FileViewList : Gtk.Box {
 	public bool show_hidden_files;
 	public bool dual_mode = true;
 
+	public bool media_view_exited = false;
+	public bool show_folders_in_media_view = true;
+	public bool show_other_files_in_media_view = true;
+
 	// signals
 	public signal void changed();
 
@@ -2123,7 +2127,15 @@ public class FileViewList : Gtk.Box {
 
 	// view mode ------------------------------------------
 
-	public void set_view_mode(ViewMode _view_mode, bool update_user = true){
+	public ViewMode get_view_mode(){
+		return view_mode;
+	}
+
+	public ViewMode get_view_mode_user(){
+		return view_mode_user;
+	}
+
+	public void set_view_mode(ViewMode _view_mode, bool set_by_user = true){
 
 		//if (view_mode == _view_mode) { return; }
 
@@ -2141,21 +2153,45 @@ public class FileViewList : Gtk.Box {
 
 		view_mode = _view_mode;
 
-		if (update_user){
+		if (set_by_user){
 			view_mode_user = _view_mode;
 		}
 
 		refresh(false, false);
 	}
 
-	public ViewMode get_view_mode(){
-		return view_mode;
+	public void set_view_mode_user(){
+		
+		view_mode = view_mode_user;
+		media_view_exited = true;
+		log_debug("set_view_mode_user(): %s".printf(view_mode.to_string()));
+		refresh(false, false);
+	}
+	
+	private void set_view_mode_for_location(){
+
+		if (current_item == null){ return; }
+		
+		log_debug("media=%s, photos=%d, videos=%d".printf(
+			current_item.is_media_directory.to_string(), current_item.count_photos, current_item.count_videos));
+
+		if (has_media && !mediaview_exclude && !media_view_exited){
+			view_mode = ViewMode.MEDIA;
+			show_folders_in_media_view = true;
+			show_other_files_in_media_view = false;
+			log_debug("changed view mode: %s".printf(view_mode.to_string()), true);
+		}
+		else{
+			view_mode = view_mode_user;
+			log_debug("changed view mode: %s".printf(view_mode.to_string()));
+		}
+
+		pane.mediabar.refresh();
+
+		//log_debug("view_mode: %s, %s".printf(view_mode.to_string(), view_mode_user.to_string()));
 	}
 
-	public ViewMode get_view_mode_user(){
-		return view_mode_user;
-	}
-
+	
 	// change current directory ----------------------------------
 
 	public FileItem? set_view_path(string path, bool update_history = true){
@@ -2260,6 +2296,8 @@ public class FileViewList : Gtk.Box {
 		pane.messages.clear();
 		
 		pane.pathbar.refresh(); // update pathbar before starting async query
+
+		media_view_exited = false;
 		
 		//query_items();
 		
@@ -2268,7 +2306,7 @@ public class FileViewList : Gtk.Box {
 		//set_view_mode_for_location();
 
 		//view_refresher_cancelled = true;
-		
+
 		refresh(true, true); // requery
 
 		set_columns_for_special_locations();
@@ -2281,25 +2319,6 @@ public class FileViewList : Gtk.Box {
 
 		return current_item;
 	}
-
-	/*private void set_view_mode_for_location(){
-
-		if (current_item == null){ return; }
-		
-		log_debug("media=%s, photos=%d, videos=%d".printf(
-			current_item.is_media_directory.to_string(), current_item.count_photos, current_item.count_videos));
-
-		if (has_media && mediaview_include && !mediaview_exclude){
-			view_mode = ViewMode.MEDIA;
-			//log_debug("changed view mode: %s".printf(view_mode.to_string()));
-		}
-		else{
-			view_mode = view_mode_user;
-			//log_debug("changed view mode: %s".printf(view_mode.to_string()));
-		}
-
-		//log_debug("view_mode: %s, %s".printf(view_mode.to_string(), view_mode_user.to_string()));
-	}*/
 
 	private void set_columns_for_special_locations(){
 		
@@ -2323,6 +2342,8 @@ public class FileViewList : Gtk.Box {
 		if (current_item != null){
 			remove_overlay();
 		}
+
+		set_view_mode_for_location();
 
 		refresh_treeview(); // will refresh icon_view also
 
@@ -3034,6 +3055,18 @@ public class FileViewList : Gtk.Box {
 				display = true;
 			}
 			else{
+				display = false;
+			}
+		}
+
+		if (view_mode == ViewMode.MEDIA){
+			
+			if (item.is_directory){
+				if (!show_folders_in_media_view){
+					display = false;
+				}
+			}
+			else if (!item.is_image && !item.is_video && !show_other_files_in_media_view){
 				display = false;
 			}
 		}
