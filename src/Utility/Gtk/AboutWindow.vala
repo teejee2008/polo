@@ -345,7 +345,7 @@ public class AboutWindow : Dialog {
 				btn_license.image = IconManager.lookup_image("go-previous-symbolic", 16);
 				btn_license.always_show_image = true;
 				btn_credits.hide();
-				this.resize(600, 500);
+				this.resize(800, 500);
 			}
 			else{
 				btn_license.label = "  " + _("License");
