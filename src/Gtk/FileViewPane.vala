@@ -303,11 +303,14 @@ public class FileViewPane : Gtk.Box {
 
 	public void maximize_terminal(){
 		gtk_hide(box_pathbar_view);
+		gtk_hide(statusbar);
 	}
 
 	public void unmaximize_terminal(){
+		
 		gtk_show(box_pathbar_view);
-
+		gtk_show(statusbar);
+		
 		int pos_height = paned_term.get_allocated_height();
 		int pos_height_half = (int) (pos_height / 2);
 		paned_term.set_position(pos_height_half);
