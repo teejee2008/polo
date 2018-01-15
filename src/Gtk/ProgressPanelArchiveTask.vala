@@ -502,7 +502,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		btn_stop.label = _("Stop");
 		btn_stop.always_show_image = true;
 		btn_stop.image_position = PositionType.LEFT;
-		btn_stop.image = IconManager.lookup_image("process-stop", 16);
+		btn_stop.image = IconManager.lookup_image("process-stop", 32);
 
 		btn_stop.clicked.connect(() => {
 			cancel();

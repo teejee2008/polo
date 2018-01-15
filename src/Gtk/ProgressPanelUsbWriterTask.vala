@@ -109,7 +109,7 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 
 		var button = new Gtk.Button.with_label("");
 		button.label = "";
-		button.image = IconManager.lookup_image("process-stop", 16);
+		button.image = IconManager.lookup_image("process-stop", 32);
 		button.always_show_image = true;
 		button.set_tooltip_text(_("Cancel"));
 		hbox_outer.add(button);
