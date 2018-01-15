@@ -1163,11 +1163,13 @@ public class ChecksumBox : Gtk.Box {
 		items = new Gee.ArrayList<FileItem>();
 
 		if (!check_hash_file_type(hash_file.file_path)){
-			string title = _("Unknown Hash Type");
-			string msg = "%s:\n\n%s".printf(_("Failed to detect hash type for file"), hash_file.file_path);
+			string title = _("Unknown File Format");
+			string msg = "%s:\n\n%s".printf(_("File has a non-standard format or is not a checksum file"), hash_file.file_path);
 			gtk_messagebox(title, msg, window, true);
 			return;
 		}
+
+		log_msg("%s: %s".printf(_("Checksum Type"), get_checksum_type_name()));
 
 		col_checksum.title = "%s: %s".printf(_("Checksum"), get_checksum_type_name());//.replace("CHECKSUMTYPE_");
 		col_checksum_compare.visible = true;
@@ -1197,7 +1199,19 @@ public class ChecksumBox : Gtk.Box {
 
 		string line = txt.split("\n")[0];
 
-		string hash = line.split("\t")[0];
+		string hash = "";
+		if (line.contains("\t")){
+			hash = line.split("\t", 2)[0];
+		}
+		else if (line.contains("  ")){
+			hash = line.split("  ", 2)[0];
+		}
+		else if (line.contains(" *")){
+			hash = line.split(" *", 2)[0];
+		}
+		else{
+			return false;
+		}
 
 		var match = regex_match("""[a-f0-9]{128}""", hash);
 		if (match != null){
@@ -1263,10 +1277,30 @@ public class ChecksumBox : Gtk.Box {
 		
 		foreach(string line in lines){
 
-			if (!line.contains("\t")){ continue; }
+			string hash = "";
+			string file_path = "";
+			string[] arr;
 			
-			string hash = line.split("\t")[0];
-			string file_path = basepath + line.split("\t")[1];
+			if (line.contains("\t")){
+				arr = line.split("\t", 2);
+				hash = arr[0];
+				file_path = arr[1];
+			}
+			else if (line.contains("  ")){
+				arr = line.split("  ", 2);
+				hash = arr[0];
+				file_path = arr[1];
+			}
+			else if (line.contains(" *")){
+				arr = line.split(" *", 2);
+				hash = arr[0];
+				file_path = arr[1];
+			}
+			else{
+				continue;
+			}
+		
+			file_path = basepath + file_path;
 
 			var item = new FileItem.from_path(file_path);
 			items.add(item);
@@ -1280,6 +1314,8 @@ public class ChecksumBox : Gtk.Box {
 				});
 			}
 		}
+
+		log_msg("%s: %d".printf(_("Found"), items.size));
 
 		enumerate_running = false;
 
@@ -1376,7 +1412,10 @@ public class ChecksumBox : Gtk.Box {
 
 		string txt = "";
 
-		if (count_ok == items.size){
+		if (items.size == 0){
+			txt += "<b>%s</b>".printf(_("No files found"));
+		}
+		else if (count_ok == items.size){
 			txt += "<b>%s</b>".printf(_("All files verified successfully"));
 		}
 		else{
