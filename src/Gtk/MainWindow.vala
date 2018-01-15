@@ -857,6 +857,7 @@ public class MainWindow : Gtk.Window {
 			"Elementary Icon Theme (fallback icons):https://github.com/elementary/icons",
 			"Faba Icon Theme (fallback icons):https://github.com/snwh/faba-icon-theme",
 			"Moka Icon Theme (fallback icons):https://github.com/snwh/moka-icon-theme",
+			"Papirus Icon Theme (fallback icons):https://github.com/PapirusDevelopmentTeam/papirus-icon-theme",
 			"7zip by Igor Pavlov (archive handling):http://www.7-zip.org/",
 			"ExifTool by Phil Harvey (EXIF properties):http://www.sno.phy.queensu.ca/~phil/exiftool/",
 			"FFmpeg (video thumbnails):https://ffmpeg.org/",

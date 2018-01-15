@@ -53,10 +53,16 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	public string owner_user = "";
 	public string owner_group = "";
 	public string file_status = "";
+	
 	public string checksum_md5 = "";
-	public string checksum_sha1 = "";
-	public string checksum_sha256 = "";
-	public string checksum_sha512 = "";
+	public string checksum_sha1 = "";   // sha1 - 160 bits
+	public string checksum_sha256 = ""; // sha2 - 256 bits
+	public string checksum_sha512 = ""; // sha2 - 512 bits
+	
+	public string checksum_compare = "";
+	public ChecksumCompareResult checksum_compare_result;
+	public string checksum_compare_message = "";
+	public Gdk.Pixbuf checksum_compare_icon;
 	
 	public string content_type = "";
 	public string content_type_desc = "";
@@ -82,7 +88,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	public bool filesystem_read_only = false;
 	public string filesystem_type = "";
 	public string filesystem_id = "";
-
+	
 	// trash support ---------------------
 	
 	public bool is_trash = false;
@@ -449,6 +455,20 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 	}
 
+	public bool exists_on_disk() {
+
+		GLib.File file;
+		
+		if (file_path.length > 0){
+			file = File.new_for_path(file_path);
+		}
+		else{
+			file = File.new_for_uri(file_uri);
+		}
+
+		return file.query_exists();
+	}
+
 	// name and path -----------------------
 
 	public string file_name {
@@ -774,6 +794,16 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 	}
 
+	public bool is_file_hash{
+		get{
+			return file_extension.down().has_suffix(".md5")
+			|| file_extension.down().has_suffix(".sha1")
+			|| file_extension.down().has_suffix(".sha2")
+			|| file_extension.down().has_suffix(".sha256")
+			|| file_extension.down().has_suffix(".sha512");
+		}
+	}
+
 	public bool is_media_directory{
 		get{
 			int media_count = count_photos + count_videos;
@@ -854,7 +884,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			//log_trace("changed=NULL: %s".printf(display_path));
 		//}
 
-		Gdk.Pixbuf? cached = IconCache.lookup_icon_fileitem(display_path, changed, icon_size,
+		Gdk.Pixbuf? cached = IconCache.lookup_icon_fileitem(
+			display_path, changed, icon_size,
 			load_thumbnail, add_transparency, add_emblems); // TODO: use file_path_uri
 
 		if (cached != null){
@@ -872,7 +903,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			IconCache.add_icon_fileitem(pixbuf, display_path, changed, icon_size, // TODO: use file_path_uri
 				load_thumbnail, add_transparency, add_emblems);
 		}
-		
+
 		return pixbuf;
 	}
 
@@ -1975,6 +2006,26 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			icon = GLib.ContentType.get_icon(content_type);
 		}
 	}
+
+	public void generate_checksum(ChecksumType checksum_type){
+
+		var hash = file_checksum(file_path, checksum_type);
+
+		switch(checksum_type){
+		case ChecksumType.MD5:
+			checksum_md5 = hash;
+			break;
+		case ChecksumType.SHA1:
+			checksum_sha1 = hash;
+			break;
+		case ChecksumType.SHA256:
+			checksum_sha256= hash;
+			break;
+		case ChecksumType.SHA512:
+			checksum_sha512 = hash;
+			break;
+		}
+	}
 	
 	// monitor
 
@@ -2102,4 +2153,13 @@ public class FileItemMonitor : GLib.Object {
 	public FileItem file_item;
 	public FileMonitor monitor;
 	public Cancellable? cancellable;
+}
+
+public enum ChecksumCompareResult {
+	OK,
+	CHANGED,
+	MISSING,
+	SYMLINK,
+	ERROR,
+	UNKNOWN
 }

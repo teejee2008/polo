@@ -147,6 +147,8 @@ public class FileContextMenu : Gtk.Menu {
 
 		add_iso_actions(this, sg_icon, sg_label);
 
+		add_checksum_actions(this, sg_icon, sg_label);
+
 		add_pdf_actions(this, sg_icon, sg_label);
 
 		add_kvm_actions(this, sg_icon, sg_label);
@@ -1754,6 +1756,128 @@ public class FileContextMenu : Gtk.Menu {
 	}
 
 
+	private void add_checksum_actions(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		if (selected_item == null){ return; }
+
+		log_debug("FileContextMenu: add_checksum_actions()");
+	
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Checksum"),
+			"",
+			IconManager.lookup_image("hash", 16),
+			sg_icon,
+			sg_label);
+			
+		var sub_menu = new Gtk.Menu();
+		sub_menu.reserve_toggle_size = false;
+		menu_item.submenu = sub_menu;
+
+		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		var sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		
+		add_generate_md5(sub_menu, sg_icon_sub, sg_label_sub);
+
+		add_generate_sha1(sub_menu, sg_icon_sub, sg_label_sub);
+
+		add_generate_sha256(sub_menu, sg_icon_sub, sg_label_sub);
+
+		add_generate_sha512(sub_menu, sg_icon_sub, sg_label_sub);
+	}
+	
+	private void add_generate_md5(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		if (selected_item == null){ return; }
+
+		log_debug("FileContextMenu: add_generate_md5()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			"MD5",
+			_("Generate checksums") + " (MD5)",
+			null,
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			var tab = panel.add_tab();
+			tab.select_tab();
+			tab.pane.show_checksum_view();
+		
+			tab.pane.view_checksum.generate(selected_items, ChecksumType.MD5);
+		});
+	}
+
+	private void add_generate_sha1(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		if (selected_item == null){ return; }
+
+		log_debug("FileContextMenu: add_generate_sha1()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			"SHA1",
+			_("Generate checksums") + " (SHA1)",
+			null,
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			var tab = panel.add_tab();
+			tab.select_tab();
+			tab.pane.show_checksum_view();
+
+			tab.pane.view_checksum.generate(selected_items, ChecksumType.SHA1);
+		});
+	}
+
+	private void add_generate_sha256(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		if (selected_item == null){ return; }
+
+		log_debug("FileContextMenu: add_generate_sha256()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			"SHA2-256",
+			_("Generate checksums") + " (SHA2-256)",
+			null,
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			var tab = panel.add_tab();
+			tab.select_tab();
+			tab.pane.show_checksum_view();
+
+			tab.pane.view_checksum.generate(selected_items, ChecksumType.SHA256);
+		});
+	}
+
+	private void add_generate_sha512(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+		
+		if (selected_item == null){ return; }
+
+		log_debug("FileContextMenu: add_generate_sha512()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			"SHA2-512",
+			_("Generate checksums") + " (SHA2-512)",
+			null,
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			var tab = panel.add_tab();
+			tab.select_tab();
+			tab.pane.show_checksum_view();
+
+			tab.pane.view_checksum.generate(selected_items, ChecksumType.SHA512);
+		});
+	}
+	
 	private void add_kvm_actions(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
 		if (!App.kvm_enable) { return; }

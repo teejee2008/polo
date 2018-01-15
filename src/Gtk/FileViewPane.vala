@@ -38,6 +38,7 @@ public class FileViewPane : Gtk.Box {
 	//public FileViewToolbar toolbar;
 	public Pathbar pathbar;
 	public FileViewList view;
+	public ChecksumBox view_checksum;
 	public MediaBar mediabar;
 	public SelectionBar selection_bar;
 	public AdminBar adminbar;
@@ -316,6 +317,20 @@ public class FileViewPane : Gtk.Box {
 		paned_term.set_position(pos_height_half);
 	}
 
+	public void show_checksum_view(){
+		
+		view_checksum = new ChecksumBox(tab);
+		this.add(view_checksum);
+
+		view.current_item = null;
+		
+		gtk_show(view_checksum);
+
+		gtk_hide(box_pathbar_view);
+
+		gtk_hide(statusbar);
+	}
+	
 	// helpers
 
 	public int tab_index{

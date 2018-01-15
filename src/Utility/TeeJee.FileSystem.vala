@@ -408,7 +408,7 @@ namespace TeeJee.FileSystem{
 					file.delete();
 				}
 	
-				var file_stream = file.create (FileCreateFlags.REPLACE_DESTINATION);
+				var file_stream = file.create(FileCreateFlags.REPLACE_DESTINATION);
 				var data_stream = new DataOutputStream (file_stream);
 				data_stream.put_string (contents);
 				data_stream.close();
@@ -485,12 +485,14 @@ namespace TeeJee.FileSystem{
 	}
 
 	public string file_checksum(string file_path, GLib.ChecksumType checksum_type = ChecksumType.MD5){
-		
-		var checksum = new Checksum (ChecksumType.MD5);
 
-		if (!file_exists(file_path)){
-			return "";
-		}
+		//log_debug("file_checksum: " + file_path);
+		
+		var checksum = new GLib.Checksum(checksum_type);
+
+		if (!file_exists(file_path)){ return "MISSING"; }
+
+		if (file_is_symlink(file_path)){ return "SYMLINK"; }
 		
 		FileStream stream = FileStream.open(file_path, "rb");
 		uint8 fbuf[100];
