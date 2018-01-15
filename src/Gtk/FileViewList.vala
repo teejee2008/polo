@@ -3950,9 +3950,13 @@ public class FileViewList : Gtk.Box {
 				
 			set_view_item(item);
 		}
-		else if (item.content_type.contains("executable")){
+		else if (item.content_type.contains("executable") || item.content_type.contains("sharedlib")){
 			
 			run_in_terminal();
+		}
+		else if (item.is_file_hash){
+			
+			verify_checksums();
 		}
 		else {
 			xdg_open(item.file_path);
@@ -4701,12 +4705,18 @@ public class FileViewList : Gtk.Box {
 	}
 
 	public void run_in_terminal(){
-		var selected_items = get_selected_items();
-		if (selected_items.size != 1){ return; }
+		
+		var selected = get_selected_items()[0];
 
-		log_debug("action.open_terminal()");
+		log_debug("action.run_in_terminal()");
 
-		open_terminal_window("", current_item.file_path, selected_items[0].file_path, false);
+		if (!pane.terminal.visible){
+			pane.terminal.toggle();
+		}
+
+		pane.terminal.feed_command("'%s'".printf(escape_single_quote(selected.file_path)));
+		
+		//open_terminal_window("", current_item.file_path, selected_items[0].file_path, false);
 	}
 
 	public void analyze_disk_usage(){
@@ -5662,6 +5672,20 @@ public class FileViewList : Gtk.Box {
 		var action = new ProgressPanelImageTask(pane, task);
 		pane.file_operations.add(action);
 		action.execute();
+	}
+
+
+	public void verify_checksums(){
+
+		var selected = get_selected_items()[0];
+
+		if (!selected.is_file_hash){ return; }
+		
+		var tab = panel.add_tab();
+		tab.select_tab();
+		tab.pane.show_checksum_view();
+	
+		tab.pane.view_checksum.verify(selected);
 	}
 	
 	// common
