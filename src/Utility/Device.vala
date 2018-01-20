@@ -177,11 +177,12 @@ public class Device : GLib.Object{
 		owned get{
 			string mpath = "";
 			foreach(var mp in mount_points){
-				if (mpath.length == 0){
+				if ((mp.subvolume_name() == "/") || (mp.subvolume_name() == "")){
 					mpath = mp.mount_point;
+					break;
 				}
-				else if (mp.subvolume_name() == "/"){
-					mpath = mp.mount_point; // use this instead of first one
+				else{
+					mpath = mp.mount_point;
 				}
 			}
 			return mpath;

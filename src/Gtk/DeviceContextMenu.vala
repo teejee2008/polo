@@ -444,8 +444,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		bool mounted = dev.is_mounted;
 
 		if (mounted){
-			var mp = dev.mount_points[0];
-			pane.view.set_view_path(mp.mount_point);
+			pane.view.set_view_path(dev.mount_path);
 		}
 
 		gtk_set_busy(false, window);
