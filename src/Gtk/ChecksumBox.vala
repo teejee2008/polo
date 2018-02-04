@@ -949,6 +949,61 @@ public class ChecksumBox : Gtk.Box {
 				
 				gtk_hide(frame_progress);
 				gtk_show(frame_verify);
+
+				if (count_changed == 0){
+
+					if (count_missing == items.size){
+
+						string ttl = _("Files Missing");
+						
+						string msg = "%s - %lld / %d".printf(
+							_("Files referenced in checksum file are missing on disk"),
+							count_missing, items.size);
+							
+						gtk_messagebox(ttl, msg, window, true);
+					}
+					else{
+
+						string ttl = _("Verified Successfully");
+						
+						string msg = "%s - %lld / %d".printf(
+							_("Files verified"), count_ok, items.size);
+
+						if (count_missing > 0){
+							
+							msg += "\n\n%s - %lld / %d".printf(
+								_("Files missing on disk"),
+								count_missing, items.size);
+						}
+						
+						gtk_messagebox(ttl, msg, window, false);
+					}
+				}
+				else{
+
+					string ttl = _("Verification Failed");
+
+					string msg = "";
+					
+					if (count_ok > 0){
+
+						msg += "%s - %lld / %d".printf(
+							_("Files verified"), count_ok, items.size);
+					}
+					
+					msg += "\n\n<b>%s - %lld / %d</b>".printf(
+						_("Files changed"), count_changed, items.size);
+
+					if (count_missing > 0){
+						
+						msg += "\n\n%s - %lld / %d".printf(
+							_("Files missing on disk"),
+							count_missing, items.size);
+					}
+					
+					gtk_messagebox(ttl, msg, window, true);
+				}
+
 				return false;
 			});
 		}
