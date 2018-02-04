@@ -261,6 +261,34 @@ public class MainWindow : Gtk.Window {
 		this.present();
 		gtk_do_events();
 
+		if (LOG_DEBUG){
+
+			Timeout.add(1000, ()=>{
+
+				string status = file_read("/proc/self/status");
+
+				log_debug(status);
+
+				string txt = "";
+				
+				var match = regex_match("""RssAnon:[ \t]*([0-9]+)[ \t]*kB""", status);
+				if (match != null){
+					txt += "Mem: %s, ".printf(format_file_size(int.parse(match.fetch(1)) * KB));
+				}
+				
+				//match = regex_match("""VmRSS:[ \t]*([0-9]+)[ \t]*kB""", status);
+				//if (match != null){
+				//	txt += "RSS: %s, ".printf(format_file_size(int.parse(match.fetch(1)) * KB));
+				//}
+
+				txt += "%lld objects, %d cached".printf(FileItem.object_count, FileItem.cache.keys.size);
+				
+				this.title = txt;
+				
+				return true;
+			});
+		}
+
 		log_debug("Initialization complete -----------------", true);
 		
 		return false;

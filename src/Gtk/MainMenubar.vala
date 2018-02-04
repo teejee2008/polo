@@ -1848,7 +1848,7 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		menu.add(item);
 
 		item.activate.connect (() => {
-			gtk_messagebox("Objects=%lld, Map=%d".printf(FileItem.object_count, FileItem.cache.keys.size),"", window, false);
+			//gtk_messagebox(,"", window, false);
 		});
 	}
 
