@@ -267,7 +267,7 @@ public class MainWindow : Gtk.Window {
 
 				string status = file_read("/proc/self/status");
 
-				log_debug(status);
+				//log_debug(status);
 
 				string txt = "";
 				
