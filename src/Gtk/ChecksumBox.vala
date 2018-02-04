@@ -1,7 +1,7 @@
 /*
  * ChecksumBox.vala
  *
- * Copyright 2017 Tony George <teejeetech@gmail.com>
+ * Copyright 2012-18 Tony George <teejeetech@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -491,7 +491,7 @@ public class ChecksumBox : Gtk.Box {
 
 		// column
 		var col = new Gtk.TreeViewColumn();
-		col.title = _("Name");
+		col.title = _("File");
 		col.clickable = true;
 		col.resizable = true;
 		col.expand = true;
@@ -671,7 +671,7 @@ public class ChecksumBox : Gtk.Box {
 
 		// column
 		var col = new Gtk.TreeViewColumn();
-		col.title = _("Checksum (Provided)");
+		col.title = _("Original Checksum");
 		col.clickable = true;
 		col.resizable = true;
 		col.expand = true;
@@ -817,7 +817,7 @@ public class ChecksumBox : Gtk.Box {
 
 		checksum_type = type;
 
-		col_checksum.title = "%s: %s".printf(_("Checksum"), get_checksum_type_name());//.replace("CHECKSUMTYPE_");
+		col_checksum.title = "%s".printf(get_checksum_type_name());
 		col_checksum_compare.visible = false;
 		col_status.visible = false;
 
@@ -949,6 +949,61 @@ public class ChecksumBox : Gtk.Box {
 				
 				gtk_hide(frame_progress);
 				gtk_show(frame_verify);
+
+				if (count_changed == 0){
+
+					if (count_missing == items.size){
+
+						string ttl = _("Files Missing");
+						
+						string msg = "%s - %lld / %d".printf(
+							_("Files referenced in checksum file are missing on disk"),
+							count_missing, items.size);
+							
+						gtk_messagebox(ttl, msg, window, true);
+					}
+					else{
+
+						string ttl = _("Verified Successfully");
+						
+						string msg = "%s - %lld / %d".printf(
+							_("Files verified"), count_ok, items.size);
+
+						if (count_missing > 0){
+							
+							msg += "\n\n%s - %lld / %d".printf(
+								_("Files missing on disk"),
+								count_missing, items.size);
+						}
+						
+						gtk_messagebox(ttl, msg, window, false);
+					}
+				}
+				else{
+
+					string ttl = _("Verification Failed");
+
+					string msg = "";
+					
+					if (count_ok > 0){
+
+						msg += "%s - %lld / %d".printf(
+							_("Files verified"), count_ok, items.size);
+					}
+					
+					msg += "\n\n<b>%s - %lld / %d</b>".printf(
+						_("Files changed"), count_changed, items.size);
+
+					if (count_missing > 0){
+						
+						msg += "\n\n%s - %lld / %d".printf(
+							_("Files missing on disk"),
+							count_missing, items.size);
+					}
+					
+					gtk_messagebox(ttl, msg, window, true);
+				}
+
 				return false;
 			});
 		}

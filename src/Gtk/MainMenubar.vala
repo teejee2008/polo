@@ -1,7 +1,7 @@
 /*
  * MainMenubar.vala
  *
- * Copyright 2017 Tony George <teejeetech@gmail.com>
+ * Copyright 2012-18 Tony George <teejeetech@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1848,7 +1848,7 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		menu.add(item);
 
 		item.activate.connect (() => {
-			gtk_messagebox("Objects=%lld, Map=%d".printf(FileItem.object_count, FileItem.cache.keys.size),"", window, false);
+			//gtk_messagebox(,"", window, false);
 		});
 	}
 

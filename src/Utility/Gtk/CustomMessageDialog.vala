@@ -1,7 +1,7 @@
 /*
  * CustomMessageDialog.vala
  *
- * Copyright 2017 Tony George <teejeetech@gmail.com>
+ * Copyright 2012-18 Tony George <teejeetech@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -138,7 +138,8 @@ public class CustomMessageDialog : Gtk.Dialog {
 
 		var text = "<span weight=\"bold\" size=\"x-large\">%s</span>\n\n%s".printf(
 			escape_html(msg_title),
-			escape_html(msg_body));
+			msg_body);
+			
 		lbl_msg = new Gtk.Label(text);
 		lbl_msg.xalign = 0.0f;
 		lbl_msg.yalign = 0.0f;

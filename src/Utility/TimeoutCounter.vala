@@ -1,4 +1,3 @@
-
 /*
  * TimeoutCounter.vala
  *
@@ -21,7 +20,6 @@
  *
  *
  */
-
 
 using TeeJee.Logging;
 using TeeJee.FileSystem;

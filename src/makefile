@@ -30,8 +30,7 @@ app-gtk:
 
 	#polo-gtk
 	valac -X -D'GETTEXT_PACKAGE="${app_name}"' \
-		--Xcc="-lm" -X -Wl,-rpath,/usr/share/${app_name}/libs \
-		${define_symbols} --thread \
+		--Xcc="-lm" ${define_symbols} --thread \
 		Common/Main.vala \
 		Gtk/*.vala \
 		Utility/*.vala \

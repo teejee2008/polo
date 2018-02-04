@@ -1,7 +1,7 @@
 /*
  * Settings.vala
  *
- * Copyright 2017 Tony George <teejeetech@gmail.com>
+ * Copyright 2012-18 Tony George <teejeetech@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -2274,8 +2274,6 @@ public class Settings : Gtk.Box, IPaneActive {
 
 		var vbox = add_column_group(box, true);
 		
-		// ---------------------------------
-		
 		var vbox_group = add_group(vbox, _("Virtual Machine"), 6);
 
 		var sg_label = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
@@ -2291,20 +2289,31 @@ public class Settings : Gtk.Box, IPaneActive {
 
 		add_option_kvm_memory(vbox_group, sg_label, sg_option);
 
-		// ---------------------------------
-		
-		vbox_group = add_group(vbox, "", 0);
-		
-		add_option_kvm_enable(vbox_group);
+		// column 2 ---------------------------------
 
+		vbox = add_column_group(box, false);
+
+		vbox_group = add_group(vbox, _("Show in Context Menu?"), 0);
+
+		add_option_menu_disk_usage(vbox_group);
+
+		if (App.tool_exists("polo-clamav")) { 
+			add_option_menu_clamav(vbox_group);
+		}
+
+		add_option_menu_archive(vbox_group);
+
+		add_option_menu_checksum(vbox_group);
+
+		add_option_menu_kvm(vbox_group);
+		
+		// column 3 ---------------------------------
 
 		if (App.tool_exists("polo-pdf") || App.tool_exists("polo-image")) {
 
-			// column 2 ---------------------------------
-
 			vbox = add_column_group(box, false);
 
-			vbox = add_group(vbox, _("Replace Original Files ?"), 0);
+			vbox = add_group(vbox, _("Replace Original Files?"), 0);
 		}
 
 		if (App.tool_exists("polo-pdf")) { 
@@ -2535,49 +2544,68 @@ public class Settings : Gtk.Box, IPaneActive {
 		sg_option.add_widget(spin);
 	}
 
-	private void add_option_kvm_enable(Gtk.Box box){
 
-		var chk = new Gtk.CheckButton.with_label(_("Show KVM in context menu"));
+	private void add_option_menu_disk_usage(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Disk Usage"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("Show KVM submenu in right-click context menu"));
-
-		chk.active = App.kvm_enable;
+		chk.active = App.show_context_menu_disk_usage;
 
 		chk.toggled.connect(()=>{
-			App.kvm_enable = chk.active;
-		});
-	}
-	
-	/*private void add_option_network(Gtk.Box box){
-
-		var chk = new Gtk.CheckButton.with_label(_("Chroot: Enable network"));
-		box.add(chk);
-
-		chk.set_tooltip_text(_("Allows network connection to be used inside the chroot environment"));
-
-		chk.active = App.term_enable_network;
-
-		chk.toggled.connect(()=>{
-			App.term_enable_network = chk.active;
+			App.show_context_menu_disk_usage = chk.active;
 		});
 	}
 
-	private void add_option_gui(Gtk.Box box){
+	private void add_option_menu_clamav(Gtk.Box box){
 
-		var chk = new Gtk.CheckButton.with_label(_("Chroot: Enable GUI Apps"));
+		var chk = new Gtk.CheckButton.with_label(_("Scan for Malware"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("Allows X-window apps running inside the chroot environment to use the host display"));
-
-		chk.active = App.term_enable_gui;
+		chk.active = App.show_context_menu_clamav;
 
 		chk.toggled.connect(()=>{
-			App.term_enable_gui = chk.active;
+			App.show_context_menu_clamav = chk.active;
 		});
-	}*/
+	}
 
+	private void add_option_menu_archive(Gtk.Box box){
 
+		var chk = new Gtk.CheckButton.with_label(_("Archive"));
+		box.add(chk);
+
+		chk.active = App.show_context_menu_archive;
+
+		chk.toggled.connect(()=>{
+			App.show_context_menu_archive = chk.active;
+		});
+	}
+
+	private void add_option_menu_checksum(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Checksum"));
+		box.add(chk);
+
+		chk.active = App.show_context_menu_checksum;
+
+		chk.toggled.connect(()=>{
+			App.show_context_menu_checksum = chk.active;
+		});
+	}
+
+	private void add_option_menu_kvm(Gtk.Box box){
+
+		var chk = new Gtk.CheckButton.with_label(_("KVM"));
+		box.add(chk);
+
+		chk.active = App.show_context_menu_kvm;
+
+		chk.toggled.connect(()=>{
+			App.show_context_menu_kvm = chk.active;
+		});
+	}
+
+		
 	private void add_option_pdf_split(Gtk.Box box){
 
 		var chk = new Gtk.CheckButton.with_label(_("Split"));
@@ -2852,6 +2880,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		}
 		
 		var vbox = new Gtk.Box(Gtk.Orientation.VERTICAL, 12);
+		vbox.margin_right = 24;
 		vbox.homogeneous = false;
 		box.add(vbox);
 

@@ -1,7 +1,7 @@
 /*
  * MainWindow.vala
  *
- * Copyright 2017 Tony George <teejeetech@gmail.com>
+ * Copyright 2012-18 Tony George <teejeetech@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -260,6 +260,34 @@ public class MainWindow : Gtk.Window {
 		this.show_all();
 		this.present();
 		gtk_do_events();
+
+		if (LOG_DEBUG){
+
+			Timeout.add(1000, ()=>{
+
+				string status = file_read("/proc/self/status");
+
+				//log_debug(status);
+
+				string txt = "";
+				
+				var match = regex_match("""RssAnon:[ \t]*([0-9]+)[ \t]*kB""", status);
+				if (match != null){
+					txt += "Mem: %s, ".printf(format_file_size(int.parse(match.fetch(1)) * KB));
+				}
+				
+				//match = regex_match("""VmRSS:[ \t]*([0-9]+)[ \t]*kB""", status);
+				//if (match != null){
+				//	txt += "RSS: %s, ".printf(format_file_size(int.parse(match.fetch(1)) * KB));
+				//}
+
+				txt += "%lld objects, %d cached".printf(FileItem.object_count, FileItem.cache.keys.size);
+				
+				this.title = txt;
+				
+				return true;
+			});
+		}
 
 		log_debug("Initialization complete -----------------", true);
 		
@@ -876,7 +904,7 @@ public class MainWindow : Gtk.Window {
 
 		dialog.program_name = AppName;
 		dialog.comments = _("A modern file manager for Linux");
-		dialog.copyright = "Copyright © 2017 Tony George (%s)".printf(AppAuthorEmail);
+		dialog.copyright = "Copyright © 2012-18 Tony George (%s)".printf(AppAuthorEmail);
 		dialog.version = AppVersion;
 		dialog.logo = get_app_icon(128,".svg");
 

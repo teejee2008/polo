@@ -1,7 +1,7 @@
 /*
  * FileItem.vala
  *
- * Copyright 2017 Tony George <teejeetech@gmail.com>
+ * Copyright 2012-18 Tony George <teejeetech@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -238,13 +238,13 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 	public FileItem.from_path(string _file_path){
 		// _file_path can be a local path, or GIO uri
-		resolve_file_path(_file_path);
+		set_file_path(_file_path);
 		query_file_info();
 		object_count++;
 	}
 
 	public FileItem.from_path_and_type(string _file_path, FileType _file_type, bool query_info) {
-		resolve_file_path(_file_path);
+		set_file_path(_file_path);
 		file_type = _file_type;
 		if (query_info){
 			query_file_info();
@@ -252,7 +252,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		object_count++;
 	}
 
-	private void resolve_file_path(string _file_path){
+	public void set_file_path(string _file_path){
 
 		GLib.File file;
 		
@@ -531,42 +531,20 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	public virtual string display_path {
 		owned get {
 
-			if (_display_path.length > 0){
+			if (_display_path.length > 0){ 
 				return _display_path;
 			}
-
+			
 			string txt = "";
 
-			//if (this is FileItemArchive){
-			//	var arch = ()
-			//	txt = path_combine(archive_base_item.display_path, file_path); 
-			//}
-			//else
 			if (is_trash){
 				txt = "trash:///";
 			}
-			//else if (is_trashed_item){
-				//txt = "trash://" + file_path[trash_basepath.length : file_path.length];
-			//}
-			//else if (file_uri_scheme != "file"){
-			//	txt = GvfsMounts.get_gvfs_basepath(file_path);
-			//}
-			else {
-				/*if (GvfsMounts.map != null){
-					foreach(string key in GvfsMounts.map.keys){
-						if (file_path.has_prefix(key)){
-							txt = file_path.replace(key, GvfsMounts.map[key].file_uri);
-							break;
-						}
-					}
-				}*/
-
-				if ((file_path != null) && (file_path.length > 0)){
-					txt = file_path;
-				}
-				else{
-					txt = file_uri;
-				}
+			else if ((file_path != null) && (file_path.length > 0)){
+				txt = file_path;
+			}
+			else{
+				txt = file_uri;
 			}
 
 			return txt;
@@ -1091,381 +1069,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		return Device.get_device_for_path(file_path);
 	}
 	
-	// instance methods ------------------------------------------
-
-	public FileItem? add_child_from_disk(string child_item_file_path, int depth = -1) {
-
-		/* Adds specified item on disk to current FileItem
-		 * Adds the item's children recursively if depth is -1 or > 0
-		 *  depth =  0, add child item, count child item's children if directory
-		 *  depth = -1, add child item, add child item's children from disk recursively
-		 *  depth =  X, add child item, add child item's children upto X levels
-		 * */
-
-		if (query_children_aborted){ return null; }
-
-		FileItem item = null;
-
-		//log_debug("add_child_from_disk(): %s".printf(child_item_file_path));
-
-		try {
-			FileEnumerator enumerator;
-			FileInfo info;
-			File file = File.parse_name (child_item_file_path);
-
-			if (!file.query_exists()) { return null; }
-
-			// query file type
-			var item_file_type = file.query_file_type(FileQueryInfoFlags.NONE);
-
-			// add item
-			item = this.add_child(child_item_file_path, item_file_type, 0, 0, true);
-			
-			// check if directory and continue ---------------
-			
-			if (!item.is_directory) { return item; }
-
-			// enumerate item's children -----------------
-
-			try {
-
-				if (!item.can_read){ return item; }
-
-				if (depth == 0){ return item; }
-
-				if (!query_children_follow_symlinks && item.is_symlink) { return item; }
-				
-				//log_debug("add_child_from_disk(): enumerate_children");
-				
-				enumerator = file.enumerate_children ("%s,%s".printf(FileAttribute.STANDARD_NAME,FileAttribute.STANDARD_TYPE), 0);
-				
-				while ((info = enumerator.next_file()) != null) {
-					
-					if (query_children_aborted) {
-						item.query_children_aborted = true;
-						//item.dir_size_queried = false;
-						return null;
-					}
-					
-					string child_path = path_combine(child_item_file_path, info.get_name());
-		
-					if (depth != 0){
-						// add item's children from disk and drill down further
-						item.add_child_from_disk(child_path, depth - 1);
-					}
-				}
-			}
-			catch (Error e) {
-				log_error (e.message);
-			}
-
-		}
-		catch (Error e) {
-			log_error (e.message);
-		}
-
-		return item;
-	}
-
-	public FileItem add_descendant(string _file_path, FileType? _file_type, int64 item_size,int64 item_size_compressed) {
-		
-		FileItem? item = null;
-			
-		//log_debug("FileItem: add_descendant=%s".printf(_file_path));
-
-		string item_path = _file_path.strip();
-		FileType item_type = (_file_type == null) ? FileType.REGULAR : _file_type;
-
-		if (item_path.has_suffix("/")) {
-			item_path = item_path[0:item_path.length - 1];
-			item_type = FileType.DIRECTORY;
-		}
-
-		if (item_path.has_prefix("/")) {
-			item_path = item_path[1:item_path.length];
-		}
-
-		string dir_name = "";
-		string dir_path = "";
-
-		// create dirs and find parent dir
-		FileItem current_dir = this;
-		
-		string[] arr = item_path.split("/");
-
-		//mutex_children.lock();
-		
-		for (int i = 0; i < arr.length - 1; i++) {
-			
-			//get dir name
-			dir_name = arr[i];
-
-			//add dir
-			if (!current_dir.children.keys.contains(dir_name)) {
-				if ((current_dir == this) && (current_dir is FileItemArchive)){
-					dir_path = "";
-				}
-				else {
-					dir_path = current_dir.file_path + "/";
-				}
-				dir_path = "%s%s".printf(dir_path, dir_name);
-				current_dir.add_child(dir_path, FileType.DIRECTORY, 0, 0, false);
-			}
-
-			current_dir = current_dir.children[dir_name];
-		}
-
-		//mutex_children.unlock();
-
-		string item_name = arr[arr.length - 1];
-
-		if (current_dir.children.keys.contains(item_name)) {
-
-			item = current_dir.children[item_name];
-		}
-		else{
-			log_debug("add_descendant: add_child()");
-			item = current_dir.add_child(item_path, item_type, item_size, item_size_compressed, false);
-		}
-
-		log_debug("add_descendant: finished: %s".printf(item_path));
-
-		return item;
-	}
-
-	public virtual FileItem add_child(string item_file_path, FileType item_file_type,
-		int64 item_size, int64 item_size_compressed, bool item_query_file_info){
-
-		// create new item ------------------------------
-
-		//log_debug("FileItem: add_child: %s ---------------".printf(item_file_path));
-
-		mutex_children.lock();
-		
-		FileItem item = null;
-
-		// check existing ----------------------------
-
-		bool existing_file = false;
-
-		string item_name = file_basename(item_file_path);
-		
-		if (children.has_key(item_name) && (children[item_name].file_name == item_name)){
-
-			existing_file = true;
-			item = children[item_name];
-
-			//log_debug("existing child, queried: %s".printf(item.fileinfo_queried.to_string()));
-		}
-		/*else if (cache.has_key(item_file_path) && (cache[item_file_path].file_path == item_file_path)){
-			
-			item = cache[item_file_path];
-
-			// set relationships
-			item.parent = this;
-			this.children[item.file_name] = item;
-
-			//log_debug("cached child");
-		}*/
-		else{
-
-			if (item == null){
-				item = new FileItem.from_path_and_type(item_file_path, item_file_type, false);
-			}
-			
-			// set relationships
-			item.parent = this;
-			this.children[item.file_name] = item;
-
-			//log_debug("new child");
-		}
-
-		item.is_stale = false; // mark fresh
-
-		//item.display_path = path_combine(this.display_path, item_name);
-
-		//bool item_was_queried = item.fileinfo_queried;
-		
-		// query file properties ------------
-		
-		if (item_query_file_info){
-			item.query_file_info();
-		}
-
-		if (item_file_type == FileType.REGULAR) {
-
-			//log_debug("add_child: regular file");
-
-			// update item size -----------------------------------
-
-			if (!item_query_file_info){
-				item.file_size = item_size;
-			}
-
-			// update hidden count -------------------------
-
-			if (!existing_file){
-				if (item.is_backup_or_hidden){
-					this.hidden_count++;
-				}
-			}
-		}
-		else if (item_file_type == FileType.DIRECTORY) {
-
-			//log_debug("add_child: directory");
-		}
-
-		mutex_children.unlock();
-
-		return item;
-	}
-
-	public FileItem remove_child(string child_name) {
-		FileItem child = null;
-
-		if (this.children.has_key(child_name)) {
-			child = this.children[child_name];
-			this.children.unset(child_name);
-
-			if (child.file_type == FileType.REGULAR) {
-				/*
-				//update file counts
-				this.file_count--;
-				this.file_count_total--;
-				*/
-				
-				//subtract child size
-				//this._size -= child.size;
-				//this._size_compressed -= child.size_compressed;
-
-				//update file count and size of parent dirs
-				var temp = this;
-				while (temp.parent != null) {
-					temp.parent.file_count_total--;
-
-					//temp.parent._size -= child.size;
-					//temp.parent._size_compressed -= child.size_compressed;
-
-					temp = temp.parent;
-				}
-			}
-			else {
-				/*
-				//update dir counts
-				this.dir_count--;
-				this.dir_count_total--;
-				*/
-				
-				//subtract child counts
-				this.file_count_total -= child.file_count_total;
-				this.dir_count_total -= child.dir_count_total;
-				//this._size -= child.size;
-				//this._size_compressed -= child.size_compressed;
-
-				//update dir count of parent dirs
-				var temp = this;
-				while (temp.parent != null) {
-					temp.parent.dir_count_total--;
-
-					temp.parent.file_count_total -= child.file_count_total;
-					temp.parent.dir_count_total -= child.dir_count_total;
-					//temp.parent._size -= child.size;
-					//temp.parent._size_compressed -= child.size_compressed;
-
-					temp = temp.parent;
-				}
-			}
-		}
-
-		//log_debug("%3ld %3ld %s".printf(file_count, dir_count, file_path));
-
-		return child;
-	}
-
-	public FileItem rename_child(string child_name, string new_name){
-
-		log_debug("FileItem: rename_child(): %s -> %s".printf(child_name, new_name));
-
-		FileItem child = null;
-
-		if (this.children.has_key(child_name)) {
-
-			child = this.children[child_name];
-
-			// unset
-			this.children.unset(child_name);
-			remove_from_cache(child);
-
-			// set
-			this.children[new_name] = child;
-			child.file_path = path_combine(child.file_location, new_name);
-			child.display_name = null;
-			child.query_file_info();
-			//add_to_cache(child);
-		}
-
-		return child;
-	}
-
-	public bool hide_item(){
-
-		if ((parent != null) && dir_exists(parent.file_path)){
-
-			string hidden_file = path_combine(parent.file_path, ".hidden");
-			string txt = "";
-
-			if (file_exists(hidden_file)){
-				txt = file_read(hidden_file);
-			}
-
-			txt += (txt.length == 0) ? "" : "\n";
-			txt += "%s".printf(file_name);
-
-			file_write(hidden_file, txt, null, null, true); // overwrite in-place
-			parent.read_hidden_list();
-			update_access_time();
-			return true;
-		}
-
-		return false;
-	}
-
-	public bool unhide_item(){
-
-		if ((parent != null) && dir_exists(parent.file_path)){
-
-			string hidden_file = path_combine(parent.file_path, ".hidden");
-			string txt = "";
-
-			if (file_exists(hidden_file)){
-
-				foreach(string line in file_read(hidden_file).split("\n")){
-
-					if (line.strip() == file_name){
-						continue;
-					}
-					else{
-						txt += (txt.length == 0) ? "" : "\n";
-						txt += "%s".printf(line);
-					}
-				}
-			}
-
-			file_write(hidden_file, txt, null, null, true); // overwrite in-place
-			parent.read_hidden_list();
-			update_access_time();
-			return true;
-		}
-
-		return false;
-	}
-
-	private void update_access_time(){
-		// update access time (and changed time) - forces cached icon to expire
-		touch(file_path, true, false, false, false, null); 
-		query_file_info();
-	}
-
 	// query info --------------------------
 
 	public virtual void query_file_info() {
@@ -1715,6 +1318,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 				//log_debug("FileItem: query_children(): found: %s".printf(info.get_name()));
 				string child_name = info.get_name();
 				string child_path = GLib.Path.build_filename(file_path, child_name);
+				//log_debug("FileItem: query_children(): child_path: %s".printf(child_path));
 				var child = this.add_child_from_disk(child_path, depth - 1);
 				//child.is_stale = false;
 				//log_debug("fresh: name: %s".printf(child.file_name));
@@ -1914,6 +1518,381 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		});
 
 		return list;
+	}
+
+	// instance methods ------------------------------------------
+
+	public FileItem? add_child_from_disk(string child_item_file_path, int depth = -1) {
+
+		/* Adds specified item on disk to current FileItem
+		 * Adds the item's children recursively if depth is -1 or > 0
+		 *  depth =  0, add child item, count child item's children if directory
+		 *  depth = -1, add child item, add child item's children from disk recursively
+		 *  depth =  X, add child item, add child item's children upto X levels
+		 * */
+
+		if (query_children_aborted){ return null; }
+
+		FileItem item = null;
+
+		//log_debug("add_child_from_disk(): %s".printf(child_item_file_path));
+
+		try {
+			FileEnumerator enumerator;
+			FileInfo info;
+			File file = File.parse_name(child_item_file_path);
+
+			if (!file.query_exists()) { return null; }
+
+			// query file type
+			var item_file_type = file.query_file_type(FileQueryInfoFlags.NONE);
+
+			// add item
+			item = this.add_child(child_item_file_path, item_file_type, 0, 0, true);
+			
+			// check if directory  ---------------------------------
+			
+			if (!item.is_directory) { return item; }
+
+			if (!item.can_read){ return item; }
+
+			if (depth == 0){ return item; }
+
+			if (!query_children_follow_symlinks && item.is_symlink) { return item; }
+			
+			//log_debug("add_child_from_disk(): enumerate_children");
+
+			// enumerate item's children ----------------------------
+			
+			enumerator = file.enumerate_children ("%s,%s".printf(FileAttribute.STANDARD_NAME,FileAttribute.STANDARD_TYPE), 0);
+			
+			while ((info = enumerator.next_file()) != null) {
+
+				try {
+					if (query_children_aborted) {
+						item.query_children_aborted = true;
+						//item.dir_size_queried = false;
+						return null;
+					}
+					
+					string child_path = path_combine(child_item_file_path, info.get_name());
+		
+					if (depth != 0){
+						// add item's children from disk and drill down further
+						item.add_child_from_disk(child_path, depth - 1);
+					}
+				}
+				catch(Error e) {
+					log_error (e.message);
+				}
+			}
+
+		}
+		catch (Error e) {
+			log_error (e.message);
+		}
+
+		return item;
+	}
+
+	public FileItem add_descendant(string _file_path, FileType? _file_type, int64 item_size,int64 item_size_compressed) {
+		
+		FileItem? item = null;
+			
+		//log_debug("FileItem: add_descendant=%s".printf(_file_path));
+
+		string item_path = _file_path.strip();
+		FileType item_type = (_file_type == null) ? FileType.REGULAR : _file_type;
+
+		if (item_path.has_suffix("/")) {
+			item_path = item_path[0:item_path.length - 1];
+			item_type = FileType.DIRECTORY;
+		}
+
+		if (item_path.has_prefix("/")) {
+			item_path = item_path[1:item_path.length];
+		}
+
+		string dir_name = "";
+		string dir_path = "";
+
+		// create dirs and find parent dir
+		FileItem current_dir = this;
+		
+		string[] arr = item_path.split("/");
+
+		//mutex_children.lock();
+		
+		for (int i = 0; i < arr.length - 1; i++) {
+			
+			//get dir name
+			dir_name = arr[i];
+
+			//add dir
+			if (!current_dir.children.keys.contains(dir_name)) {
+				if ((current_dir == this) && (current_dir is FileItemArchive)){
+					dir_path = "";
+				}
+				else {
+					dir_path = current_dir.file_path + "/";
+				}
+				dir_path = "%s%s".printf(dir_path, dir_name);
+				current_dir.add_child(dir_path, FileType.DIRECTORY, 0, 0, false);
+			}
+
+			current_dir = current_dir.children[dir_name];
+		}
+
+		//mutex_children.unlock();
+
+		string item_name = arr[arr.length - 1];
+
+		if (current_dir.children.keys.contains(item_name)) {
+
+			item = current_dir.children[item_name];
+		}
+		else{
+			log_debug("add_descendant: add_child()");
+			item = current_dir.add_child(item_path, item_type, item_size, item_size_compressed, false);
+		}
+
+		log_debug("add_descendant: finished: %s".printf(item_path));
+
+		return item;
+	}
+
+	public virtual FileItem add_child(string item_file_path, FileType item_file_type,
+		int64 item_size, int64 item_size_compressed, bool item_query_file_info){
+
+		// create new item ------------------------------
+
+		//log_debug("FileItem: add_child: %s ---------------".printf(item_file_path));
+
+		mutex_children.lock();
+		
+		FileItem item = null;
+
+		// check existing ----------------------------
+
+		bool existing_file = false;
+
+		string item_name = file_basename(item_file_path);
+		
+		if (children.has_key(item_name) && (children[item_name].file_name == item_name)){
+
+			existing_file = true;
+			item = children[item_name];
+			item.set_file_path(item_file_path); // path may have changed (rename issue)
+			
+			//log_debug("existing child, queried: %s".printf(item.fileinfo_queried.to_string()));
+		}
+		/*else if (cache.has_key(item_file_path) && (cache[item_file_path].file_path == item_file_path)){
+			
+			item = cache[item_file_path];
+
+			// set relationships
+			item.parent = this;
+			this.children[item.file_name] = item;
+
+			//log_debug("cached child");
+		}*/
+		else{
+
+			if (item == null){
+				item = new FileItem.from_path_and_type(item_file_path, item_file_type, false);
+			}
+			
+			// set relationships
+			item.parent = this;
+			this.children[item.file_name] = item;
+
+			//log_debug("new child");
+		}
+
+		item.is_stale = false; // mark fresh
+
+		//item.display_path = path_combine(this.display_path, item_name);
+
+		//bool item_was_queried = item.fileinfo_queried;
+		
+		// query file properties ------------
+		
+		if (item_query_file_info){
+			item.query_file_info();
+		}
+
+		if (item_file_type == FileType.REGULAR) {
+
+			//log_debug("add_child: regular file");
+
+			// update item size -----------------------------------
+
+			if (!item_query_file_info){
+				item.file_size = item_size;
+			}
+
+			// update hidden count -------------------------
+
+			if (!existing_file){
+				if (item.is_backup_or_hidden){
+					this.hidden_count++;
+				}
+			}
+		}
+		else if (item_file_type == FileType.DIRECTORY) {
+
+			//log_debug("add_child: directory");
+		}
+
+		mutex_children.unlock();
+
+		return item;
+	}
+
+	public FileItem remove_child(string child_name) {
+		FileItem child = null;
+
+		if (this.children.has_key(child_name)) {
+			child = this.children[child_name];
+			this.children.unset(child_name);
+
+			if (child.file_type == FileType.REGULAR) {
+				/*
+				//update file counts
+				this.file_count--;
+				this.file_count_total--;
+				*/
+				
+				//subtract child size
+				//this._size -= child.size;
+				//this._size_compressed -= child.size_compressed;
+
+				//update file count and size of parent dirs
+				var temp = this;
+				while (temp.parent != null) {
+					temp.parent.file_count_total--;
+
+					//temp.parent._size -= child.size;
+					//temp.parent._size_compressed -= child.size_compressed;
+
+					temp = temp.parent;
+				}
+			}
+			else {
+				/*
+				//update dir counts
+				this.dir_count--;
+				this.dir_count_total--;
+				*/
+				
+				//subtract child counts
+				this.file_count_total -= child.file_count_total;
+				this.dir_count_total -= child.dir_count_total;
+				//this._size -= child.size;
+				//this._size_compressed -= child.size_compressed;
+
+				//update dir count of parent dirs
+				var temp = this;
+				while (temp.parent != null) {
+					temp.parent.dir_count_total--;
+
+					temp.parent.file_count_total -= child.file_count_total;
+					temp.parent.dir_count_total -= child.dir_count_total;
+					//temp.parent._size -= child.size;
+					//temp.parent._size_compressed -= child.size_compressed;
+
+					temp = temp.parent;
+				}
+			}
+		}
+
+		//log_debug("%3ld %3ld %s".printf(file_count, dir_count, file_path));
+
+		return child;
+	}
+
+	public FileItem rename_child(string child_name, string new_name){
+
+		log_debug("FileItem: rename_child(): %s -> %s".printf(child_name, new_name));
+
+		FileItem child = null;
+
+		if (this.children.has_key(child_name)) {
+
+			child = this.children[child_name];
+
+			// unset
+			this.children.unset(child_name);
+			remove_from_cache(child);
+
+			// set
+			this.children[new_name] = child;
+			child.file_path = path_combine(child.file_location, new_name);
+			child.display_name = null;
+			child.query_file_info();
+			//add_to_cache(child);
+		}
+
+		return child;
+	}
+
+	public bool hide_item(){
+
+		if ((parent != null) && dir_exists(parent.file_path)){
+
+			string hidden_file = path_combine(parent.file_path, ".hidden");
+			string txt = "";
+
+			if (file_exists(hidden_file)){
+				txt = file_read(hidden_file);
+			}
+
+			txt += (txt.length == 0) ? "" : "\n";
+			txt += "%s".printf(file_name);
+
+			file_write(hidden_file, txt, null, null, true); // overwrite in-place
+			parent.read_hidden_list();
+			update_access_time();
+			return true;
+		}
+
+		return false;
+	}
+
+	public bool unhide_item(){
+
+		if ((parent != null) && dir_exists(parent.file_path)){
+
+			string hidden_file = path_combine(parent.file_path, ".hidden");
+			string txt = "";
+
+			if (file_exists(hidden_file)){
+
+				foreach(string line in file_read(hidden_file).split("\n")){
+
+					if (line.strip() == file_name){
+						continue;
+					}
+					else{
+						txt += (txt.length == 0) ? "" : "\n";
+						txt += "%s".printf(line);
+					}
+				}
+			}
+
+			file_write(hidden_file, txt, null, null, true); // overwrite in-place
+			parent.read_hidden_list();
+			update_access_time();
+			return true;
+		}
+
+		return false;
+	}
+
+	private void update_access_time(){
+		// update access time (and changed time) - forces cached icon to expire
+		touch(file_path, true, false, false, false, null); 
+		query_file_info();
 	}
 
 	// set properties -------------------------
