@@ -491,7 +491,7 @@ public class ChecksumBox : Gtk.Box {
 
 		// column
 		var col = new Gtk.TreeViewColumn();
-		col.title = _("Name");
+		col.title = _("File");
 		col.clickable = true;
 		col.resizable = true;
 		col.expand = true;
@@ -671,7 +671,7 @@ public class ChecksumBox : Gtk.Box {
 
 		// column
 		var col = new Gtk.TreeViewColumn();
-		col.title = _("Checksum (Provided)");
+		col.title = _("Original Checksum");
 		col.clickable = true;
 		col.resizable = true;
 		col.expand = true;
@@ -817,7 +817,7 @@ public class ChecksumBox : Gtk.Box {
 
 		checksum_type = type;
 
-		col_checksum.title = "%s: %s".printf(_("Checksum"), get_checksum_type_name());//.replace("CHECKSUMTYPE_");
+		col_checksum.title = "%s".printf(get_checksum_type_name());
 		col_checksum_compare.visible = false;
 		col_status.visible = false;
 
