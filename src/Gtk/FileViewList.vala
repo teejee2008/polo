@@ -1,7 +1,7 @@
 /*
  * FileViewList.vala
  *
- * Copyright 2017 Tony George <teejeetech@gmail.com>
+ * Copyright 2012-18 Tony George <teejeetech@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -2196,7 +2196,8 @@ public class FileViewList : Gtk.Box {
 
 	public FileItem? set_view_path(string path, bool update_history = true){
 
-		log_debug("FileViewList: set_view_path(): %s -------------------------------------------".printf(path));
+		log_debug(string.nfill(80,'-'));
+		log_debug("FileViewList: set_view_path(): %s".printf(path));
 
 		if (path.strip().length == 0){
 			clear_views();
@@ -2267,10 +2268,10 @@ public class FileViewList : Gtk.Box {
 
 	public FileItem set_view_item(FileItem item, bool update_history = true){
 
+		log_debug(string.nfill(80,'-'));
 		log_debug("FileViewList: set_view_item(%s): %d".printf(item.file_path, item.children.size));
-		log_debug(string.nfill(80, '-'));
-		
-		log_trace("view_changed: %s ------------------------".printf(item.file_path));
+
+		log_trace("view_changed: %s".printf(item.file_path));
 
 		FileItem.add_to_cache(item);
 		
@@ -2315,8 +2316,9 @@ public class FileViewList : Gtk.Box {
 
 		view_initialized = true;
 
-		log_debug("FileViewList: set_view_item : done ----------------------------------------------------");
-
+		log_debug("FileViewList: set_view_item(): done");
+		log_debug(string.nfill(80,'-'));
+		
 		return current_item;
 	}
 

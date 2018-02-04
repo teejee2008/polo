@@ -1,7 +1,7 @@
 /*
  * MainWindow.vala
  *
- * Copyright 2017 Tony George <teejeetech@gmail.com>
+ * Copyright 2012-18 Tony George <teejeetech@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -904,7 +904,7 @@ public class MainWindow : Gtk.Window {
 
 		dialog.program_name = AppName;
 		dialog.comments = _("A modern file manager for Linux");
-		dialog.copyright = "Copyright © 2017 Tony George (%s)".printf(AppAuthorEmail);
+		dialog.copyright = "Copyright © 2012-18 Tony George (%s)".printf(AppAuthorEmail);
 		dialog.version = AppVersion;
 		dialog.logo = get_app_icon(128,".svg");
 

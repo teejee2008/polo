@@ -1,7 +1,7 @@
 /*
  * FileItem.vala
  *
- * Copyright 2017 Tony George <teejeetech@gmail.com>
+ * Copyright 2012-18 Tony George <teejeetech@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -1315,7 +1315,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			
 			enumerator = file.enumerate_children ("%s".printf(FileAttribute.STANDARD_NAME), 0);
 			while ((info = enumerator.next_file()) != null) {
-				log_debug("FileItem: query_children(): found: %s".printf(info.get_name()));
+				//log_debug("FileItem: query_children(): found: %s".printf(info.get_name()));
 				string child_name = info.get_name();
 				string child_path = GLib.Path.build_filename(file_path, child_name);
 				//log_debug("FileItem: query_children(): child_path: %s".printf(child_path));
@@ -1535,7 +1535,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 		FileItem item = null;
 
-		log_debug("add_child_from_disk(): %s".printf(child_item_file_path));
+		//log_debug("add_child_from_disk(): %s".printf(child_item_file_path));
 
 		try {
 			FileEnumerator enumerator;
@@ -1550,26 +1550,25 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			// add item
 			item = this.add_child(child_item_file_path, item_file_type, 0, 0, true);
 			
-			// check if directory and continue ---------------
+			// check if directory  ---------------------------------
 			
 			if (!item.is_directory) { return item; }
 
-			// enumerate item's children -----------------
+			if (!item.can_read){ return item; }
 
-			try {
+			if (depth == 0){ return item; }
 
-				if (!item.can_read){ return item; }
+			if (!query_children_follow_symlinks && item.is_symlink) { return item; }
+			
+			//log_debug("add_child_from_disk(): enumerate_children");
 
-				if (depth == 0){ return item; }
+			// enumerate item's children ----------------------------
+			
+			enumerator = file.enumerate_children ("%s,%s".printf(FileAttribute.STANDARD_NAME,FileAttribute.STANDARD_TYPE), 0);
+			
+			while ((info = enumerator.next_file()) != null) {
 
-				if (!query_children_follow_symlinks && item.is_symlink) { return item; }
-				
-				//log_debug("add_child_from_disk(): enumerate_children");
-				
-				enumerator = file.enumerate_children ("%s,%s".printf(FileAttribute.STANDARD_NAME,FileAttribute.STANDARD_TYPE), 0);
-				
-				while ((info = enumerator.next_file()) != null) {
-					
+				try {
 					if (query_children_aborted) {
 						item.query_children_aborted = true;
 						//item.dir_size_queried = false;
@@ -1583,9 +1582,9 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 						item.add_child_from_disk(child_path, depth - 1);
 					}
 				}
-			}
-			catch (Error e) {
-				log_error (e.message);
+				catch(Error e) {
+					log_error (e.message);
+				}
 			}
 
 		}
