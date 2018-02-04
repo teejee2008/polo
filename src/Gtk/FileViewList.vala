@@ -2175,16 +2175,16 @@ public class FileViewList : Gtk.Box {
 		log_debug("media=%s, photos=%d, videos=%d".printf(
 			current_item.is_media_directory.to_string(), current_item.count_photos, current_item.count_videos));
 
-		if (has_media && !mediaview_exclude && !media_view_exited){
-			view_mode = ViewMode.MEDIA;
-			show_folders_in_media_view = true;
-			show_other_files_in_media_view = false;
-			log_debug("changed view mode: %s".printf(view_mode.to_string()), true);
-		}
-		else{
-			view_mode = view_mode_user;
-			log_debug("changed view mode: %s".printf(view_mode.to_string()));
-		}
+		//if (has_media && !mediaview_exclude && !media_view_exited){
+			//view_mode = ViewMode.MEDIA;
+			//show_folders_in_media_view = true;
+			//show_other_files_in_media_view = false;
+			//log_debug("changed view mode: %s".printf(view_mode.to_string()), true);
+		//}
+		//else{
+			//view_mode = view_mode_user;
+			//log_debug("changed view mode: %s".printf(view_mode.to_string()));
+		//}
 
 		pane.mediabar.refresh();
 

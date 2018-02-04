@@ -1244,6 +1244,7 @@ public class FileTask : GLib.Object {
 
 			bytes_batch_total += item.file_size;
 			count_batch_total += item.get_file_count_recursively(true);
+			count_batch_total += 1;
 		}
 
 		_stats = "";
