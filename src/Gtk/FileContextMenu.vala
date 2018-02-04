@@ -137,6 +137,8 @@ public class FileContextMenu : Gtk.Menu {
 
 		gtk_menu_add_separator(this); //----------------------
 
+		add_clamav_actions(this, sg_icon, sg_label);
+		
 		add_disk_usage(this, sg_icon, sg_label);
 
 		add_file_compare(this, sg_icon, sg_label);
@@ -1444,6 +1446,8 @@ public class FileContextMenu : Gtk.Menu {
 
 	private void add_archive_actions(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
+		if (!App.show_context_menu_archive) { return; }
+		
 		if (view.current_item is FileItemCloud){ return; }
 
 		if (selected_items.size == 0){ return; }
@@ -1592,11 +1596,12 @@ public class FileContextMenu : Gtk.Menu {
 			&& !(view.current_item is FileItemArchive) && !(view.current_item is FileItemCloud); // check destination
 	}
 
+
 	private void add_disk_usage(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
+		if (!App.show_context_menu_disk_usage) { return; }
+		
 		if (!view.is_normal_directory){ return; }
-
-		if (view.current_item is FileItemCloud){ return; }
 
 		log_debug("FileContextMenu: add_disk_usage()");
 
@@ -1606,8 +1611,8 @@ public class FileContextMenu : Gtk.Menu {
 		var menu_item = gtk_menu_add_item(
 			menu,
 			_("Disk Usage"),
-			_("Analyze disk usage"),
-			null,
+			"",
+			IconManager.lookup_image("disk-usage-analyzer", 16),
 			sg_icon,
 			sg_label);
 
@@ -1756,8 +1761,38 @@ public class FileContextMenu : Gtk.Menu {
 	}
 
 
+	private void add_clamav_actions(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		if (!App.show_context_menu_clamav) { return; }
+		
+		if (!view.is_normal_directory){ return; }
+		
+		if (!App.tool_exists("polo-clamav")) { return; }
+		
+		log_debug("FileContextMenu: add_clamav_actions()");
+	
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Scan for Malware"),
+			"",
+			IconManager.lookup_image("clamav", 16),
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+			var tab = panel.add_tab();
+			tab.select_tab();
+			//tab.pane.show_clamav_view();
+		
+			//tab.pane.view_checksum.generate(selected_items, ChecksumType.MD5);
+		});
+	}
+
+	
 	private void add_checksum_actions(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
+		if (!App.show_context_menu_checksum) { return; }
+		
 		if (selected_item == null){ return; }
 
 		log_debug("FileContextMenu: add_checksum_actions()");
@@ -1877,10 +1912,11 @@ public class FileContextMenu : Gtk.Menu {
 			tab.pane.view_checksum.generate(selected_items, ChecksumType.SHA512);
 		});
 	}
+
 	
 	private void add_kvm_actions(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
-		if (!App.kvm_enable) { return; }
+		if (!App.show_context_menu_kvm) { return; }
 
 		if (view.current_item is FileItemCloud){ return; }
 
@@ -2041,8 +2077,6 @@ public class FileContextMenu : Gtk.Menu {
 
 		log_debug("FileContextMenu: add_kvm_convert()");
 
-		if (!App.kvm_enable) { return; }
-		
 		var menu_item = gtk_menu_add_item(
 			menu,
 			_("Convert to..."),

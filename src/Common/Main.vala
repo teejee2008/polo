@@ -46,6 +46,7 @@ public const int PLUGIN_VER_ISO = 3;
 public const int PLUGIN_VER_PDF = 3;
 public const int PLUGIN_VER_IMAGE = 3;
 public const int PLUGIN_VER_YT = 4;
+public const int PLUGIN_VER_CLAMAV = 1;
 
 const string GETTEXT_PACKAGE = "";
 const string LOCALE_DIR = "/usr/share/locale";
@@ -198,6 +199,12 @@ public class Main : GLib.Object {
 	public bool confirm_delete = true;
 	public bool confirm_trash = true;
 
+	public bool show_context_menu_disk_usage = true;
+	public bool show_context_menu_clamav = true;
+	public bool show_context_menu_archive = true;
+	public bool show_context_menu_checksum = true;
+	public bool show_context_menu_kvm = true;
+
 	public bool overwrite_pdf_split = false;
 	public bool overwrite_pdf_merge = false;
 	public bool overwrite_pdf_compress = false;
@@ -227,7 +234,6 @@ public class Main : GLib.Object {
 	public bool term_enable_network = true;
 	public bool term_enable_gui = true;
 
-	public bool kvm_enable = true;
 	public string kvm_vga = "std";
 	public string kvm_cpu = "host";
 	public int kvm_smp = 1;
@@ -515,6 +521,7 @@ public class Main : GLib.Object {
 		tools["convert"] = new Tool("convert","convert","Converting images and PDF documents");
 		tools["pngcrush"] = new Tool("pngcrush","pngcrush","Reduce file size of PNG files");
 		tools["gs"] = new Tool("gs","ghostscript","Ghostscript - Converting PDF files");
+		tools["polo-clamav"] = new Tool("polo-clamav","polo-clamav","ClamAV Plugin (Donation)");
 		tools["polo-iso"] = new Tool("polo-iso","polo-iso","Polo ISO Plugin (Donation)");
 		tools["polo-pdf"] = new Tool("polo-pdf","polo-pdf","Polo PDF Plugin (Donation)");
 		tools["polo-image"] = new Tool("polo-image","polo-image","Polo Image Plugin (Donation)");
@@ -553,6 +560,7 @@ public class Main : GLib.Object {
 		plugins["pdf"] = new Plugin("polo-pdf", "Polo PDF Plugin", PLUGIN_VER_PDF);
 		plugins["image"] = new Plugin("polo-image", "Polo Image Plugin", PLUGIN_VER_IMAGE);
 		plugins["yt"] = new Plugin("polo-yt", "Polo Video Download Plugin", PLUGIN_VER_YT);
+		plugins["clamav"] = new Plugin("polo-clamav", "Polo ClamAV Plugin", PLUGIN_VER_CLAMAV);
 
 		check_all_plugins();
 	}
@@ -671,7 +679,6 @@ public class Main : GLib.Object {
 		config.set_string_member("term_enable_network", term_enable_network.to_string());
 		config.set_string_member("term_enable_gui", term_enable_gui.to_string());
 
-		config.set_string_member("kvm_enable", kvm_enable.to_string());
 		config.set_string_member("kvm_cpu", kvm_cpu);
 		config.set_string_member("kvm_smp", kvm_smp.to_string());
 		config.set_string_member("kvm_cpu_limit", kvm_cpu_limit.to_string());
@@ -690,6 +697,12 @@ public class Main : GLib.Object {
 
 		config.set_string_member("confirm_delete", confirm_delete.to_string());
 		config.set_string_member("confirm_trash", confirm_trash.to_string());
+
+		config.set_string_member("show_context_menu_disk_usage", show_context_menu_disk_usage.to_string());
+		config.set_string_member("show_context_menu_clamav", show_context_menu_clamav.to_string());
+		config.set_string_member("show_context_menu_archive", show_context_menu_archive.to_string());
+		config.set_string_member("show_context_menu_checksum", show_context_menu_checksum.to_string());
+		config.set_string_member("show_context_menu_kvm", show_context_menu_kvm.to_string());
 
 		config.set_string_member("overwrite_pdf_split", overwrite_pdf_split.to_string());
 		config.set_string_member("overwrite_pdf_merge", overwrite_pdf_merge.to_string());
@@ -865,7 +878,6 @@ public class Main : GLib.Object {
 		term_enable_network = json_get_bool_from_string(config, "term_enable_network", term_enable_network);
 		term_enable_gui = json_get_bool_from_string(config, "term_enable_gui", term_enable_gui);
 
-		kvm_enable = json_get_bool_from_string(config, "kvm_enable", kvm_enable);
 		kvm_cpu = json_get_string(config, "kvm_cpu", kvm_cpu);
 		kvm_smp = json_get_int_from_string(config, "kvm_smp", kvm_smp);
 		kvm_cpu_limit = json_get_int_from_string(config, "kvm_cpu_limit", kvm_cpu_limit);
@@ -886,6 +898,18 @@ public class Main : GLib.Object {
 
 		confirm_delete = json_get_bool_from_string(config, "confirm_delete", confirm_delete);
 		confirm_trash = json_get_bool_from_string(config, "confirm_trash", confirm_trash);
+
+		config.set_string_member("", show_context_menu_disk_usage.to_string());
+		config.set_string_member("", show_context_menu_clamav.to_string());
+		config.set_string_member("", show_context_menu_archive.to_string());
+		config.set_string_member("", show_context_menu_checksum.to_string());
+		config.set_string_member("", show_context_menu_kvm.to_string());
+
+		show_context_menu_disk_usage = json_get_bool_from_string(config, "show_context_menu_disk_usage", show_context_menu_disk_usage);
+		show_context_menu_clamav = json_get_bool_from_string(config, "show_context_menu_clamav", show_context_menu_clamav);
+		show_context_menu_archive = json_get_bool_from_string(config, "show_context_menu_archive", show_context_menu_archive);
+		show_context_menu_checksum = json_get_bool_from_string(config, "show_context_menu_checksum", show_context_menu_checksum);
+		show_context_menu_kvm = json_get_bool_from_string(config, "show_context_menu_kvm", show_context_menu_kvm);
 
 		overwrite_pdf_split = json_get_bool_from_string(config, "overwrite_pdf_split", overwrite_pdf_split);
 		overwrite_pdf_merge = json_get_bool_from_string(config, "overwrite_pdf_merge", overwrite_pdf_merge);
