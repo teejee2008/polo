@@ -40,8 +40,289 @@ public enum VideoDownloadTaskType {
 }
 
 public class VideoDownloadFormat : GLib.Object {
+	
 	public string code = "";
-	public string description = "";
+	public string ext = "";
+	public string resolution = "";
+	public string type = "";
+	public string size = "";
+	public string note = "";
+	//public string description = "";
+
+	private string _description = "";
+	public string description {
+		owned get {
+
+			if (_description.length > 0){ return _description; }
+
+			string txt = "";
+			
+			switch(type){
+			case "audio":
+				txt += _("Audio");
+				txt += (format.length > 0) ? " %s".printf(format) : "";
+				txt += (audio_codec.length > 0) ? " %s".printf(audio_codec) : "";
+				txt += (audio_bitrate.length > 0) ? " (%s)".printf(audio_bitrate) : "";
+				break;
+				
+			case "video":
+				txt += _("Video");
+				txt += (format.length > 0) ? " %s".printf(format) : "";
+				txt += (video_codec.length > 0) ? " %s".printf(video_codec) : "";
+				txt += (video_resolution.length > 0) ? " (%s)".printf(video_resolution) : "";
+				break;
+
+			case "audio+video":
+				txt += "%s".printf(format);
+				txt += (video_codec.length > 0) ? " %s".printf(video_codec) : "";
+				txt += (video_resolution.length > 0) ? " (%s)".printf(video_resolution) : "";
+				txt += " ~";
+				txt += (audio_codec.length > 0) ? " %s".printf(audio_codec) : "";
+				txt += (audio_bitrate.length > 0) ? " (%s)".printf(audio_bitrate) : "";
+				break;
+			}
+
+			if (size.length > 0){
+				txt += " ~ %s".printf(size);
+			}
+
+			_description = txt;
+
+			return txt;
+		}
+	}
+
+	private string _format = "";
+	public string format {
+		owned get {
+
+			if (_format.length > 0){ return _format; }
+			
+			string txt = "";
+			
+			if (ext == "webm"){
+				txt += "WebM";
+			}
+			else {
+				// mp4, 3gp, m4a
+				txt += ext.up();
+			}
+
+			_format = txt;
+			
+			return txt;
+		}
+	}
+
+	private string _audio_codec = "";
+	public string audio_codec {
+		owned get {
+
+			if (_audio_codec.length > 0){ return _audio_codec; }
+			
+			string txt = "";
+			
+			if (note.down().contains("opus")){
+				txt += "Opus";
+			}
+			else if (note.down().contains("vorbis")){
+				txt += "Vorbis";
+			}
+			else if (note.down().contains("m4a") || note.down().contains("mp4a")){
+				txt += "AAC";
+			}
+
+			_audio_codec = txt;
+			
+			return txt;
+		}
+	}
+
+	private string _audio_bitrate = "";
+	public string audio_bitrate {
+		owned get {
+
+			if (_audio_bitrate.length > 0){ return _audio_bitrate; }
+			
+			string txt = "";
+
+			if (type == "audio"){
+			
+				var match = regex_match("""([0-9]+k)""", note);
+				if (match != null){
+					txt = match.fetch(1);
+				}
+			}
+			else if (type == "audio+video"){
+
+				var s = note;
+				s = s[s.index_of("opus")   + 4 : s.length];
+				s = s[s.index_of("vorbis") + 6 : s.length];
+				s = s[s.index_of("m4a")    + 3 : s.length];
+				s = s[s.index_of("mp4a")   + 4 : s.length];
+
+				var match = regex_match("""([0-9]+k)""", s);
+				if (match != null){
+					txt = match.fetch(1);
+				}
+			}
+
+			_audio_bitrate = txt;
+			
+			return txt;
+		}
+	}
+
+	private string _video_codec = "";
+	public string video_codec {
+		owned get {
+
+			if (_video_codec.length > 0){ return _video_codec; }
+			
+			string txt = "";
+			
+			if (note.down().contains("avc1")){
+				txt += "H264-AVC";
+			}
+			else if (note.down().contains("vp8")){
+				txt += "VP8";
+			}
+			else if (note.down().contains("vp9")){
+				txt += "VP9";
+			}
+
+			_video_codec = txt;
+			
+			return txt;
+		}
+	}
+
+	private string _video_resolution = "";
+	public string video_resolution {
+		owned get {
+
+			if (_video_resolution.length > 0){ return _video_resolution; }
+			
+			string txt = "";
+
+			var match = regex_match("""([0-9])+x([0-9]+)""", resolution);
+			if (match != null){
+				txt = match.fetch(2) + "p";
+			}
+
+			if (txt.length == 0){
+				
+				match = regex_match("""([0-9])+x([0-9]+)""", note);
+				if (match != null){
+					txt = match.fetch(2) + "p";
+				}
+			}
+
+			if (txt.length == 0){
+
+				match = regex_match("""([0-9]+p)""", note);
+				if (match != null){
+					txt = match.fetch(1);
+				}
+			}
+
+			if (txt.length == 0){
+
+				match = regex_match("""^(small|medium|large),""", note);
+				if (match != null){
+					txt = match.fetch(1);
+				}
+			}
+
+			if (txt.length == 0){
+
+				if (note.contains("hd720")){
+					txt = "720p";
+				}
+			}
+
+			//if (txt == "720p"){
+			//	txt = "HD";
+			//}
+			//else if (txt == "1080p"){
+			//	txt = "FHD";
+			//}
+
+			if (video_fps == "60"){
+				txt += "60";
+			}
+
+			_video_resolution = txt;
+			
+			return txt;
+		}
+	}
+
+	private string _video_bitrate = "";
+	public string video_bitrate {
+		owned get {
+
+			if (_video_bitrate.length > 0){ return _video_bitrate; }
+			
+			string txt = "";
+			
+			var match = regex_match("""([0-9]+k)""", note);
+			if (match != null){
+				txt = match.fetch(1);
+			}
+
+			_video_bitrate = txt;
+			
+			return txt;
+		}
+	}
+
+	private string _video_fps = "";
+	public string video_fps {
+		owned get {
+
+			if (_video_fps.length > 0){ return _video_fps; }
+			
+			string txt = "";
+			
+			var match = regex_match("""([0-9]+)fps""", note);
+			if (match != null){
+				txt = match.fetch(1);
+			}
+
+			_video_fps = txt;
+			
+			return txt;
+		}
+	}
+
+	private string _tooltip_text = "";
+	public string tooltip_text {
+		owned get {
+
+			if (_tooltip_text.length > 0){ return _tooltip_text; }
+			
+			string txt = "";
+			
+			txt += (code.length > 0) ? "%s: %s\n".printf(_("Code"), code) : "";
+			txt += (ext.length > 0) ? "%s: %s\n".printf(_("Extension"), ext) : "";
+			txt += (resolution.length > 0) ? "%s: %s\n".printf(_("Resolution"), resolution) : "";
+			txt += (type.length > 0) ? "%s: %s\n".printf(_("Type"), type) : "";
+			txt += (size.length > 0) ? "%s: %s\n".printf(_("Size"), size) : "";
+			txt += (note.length > 0) ? "%s: %s\n".printf(_("Notes"), note) : "";
+
+			txt += "%s\n".printf(string.nfill(40,'-'));
+
+			txt += (video_codec.length > 0) ? "%s: %s\n".printf(_("Video Codec"), video_codec) : "";
+			txt += (video_resolution.length > 0) ? "%s: %s\n".printf(_("Video Resolution"), video_resolution) : "";
+			txt += (audio_codec.length > 0) ? "%s: %s\n".printf(_("Audio Codec"), audio_codec) : "";
+			txt += (audio_bitrate.length > 0) ? "%s: %s\n".printf(_("Audio Bitrate"), audio_bitrate) : "";
+
+			_tooltip_text = txt;
+			
+			return txt;
+		}
+	}
 }
 
 public class VideoDownloadTask : AsyncTask {
@@ -73,7 +354,7 @@ public class VideoDownloadTask : AsyncTask {
 		
 		try {
 			
-			regex_list["list"] = new Regex("""^code='(.*)',ext='(.*)',type='(.*)',size='(.*)',note='(.*)'""");
+			regex_list["list"] = new Regex("""^code='(.*)',ext='(.*)',resolution='(.*)',type='(.*)',size='(.*)',note='(.*)'""");
 
 			regex_list["info"] = new Regex("""^thumb_url='(.*)',thumb_path='(.*)',title='(.*)',duration='(.*)'""");
 
@@ -164,22 +445,23 @@ public class VideoDownloadTask : AsyncTask {
 
 		MatchInfo match;
 		if (regex_list["list"].match(line, 0, out match)) {
+			
 			log_debug("format: %s".printf(line));
 
 			string code = match.fetch(1);
 			string ext = match.fetch(2);
-			string type = match.fetch(3);
-			string size = match.fetch(4);
-			string note = match.fetch(5);
+			string res = match.fetch(3);
+			string type = match.fetch(4);
+			string size = match.fetch(5);
+			string note = match.fetch(6);
 
-			string desc = ext.up();
-			desc += (type.length > 0) ? " (%s)".printf(type) : "";
-			desc += (size.length > 0) ? ", %s".printf(size) : "";
-			desc += (note.length > 0) ? " ~ %s".printf(note) : "";
-			
 			var fmt = new VideoDownloadFormat();
 			fmt.code = code;
-			fmt.description = desc;
+			fmt.ext = ext;
+			fmt.resolution = res;
+			fmt.type = type.down();
+			fmt.size = size;
+			fmt.note = note.down();
 			list.add(fmt);
 		}
 		else if (regex_list["info"].match(line, 0, out match)) {
@@ -223,6 +505,81 @@ public class VideoDownloadTask : AsyncTask {
 	}
 
 	protected override void finish_task(){
+
+		list.sort((a,b)=>{
+
+			if (a.type == "audio"){
+				
+				switch(b.type){
+				case "audio":
+					if ((a.audio_bitrate.length > 0) && (b.audio_bitrate.length > 0)
+						&& (a.format == b.format) && (a.audio_codec == b.audio_codec)){
+						return int.parse(a.audio_bitrate) - int.parse(b.audio_bitrate);
+					}
+					else{
+						return strcmp(a.description, b.description);
+					}
+					
+				case "video":
+					return -1;
+					
+				case "audio+video":
+					return 1;
+					
+				default:
+					return strcmp(a.description, b.description);
+				}
+			}
+			else if (a.type == "video"){
+
+				switch(b.type){
+				case "audio":
+					return 1;
+					
+				case "video":
+					if ((a.video_resolution.length > 0) && (b.video_resolution.length > 0)
+						&& (a.format == b.format) && (a.video_codec == b.video_codec)){
+						return int.parse(a.video_resolution) - int.parse(b.video_resolution);
+					}
+					else{
+						return strcmp(a.description, b.description);
+					}
+					
+				case "audio+video":
+					return 1;
+					
+				default:
+					return strcmp(a.description, b.description);
+				}
+			}
+			else if (a.type == "audio+video"){
+
+				switch(b.type){
+				case "audio":
+					return -1;
+					
+				case "video":
+					return -1;
+					
+				case "audio+video":
+
+					if ((a.video_resolution.length > 0) && (b.video_resolution.length > 0)
+						&& (a.format == b.format) && (a.video_codec == b.video_codec)){
+						return int.parse(a.video_resolution) - int.parse(b.video_resolution);
+					}
+					else{
+						return strcmp(a.description, b.description);
+					}
+					
+				default:
+					return strcmp(a.description, b.description);
+				}
+			}
+			else {
+				return strcmp(a.description, b.description);
+			}
+		});
+
 		if ((status != AppStatus.CANCELLED) && (status != AppStatus.PASSWORD_REQUIRED)) {
 			status = AppStatus.FINISHED;
 		}
