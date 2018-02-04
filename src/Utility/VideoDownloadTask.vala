@@ -80,10 +80,18 @@ public class VideoDownloadFormat : GLib.Object {
 				txt += (audio_codec.length > 0) ? " %s".printf(audio_codec) : "";
 				txt += (audio_bitrate.length > 0) ? " (%s)".printf(audio_bitrate) : "";
 				break;
+				
+			default:
+				txt += "%s".printf(format);
+				break;
 			}
 
 			if (size.length > 0){
 				txt += " ~ %s".printf(size);
+			}
+
+			if (txt.strip().length == 0){
+				txt = code;
 			}
 
 			_description = txt;

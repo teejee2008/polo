@@ -39,7 +39,7 @@ public class ProgressPanelVideoDownloadTask : ProgressPanel {
 	private string url;
 	private bool fetch_in_progress = false;
 	
-	private const int FETCH_WAIT_INTERVAL = 15;
+	private const int FETCH_WAIT_INTERVAL = 15000;
 	private int fetch_wait_interval = FETCH_WAIT_INTERVAL;
 	
 	// ui 
@@ -80,15 +80,13 @@ public class ProgressPanelVideoDownloadTask : ProgressPanel {
 		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		vbox_outer.add(hbox);
 
-		// -----------------------------
-
-		// spinner --------------------
+		// spinner ------------------------------------
 
 		var spinner = new Gtk.Spinner();
 		spinner.start();
 		hbox.add(spinner);
 
-		// status message ------------------
+		// status message -------------------------------------
 
 		label = new Gtk.Label(_("Fetching info..."));
 		label.xalign = 0.0f;
@@ -96,6 +94,26 @@ public class ProgressPanelVideoDownloadTask : ProgressPanel {
 		label.max_width_chars = 100;
 		hbox.add(label);
 		lbl_status = label;
+
+
+		label = new Gtk.Label("");
+		label.hexpand = true;
+		hbox.add(label);
+
+		// cancel button ------------------------------
+
+		var button = new Gtk.Button.with_label("");
+		button.label = "";
+		button.image = IconManager.lookup_image("process-stop", 32);
+		button.always_show_image = true;
+		button.set_tooltip_text(_("Cancel"));
+		hbox.add(button);
+
+		button.clicked.connect(()=>{
+			cancel();
+		});
+
+		// ------------------------------------------
 
 		hbox.margin_bottom = 12;
 
@@ -133,51 +151,55 @@ public class ProgressPanelVideoDownloadTask : ProgressPanel {
 
 		// -----------------------------
 
+		Gtk.RadioButton? radio = null;
 		Gtk.RadioButton? last_radio = null;
 
-		// best 
-		
-		var radio = new Gtk.RadioButton.with_label_from_widget(last_radio, _("Best (audio + video)"));
-		vbox.add(radio);
-		last_radio = radio;
+		if (task.list.size > 1){
 
-		radio.toggled.connect(()=>{
-			task.format = "best";
-			log_debug("task.set_format: %s".printf(task.format));
-		});
+			// best 
+			
+			radio = new Gtk.RadioButton.with_label_from_widget(last_radio, _("Best (audio + video)"));
+			vbox.add(radio);
+			last_radio = radio;
 
-		// best video
-		
-		radio = new Gtk.RadioButton.with_label_from_widget(last_radio, _("Best (audio only)"));
-		vbox.add(radio);
-		last_radio = radio;
+			radio.toggled.connect(()=>{
+				task.format = "best";
+				log_debug("task.set_format: %s".printf(task.format));
+			});
 
-		radio.toggled.connect(()=>{
-			task.format = "bestaudio";
-			log_debug("task.set_format: %s".printf(task.format));
-		});
+			// best video
+			
+			radio = new Gtk.RadioButton.with_label_from_widget(last_radio, _("Best (audio only)"));
+			vbox.add(radio);
+			last_radio = radio;
 
-		// best audio
-		
-		radio = new Gtk.RadioButton.with_label_from_widget(last_radio, _("Best (video only)"));
-		vbox.add(radio);
-		last_radio = radio;
+			radio.toggled.connect(()=>{
+				task.format = "bestaudio";
+				log_debug("task.set_format: %s".printf(task.format));
+			});
 
-		radio.toggled.connect(()=>{
-			task.format = "bestvideo";
-			log_debug("task.set_format: %s".printf(task.format));
-		});
+			// best audio
+			
+			radio = new Gtk.RadioButton.with_label_from_widget(last_radio, _("Best (video only)"));
+			vbox.add(radio);
+			last_radio = radio;
 
-		// best video + audio
-		
-		radio = new Gtk.RadioButton.with_label_from_widget(last_radio, _("Best Video + Best Audio (merge)"));
-		vbox.add(radio);
-		last_radio = radio;
+			radio.toggled.connect(()=>{
+				task.format = "bestvideo";
+				log_debug("task.set_format: %s".printf(task.format));
+			});
 
-		radio.toggled.connect(()=>{
-			task.format = "bestvideo+bestaudio";
-			log_debug("task.set_format: %s".printf(task.format));
-		});
+			// best video + audio
+			
+			radio = new Gtk.RadioButton.with_label_from_widget(last_radio, _("Best Video + Best Audio (merge)"));
+			vbox.add(radio);
+			last_radio = radio;
+
+			radio.toggled.connect(()=>{
+				task.format = "bestvideo+bestaudio";
+				log_debug("task.set_format: %s".printf(task.format));
+			});
+		}
 			
 		foreach(var item in task.list){
 			
@@ -468,13 +490,17 @@ public class ProgressPanelVideoDownloadTask : ProgressPanel {
 			if (fetch_in_progress){
 
 				if (fetch_wait_interval < 0){
+					
 					string txt = _("Could not fetch video info");
-					string msg = _("Check your internet connection and video URL");
+					string msg = "%s\n\n%s".printf(
+						_("Check your internet connectivity."),_("Try pasting the URL again."));
 					gtk_messagebox(txt, msg, window, true);
+					
 					cancel();
 				}
 
-				fetch_wait_interval--;
+				fetch_wait_interval -= 500;
+				//log_debug("fetch_wait_interval: %d".printf(fetch_wait_interval));
 			}
 			
 			//lbl_stats.label = task.stat_status_line;
@@ -488,10 +514,9 @@ public class ProgressPanelVideoDownloadTask : ProgressPanel {
 		}
 		else{
 			finish();
-			return false;
 		}
 
-		return true;
+		return task.is_running;
 	}
 
 	public override void cancel(){
@@ -522,13 +547,31 @@ public class ProgressPanelVideoDownloadTask : ProgressPanel {
 			log_debug("task.list_size: %d".printf(task.list.size));
 			
 			if (task.list.size > 0){
-				task.format = "best";
+
+				if (task.list.size == 1){
+					task.format = task.list[0].code;
+				}
+				else{
+					task.format = "best";
+				}
+				
 				task.current_file = task.title;
 				init_ui_selection();
 			}
+			else{
+
+				string txt = _("Could not fetch video info");
+
+				string msg = "%s\n\n%s".printf(
+						_("Check if the link is from a supported website."),
+						_("Update youtube-dl to a newer version."));
+						
+				gtk_messagebox(txt, msg, window, true);
+					
+				cancel();
+			}
 		}
 		else{
-
 			log_debug("ProgressPanelVideoDownloadTask: finish()");
 
 			pane.file_operations.remove(this);
