@@ -105,51 +105,18 @@ namespace TeeJee.System{
 	}
 
 	public int get_user_id_from_username(string username){
-		
-		int user_id = -1;
-
-		foreach(var line in file_read("/etc/passwd").split("\n")){
-			var arr = line.split(":");
-			if (arr.length < 3) { continue; }
-			if (arr[0] == username){
-				user_id = int.parse(arr[2]);
-				break;
-			}
-		}
-
-		return user_id;
+      string cmd = "getent passwd " + username;
+      return int.parse(run_cmd(cmd).split(":")[2]);
 	}
 
 	public string get_username_from_uid(int user_id){
-		
-		string username = "";
-
-		foreach(var line in file_read("/etc/passwd").split("\n")){
-			var arr = line.split(":");
-			if (arr.length < 3) { continue; }
-			if (int.parse(arr[2]) == user_id){
-				username = arr[0];
-				break;
-			}
-		}
-
-		return username;
+      string cmd = "getent passwd " + user_id.to_string();
+      return run_cmd(cmd).split(":")[0];
 	}
 
-	public string get_user_home(string username = get_username()){
-		
-		string userhome = "";
-
-		foreach(var line in file_read("/etc/passwd").split("\n")){
-			var arr = line.split(":");
-			if (arr.length < 6) { continue; }
-			if (arr[0] == username){
-				userhome = arr[5];
-				break;
-			}
-		}
-
-		return userhome;
+	public string get_user_home(string username = get_username()){	
+      string cmd = "getent passwd " + username;
+      return run_cmd(cmd).split(":")[5];
 	}
 
 	public string get_user_home_effective(){
@@ -566,4 +533,18 @@ namespace TeeJee.System{
 	    Intl.setlocale(GLib.LocaleCategory.COLLATE, type);
 	    Intl.setlocale(GLib.LocaleCategory.TIME, type);
 	}
+
+   private string run_cmd(string cmd) {
+      string std_out, std_err;
+      int ret_val;
+
+      try {
+         Process.spawn_command_line_sync(cmd, out std_out, out std_err, out ret_val);
+      }
+      catch(Error e){
+         log_error (e.message);
+      }
+      
+      return std_out;      
+   }
 }
