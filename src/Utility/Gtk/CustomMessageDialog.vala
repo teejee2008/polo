@@ -139,6 +139,8 @@ public class CustomMessageDialog : Gtk.Dialog {
 		var text = "<span weight=\"bold\" size=\"x-large\">%s</span>\n\n%s".printf(
 			escape_html(msg_title),
 			msg_body);
+
+		this.title = "";
 			
 		lbl_msg = new Gtk.Label(text);
 		lbl_msg.xalign = 0.0f;

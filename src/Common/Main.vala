@@ -530,6 +530,7 @@ public class Main : GLib.Object {
 		tools["rclone"] = new Tool("rclone","rclone","rsync for Cloud Storage");
 		tools["youtube-dl"] = new Tool("youtube-dl","youtube-dl","youtube-dl Downloader");
 		tools["diffuse"] = new Tool("diffuse","diffuse","File Compare Utility");
+		tools["groot"] = new Tool("groot","groot","Groot Utility for chroot");
 
 		check_all_tools();
 	}

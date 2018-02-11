@@ -88,7 +88,6 @@ install:
 	#binary
 	install -m 0755 ${app_name}-gtk "$(DESTDIR)$(bindir)"
 	install -m 0755 gtk3-version-polo "$(DESTDIR)$(bindir)"
-	install -m 0755 ${app_name}-chroot "$(DESTDIR)$(bindir)"
 	install -m 0755 ${app_name}-uninstall "$(DESTDIR)$(bindir)"
 
 	#shared files
@@ -116,7 +115,6 @@ uninstall:
 	#binary
 	rm -f "$(DESTDIR)$(bindir)/${app_name}-gtk"
 	rm -f "$(DESTDIR)$(bindir)/gtk3-version-polo"
-	rm -f "$(DESTDIR)$(bindir)/${app_name}-chroot"
 	rm -f "$(DESTDIR)$(bindir)/${app_name}-uninstall"
 
 	#shared files

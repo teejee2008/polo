@@ -3025,7 +3025,7 @@ public class FileViewList : Gtk.Box {
 			if (item.file_path == file_path){
 				item.query_file_info();
 				set_iter_from_item(iter0, item, true, false);
-				log_debug("Refreshed iter: %s".printf(file_path));
+				//log_debug("Refreshed iter: %s".printf(file_path));
 				return;
 			}
 

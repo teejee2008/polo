@@ -525,7 +525,7 @@ public class LayoutBox : Gtk.Box {
 	public bool show_file_operation_warning_on_layout_change(){
 
 		if (file_operations.size > 0){
-			string title = _("Layout Cannot be Changed");
+			string title = _("File Operation Running");
 			string msg = _("Layout cannot be changed while file operations are running");
 			gtk_messagebox(title, msg, window, true);
 			return false;
