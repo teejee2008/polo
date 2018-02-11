@@ -295,6 +295,9 @@ public class CloudLoginWindow : Gtk.Window, IPaneActive {
 		
 		term.feed_command("");
 		sleep(200);
+
+		term.feed_command("");
+		sleep(200);
 		
 		term.feed_command("y");
 		sleep(200);
