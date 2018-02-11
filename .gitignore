@@ -14,3 +14,5 @@ release/*.run
 .git
 .bzr
 *~
+
+po-temp/
