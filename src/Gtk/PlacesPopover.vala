@@ -21,7 +21,6 @@
  *
  */
 
-
 using Gtk;
 using Gee;
 
@@ -515,7 +514,7 @@ public class PlacesPopover : Gtk.Popover {
 		// bookmark ---------------------------------------
 		
 		var bbox = new Gtk.ButtonBox(Gtk.Orientation.HORIZONTAL);
-		bbox.set_layout(Gtk.ButtonBoxStyle.CENTER);
+		bbox.set_layout(Gtk.ButtonBoxStyle.EXPAND);
 		bbox.spacing = 6;
 		hbox.add(bbox);
 

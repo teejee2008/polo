@@ -106,50 +106,100 @@ namespace TeeJee.System{
 
 	public int get_user_id_from_username(string username){
 		
-		int user_id = -1;
+		// check local user accounts in /etc/passwd -------------------
 
 		foreach(var line in file_read("/etc/passwd").split("\n")){
+			
 			var arr = line.split(":");
-			if (arr.length < 3) { continue; }
-			if (arr[0] == username){
-				user_id = int.parse(arr[2]);
-				break;
+			
+			if ((arr.length >= 3) && (arr[0] == username)){
+				
+				return int.parse(arr[2]);
 			}
 		}
 
-		return user_id;
+		// check remote user accounts with getent -------------------
+			
+		var arr = get_user_with_getent(username).split(":");
+
+		if ((arr.length >= 3) && (arr[0] == username)){
+
+			return int.parse(arr[2]);
+		}
+
+		// not found --------------------
+		
+		log_error("UserId not found for userName: %s".printf(username));
+
+		return -1;
 	}
 
 	public string get_username_from_uid(int user_id){
-		
-		string username = "";
 
+		// check local user accounts in /etc/passwd -------------------
+		
 		foreach(var line in file_read("/etc/passwd").split("\n")){
+			
 			var arr = line.split(":");
-			if (arr.length < 3) { continue; }
-			if (int.parse(arr[2]) == user_id){
-				username = arr[0];
-				break;
+			
+			if ((arr.length >= 3) && (arr[2] == user_id.to_string())){
+				
+				return arr[0];
 			}
 		}
 
-		return username;
+		// check remote user accounts with getent -------------------
+			
+		var arr = get_user_with_getent(user_id.to_string()).split(":");
+
+		if ((arr.length >= 3) && (arr[2] == user_id.to_string())){
+
+			return arr[0];
+		}
+
+		// not found --------------------
+		
+		log_error("Username not found for uid: %d".printf(user_id));
+
+		return "";
 	}
 
 	public string get_user_home(string username = get_username()){
-		
-		string userhome = "";
 
+		// check local user accounts in /etc/passwd -------------------
+		
 		foreach(var line in file_read("/etc/passwd").split("\n")){
+			
 			var arr = line.split(":");
-			if (arr.length < 6) { continue; }
-			if (arr[0] == username){
-				userhome = arr[5];
-				break;
+			
+			if ((arr.length >= 6) && (arr[0] == username)){
+
+				return arr[5];
 			}
 		}
 
-		return userhome;
+		// check remote user accounts with getent -------------------
+		
+		var arr = get_user_with_getent(username).split(":");
+		
+		if ((arr.length >= 6) && (arr[0] == username)){
+
+			return arr[5];
+		}
+
+		// not found --------------------
+
+		log_error("Home directory not found for user: %s".printf(username));
+
+		return "";
+	}
+
+	public string get_user_with_getent(string user_name_or_uid){
+
+		string cmd = "getent passwd " + user_name_or_uid;
+		string std_out, std_err;
+		exec_sync(cmd, out std_out, out std_err);
+		return std_out;
 	}
 
 	public string get_user_home_effective(){
