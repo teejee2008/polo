@@ -181,8 +181,7 @@ public class MainHeaderBar : Gtk.HeaderBar, IPaneActive {
 		});
 	}
 
-	private Gtk.Popover popup_bm;
-	private Sidebar sidebar_bm;
+	private PlacesPopover popup_bm;
 	
 	private void add_bookmarks(){
 
@@ -194,15 +193,11 @@ public class MainHeaderBar : Gtk.HeaderBar, IPaneActive {
 		
 		gtk_apply_css({ button }, "padding-left: %dpx; padding-right: %dpx;".printf(BUTTON_PADDING, BUTTON_PADDING));
 
-		popup_bm = new Gtk.Popover(button);
-		sidebar_bm = new Sidebar(popup_bm, "bm", pane);
-		popup_bm.add(sidebar_bm);
+		popup_bm = new PlacesPopover(button, pane);
 
 		button.clicked.connect(() => {
 			if (view == null) { return; };
-			sidebar_bm.show();
-			sidebar_bm.refresh();
-			gtk_show(popup_bm);
+			popup_bm.show_popup();
 		});
 	}
 
