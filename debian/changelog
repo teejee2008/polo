@@ -1,3 +1,50 @@
+polo-file-manager (18.2) xenial; urgency=low
+
+  * Checksum: Added options for generating and verifying checksums
+
+  * Checksum: Added support for md5 files produced by md5sum
+
+  * Checksum: Display summary dialog after verification
+
+  * Devices: Open mounted path of device root instead of mounted subvolume
+  
+  * Term: Hide statusbar when terminal is maximized
+
+  * Term: Run executable files in embedded terminal, instead of new window
+
+  * Term: Use Groot for the chroot context menu action
+  
+  * Use larger icons for stop buttons in progress panels
+
+  * VideoDownload: Timeout fetch operation after 15 seconds
+
+  * VideoDownload: Sort available formats by codec and quality
+
+  * VideoDownload: Added option to cancel fetch operation
+
+  * VideoDownload: Display thumbnail in progress panel
+
+  * FileItem: Fixed an issue while requerying a renamed folder
+
+  * Makefile: Remove linking of libs from shared folder
+
+  * Settings: Added options to hide context menu items
+
+  * Updated get_process_children() to fetch all descendants
+
+  * Added support for remote user accounts (LDAP,etc)
+
+  * Fixed: Adding new cloud account was broken with rclone v1.39
+
+  * Bookmarks: Expand buttons; Added "Add/Remove" to bookmark button
+
+  * DebugMode: Show memory used in window title
+
+  * HeaderBarMode: Use the new bookmarks popover
+
+ -- Tony George <tony.george.kol@gmail.com>  Sun, 11 Feb 2017 10:00:00 +0530
+
+
 polo-file-manager (18.1) xenial; urgency=low
 
   * Bookmarks popup was redesigned

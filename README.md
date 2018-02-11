@@ -11,6 +11,8 @@ Polo is a modern, light-weight file manager for Linux with support for multiple 
 - **PDF Actions** - Actions in right-click menu: Split and Merge pages, Add or Remove Password, Rotate, etc.
 - **ISO Actions** - Actions in right-click menu: Mount, Boot in VM, Write to USB
 - **Image Actions** - Actions in right-click menu: Rotate, Resize, Reduce Quality, Optimize PNG, Convert to other formats, Boot or Reduce Colors, etc.
+- **Checksum & Hashing** - Actions in right-click menu to generate MD5, SHA1, SHA2-256 ad SHA2-512 checksums for file and folders. Double-click on files with  **.md5, .sha1, .sha2, .sha256, .sha512** extensions to verify.
+- **Video Downloads** - Paste URLs from YouTube and other video websites in a folder to download video files. Integrates with youtube-dl utility.
 
 ## Screenshots
 
