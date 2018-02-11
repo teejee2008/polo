@@ -431,16 +431,23 @@ namespace TeeJee.ProcessHelper{
 		string[] arr;
 
 		foreach (string line in std_out.split ("\n")){
+			
 			arr = line.strip().split (" ");
 			if (arr.length < 1) { continue; }
 
 			pid = 0;
-			pid = int.parse (arr[0]);
+			pid = int.parse(arr[0]);
 
 			if (pid != 0){
 				procList += pid;
+
+				var children = get_process_children(pid);
+				foreach(var child_pid in children){
+					procList += child_pid;
+				}
 			}
 		}
+		
 		return procList;
 	}
 
@@ -452,14 +459,16 @@ namespace TeeJee.ProcessHelper{
 		 * Sends signal SIGTERM to the process to allow it to quit gracefully.
 		 * */
 
-		int[] child_pids = get_process_children (process_pid);
-		Posix.kill (process_pid, Posix.SIGTERM);
-
+		int[] child_pids = get_process_children(process_pid);
+		Posix.kill(process_pid, Posix.SIGTERM);
+		log_debug("SIGTERM: pid=%d".printf(process_pid));
+		
 		if (killChildren){
 			Pid childPid;
 			foreach (long pid in child_pids){
 				childPid = (Pid) pid;
-				Posix.kill (childPid, Posix.SIGTERM);
+				Posix.kill(childPid, Posix.SIGTERM);
+				log_debug("SIGTERM: pid=%d".printf(childPid));
 			}
 		}
 	}
@@ -473,12 +482,14 @@ namespace TeeJee.ProcessHelper{
 		
 		int[] child_pids = get_process_children (process_pid);
 		Posix.kill (process_pid, Posix.SIGKILL);
-
+		log_debug("SIGKILL: pid=%d".printf(process_pid));
+		
 		if (killChildren){
 			Pid childPid;
 			foreach (long pid in child_pids){
 				childPid = (Pid) pid;
 				Posix.kill (childPid, Posix.SIGKILL);
+				log_debug("SIGKILL: pid=%d".printf(childPid));
 			}
 		}
 	}
