@@ -95,7 +95,7 @@ public class TermContextMenu : Gtk.Menu {
 		
 		add_clear_output(this, sg_icon, sg_label);
 
-		//add_chroot(this, sg_icon, sg_label);
+		add_chroot(this, sg_icon, sg_label);
 
 		gtk_menu_add_separator(this); //---------------------------
 
@@ -192,8 +192,10 @@ public class TermContextMenu : Gtk.Menu {
 
 	private void add_chroot(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
 
+		if (!view.is_normal_directory || (view.current_item == null)) { return; }
+		
 		log_debug("TermContextMenu: add_chroot()");
-
+		
 		var menu_item = gtk_menu_add_item(
 			menu,
 			_("Chroot"),
@@ -202,10 +204,8 @@ public class TermContextMenu : Gtk.Menu {
 			sg_icon,
 			sg_label);
 
-		menu_item.sensitive = true; // view.is_normal_directory && (view.current_item != null) && view.current_item.is_sys_root;
+		menu_item.sensitive = App.tool_exists("groot");
 
-		if (!view.is_normal_directory || (view.current_item == null)) { return; }
-		
 		menu_item.activate.connect(()=>{
 			pane.terminal.chroot_current();
 		});

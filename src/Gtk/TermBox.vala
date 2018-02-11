@@ -110,9 +110,17 @@ public class TermBox : Gtk.Box {
 		term.scroll_on_output = true;
 		term.scrollback_lines = 100000;
 
-		set_font_desc(App.term_font);
-		set_color_foreground(App.term_fg_color);
-		set_color_background(App.term_bg_color);
+		if (App.term_font != null){
+			set_font_desc(App.term_font);
+		}
+
+		if (App.term_fg_color.length > 0){
+			set_color_foreground(App.term_fg_color);
+		}
+
+		if (App.term_bg_color.length > 0){
+			set_color_background(App.term_bg_color);
+		}
 
 		//set_color_foreground("#000000FF");
 		//set_color_background("#FFFFFFFF");
@@ -357,22 +365,22 @@ public class TermBox : Gtk.Box {
 	}
 
 	public void set_defaults(){
+		
 		set_font_size(DEF_FONT_SIZE);
 		set_color_foreground(DEF_COLOR_FG);
 		set_color_background(DEF_COLOR_BG);
 	}
 
 	public void chroot_current(){
+
+		string cmd = "";
 		
-		feed_command("sudo polo-chroot $(pwd)");
-	}
-
-	public void chroot(string path){
-
-		var cmd = "sudo polo-chroot '%s' \n".printf(
-			//App.term_enable_network ? "--enable-network" : "",
-			//App.term_enable_gui ? "--enable-gui" : "",
-			escape_single_quote(path));
+		if (App.shell_default == "fish"){
+			cmd = "sudo groot --chroot-fstab (pwd)";
+		}
+		else{
+			cmd = "sudo groot --chroot-fstab $(pwd)";
+		}
 		
 		feed_command(cmd);
 	}
