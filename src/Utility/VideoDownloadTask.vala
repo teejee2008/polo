@@ -615,7 +615,7 @@ public class VideoDownloadTask : AsyncTask {
 			var txt = "";
 			
 			if (prg_bytes_total > 0){
-				txt = "%.2f %% complete, %s/%s downloaded, %s elapsed, %s remaining, %s".printf(
+				txt = "%.2f %% complete, %s/%s, %s elapsed, %s remaining, %s".printf(
 					progress * 100.0,
 					format_file_size(prg_bytes, true, "", true),
 					format_file_size(prg_bytes_total, true, "", true),

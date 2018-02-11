@@ -369,18 +369,29 @@ public class ProgressPanelVideoDownloadTask : ProgressPanel {
 
 		gtk_container_remove_children(contents);
 		
-		string txt = _("Download");
+		//string txt = _("Download");
 
 		// heading ----------------
 
-		var label = new Gtk.Label("<b>" + txt + "</b>");
+		/*var label = new Gtk.Label("<b>" + txt + "</b>");
 		label.set_use_markup(true);
 		label.xalign = 0.0f;
 		//label.margin_bottom = 12;
-		contents.add(label);
+		contents.add(label);*/
 		
 		var hbox_outer = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		contents.add(hbox_outer);
+
+		try {
+			if (file_exists(task.thumb_path)){
+				var pixbuf = new Gdk.Pixbuf.from_file_at_scale(task.thumb_path, -1, 64, true);
+				var img = new Gtk.Image.from_pixbuf(pixbuf);
+				hbox_outer.add(img);
+			}
+		}
+		catch (Error e){
+			log_error(e.message);
+		}
 
 		var vbox_outer = new Gtk.Box(Orientation.VERTICAL, 6);
 		hbox_outer.add(vbox_outer);
@@ -396,7 +407,7 @@ public class ProgressPanelVideoDownloadTask : ProgressPanel {
 
 		// status message ------------------
 
-		label = new Gtk.Label(_("Preparing..."));
+		var label = new Gtk.Label(_("Preparing..."));
 		label.xalign = 0.0f;
 		label.ellipsize = Pango.EllipsizeMode.START;
 		label.max_width_chars = 100;
