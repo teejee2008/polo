@@ -500,10 +500,10 @@ public class PlacesPopover : Gtk.Popover {
 		var hbox = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 0);
 		vbox_right.add(hbox);
 
-		hbox.margin_top = 5;
-		hbox.margin_left = 3;
-		hbox.margin_right = 3;
-		hbox.margin_bottom = 3;
+		hbox.margin_top = 6;
+		hbox.margin_left = 6;
+		hbox.margin_right = 6;
+		hbox.margin_bottom = 6;
 
 		// spacer -----------------------------------
 		
@@ -515,12 +515,12 @@ public class PlacesPopover : Gtk.Popover {
 		
 		var bbox = new Gtk.ButtonBox(Gtk.Orientation.HORIZONTAL);
 		bbox.set_layout(Gtk.ButtonBoxStyle.EXPAND);
-		bbox.spacing = 6;
+		//bbox.spacing = 6;
 		hbox.add(bbox);
 
 		bbox.hexpand = true;
 
-		var button = new Gtk.Button.with_label(_("Bookmark"));
+		var button = new Gtk.Button.with_label(" " + _("Bookmark"));
 		button.set_image(IconManager.lookup_image("user-bookmarks", 16, false, true));
 		button.always_show_image = true;
 		bbox.add(button);
@@ -530,7 +530,7 @@ public class PlacesPopover : Gtk.Popover {
 
 		// edit -----------------------------------------------------
 
-		button = new Gtk.Button.with_label(_("Edit"));
+		button = new Gtk.Button.with_label(" " + _("Edit"));
 		button.set_image(IconManager.lookup_image("item-gray", 16, false, true));
 		button.always_show_image = true;
 		bbox.add(button);
@@ -647,7 +647,8 @@ public class PlacesPopover : Gtk.Popover {
 
 	private void refresh_bookmarks(){
 
-		var model = new Gtk.ListStore(6, typeof(GtkBookmark), typeof(string), typeof(string), typeof(Gdk.Pixbuf?), typeof(bool), typeof(string));
+		var model = new Gtk.ListStore(6,
+			typeof(GtkBookmark), typeof(string), typeof(string), typeof(Gdk.Pixbuf?), typeof(bool), typeof(string));
 		
 		treeview_bm.set_model(model);
 
@@ -685,9 +686,11 @@ public class PlacesPopover : Gtk.Popover {
 			
 			if (GtkBookmark.is_bookmarked(uri)){
 				btn_bookmark.set_image(IconManager.lookup_image("user-bookmarks", 16, false, true));
+				btn_bookmark.label = " " + _("Remove Bookmark");
 			}
 			else{
 				btn_bookmark.set_image(IconManager.lookup_image("bookmark-missing", 16, false, true));
+				btn_bookmark.label = " " + _("Add Bookmark");
 			}
 		}
 
