@@ -1903,6 +1903,7 @@ public class FileViewList : Gtk.Box {
 		case "tab":
 			return false;
 		case "enter":
+		case "return":
 			pane.pathbar.finish_editing();
 			window.pathbar.finish_editing();
 			return false;
