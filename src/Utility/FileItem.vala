@@ -1429,6 +1429,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	public void read_hidden_list(){
 
 		hidden_list = new Gee.ArrayList<string>();
+		
+		if ((file_name == ".dbus")||((file_name == ".gvfs"))){ return; }
 
 		if (is_remote){ return; }
 
