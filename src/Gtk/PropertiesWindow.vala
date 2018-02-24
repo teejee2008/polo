@@ -58,7 +58,10 @@ public class PropertiesWindow : Gtk.Window {
 	private Gtk.Entry entry_created; 
 	private Gtk.Entry entry_modified; 
 	private Gtk.Entry entry_changed; 
-	private Gtk.Entry entry_accessed; 
+	private Gtk.Entry entry_accessed;
+
+	private Gtk.ComboBox cmb_user;
+	private Gtk.ComboBox cmb_group;
 
 	private TouchFileDateContextMenu menu_accessed;
 	private TouchFileDateContextMenu menu_modified;
@@ -817,6 +820,8 @@ public class PropertiesWindow : Gtk.Window {
 		hbox.add (combo);
 		group2_value.add_widget(combo);
 
+		cmb_user = combo;
+
 		// render text
 		var cell_text = new Gtk.CellRendererText();
 		combo.pack_start(cell_text, false);
@@ -850,10 +855,10 @@ public class PropertiesWindow : Gtk.Window {
 
 		combo.changed.connect(combo_owner_changed);
 
-		combo.sensitive = (get_user_id_effective() == 0) && file_item.is_local;
+		combo.sensitive = true; //(get_user_id_effective() == 0) && file_item.is_local;
 
-		if (file_item.is_directory && (get_user_id_effective() == 0)){
-			add_button_user_recursive(hbox, combo);
+		if (file_item.is_directory){// && (get_user_id_effective() == 0)){
+			add_button_user_recursive(hbox);
 		}
 	}
 
@@ -874,6 +879,7 @@ public class PropertiesWindow : Gtk.Window {
 		var combo = new Gtk.ComboBox();
 		hbox.add (combo);
 		group2_value.add_widget(combo);
+		cmb_group = combo;
 
 		// render text
 		var cell_text = new Gtk.CellRendererText();
@@ -907,44 +913,66 @@ public class PropertiesWindow : Gtk.Window {
 
 		combo.changed.connect(combo_group_changed);
 
-		combo.sensitive = (get_user_id_effective() == 0) && file_item.is_local;
+		combo.sensitive = true; //(get_user_id_effective() == 0) && file_item.is_local;
 
-		if (file_item.is_directory && (get_user_id_effective() == 0)){
-			add_button_group_recursive(hbox, combo);
+		if (file_item.is_directory){// && (get_user_id_effective() == 0)){
+			add_button_group_recursive(hbox);
 		}
 	}
 
 	private void combo_owner_changed(Gtk.ComboBox combo){
 
+		combo.changed.disconnect(combo_owner_changed);
+
+		gtk_set_busy(true, this);
+		
 		string user = gtk_combobox_get_value(combo, 0, file_item.owner_user);
 
-		if (!chown(file_item.file_path, user, "", false, this)){
-			combo.changed.disconnect(combo_owner_changed);
+		string cmd = cmd_chown(file_item.file_path, user, "", false);
+		
+		string msg = App.exec_admin(cmd);
+
+		gtk_set_busy(false, this);
+
+		if (msg.length > 0){
+			
+			gtk_messagebox(_("Operation Failed"), msg, this, true);
 
 			combo.active = combo.get_data<int>("active");
-
-			combo.changed.connect(combo_owner_changed);
 		}
+
+		combo.changed.connect(combo_owner_changed);
 
 		file_item.query_file_info();
 	}
 
 	private void combo_group_changed(Gtk.ComboBox combo){
 
+		combo.changed.disconnect(combo_group_changed);
+
+		gtk_set_busy(true, this);
+		
 		string group = gtk_combobox_get_value(combo, 0, file_item.owner_group);
 
-		if (!chown(file_item.file_path, "", group, false, this)){
-			combo.changed.disconnect(combo_group_changed);
+		string cmd = cmd_chown(file_item.file_path, "", group, false);
+		
+		string msg = App.exec_admin(cmd);
+
+		gtk_set_busy(false, this);
+
+		if (msg.length > 0){
+			
+			gtk_messagebox(_("Operation Failed"), msg, this, true);
 
 			combo.active = combo.get_data<int>("active");
-
-			combo.changed.connect(combo_group_changed);
 		}
+
+		combo.changed.connect(combo_group_changed);
 
 		file_item.query_file_info();
 	}
 
-	private void add_button_user_recursive(Gtk.Box hbox, Gtk.ComboBox combo) {
+	private void add_button_user_recursive(Gtk.Box hbox) {
 
 		var button = new Gtk.Button();
 		button.image = new Gtk.Image.from_pixbuf(IconManager.lookup("view-refresh", 16, false));
@@ -953,16 +981,33 @@ public class PropertiesWindow : Gtk.Window {
 
 		//gtk_apply_css(new Gtk.Widget[] { button }, "padding-left: 1px; padding-right: 1px; padding-top: 0px; padding-bottom: 0px;");
 
-		button.sensitive = file_item.is_directory && (get_user_id_effective() == 0) && file_item.is_local;
+		button.sensitive = file_item.is_directory && file_item.is_local;// && (get_user_id_effective() == 0) ;
 
-		button.clicked.connect(() => {
-			string user = gtk_combobox_get_value(combo, 0, file_item.owner_user);
-			chown(file_item.file_path, user, "", true, this);
-			//return true;
-		});
+		button.clicked.connect(btn_user_recursive);
 	}
 
-	private void add_button_group_recursive(Gtk.Box hbox, Gtk.ComboBox combo) {
+	private void btn_user_recursive(Gtk.Button button){
+
+		button.clicked.disconnect(btn_user_recursive);
+
+		gtk_set_busy(true, this);
+			
+		string user = gtk_combobox_get_value(cmb_user, 0, file_item.owner_user);
+
+		string cmd = cmd_chown(file_item.file_path, user, "", true);
+		
+		string msg = App.exec_admin(cmd);
+
+		gtk_set_busy(false, this);
+
+		if (msg.length > 0){
+			gtk_messagebox(_("Operation Failed"), msg, this, true);
+		}
+
+		button.clicked.connect(btn_user_recursive);
+	}
+
+	private void add_button_group_recursive(Gtk.Box hbox) {
 
 		var button = new Gtk.Button();
 		button.image = new Gtk.Image.from_pixbuf(IconManager.lookup("view-refresh", 16, false));
@@ -971,14 +1016,31 @@ public class PropertiesWindow : Gtk.Window {
 
 		//gtk_apply_css(new Gtk.Widget[] { button }, "padding-left: 1px; padding-right: 1px; padding-top: 0px; padding-bottom: 0px;");
 
-		button.sensitive = file_item.is_directory && (get_user_id_effective() == 0) && file_item.is_local;
+		button.sensitive = file_item.is_directory && file_item.is_local;// && (get_user_id_effective() == 0) ;
 
-		button.clicked.connect(() => {
-			string group = gtk_combobox_get_value(combo, 0, file_item.owner_group);
-			chown(file_item.file_path, "", group, true, this);
-			//return true;
-		});
+		button.clicked.connect(btn_group_recursive);
 	}
+
+	private void btn_group_recursive(Gtk.Button button){
+
+		button.clicked.disconnect(btn_group_recursive);
+
+		gtk_set_busy(true, this);
+			
+		string group = gtk_combobox_get_value(cmb_group, 0, file_item.owner_group);
+
+		string cmd = cmd_chown(file_item.file_path, "", group, true);
+		
+		string msg = App.exec_admin(cmd);
+
+		gtk_set_busy(false, this);
+		
+		if (msg.length > 0){
+			gtk_messagebox(_("Operation Failed"), msg, this, true);
+		}
+
+		button.clicked.connect(btn_group_recursive);
+	}	
 
 	/*private void add_info_bar(Gtk.Box box){
 
@@ -1239,7 +1301,6 @@ public class PropertiesWindow : Gtk.Window {
 		separator.margin_left = 12;
 		box.add(separator);
 	}
-
 }
 
 

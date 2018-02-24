@@ -29,6 +29,7 @@ namespace TeeJee.FileSystem{
 	using TeeJee.Logging;
 	using TeeJee.ProcessHelper;
 	using TeeJee.Misc;
+	using TeeJee.System;
 	using GtkHelper;
 
 	public const int64 KB = 1000;
@@ -1220,7 +1221,29 @@ namespace TeeJee.FileSystem{
 
 	public bool chown(string file_path, string user, string group, bool recursive, Gtk.Window? window){
 		
-		string cmd = "chown";
+		string cmd = cmd_chown(file_path, user, group, recursive);
+
+		string std_out, std_err;
+		int retval = exec_sync(cmd, out std_out, out std_err);
+
+		if (retval != 0){
+			if (window != null){
+				gtk_messagebox(_("Failed to change owner/group!"), std_err, window, true);
+			}
+			else{
+				log_error(std_out);	
+				log_error(std_err);
+			}
+		}
+		
+		return (retval == 0);
+	}
+
+	public string cmd_chown(string file_path, string user, string group, bool recursive){
+		
+		string cmd = "";
+
+		cmd += "chown";
 
 		if (recursive){
 			cmd += " -hR";
@@ -1239,23 +1262,10 @@ namespace TeeJee.FileSystem{
 		cmd += " '%s'".printf(escape_single_quote(file_path));
 
 		log_debug(cmd);
-		
-		string std_out, std_err;
-		int retval = exec_sync (cmd, out std_out, out std_err);
 
-		if (retval != 0){
-			if (window != null){
-				gtk_messagebox(_("Failed to change owner/group!"), std_err, window, true);
-			}
-			else{
-				log_error(std_out);	
-				log_error(std_err);
-			}
-		}
-		
-		return (retval == 0);
+		return cmd;
 	}
-
+	
 	public bool touch (string file, bool accessed, bool modified, bool recurse, bool follow_symlinks, Gtk.Window? window = null){
 
 		string cmd = "touch";

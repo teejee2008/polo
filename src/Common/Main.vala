@@ -241,6 +241,8 @@ public class Main : GLib.Object {
 	public int kvm_cpu_limit = 80;
 	public string kvm_format = ".qcow2";
 
+	public TermBox? admin_shell = null;
+
 	public string selected_columns = DEFAULT_COLUMNS;
 
 	public bool show_hidden_files = false;
@@ -453,16 +455,16 @@ public class Main : GLib.Object {
 		if (!file_exists(dst_path)){
 			dir_create(path_combine(user_home, ".config/fish/functions"));
 			file_copy(src_path, dst_path);
-			chown(dst_path, user_name, user_name, false, null);
-			chmod(dst_path, "u+rw", null);
+			//chown(dst_path, user_name, user_name, false, null);
+			//chmod(dst_path, "u+rw", null);
 		}
 
 		src_path = path_combine(share_dir, "files/bashrc");
 		dst_path = path_combine(app_conf_dir_path, "bashrc");
 		if (!file_exists(dst_path)){
 			file_copy(src_path, dst_path);
-			chown(dst_path, user_name, user_name, false, null);
-			chmod(dst_path, "u+rw", null);
+			//chown(dst_path, user_name, user_name, false, null);
+			//chmod(dst_path, "u+rw", null);
 		}
 
 		init_tools();
@@ -470,6 +472,8 @@ public class Main : GLib.Object {
 		init_plugins();
 
 		load_app_config();
+
+		Proc.list_processes();
 	}
 
 	public void start_bash_admin_shell(){
@@ -1246,6 +1250,113 @@ public class Main : GLib.Object {
 		config.set_string_member("kvm_mem", kvm_mem.to_string());
 		config.set_string_member("kvm_smb", App.user_dirs.user_public);
 		return config;
+	}
+
+	public string exec_admin(string _cmd){
+		
+		if (admin_shell == null){
+
+			string admin_prefix = "";
+
+			if (get_user_id_effective() != 0){
+
+				if (cmd_exists("pkexec")){
+					
+					admin_prefix = "%s ".printf("pkexec");
+				}
+				else if (cmd_exists("gksu")){
+					admin_prefix = "%s ".printf("gksu");
+				}
+				//else if (cmd_exists("gksudo")){
+				//	admin_prefix = "%s ".printf("gksudo");
+				//}
+				else{
+					gtk_messagebox(_("Missing Dependencies"), _("'pkexec' or 'gksu' is needed for executing admin operations. Install required packages and try again."), main_window, true);
+				}
+			}
+			else{
+				admin_prefix = ""; // not needed
+			}
+
+			admin_shell = new TermBox(null);
+			admin_shell.start_shell();
+
+			//var children = admin_shell.get_child_processes();
+			//log_debug("children.size: %d".printf(children.length));
+
+			admin_shell.feed_command(admin_prefix + "bash");
+			sleep(200);
+
+			//children = admin_shell.get_child_processes();
+			//log_debug("children.size: %d".printf(children.length));
+
+			while (admin_shell.waiting_for_admin_prompt()){
+
+				//log_debug("waiting for pkexec");
+				sleep(1000);
+				gtk_do_events();
+			}
+		}
+
+		if (!admin_shell.has_root_bash()){
+			
+			admin_shell.feed_command("exit");
+			admin_shell = null;
+			
+			string msg = _("Failed to execute operation as admin");
+			log_error(msg);
+			return msg;
+		}
+		
+		string cmd = _cmd;
+		string tmp_stderr = get_temp_file_path();
+		string tmp_status = get_temp_file_path();
+
+		cmd += " 2>'%s' ; echo $? > '%s'".printf(escape_single_quote(tmp_stderr), escape_single_quote(tmp_status));
+
+		log_debug("admin_cmd: " + cmd);
+
+		admin_shell.feed_command(cmd);
+
+		int wait_secs = 0;
+		
+		while (!file_exists(tmp_status)){
+			
+			gtk_do_events();
+			
+			sleep(1000);
+			
+			wait_secs++;
+			if (wait_secs > 30){
+				break;
+			}
+		}
+
+		if (file_exists(tmp_status)){
+
+			string status = file_read(tmp_status);
+			//log_debug("tmp_status: " + status);
+			
+			if (status.strip() == "0"){	
+				return "";
+			}
+			else{
+				if (file_exists(tmp_stderr)){
+					string std_err = file_read(tmp_stderr).strip();
+					//log_debug("tmp_stderr: " + std_err);
+					return std_err;
+				}
+				else{
+					//log_debug("tmp_stderr: not found");
+					return "Error";
+				}
+			}
+		}
+		else{
+			//log_debug("tmp_status: not found");
+		}
+
+		return "Error";
 	}
 	
 	/* Core */

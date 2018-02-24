@@ -610,7 +610,6 @@ namespace TeeJee.System{
 		log_msg("%s %lu\n".printf(seconds.to_string(), microseconds));
 	}	
 
-
 	public void set_numeric_locale(string type){
 		Intl.setlocale(GLib.LocaleCategory.NUMERIC, type);
 	    Intl.setlocale(GLib.LocaleCategory.COLLATE, type);

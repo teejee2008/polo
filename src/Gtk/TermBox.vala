@@ -41,20 +41,27 @@ public class TermBox : Gtk.Box {
 		get { return App.main_window; }
 	}
 	
-	protected FileViewPane pane;
-
-	protected FileViewList view {
-		get{ return pane.view; }
+	FileViewPane _pane;
+	private FileViewPane? pane {
+		get{
+			if (_pane != null){ return _pane; }
+			else { return window.active_pane; }
+		}
 	}
 
-	protected LayoutPanel panel {
-		get { return pane.panel; }
+	private FileViewList? view{
+		get{ return (pane == null) ? null : pane.view; }
+	}
+
+	private LayoutPanel? panel {
+		get { return (pane == null) ? null : pane.panel; }
 	}
 
 	// -------------------------------
 	
 	private Vte.Terminal term;
 	private Pid child_pid;
+	//private bool admin_mode = false;
 	private bool cancelled = false;
 	private bool is_running = false;
 	private TermContextMenu menu_term;
@@ -63,7 +70,7 @@ public class TermBox : Gtk.Box {
 	public const string DEF_COLOR_FG = "#DCDCDC";
 	public const string DEF_COLOR_BG = "#2C2C2C";
 	
-	public TermBox(FileViewPane parent_pane){
+	public TermBox(FileViewPane? parent_pane){
 		//base(Gtk.Orientation.VERTICAL, 6); // issue with vala
 		Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0); // work-around
 
@@ -71,7 +78,9 @@ public class TermBox : Gtk.Box {
 
 		//var timer = timer_start();
 		
-		pane = parent_pane;
+		_pane = parent_pane;
+
+		//admin_mode = _admin_mode;
 		
 		init_ui();
 
@@ -156,6 +165,7 @@ public class TermBox : Gtk.Box {
 		log_debug("TermBox: start_shell()");
 		
 		string[] argv = new string[1];
+
 		argv[0] = get_cmd_path(App.shell_default);
 
 		if (!cmd_exists(App.shell_default)){
@@ -383,6 +393,38 @@ public class TermBox : Gtk.Box {
 		}
 		
 		feed_command(cmd);
+	}
+
+	public Proc[] get_child_processes(){
+		return Proc.enumerate_descendants(child_pid, null);
+	}
+
+	public bool waiting_for_admin_prompt(){
+
+		var procs = get_child_processes();
+		
+		foreach(var proc in procs){
+			if ((proc.user == "root") && ((proc.cmdline == "pkexec bash") || (proc.cmdline == "gksu bash"))){
+				return true;
+			}
+		}
+		
+		return false;
+	}
+
+	public bool has_root_bash(){
+
+		var procs = get_child_processes();
+
+		string cmd_bash = get_cmd_path("bash");
+		
+		foreach(var proc in procs){
+			if ((proc.user == "root") && (proc.cmdline == cmd_bash)){
+				return true;
+			}
+		}
+		
+		return false;
 	}
 }
 
