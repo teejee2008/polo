@@ -24,7 +24,7 @@ endif
 
 define_symbols=$(shell { echo "${vte_symbols} ${gtk3_symbols}"; } )
 
-all: app-gtk app-translations
+all: app-gtk app-translations app-util-disk app-util-gtk3 
 
 app-gtk:
 
@@ -41,8 +41,11 @@ app-gtk:
 		--pkg gee-0.8 --pkg json-glib-1.0 --pkg libxml-2.0 \
 		--pkg $(vte_version)
 
-	#gtk3-version-polo
-	valac "gtk3-version.vala" -o gtk3-version-polo --pkg gtk+-3.0
+app-util-gtk3:
+	valac "polo-gtk3-helper.vala" -o polo-gtk3-helper --pkg gtk+-3.0
+
+app-util-disk:
+	valac "polo-disk.vala" Util.vala -o polo-disk --pkg posix --pkg gio-unix-2.0
 
 app-translations:
 
@@ -72,7 +75,7 @@ clean:
 	rm -rfv ../release/{source,i386,amd64,armel,armhf}
 	rm -rfv ../release/*.{run,deb}
 	rm -rfv *.c *.o *.mo
-	rm -fv ${app_name}-gtk gtk3-version-polo
+	rm -fv ${app_name}-gtk ${app_name}-gtk3-helper ${app_name}-disk
 
 install:
 	mkdir -p "$(DESTDIR)$(bindir)"
@@ -87,7 +90,8 @@ install:
 	
 	#binary
 	install -m 0755 ${app_name}-gtk "$(DESTDIR)$(bindir)"
-	install -m 0755 gtk3-version-polo "$(DESTDIR)$(bindir)"
+	install -m 0755 ${app_name}-gtk3-helper "$(DESTDIR)$(bindir)"
+	install -m 0755 ${app_name}-disk "$(DESTDIR)$(bindir)"
 	install -m 0755 ${app_name}-uninstall "$(DESTDIR)$(bindir)"
 
 	#shared files
@@ -114,7 +118,8 @@ uninstall:
 
 	#binary
 	rm -f "$(DESTDIR)$(bindir)/${app_name}-gtk"
-	rm -f "$(DESTDIR)$(bindir)/gtk3-version-polo"
+	rm -f "$(DESTDIR)$(bindir)/${app_name}-gtk3-helper"
+	rm -f "$(DESTDIR)$(bindir)/${app_name}-disk"
 	rm -f "$(DESTDIR)$(bindir)/${app_name}-uninstall"
 
 	#shared files

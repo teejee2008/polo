@@ -296,7 +296,7 @@ public class Sidebar : Gtk.Box {
 
 	public void refresh() {
 
-		Device.print_device_list();
+		//Device.print_device_list();
 
 		if (listbox == null){ return; }
 

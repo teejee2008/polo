@@ -37,9 +37,11 @@ using TeeJee.Misc;
 
 public class UsbWriterTask : AsyncTask {
 
-	public string device = "";
-	public string iso_file = "";
-
+	public DiskAction action;
+	public Device device;
+	public string image_file = "";
+	public string format = "";
+	
 	public string error_log = "";
 	
 	public UsbWriterTask(){
@@ -65,28 +67,72 @@ public class UsbWriterTask : AsyncTask {
 		script_file = save_bash_script_temp(script_text, script_file, true, false, true);
 
 		bytes_completed = 0;
-		bytes_total = file_get_size(iso_file);
+
+		switch(action){
+		case DiskAction.BACKUP:
+		case DiskAction.RESTORE:
+			bytes_total = device.size_bytes;
+			break;
+
+		case DiskAction.WRITE_ISO:
+			bytes_total = file_get_size(image_file);
+			break;
+		}	
 	}
 
 	private string build_script() {
 	
-		//var cmd = "dd";
-		//cmd += " if='%s'".printf(iso_file);
-		//cmd += " of='%s'".printf(device);
-		//cmd += " bs=8M status=progress oflag=direct";
+		string cmd = "";
 
-		string cmd = "polo-iso write";
-		cmd += " --iso '%s'".printf(iso_file);
-		cmd += " --device '%s'".printf(device);
-		
+		switch(action){
+		case DiskAction.BACKUP:
+			cmd = "polo-disk backup";
+			cmd += " --file '%s'".printf(image_file);
+			cmd += " --device '%s'".printf(device.device);
+			cmd += " --user %s".printf(App.user_name);
+			break;
+
+		case DiskAction.RESTORE:
+			cmd = "polo-disk restore";
+			cmd += " --file '%s'".printf(image_file);
+			cmd += " --device '%s'".printf(device.device);
+			cmd += " --user %s".printf(App.user_name);
+			break;
+
+		case DiskAction.WRITE_ISO:
+			cmd = "polo-iso write";
+			cmd += " --iso '%s'".printf(image_file);
+			cmd += " --device '%s'".printf(device.device);
+			break;
+		}
+
+		log_debug(cmd);
+
 		return cmd;
 	}
 	
 	// execution ----------------------------
 
-	public void write_iso_to_device(string _iso_file, string _device){
-		iso_file = _iso_file;
+	public void write_iso_to_device(string _disk_image, Device _device){
+		action = DiskAction.WRITE_ISO;
+		image_file = _disk_image;
 		device = _device;
+		execute();
+	}
+
+	public void backup_device(string _disk_image, Device _device, string _format){
+		action = DiskAction.BACKUP;
+		image_file = _disk_image;
+		device = _device;
+		format = _format;
+		execute();
+	}
+
+	public void restore_device(string _disk_image, Device _device, string _format){
+		action = DiskAction.RESTORE;
+		image_file = _disk_image;
+		device = _device;
+		format = _format;
 		execute();
 	}
 	
@@ -180,4 +226,10 @@ public class UsbWriterTask : AsyncTask {
 		}
 	}
 
+}
+
+public enum DiskAction{
+	WRITE_ISO,
+	BACKUP,
+	RESTORE
 }

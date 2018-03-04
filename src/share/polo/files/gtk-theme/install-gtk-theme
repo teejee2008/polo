@@ -1,9 +1,9 @@
 #!/bin/bash
 
-gtk_major=$( gtk3-version-polo --major )
+gtk_major=$( polo-gtk3-helper --major )
 if [ $? -ne 0 ]; then exit 1; fi
 
-gtk_minor=$( gtk3-version-polo --minor )
+gtk_minor=$( polo-gtk3-helper --minor )
 if [ $? -ne 0 ]; then exit 1; fi
 
 backup=`pwd`

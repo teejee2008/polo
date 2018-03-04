@@ -147,6 +147,7 @@ public class SystemUser : GLib.Object {
 	}
 
 	private static SystemUser? parse_line_passwd(string line){
+		
 		if ((line == null) || (line.length == 0)){
 			return null;
 		}

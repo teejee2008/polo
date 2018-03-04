@@ -1447,6 +1447,8 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 				}
 			}
 		}
+
+		err_log_clear();
 	}
 
 	public void clear_children() {

@@ -63,12 +63,14 @@ namespace TeeJee.System{
 		string pkexec_uid = GLib.Environment.get_variable("PKEXEC_UID");
 
 		if (pkexec_uid != null){
+			
 			return int.parse(pkexec_uid);
 		}
 
 		string sudo_user = GLib.Environment.get_variable("SUDO_USER");
 
 		if (sudo_user != null){
+			
 			return get_user_id_from_username(sudo_user);
 		}
 

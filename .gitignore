@@ -16,3 +16,7 @@ release/*.run
 *~
 
 po-temp/
+
+*.rpm
+
+src/polo-disk

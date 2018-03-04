@@ -84,7 +84,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 			
 			add_manage();
 		
-			add_format();
+			//add_format();
 		}
 
 		add_lock();
@@ -115,7 +115,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 			
 			add_manage();
 		
-			add_format();
+			//add_format();
 		}
 
 		show_all();
@@ -282,30 +282,6 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		item.sensitive = (device.type != "loop");
 	}
 	
-	private void add_format(){
-
-		log_debug("DeviceContextMenu: add_format()");
-
-		// item  ------------------
-
-		var item = gtk_menu_add_item(
-			this,
-			_("Format..."),
-			_("Format device using GNOME disk utility"),
-			null,
-			sg_icon,
-			sg_label);
-
-		item.activate.connect (() => {
-			format_disk(device, pane, window);
-			if (parent_popup != null){
-				parent_popup.hide();
-			}
-		});
-
-		item.sensitive = (device.type != "loop");
-	}
-
 	private void add_properties(){
 
 		log_debug("DeviceContextMenu: add_properties()");
@@ -328,76 +304,6 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		item.sensitive = (device.type != "loop");
 	}
-
-	/*private void add_unlock(){
-
-		log_debug("DeviceContextMenu: add_lock()");
-
-		if (device.type == "disk"){ return; }
-
-		// item  ------------------
-
-		var item = gtk_menu_add_item(
-			this,
-			_("Mount"),
-			_("Mount this volume"),
-			null,
-			sg_icon,
-			sg_label);
-
-		item.activate.connect (() => {
-			lock_device(device, pane, window);
-		});
-
-		item.sensitive = !device.is_mounted;
-	}*/
-
-
-	/*private void add_sync(){
-
-		log_debug("DeviceContextMenu: add_sync()");
-
-		if (device.type == "disk"){ return; }
-
-		// item ------------------
-
-		var item = gtk_menu_add_item(
-			this,
-			_("Sync Pending Writes"),
-			_("Write any data waiting to be written to the device"),
-			null,
-			sg_icon,
-			sg_label);
-
-		item.activate.connect (() => {
-			//view.open(item, null);
-		});
-
-		item.sensitive = device.is_mounted;
-	}*/
-
-	/*private void add_flush(){
-
-		log_debug("DeviceContextMenu: add_flush()");
-
-		if (device.type != "disk"){ return; }
-
-		// item ------------------
-
-		var item = gtk_menu_add_item(
-			this,
-			_("Flush Read Buffer"),
-			_("Flushes the read buffer for device"),
-			null,
-			sg_icon,
-			sg_label);
-
-		item.activate.connect (() => {
-			device.flush_buffers();
-		});
-
-		item.sensitive = device.is_mounted;
-	}*/
 
 	public bool show_menu(Gdk.EventButton? event) {
 
@@ -456,10 +362,49 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		log_debug("DeviceContextMenu: unmount_device()");
 
+		Device dev = _device;
+		
+		if (dev.is_system_device){
+			string txt = _("System Device");
+			string msg = _("System devices cannot be changed while system is running");
+			msg += "\n\n▰ %s".printf(dev.description_friendly());
+			gtk_messagebox(txt, msg, window, true);
+			return false;
+		}
+
 		gtk_set_busy(true, window);
+
+		if (dev.is_mounted){
+			if (dev.unmount(window)){
+				string title =  _("Device Unmounted");
+				OSDNotify.notify_send(title, "", 1000, "low", "info");
+			}
+			DeviceMonitor.notify_change(); // workaround for GLib.VolumeMonitor not detecting some mount events
+		}
+
+		bool mounted = dev.is_mounted;
+
+		gtk_set_busy(false, window);
+
+		return mounted;
+	}
+
+	public static bool eject_device(Device _device, FileViewPane pane, MainWindow window){
+
+		log_debug("DeviceContextMenu: unmount_device()");
 
 		Device dev = _device;
 		
+		if (dev.is_system_device){
+			string txt = _("System Device");
+			string msg = _("System devices cannot be changed while system is running");
+			gtk_messagebox(txt, msg, window, true);
+			msg += "\n\n▰ %s".printf(dev.description_friendly());
+			return false;
+		}
+		
+		gtk_set_busy(true, window);
+
 		if (dev.is_mounted){
 			if (dev.unmount(window)){
 				string title =  _("Device Unmounted");
@@ -478,7 +423,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 	public static bool mount_device(Device _device, FileViewPane pane, MainWindow window){
 
 		log_debug("DeviceContextMenu: mount_device(): %s".printf(_device.device));
-
+		
 		gtk_set_busy(true, window);
 
 		Device dev = _device;
@@ -553,10 +498,18 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		log_debug("DeviceContextMenu: lock_device(): %s".printf(_device.device));
 
-		gtk_set_busy(true, window);
-
 		Device dev = _device;
 		
+		if (dev.is_system_device){
+			string txt = _("System Device");
+			string msg = _("System devices cannot be changed while system is running");
+			msg += "\n\n▰ %s".printf(dev.description_friendly());
+			gtk_messagebox(txt, msg, window, true);
+			return false;
+		}
+		
+		gtk_set_busy(true, window);
+
 		bool ok = true;
 		string mpath = "";
 
@@ -600,28 +553,6 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		return ok;
 	}
 
-	public static bool eject_disk(Device _device, FileViewPane pane, MainWindow window){
-	
-		log_debug("DeviceContextMenu: eject_device(): %s".printf(_device.device));
-
-		string txt = _("Eject Disk ?");
-		string msg = _("Partitions on following device will be unmounted and device will be ejected:");
-		msg += "\n\n%s".printf(_device.description_simple(true));
-		if (gtk_messagebox_yes_no(txt, msg, window, false) != Gtk.ResponseType.YES){
-			return false;
-		}
-		
-		gtk_set_busy(true, window);
-
-		//Device dev = _device;
-		
-		bool ok = true;
-		
-		gtk_set_busy(false, window);
-
-		return ok;
-	}
-	
 	public static void manage_disk(Device _device, FileViewPane pane, MainWindow window){
 	
 		log_debug("DeviceContextMenu: manage_disk(): %s".printf(_device.device));
@@ -635,23 +566,6 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		else{
 			string txt = _("Missing Dependency");
 			string msg = _("GNOME Disk Uitility (gnome-disks) is not installed");
-			gtk_messagebox(txt, msg, window, true);
-		}
-	}
-
-	public static void format_disk(Device _device, FileViewPane pane, MainWindow window){
-	
-		log_debug("DeviceContextMenu: format_disk(): %s".printf(_device.device));
-
-		if (App.tool_exists("gnome-disks")){
-			
-			string cmd = "gnome-disks --format-device --block-device %s".printf(_device.device);
-		
-			exec_process_new_session(cmd);
-		}
-		else{
-			string txt = _("Missing Dependency");
-			string msg = _("GNOME Disk Utility (gnome-disks) is not installed");
 			gtk_messagebox(txt, msg, window, true);
 		}
 	}

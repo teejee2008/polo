@@ -1499,7 +1499,7 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 
 		var list = Device.get_disk_space_using_df(path_to_check);
 
-		print_device_list_short(list);
+		//print_device_list_short(list);
 
 		if (list.size > 0){
 			return list[0];
@@ -1723,11 +1723,14 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 
 		/* Updates mount point information */
 
+		mount_points.clear();
+
 		var list = get_mounted_filesystems_using_mtab();
-		var dev = find_device_in_list_by_uuid(list, uuid);
+		
+		var dev = find_device_in_list_by_name(list, device);
+		
 		if (dev != null){
-			// update fields
-			mount_points = dev.mount_points;
+			mount_points = dev.mount_points; // update field
 		}
 	}
 

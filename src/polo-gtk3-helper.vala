@@ -25,7 +25,7 @@ using Gtk;
 
 public static int main(string[] args) {
 
-	string help_text = "Syntax: gtk3-version [--major] [--minor] [--micro] [--major-minor]\n";
+	string help_text = "Syntax: polo-gtk3-helper [--major] [--minor] [--micro] [--major-minor]\n";
 	
     if (args.length == 1) {
 		// no args given

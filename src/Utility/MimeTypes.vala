@@ -540,7 +540,7 @@ public class DesktopApp : GLib.Object {
 		log_debug("exec: %s".printf(exec));
 		log_debug("command: %s".printf(cmd));
 		
-		exec_script_async(cmd);
+		exec_process_new_session(cmd);
 	}
 
 	public static DesktopApp? get_app_by_filename(string app_filename){

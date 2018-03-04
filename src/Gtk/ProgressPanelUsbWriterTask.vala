@@ -36,10 +36,14 @@ using TeeJee.Misc;
 public class ProgressPanelUsbWriterTask : ProgressPanel {
 
 	public UsbWriterTask task;
-	private string device = "";
-	private string iso_file = "";
 
-	// ui 
+	private DiskAction action;
+	private Device device;
+	private string iso_file = "";
+	private string format = "";
+	
+	// ui
+	public Gtk.Label lbl_header;
 	public Gtk.Label lbl_status;
 	public Gtk.Label lbl_stats;
 	public Gtk.ProgressBar progressbar;
@@ -48,22 +52,23 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 		base(_pane, null, FileActionType.ISO_WRITE);
 	}
 
-	public void set_parameters(string _iso_file, string _device){
+	public void set_parameters(DiskAction _action, string _iso_file, Device _device, string _format){
+		action = _action;
 		device = _device;
 		iso_file = _iso_file;
+		format = _format;
 	}
 
 	public override void init_ui(){ // TODO: make protected
 
-		string txt = _("Flashing ISO to device...");
-
 		// heading ----------------
 
-		var label = new Gtk.Label("<b>" + txt + "</b>");
+		var label = new Gtk.Label("");
 		label.set_use_markup(true);
 		label.xalign = 0.0f;
 		label.margin_bottom = 12;
 		contents.add(label);
+		lbl_header = label;
 		
 		var hbox_outer = new Gtk.Box(Orientation.HORIZONTAL, 6);
 		contents.add(hbox_outer);
@@ -121,6 +126,24 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 
 	public override void execute(){
 
+		string txt = "";
+
+		switch(action){
+		case DiskAction.WRITE_ISO:
+			txt = _("Flashing ISO to device...");
+			break;
+		case DiskAction.BACKUP:
+			txt = _("Saving device to disk image...");
+			break;
+		case DiskAction.RESTORE:
+			txt = _("Restoring device from disk image...");
+			break;
+		}
+
+		txt = "<b>" + txt + "</b>";
+
+		lbl_header.label = txt;
+
 		task = new UsbWriterTask();
 
 		log_debug("ProgressPanelUsbWriterTask: execute(%s)");
@@ -146,7 +169,17 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 
 		err_log_clear();
 
-		task.write_iso_to_device(iso_file, device);
+		switch(action){
+		case DiskAction.WRITE_ISO:
+			task.write_iso_to_device(iso_file, device);
+			break;
+		case DiskAction.BACKUP:
+			task.backup_device(iso_file, device, format);
+			break;
+		case DiskAction.RESTORE:
+			task.restore_device(iso_file, device, format);
+			break;
+		}
 
 		gtk_do_events();
 		
@@ -168,7 +201,6 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 			gtk_do_events();
 		}
 		else{
-			
 			finish();
 			return false;
 		}
@@ -210,9 +242,27 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 			//pane.add_message("%s: %s".printf(_("Error"), task.get_error_message()), Gtk.MessageType.ERROR);
 		}		
 		else if (!aborted){
-			string txt = _("Flash Complete");
-			string msg = _("Device safely ejected and ready for use");
-			gtk_messagebox(txt, msg, window, false);
+
+			switch(action){
+			case DiskAction.WRITE_ISO:
+				string txt = _("Flash Complete");
+				string msg = _("Device safely ejected and ready for use");
+				gtk_messagebox(txt, msg, window, false);
+				break;
+				
+			case DiskAction.BACKUP:
+				string txt = _("Backup Complete");
+				string msg = _("Disk image was created successfully from device");
+				gtk_messagebox(txt, msg, window, false);
+				break;
+				
+			case DiskAction.RESTORE:
+				string txt = _("Restore Complete");
+				string msg = _("Device was restored successfully from disk image");
+				gtk_messagebox(txt, msg, window, false);
+				break;
+			}
+
 			//pane.add_message("%s - %s".printf(txt, msg), Gtk.MessageType.INFO);
 		}
 	}

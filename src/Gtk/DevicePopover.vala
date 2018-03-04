@@ -112,7 +112,7 @@ public class DevicePopover : Gtk.Popover {
 		init_actions();
 
 		DeviceMonitor.get_monitor().changed.connect(()=>{
-			this.refresh_devices();
+			this.refresh();
 		});
 
 		on_settings_changed();
@@ -382,7 +382,8 @@ public class DevicePopover : Gtk.Popover {
 		scrolled.get_window().set_cursor(cursor);
 
 		treeview.row_activated.connect(treeview_row_activated); 
-		
+
+		/*
 		// connect signal for shift+F10
 		treeview.popup_menu.connect(() => {
 			return show_context_menu();
@@ -395,9 +396,10 @@ public class DevicePopover : Gtk.Popover {
 			}
 			return false;
 		});
+		*/
 	}
 
-	private bool show_context_menu(){
+	/*private bool show_context_menu(){
 		
 		var selected = get_selected();
 		
@@ -406,7 +408,7 @@ public class DevicePopover : Gtk.Popover {
 		context_menu = new DeviceContextMenu(selected[0], this);
 		
 		return context_menu.show_menu(null);
-	}
+	}*/
 
 	public Gee.ArrayList<Device> get_selected(){
 		
@@ -466,16 +468,18 @@ public class DevicePopover : Gtk.Popover {
 		dummy.hexpand = true;
 		hbox.add(dummy);
 		
-		// bookmark ---------------------------------------
-		
-		var bbox = new Gtk.ButtonBox(Gtk.Orientation.HORIZONTAL);
-		bbox.set_layout(Gtk.ButtonBoxStyle.EXPAND);
-		hbox.add(bbox);
+		// actions ---------------------------------------
 
-		bbox_actions = bbox;
+		var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
+		hbox.add(box);
+
+		bbox_actions = box;
 		
-		//bbox.hexpand = true;
-		
+		var bbox = new Gtk.ButtonBox(Gtk.Orientation.VERTICAL);
+		bbox.set_layout(Gtk.ButtonBoxStyle.CENTER);
+		bbox.spacing = 3;
+		box.add(bbox);
+
 		// open -----------------------
 
 		//var button = new Gtk.Button.with_label(_("Open"));
@@ -486,6 +490,8 @@ public class DevicePopover : Gtk.Popover {
 		// mount -----------------------
 
 		var button = new Gtk.Button.with_label(_("Mount"));
+		button.set_image(IconManager.lookup_image("drive-harddisk", 16, false, false));
+		button.always_show_image = true;
 		bbox.add(button);
 		btn_mount = button;
 		
@@ -493,15 +499,25 @@ public class DevicePopover : Gtk.Popover {
 
 		// unmount -----------------------
 
-		button = new Gtk.Button.with_label(_("UnMount"));
+		button = new Gtk.Button.with_label(_("Unmount"));
+		button.set_image(IconManager.lookup_image("drive-harddisk", 16, false, false));
+		button.always_show_image = true;
 		bbox.add(button);
 		btn_unmount = button;
 		
 		button.clicked.connect(btn_unmount_clicked);
 
+
+		bbox = new Gtk.ButtonBox(Gtk.Orientation.VERTICAL);
+		bbox.set_layout(Gtk.ButtonBoxStyle.CENTER);
+		bbox.spacing = 3;
+		box.add(bbox);
+
 		// lock -----------------------
 
 		button = new Gtk.Button.with_label(_("Lock"));
+		button.set_image(IconManager.lookup_image("locked", 16, false, false));
+		button.always_show_image = true;
 		bbox.add(button);
 		btn_lock = button;
 		
@@ -509,12 +525,20 @@ public class DevicePopover : Gtk.Popover {
 
 		// unlock -----------------------
 
-		button = new Gtk.Button.with_label(_("UnLock"));
+		button = new Gtk.Button.with_label(_("Unlock"));
+		button.set_image(IconManager.lookup_image("unlocked", 16, false, false));
+		button.always_show_image = true;
 		bbox.add(button);
 		btn_unlock = button;
 		
 		button.clicked.connect(btn_unlock_clicked);
 
+
+		bbox = new Gtk.ButtonBox(Gtk.Orientation.VERTICAL);
+		bbox.set_layout(Gtk.ButtonBoxStyle.CENTER);
+		bbox.spacing = 3;
+		box.add(bbox);
+		
 		// lock -----------------------
 
 		button = new Gtk.Button.with_label(_("Backup"));
@@ -531,16 +555,10 @@ public class DevicePopover : Gtk.Popover {
 		
 		button.clicked.connect(btn_restore_clicked);
 
-		// eject -----------------------
-
-		button = new Gtk.Button.with_label(_("Eject"));
-		button.set_image(IconManager.lookup_image("media-eject", 24, false, false));
-		button.always_show_image = true;
-		//button.set_tooltip_text(_("Eject"));
-		bbox.add(button);
-		btn_eject = button;
-		
-		button.clicked.connect(btn_eject_clicked);
+		bbox = new Gtk.ButtonBox(Gtk.Orientation.VERTICAL);
+		bbox.set_layout(Gtk.ButtonBoxStyle.CENTER);
+		bbox.spacing = 3;
+		box.add(bbox);
 
 		// format -----------------------
 
@@ -551,7 +569,7 @@ public class DevicePopover : Gtk.Popover {
 		});
 		
 		button = new Gtk.Button.with_label(" " + _("Reformat") + " ↓");
-		button.set_image(null);
+		//button.set_image(null);
 		button.always_show_image = true;
 		//button.set_tooltip_text(_("Reformat"));
 		bbox.add(button);
@@ -566,8 +584,8 @@ public class DevicePopover : Gtk.Popover {
 		
 		// manage -----------------------
 
-		button = new Gtk.Button.with_label(_("Manage"));
-		button.set_image(IconManager.lookup_image("partitionmanager", 24, false, false));
+		button = new Gtk.Button.with_label(_("Partition"));
+		button.set_image(IconManager.lookup_image("partitionmanager", 16, false, false));
 		button.always_show_image = true;
 		//button.set_tooltip_text(_("Partition Manager"));
 		bbox.add(button);
@@ -575,10 +593,26 @@ public class DevicePopover : Gtk.Popover {
 		
 		button.clicked.connect(btn_manage_clicked);
 
+		bbox = new Gtk.ButtonBox(Gtk.Orientation.VERTICAL);
+		bbox.set_layout(Gtk.ButtonBoxStyle.CENTER);
+		bbox.spacing = 3;
+		box.add(bbox);
+
+		// eject -----------------------
+
+		button = new Gtk.Button.with_label(_("Eject"));
+		button.set_image(IconManager.lookup_image("media-eject", 16, false, false));
+		button.always_show_image = true;
+		//button.set_tooltip_text(_("Eject"));
+		bbox.add(button);
+		btn_eject = button;
+		
+		button.clicked.connect(btn_eject_clicked);
+
 		// properties -----------------------
 
 		button = new Gtk.Button.with_label(_("Properties"));
-		button.set_image(IconManager.lookup_image("preferences-system-symbolic", 24, false, false));
+		button.set_image(IconManager.lookup_image("preferences-system-symbolic", 16, false, false));
 		button.always_show_image = true;
 		//button.set_tooltip_text(_("Properties"));
 		bbox.add(button);
@@ -725,9 +759,9 @@ public class DevicePopover : Gtk.Popover {
 
 		var device = get_selected_device();
 		
-		if (device != null){ 
-			//DeviceContextMenu.unlock_device(device, pane, window);
-			//refresh_devices();
+		if ((device != null) && (view != null)){
+			
+			backup_device(device);
 		}
 	}
 
@@ -735,9 +769,9 @@ public class DevicePopover : Gtk.Popover {
 
 		var device = get_selected_device();
 		
-		if (device != null){ 
-			//DeviceContextMenu.unlock_device(device, pane, window);
-			//refresh_devices();
+		if ((device != null) && (view != null)){ 
+
+			restore_device(device);
 		}
 	}
 
@@ -840,7 +874,7 @@ public class DevicePopover : Gtk.Popover {
 		col_fs.visible = !App.dm_hide_fs;
 		col_mp.visible = !App.dm_hide_mp;
 
-		Device.print_logical_children();
+		//Device.print_logical_children();
 	}
 
 	private Gtk.TreeIter add_device(Gtk.TreeStore model, Device dev, Gtk.TreeIter? iter_parent){
@@ -860,74 +894,192 @@ public class DevicePopover : Gtk.Popover {
 		/// note: unmount, backup, restore, format, manage is always visible. disable if not applicable.
 		
 		if (dev != null){
-			
-			btn_mount.visible = !dev.is_mounted && (dev.fstype.length > 0) && (dev.pkname.length > 0);
 
-			btn_unmount.visible = true;
-			btn_unmount.sensitive = dev.is_mounted;
-			
-			btn_lock.visible = dev.is_on_encrypted_partition;
-			btn_lock.sensitive = true;
-			
-			btn_unlock.visible = dev.is_encrypted_partition;
-			btn_unlock.sensitive = true;
+			btn_mount.sensitive = !dev.is_mounted && (dev.fstype.length > 0) && (dev.pkname.length > 0);
 
-			if (!btn_lock.visible && !btn_unlock.visible){
-				btn_lock.visible = true;
-				btn_lock.sensitive = false;
-			}
+			btn_unmount.sensitive = dev.is_mounted && !dev.is_system_device;
 			
-			btn_backup.visible = true;
-			btn_backup.sensitive = !dev.has_mounted_partitions;
+			btn_lock.sensitive = dev.is_on_encrypted_partition && !dev.is_system_device;
 			
-			btn_restore.visible = true;
-			btn_restore.sensitive = !dev.has_mounted_partitions;
-			
-			btn_eject.visible = true;
+			btn_unlock.sensitive = dev.is_encrypted_partition;
+
+			btn_backup.sensitive = !dev.is_system_device; // cannot be unmounted
+
+			btn_restore.sensitive = !dev.is_system_device; // cannot be unmounted
+
 			btn_eject.sensitive = dev.removable && !dev.is_system_device;
 
-			btn_format.visible = true;
-			btn_format.sensitive = (dev.fstype.length > 0);
+			btn_format.sensitive = (dev.fstype.length > 0) && !dev.is_system_device; // cannot be unmounted
 
 			var pix = dev.get_icon_fstype(16);
 			if (pix != null){
 				btn_format.set_image(new Gtk.Image.from_pixbuf(pix));
 			}
 			else{
-				btn_format.set_image(null);
+				//btn_format.set_image(null);
 			}
 
-			btn_manage.visible = true;
 			btn_manage.sensitive = true;
 
 			btn_properties.sensitive = true;
 		}
 		else{
 
-			btn_mount.visible = false;
-
-			btn_unmount.visible = true;
+			btn_mount.sensitive = false;
+			
 			btn_unmount.sensitive = false;
 
-			btn_lock.visible = false;
+			btn_lock.sensitive = false;
 			
-			btn_unlock.visible = false;
-
-			btn_backup.visible = true;
+			btn_unlock.sensitive = false;
+;
 			btn_backup.sensitive = false;
-
-			btn_restore.visible = true;
+			
 			btn_restore.sensitive = false;
-
-			btn_eject.visible = true;
-			btn_eject.sensitive = false;
 
 			btn_format.sensitive = false;
 
 			btn_manage.sensitive = false;
 
+			btn_eject.sensitive = false;
+
 			btn_properties.sensitive = false;
 		}
+	}
+
+	// actions ------------------------------------
+
+	public void backup_device(Device dev){
+
+		if (!view.check_tool("polo-disk")){ return; }
+
+		string image_file = choose_disk_image_file(dev, true);
+
+		if (image_file.length == 0){ return; }
+
+		string format = "";
+		
+		if (image_file.down().has_suffix(".gz")){
+			format = "gz";
+		}
+		else if (image_file.down().has_suffix(".bz2")){
+			format = "bz2";
+		}
+		else if (image_file.down().has_suffix(".img")){
+			format = "img";
+		}
+
+		if (dev.is_mounted){
+			bool ok = dev.unmount();
+			log_debug("unmounted: %s".printf(ok.to_string()));
+			
+		}
+
+		if (dev.is_mounted){
+			string txt = "%s".printf(_("Failed to unmount device"));
+			string msg = "%s:\n\n▰ %s".printf(_("Device is in use by the system"), dev.description_friendly());
+			gtk_messagebox(txt, msg, window, true);
+			return;
+		}
+
+		var action = new ProgressPanelUsbWriterTask(pane);
+		action.set_parameters(DiskAction.BACKUP, image_file, dev, format);
+		pane.file_operations.add(action);
+		action.execute();
+	}
+
+	public void restore_device(Device dev){
+
+		if (!view.check_tool("polo-disk")){ return; }
+
+		string image_file = choose_disk_image_file(dev, false);
+
+		if (image_file.length == 0){ return; }
+
+		string txt = "%s".printf(_("Restore device?"));
+		string msg = "%s:\n\n▰ %s".printf(_("Existing data on device will be destroyed"), dev.description_friendly());
+		var resp = gtk_messagebox_yes_no(txt, msg, window, true);
+		if (resp != Gtk.ResponseType.YES){
+			return;
+		}
+
+		if (dev.is_mounted){
+			bool ok = dev.unmount();
+			log_debug("unmounted: %s".printf(ok.to_string()));
+		}
+
+		if (dev.is_mounted){
+			txt = "%s".printf(_("Failed to unmount device"));
+			msg = "%s:\n\n▰ %s".printf(_("Device is in use by the system"), dev.description_friendly());
+			gtk_messagebox(txt, msg, window, true);
+			return;
+		}
+		
+		var action = new ProgressPanelUsbWriterTask(pane);
+		action.set_parameters(DiskAction.RESTORE, image_file, dev, "");
+		pane.file_operations.add(action);
+		action.execute();
+	}
+
+	private string choose_disk_image_file(Device dev, bool save){
+
+		var chooser = new Gtk.FileChooserDialog(
+			(save ? _("Save As") : _("Select Disk Image")),
+			window,
+			(save ? FileChooserAction.SAVE : FileChooserAction.OPEN),
+			"_Cancel",
+			Gtk.ResponseType.CANCEL,
+			(save ? "_Save" : "_Open"),
+			Gtk.ResponseType.ACCEPT
+		);
+
+		chooser.local_only = true;
+ 		chooser.set_modal(true);
+		chooser.select_multiple = false;
+
+		//chooser.set_current_folder(pane.current_location);
+		chooser.set_current_name(dev.kname);
+
+		var filter = create_file_filter(_("GZip Compressed Disk Image"), { "*.gz" });
+		chooser.add_filter(filter);
+		var filter_gz = filter;
+
+		filter = create_file_filter(_("BZip2 Compressed Disk Image"), { "*.bz2" });
+		chooser.add_filter(filter);
+		var filter_bz2 = filter;
+
+		filter = create_file_filter(_("Raw Disk Image"), { "*.img" });
+		chooser.add_filter(filter);
+		var filter_img = filter;
+		
+		if (chooser.run() != Gtk.ResponseType.ACCEPT) {
+			chooser.destroy();
+			return "";
+		}
+
+		string fname = chooser.get_filename();
+
+		var fltr = chooser.get_filter();
+
+		string extension = "";
+		
+		if (fltr == filter_gz){
+			extension = ".gz";
+		}
+		else if (fltr == filter_bz2){
+			extension = ".bz2";
+		}
+		else if (fltr == filter_img){
+			extension = ".img";
+		}
+
+		if (!fname.down().has_suffix(extension)){
+			fname += extension;
+		}
+
+		chooser.destroy();
+
+		return fname;
 	}
 }
 

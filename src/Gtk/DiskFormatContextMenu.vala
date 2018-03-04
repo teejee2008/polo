@@ -90,6 +90,14 @@ public class DiskFormatContextMenu : Gtk.Menu, IPaneActive {
 			return;
 		}
 
+		if (device.is_system_device){
+			string txt = _("System Device");
+			string msg = _("System devices cannot be changed while system is running");
+			msg += "\n\n▰ %s".printf(device.description_friendly());
+			gtk_messagebox(txt, msg, window, true);
+			return;
+		}
+
 		string txt = "%s".printf(_("Format device?"));
 		
 		string msg = "%s:\n\n▰ %s".printf(_("Existing data on device will be destroyed"), device.description_friendly());
@@ -151,7 +159,7 @@ public class DiskFormatContextMenu : Gtk.Menu, IPaneActive {
 		}
 
 		cmd += " %s".printf(device.device);
-				
+		
 		this.sensitive = false;
 
 		gtk_set_busy(true, App.main_window);
@@ -164,7 +172,7 @@ public class DiskFormatContextMenu : Gtk.Menu, IPaneActive {
 		device_formatting_complete();
 
 		if (status == 0){
-			gtk_messagebox(_("Formatting Complete"), std_out, App.main_window, true);
+			//gtk_messagebox(_("Formatting Complete"), std_out, App.main_window, true);
 		}
 		else{
 			gtk_messagebox(_("Formatting Failed"), std_out + "\n\n" + std_err, App.main_window, true);

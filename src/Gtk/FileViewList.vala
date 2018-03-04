@@ -5128,7 +5128,7 @@ public class FileViewList : Gtk.Box {
 		}
 
 		var action = new ProgressPanelUsbWriterTask(pane);
-		action.set_parameters(item.file_path, dev.device);
+		action.set_parameters(DiskAction.WRITE_ISO, item.file_path, dev, "");
 		pane.file_operations.add(action);
 		action.execute();
 	}
@@ -5721,7 +5721,7 @@ public class FileViewList : Gtk.Box {
 		return check_tool("youtube-dl");
 	}
 	
-	private bool check_tool(string tool_cmd){
+	public bool check_tool(string tool_cmd){
 		
 		var tool = App.tools[tool_cmd];
 		
@@ -5737,8 +5737,7 @@ public class FileViewList : Gtk.Box {
 		return true;
 	}
 
-
-	private bool check_plugin(string name){
+	public bool check_plugin(string name){
 		
 		var plug = App.plugins[name];
 
@@ -5767,6 +5766,8 @@ public class FileViewList : Gtk.Box {
 		return true;
 	}
 
+	// hidden --------------------------------
+	
 	public void hide_selected(){
 
 		if (!is_normal_directory){ return; }
