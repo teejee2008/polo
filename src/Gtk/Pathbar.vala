@@ -181,8 +181,10 @@ public class Pathbar : Gtk.Box {
 
 	// disk menu
 
-	private Gtk.Popover popup_dev;
-	private Sidebar sidebar_dev;
+	//private Gtk.Popover popup_dev;
+	//private Sidebar sidebar_dev;
+
+	private DevicePopover dev_popup;
 
 	private void add_item_disk(Gtk.Box box){
 
@@ -204,7 +206,7 @@ public class Pathbar : Gtk.Box {
 
 		set_pointer_cursor_for_eventbox(ebox);
 
-		popup_dev = new Gtk.Popover(ebox);
+		/*popup_dev = new Gtk.Popover(ebox);
 		sidebar_dev = new Sidebar(popup_dev, "device", pane);
 		popup_dev.add(sidebar_dev);
 
@@ -213,6 +215,13 @@ public class Pathbar : Gtk.Box {
 			sidebar_dev.refresh();
 			gtk_show(popup_dev);
 			//menu_disk_popup(null);
+			return false;
+		});*/
+
+		dev_popup = new DevicePopover(ebox, pane);
+		
+		ebox.button_press_event.connect((event)=>{
+			dev_popup.show_popup();
 			return false;
 		});
 	}

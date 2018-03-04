@@ -510,13 +510,15 @@ public class PropertiesWindow : Gtk.Window {
 
 			add_property(vbox, _("PartLabel"), ((device.partlabel.length > 0) ? device.partlabel : _("(empty)")));
 
-			add_property(vbox, _("Filesystem"), device.fstype);
+			add_property(vbox, _("FileSystem"), device.fstype);
 
 			if (device.is_mounted){
-				add_property(vbox, _("Mount"), device.mount_points[0].mount_point);
+				add_property(vbox, _("MountPath"), device.mount_points[0].mount_point);
 			}
 
 			add_property(vbox, _("ReadOnly"), ((device.read_only ? "Yes" : "No")));
+
+			add_property(vbox, _("Removable"), ((device.removable ? "Yes" : "No")));
 
 			var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
 			vbox.add(sep);
@@ -930,14 +932,15 @@ public class PropertiesWindow : Gtk.Window {
 
 		string cmd = cmd_chown(file_item.file_path, user, "", false);
 		
-		string msg = App.exec_admin(cmd);
+		string std_out, std_err;
+		int status = App.exec_admin(cmd, out std_out, out std_err);
 
 		gtk_set_busy(false, this);
 
-		if (msg.length > 0){
+		if (status != 0){
 			
-			gtk_messagebox(_("Operation Failed"), msg, this, true);
-
+			gtk_messagebox(_("Failed to update Owner"), std_err, App.main_window, true);
+			
 			combo.active = combo.get_data<int>("active");
 		}
 
@@ -956,14 +959,15 @@ public class PropertiesWindow : Gtk.Window {
 
 		string cmd = cmd_chown(file_item.file_path, "", group, false);
 		
-		string msg = App.exec_admin(cmd);
+		string std_out, std_err;
+		int status = App.exec_admin(cmd, out std_out, out std_err);
 
 		gtk_set_busy(false, this);
 
-		if (msg.length > 0){
+		if (status != 0){
 			
-			gtk_messagebox(_("Operation Failed"), msg, this, true);
-
+			gtk_messagebox(_("Failed to update Group"), std_err, App.main_window, true);
+			
 			combo.active = combo.get_data<int>("active");
 		}
 
@@ -996,12 +1000,14 @@ public class PropertiesWindow : Gtk.Window {
 
 		string cmd = cmd_chown(file_item.file_path, user, "", true);
 		
-		string msg = App.exec_admin(cmd);
+		string std_out, std_err;
+		int status = App.exec_admin(cmd, out std_out, out std_err);
 
 		gtk_set_busy(false, this);
 
-		if (msg.length > 0){
-			gtk_messagebox(_("Operation Failed"), msg, this, true);
+		if (status != 0){
+			
+			gtk_messagebox(_("Failed to update Owner"), std_err, App.main_window, true);
 		}
 
 		button.clicked.connect(btn_user_recursive);
@@ -1031,12 +1037,14 @@ public class PropertiesWindow : Gtk.Window {
 
 		string cmd = cmd_chown(file_item.file_path, "", group, true);
 		
-		string msg = App.exec_admin(cmd);
+		string std_out, std_err;
+		int status = App.exec_admin(cmd, out std_out, out std_err);
 
 		gtk_set_busy(false, this);
 		
-		if (msg.length > 0){
-			gtk_messagebox(_("Operation Failed"), msg, this, true);
+		if (status != 0){
+			
+			gtk_messagebox(_("Failed to update Group"), std_err, App.main_window, true);
 		}
 
 		button.clicked.connect(btn_group_recursive);

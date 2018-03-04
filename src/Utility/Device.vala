@@ -28,8 +28,9 @@ using TeeJee.Logging;
 using TeeJee.FileSystem;
 using TeeJee.ProcessHelper;
 using TeeJee.GtkHelper;
+using TeeJee.Misc;
 
-public class Device : GLib.Object{
+public class Device : GLib.Object, Gee.Comparable<Device>{
 
 	/* Class for storing disk information */
 
@@ -139,9 +140,44 @@ public class Device : GLib.Object{
 		return device_list;
 	}
 
+	public int compare_to(Device b){
+
+		var a = this;
+
+		// use numeric sorting for numbered partitions --------------
+		
+		var match_a = regex_match("""^(.*)([0-9]+)$""", a.kname);
+			
+		var match_b = regex_match("""^(.*)([0-9]+)$""", b.kname);
+
+		if ((match_a != null) && (match_b != null)){
+			
+			if (match_a.fetch(1) == match_b.fetch(1)){
+
+				return int.parse(match_a.fetch(2)) - int.parse(match_b.fetch(2));
+			}
+			else{
+				return strcmp(a.kname, b.kname);
+			}
+		}
+
+		// list internal disks before removable disks ----------
+		
+		if (a.removable && !b.removable){
+			return 1;
+		}
+		else if (!a.removable && b.removable){
+			return -1;
+		}
+		else {
+			return strcmp(a.kname,b.kname);
+		}
+	}
+
 	// instance ------------------
 	
 	public Device(){
+		
 		mount_points = new Gee.ArrayList<MountEntry>();
 		symlinks = new Gee.ArrayList<string>();
 		children = new Gee.ArrayList<Device>();
@@ -275,31 +311,52 @@ public class Device : GLib.Object{
 		return null;
 	}
 
+	public bool has_mounted_partitions {
+		get {
+			if (is_mounted){
+				return true;
+			}
+			
+			foreach(var child in children){
+				if (child.has_mounted_partitions){
+					return true;
+				}
+			}
+
+			return false;
+		}
+	}
+
 	public bool has_parent(){
 		return (parent != null);
 	}
 
 	public bool is_system_device {
 		get {
-			bool is_system = false;
-
 			foreach (var mnt in mount_points){
 				switch (mnt.mount_point){
 				case "/":
 				case "/boot":
 				case "/boot/efi":
 				case "/home":
-					is_system = true;
-					break;
+				case "/var":
+				case "/usr":
+					return true;
 				default:
 					if (fstype == "swap"){
-						is_system = true;
+						return true;
 					}
 					break;
 				}
 			}
 
-			return is_system;
+			foreach(var child in children){
+				if (child.is_system_device){
+					return true;
+				}
+			}
+
+			return false;
 		}
 	}
 
@@ -382,7 +439,6 @@ public class Device : GLib.Object{
 		}
 	}
 
-	
 	public bool unlock(string mapped_name, string passphrase, Gtk.Window? parent_window, bool show_on_success = false){
 
 		// depends: gvfs-mount cryptsetup
@@ -648,9 +704,13 @@ public class Device : GLib.Object{
 	}
 
 	private static void find_child_devices(Gee.ArrayList<Device> list, Device parent){
+		
 		if (lsblk_is_ancient && (parent.type == "disk")){
+			
 			foreach (var part in list){
+				
 				if ((part.kname != parent.kname) && part.kname.has_prefix(parent.kname)){
+					
 					parent.children.add(part);
 					part.parent = parent;
 					part.pkname = parent.kname;
@@ -666,6 +726,14 @@ public class Device : GLib.Object{
 				}
 			}
 		}
+
+		if (parent.removable){
+			foreach(var child in parent.children){
+				child.removable = true;
+			}
+		}
+
+		parent.children.sort();
 	}
 
 	private static void find_toplevel_parent(Gee.ArrayList<Device> list, Device dev){
@@ -1527,21 +1595,38 @@ public class Device : GLib.Object{
 		return resolved;
 	}
 
+	
 	public Gdk.Pixbuf get_icon(int icon_size = 16, bool symbolic = false){
 
 		Gdk.Pixbuf pixbuf = null;
 
 		if ((type == "crypt") && (pkname.length > 0)){
-			pixbuf = IconManager.lookup("unlocked", icon_size, symbolic, true);
+			//pixbuf = IconManager.lookup("unlocked", icon_size, symbolic, true);
+			//pixbuf = IconManager.lookup("drive-harddisk", icon_size, symbolic);
+
+			if (removable || (has_parent() && parent.removable)){
+				pixbuf = IconManager.lookup("drive-harddisk-usb", icon_size, symbolic);
+			}
+			else{
+				pixbuf = IconManager.lookup("drive-harddisk", icon_size, symbolic);
+			}
 		}
 		else if (fstype.contains("luks")){
+			//pixbuf = IconManager.lookup("encrypted", icon_size, symbolic);
 			pixbuf = IconManager.lookup("locked", icon_size, symbolic, true);
+			//pixbuf = IconManager.lookup("drive-harddisk", icon_size, symbolic);
 		}
 		else if (fstype.contains("iso9660")){
 			pixbuf = IconManager.lookup("media-cdrom", icon_size, symbolic);
 		}
 		else{
-			pixbuf = IconManager.lookup("drive-harddisk-symbolic", icon_size, symbolic);
+			//pixbuf = IconManager.lookup("drive-harddisk-symbolic", icon_size, symbolic);
+			if (removable || (has_parent() && parent.removable)){
+				pixbuf = IconManager.lookup("drive-harddisk-usb", icon_size, symbolic);
+			}
+			else{
+				pixbuf = IconManager.lookup("drive-harddisk", icon_size, symbolic);
+			}
 		}
 
 		if (!is_mounted){
@@ -1551,6 +1636,11 @@ public class Device : GLib.Object{
 		return pixbuf;
 	}
 
+
+	public Gdk.Pixbuf? get_icon_fstype(int icon_size = 16, bool symbolic = false){
+		return IconManager.lookup("fs-" + fstype, icon_size);
+	}
+	
 	// instance helpers -------------------------------
 
 	public void copy_fields_from(Device dev2){
@@ -2287,7 +2377,7 @@ public class Device : GLib.Object{
 		return s.strip();
 	}
 
-	public string description_simple(bool show_device_file = true){
+	public string description_simple(bool show_device_file = true, bool short_desc = false){
 		
 		string s = "";
 
@@ -2303,11 +2393,17 @@ public class Device : GLib.Object{
 					s += "%s Device".printf(format_file_size(size_bytes, false, "", true, 0));
 				}
 				else{
-					s += " (%s)".printf(format_file_size(size_bytes, false, "", true, 0));
+					if (!short_desc){
+						s += " (%s)".printf(format_file_size(size_bytes, false, "", true, 0));
+					}
 				}
 			}
 			if (show_device_file && (device.length > 0)){
 				s += " ~ %s".printf(device);
+			}
+
+			if (s.has_prefix("ATA ")){
+				s = s[4:s.length];
 			}
 		}
 		else{
@@ -2354,6 +2450,37 @@ public class Device : GLib.Object{
 		return s.strip();
 	}
 
+	public string description_friendly(){
+
+		string s = "";
+
+		s += "/dev/%s".printf(kname);
+		
+		if (pkname.length > 0){
+			s += " (on /dev/%s)".printf(pkname);
+		}
+
+		if (label.length > 0){
+			s += " (%s)".printf(label);
+		}
+		else if (partlabel.length > 0){
+			s += " (%s)".printf(partlabel);
+		}
+		else if (has_parent() && (parent.partlabel.length > 0)){
+			s += " (%s)".printf(parent.partlabel);
+		}
+
+		if (fstype.length > 0){
+			s += " ~ %s".printf(fstype);
+		}
+			
+		if (size_bytes > 0) {
+			s += " ~ %s".printf(format_file_size(size_bytes, false, "", true, 0));
+		}
+
+		return s;
+	}
+	
 	public string description_full_free(){
 		string s = "";
 
@@ -2413,40 +2540,72 @@ public class Device : GLib.Object{
 	}
 
 	public string tooltip_text(){
+
 		string tt = "";
 
-		if (type == "disk"){
-			tt += "%-15s: %s\n".printf(_("Device"), device);
-			tt += "%-15s: %s\n".printf(_("Vendor"), vendor);
-			tt += "%-15s: %s\n".printf(_("Model"), model);
-			tt += "%-15s: %s\n".printf(_("Serial"), serial);
-			tt += "%-15s: %s\n".printf(_("Revision"), revision);
+		tt += "%s: %s\n".printf(_("Device"), device);
 
-			tt += "%-15s: %s\n".printf( _("Size"),
-				(size_bytes > 0) ? format_file_size(size_bytes) : "N/A");
-		}
-		else{
-			tt += "%-15s: %s\n".printf(_("Device"),
-				(mapped_name.length > 0) ? "%s → %s".printf(device, mapped_name) : device);
-
-			if (has_parent()){
-				tt += "%-15s: %s\n".printf(_("Parent Device"), parent.device);
-			}
-			tt += "%-15s: %s\n".printf(_("UUID"),uuid);
-			tt += "%-15s: %s\n".printf(_("Type"),type);
-			tt += "%-15s: %s\n".printf(_("Filesystem"),fstype);
-			tt += "%-15s: %s\n".printf(_("Label"),label);
-
-			tt += "%-15s: %s\n".printf(_("Size"),
-				(size_bytes > 0) ? format_file_size(size_bytes) : "N/A");
-
-			tt += "%-15s: %s\n".printf(_("Used"),
-				(used_bytes > 0) ? format_file_size(used_bytes) : "N/A");
-
-			tt += "%-15s: %s\n".printf(_("System"),dist_info);
+		if (mapped_name.length > 0){
+			tt += "%s: %s\n".printf(_("Mapped"), "/dev/mapper/%s".printf(mapped_name));
 		}
 
-		return "<tt>%s</tt>".printf(tt);
+		if ((pkname.length > 0) || (fstype.length > 0)){
+			
+			tt += "%s: %s\n".printf(_("UUID"), ((uuid.length > 0) ? uuid : _("(empty)")));
+			
+			tt += "%s: %s\n".printf(_("Label"), ((label.length > 0) ? label : _("(empty)")));
+
+			tt += "%s: %s\n".printf(_("PartLabel"), ((partlabel.length > 0) ? partlabel : _("(empty)")));
+		}
+
+		tt += "────────────────────────────────────────\n";
+		
+		if (fstype.length > 0){
+			tt += "%s: %s\n".printf(_("Filesystem"), fstype);
+		}
+
+		if (is_mounted){
+			tt += "%s: %s\n".printf(_("Mount"), mount_points[0].mount_point);
+		}
+		
+		tt += "%s: %s\n".printf(_("ReadOnly"), (read_only ? "Yes" : "No"));
+
+		tt += "%s: %s\n".printf(_("Removable"), (removable ? "Yes" : "No"));
+
+		if (vendor.length > 0){
+			tt += "%s: %s\n".printf(_("Vendor"), vendor);
+		}
+
+		if (model.length > 0){
+			tt += "%s: %s\n".printf(_("Model"), model);
+		}
+
+		if (serial.length > 0){
+			tt += "%s: %s\n".printf(_("Serial"), serial);
+		}
+
+		if (revision.length > 0){
+			tt += "%s: %s\n".printf(_("Revision"), revision);
+		}
+
+		tt += "%s: %d\n".printf(_("Major"), major);
+
+		tt += "%s: %d\n".printf(_("Minor"), minor);
+
+		tt += "────────────────────────────────────────\n";
+
+		tt += "%s: %s (%'ld bytes)\n".printf(
+			_("Size"), format_file_size(size_bytes), size_bytes);
+
+		tt += "%s: %s (%'ld bytes) (%.0f%%)\n".printf(
+			_("Used"), format_file_size(used_bytes),
+			used_bytes, (used_bytes * 100.0) / size_bytes);
+
+		tt += "%s: %s (%'ld bytes) (%.0f%%)".printf(
+			_("Available"), format_file_size(available_bytes),
+			available_bytes, (available_bytes * 100.0) / size_bytes);
+
+		return tt;
 	}
 
 	private string display_name(bool short_name = true, bool show_label = true, bool show_parent = true, bool show_alias = false){
@@ -2622,6 +2781,48 @@ public class Device : GLib.Object{
 
 		log_debug("");
 	}
+
+	public static void print_logical_children(Gee.ArrayList<Device> list = get_devices()){
+		
+		log_debug("");
+
+		foreach(var dev in list){
+
+			if (dev.pkname.length > 0){ continue; }
+
+			string line = "";
+			
+			line += "%s".printf(dev.device);
+
+			foreach(var child in dev.children){
+				
+				line += " ~ ";
+
+				if (child.is_on_encrypted_partition){
+					
+					line += "%s_%s".printf(child.parent.device.replace("/dev/",""), child.device.replace("/dev/",""));
+				}
+				else if (child.is_encrypted_partition){
+					
+					if (child.has_children){
+						
+						line += "%s_%s".printf(child.device.replace("/dev/",""), child.children[0].device.replace("/dev/",""));
+					}
+					else{
+						line += "%s".printf(child.device.replace("/dev/",""));
+					}
+				}
+				else{
+					line += "%s".printf(child.device.replace("/dev/",""));
+				}
+			}
+			
+			log_debug(line);
+		}
+
+		log_debug("");
+	}
+
 }
 
 public class DeviceMonitor : GLib.Object{
