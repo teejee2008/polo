@@ -1,5 +1,5 @@
 /*
- * UsbWriterTask.vala
+ * DeviceWriterTask.vala
  *
  * Copyright 2012-18 Tony George <teejeetech@gmail.com>
  *
@@ -35,7 +35,7 @@ using TeeJee.System;
 using TeeJee.Misc;
 
 
-public class UsbWriterTask : AsyncTask {
+public class DeviceWriterTask : AsyncTask {
 
 	public DiskAction action;
 	public Device device;
@@ -44,7 +44,7 @@ public class UsbWriterTask : AsyncTask {
 	
 	public string error_log = "";
 	
-	public UsbWriterTask(){
+	public DeviceWriterTask(){
 		init_regular_expressions();
 	}
 	

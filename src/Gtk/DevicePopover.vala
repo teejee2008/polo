@@ -71,8 +71,6 @@ public class DevicePopover : Gtk.Popover {
 	private Gtk.TreeViewColumn col_fs;
 	private Gtk.TreeViewColumn col_mp;
 
-	private DeviceContextMenu context_menu;
-
 	private Gtk.Button btn_mount;
 	private Gtk.Button btn_unmount;
 	private Gtk.Button btn_lock;
@@ -982,7 +980,7 @@ public class DevicePopover : Gtk.Popover {
 			return;
 		}
 
-		var action = new ProgressPanelUsbWriterTask(pane);
+		var action = new ProgressPanelDeviceWriterTask(pane);
 		action.set_parameters(DiskAction.BACKUP, image_file, dev, format);
 		pane.file_operations.add(action);
 		action.execute();
@@ -1015,7 +1013,7 @@ public class DevicePopover : Gtk.Popover {
 			return;
 		}
 		
-		var action = new ProgressPanelUsbWriterTask(pane);
+		var action = new ProgressPanelDeviceWriterTask(pane);
 		action.set_parameters(DiskAction.RESTORE, image_file, dev, "");
 		pane.file_operations.add(action);
 		action.execute();

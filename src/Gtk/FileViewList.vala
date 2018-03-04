@@ -5127,7 +5127,7 @@ public class FileViewList : Gtk.Box {
 			return;
 		}
 
-		var action = new ProgressPanelUsbWriterTask(pane);
+		var action = new ProgressPanelDeviceWriterTask(pane);
 		action.set_parameters(DiskAction.WRITE_ISO, item.file_path, dev, "");
 		pane.file_operations.add(action);
 		action.execute();

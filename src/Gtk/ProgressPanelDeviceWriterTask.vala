@@ -1,5 +1,5 @@
 /*
- * ProgressPanelUsbWriterTask.vala
+ * ProgressPanelDeviceWriterTask.vala
  *
  * Copyright 2012-18 Tony George <teejeetech@gmail.com>
  *
@@ -33,9 +33,9 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
-public class ProgressPanelUsbWriterTask : ProgressPanel {
+public class ProgressPanelDeviceWriterTask : ProgressPanel {
 
-	public UsbWriterTask task;
+	public DeviceWriterTask task;
 
 	private DiskAction action;
 	private Device device;
@@ -48,7 +48,7 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 	public Gtk.Label lbl_stats;
 	public Gtk.ProgressBar progressbar;
 
-	public ProgressPanelUsbWriterTask(FileViewPane _pane){
+	public ProgressPanelDeviceWriterTask(FileViewPane _pane){
 		base(_pane, null, FileActionType.ISO_WRITE);
 	}
 
@@ -144,9 +144,9 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 
 		lbl_header.label = txt;
 
-		task = new UsbWriterTask();
+		task = new DeviceWriterTask();
 
-		log_debug("ProgressPanelUsbWriterTask: execute(%s)");
+		log_debug("ProgressPanelDeviceWriterTask: execute(%s)");
 
 		pane.refresh_file_action_panel();
 		pane.clear_messages();
@@ -156,7 +156,7 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 
 	public override void init_status(){
 
-		log_debug("ProgressPanelUsbWriterTask: init_status()");
+		log_debug("ProgressPanelDeviceWriterTask: init_status()");
 
 		progressbar.fraction = 0.0;
 		lbl_status.label = "Preparing...";
@@ -165,7 +165,7 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 	
 	public override void start_task(){
 
-		log_debug("ProgressPanelUsbWriterTask: start_task()");
+		log_debug("ProgressPanelDeviceWriterTask: start_task()");
 
 		err_log_clear();
 
@@ -190,7 +190,7 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 
 		if (task.is_running){
 			
-			log_debug("ProgressPanelUsbWriterTask: update_status()");
+			log_debug("ProgressPanelDeviceWriterTask: update_status()");
 			
 			lbl_status.label = "%s: %s".printf(_("File"), file_basename(iso_file));
 			
@@ -210,7 +210,7 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 
 	public override void cancel(){
 
-		log_debug("ProgressPanelUsbWriterTask: cancel()");
+		log_debug("ProgressPanelDeviceWriterTask: cancel()");
 		
 		aborted = true;
 
@@ -229,7 +229,7 @@ public class ProgressPanelUsbWriterTask : ProgressPanel {
 
 		stop_status_timer();
 		
-		log_debug("ProgressPanelUsbWriterTask: finish()");
+		log_debug("ProgressPanelDeviceWriterTask: finish()");
 
 		pane.file_operations.remove(this);
 		pane.refresh_file_action_panel();
