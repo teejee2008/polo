@@ -322,7 +322,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		item.activate.connect (() => {
 			var win = new PropertiesWindow.for_device(device);
-			log_msg("111");
+			//log_msg("111");
 			win.show_all();
 		});
 
@@ -508,6 +508,45 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		gtk_set_busy(false, window);
 
 		return mounted;
+	}
+
+	public static bool unlock_device(Device _device, FileViewPane pane, MainWindow window){
+
+		log_debug("DeviceContextMenu: unlock_device(): %s".printf(_device.device));
+
+		gtk_set_busy(true, window);
+
+		Device dev = _device;
+
+		if (dev.is_mounted){
+			return true;
+		}
+		else if (dev.is_on_encrypted_partition){
+			return true;
+		}
+		else if (dev.is_encrypted_partition){
+
+			log_debug("prompting user to unlock encrypted partition");
+
+			if (!dev.unlock("", "", window, false)){
+				log_debug("device is null or still in locked state!");
+				gtk_set_busy(false, window);
+				return false; // no message needed
+			}
+			else{
+				dev = dev.children[0];
+			}
+			
+			dev.automount(window);
+			DeviceMonitor.notify_change(); // workaround for GLib.VolumeMonitor not detecting some mount events
+		}
+		else{
+			// ignore
+		}
+
+		gtk_set_busy(false, window);
+
+		return true;
 	}
 
 	public static bool lock_device(Device _device, FileViewPane pane, MainWindow window){

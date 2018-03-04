@@ -280,6 +280,12 @@ public class Main : GLib.Object {
 	public bool plugin_obsolete_pdf = false;
 	public bool plugin_obsolete_image = false;
 
+	public bool dm_hide_fs = false;
+	public bool dm_hide_mp = false;
+	public bool dm_hide_size = false;
+	public int dm_width = 800;
+	public int dm_height = 600;
+	
 	public Gee.ArrayList<string> mediaview_exclude = new Gee.ArrayList<string>();
 	public Gee.ArrayList<string> mediaview_include = new Gee.ArrayList<string>();
 	
@@ -727,6 +733,12 @@ public class Main : GLib.Object {
 		config.set_string_member("overwrite_image_decolor", overwrite_image_decolor.to_string());
 		config.set_string_member("overwrite_image_boost_color", overwrite_image_boost_color.to_string());
 		config.set_string_member("overwrite_image_reduce_color", overwrite_image_reduce_color.to_string());
+
+		config.set_string_member("dm_hide_fs", dm_hide_fs.to_string());
+		config.set_string_member("dm_hide_mp", dm_hide_mp.to_string());
+		config.set_string_member("dm_hide_size", dm_hide_size.to_string());
+		config.set_string_member("dm_width", dm_width.to_string());
+		config.set_string_member("dm_height", dm_height.to_string());
 		
 		save_folder_selections();
 		
@@ -944,6 +956,13 @@ public class Main : GLib.Object {
 		sidebar_position = json_get_int_from_string(config, "sidebar_position", sidebar_position);
 		sidebar_action_button = json_get_bool_from_string(config, "sidebar_action_button", sidebar_action_button);
 		sidebar_collapsed_sections = json_get_string(config, "sidebar_collapsed_sections", sidebar_collapsed_sections);
+
+		dm_hide_fs = json_get_bool_from_string(config, "dm_hide_fs", dm_hide_fs);
+		dm_hide_mp = json_get_bool_from_string(config, "dm_hide_mp", dm_hide_mp);
+		dm_hide_size = json_get_bool_from_string(config, "dm_hide_size", dm_hide_size);
+
+		dm_width = json_get_int_from_string(config, "dm_width", dm_width);
+		dm_height = json_get_int_from_string(config, "dm_height", dm_height);
 		
 		load_folder_selections();
 
@@ -1252,7 +1271,11 @@ public class Main : GLib.Object {
 		return config;
 	}
 
-	public string exec_admin(string _cmd){
+	public int exec_admin(string _cmd, out string std_out, out string std_err){
+
+		int status = -1;
+		std_out = "";
+		std_err = "";
 		
 		if (admin_shell == null){
 
@@ -1305,14 +1328,18 @@ public class Main : GLib.Object {
 			
 			string msg = _("Failed to execute operation as admin");
 			log_error(msg);
-			return msg;
+			std_err = msg;
+			return 1;
 		}
 		
 		string cmd = _cmd;
+		string tmp_stdout = get_temp_file_path();
 		string tmp_stderr = get_temp_file_path();
 		string tmp_status = get_temp_file_path();
 
-		cmd += " 2>'%s' ; echo $? > '%s'".printf(escape_single_quote(tmp_stderr), escape_single_quote(tmp_status));
+		cmd += " >'%s' ".printf(escape_single_quote(tmp_stdout));
+		cmd += " 2>'%s' ".printf(escape_single_quote(tmp_stderr));
+		cmd += " ; echo $? > '%s'".printf(escape_single_quote(tmp_status));
 
 		log_debug("admin_cmd: " + cmd);
 
@@ -1333,30 +1360,18 @@ public class Main : GLib.Object {
 		}
 
 		if (file_exists(tmp_status)){
-
-			string status = file_read(tmp_status);
-			//log_debug("tmp_status: " + status);
-			
-			if (status.strip() == "0"){	
-				return "";
-			}
-			else{
-				if (file_exists(tmp_stderr)){
-					string std_err = file_read(tmp_stderr).strip();
-					//log_debug("tmp_stderr: " + std_err);
-					return std_err;
-				}
-				else{
-					//log_debug("tmp_stderr: not found");
-					return "Error";
-				}
-			}
-		}
-		else{
-			//log_debug("tmp_status: not found");
+			status = int.parse(file_read(tmp_status));
 		}
 
-		return "Error";
+		if (file_exists(tmp_stdout)){
+			std_out = file_read(tmp_stdout);
+		}
+
+		if (file_exists(tmp_stderr)){
+			std_err = file_read(tmp_stderr);
+		}
+
+		return status;
 	}
 	
 	/* Core */
