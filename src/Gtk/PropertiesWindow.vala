@@ -474,20 +474,6 @@ public class PropertiesWindow : Gtk.Window {
 		hbox.margin = 12;
 		stack.add_titled (hbox, _("Filesystem"), _("Filesystem"));
 
-		// get device for file_item ---------------------------
-		
-		if ((device == null) && (file_item != null)){
-			
-			device = Device.get_device_by_path(dir_item.file_path);
-			
-			if (device != null){
-				device = Device.get_device_by_name(device.device);
-			}
-			else{
-				log_error("device is NULL: Device.get_device_by_path(%s)".printf(dir_item.file_path));
-			}
-		}
-
 		// create ui ---------------------------------------------
 
 		var vbox = new Gtk.Box(Orientation.VERTICAL, 6);
@@ -496,33 +482,48 @@ public class PropertiesWindow : Gtk.Window {
 		group_label = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
 		group1_value = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
 
-		if (device != null){
-
-			add_property(vbox, _("Device"), device.device);
-
-			if (device.mapped_name.length > 0){
-				add_property(vbox, _("Mapped"), "/dev/mapper/%s".printf(device.mapped_name));
-			}
-
-			add_property(vbox, _("UUID"), device.uuid);
-
-			add_property(vbox, _("Label"), ((device.label.length > 0) ? device.label : _("(empty)")));
-
-			add_property(vbox, _("PartLabel"), ((device.partlabel.length > 0) ? device.partlabel : _("(empty)")));
-
-			add_property(vbox, _("FileSystem"), device.fstype);
-
-			if (device.is_mounted){
-				add_property(vbox, _("MountPath"), device.mount_points[0].mount_point);
-			}
-
-			add_property(vbox, _("ReadOnly"), ((device.read_only ? "Yes" : "No")));
-
-			add_property(vbox, _("Removable"), ((device.removable ? "Yes" : "No")));
-
-			var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
-			vbox.add(sep);
+		// get device for file_item ---------------------------
+		
+		if (dir_item == null){
+			add_property(vbox, _("Device"), _("Unknown"));
+			return;
 		}
+
+		device = Device.get_device_by_path(dir_item.file_path);
+		
+		if (device != null){
+			device = Device.get_device_by_name(device.device);
+		}
+		else{
+			add_property(vbox, _("Device"), _("Unknown"));
+			log_error("device is NULL: Device.get_device_by_path(%s)".printf(dir_item.file_path));
+			return;
+		}
+
+		add_property(vbox, _("Device"), device.device);
+
+		if (device.mapped_name.length > 0){
+			add_property(vbox, _("Mapped"), "/dev/mapper/%s".printf(device.mapped_name));
+		}
+
+		add_property(vbox, _("UUID"), device.uuid);
+
+		add_property(vbox, _("Label"), ((device.label.length > 0) ? device.label : _("(empty)")));
+
+		add_property(vbox, _("PartLabel"), ((device.partlabel.length > 0) ? device.partlabel : _("(empty)")));
+
+		add_property(vbox, _("FileSystem"), device.fstype);
+
+		if (device.is_mounted){
+			add_property(vbox, _("MountPath"), device.mount_points[0].mount_point);
+		}
+
+		add_property(vbox, _("ReadOnly"), ((device.read_only ? "Yes" : "No")));
+
+		add_property(vbox, _("Removable"), ((device.removable ? "Yes" : "No")));
+
+		var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
+		vbox.add(sep);
 
 		// create tooltip ---------------------------
 
