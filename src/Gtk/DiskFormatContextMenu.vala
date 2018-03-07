@@ -117,7 +117,12 @@ public class DiskFormatContextMenu : Gtk.Menu, IPaneActive {
 		case "ext3":
 		case "ext4":
 		case "f2fs":
+		case "ufs":
 			cmd += "mkfs.%s".printf(fmt);
+			break;
+
+		case "jfs":
+			cmd += "mkfs.%s -q".printf(fmt);
 			break;
 			
 		case "btrfs":
@@ -127,6 +132,10 @@ public class DiskFormatContextMenu : Gtk.Menu, IPaneActive {
 
 		case "nilfs2":
 			cmd += "mkfs.%s -f -v".printf(fmt);
+			break;
+
+		case "ntfs":
+			cmd += "mkfs.%s -f -F".printf(fmt);
 			break;
 
 		case "exfat":
@@ -191,7 +200,10 @@ public class DiskFormatContextMenu : Gtk.Menu, IPaneActive {
 		case "ext3":
 		case "ext4":
 		case "f2fs":
+		case "jfs":
 		case "nilfs2":
+		case "ntfs":
+		case "ufs":
 		case "xfs":
 			cmd += "mkfs.%s".printf(fmt);
 			break;

@@ -134,6 +134,8 @@ public class DevicePopoverSettingsWindow : Gtk.Window {
 
 			settings_changed();
 		});
+
+		chk.margin_bottom = 12;
 	}
 
 	private void init_width(Gtk.Container box) {
@@ -207,6 +209,7 @@ public class DevicePopoverSettingsWindow : Gtk.Window {
 		box.add(button);
 
 		button.clicked.connect(()=>{
+			App.save_app_config();
 			this.destroy();
 		});
 

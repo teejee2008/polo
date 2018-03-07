@@ -428,16 +428,13 @@ public class DevicePopover : Gtk.Popover {
 		return list;
 	}
 
-
 	private void treeview_row_activated(TreePath path, TreeViewColumn? column){
 
 		log_debug("DevicePopover(): treeview_row_activated()");
 
 		if (!manage_mode){
-
+			
 			btn_open_clicked();
-
-			this.hide();
 		}
 		else{
 			refresh_actions();
@@ -466,28 +463,23 @@ public class DevicePopover : Gtk.Popover {
 		dummy.hexpand = true;
 		hbox.add(dummy);
 		
-		// actions ---------------------------------------
+		// actions ----------------------------------
 
 		var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
 		hbox.add(box);
 
 		bbox_actions = box;
+
+		// ------------------------------------------------------------------------------
 		
 		var bbox = new Gtk.ButtonBox(Gtk.Orientation.VERTICAL);
 		bbox.set_layout(Gtk.ButtonBoxStyle.CENTER);
 		bbox.spacing = 3;
 		box.add(bbox);
 
-		// open -----------------------
-
-		//var button = new Gtk.Button.with_label(_("Open"));
-		//bbox.add(button);
-
-		//button.clicked.connect(btn_open_clicked);
-
 		// mount -----------------------
 
-		var button = new Gtk.Button.with_label(_("Mount"));
+		var button = new Gtk.Button.with_label(" " + _("Mount"));
 		button.set_image(IconManager.lookup_image("drive-harddisk", 16, false, false));
 		button.always_show_image = true;
 		bbox.add(button);
@@ -497,7 +489,7 @@ public class DevicePopover : Gtk.Popover {
 
 		// unmount -----------------------
 
-		button = new Gtk.Button.with_label(_("Unmount"));
+		button = new Gtk.Button.with_label(" " + _("Unmount"));
 		button.set_image(IconManager.lookup_image("drive-harddisk", 16, false, false));
 		button.always_show_image = true;
 		bbox.add(button);
@@ -505,7 +497,8 @@ public class DevicePopover : Gtk.Popover {
 		
 		button.clicked.connect(btn_unmount_clicked);
 
-
+		// ------------------------------------------------------------------------------
+		
 		bbox = new Gtk.ButtonBox(Gtk.Orientation.VERTICAL);
 		bbox.set_layout(Gtk.ButtonBoxStyle.CENTER);
 		bbox.spacing = 3;
@@ -513,7 +506,7 @@ public class DevicePopover : Gtk.Popover {
 
 		// lock -----------------------
 
-		button = new Gtk.Button.with_label(_("Lock"));
+		button = new Gtk.Button.with_label(" " + _("Lock"));
 		button.set_image(IconManager.lookup_image("locked", 16, false, false));
 		button.always_show_image = true;
 		bbox.add(button);
@@ -523,7 +516,7 @@ public class DevicePopover : Gtk.Popover {
 
 		// unlock -----------------------
 
-		button = new Gtk.Button.with_label(_("Unlock"));
+		button = new Gtk.Button.with_label(" " + _("Unlock"));
 		button.set_image(IconManager.lookup_image("unlocked", 16, false, false));
 		button.always_show_image = true;
 		bbox.add(button);
@@ -531,6 +524,7 @@ public class DevicePopover : Gtk.Popover {
 		
 		button.clicked.connect(btn_unlock_clicked);
 
+		// ------------------------------------------------------------------------------
 
 		bbox = new Gtk.ButtonBox(Gtk.Orientation.VERTICAL);
 		bbox.set_layout(Gtk.ButtonBoxStyle.CENTER);
@@ -553,10 +547,23 @@ public class DevicePopover : Gtk.Popover {
 		
 		button.clicked.connect(btn_restore_clicked);
 
+		// ------------------------------------------------------------------------------
+		
 		bbox = new Gtk.ButtonBox(Gtk.Orientation.VERTICAL);
 		bbox.set_layout(Gtk.ButtonBoxStyle.CENTER);
 		bbox.spacing = 3;
 		box.add(bbox);
+
+		// manage -----------------------
+
+		button = new Gtk.Button.with_label(" " + _("Partition"));
+		button.set_image(IconManager.lookup_image("partitionmanager", 16, false, false));
+		button.always_show_image = true;
+		//button.set_tooltip_text(_("Partition Manager"));
+		bbox.add(button);
+		btn_manage = button;
+		
+		button.clicked.connect(btn_manage_clicked);
 
 		// format -----------------------
 
@@ -579,17 +586,8 @@ public class DevicePopover : Gtk.Popover {
 				menu_format.show_menu(dev, null);
 			}
 		});
-		
-		// manage -----------------------
 
-		button = new Gtk.Button.with_label(_("Partition"));
-		button.set_image(IconManager.lookup_image("partitionmanager", 16, false, false));
-		button.always_show_image = true;
-		//button.set_tooltip_text(_("Partition Manager"));
-		bbox.add(button);
-		btn_manage = button;
-		
-		button.clicked.connect(btn_manage_clicked);
+		// ------------------------------------------------------------------------------
 
 		bbox = new Gtk.ButtonBox(Gtk.Orientation.VERTICAL);
 		bbox.set_layout(Gtk.ButtonBoxStyle.CENTER);
@@ -598,7 +596,7 @@ public class DevicePopover : Gtk.Popover {
 
 		// eject -----------------------
 
-		button = new Gtk.Button.with_label(_("Eject"));
+		button = new Gtk.Button.with_label(" " + _("Eject"));
 		button.set_image(IconManager.lookup_image("media-eject", 16, false, false));
 		button.always_show_image = true;
 		//button.set_tooltip_text(_("Eject"));
@@ -609,7 +607,7 @@ public class DevicePopover : Gtk.Popover {
 
 		// properties -----------------------
 
-		button = new Gtk.Button.with_label(_("Properties"));
+		button = new Gtk.Button.with_label(" " + _("Properties"));
 		button.set_image(IconManager.lookup_image("preferences-system-symbolic", 16, false, false));
 		button.always_show_image = true;
 		//button.set_tooltip_text(_("Properties"));
@@ -658,16 +656,8 @@ public class DevicePopover : Gtk.Popover {
 		button = new Gtk.Button.with_label(_("Actions"));
 		bbox.add(button);
 
-		button.clicked.connect(()=>{
-			
-			manage_mode = true;
-
-			gtk_hide(bbox_manage);
-			gtk_show(bbox_actions);
-
-			refresh();
-		});
-
+		button.clicked.connect(btn_manage_mode);
+		
 		bbox_actions.set_no_show_all(true);
 
 		// spacer -----------------------------------
@@ -681,7 +671,17 @@ public class DevicePopover : Gtk.Popover {
 
 		refresh_devices();
 
-		this.set_size_request(App.dm_width, App.dm_height);
+		vbox_main.set_size_request(App.dm_width, App.dm_height);
+	}
+
+	private void btn_manage_mode(){
+
+		manage_mode = true;
+
+		gtk_hide(bbox_manage);
+		gtk_show(bbox_actions);
+
+		refresh();
 	}
 
 	private Device? get_selected_device(){
@@ -707,7 +707,7 @@ public class DevicePopover : Gtk.Popover {
 
 		var device = get_selected_device();
 		
-		if (device != null){ 
+		if ((device != null) && !device.has_children){ 
 			DeviceContextMenu.browse_device(device, pane, window);
 			this.hide();
 		}
@@ -717,7 +717,7 @@ public class DevicePopover : Gtk.Popover {
 
 		var device = get_selected_device();
 		
-		if (device != null){ 
+		if (device != null){
 			DeviceContextMenu.mount_device(device, pane, window);
 			//refresh_devices();
 		}
@@ -813,6 +813,8 @@ public class DevicePopover : Gtk.Popover {
 		Device.get_block_devices();
 
 		refresh();
+
+		vbox_main.set_size_request(App.dm_width, App.dm_height);
 		
 		gtk_show(this);
 	}
@@ -868,9 +870,9 @@ public class DevicePopover : Gtk.Popover {
 
 		treeview.expand_all();
 
-		col_size.visible = !App.dm_hide_size;
-		col_fs.visible = !App.dm_hide_fs;
-		col_mp.visible = !App.dm_hide_mp;
+		col_size.visible = !App.dm_hide_size || manage_mode;
+		col_fs.visible = !App.dm_hide_fs || manage_mode;
+		col_mp.visible = !App.dm_hide_mp || manage_mode;
 
 		//Device.print_logical_children();
 	}
@@ -893,7 +895,7 @@ public class DevicePopover : Gtk.Popover {
 		
 		if (dev != null){
 
-			btn_mount.sensitive = !dev.is_mounted && (dev.fstype.length > 0) && (dev.pkname.length > 0);
+			btn_mount.sensitive = !dev.is_mounted && (dev.fstype.length > 0) && !dev.has_children;
 
 			btn_unmount.sensitive = dev.is_mounted && !dev.is_system_device;
 			
@@ -910,6 +912,7 @@ public class DevicePopover : Gtk.Popover {
 			btn_format.sensitive = (dev.fstype.length > 0) && !dev.is_system_device; // cannot be unmounted
 
 			var pix = dev.get_icon_fstype(16);
+			
 			if (pix != null){
 				btn_format.set_image(new Gtk.Image.from_pixbuf(pix));
 			}
