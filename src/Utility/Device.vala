@@ -1600,7 +1600,12 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 
 		Gdk.Pixbuf pixbuf = null;
 
-		if ((type == "crypt") && (pkname.length > 0)){
+		if (kname.has_prefix("mmcblk") || pkname.has_prefix("mmcblk")){
+			
+			pixbuf = IconManager.lookup("media-flash", icon_size, symbolic, true);
+		}
+		else if ((type == "crypt") && (pkname.length > 0)){
+			
 			//pixbuf = IconManager.lookup("unlocked", icon_size, symbolic, true);
 			//pixbuf = IconManager.lookup("drive-harddisk", icon_size, symbolic);
 
@@ -1612,11 +1617,13 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 			}
 		}
 		else if (fstype.contains("luks")){
+			
 			//pixbuf = IconManager.lookup("encrypted", icon_size, symbolic);
-			pixbuf = IconManager.lookup("locked", icon_size, symbolic, true);
 			//pixbuf = IconManager.lookup("drive-harddisk", icon_size, symbolic);
+			pixbuf = IconManager.lookup("locked", icon_size, symbolic, true);
 		}
 		else if (fstype.contains("iso9660")){
+			
 			pixbuf = IconManager.lookup("media-cdrom", icon_size, symbolic);
 		}
 		else{
@@ -1629,16 +1636,21 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 			}
 		}
 
-		if (!is_mounted){
+		if (!is_mounted){ // && (pkname.length > 0)
 			pixbuf = IconManager.add_transparency(pixbuf);
 		}
 
 		return pixbuf;
 	}
 
-
 	public Gdk.Pixbuf? get_icon_fstype(int icon_size = 16, bool symbolic = false){
-		return IconManager.lookup("fs-" + fstype, icon_size);
+		
+		if (fstype.length > 0){
+			return IconManager.lookup("fs-" + fstype, icon_size);
+		}
+		else{
+			return null;
+		}
 	}
 	
 	// instance helpers -------------------------------
