@@ -86,6 +86,8 @@ public class DevicePopoverSettingsWindow : Gtk.Window {
 
 		init_dm_hide_mp(vbox_main);
 
+		init_dm_hide_header(vbox_main);
+
 		init_width(vbox_main);
 
 		init_height(vbox_main);
@@ -134,13 +136,30 @@ public class DevicePopoverSettingsWindow : Gtk.Window {
 
 			settings_changed();
 		});
+	}
 
-		chk.margin_bottom = 12;
+	private void init_dm_hide_header(Gtk.Container box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Hide column headers"));
+		box.add(chk);
+
+		chk.active = App.dm_hide_header;
+
+		chk.toggled.connect(()=>{
+
+			App.dm_hide_header = chk.active;
+
+			settings_changed();
+		});
 	}
 
 	private void init_width(Gtk.Container box) {
 
 		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 12);
+		box.add(hbox);
+		hbox.add(new Gtk.Label(""));
+		
+		hbox = new Gtk.Box(Orientation.HORIZONTAL, 12);
 		box.add(hbox);
 
 		hbox.margin_left = 6;

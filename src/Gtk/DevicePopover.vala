@@ -671,6 +671,10 @@ public class DevicePopover : Gtk.Popover {
 
 		refresh_devices();
 
+		treeview.headers_visible = !App.dm_hide_header || manage_mode;
+
+		treeview.margin_top = treeview.headers_visible ? 0 : 6;
+
 		vbox_main.set_size_request(App.dm_width, App.dm_height);
 	}
 

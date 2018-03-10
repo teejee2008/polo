@@ -283,6 +283,7 @@ public class Main : GLib.Object {
 	public bool dm_hide_fs = false;
 	public bool dm_hide_mp = false;
 	public bool dm_hide_size = false;
+	public bool dm_hide_header = false;
 	public int dm_width = 800;
 	public int dm_height = 600;
 	
@@ -738,6 +739,7 @@ public class Main : GLib.Object {
 		config.set_string_member("dm_hide_fs", dm_hide_fs.to_string());
 		config.set_string_member("dm_hide_mp", dm_hide_mp.to_string());
 		config.set_string_member("dm_hide_size", dm_hide_size.to_string());
+		config.set_string_member("dm_hide_header", dm_hide_header.to_string());
 		config.set_string_member("dm_width", dm_width.to_string());
 		config.set_string_member("dm_height", dm_height.to_string());
 		
@@ -961,7 +963,8 @@ public class Main : GLib.Object {
 		dm_hide_fs = json_get_bool_from_string(config, "dm_hide_fs", dm_hide_fs);
 		dm_hide_mp = json_get_bool_from_string(config, "dm_hide_mp", dm_hide_mp);
 		dm_hide_size = json_get_bool_from_string(config, "dm_hide_size", dm_hide_size);
-
+		dm_hide_header = json_get_bool_from_string(config, "dm_hide_header", dm_hide_header);
+		
 		dm_width = json_get_int_from_string(config, "dm_width", dm_width);
 		dm_height = json_get_int_from_string(config, "dm_height", dm_height);
 		
