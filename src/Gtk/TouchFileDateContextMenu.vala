@@ -37,7 +37,7 @@ public class TouchFileDateContextMenu : Gtk.Menu {
 	private FileItem file_item;
 	private bool touch_modified;
 	private bool touch_accessed;
-	private PropertiesWindow window;
+	private Gtk.Window window;
 	private Gtk.Entry entry;
 	private bool task_is_running;
 
@@ -46,7 +46,7 @@ public class TouchFileDateContextMenu : Gtk.Menu {
 
 	public signal void file_touched();
 
-	public TouchFileDateContextMenu(FileItem _file_item, bool _touch_accessed, bool _touch_modified, PropertiesWindow _window, Gtk.Entry _entry){
+	public TouchFileDateContextMenu(FileItem _file_item, bool _touch_accessed, bool _touch_modified, Gtk.Window _window, Gtk.Entry _entry){
 
 		//log_debug("TouchFileDateContextMenu()");
 

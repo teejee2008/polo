@@ -286,9 +286,7 @@ public class FileViewList : Gtk.Box {
 
 		treeview.row_collapsed.connect(treeview_row_collapsed);
 
-		treeview.get_selection().changed.connect(()=> {
-			pane.statusbar.refresh_selection_counts();
-		});
+		treeview.get_selection().changed.connect(on_selection_changed);
 
 		// context menu will be connected in connect_file_context_menu()
 		
@@ -563,6 +561,19 @@ public class FileViewList : Gtk.Box {
 		treeview.row_collapsed.connect(treeview_row_collapsed);
 	}
 
+	private void on_selection_changed(){
+		
+		pane.statusbar.refresh_selection_counts();
+		
+		if (App.main_window.propbar.visible){
+			
+			var selected_items = get_selected_items();
+			if (selected_items.size == 0){ return; }
+			
+			App.main_window.propbar.show_properties_for_file(selected_items[0]);
+		}
+	}
+	
 	// iconview -----------------------------------
 	
 	public void init_iconview(){
@@ -602,9 +613,7 @@ public class FileViewList : Gtk.Box {
         // connect signal for right-click
 		iconview.button_press_event.connect(iconview_button_press_event);
 
-		iconview.selection_changed.connect(()=> {
-			pane.statusbar.refresh_selection_counts();
-		});
+		iconview.selection_changed.connect(on_selection_changed);
 		
 		// tooltip
 		iconview.has_tooltip = true;
@@ -4866,7 +4875,7 @@ public class FileViewList : Gtk.Box {
 		if (get_selected_items().size > 0){
 			item = get_selected_items()[0];
 		}
-		var win = new PropertiesWindow.for_file(item);
+		var win = new FilePropertiesWindow.for_file(item);
 		win.show_all();
 	}
 

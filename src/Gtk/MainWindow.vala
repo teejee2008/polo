@@ -47,10 +47,11 @@ public class MainWindow : Gtk.Window {
 
 	private Gtk.Box vbox_main;
 	private Gtk.Paned pane_nav;
-	//private Gtk.Notebook notebook;
+	private Gtk.Paned pane_prop;
 
 	public MainMenuBar menubar;
 	public Sidebar sidebar;
+	public FilePropertiesPanel propbar;
 	public FileViewToolbar toolbar;
 	public Pathbar pathbar;
 	public LayoutBox layout_box;
@@ -123,6 +124,7 @@ public class MainWindow : Gtk.Window {
 		this.delete_event.disconnect(on_delete_event); //disconnect this handler
 
 		App.sidebar_position = pane_nav.position;
+		App.propbar_position = pane_prop.position;
 
 		if (show_file_operation_warning_on_window_close() == Gtk.ResponseType.NO){
 			log_debug("MainWindow: running operation warning displayed");
@@ -195,7 +197,7 @@ public class MainWindow : Gtk.Window {
 
 		init_pathbar();
 
-		init_sidebar();
+		init_sidebar_layoutbox_and_properties_panel();
 
 		init_layout_box();
 
@@ -229,7 +231,7 @@ public class MainWindow : Gtk.Window {
 
 		//sidebar.refresh();
 
-		reset_sidebar_width();
+		reset_sidebar_position();
 
 		statusbar.refresh();
 
@@ -242,6 +244,8 @@ public class MainWindow : Gtk.Window {
 		window_is_ready = true;
 
 		sidebar.refresh(); // after setting flag
+
+		propbar.refresh();
 
 		if (App.first_run){
 
@@ -334,26 +338,20 @@ public class MainWindow : Gtk.Window {
 		vbox_main.add(pathbar);
 	}
 
-	private void init_sidebar(){
+	private void init_sidebar_layoutbox_and_properties_panel(){
 
-		// add a horizontal pane (pane_nav) to the window
+		// add a horizontal pane (pane_nav) to the window ----------------------
 
-		var pane = new Gtk.Paned (Gtk.Orientation.HORIZONTAL);
+		var pane = new Gtk.Paned(Gtk.Orientation.HORIZONTAL);
 		//pane.position = 300;
 		//pane.margin = 3;
 		vbox_main.add(pane);
+		
 		pane_nav = pane;
 
 		// add the navigation box to the left pane of pane_nav
 		sidebar = new Sidebar(null,null,null);
-		pane_nav.pack1(sidebar, false, false); // resize, shrink
-
-		/*DeviceMonitor.get_monitor().changed.connect(()=>{
-			if (sidebar == null){ return; }
-			if (window_is_ready) {
-				sidebar.refresh();
-			}
-		});*/
+		pane_nav.pack1(sidebar, true, true); // resize, shrink
 
 		App.trashcan.query_completed.connect(()=>{
 			if (sidebar == null){ return; }
@@ -361,11 +359,27 @@ public class MainWindow : Gtk.Window {
 				sidebar.refresh();
 			}
 		});
+
+		// add a horizontal pane (pane_nav) to the window ----------------------
+
+		pane = new Gtk.Paned(Gtk.Orientation.HORIZONTAL);
+		pane_nav.pack2(pane, true, true); // resize, shrink
+		
+		pane_prop = pane;
+
+		// add the layoutbox to the left pane of pane_props
+		layout_box = new LayoutBox();
+		//layout_box.expand = true;
+		pane_prop.pack1(layout_box, true, true); // resize, shrink
+
+		// add the properties panel to the right pane of pane_props
+		propbar = new FilePropertiesPanel(this);
+		gtk_hide(propbar);
+		pane_prop.pack2(propbar, true, true); // resize, shrink
 	}
 
 	private void init_layout_box(){
-		layout_box = new LayoutBox();
-		pane_nav.pack2(layout_box, true, false); // resize, no shrink
+		
 	}
 	
 	private void initialize_views(){
@@ -759,15 +773,6 @@ public class MainWindow : Gtk.Window {
 		log_debug("MainWindow: refresh_treemodels(): exit");
 	}
 
-	public void reset_sidebar_width(){
-		if (App.sidebar_visible){
-			pane_nav.position = App.sidebar_position;
-		}
-		else{
-			pane_nav.position = 0; // set default size
-		}
-	}
-
 	public void reset_view_size_defaults(){
 
 		App.listview_font_scale = Main.LV_FONT_SCALE;
@@ -799,7 +804,18 @@ public class MainWindow : Gtk.Window {
 			v.refresh(false, false);
 		}
 	}
+
+	// sidebar ----------------
 	
+	public void reset_sidebar_position(){
+		if (App.sidebar_visible){
+			pane_nav.position = Main.DEFAULT_SIDEBAR_POSITION;
+		}
+		else{
+			pane_nav.position = 0; // set default size
+		}
+	}
+
 	public void save_sidebar_position(){
 		if (sidebar.visible && (pane_nav.position > 0)){
 			log_debug("MainWindow: save_sidebar_position: %d".printf(pane_nav.position));
@@ -814,6 +830,48 @@ public class MainWindow : Gtk.Window {
 				App.sidebar_position = 250;
 			}
 			pane_nav.position = App.sidebar_position;
+		}
+	}
+
+	// propbar ----------------
+	
+	public void reset_propbar_position(){
+		if (propbar.visible){
+			pane_prop.position = Main.DEFAULT_PROPBAR_POSITION;
+		}
+	}
+
+	public void save_propbar_position(){
+		if (propbar.visible){
+			log_debug("MainWindow: save_propbar_position: %d".printf(pane_prop.position));
+			App.propbar_position = pane_prop.position;
+		}
+	}
+
+	public void restore_propbar_position(){
+		if (propbar.visible){
+			log_debug("MainWindow: restore_propbar_position: %d".printf(App.propbar_position));
+			//if (App.propbar_position < 10){
+			//	App.propbar_position = 250;
+			//}
+			pane_prop.position = App.propbar_position;
+		}
+	}
+
+	public void toggle_properties_panel(){
+
+		if (active_pane != null){
+			
+			var view = active_pane.view;
+
+			if (view != null){
+				
+				var selected = view.get_selected_items();
+				
+				if (selected.size > 0){
+					propbar.show_properties_for_file(selected[0]);
+				}
+			}
 		}
 	}
 

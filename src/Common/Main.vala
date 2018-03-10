@@ -70,6 +70,7 @@ public class Main : GLib.Object {
 	public static int TV_PADDING = 2;
 
 	public static int DEFAULT_SIDEBAR_POSITION = 200;
+	public static int DEFAULT_PROPBAR_POSITION = 600;
 
 	public static string REQUIRED_COLUMNS = "name,indicator,spacer";
 	public static string REQUIRED_COLUMNS_END = "spacer";
@@ -156,6 +157,9 @@ public class Main : GLib.Object {
 	public int sidebar_position = DEFAULT_SIDEBAR_POSITION;
 	public string sidebar_collapsed_sections = "";
 
+	public bool propbar_visible = false;
+	public int propbar_position = DEFAULT_PROPBAR_POSITION;
+
 	public int bookmarks_position = 300;
 
 	public bool headerbar_enabled = false;
@@ -176,6 +180,7 @@ public class Main : GLib.Object {
 	public bool toolbar_item_reload = true;
 	public bool toolbar_item_home = true;
 	public bool toolbar_item_terminal = true;
+	public bool toolbar_item_properties = true;
 	public bool toolbar_item_hidden = true;
 	public bool toolbar_item_dual_pane = true;
 	public bool toolbar_item_view = true;
@@ -616,6 +621,9 @@ public class Main : GLib.Object {
 		config.set_string_member("sidebar_action_button", sidebar_action_button.to_string());
 		config.set_string_member("sidebar_collapsed_sections", sidebar_collapsed_sections);
 
+		config.set_string_member("propbar_visible", propbar_visible.to_string());
+		config.set_string_member("propbar_position", propbar_position.to_string());
+
 		config.set_string_member("bookmarks_position", bookmarks_position.to_string());
 
 		//save headerbar_enabled_temp instead of headerbar_enabled
@@ -663,6 +671,7 @@ public class Main : GLib.Object {
 		config.set_string_member("toolbar_item_reload", toolbar_item_reload.to_string());
 		config.set_string_member("toolbar_item_home", toolbar_item_home.to_string());
 		config.set_string_member("toolbar_item_terminal", toolbar_item_terminal.to_string());
+		config.set_string_member("toolbar_item_properties", toolbar_item_properties.to_string());
 		config.set_string_member("toolbar_item_hidden", toolbar_item_hidden.to_string());
 		config.set_string_member("toolbar_item_dual_pane", toolbar_item_dual_pane.to_string());
 		config.set_string_member("toolbar_item_view", toolbar_item_view.to_string());
@@ -864,6 +873,7 @@ public class Main : GLib.Object {
 		toolbar_item_reload = json_get_bool_from_string(config, "toolbar_item_reload", toolbar_item_reload);
 		toolbar_item_home = json_get_bool_from_string(config, "toolbar_item_home", toolbar_item_home);
 		toolbar_item_terminal = json_get_bool_from_string(config, "toolbar_item_terminal", toolbar_item_terminal);
+		toolbar_item_properties = json_get_bool_from_string(config, "toolbar_item_properties", toolbar_item_properties);
 		toolbar_item_hidden = json_get_bool_from_string(config, "toolbar_item_hidden", toolbar_item_hidden);
 		toolbar_item_dual_pane = json_get_bool_from_string(config, "toolbar_item_dual_pane", toolbar_item_dual_pane);
 		toolbar_item_view = json_get_bool_from_string(config, "toolbar_item_view", toolbar_item_view);
@@ -959,7 +969,10 @@ public class Main : GLib.Object {
 		sidebar_position = json_get_int_from_string(config, "sidebar_position", sidebar_position);
 		sidebar_action_button = json_get_bool_from_string(config, "sidebar_action_button", sidebar_action_button);
 		sidebar_collapsed_sections = json_get_string(config, "sidebar_collapsed_sections", sidebar_collapsed_sections);
-
+		
+		propbar_visible = json_get_bool_from_string(config, "propbar_visible", propbar_visible);
+		propbar_position = json_get_int_from_string(config, "propbar_position", propbar_position);
+		
 		dm_hide_fs = json_get_bool_from_string(config, "dm_hide_fs", dm_hide_fs);
 		dm_hide_mp = json_get_bool_from_string(config, "dm_hide_mp", dm_hide_mp);
 		dm_hide_size = json_get_bool_from_string(config, "dm_hide_size", dm_hide_size);

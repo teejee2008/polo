@@ -61,6 +61,7 @@ public class FileViewToolbar : Gtk.Toolbar, IPaneActive {
 	private Gtk.ToolButton btn_home;
 	//private Gtk.ToolButton btn_hidden;
 	private Gtk.ToolButton btn_terminal;
+	private Gtk.ToolButton btn_properties;
 	//private Gtk.MenuToolButton btn_dual_pane;
 	private Gtk.ToolButton btn_view;
 	private Gtk.ToolButton btn_bookmarks;
@@ -79,6 +80,7 @@ public class FileViewToolbar : Gtk.Toolbar, IPaneActive {
 	private Gtk.Image img_home;
 	//private Gtk.Image img_hidden;
 	private Gtk.Image img_terminal;
+	private Gtk.Image img_properties;
 	//private Gtk.Image img_dual_pane;
 	private Gtk.Image img_view;
 	private Gtk.Image img_bookmarks;
@@ -132,6 +134,8 @@ public class FileViewToolbar : Gtk.Toolbar, IPaneActive {
 		//add_toolbar_button_for_show_hidden();
 
 		add_toolbar_button_for_open_terminal();
+
+		add_toolbar_button_for_properties();
 
 		add_toolbar_separator_spacer();
 
@@ -442,6 +446,26 @@ public class FileViewToolbar : Gtk.Toolbar, IPaneActive {
 		});
 	}
 
+	private void add_toolbar_button_for_properties(){
+
+		var button = new Gtk.ToolButton(null,null);
+		button.label = _("Properties");
+		button.set_tooltip_text (_("Toggle file properties panel"));
+		button.is_important = true;
+		add(button);
+		btn_properties = button;
+
+		img_properties = new Gtk.Image();
+		button.set_icon_widget(img_properties);
+
+		gtk_apply_css({ button }, "padding-left: 2px; padding-right: 2px;");
+
+		button.clicked.connect(() => {
+			
+			window.toggle_properties_panel();
+		});
+	}
+
 	private void add_toolbar_separator_spacer(){
 		separator_spacer = new Gtk.SeparatorToolItem();
 		separator_spacer.set_draw (false);
@@ -585,6 +609,10 @@ public class FileViewToolbar : Gtk.Toolbar, IPaneActive {
 			this.add(btn_terminal);
 		}
 
+		if (App.toolbar_item_properties){
+			this.add(btn_properties);
+		}
+
 		if (is_global){
 			this.add(separator_spacer);
 			this.add(btn_settings);
@@ -617,6 +645,7 @@ public class FileViewToolbar : Gtk.Toolbar, IPaneActive {
 		img_bookmarks.pixbuf = IconManager.lookup("user-bookmarks-symbolic", icon_size_actual);
 		img_devices.pixbuf = IconManager.lookup("drive-harddisk-symbolic", icon_size_actual);
 		img_terminal.pixbuf = IconManager.lookup("terminal-symbolic", icon_size_actual);
+		img_properties.pixbuf = IconManager.lookup("document-properties", icon_size_actual);
 
 		img_settings.pixbuf = IconManager.lookup("preferences-system-symbolic", icon_size_actual);
 		img_donate.pixbuf = IconManager.lookup("donate", icon_size_actual);

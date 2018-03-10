@@ -488,6 +488,23 @@ public class Settings : Gtk.Box, IPaneActive {
 		});
 	}
 
+	private void add_toolbar_item_properties(Gtk.Container box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Properties"));
+		box.add(chk);
+
+		chk.active = App.toolbar_item_properties;
+
+		chk.toggled.connect(()=>{
+
+			if (App.toolbar_item_properties == chk.active){ return; }
+
+			App.toolbar_item_properties = chk.active;
+
+			window.toolbar.refresh_items();
+		});
+	}
+
 	/*private void add_toolbar_item_hidden(Gtk.Container box){
 
 		var chk = new Gtk.CheckButton.with_label(_("Hidden"));

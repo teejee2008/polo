@@ -297,7 +297,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 			sg_label);
 
 		item.activate.connect (() => {
-			var win = new PropertiesWindow.for_device(device);
+			var win = new FilePropertiesWindow.for_device(device);
 			//log_msg("111");
 			win.show_all();
 		});

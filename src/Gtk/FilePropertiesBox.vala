@@ -1,5 +1,5 @@
 /*
- * PropertiesWindow.vala
+ * FilePropertiesBox.vala
  *
  * Copyright 2012-18 Tony George <teejeetech@gmail.com>
  *
@@ -33,23 +33,14 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
-public class PropertiesWindow : Gtk.Window {
+public class FilePropertiesBox : Gtk.Box {
 
-	//private Gtk.Box vbox_main;
-	private Gtk.DrawingArea area_archive;
-	private Gtk.DrawingArea area_fs;
 	private FileItem? file_item;
 	private FileItem? dir_item;
-	private Device? device;
-	private MediaFile mfile;
 
 	private bool file_is_remote {
 		get { return (file_item != null) && file_item.file_path.has_prefix(App.rclone_mounts); }
 	}
-
-	private Gtk.Box header_box;
-	private Gtk.StackSwitcher switcher;
-	private Gtk.Stack stack;
 
 	private Gtk.SizeGroup group_label;
 	private Gtk.SizeGroup group1_value;
@@ -68,124 +59,85 @@ public class PropertiesWindow : Gtk.Window {
 
 	private signal void file_touched();
 
-	public PropertiesWindow.for_file(FileItem _file_item) {
+	private Gtk.Window window;
+
+	private bool panel_mode = false;
+
+	public FilePropertiesBox(Gtk.Window parent_window, bool _panel_mode){
+		//base(Gtk.Orientation.VERTICAL, 6); // issue with vala
+		Object(orientation: Gtk.Orientation.VERTICAL, spacing: 6); // work-around
+
+		window = parent_window;
+
+		panel_mode = _panel_mode;
+
+		gtk_container_remove_children(this);
+	}
+
+	public Gtk.SizeGroup show_properties_for_file(FileItem _file_item){
 
 		file_item = _file_item;
 		dir_item = file_item.is_directory ? file_item : (new FileItem.from_path(file_item.file_location));
 
 		file_item.query_file_info();
 		
-		init_window();
+		init_ui_for_file();
+
+		this.show_all();
+
+		return group_label; // will be used by FilePropertiesPanel to align contents in FilePermissionsBox
 	}
 
-	public PropertiesWindow.for_device(Device _device) {
+	private void init_ui_for_file(){
+
+		gtk_container_remove_children(this);
 		
-		device = _device;
-
-		init_window();
-	}
-
-	public void init_window () {
-
-		set_transient_for(App.main_window);
-		set_modal(true);
-		//set_type_hint(Gdk.WindowTypeHint.DIALOG); // Do not use; Hides close button on some window managers
-		set_skip_taskbar_hint(true);
-		set_skip_pager_hint(true);
-		window_position = WindowPosition.CENTER_ON_PARENT;
-		deletable = true;
-		resizable = true;
-		icon = get_app_icon(16,".svg");
-		title = _("Properties");
-		
-		// vbox_main
-		var vbox_main = new Gtk.Box(Gtk.Orientation.VERTICAL, 0);
-		vbox_main.set_size_request(600, 400);
-		add(vbox_main);
-
-		header_box = new Gtk.Box(Orientation.HORIZONTAL, 6);
-		header_box.margin = 0;
-		header_box.get_style_context().add_class(Gtk.STYLE_CLASS_PRIMARY_TOOLBAR);
-		vbox_main.add(header_box);
-
-		switcher = new Gtk.StackSwitcher();
-		switcher.margin = 6;
-		header_box.add (switcher);
-
-		var label = new Gtk.Label("");
-		label.hexpand = true;
-		header_box.add(label);
-
-		stack = new Gtk.Stack();
-		stack.set_transition_duration (200);
-        stack.set_transition_type (Gtk.StackTransitionType.SLIDE_LEFT_RIGHT);
-		vbox_main.add(stack);
-
-		switcher.set_stack(stack);
-
-		// hide tabs when showing only device properties
-		bool show_tabs = (device == null);
-		switcher.set_no_show_all(!show_tabs);
-		header_box.set_no_show_all(!show_tabs);
-
 		group_label = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
 		group1_value = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
 		group2_value = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
-		
-		init_tab_properties();
-
-		init_tab_fs();
-
-		init_tab_permissions();
-
-		init_tab_mediainfo();
-	}
-
-	// properties tab
-
-	private void init_tab_properties(){
 
 		if (file_item == null){ return; }
 
-		log_debug("PropertiesWindow: init_tab_properties()");
-		
+		log_debug("FilePropertiesBox: init_ui_for_file()");
+
 		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 24);
-		hbox.margin = 12;
-		//hbox.margin_left = 24;
-		//hbox.margin_bottom = 24;
-		//hbox.margin_right = 24;
-		stack.add_titled (hbox, _("General"), _("General"));
-
-		if (file_item is FileItemArchive){
-
-			//ratio bar
-			var area = new Gtk.DrawingArea();
-			area.set_size_request(30, 40);
-			area.vexpand = true;
-			hbox.add(area);
-			area_archive = area;
-
-			area.draw.connect(area_archive_draw);
-		}
-
+		this.add(hbox);
+		
 		var vbox = new Gtk.Box(Orientation.VERTICAL, 6);
 		hbox.add(vbox);
 
-		//Label label;
+		if (panel_mode){
+			init_preview_image(vbox); 
+		}
 
 		// name ----------------
 		
 		var txt = file_item.display_name;
-		add_property(vbox, _("Name"), txt);
+		var label = add_property(vbox, _("Name"), txt);
+
+		if (panel_mode){
+			//label.set_size_request(-1, 100);
+		}
 
 		// location -----------
 		
 		txt = file_item.display_location;
 
-		add_property(vbox, _("Location"), txt);
+		label = add_property(vbox, _("Location"), txt);
+
+		if (panel_mode){
+			//label.set_size_request(-1, 100);
+		}
+
+		// symlink target --------------------
 
 		if (file_item.is_symlink){
-			add_property(vbox, _("Link Target"), file_item.symlink_target);
+			
+			label = add_property(vbox, _("Target"), file_item.symlink_target);
+
+			if (panel_mode){
+				//label.set_size_request(-1, 100);
+			}
 		}
 
 		// size -------------
@@ -368,8 +320,10 @@ public class PropertiesWindow : Gtk.Window {
 		add_group_combo(vbox);
 
 		// preview ---------------------
-		
-		init_preview_image(hbox); 
+
+		if (!panel_mode){
+			init_preview_image(hbox); 
+		}
 	} 
  
 	private void init_preview_image(Gtk.Box hbox){
@@ -404,405 +358,6 @@ public class PropertiesWindow : Gtk.Window {
 				image.pixbuf = IconManager.generic_icon_file(256);
 			}
 		}
-	}
-
-	private bool area_archive_draw(Cairo.Context context) {
-
-		if (file_item is FileItemArchive == false){ return true; }
-		
-		var arch = (FileItemArchive) file_item;
-		double ratio = (arch.archive_size * 1.0) / arch.file_size;
-
-		var color_blue_100 = Gdk.RGBA();
-		color_blue_100.parse("#BBDEFB");
-		color_blue_100.alpha = 1.0;
-
-		var color_grey_700 = Gdk.RGBA();
-		color_grey_700.parse("#616161");
-		color_grey_700.alpha = 1.0;
-
-		var color_white = Gdk.RGBA();
-		color_white.parse("white");
-		color_white.alpha = 1.0;
-
-		var area = area_archive;
-
-		int w = area.get_allocated_width();
-		int h = area.get_allocated_height();
-
-		//------ BEGIN CONTEXT -------------------------------------------------
-		context.set_line_width (1);
-		Gdk.cairo_set_source_rgba (context, color_blue_100);
-		context.rectangle(0, 0, w, h);
-		context.fill();
-		//------ END CONTEXT ---------------------------------------------------
-
-		//------ BEGIN CONTEXT -------------------------------------------------
-		context.set_line_width (1);
-		Gdk.cairo_set_source_rgba (context, color_grey_700);
-		context.rectangle(0, h * (1.0 - ratio), w, (h * ratio));
-		context.fill();
-		//------ END CONTEXT ---------------------------------------------------
-
-		//------ BEGIN CONTEXT -------------------------------------------------
-		context.set_line_width (1);
-		Gdk.cairo_set_source_rgba (context, color_grey_700);
-		context.rectangle(0, 0, w, h);
-		context.stroke();
-		//------ END CONTEXT ---------------------------------------------------
-
-		//------ BEGIN CONTEXT -------------------------------------------------
-		context.set_line_width (1);
-		Gdk.cairo_set_source_rgba (context, color_white);
-		context.move_to (3, h-6);
-		context.show_text("%.0f%%".printf(ratio * 100.00));
-		context.stroke();
-		//------ END CONTEXT ---------------------------------------------------
-
-		return true;
-	}
-
-	// filesystem tab
-
-	private void init_tab_fs(){
-
-		if ((file_item != null) && ((file_item is FileItemArchive) || (file_item is FileItemCloud) || file_is_remote)){ return; }
-
-		log_debug("PropertiesWindow: init_tab_fs()");
-		
-		var hbox = new Gtk.Box(Orientation.VERTICAL, 12);
-		hbox.margin = 12;
-		stack.add_titled (hbox, _("Filesystem"), _("Filesystem"));
-
-		// create ui ---------------------------------------------
-
-		var vbox = new Gtk.Box(Orientation.VERTICAL, 6);
-		hbox.add(vbox);
-
-		group_label = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
-		group1_value = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
-
-		// get device for file_item ---------------------------
-		
-		if (dir_item == null){
-			add_property(vbox, _("Device"), _("Unknown"));
-			return;
-		}
-
-		device = Device.get_device_by_path(dir_item.file_path);
-		
-		if (device != null){
-			device = Device.get_device_by_name(device.device);
-		}
-		else{
-			add_property(vbox, _("Device"), _("Unknown"));
-			log_error("device is NULL: Device.get_device_by_path(%s)".printf(dir_item.file_path));
-			return;
-		}
-
-		add_property(vbox, _("Device"), device.device);
-
-		if (device.mapped_name.length > 0){
-			add_property(vbox, _("Mapped"), "/dev/mapper/%s".printf(device.mapped_name));
-		}
-
-		add_property(vbox, _("UUID"), device.uuid);
-
-		add_property(vbox, _("Label"), ((device.label.length > 0) ? device.label : _("(empty)")));
-
-		add_property(vbox, _("PartLabel"), ((device.partlabel.length > 0) ? device.partlabel : _("(empty)")));
-
-		add_property(vbox, _("FileSystem"), device.fstype);
-
-		if (device.is_mounted){
-			add_property(vbox, _("MountPath"), device.mount_points[0].mount_point);
-		}
-
-		add_property(vbox, _("ReadOnly"), ((device.read_only ? "Yes" : "No")));
-
-		add_property(vbox, _("Removable"), ((device.removable ? "Yes" : "No")));
-
-		var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
-		vbox.add(sep);
-
-		// create tooltip ---------------------------
-
-		string txt = "%s (%'ld bytes)".printf(format_file_size(device.size_bytes), device.size_bytes);
-
-		add_property(vbox, _("Size"), txt);
-
-		txt = "%s (%'ld bytes) (%.0f%%)".printf(
-			format_file_size(device.used_bytes),
-			device.used_bytes,
-			(device.used_bytes * 100.0) / device.size_bytes);
-
-		add_property(vbox, _("Used"), txt);
-
-		txt = "%s (%'ld bytes) (%.0f%%)".printf(
-			format_file_size(device.free_bytes),
-			device.free_bytes,
-			(device.free_bytes * 100.0) / device.size_bytes);
-
-		add_property(vbox, _("Available"), txt);
-
-		var dummy = new Gtk.Label("");
-		dummy.vexpand = true;
-		vbox.add(dummy);
-
-		// ratio bar ------------------------------------------
-		
-		var area = new Gtk.DrawingArea();
-		area.set_size_request(-1, 30);
-		area.hexpand = true;
-		area.margin_top = 6;
-		area.margin_left = 6;
-		area.margin_right = 6;
-		vbox.add(area);
-		area_fs = area;
-
-		area.draw.connect(area_fs_draw);
-	}
-
-	private bool area_fs_draw(Cairo.Context context) {
-
-		if (device == null) { return true; }
-
-		double used = (device.used_bytes * 1.0) / device.size_bytes;
-
-		var color_white = Gdk.RGBA();
-		color_white.parse("white");
-		color_white.alpha = 1.0;
-
-		var color_black = Gdk.RGBA();
-		color_black.parse("#606060");
-		color_black.alpha = 1.0;
-
-		var color_red = Gdk.RGBA();
-		color_red.parse("red");
-		color_red.alpha = 1.0;
-
-		var color_blue_200 = Gdk.RGBA();
-		color_blue_200.parse("#90CAF9");
-		color_blue_200.alpha = 1.0;
-
-		var color_green_300 = Gdk.RGBA();
-		color_green_300.parse("#81C784");
-		color_green_300.alpha = 1.0;
-
-		var color_yellow_300 = Gdk.RGBA();
-		color_yellow_300.parse("#FFA500");
-		color_yellow_300.alpha = 1.0;
-
-		var color_red_300 = Gdk.RGBA();
-		color_red_300.parse("#E57373");
-		color_red_300.alpha = 1.0;
-
-		Gdk.RGBA color_bar = color_green_300;
-
-		int line_width = 2;
-
-		var area = area_fs;
-
-		int w = area.get_allocated_width();
-		int h = area.get_allocated_height();
-
-		if (used >= 0.75){
-			color_bar = color_red_300;
-		}
-		else if (used >= 0.50){
-			color_bar = color_yellow_300;
-		}
-		else{
-			color_bar = color_green_300;
-		}
-
-		int x_level = (int) (w * used);
-
-		Gdk.cairo_set_source_rgba (context, color_black);
-		context.set_line_width (line_width);
-		context.rectangle(0, 0, w, h);
-		context.stroke();
-
-		Gdk.cairo_set_source_rgba (context, color_bar);
-		context.set_line_width (line_width);
-		context.rectangle(line_width, line_width, x_level, h - (line_width * 2));
-		context.fill();
-
-		return true;
-	}
-
-	// permissions tab
-
-	private void init_tab_permissions(){
-
-		if ((file_item == null) || (file_item.perms.length == 0)){ return; }
-			
-		if ((file_item is FileItemArchive) || (file_item is FileItemCloud)){ return; }
-		
-		log_debug("PropertiesWindow: init_tab_permissions()");
-		
-		var vbox = new Gtk.Box(Orientation.VERTICAL, 6);
-		vbox.margin = 12;
-		stack.add_titled (vbox, _("Permissions"), _("Permissions"));
-
-		var label = new Gtk.Label("<b>%s:</b>".printf(_("Permissions")));
-		label.set_use_markup(true);
-		label.xalign = 0.0f;
-		label.margin_bottom = 6;
-		vbox.add(label);
-
-		//grid
-		var grid = new Gtk.Grid();
-		grid.set_column_spacing(12);
-		grid.set_row_spacing(6);
-		grid.margin_left = 6;
-		grid.margin_right = 12;
-		vbox.add(grid);
-
-		label = new Gtk.Label(_("User"));
-		label.xalign =  1.0f;
-		grid.attach(label, 0, 1, 1, 1);
-
-		label = new Gtk.Label(_("Group"));
-		label.xalign =  1.0f;
-		grid.attach(label, 0, 2, 1, 1);
-
-		label = new Gtk.Label(_("Others"));
-		label.xalign =  1.0f;
-		grid.attach(label, 0, 3, 1, 1);
-
-		add_option(grid, 1, 1, "u", "r", _("Read"));
-
-		add_option(grid, 2, 1, "u", "w", _("Write"));
-
-		add_option(grid, 3, 1, "u", "x", _("Execute"));
-
-		add_option(grid, 1, 2, "g", "r", _("Read"));
-
-		add_option(grid, 2, 2, "g", "w", _("Write"));
-
-		add_option(grid, 3, 2, "g", "x", _("Execute"));
-
-		add_option(grid, 1, 3, "o", "r", _("Read"));
-
-		add_option(grid, 2, 3, "o", "w", _("Write"));
-
-		add_option(grid, 3, 3, "o", "x", _("Execute"));
-
-		var sep = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
-		grid.attach(sep, 0, 4, 5, 1);
-
-		label = new Gtk.Label(_("Special bits"));
-		label.xalign =  1.0f;
-		grid.attach(label, 0, 5, 1, 1);
-
-		add_option(grid, 1, 5, "u", "s", "SUID");
-
-		add_option(grid, 2, 5, "g", "s", "SGID");
-
-		add_option(grid, 3, 5, "", "t", "Sticky");
-	}
-
-	private void add_option(Gtk.Grid grid, int col,  int row, string user, string mode_bit, string? text = null){
-
-		var chk = new Gtk.CheckButton.with_label(text);
-		//chk.margin_left = 6;
-		grid.attach(chk, col, row, 1, 1);
-
-		chk.set_data<string>("user",user);
-		chk.set_data<string>("mode",mode_bit);
-
-		if (mode_bit == "t"){
-			chk.set_tooltip_text(_("Protects files in shared directory from being deleted by other users. Only the owner of the file, owner of the directory or root user will be able to rename or delete the file.\n\nThis is useful for shared directories. Only the owners of files will be able to rename or delete files created by them. They will not be able to modify files created by other users."));
-		}
-		else if ((mode_bit == "s") && (user == "u")){
-			chk.set_tooltip_text(_("File will be executed with the priviledges of the file's owner instead of priviledges of user who is executing the file.\n\nUseful for executable files. Allows anybody who has permission to execute the file, to run it with the owner's priviledges."));
-		}
-		else if ((mode_bit == "s") && (user == "g")){
-			chk.set_tooltip_text(_("File will be executed with the priviledges of the file's group instead of priviledges of user who is executing the file.\n\nUseful for executable files. Allows anybody who has permission to execute the file, to run it with the group's priviledges."));
-		}
-
-		switch(user){
-		case "u":
-			switch(mode_bit){
-			case "r":
-				chk.active = (file_item.perms[1] == "r");
-				break;
-			case "w":
-				chk.active = (file_item.perms[2] == "w");
-				break;
-			case "x":
-				chk.active = (file_item.perms[3] == "x") || (file_item.perms[3] == "s");
-				break;
-			case "s":
-				chk.active = (file_item.perms[3] == "s");
-				break;
-			}
-			break;
-		case "g":
-			switch(mode_bit){
-			case "r":
-				chk.active = (file_item.perms[4] == "r");
-				break;
-			case "w":
-				chk.active = (file_item.perms[5] == "w");
-				break;
-			case "x":
-				chk.active = (file_item.perms[6] == "x") || (file_item.perms[6] == "s");
-				break;
-			case "s":
-				chk.active = (file_item.perms[6] == "s");
-				break;
-			}
-			break;
-		case "o":
-			switch(mode_bit){
-			case "r":
-				chk.active = (file_item.perms[7] == "r");
-				break;
-			case "w":
-				chk.active = (file_item.perms[8] == "w");
-				break;
-			case "x":
-				chk.active = (file_item.perms[9] == "x") || (file_item.perms[9] == "t");
-				break;
-			}
-			break;
-		case "":
-			switch(mode_bit){
-			case "t":
-				chk.active = (file_item.perms[9] == "t");
-				break;
-			}
-			break;
-		}
-
-		chk.toggled.connect(chk_permission_toggled);
-
-		chk.sensitive = file_item.is_local;
-	}
-
-	private void chk_permission_toggled(Gtk.ToggleButton chk){
-
-		string user = chk.get_data<string>("user");
-		string mode = chk.get_data<string>("mode");
-
-		if (chk.active){
-			if (!chmod(file_item.file_path, user + "+" + mode, this)){
-				chk.toggled.disconnect(chk_permission_toggled);
-				chk.active = !chk.active;
-				chk.toggled.connect(chk_permission_toggled);
-			}
-		}
-		else{
-			if (!chmod(file_item.file_path, user + "-" + mode, this)){
-				chk.toggled.disconnect(chk_permission_toggled);
-				chk.active = !chk.active;
-				chk.toggled.connect(chk_permission_toggled);
-			}
-		}
-
-		file_item.query_file_info();
 	}
 
 	private void add_user_combo(Gtk.Box box){
@@ -927,7 +482,7 @@ public class PropertiesWindow : Gtk.Window {
 
 		combo.changed.disconnect(combo_owner_changed);
 
-		gtk_set_busy(true, this);
+		gtk_set_busy(true, window);
 		
 		string user = gtk_combobox_get_value(combo, 0, file_item.owner_user);
 
@@ -936,11 +491,11 @@ public class PropertiesWindow : Gtk.Window {
 		string std_out, std_err;
 		int status = App.exec_admin(cmd, out std_out, out std_err);
 
-		gtk_set_busy(false, this);
+		gtk_set_busy(false, window);
 
 		if (status != 0){
 			
-			gtk_messagebox(_("Failed to update Owner"), std_err, App.main_window, true);
+			gtk_messagebox(_("Failed to update Owner"), std_err, window, true);
 			
 			combo.active = combo.get_data<int>("active");
 		}
@@ -954,7 +509,7 @@ public class PropertiesWindow : Gtk.Window {
 
 		combo.changed.disconnect(combo_group_changed);
 
-		gtk_set_busy(true, this);
+		gtk_set_busy(true, window);
 		
 		string group = gtk_combobox_get_value(combo, 0, file_item.owner_group);
 
@@ -963,11 +518,11 @@ public class PropertiesWindow : Gtk.Window {
 		string std_out, std_err;
 		int status = App.exec_admin(cmd, out std_out, out std_err);
 
-		gtk_set_busy(false, this);
+		gtk_set_busy(false, window);
 
 		if (status != 0){
 			
-			gtk_messagebox(_("Failed to update Group"), std_err, App.main_window, true);
+			gtk_messagebox(_("Failed to update Group"), std_err, window, true);
 			
 			combo.active = combo.get_data<int>("active");
 		}
@@ -995,7 +550,7 @@ public class PropertiesWindow : Gtk.Window {
 
 		button.clicked.disconnect(btn_user_recursive);
 
-		gtk_set_busy(true, this);
+		gtk_set_busy(true, window);
 			
 		string user = gtk_combobox_get_value(cmb_user, 0, file_item.owner_user);
 
@@ -1004,11 +559,11 @@ public class PropertiesWindow : Gtk.Window {
 		string std_out, std_err;
 		int status = App.exec_admin(cmd, out std_out, out std_err);
 
-		gtk_set_busy(false, this);
+		gtk_set_busy(false, window);
 
 		if (status != 0){
 			
-			gtk_messagebox(_("Failed to update Owner"), std_err, App.main_window, true);
+			gtk_messagebox(_("Failed to update Owner"), std_err, window, true);
 		}
 
 		button.clicked.connect(btn_user_recursive);
@@ -1032,7 +587,7 @@ public class PropertiesWindow : Gtk.Window {
 
 		button.clicked.disconnect(btn_group_recursive);
 
-		gtk_set_busy(true, this);
+		gtk_set_busy(true, window);
 			
 		string group = gtk_combobox_get_value(cmb_group, 0, file_item.owner_group);
 
@@ -1041,96 +596,18 @@ public class PropertiesWindow : Gtk.Window {
 		string std_out, std_err;
 		int status = App.exec_admin(cmd, out std_out, out std_err);
 
-		gtk_set_busy(false, this);
+		gtk_set_busy(false, window);
 		
 		if (status != 0){
 			
-			gtk_messagebox(_("Failed to update Group"), std_err, App.main_window, true);
+			gtk_messagebox(_("Failed to update Group"), std_err, window, true);
 		}
 
 		button.clicked.connect(btn_group_recursive);
-	}	
-
-	/*private void add_info_bar(Gtk.Box box){
-
-		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
-		hbox.margin_top = 6;
-		box.add(hbox);
-
-		var label = new Gtk.Label(_("You don't have permission to change some permissions"));
-		label.xalign = 0.5f;
-		label.hexpand = true;
-		label.margin = 6;
-		hbox.add(label);
-
-		string css = " background-color: #FFC107; ";
-		gtk_apply_css(new Gtk.Widget[] { hbox }, css);
-
-		css = " color: #000000; ";
-		gtk_apply_css(new Gtk.Widget[] { label }, css);
-	}*/
-
-	// mediainfo tab
-
-	private void init_tab_mediainfo(){
-
-		if ((file_item == null) || file_item.is_directory || file_is_remote){ return; }
-
-		if ((file_item is FileItemArchive) || (file_item is FileItemCloud)){ return; }
-
-		log_debug("PropertiesWindow: init_tab_mediainfo()");
-		
-		mfile = new MediaFile(file_item.file_path);
-		mfile.query_mediainfo_formatted();
-
-		var vbox = new Gtk.Box(Orientation.VERTICAL, 12);
-		stack.add_titled (vbox, _("MediaInfo"), _("MediaInfo"));
-
-		//tv_info
-		var treeview = new Gtk.TreeView();
-		treeview.get_selection().mode = SelectionMode.SINGLE;
-		treeview.headers_visible = false;
-		treeview.expand = true;
-		treeview.insert_column_with_attributes (-1, _("Key"), new CellRendererText(), "text", 0);
-		treeview.insert_column_with_attributes (-1, _("Value"), new CellRendererText(), "text", 1);
-
-		var scrolled = new Gtk.ScrolledWindow(null, null);
-		scrolled.set_shadow_type (ShadowType.ETCHED_IN);
-		scrolled.hscrollbar_policy = PolicyType.AUTOMATIC;
-		scrolled.vscrollbar_policy = PolicyType.AUTOMATIC;
-		scrolled.expand = true;
-		scrolled.add(treeview);
-		vbox.add(scrolled);
-
-		var store = new Gtk.TreeStore (2, typeof (string), typeof (string));
-
-		TreeIter? iter0 = null;
-		TreeIter? iter1 = null;
-		int index = -1;
-		//store.append (out iter0, null);
-
-		//log_debug(mfile.InfoTextFormatted);
-
-		foreach (string line in mfile.InfoTextFormatted.split ("\n")){
-			if (line.strip() == "") { continue; }
-
-			index = line.index_of (":");
-
-			if (index == -1){
-				store.append (out iter0, null);
-				store.set (iter0, 0, line.strip());
-			}
-			else{
-				store.append (out iter1, iter0);
-				store.set (iter1, 0, line[0:index-1].strip());
-				store.set (iter1, 1, line[index+1:line.length].strip());
-			}
-		}
-		treeview.set_model(store);
-		treeview.expand_all();
 	}
 
-	// helpers
+	
+	// helpers ---------------------------
 
 	private Gtk.Label add_property(Gtk.Box box, string property_name, string property_value){
 
@@ -1151,7 +628,7 @@ public class PropertiesWindow : Gtk.Window {
 		label.yalign = 0.0f;
 		label.selectable = true;
 		hbox.add(label);
-		group1_value.add_widget(label);
+		//group1_value.add_widget(label);
 
 		label.max_width_chars = 40;
 		label.wrap = true;
@@ -1159,7 +636,6 @@ public class PropertiesWindow : Gtk.Window {
 
 		return label;
 	}
-
 
 	private Gtk.Entry add_property_accessed(Gtk.Box box, string property_name, string property_value){
 
@@ -1199,7 +675,7 @@ public class PropertiesWindow : Gtk.Window {
 		set_pointer_cursor_for_eventbox(ebox);
 
 		ebox.button_press_event.connect((event)=>{
-			menu_accessed = new TouchFileDateContextMenu(file_item, true, false, this, entry_accessed);
+			menu_accessed = new TouchFileDateContextMenu(file_item, true, false, window, entry_accessed);
 			menu_accessed.file_touched.connect(()=> { file_touched(); });
 			return menu_accessed.show_menu(null);
 		});
@@ -1245,7 +721,7 @@ public class PropertiesWindow : Gtk.Window {
 		set_pointer_cursor_for_eventbox(ebox);
 
 		ebox.button_press_event.connect((event)=>{
-			menu_modified = new TouchFileDateContextMenu(file_item, false, true, this, entry_modified);
+			menu_modified = new TouchFileDateContextMenu(file_item, false, true, window, entry_modified);
 			menu_modified.file_touched.connect(()=> { file_touched(); });
 			return menu_modified.show_menu(null);
 		});
@@ -1306,6 +782,7 @@ public class PropertiesWindow : Gtk.Window {
 	}
 
 	private void add_separator(Gtk.Box box){
+		
 		var separator = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
 		separator.margin_left = 12;
 		box.add(separator);

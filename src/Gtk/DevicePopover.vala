@@ -800,7 +800,7 @@ public class DevicePopover : Gtk.Popover {
 		var device = get_selected_device();
 		
 		if (device != null){
-			var win = new PropertiesWindow.for_device(device);
+			var win = new FilePropertiesWindow.for_device(device);
 			win.show_all();
 		}
 	}

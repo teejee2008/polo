@@ -215,7 +215,7 @@ public class WizardWindow : Gtk.Window {
 			App.statusbar_unified = false;
 			App.pathbar_unified = false;
 			App.sidebar_position = Main.DEFAULT_SIDEBAR_POSITION;
-			App.main_window.sidebar.sidebar_show();
+			App.main_window.sidebar.show_panel();
 
 			App.view_mode = ViewMode.ICONS;
 			App.main_window.layout_box.set_panel_layout(PanelLayout.SINGLE);
@@ -226,7 +226,7 @@ public class WizardWindow : Gtk.Window {
 			App.statusbar_unified = false;
 			App.pathbar_unified = false;
 			App.sidebar_position = Main.DEFAULT_SIDEBAR_POSITION;
-			App.main_window.sidebar.sidebar_show();
+			App.main_window.sidebar.show_panel();
 			App.main_window.layout_box.set_panel_layout(PanelLayout.SINGLE);
 
 			App.view_mode = ViewMode.LIST;
@@ -236,7 +236,7 @@ public class WizardWindow : Gtk.Window {
 		case LayoutStyle.DUAL_ICONS:
 			App.statusbar_unified = false;
 			App.pathbar_unified = false;
-			App.main_window.sidebar.sidebar_hide();
+			App.main_window.sidebar.hide_panel();
 			App.main_window.layout_box.set_panel_layout(PanelLayout.DUAL_VERTICAL);
 
 			App.view_mode = ViewMode.ICONS;
@@ -247,7 +247,7 @@ public class WizardWindow : Gtk.Window {
 		case LayoutStyle.DUAL_LIST:
 			App.statusbar_unified = false;
 			App.pathbar_unified = false;
-			App.main_window.sidebar.sidebar_hide();
+			App.main_window.sidebar.hide_panel();
 			App.main_window.layout_box.set_panel_layout(PanelLayout.DUAL_VERTICAL);
 
 			App.view_mode = ViewMode.LIST;
@@ -258,7 +258,7 @@ public class WizardWindow : Gtk.Window {
 		case LayoutStyle.QUAD:
 			App.statusbar_unified = true;
 			App.pathbar_unified = true;
-			App.main_window.sidebar.sidebar_hide();
+			App.main_window.sidebar.hide_panel();
 			App.main_window.layout_box.set_panel_layout(PanelLayout.QUAD);
 
 			App.view_mode = ViewMode.LIST;
@@ -271,12 +271,14 @@ public class WizardWindow : Gtk.Window {
 
 		App.main_window.refresh_pathbars();
 		App.main_window.refresh_statusbars();
-
+	
 		App.toolbar_dark = true;
 		App.main_window.toolbar.refresh_style();
 
 		App.sidebar_dark = true;
+		
 		App.main_window.sidebar.refresh();
+		App.main_window.propbar.refresh();
 
 		GtkTheme.set_gtk_theme_preferred();
 

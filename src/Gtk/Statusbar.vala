@@ -129,6 +129,8 @@ public class Statusbar : Gtk.Box {
 		
 		add_terminal_toggle();
 
+		add_properties_toggle();
+
 		//add_style_toggle();
 	}
 
@@ -460,6 +462,28 @@ public class Statusbar : Gtk.Box {
 		ebox.button_press_event.connect((event)=>{
 
 			pane.terminal.toggle();
+
+			return true;
+		});
+	}
+
+	private void add_properties_toggle(){
+
+		var img = IconManager.lookup_image("document-properties",16);
+		img.set_tooltip_text(_("Toggle file properties panel"));
+		//img.margin_left = 6;
+		//img.margin_right = 6;
+
+		var ebox = new Gtk.EventBox();
+		ebox.add(img);
+		add(ebox);
+		ebox_terminal = ebox;
+		
+		set_pointer_cursor_for_eventbox(ebox);
+
+		ebox.button_press_event.connect((event)=>{
+
+			window.toggle_properties_panel();
 
 			return true;
 		});

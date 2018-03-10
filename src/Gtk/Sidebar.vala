@@ -444,20 +444,20 @@ public class Sidebar : Gtk.Box {
 	public void refresh_visibility(){
 
 		if (App.sidebar_visible){
-			sidebar_show();
+			show_panel();
 		}
 		else{
-			sidebar_hide();
+			hide_panel();
 		}
 	}
 
-	public void sidebar_show(){
+	public void show_panel(){
 
-		log_debug("sidebar_show");
+		log_debug("Sidebar: show_panel()");
 
 		App.sidebar_visible = true;
 
-		this.set_no_show_all(false);
+		gtk_show(this);
 
 		refresh(); // calls show_all()
 
@@ -465,19 +465,29 @@ public class Sidebar : Gtk.Box {
 		window.restore_sidebar_position();
 	}
 
-	public void sidebar_hide(){
+	public void hide_panel(){
 
-		log_debug("sidebar_hide");
+		log_debug("Sidebar: hide_panel()");
 
 		window.save_sidebar_position();
 
 		App.sidebar_visible = false;
 
-		this.set_no_show_all(true);
-		this.hide();
+		gtk_hide(this);
 	}
 
+	public void toggle(){
 
+		log_debug("Sidebar: toggle()");
+		
+		if (this.visible){
+			hide_panel();
+		}
+		else{
+			show_panel();
+		}
+	}
+	
 	private SidebarItem add_header_locations(string name){
 		var item = new SidebarItem.for_header(name, SidebarItemType.HEADER_LOCATIONS);
 		add_missing_node_key(item);
