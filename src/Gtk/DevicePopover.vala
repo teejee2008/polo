@@ -773,13 +773,12 @@ public class DevicePopover : Gtk.Popover {
 		}
 	}
 
-
 	private void btn_eject_clicked(){
 
 		var device = get_selected_device();
 		
 		if (device != null){
-			//DeviceContextMenu.browse_device(device, pane, window);
+			eject_device(device);
 		}
 	}
 
@@ -1082,6 +1081,32 @@ public class DevicePopover : Gtk.Popover {
 
 		return fname;
 	}
+
+	public void eject_device(Device dev){
+
+		if (!view.check_tool("polo-disk")){ return; }
+
+		string cmd = "polo-disk eject --device /dev/%s".printf(dev.pkname_toplevel);
+		
+		this.sensitive = false;
+
+		gtk_set_busy(true, App.main_window);
+
+		string std_out, std_err;
+		int status = App.exec_admin(cmd, out std_out, out std_err);
+
+		gtk_set_busy(false, App.main_window);
+
+		if (status == 0){
+			//gtk_messagebox(_("Formatting Complete"), std_out, App.main_window, true);
+		}
+		else{
+			//gtk_messagebox(_("Formatting Failed"), std_out + "\n\n" + std_err, App.main_window, true);
+		}
+
+		this.sensitive = true;
+	}
+
 }
 
 

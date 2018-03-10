@@ -1,6 +1,9 @@
 
 
-
+	extern void exit(int exit_code);
+	
+	// process ------------------------------------------
+	
 	public string get_cmd_path (string cmd_tool){
 
 		try {
@@ -39,6 +42,41 @@
 		return file_path.replace("'","'\\''");
 	}
 
+	public void check_admin_access(){
+		
+		if (!user_is_admin()){
+			
+			log_error("Admin access is needed!");
+			log_error("Run as root, or using 'sudo' or 'pkexec'");
+			exit(1);
+		}
+	}
+
+	public bool user_is_admin (){
+
+		/* Check if current application is running with admin priviledges */
+
+		try{
+			// create a process
+			string[] argv = { "sleep", "10" };
+			Pid procId;
+			Process.spawn_async(null, argv, null, SpawnFlags.SEARCH_PATH, null, out procId);
+
+			// try changing the priority
+			Posix.setpriority (Posix.PRIO_PROCESS, procId, -5);
+
+			// check if priority was changed successfully
+			if (Posix.getpriority (Posix.PRIO_PROCESS, procId) == -5)
+				return true;
+			else
+				return false;
+		}
+		catch (Error e) {
+			log_error (e.message);
+			return false;
+		}
+	}
+	
 	// file ---------------------------------------
 
 	public string file_parent(string file_path){
@@ -200,3 +238,196 @@
 			return false;
 		}
 	}
+
+	// logging -----------------------------------------
+
+	public bool LOG_ENABLE = true;
+	public bool LOG_TIMESTAMP = false;
+	public bool LOG_COLORS = true;
+	public bool LOG_DEBUG = false;
+	public bool LOG_TRACE = false;
+	public bool LOG_COMMANDS = false;
+	
+	public void log_msg (string message, bool highlight = false, bool is_warning = false){
+
+		if (!LOG_ENABLE) { return; }
+
+		string msg = "";
+
+		if (LOG_COLORS){
+			if (highlight){
+				msg += "\033[1;38;5;34m";
+			}
+			else if (is_warning){
+				msg += "\033[1;38;5;93m";
+			}
+		}
+
+		if (LOG_TIMESTAMP){
+			msg += "[" + timestamp(true) +  "] ";
+		}
+
+		if (is_warning){
+			msg += "W: ";
+		}
+			
+		msg += message;
+
+		if (LOG_COLORS){
+			msg += "\033[0m";
+		}
+
+		msg += "\n";
+
+		stdout.printf (msg);
+		stdout.flush();
+	}
+
+	public void log_error(string message){
+			
+		if (!LOG_ENABLE) { return; }
+
+		string msg = "";
+
+		if (LOG_COLORS){
+			msg += "\033[1;38;5;160m";
+		}
+
+		if (LOG_TIMESTAMP){
+			msg += "[" + timestamp(true) +  "] ";
+		}
+
+		msg += "E: ";
+
+		msg += message;
+
+		if (LOG_COLORS){
+			msg += "\033[0m";
+		}
+
+		msg += "\n";
+
+		stderr.printf(msg);
+		stderr.flush();
+	}
+
+	// misc -----------------
+
+	// timestamp ----------------
+	
+	public string timestamp (bool show_millis = false){
+
+		/* Returns a formatted timestamp string */
+
+		// NOTE: format() does not support milliseconds
+
+		DateTime now = new GLib.DateTime.now_local();
+		
+		if (show_millis){
+			var msec = now.get_microsecond () / 1000;
+			return "%s.%03d".printf(now.format("%H:%M:%S"), msec);
+		}
+		else{
+			return now.format ("%H:%M:%S");
+		}
+	}
+
+	public string timestamp_numeric (){
+
+		/* Returns a numeric timestamp string */
+
+		return "%ld".printf((long) time_t ());
+	}
+
+	public string timestamp_for_path (){
+
+		/* Returns a formatted timestamp string */
+
+		Time t = Time.local (time_t ());
+		return t.format ("%Y-%d-%m_%H-%M-%S");
+	}
+
+	// string formatting -------------------------------------------------
+
+	public string format_date(DateTime date){
+		return date.format ("%Y-%m-%d %H:%M");
+	}
+	
+	public string format_date_12_hour(DateTime date){
+		return date.format ("%Y-%m-%d %I:%M %p");
+	}
+	
+	public string format_duration (long millis){
+
+		/* Converts time in milliseconds to format '00:00:00.0' */
+
+	    double time = millis / 1000.0; // time in seconds
+
+	    double hr = Math.floor(time / (60.0 * 60));
+	    time = time - (hr * 60 * 60);
+	    double min = Math.floor(time / 60.0);
+	    time = time - (min * 60);
+	    double sec = Math.floor(time);
+
+        return "%02.0lf:%02.0lf:%02.0lf".printf (hr, min, sec);
+	}
+
+	public string format_duration_simple (long millis){
+
+		/* Converts time in milliseconds to format '00:00:00.0' */
+
+	    double time = millis / 1000.0; // time in seconds
+
+	    double hr = Math.floor(time / (60.0 * 60));
+	    time = time - (hr * 60 * 60);
+	    double min = Math.floor(time / 60.0);
+	    time = time - (min * 60);
+	    double sec = Math.floor(time);
+
+	    if (hr > 0){
+			return "%2.0lfh %2.0lfm %2.0lfs".printf(hr, min, sec);
+		}
+		else if (min > 0){
+			return "%2.0lfm %2.0lfs".printf(min, sec);
+		}
+		else {
+			return "%2.0lfs".printf(sec);
+		}
+	}
+
+	public string format_time_left(int64 millis){
+		double mins = (millis * 1.0) / 60000;
+		double secs = ((millis * 1.0) % 60000) / 1000;
+		string txt = "";
+		if (mins >= 1){
+			txt += "%.0fm ".printf(mins);
+		}
+		txt += "%.0fs".printf(secs);
+		return txt;
+	}
+	
+	public double parse_time (string time){
+
+		/* Converts time in format '00:00:00.0' to milliseconds */
+
+		string[] arr = time.split (":");
+		double millis = 0;
+		if (arr.length >= 3){
+			millis += double.parse(arr[0]) * 60 * 60;
+			millis += double.parse(arr[1]) * 60;
+			millis += double.parse(arr[2]);
+		}
+		return millis;
+	}
+	
+	public DateTime date_now(){
+		return new GLib.DateTime.now_local();
+	}
+	
+	public bool dates_are_equal(DateTime? dt1, DateTime? dt2){
+		if ((dt1 == null) || (dt2 == null)){
+			return false;
+		}
+		return Math.fabs(dt2.difference(dt1)) < (1 * TimeSpan.SECOND);
+	}
+	

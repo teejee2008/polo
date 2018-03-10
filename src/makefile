@@ -45,7 +45,7 @@ app-util-gtk3:
 	valac "polo-gtk3-helper.vala" -o polo-gtk3-helper --pkg gtk+-3.0
 
 app-util-disk:
-	valac "polo-disk.vala" Util.vala -o polo-disk --pkg posix --pkg gio-unix-2.0
+	valac --Xcc="-lm" "polo-disk.vala" Util.vala -o polo-disk --pkg posix --pkg gio-unix-2.0
 
 app-translations:
 

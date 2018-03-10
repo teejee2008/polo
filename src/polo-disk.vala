@@ -35,6 +35,8 @@ public static int main(string[] args) {
 
 	string username = "";
 
+	check_admin_access();
+
 	//parse options
 	for (int k = 1; k < args.length; k++) {
 		
@@ -42,6 +44,7 @@ public static int main(string[] args) {
 
 		case "backup":
 		case "restore":
+		case "eject":
 			command = args[k].down();
 			break;
 			
@@ -100,7 +103,7 @@ public static int main(string[] args) {
 		return 1;
 	}
 	
-	if (image_file.length == 0){
+	if (((command == "restore")||(command == "backup")) && image_file.length == 0){
 		stderr.printf("E: %s\n".printf("Image file not specified"));
 		return 1;
 	}
@@ -242,6 +245,29 @@ public static int main(string[] args) {
 
 		stdout.printf(cmd + "\n");
 		
+		Posix.system(cmd);
+		break;
+
+	case "eject":
+
+		//http://www.redhatgeek.com/linux/remove-a-disk-from-redhatcentos-linux-without-rebooting-the-system
+
+		//cmd = "umount %s?*".printf(device);
+
+		cmd = "ls %s?* | xargs -n1 umount -l".printf(device);
+		
+		string kname = device.replace("/dev/","").strip();
+
+		// mark offline
+		string sysfile = "/sys/block/%s/device/state".printf(kname);
+		//file_write(sysfile, "offline", true);
+		cmd = "echo 'offline' > %s".printf(sysfile);
+		Posix.system(cmd);
+
+		// delete entries from system
+		sysfile = "/sys/block/%s/device/delete".printf(kname);
+		//file_write(sysfile, "1", true);
+		cmd = "echo '1' > %s".printf(sysfile);
 		Posix.system(cmd);
 		break;
 	}
