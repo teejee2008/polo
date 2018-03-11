@@ -285,10 +285,10 @@ public class Main : GLib.Object {
 	public bool plugin_obsolete_pdf = false;
 	public bool plugin_obsolete_image = false;
 
-	public bool dm_hide_fs = false;
-	public bool dm_hide_mp = false;
-	public bool dm_hide_size = false;
-	public bool dm_hide_header = false;
+	public bool dm_show_fs = true;
+	public bool dm_show_mp = true;
+	public bool dm_show_size = true;
+	public bool dm_show_headers = true;
 	public int dm_width = 800;
 	public int dm_height = 600;
 	
@@ -745,10 +745,10 @@ public class Main : GLib.Object {
 		config.set_string_member("overwrite_image_boost_color", overwrite_image_boost_color.to_string());
 		config.set_string_member("overwrite_image_reduce_color", overwrite_image_reduce_color.to_string());
 
-		config.set_string_member("dm_hide_fs", dm_hide_fs.to_string());
-		config.set_string_member("dm_hide_mp", dm_hide_mp.to_string());
-		config.set_string_member("dm_hide_size", dm_hide_size.to_string());
-		config.set_string_member("dm_hide_header", dm_hide_header.to_string());
+		config.set_string_member("dm_show_fs", dm_show_fs.to_string());
+		config.set_string_member("dm_show_mp", dm_show_mp.to_string());
+		config.set_string_member("dm_show_size", dm_show_size.to_string());
+		config.set_string_member("dm_show_headers", dm_show_headers.to_string());
 		config.set_string_member("dm_width", dm_width.to_string());
 		config.set_string_member("dm_height", dm_height.to_string());
 		
@@ -973,10 +973,10 @@ public class Main : GLib.Object {
 		propbar_visible = json_get_bool_from_string(config, "propbar_visible", propbar_visible);
 		propbar_position = json_get_int_from_string(config, "propbar_position", propbar_position);
 		
-		dm_hide_fs = json_get_bool_from_string(config, "dm_hide_fs", dm_hide_fs);
-		dm_hide_mp = json_get_bool_from_string(config, "dm_hide_mp", dm_hide_mp);
-		dm_hide_size = json_get_bool_from_string(config, "dm_hide_size", dm_hide_size);
-		dm_hide_header = json_get_bool_from_string(config, "dm_hide_header", dm_hide_header);
+		dm_show_fs = json_get_bool_from_string(config, "dm_show_fs", dm_show_fs);
+		dm_show_mp = json_get_bool_from_string(config, "dm_show_mp", dm_show_mp);
+		dm_show_size = json_get_bool_from_string(config, "dm_show_size", dm_show_size);
+		dm_show_headers = json_get_bool_from_string(config, "dm_show_headers", dm_show_headers);
 		
 		dm_width = json_get_int_from_string(config, "dm_width", dm_width);
 		dm_height = json_get_int_from_string(config, "dm_height", dm_height);

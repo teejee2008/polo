@@ -80,74 +80,74 @@ public class DevicePopoverSettingsWindow : Gtk.Window {
 		size_label = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
 		size_combo = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
 
-		init_dm_hide_size(vbox_main);
+		init_dm_show_size(vbox_main);
 
-		init_dm_hide_fs(vbox_main);
+		init_dm_show_fs(vbox_main);
 
-		init_dm_hide_mp(vbox_main);
+		init_dm_show_mp(vbox_main);
 
-		init_dm_hide_header(vbox_main);
+		init_dm_show_headers(vbox_main);
 
 		init_width(vbox_main);
 
 		init_height(vbox_main);
 	}
 
-	private void init_dm_hide_size(Gtk.Container box){
+	private void init_dm_show_size(Gtk.Container box){
 
-		var chk = new Gtk.CheckButton.with_label(_("Hide column: Size"));
+		var chk = new Gtk.CheckButton.with_label(_("Show column: Size"));
 		box.add(chk);
 
-		chk.active = App.dm_hide_size;
+		chk.active = App.dm_show_size;
 
 		chk.toggled.connect(()=>{
 
-			App.dm_hide_size = chk.active;
+			App.dm_show_size = chk.active;
 
 			settings_changed();
 		});
 	}
 
-	private void init_dm_hide_fs(Gtk.Container box){
+	private void init_dm_show_fs(Gtk.Container box){
 
-		var chk = new Gtk.CheckButton.with_label(_("Hide column: File System"));
+		var chk = new Gtk.CheckButton.with_label(_("Show column: File System"));
 		box.add(chk);
 
-		chk.active = App.dm_hide_fs;
+		chk.active = App.dm_show_fs;
 
 		chk.toggled.connect(()=>{
 
-			App.dm_hide_fs = chk.active;
+			App.dm_show_fs = chk.active;
 
 			settings_changed();
 		});
 	}
 
-	private void init_dm_hide_mp(Gtk.Container box){
+	private void init_dm_show_mp(Gtk.Container box){
 
-		var chk = new Gtk.CheckButton.with_label(_("Hide column: Mount Path"));
+		var chk = new Gtk.CheckButton.with_label(_("Show column: Mount Path"));
 		box.add(chk);
 
-		chk.active = App.dm_hide_mp;
+		chk.active = App.dm_show_mp;
 
 		chk.toggled.connect(()=>{
 
-			App.dm_hide_mp = chk.active;
+			App.dm_show_mp = chk.active;
 
 			settings_changed();
 		});
 	}
 
-	private void init_dm_hide_header(Gtk.Container box){
+	private void init_dm_show_headers(Gtk.Container box){
 
-		var chk = new Gtk.CheckButton.with_label(_("Hide column headers"));
+		var chk = new Gtk.CheckButton.with_label(_("Show column headers"));
 		box.add(chk);
 
-		chk.active = App.dm_hide_header;
+		chk.active = App.dm_show_headers;
 
 		chk.toggled.connect(()=>{
 
-			App.dm_hide_header = chk.active;
+			App.dm_show_headers = chk.active;
 
 			settings_changed();
 		});

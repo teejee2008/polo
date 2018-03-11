@@ -671,7 +671,7 @@ public class DevicePopover : Gtk.Popover {
 
 		refresh_devices();
 
-		treeview.headers_visible = !App.dm_hide_header || manage_mode;
+		treeview.headers_visible = App.dm_show_headers || manage_mode;
 
 		treeview.margin_top = treeview.headers_visible ? 0 : 6;
 
@@ -873,9 +873,9 @@ public class DevicePopover : Gtk.Popover {
 
 		treeview.expand_all();
 
-		col_size.visible = !App.dm_hide_size || manage_mode;
-		col_fs.visible = !App.dm_hide_fs || manage_mode;
-		col_mp.visible = !App.dm_hide_mp || manage_mode;
+		col_size.visible = App.dm_show_size || manage_mode;
+		col_fs.visible = App.dm_show_fs || manage_mode;
+		col_mp.visible = App.dm_show_mp || manage_mode;
 
 		//Device.print_logical_children();
 	}
