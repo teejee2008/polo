@@ -53,7 +53,6 @@ public class FilePreviewBox : Gtk.Box {
 	private Gtk.Button btnMute;
 	private Gtk.Button btnFullscreen;
 	private uint tmr_status = 0;
-	private bool IsMaximized = false;
 
 	public FilePreviewBox(Gtk.Window parent_window, bool _panel_mode){
 		//base(Gtk.Orientation.VERTICAL, 6); // issue with vala
@@ -308,7 +307,7 @@ public class FilePreviewBox : Gtk.Box {
 		//scalePos.has_origin = true;
 		scalePos.value_pos = PositionType.BOTTOM;
 		scalePos.hexpand = true;
-		scalePos.set_size_request(300,-1);
+		scalePos.set_size_request(100,-1);
 		box_controls.add(scalePos);
 
 		scalePos_value_changed_connect();
@@ -323,7 +322,7 @@ public class FilePreviewBox : Gtk.Box {
 		scaleVolume.has_origin = true;
 		scaleVolume.value_pos = PositionType.BOTTOM;
 		scaleVolume.hexpand = false;
-		scaleVolume.set_size_request(100,-1);
+		scaleVolume.set_size_request(50,-1);
 		box_controls.add(scaleVolume);
 
 		scaleVolume.value_changed.connect(()=>{
