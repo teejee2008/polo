@@ -293,6 +293,11 @@ public class MainWindow : Gtk.Window {
 			});
 		}
 
+		Timeout.add(100, ()=>{
+			restore_propbar_position();
+			return false;
+		});
+
 		log_debug("Initialization complete -----------------", true);
 		
 		return false;
@@ -687,12 +692,14 @@ public class MainWindow : Gtk.Window {
 		log_debug("MainWindow: refresh_remote_views(%s)".printf(dir_path));
 		
 		foreach(var view in views){
+			
 			if (view.current_item == null) { continue; }
 			//if (view.current_item.is_remote == false) { continue; }
 			if (view.current_item.file_path != dir_path) { continue; }
 			
 			view.reload();
 		}
+		
 		log_debug("MainWindow: refresh_remote_views(): exit");
 	}
 
@@ -751,6 +758,7 @@ public class MainWindow : Gtk.Window {
 	public void refresh_statusbars(){
 		
 		foreach(var pn in panes){
+			
 			pn.statusbar.refresh_visibility();
 		}
 
@@ -808,7 +816,9 @@ public class MainWindow : Gtk.Window {
 	// sidebar ----------------
 	
 	public void reset_sidebar_position(){
+		
 		if (App.sidebar_visible){
+			
 			pane_nav.position = Main.DEFAULT_SIDEBAR_POSITION;
 		}
 		else{
@@ -836,25 +846,40 @@ public class MainWindow : Gtk.Window {
 	// propbar ----------------
 	
 	public void reset_propbar_position(){
+		
 		if (propbar.visible){
-			pane_prop.position = Main.DEFAULT_PROPBAR_POSITION;
+
+			int pos = pane_prop.get_allocated_width() - 400;
+			
+			log_debug("MainWindow: reset_propbar_position: %d".printf(pos));
+			
+			pane_prop.position = pos;
 		}
 	}
 
 	public void save_propbar_position(){
+		
 		if (propbar.visible){
+			
 			log_debug("MainWindow: save_propbar_position: %d".printf(pane_prop.position));
+			
 			App.propbar_position = pane_prop.position;
 		}
 	}
 
 	public void restore_propbar_position(){
+		
 		if (propbar.visible){
+			
 			log_debug("MainWindow: restore_propbar_position: %d".printf(App.propbar_position));
-			//if (App.propbar_position < 10){
-			//	App.propbar_position = 250;
-			//}
-			pane_prop.position = App.propbar_position;
+
+			if (App.propbar_position > 0){
+				
+				pane_prop.position = App.propbar_position;
+			}
+			else {
+				reset_propbar_position();
+			}
 		}
 	}
 

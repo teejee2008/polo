@@ -112,7 +112,7 @@ public class FilePropertiesPanel : Gtk.Box {
 		scrolled.vexpand = true;
 		this.add(scrolled);
 
-		var box = new Gtk.Box(Orientation.VERTICAL, 12);
+		var box = new Gtk.Box(Orientation.VERTICAL, 6);
 		scrolled.add(box);
 
 		box_preview = new FilePreviewBox(window, true);
@@ -158,6 +158,7 @@ public class FilePropertiesPanel : Gtk.Box {
 	public void refresh_visibility(){
 
 		if (App.propbar_visible){
+			
 			show_panel();
 		}
 		else{
@@ -175,7 +176,7 @@ public class FilePropertiesPanel : Gtk.Box {
 
 		init_ui_empty();
 
-		App.main_window.restore_propbar_position();
+		App.main_window.reset_propbar_position();
 	}
 
 	public void hide_panel(){

@@ -70,7 +70,7 @@ public class Main : GLib.Object {
 	public static int TV_PADDING = 2;
 
 	public static int DEFAULT_SIDEBAR_POSITION = 200;
-	public static int DEFAULT_PROPBAR_POSITION = 600;
+	//public static int DEFAULT_PROPBAR_POSITION = 600;
 
 	public static string REQUIRED_COLUMNS = "name,indicator,spacer";
 	public static string REQUIRED_COLUMNS_END = "spacer";
@@ -158,7 +158,7 @@ public class Main : GLib.Object {
 	public string sidebar_collapsed_sections = "";
 
 	public bool propbar_visible = false;
-	public int propbar_position = DEFAULT_PROPBAR_POSITION;
+	public int propbar_position = 0;
 
 	public int bookmarks_position = 300;
 
