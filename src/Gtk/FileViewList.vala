@@ -569,8 +569,11 @@ public class FileViewList : Gtk.Box {
 			
 			var selected_items = get_selected_items();
 			if (selected_items.size == 0){ return; }
-			
-			App.main_window.propbar.show_properties_for_file(selected_items[0]);
+
+			Timeout.add(10, ()=>{
+				App.main_window.propbar.show_properties_for_file(selected_items[0]);
+				return false;
+			});
 		}
 	}
 	

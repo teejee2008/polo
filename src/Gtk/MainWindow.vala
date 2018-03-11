@@ -860,7 +860,9 @@ public class MainWindow : Gtk.Window {
 
 	public void toggle_properties_panel(){
 
-		if (active_pane != null){
+		propbar.toggle();
+		
+		if ((active_pane != null) && propbar.visible){
 			
 			var view = active_pane.view;
 

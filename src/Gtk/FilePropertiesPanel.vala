@@ -36,16 +36,18 @@ using TeeJee.Misc;
 public class FilePropertiesPanel : Gtk.Box {
 
 	private FileItem? file_item;
-	
+
+	private FilePreviewBox box_preview;
 	private FilePropertiesBox box_props;
 	private FilePermissionsBox box_perms;
 	
 	private Gtk.Window window;
+
+	private bool ui_empty = true;
 	
 	public FilePropertiesPanel(Gtk.Window parent_window){
 		//base(Gtk.Orientation.VERTICAL, 6); // issue with vala
 		Object(orientation: Gtk.Orientation.VERTICAL, spacing: 12); // work-around
-		margin = 12;
 
 		window = parent_window;
 
@@ -55,8 +57,14 @@ public class FilePropertiesPanel : Gtk.Box {
 	public void show_properties_for_file(FileItem _file_item){
 
 		file_item = _file_item;
-		
-		init_ui_for_file();
+
+		if (ui_empty){
+			init_ui_for_file();
+			update_ui_for_file();
+		}
+		else{
+			update_ui_for_file();
+		}
 	}
 
 	private void init_ui_empty(){
@@ -80,21 +88,63 @@ public class FilePropertiesPanel : Gtk.Box {
 		label.label = "<i>%s</i>".printf(label.label);
 		vbox.add(label);
 
+		if (box_preview != null){
+			box_preview.stop();
+		}
+
+		ui_empty = true;
+
 		this.show_all();
 	}
 
 	private void init_ui_for_file(){
-		
+
+		log_debug("FilePropertiesPanel: init_ui_for_file()");
+
 		gtk_container_remove_children(this);
 
+		// scrolled
+		var scrolled = new Gtk.ScrolledWindow(null, null);
+		//scrolled.set_shadow_type(ShadowType.ETCHED_IN);
+		scrolled.hscrollbar_policy = PolicyType.AUTOMATIC;
+		scrolled.vscrollbar_policy = PolicyType.AUTOMATIC;
+		scrolled.hexpand = true;
+		scrolled.vexpand = true;
+		this.add(scrolled);
+
+		var box = new Gtk.Box(Orientation.VERTICAL, 12);
+		scrolled.add(box);
+
+		box_preview = new FilePreviewBox(window, true);
+		box.add(box_preview);
+
 		box_props = new FilePropertiesBox(window, true);
-		this.add(box_props);
+		box.add(box_props);
+
+		box_perms = new FilePermissionsBox(window, true);
+		box.add(box_perms);
+		
+		ui_empty = false;
+		
+		this.show_all();
+	}
+
+	private void update_ui_for_file(){
+
+		if (ui_empty){
+			init_ui_for_file();
+		}
+
+		if (box_preview != null){
+			box_preview.stop();
+		}
+
+		log_debug("FilePropertiesPanel: update_ui_for_file()");
+
+		box_preview.preview_file(file_item);
 		
 		var group_label = box_props.show_properties_for_file(file_item);
 
-		box_perms = new FilePermissionsBox(window, true);
-		this.add(box_perms);
-		
 		box_perms.show_properties_for_file(file_item, group_label);
 
 		this.show_all();
@@ -135,6 +185,10 @@ public class FilePropertiesPanel : Gtk.Box {
 		App.main_window.save_propbar_position();
 
 		App.propbar_visible = false;
+
+		if (box_preview != null){
+			box_preview.quit();
+		}
 
 		gtk_hide(this);
 	}

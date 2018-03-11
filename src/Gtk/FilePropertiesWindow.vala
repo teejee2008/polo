@@ -142,8 +142,6 @@ public class FilePropertiesWindow : Gtk.Window {
 		box_props = new FilePropertiesBox(this, false);
 		stack.add_titled (box_props, _("General"), _("General"));
 
-		box_props.margin = 12;
-
 		box_props.show_properties_for_file(file_item);
 	} 
  
@@ -328,8 +326,6 @@ public class FilePropertiesWindow : Gtk.Window {
 
 		box_perms = new FilePermissionsBox(this, false);
 		stack.add_titled(box_perms, _("Permissions"), _("Permissions"));
-		
-		box_perms.margin = 12;
 		
 		box_perms.show_properties_for_file(file_item, null);
 	}

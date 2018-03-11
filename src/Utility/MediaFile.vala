@@ -543,12 +543,13 @@ public class MediaFile : GLib.Object{
 	//cropping --------------------
 	
 	public bool crop_detect(){
+		
 		if (HasVideo == false) {
 			AutoCropError = true;
 			return false;
 		}
 
-		string params = get_file_crop_params (Path);
+		string params = get_file_crop_params(Path);
 		string[] arr = params.split (":");
 
 		int CropW = 0;
@@ -562,6 +563,8 @@ public class MediaFile : GLib.Object{
 
 		CropR = SourceWidth - CropW - CropL;
 		CropB = SourceHeight - CropH - CropT;
+
+		log_debug("Detected: ffmpeg: %d,%d,%d,%d".printf(CropL,CropR,CropT,CropB));
 
 		if ((CropW == 0) && (CropH == 0)){
 			AutoCropError = true;

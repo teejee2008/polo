@@ -38,6 +38,9 @@ public class FilePropertiesBox : Gtk.Box {
 	private FileItem? file_item;
 	private FileItem? dir_item;
 
+	private Gtk.DrawingArea canvas;
+	private MediaPlayer mpv;
+
 	private bool file_is_remote {
 		get { return (file_item != null) && file_item.file_path.has_prefix(App.rclone_mounts); }
 	}
@@ -66,7 +69,8 @@ public class FilePropertiesBox : Gtk.Box {
 	public FilePropertiesBox(Gtk.Window parent_window, bool _panel_mode){
 		//base(Gtk.Orientation.VERTICAL, 6); // issue with vala
 		Object(orientation: Gtk.Orientation.VERTICAL, spacing: 6); // work-around
-
+		margin = 12;
+		
 		window = parent_window;
 
 		panel_mode = _panel_mode;
@@ -326,40 +330,6 @@ public class FilePropertiesBox : Gtk.Box {
 		}
 	} 
  
-	private void init_preview_image(Gtk.Box hbox){
-	  
-		var image = new Gtk.Image();
-		hbox.add(image);
-
-		ThumbTask task;
-		var thumb = file_item.get_image(256, true, false, false, out task);
-
-		if (task != null){
-			while (!task.completed){
-				sleep(100);
-				gtk_do_events();
-			}
-			thumb = file_item.get_image(256, true, false, false, out task);
-		}
-		
-		if (thumb != null) {
-			image.pixbuf = thumb;
-			log_debug("setting from file_item.get_image()");
-		}
-		else if (file_item.icon != null) {
-			image.gicon = file_item.icon;
-			log_debug("setting from file_item.gicon");
-		}
-		else{
-			if (file_item.file_type == FileType.DIRECTORY) {
-				image.pixbuf = IconManager.generic_icon_directory(256);
-			}
-			else{
-				image.pixbuf = IconManager.generic_icon_file(256);
-			}
-		}
-	}
-
 	private void add_user_combo(Gtk.Box box){
 
 		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
@@ -606,7 +576,61 @@ public class FilePropertiesBox : Gtk.Box {
 		button.clicked.connect(btn_group_recursive);
 	}
 
-	
+	// preview -----------------------------
+
+	private void init_preview_image(Gtk.Box box){
+
+		if (panel_mode){ return; } // preview will be displayed by parent panel
+
+		var image = new Gtk.Image();
+		
+		if (file_item.is_image_gdk_supported){
+
+			log_debug("is_image_gdk_supported()");
+			
+			try{
+				var pix = new Gdk.Pixbuf.from_file_at_scale(file_item.file_path, 256, 256, true);
+				pix = IconManager.resize_icon(pix, 256);
+				image = new Gtk.Image.from_pixbuf(pix);
+				box.add(image);
+				return;
+			}
+			catch(Error e){
+				//ignore
+			}
+		}
+
+		ThumbTask task;
+		var thumb = file_item.get_image(256, true, false, false, out task);
+
+		if (task != null){
+			while (!task.completed){
+				sleep(100);
+				gtk_do_events();
+			}
+			thumb = file_item.get_image(256, true, false, false, out task);
+		}
+		
+		if (thumb != null) {
+			image.pixbuf = thumb;
+			log_debug("setting from file_item.get_image()");
+		}
+		else if (file_item.icon != null) {
+			image.gicon = file_item.icon;
+			log_debug("setting from file_item.gicon");
+		}
+		else{
+			if (file_item.file_type == FileType.DIRECTORY) {
+				image.pixbuf = IconManager.generic_icon_directory(256);
+			}
+			else{
+				image.pixbuf = IconManager.generic_icon_file(256);
+			}
+		}
+
+		box.add(image);
+	}
+
 	// helpers ---------------------------
 
 	private Gtk.Label add_property(Gtk.Box box, string property_name, string property_value){

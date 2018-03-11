@@ -51,12 +51,11 @@ public class FilePermissionsBox : Gtk.Box {
 	public FilePermissionsBox(Gtk.Window parent_window, bool _panel_mode){
 		//base(Gtk.Orientation.VERTICAL, 6); // issue with vala
 		Object(orientation: Gtk.Orientation.VERTICAL, spacing: 6); // work-around
-
+		margin = 12;
+		
 		window = parent_window;
 
 		panel_mode = _panel_mode;
-
-		init_ui_empty();
 	}
 
 	public void show_properties_for_file(FileItem _file_item, Gtk.SizeGroup? _group_label){
@@ -69,29 +68,6 @@ public class FilePermissionsBox : Gtk.Box {
 		group_label = _group_label;
 		
 		init_ui_for_file();
-
-		this.show_all();
-	}
-
-	private void init_ui_empty(){
-
-		gtk_container_remove_children(this);
-		
-		var vbox = new Gtk.Box(Orientation.VERTICAL, 12);
-		this.add(vbox);
-
-		var label = new Gtk.Label(_("File Properties"));
-		label.xalign = 0.5f;
-		label.use_markup = true;
-		label.label = "<b>%s</b>".printf(label.label);
-		vbox.add(label);
-
-		label = new Gtk.Label(_("Select file to view properties"));
-		label.xalign = 0.5f;
-		label.margin_bottom = 12;
-		label.use_markup = true;
-		label.label = "<i>%s</i>".printf(label.label);
-		vbox.add(label);
 
 		this.show_all();
 	}
@@ -189,6 +165,12 @@ public class FilePermissionsBox : Gtk.Box {
 		add_option(grid, 2, 5, "g", "s", "SGID");
 
 		add_option(grid, 3, 5, "", "t", "Sticky");
+
+		var spacer = new Gtk.Label("");
+		spacer.margin_bottom = 12;
+		grid.attach(spacer, 1, 6, 1, 1);
+
+		log_debug("FilePermissionsBox: init_ui_for_file(): done");
 	}
 
 	private void add_option(Gtk.Grid grid, int col,  int row, string user, string mode_bit, string? text = null){

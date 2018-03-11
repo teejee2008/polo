@@ -246,6 +246,8 @@ public class Main : GLib.Object {
 	public int kvm_cpu_limit = 80;
 	public string kvm_format = ".qcow2";
 
+	public int audio_volume = 70;
+
 	public TermBox? admin_shell = null;
 
 	public string selected_columns = DEFAULT_COLUMNS;
@@ -751,7 +753,9 @@ public class Main : GLib.Object {
 		config.set_string_member("dm_show_headers", dm_show_headers.to_string());
 		config.set_string_member("dm_width", dm_width.to_string());
 		config.set_string_member("dm_height", dm_height.to_string());
-		
+
+		config.set_string_member("audio_volume", audio_volume.to_string());
+
 		save_folder_selections();
 		
 		GtkBookmark.save_bookmarks();
@@ -980,6 +984,8 @@ public class Main : GLib.Object {
 		
 		dm_width = json_get_int_from_string(config, "dm_width", dm_width);
 		dm_height = json_get_int_from_string(config, "dm_height", dm_height);
+
+		audio_volume = json_get_int_from_string(config, "audio_volume", audio_volume);
 		
 		load_folder_selections();
 

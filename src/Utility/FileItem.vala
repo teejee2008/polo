@@ -695,6 +695,41 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		}
 	}
 
+	public bool is_image_gdk_supported{
+		get{
+			string ext = file_extension.down();
+			
+			return (ext == ".bmp")||(ext == ".ico")||(ext == ".jpeg")||(ext == ".jpg")
+				||(ext == ".ico")||(ext == ".png")||(ext == ".pnm")||(ext == ".qtif")
+				||(ext == ".svg")||(ext == ".tga")||(ext == ".tiff")||(ext == ".wmf")
+				||(ext == ".xbm")||(ext == ".xpm")||(ext == ".gif")||(ext == ".ani");
+		}
+	}
+
+	public bool is_animation_gdk_supported{
+		get{
+			string ext = file_extension.down();
+			
+			return (ext == ".gif")||(ext == ".ani");
+		}
+	}
+
+	public bool is_mplayer_supported{
+		get{
+			if (is_directory){ return false; }
+
+			if (content_type.has_prefix("audio/")){ return true; }
+
+			if (content_type.has_prefix("video/")){ return true; }
+			
+			string ext = file_extension.down();
+
+			var supported = new string[] { ".mp4", ".gif"};
+			
+			return (ext in supported);
+		}
+	}
+
 	public bool is_text{
 		get{
 			return content_type.has_prefix("text/");

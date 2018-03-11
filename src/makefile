@@ -39,7 +39,8 @@ app-gtk:
 		--target-glib 2.32 --pkg glib-2.0 \
 		--pkg gio-unix-2.0 --pkg posix --pkg gtk+-3.0 \
 		--pkg gee-0.8 --pkg json-glib-1.0 --pkg libxml-2.0 \
-		--pkg $(vte_version)
+		--pkg $(vte_version) \
+		--pkg gdk-x11-3.0
 
 app-util-gtk3:
 	valac "polo-gtk3-helper.vala" -o polo-gtk3-helper --pkg gtk+-3.0
