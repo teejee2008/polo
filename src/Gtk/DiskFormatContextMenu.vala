@@ -109,6 +109,8 @@ public class DiskFormatContextMenu : Gtk.Menu, IPaneActive {
 		if (resp != Gtk.ResponseType.YES){
 			return;
 		}
+
+		if (!view.check_tool("polo-disk")){ return; }
 		
 		string cmd = "polo-disk format --device %s --fstype %s --user %s".printf(device.device, fmt, App.user_name);
 				

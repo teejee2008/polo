@@ -343,8 +343,10 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 				}
 			}
 
-			dev.automount(window);
-			DeviceMonitor.notify_change(); // workaround for GLib.VolumeMonitor not detecting some mount events
+			if (dev.fstype.length > 0){
+				dev.automount(window);
+				DeviceMonitor.notify_change(); // workaround for GLib.VolumeMonitor not detecting some mount events
+			}
 		}
 
 		bool mounted = dev.is_mounted;

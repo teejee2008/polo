@@ -71,6 +71,7 @@ public class DevicePopover : Gtk.Popover {
 	private Gtk.TreeViewColumn col_fs;
 	private Gtk.TreeViewColumn col_mp;
 
+	private Gtk.Button btn_open;
 	private Gtk.Button btn_mount;
 	private Gtk.Button btn_unmount;
 	private Gtk.Button btn_lock;
@@ -124,7 +125,7 @@ public class DevicePopover : Gtk.Popover {
 
 	private void init_devices() {
 
-		log_debug("DevicePopover(): init_bookmarks()");
+		log_debug("DevicePopover(): init_devices()");
 		
 		// treeview
 		treeview = new Gtk.TreeView();
@@ -376,8 +377,8 @@ public class DevicePopover : Gtk.Popover {
 		//treeview.query_tooltip.connect(treeview_query_tooltip);
 
 		// cursor
-		var cursor = new Gdk.Cursor.from_name(Gdk.Display.get_default(), "pointer");
-		scrolled.get_window().set_cursor(cursor);
+		//var cursor = new Gdk.Cursor.from_name(Gdk.Display.get_default(), "pointer");
+		//scrolled.get_window().set_cursor(cursor);
 
 		treeview.row_activated.connect(treeview_row_activated); 
 
@@ -473,13 +474,31 @@ public class DevicePopover : Gtk.Popover {
 		// ------------------------------------------------------------------------------
 		
 		var bbox = new Gtk.ButtonBox(Gtk.Orientation.VERTICAL);
+		bbox.set_layout(Gtk.ButtonBoxStyle.EXPAND);
+		bbox.spacing = 3;
+		box.add(bbox);
+
+		// open -----------------------
+
+		var button = new Gtk.Button.with_label(" " + _("Open"));//" " + _("Open")
+		//button.set_image(IconManager.lookup_image("folder-open", 16, false, false));
+		//button.always_show_image = true;
+		//button.image_position = PositionType.TOP;
+		bbox.add(button);
+		btn_open = button;
+		
+		button.clicked.connect(btn_open_clicked);
+
+		// ------------------------------------------------------------------------------
+		
+		bbox = new Gtk.ButtonBox(Gtk.Orientation.VERTICAL);
 		bbox.set_layout(Gtk.ButtonBoxStyle.CENTER);
 		bbox.spacing = 3;
 		box.add(bbox);
 
 		// mount -----------------------
 
-		var button = new Gtk.Button.with_label(" " + _("Mount"));
+		button = new Gtk.Button.with_label(" " + _("Mount"));
 		button.set_image(IconManager.lookup_image("drive-harddisk", 16, false, false));
 		button.always_show_image = true;
 		bbox.add(button);
@@ -898,6 +917,8 @@ public class DevicePopover : Gtk.Popover {
 		
 		if (dev != null){
 
+			btn_open.sensitive = (dev.fstype.length > 0);
+			
 			btn_mount.sensitive = !dev.is_mounted && (dev.fstype.length > 0) && !dev.has_children;
 
 			btn_unmount.sensitive = dev.is_mounted && !dev.is_system_device;
@@ -929,6 +950,8 @@ public class DevicePopover : Gtk.Popover {
 		}
 		else{
 
+			btn_open.sensitive = false;
+			
 			btn_mount.sensitive = false;
 			
 			btn_unmount.sensitive = false;
@@ -936,7 +959,7 @@ public class DevicePopover : Gtk.Popover {
 			btn_lock.sensitive = false;
 			
 			btn_unlock.sensitive = false;
-;
+
 			btn_backup.sensitive = false;
 			
 			btn_restore.sensitive = false;
@@ -1090,7 +1113,9 @@ public class DevicePopover : Gtk.Popover {
 
 		if (!view.check_tool("polo-disk")){ return; }
 
-		string cmd = "polo-disk eject --device /dev/%s".printf(dev.pkname_toplevel);
+		string disk = (dev.pkname_toplevel.length > 0) ? dev.pkname_toplevel : dev.kname;
+
+		string cmd = "polo-disk eject --device /dev/%s".printf(disk);
 		
 		this.sensitive = false;
 
