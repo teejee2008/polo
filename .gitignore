@@ -20,3 +20,5 @@ po-temp/
 *.rpm
 
 src/polo-disk
+
+src/polo-gtk3-helper

@@ -249,6 +249,8 @@ namespace TeeJee.FileSystem{
 	}
 
 	public bool file_delete(string file_path, Gtk.Window? window = null, out string error_msg = null){
+
+		error_msg = "";
 		
 		var file = File.new_for_path(file_path);
 		if (!file.query_exists()){
@@ -276,6 +278,8 @@ namespace TeeJee.FileSystem{
 
 	public bool file_trash(string file_path, Gtk.Window? window = null, out string error_msg = null){
 
+		error_msg = "";
+		
 		var file = File.parse_name(file_path);
 		if (!file.query_exists()){
 			return true;
@@ -301,6 +305,8 @@ namespace TeeJee.FileSystem{
 	}
 
 	public bool file_delete_cmd(string file_path, Gtk.Window? window = null, out string error_msg = null){
+
+		error_msg = "";
 		
 		if (!file_or_dir_exists(file_path)){ return true; }
 
@@ -323,6 +329,8 @@ namespace TeeJee.FileSystem{
 
 	public bool file_trash_cmd(string file_path, Gtk.Window? window = null, out string error_msg = null){
 
+		error_msg = "";
+		
 		if (!file_or_dir_exists(file_path)){ return true; }
 		
 		string cmd = "gvfs-trash '%s'".printf(escape_single_quote(file_path));
@@ -383,6 +391,8 @@ namespace TeeJee.FileSystem{
 	public bool file_write (string file_path, string contents,
 		Gtk.Window? window = null, out string error_msg = null, bool overwrite_in_place = false){
 
+		error_msg = "";
+		
 		/* Write text to file */
 
 		try{
@@ -737,6 +747,8 @@ namespace TeeJee.FileSystem{
 	
 	public bool dir_create (string dir_path, bool show_message = false, Gtk.Window? window = null, out string err_msg = null){
 
+		err_msg = "";
+		
 		/* Creates a directory along with parents */
 
 		try{
@@ -1080,6 +1092,7 @@ namespace TeeJee.FileSystem{
 
 	// dep: tar gzip gpg
 	public bool decrypt_and_untar (string src_file, string dst_file, string password){
+		
 		if (file_exists(src_file)) {
 			if (file_exists(dst_file)){
 				file_delete(dst_file);
@@ -1125,23 +1138,6 @@ namespace TeeJee.FileSystem{
 		}
 
 		return false;
-	}
-
-	// hashing -----------
-	
-	private string hash_md5(string path){
-		Checksum checksum = new Checksum (ChecksumType.MD5);
-		FileStream stream = FileStream.open (path, "rb");
-
-		uint8 fbuf[100];
-		size_t size;
-		while ((size = stream.read (fbuf)) > 0){
-		  checksum.update (fbuf, size);
-		}
-		
-		unowned string digest = checksum.get_string();
-
-		return digest;
 	}
 
 	// misc --------------------

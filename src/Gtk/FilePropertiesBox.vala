@@ -38,13 +38,6 @@ public class FilePropertiesBox : Gtk.Box {
 	private FileItem? file_item;
 	private FileItem? dir_item;
 
-	private Gtk.DrawingArea canvas;
-	private MediaPlayer mpv;
-
-	private bool file_is_remote {
-		get { return (file_item != null) && file_item.file_path.has_prefix(App.rclone_mounts); }
-	}
-
 	private Gtk.SizeGroup group_label;
 	private Gtk.SizeGroup group1_value;
 	private Gtk.SizeGroup group2_value;

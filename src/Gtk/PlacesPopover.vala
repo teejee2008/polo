@@ -206,8 +206,8 @@ public class PlacesPopover : Gtk.Popover {
 
 		treeview.set_tooltip_column(ColumnItem.TOOLTIP);
 
-		var cursor = new Gdk.Cursor.from_name(Gdk.Display.get_default(), "pointer");
-		scrolled.get_window().set_cursor(cursor);
+		//var cursor = new Gdk.Cursor.from_name(Gdk.Display.get_default(), "pointer");
+		//scrolled.get_window().set_cursor(cursor);
 		
 		// events -------------------------------
 

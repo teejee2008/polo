@@ -62,7 +62,7 @@ public class RCloneClient : GLib.Object {
 		query_accounts();
 
 		// load class by creating object
-		var acc = new CloudAccount.dummy();
+		new CloudAccount.dummy();
 	}
 
 	public void query_accounts(){
@@ -139,7 +139,7 @@ public class RCloneClient : GLib.Object {
 				string device = match.fetch(1);
 				string mpath = match.fetch(2);
 				string fs = match.fetch(3);
-				string options = match.fetch(4);
+				//string options = match.fetch(4);
 
 				if (fs != "fuse.rclone"){ continue; }
 
@@ -322,7 +322,7 @@ public class CloudAccount : GLib.Object {
 		log_debug(cmd);
 		
 		string std_out, std_err;
-		int status = exec_sync(cmd, out std_out, out std_err);
+		exec_sync(cmd, out std_out, out std_err);
 
 		start_changed_delayed_timer();
 	}

@@ -624,23 +624,7 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 		log_debug(cmd);
 		string std_out, std_err;
 		int status = exec_script_sync(cmd, out std_out, out std_err, false, true); // prompt user if not admin
-
 		return (status == 0);
-		
-		/*if (has_children){
-			string message = _("Failed to lock device");
-			string details = "%s: %s\n\n%s".printf(_("Device"), device, std_err);
-			bool is_error = true;
-			show_message(message, details, is_error, parent_window, show_on_success);
-			return !is_error;
-		}
-		else{
-			string message = _("Locked successfully");
-			string details = "%s: %s".printf(_("Locked"), parent.device);
-			bool is_error = false;
-			show_message(message, details, is_error, parent_window, show_on_success);
-			return !is_error;
-		}*/
 	}
 
 	public void flush_buffers(){
@@ -1659,7 +1643,7 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 			}
 		}
 
-		if (!has_mounted_partitions){ // && (pkname.length > 0)
+		if (!has_mounted_partitions && (pixbuf != null)){ // && (pkname.length > 0)
 			
 			pixbuf = IconManager.add_transparency(pixbuf);
 		}
@@ -2025,48 +2009,19 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 		return unlocked_device;
 	}
 
-	public static Device luks_lock(Device dev, Gtk.Window? parent_window, bool show_on_success){
+	public static bool luks_lock(Device dev, Gtk.Window? parent_window, bool show_on_success){
 
 		// check if not on encrypted device
 		if (!dev.is_on_encrypted_partition){
 			log_debug("Device is not encrypted: %s".printf(dev.device));
-			return dev;
+			return false;
 		}
-
-		var parent_device = dev.parent;
 
 		var cmd = "cryptsetup luksClose %s".printf(dev.kname);
 		log_debug(cmd);
 		string std_out, std_err;
 		int status = exec_script_sync(cmd, out std_out, out std_err, false, true); // prompt user if not admin
-
-		parent_device.query_changes();
-
-		if (parent_device.has_children){
-			string message = _("Failed to lock device");
-			string details = "%s: %s\n\n%s".printf(_("Device"), dev.device, std_err);
-			bool is_error = true;
-			show_message(message, details, is_error, parent_window, show_on_success);
-		}
-		else{
-			string message = _("Locked successfully");
-			string details = "%s: %s".printf(_("Locked"), parent_device.device);
-			bool is_error = false;
-			show_message(message, details, is_error, parent_window, show_on_success);
-		}
-
-		return parent_device;
-
-		/*log_debug(cmd);
-
-		if (bash_admin_shell != null){
-			int status = bash_admin_shell.execute(cmd);
-			return (status == 0);
-		}
-		else{
-			int status = exec_script_sync(cmd,null,null,false,true);
-			return (status == 0);
-		}*/
+		return (status == 0);
 	}
 
 	public static bool mount(
@@ -2653,48 +2608,6 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 			available_bytes, (available_bytes * 100.0) / size_bytes);
 
 		return tt;
-	}
-
-	private string display_name(bool short_name = true, bool show_label = true, bool show_parent = true, bool show_alias = false){
-
-		string txt = "";
-
-		if (short_name){
-			txt += kname;
-		}
-		else{
-			txt += device;
-		}
-
-		if (type == "disk"){
-			if (vendor.length > 0){
-				txt += " " + vendor;
-			}
-			if (model.length > 0){
-				txt += " " + model;
-			}
-			if (size_bytes > 0) {
-				if (txt.strip().length == 0){
-					txt += "%s Device".printf(format_file_size(size_bytes, false, "", true, 0));
-				}
-				else{
-					txt += " (%s)".printf(format_file_size(size_bytes, false, "", true, 0));
-				}
-			}
-		}
-		else{
-			if (show_label && (label.length > 0)){
-				txt += "(%s)".printf(label);
-			}
-			if (show_parent && has_parent() && (parent.type == "part")){ // TODO: if parent is crypt (like lvm on luks)
-				txt += "(%s)".printf(pkname);
-			}
-			if (show_alias && (mapped_name.length > 0)){
-				txt += "(%s)".printf(mapped_name);
-			}
-		}
-
-		return txt;
 	}
 
 	// testing -----------------------------------

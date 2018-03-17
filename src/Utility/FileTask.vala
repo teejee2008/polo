@@ -96,7 +96,6 @@ public class FileTask : GLib.Object {
 	
 	private GLib.Timer timer = new GLib.Timer();
 	private GLib.Timer rate_timer = new GLib.Timer();
-	private Mutex mutex = Mutex();
 
 	public RsyncTask rsync;
 
@@ -781,7 +780,7 @@ public class FileTask : GLib.Object {
 			return true; // ignore, src may have been a symlink which was moved
 		}
 
-		bool is_replace = dest.query_exists();
+		//bool is_replace = dest.query_exists();
 		
 		bytes_file = 0;
 		bytes_file_total = 0;

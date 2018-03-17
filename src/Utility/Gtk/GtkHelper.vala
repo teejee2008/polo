@@ -382,12 +382,9 @@ namespace TeeJee.GtkHelper{
 		return img_icon;
 	}
 
-	public Gdk.Pixbuf? get_gicon(
-		GLib.Icon gicon,
-		int icon_size){
+	public Gdk.Pixbuf? get_gicon(GLib.Icon gicon, int icon_size){
 			
 		Gdk.Pixbuf pix_icon = null;
-		Gtk.Image img_icon = null;
 
 		try {
 			Gtk.IconTheme icon_theme = Gtk.IconTheme.get_default();
@@ -402,9 +399,7 @@ namespace TeeJee.GtkHelper{
 		return pix_icon;
 	}
 
-	public Gdk.Pixbuf? get_shared_icon_pixbuf(string icon_name,
-		string fallback_file_name,
-		int icon_size,
+	public Gdk.Pixbuf? get_shared_icon_pixbuf(string icon_name, string fallback_file_name, int icon_size,
 		string icon_directory = AppShortName + "/images"){
 			
 		var img = get_shared_icon(icon_name, fallback_file_name, icon_size, icon_directory);
@@ -728,30 +723,6 @@ namespace TeeJee.GtkHelper{
 		container.forall ((element) => container.remove (element));
 	}
 
-	private void text_view_append(Gtk.TextView view, string text){
-		TextIter iter;
-		view.buffer.get_end_iter(out iter);
-		view.buffer.insert(ref iter, text, text.length);
-	}
-
-	private void text_view_prepend(Gtk.TextView view, string text){
-		TextIter iter;
-		view.buffer.get_start_iter(out iter);
-		view.buffer.insert(ref iter, text, text.length);
-	}
-
-	private void text_view_scroll_to_end(Gtk.TextView view){
-		TextIter iter;
-		view.buffer.get_end_iter(out iter);
-		view.scroll_to_iter(iter, 0.0, false, 0.0, 0.0);
-	}
-
-	private void text_view_scroll_to_start(Gtk.TextView view){
-		TextIter iter;
-		view.buffer.get_start_iter(out iter);
-		view.scroll_to_iter(iter, 0.0, false, 0.0, 0.0);
-	}
-	
 	// file chooser ----------------
 
 	public Gee.ArrayList<string> gtk_select_files(Gtk.Window? parent_window,

@@ -1354,7 +1354,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 				string child_name = info.get_name();
 				string child_path = GLib.Path.build_filename(file_path, child_name);
 				//log_debug("FileItem: query_children(): child_path: %s".printf(child_path));
-				var child = this.add_child_from_disk(child_path, depth - 1);
+				this.add_child_from_disk(child_path, depth - 1);
 				//child.is_stale = false;
 				//log_debug("fresh: name: %s".printf(child.file_name));
 				//if (query_children_aborted) { break; }
@@ -1607,25 +1607,19 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			
 			while ((info = enumerator.next_file()) != null) {
 
-				try {
-					if (query_children_aborted) {
-						item.query_children_aborted = true;
-						//item.dir_size_queried = false;
-						return null;
-					}
-					
-					string child_path = path_combine(child_item_file_path, info.get_name());
-		
-					if (depth != 0){
-						// add item's children from disk and drill down further
-						item.add_child_from_disk(child_path, depth - 1);
-					}
+				if (query_children_aborted) {
+					item.query_children_aborted = true;
+					//item.dir_size_queried = false;
+					return null;
 				}
-				catch(Error e) {
-					log_error (e.message);
+				
+				string child_path = path_combine(child_item_file_path, info.get_name());
+	
+				if (depth != 0){
+					// add item's children from disk and drill down further
+					item.add_child_from_disk(child_path, depth - 1);
 				}
 			}
-
 		}
 		catch (Error e) {
 			log_error (e.message);
@@ -2047,11 +2041,11 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 	
 	// monitor
 
-	public FileMonitor? monitor_for_changes(out Cancellable monitor_cancellable){
+	public FileMonitor? monitor_for_changes(out Cancellable? monitor_cancellable){
 
-		if (!is_directory){
-			return null;
-		}
+		monitor_cancellable = null;
+				
+		if (!is_directory){ return null; }
 
 		FileMonitor file_monitor = null;
 

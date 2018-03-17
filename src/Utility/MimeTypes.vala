@@ -164,9 +164,13 @@ public class MimeApp : GLib.Object {
 	}
 	 
 	public static void set_default(string mimetype, DesktopApp app){
+		
 		string cmd = "xdg-mime default %s %s".printf(app.desktop_file_name, mimetype);
+		
 		string std_out, std_err;
-		int status = exec_sync(cmd, out std_out, out std_err);
+		
+		exec_sync(cmd, out std_out, out std_err);
+		
 		query_mimeapps(user_home);
 	}
 

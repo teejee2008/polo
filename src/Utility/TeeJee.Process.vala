@@ -83,6 +83,9 @@ namespace TeeJee.ProcessHelper{
 		 * std_out, std_err can be null. Output will be written to terminal if null.
 		 * */
 
+		std_out = "";
+		std_err = "";
+
 		string sh_file = save_bash_script_temp(script, null, true, supress_errors, run_as_admin);
 
 		//log_debug("exec_script_sync(): %s".printf(sh_file));
@@ -473,7 +476,6 @@ namespace TeeJee.ProcessHelper{
 			exec_sync(cmd, out std_out, out std_err);
 
 			Proc[] procList = {};
-			string[] keys = {};
 
 			/*
 			USER       PID %CPU %MEM    VSZ   RSS TTY      STAT START   TIME COMMAND

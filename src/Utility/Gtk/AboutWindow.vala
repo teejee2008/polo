@@ -41,7 +41,6 @@ public class AboutWindow : Dialog {
 	private Gtk.Box hbox_action;
 	private Gtk.Button btn_license;
 	private Gtk.Button btn_credits;
-	private Gtk.Button btn_close;
 
 	private Gtk.Image img_logo;
 	private Gtk.Label lbl_program_name;

@@ -149,8 +149,6 @@ namespace TeeJee.Misc {
 	    time = time - (min * 60);
 	    double sec = Math.floor(time);
 
-	    string txt = "";
-
 	    if (hr > 0){
 			return "%2.0lfh %2.0lfm %2.0lfs".printf(hr, min, sec);
 		}
@@ -201,7 +199,6 @@ namespace TeeJee.Misc {
 	public static DateTime? parse_date_time (string date_string, bool local_time) {	
 		
 		DateTime? dt = null;
-		bool valid = false;
 		int year, month, day, hr, min, tz_hr, tz_min;
 		double sec;
 		
@@ -259,8 +256,11 @@ namespace TeeJee.Misc {
 	// string handling ------------------------
 	
 	public string string_replace(string str, string search, string replacement, int count = -1){
+		
 		string[] arr = str.split(search);
+		
 		string new_txt = "";
+		
 		bool first = true;
 		
 		foreach(string part in arr){
@@ -321,19 +321,26 @@ namespace TeeJee.Misc {
 	}
 
 	public string uri_encode(string path, bool encode_forward_slash){
+		
 		string uri = Uri.escape_string(path);
+		
 		if (!encode_forward_slash){
+			
 			uri = uri.replace("%2F","/");
 		}
+		
 		return uri;
 	}
 
 	public string uri_decode(string path){
+		
 		return Uri.unescape_string(path);
 	}
 
 	public string ellipsize(string txt, int maxchars){
+		
 		if (txt.length > maxchars){
+			
 			return txt[0:maxchars-1] + "...";
 		}
 		else{
@@ -399,10 +406,11 @@ namespace TeeJee.Misc {
 	}
 
 	public bool array_contains(int needle, int[] haystack){
-		int result = -1;
+
 		for (int i=0; i < haystack.length; i++) {
 			if(needle == haystack[i]) return true;
 		}
+		
 		return false;
 	}
 
@@ -426,8 +434,7 @@ namespace TeeJee.Misc {
 		return random;
 	}
 
-	private string pad_numbers_in_string(
-		string input, int max_length = 3, char pad_char = '0'){
+	private string pad_numbers_in_string(string input, int max_length = 3, char pad_char = '0'){
 			
 		string sequence = "";
 		string output = "";
