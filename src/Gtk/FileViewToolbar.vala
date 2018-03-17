@@ -307,8 +307,7 @@ public class FileViewToolbar : Gtk.Toolbar, IPaneActive {
 		});
 	}
 
-	private Gtk.Popover popup_dev;
-	private Sidebar sidebar_dev;
+	private DevicePopover dev_popup;
 
 	private void add_toolbar_button_for_devices(){
 
@@ -323,15 +322,12 @@ public class FileViewToolbar : Gtk.Toolbar, IPaneActive {
 
 		gtk_apply_css({ button }, "padding-left: 2px; padding-right: 2px;");
 
-		popup_dev = new Gtk.Popover(button);
-		sidebar_dev = new Sidebar(popup_dev, "device", pane);
-		popup_dev.add(sidebar_dev);
+		dev_popup = new DevicePopover(button, pane);
 
 		button.clicked.connect(() => {
-			if (view == null) { return; };
-			sidebar_dev.show();
-			sidebar_dev.refresh();
-			gtk_show(popup_dev);
+			if (view != null){
+				dev_popup.show_popup();
+			}
 		});
 	}
 

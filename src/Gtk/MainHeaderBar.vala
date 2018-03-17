@@ -196,13 +196,13 @@ public class MainHeaderBar : Gtk.HeaderBar, IPaneActive {
 		popup_bm = new PlacesPopover(button, pane);
 
 		button.clicked.connect(() => {
-			if (view == null) { return; };
-			popup_bm.show_popup();
+			if (view != null){
+				popup_bm.show_popup();
+			}
 		});
 	}
 
-	private Gtk.Popover popup_dev;
-	private Sidebar sidebar_dev;
+	private DevicePopover dev_popup;
 	
 	private void add_devices(){
 
@@ -214,15 +214,12 @@ public class MainHeaderBar : Gtk.HeaderBar, IPaneActive {
 		
 		gtk_apply_css({ button }, "padding-left: %dpx; padding-right: %dpx;".printf(BUTTON_PADDING, BUTTON_PADDING));
 
-		popup_dev = new Gtk.Popover(button);
-		sidebar_dev = new Sidebar(popup_dev, "device", pane);
-		popup_dev.add(sidebar_dev);
+		dev_popup = new DevicePopover(button, pane);
 
 		button.clicked.connect(() => {
-			if (view == null) { return; };
-			sidebar_dev.show();
-			sidebar_dev.refresh();
-			gtk_show(popup_dev);
+			if (view != null){
+				dev_popup.show_popup();
+			}
 		});
 	}
 
