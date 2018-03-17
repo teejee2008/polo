@@ -110,64 +110,9 @@ public class DiskFormatContextMenu : Gtk.Menu, IPaneActive {
 			return;
 		}
 		
-		string cmd = "umount %s ; ".printf(device.device);
+		string cmd = "polo-disk format --device %s --fstype %s --user %s".printf(device.device, fmt, App.user_name);
 				
-		switch(fmt){
-		case "ext2":
-		case "ext3":
-		case "ext4":
-		case "f2fs":
-		case "ufs":
-			cmd += "mkfs.%s".printf(fmt);
-			break;
-
-		case "jfs":
-			cmd += "mkfs.%s -q".printf(fmt);
-			break;
-			
-		case "btrfs":
-		case "xfs":
-			cmd += "mkfs.%s -f".printf(fmt);
-			break;
-
-		case "nilfs2":
-			cmd += "mkfs.%s -f -v".printf(fmt);
-			break;
-
-		case "ntfs":
-			cmd += "mkfs.%s -f -F".printf(fmt);
-			break;
-
-		case "exfat":
-			cmd += "mkfs.exfat";
-			break;
-			
-		case "fat16":
-			cmd += "mkfs.fat -F16 -v";
-			break;
-
-		case "fat32":
-			cmd += "mkfs.fat -F32 -v";
-			break;
-
-		case "hfs":
-			cmd += "hformat -f";
-			break;
-
-		case "hfs+":
-			cmd += "mkfs.hfsplus";
-			break;
-
-		case "reiser4":
-			cmd += "mkfs.reiser4 --force --yes --label \"\"";
-			break;
-		
-		case "reiserfs":
-			cmd += "mkreiserfs -f -f --label \"\"";
-			break;
-		}
-
-		cmd += " %s".printf(device.device);
+		log_debug(cmd);
 		
 		this.sensitive = false;
 
@@ -183,8 +128,8 @@ public class DiskFormatContextMenu : Gtk.Menu, IPaneActive {
 		if (status == 0){
 			//gtk_messagebox(_("Formatting Complete"), std_out, App.main_window, true);
 		}
-		else{
-			gtk_messagebox(_("Formatting Failed"), std_out + "\n\n" + std_err, App.main_window, true);
+		else if (std_err.strip().length > 0){
+			gtk_messagebox(_("Formatting Failed"), std_err, App.main_window, true);
 		}
 
 		this.sensitive = true;

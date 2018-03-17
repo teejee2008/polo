@@ -1196,23 +1196,27 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 
 		var list = new Gee.ArrayList<Device>();
 
-		string mtab_path = "/etc/mtab";
-		string mtab_lines = "";
-
-		File f;
-
 		// find mtab file -----------
 
-		mtab_path = "/proc/mounts";
-		f = File.new_for_path(mtab_path);
-		if(!f.query_exists()){
+		string mtab_path = "/proc/mounts";
+		
+		File f = File.new_for_path(mtab_path);
+		
+		if (!f.query_exists()){
+			
 			mtab_path = "/proc/self/mounts";
+			
 			f = File.new_for_path(mtab_path);
-			if(!f.query_exists()){
+			
+			if (!f.query_exists()){
+				
 				mtab_path = "/etc/mtab";
+				
 				f = File.new_for_path(mtab_path);
-				if(!f.query_exists()){
-					return list; //empty list
+				
+				if (!f.query_exists()){
+					
+					return list;
 				}
 			}
 		}
@@ -1225,7 +1229,7 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 
 		//read -----------
 
-		mtab_lines = file_read(mtab_path);
+		var mtab_lines = file_read(mtab_path);
 
 		/*
 		sample mtab

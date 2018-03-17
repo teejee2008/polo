@@ -76,6 +76,24 @@
 			return false;
 		}
 	}
+
+	public string get_temp_file_path(bool with_temp_folder = true){
+
+		/* Generates temporary file path */
+
+		string txt = "/tmp/%s".printf(timestamp_numeric() + (new Rand()).next_int().to_string());
+
+		if (with_temp_folder){
+			dir_create(txt);
+			txt += "/%s".printf(timestamp_numeric() + (new Rand()).next_int().to_string());
+		}
+
+		return txt;
+	}
+
+	public void thread_sleep(int milliseconds){
+		Thread.usleep ((ulong) milliseconds * 1000);
+	}
 	
 	// file ---------------------------------------
 
@@ -431,3 +449,54 @@
 		return Math.fabs(dt2.difference(dt1)) < (1 * TimeSpan.SECOND);
 	}
 	
+	// device is mounted
+
+	public bool device_is_mounted(string device){
+
+		string mtab_path = "/proc/mounts";
+		
+		File f = File.new_for_path(mtab_path);
+		
+		if (!f.query_exists()){
+			
+			mtab_path = "/proc/self/mounts";
+			
+			f = File.new_for_path(mtab_path);
+			
+			if (!f.query_exists()){
+				
+				mtab_path = "/etc/mtab";
+				
+				f = File.new_for_path(mtab_path);
+				
+				if (!f.query_exists()){
+					
+					return false;
+				}
+			}
+		}
+
+		var lines = file_read(mtab_path).split("\n");
+
+		foreach (var line in lines){
+
+			if (line.strip().length == 0) { continue; }
+
+			int k = 1;
+			
+			foreach(string val in line.strip().split(" ")){
+
+				if (val.strip().length == 0){ continue; }
+
+				switch(k++){
+				case 1:
+					if (val.strip() == device){
+						return true;
+					}
+					break;
+				}
+			}
+		}
+
+		return false;
+	}

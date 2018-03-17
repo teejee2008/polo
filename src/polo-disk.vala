@@ -33,6 +33,8 @@ public static int main(string[] args) {
 
 	string device = "";
 
+	string fstype = "";
+
 	string username = "";
 
 	check_admin_access();
@@ -45,6 +47,7 @@ public static int main(string[] args) {
 		case "backup":
 		case "restore":
 		case "eject":
+		case "format":
 			command = args[k].down();
 			break;
 			
@@ -74,6 +77,17 @@ public static int main(string[] args) {
 			}
 			else{
 				stderr.printf("E: %s\n".printf("Device not specified"));
+				return 1;
+			}
+			break;
+
+		case "--fstype":
+			k++;
+			if (k < args.length){
+				fstype = args[k];
+			}
+			else{
+				stderr.printf("E: %s\n".printf("File system type not specified"));
 				return 1;
 			}
 			break;
@@ -113,6 +127,11 @@ public static int main(string[] args) {
 		return 1;
 	}
 
+	if ((command == "format") && (fstype.length == 0)){
+		stderr.printf("E: %s\n".printf("File system type not specified"));
+		return 1;
+	}
+
 	if (!file_exists(device)){
 		stderr.printf("E: %s: %s\n".printf("Device not found", device));
 		return 1;
@@ -128,9 +147,25 @@ public static int main(string[] args) {
 		
 	case "backup":
 
+		// unmount ------------------------------------
+
+		if (device_is_mounted(device)){
+
+			cmd = "umount %s".printf(device);
+
+			stdout.printf(cmd + "\n");
+			
+			int status = Posix.system(cmd);
+
+			if (status != 0){
+				stderr.printf("E: Failed to unmount device\n");
+				exit(1);
+			}
+		}
+	
 		if (format.length == 0){ // not specified by user
 
-			format = get_format_from_file_name(image_file);
+			format = get_file_format_from_file_name(image_file);
 
 			if (format.length == 0){ // not evident from file name
 
@@ -193,7 +228,23 @@ public static int main(string[] args) {
 		
 	case "restore":
 
-		format = get_format_from_file_name(image_file);
+		// unmount ------------------------------------
+
+		if (device_is_mounted(device)){
+
+			cmd = "umount %s".printf(device);
+
+			stdout.printf(cmd + "\n");
+			
+			int status = Posix.system(cmd);
+
+			if (status != 0){
+				stderr.printf("E: Failed to unmount device\n");
+				exit(1);
+			}
+		}
+		
+		format = get_file_format_from_file_name(image_file);
 
 		if (format.length == 0){
 			stderr.printf("E: %s (%s)\n".printf("File format not supported", "Supports: .gz, .bz2, .img"));
@@ -248,6 +299,11 @@ public static int main(string[] args) {
 		Posix.system(cmd);
 		break;
 
+	case "format":
+	
+		format_device(device, fstype, username);
+		break;
+
 	case "eject":
 
 		//http://www.redhatgeek.com/linux/remove-a-disk-from-redhatcentos-linux-without-rebooting-the-system
@@ -272,10 +328,121 @@ public static int main(string[] args) {
 		break;
 	}
 
-	return 1;
+	return 0;
 }
 
-public string get_format_from_file_name(string file_name){
+public bool format_device(string device, string fstype, string username){
+
+	// check --------------------------------------
+
+	if (!fstype_available(fstype)){
+		stderr.printf("E: Missing dependencies\n");
+		stderr.printf("E: Utility packages are not installed for selected file system format\n");
+		exit(1);
+	}
+	
+	// unmount ------------------------------------
+
+	if (device_is_mounted(device)){
+
+		string cmd = "umount %s".printf(device);
+
+		stdout.printf(cmd + "\n");
+		
+		int status = Posix.system(cmd);
+
+		if (status != 0){
+			stderr.printf("E: Failed to unmount device\n");
+			exit(1);
+		}
+	}
+	
+	// format ------------------------------------
+
+	thread_sleep(100);
+	
+	string cmd_format = fstype_command(fstype);
+				
+	if (cmd_format.length == 0){
+		stderr.printf("E: Failed to set command\n");
+		exit(1);
+	}
+
+	string cmd = "%s %s".printf(cmd_format, device);
+
+	stdout.printf(cmd + "\n");
+	
+	int status = Posix.system(cmd);
+
+	if (status != 0){
+		stderr.printf("E: Failed to unmount device\n");
+		exit(1);
+	}
+
+	// set owner ----------------------------------
+
+	if (fstype in new string[]{ "exfat", "fat16", "fat32" } ){
+		// setting owner not supported
+	}
+	else{
+		set_device_owner(device, username);
+	}
+
+	return true;
+}
+
+public void set_device_owner(string device, string username){
+
+	string mpath = get_temp_file_path(false);
+	dir_create(mpath);
+
+	// mount ------------------------------------
+
+	thread_sleep(100);
+	
+	string cmd = "mount %s '%s'".printf(device, escape_single_quote(mpath));
+
+	stdout.printf(cmd + "\n");
+	
+	int status = Posix.system(cmd);
+
+	if (status != 0){
+		stderr.printf("E: Failed to mount device\n");
+		exit(0); // exit without error
+	}
+
+	// chown ------------------------------------
+
+	thread_sleep(100);
+	
+	cmd = "chown %s:%s '%s'".printf(username, username, escape_single_quote(mpath));
+
+	stdout.printf(cmd + "\n");
+	
+	status = Posix.system(cmd);
+
+	if (status != 0){
+		stderr.printf("E: Failed to set owner\n");
+		exit(0); // exit without error
+	}
+
+	// unmount ------------------------------------
+
+	thread_sleep(100);
+	
+	cmd = "umount '%s'".printf(escape_single_quote(mpath));
+
+	stdout.printf(cmd + "\n");
+	
+	status = Posix.system(cmd);
+
+	if (status != 0){
+		stderr.printf("E: Failed to unmount device\n");
+		exit(0); // exit without error
+	}
+}
+
+public string get_file_format_from_file_name(string file_name){
 
 	string format = "";
 	
@@ -291,3 +458,125 @@ public string get_format_from_file_name(string file_name){
 
 	return format;
 }
+
+public bool fstype_available(string fmt){
+
+	string cmd = "";
+			
+	switch(fmt){
+	case "btrfs":
+	case "ext2":
+	case "ext3":
+	case "ext4":
+	case "f2fs":
+	case "jfs":
+	case "nilfs2":
+	case "ntfs":
+	case "ufs":
+	case "xfs":
+		cmd += "mkfs.%s".printf(fmt);
+		break;
+
+	case "exfat":
+		cmd += "mkfs.exfat";
+		break;
+		
+	case "fat16":
+		cmd += "mkfs.fat";
+		break;
+
+	case "fat32":
+		cmd += "mkfs.fat";
+		break;
+
+	case "hfs":
+		cmd += "hformat";
+		break;
+
+	case "hfs+":
+		cmd += "mkfs.hfsplus";
+		break;
+
+	case "reiser4":
+		cmd += "mkfs.reiser4";
+		break;
+	
+	case "reiserfs":
+		cmd += "mkreiserfs";
+		break;
+	}
+
+	return cmd_exists(cmd);
+}
+
+public string fstype_command(string fmt){
+
+	string cmd = "";
+	
+	switch(fmt){
+	case "ext2":
+	case "ext3":
+	case "ext4":
+		cmd += "mkfs.%s -F -L \"\"".printf(fmt);
+		break;
+		
+	case "f2fs":
+		cmd += "mkfs.%s -l \"\"".printf(fmt);
+		break;
+		
+	case "ufs":
+		cmd += "mkfs.%s".printf(fmt);
+		break;
+
+	case "jfs":
+		cmd += "mkfs.%s -q -L \"\"".printf(fmt);
+		break;
+		
+	case "btrfs":
+		cmd += "mkfs.%s -f -L \"\"".printf(fmt);
+		break;
+		
+	case "xfs":
+		cmd += "mkfs.%s -f -L \"\"".printf(fmt);
+		break;
+
+	case "nilfs2":
+		cmd += "mkfs.%s -f -v -L \"\"".printf(fmt);
+		break;
+
+	case "ntfs":
+		cmd += "mkfs.%s -Q -v -F -L \"\"".printf(fmt);
+		break;
+
+	case "exfat":
+		cmd += "mkfs.exfat";
+		break;
+		
+	case "fat16":
+		cmd += "mkfs.fat -F16 -v";
+		break;
+
+	case "fat32":
+		cmd += "mkfs.fat -F32 -v";
+		break;
+
+	case "hfs":
+		cmd += "hformat -f";
+		break;
+
+	case "hfs+":
+		cmd += "mkfs.hfsplus";
+		break;
+
+	case "reiser4":
+		cmd += "mkfs.reiser4 --force --yes --label \"\"";
+		break;
+	
+	case "reiserfs":
+		cmd += "mkreiserfs -f -f --label \"\"";
+		break;
+	}
+
+	return cmd.strip();
+}
+
