@@ -165,7 +165,8 @@ public class Main : GLib.Object {
 	public bool headerbar_enabled = false;
 	public bool headerbar_enabled_temp = false;
 	public bool headerbar_window_buttons_left = false;
-
+	public bool headerbar_show_pathbars = false;
+	
 	public bool middlebar_visible = true;
 
 	public bool toolbar_visible = true;
@@ -631,6 +632,7 @@ public class Main : GLib.Object {
 		//save headerbar_enabled_temp instead of headerbar_enabled
 		config.set_string_member("headerbar_enabled", headerbar_enabled_temp.to_string());
 		config.set_string_member("headerbar_window_buttons_left", headerbar_window_buttons_left.to_string());
+		config.set_string_member("headerbar_show_pathbars", headerbar_show_pathbars.to_string());
 
 		config.set_string_member("show_hidden_files", show_hidden_files.to_string());
 		config.set_string_member("panel_layout", ((int)panel_layout).to_string());
@@ -828,7 +830,8 @@ public class Main : GLib.Object {
 		headerbar_enabled = json_get_bool_from_string(config, "headerbar_enabled", headerbar_enabled);
 		headerbar_enabled_temp = headerbar_enabled;
 		headerbar_window_buttons_left = json_get_bool_from_string(config, "headerbar_window_buttons_left", headerbar_window_buttons_left);
-		
+		headerbar_show_pathbars = json_get_bool_from_string(config, "headerbar_show_pathbars", headerbar_show_pathbars);
+
 		show_hidden_files = json_get_bool_from_string(config, "show_hidden_files", show_hidden_files);
 		panel_layout = (PanelLayout) json_get_int_from_string(config, "panel_layout", panel_layout);
 		shell_default = json_get_string(config, "shell_default", shell_default);

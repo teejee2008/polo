@@ -356,8 +356,11 @@ public class Pathbar : Gtk.Box {
 	private void refresh_visibility(){
 
 		log_debug("Pathbar: refresh_visibility()");
+
 		
-		if (!App.headerbar_enabled && ((this.is_global && App.pathbar_unified) || (!this.is_global && !App.pathbar_unified))){
+		if ((!App.headerbar_enabled || App.headerbar_show_pathbars)
+			&& ((this.is_global && App.pathbar_unified) || (!this.is_global && !App.pathbar_unified))){
+				
 			this.set_no_show_all(false);
 			this.show_all();
 		}

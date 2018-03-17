@@ -58,6 +58,7 @@ public class Settings : Gtk.Box, IPaneActive {
 	private Gtk.Box vbox_toolbar;
 	private Gtk.Box vbox_pathbar;
 	private Gtk.CheckButton chk_headerbar_enabled;
+	private Gtk.CheckButton chk_headerbar_show_pathbar;
 
 	//Gtk.IconSize[] toolbar_icon_sizes = new Gtk.IconSize[] { Gtk.IconSize.MENU, Gtk.IconSize.SMALL_TOOLBAR };
 
@@ -170,6 +171,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		vbox_items = add_group(vbox, _("Headerbar"), 0);
 		add_headerbar_option_enable(vbox_items);
 		add_headerbar_option_left_window_buttons(vbox_items);
+		add_headerbar_option_show_pathbars(vbox_items);
 
 		// Sidebar -------------------------------
 
@@ -223,7 +225,8 @@ public class Settings : Gtk.Box, IPaneActive {
 		add_toolbar_item_bookmarks(vbox_items);
 		add_toolbar_item_devices(vbox_items);
 		add_toolbar_item_terminal(vbox_items);
-
+		add_toolbar_item_properties(vbox_items);
+		
 		// new column  ---------------------------------
 
 		separator = new Gtk.Separator(Gtk.Orientation.VERTICAL);
@@ -265,7 +268,7 @@ public class Settings : Gtk.Box, IPaneActive {
 			vbox_toolbar.sensitive = !chk_headerbar_enabled.active;
 		}
 		if (vbox_pathbar != null){
-			vbox_pathbar.sensitive = !chk_headerbar_enabled.active;
+			vbox_pathbar.sensitive = !chk_headerbar_enabled.active || chk_headerbar_show_pathbar.active;
 		}
 	}
 
@@ -632,6 +635,28 @@ public class Settings : Gtk.Box, IPaneActive {
 			if (App.headerbar_window_buttons_left == chk.active){ return; }
 
 			App.headerbar_window_buttons_left = chk.active;
+		});
+	}
+
+	private void add_headerbar_option_show_pathbars(Gtk.Container box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Show pathbars"));
+		chk.set_tooltip_text(_("Show pathbar"));
+		box.add(chk);
+
+		chk_headerbar_show_pathbar = chk;
+ 
+		chk.active = App.headerbar_show_pathbars;
+
+		chk.toggled.connect(()=>{
+
+			if (App.headerbar_show_pathbars == chk.active){ return; }
+
+			App.headerbar_show_pathbars = chk.active;
+
+			vbox_pathbar.sensitive = chk.active;
+
+			window.refresh_pathbars();
 		});
 	}
 
