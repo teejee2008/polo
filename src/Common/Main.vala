@@ -37,7 +37,7 @@ using TeeJee.Misc;
 public Main App;
 public const string AppName = "Polo File Manager";
 public const string AppShortName = "polo";
-public const string AppVersion = "18.2 BETA";
+public const string AppVersion = "18.3 BETA";
 public const string AppWikiVersion = ""; // update only if wiki page exists
 public const string AppAuthor = "Tony George";
 public const string AppAuthorEmail = "teejeetech@gmail.com";
@@ -294,6 +294,7 @@ public class Main : GLib.Object {
 	public bool dm_show_mp = true;
 	public bool dm_show_size = true;
 	public bool dm_show_headers = true;
+	public bool dm_show_snap = false;
 	public int dm_width = 800;
 	public int dm_height = 600;
 	
@@ -755,6 +756,8 @@ public class Main : GLib.Object {
 		config.set_string_member("dm_show_mp", dm_show_mp.to_string());
 		config.set_string_member("dm_show_size", dm_show_size.to_string());
 		config.set_string_member("dm_show_headers", dm_show_headers.to_string());
+		config.set_string_member("dm_show_snap", dm_show_snap.to_string());
+		
 		config.set_string_member("dm_width", dm_width.to_string());
 		config.set_string_member("dm_height", dm_height.to_string());
 
@@ -988,6 +991,7 @@ public class Main : GLib.Object {
 		dm_show_mp = json_get_bool_from_string(config, "dm_show_mp", dm_show_mp);
 		dm_show_size = json_get_bool_from_string(config, "dm_show_size", dm_show_size);
 		dm_show_headers = json_get_bool_from_string(config, "dm_show_headers", dm_show_headers);
+		dm_show_snap = json_get_bool_from_string(config, "dm_show_snap", dm_show_snap);
 		
 		dm_width = json_get_int_from_string(config, "dm_width", dm_width);
 		dm_height = json_get_int_from_string(config, "dm_height", dm_height);

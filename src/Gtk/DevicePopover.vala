@@ -181,6 +181,8 @@ public class DevicePopover : Gtk.Popover {
 			//else{
 				pixcell.pixbuf = dev.get_icon(22);
 			//}
+
+			pixcell.ypad = dev.has_parent() ? 0 : 5;
 		});
 
 		// text ---------------------------------------
@@ -199,9 +201,19 @@ public class DevicePopover : Gtk.Popover {
 
 			string name = "";
 			
-			if (dev.pkname.length == 0){
-			
-				name = dev.description_simple(false, true);
+			if ((dev.pkname.length == 0) && (dev.type != "loop")){
+					
+				if (dev.vendor.length > 0){
+					name += " " + dev.vendor;
+				}
+				
+				if (dev.model.length > 0){
+					name += " " + dev.model;
+				}
+
+				if ((name.strip().length == 0) && (dev.size_bytes > 0)){
+					name = "%s Device".printf(format_file_size(dev.size_bytes, false, "", true, 0));
+				}
 			}
 			else{
 				name = dev.kname;
@@ -232,7 +244,7 @@ public class DevicePopover : Gtk.Popover {
 				}
 			}
 		
-			crt.text = name;
+			crt.text = name.strip();
 		});
 
 		// size ---------------------------------------------
@@ -859,14 +871,16 @@ public class DevicePopover : Gtk.Popover {
 		var model = new Gtk.TreeStore(3, typeof(Device), typeof(string), typeof(Gdk.Pixbuf));
 		treeview.set_model(model);
 
-		var list = Main.get_devices();
+		var list = Device.get_devices();
 
 		list.sort();
 		
 		foreach(var dev in list){
 			
 			if (dev.pkname.length == 0){ // type = disk, loop
-				
+
+				if (!App.dm_show_snap && dev.mount_path.has_prefix("/snap/")){ continue; }
+
 				var iter0 = add_device(model, dev, null);
 
 				foreach(var child1 in dev.children){
@@ -880,13 +894,13 @@ public class DevicePopover : Gtk.Popover {
 					}
 				}
 
-				if (dev.children.size == 0){
+				/*if (dev.children.size == 0){
 					var dev2 = dev.copy();
 					dev2.type = "part";
 					dev2.pkname = dev.device.replace("/dev/","");
 					dev2.parent = dev;
 					add_device(model, dev2, null);
-				}
+				}*/
 			}
 		}
 
@@ -896,7 +910,7 @@ public class DevicePopover : Gtk.Popover {
 		col_fs.visible = App.dm_show_fs || manage_mode;
 		col_mp.visible = App.dm_show_mp || manage_mode;
 
-		//Device.print_logical_children();
+		Device.print_logical_children();
 	}
 
 	private Gtk.TreeIter add_device(Gtk.TreeStore model, Device dev, Gtk.TreeIter? iter_parent){

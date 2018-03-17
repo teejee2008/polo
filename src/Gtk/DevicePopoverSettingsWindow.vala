@@ -87,6 +87,8 @@ public class DevicePopoverSettingsWindow : Gtk.Window {
 		init_dm_show_mp(vbox_main);
 
 		init_dm_show_headers(vbox_main);
+		
+		init_dm_show_snap(vbox_main);
 
 		init_width(vbox_main);
 
@@ -148,6 +150,21 @@ public class DevicePopoverSettingsWindow : Gtk.Window {
 		chk.toggled.connect(()=>{
 
 			App.dm_show_headers = chk.active;
+
+			settings_changed();
+		});
+	}
+
+	private void init_dm_show_snap(Gtk.Container box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Show snap volumes"));
+		box.add(chk);
+
+		chk.active = App.dm_show_snap;
+
+		chk.toggled.connect(()=>{
+
+			App.dm_show_snap = chk.active;
 
 			settings_changed();
 		});
