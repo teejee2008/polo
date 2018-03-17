@@ -298,7 +298,7 @@ public abstract class AsyncTask : GLib.Object{
 			return true;
 		}
 	}
-	
+
 	/*public void wait_for_threads_to_finish(){
 		
 		while (threads_are_pending()){
@@ -385,13 +385,14 @@ public abstract class AsyncTask : GLib.Object{
 
 	public bool is_running {
 		get {
-			return (status == AppStatus.RUNNING);
+			return process_is_running(child_pid);
 		}
 	}
 	
 	// public actions --------------
 
 	public void pause() {
+		
 		Pid sub_child_pid;
 		foreach (long pid in get_process_children(child_pid)) {
 			sub_child_pid = (Pid) pid;

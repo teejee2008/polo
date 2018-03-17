@@ -246,7 +246,7 @@ public class FilePreviewBox : Gtk.Box {
 			
 			update_player_controls_for_file();
 
-			mpv.open_file(mfile, App.playback_paused, App.audio_muted, true);
+			mpv.open_file(mfile, App.playback_paused, App.audio_muted, true, App.audio_volume);
 		}
 
 		log_debug("FilePreviewBox: preview_mplayer(): done");
@@ -256,7 +256,7 @@ public class FilePreviewBox : Gtk.Box {
 
 	public void stop(){
 		
-		mpv.stop();
+		mpv.playback_stop();
 	}
 
 	public void quit(){
