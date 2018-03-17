@@ -248,6 +248,8 @@ public class Main : GLib.Object {
 	public string kvm_format = ".qcow2";
 
 	public int audio_volume = 70;
+	public bool audio_muted = false;
+	public bool playback_paused = false;
 
 	public TermBox? admin_shell = null;
 
@@ -757,6 +759,8 @@ public class Main : GLib.Object {
 		config.set_string_member("dm_height", dm_height.to_string());
 
 		config.set_string_member("audio_volume", audio_volume.to_string());
+		config.set_string_member("audio_muted", audio_muted.to_string());
+		config.set_string_member("playback_paused", playback_paused.to_string());
 
 		save_folder_selections();
 		
@@ -989,6 +993,8 @@ public class Main : GLib.Object {
 		dm_height = json_get_int_from_string(config, "dm_height", dm_height);
 
 		audio_volume = json_get_int_from_string(config, "audio_volume", audio_volume);
+		audio_muted = json_get_bool_from_string(config, "audio_muted", audio_muted);
+		playback_paused = json_get_bool_from_string(config, "playback_paused", playback_paused);
 		
 		load_folder_selections();
 

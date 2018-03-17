@@ -10,18 +10,17 @@ public class MediaPlayer : GLib.Object{
 	public MediaFile mFile;
 
 	//playback state
-	public string isRunning;
-	public bool IsMuted = false;
-    public bool IsPaused = false;
-    public bool IsIdle = true;
-	public double Position = 0.0;
-	public int Volume = 70;
+	public bool is_muted = false;
+    public bool is_paused = false;
+    public bool is_idle = true;
+	public double position = 0.0;
+	public int volume = 70;
 	
 	//default state flags
-    public bool MuteOnLoad = false;
-    public bool PauseOnLoad = false;
+    public bool mute_on_load = false;
+    public bool pause_on_load = false;
 
-	public uint WindowID = 0;
+	public uint window_id = 0;
 	//public string input_pipe = "";
 	
     public string err_line;
@@ -55,9 +54,9 @@ public class MediaPlayer : GLib.Object{
 
 	public MediaPlayer(string _primary_player){
 		
-        IsMuted = false;
-        IsPaused = false;
-        IsIdle = true;
+        is_muted = false;
+        is_paused = false;
+        is_idle = true;
 
         primary_player = _primary_player;
 
@@ -86,7 +85,7 @@ public class MediaPlayer : GLib.Object{
 		}
 	}
 
-	public void StartPlayer(string ExtraOptions = ""){
+	public void start_player(string extra_options = ""){
 		
 		string args = primary_player;
 		
@@ -101,7 +100,7 @@ public class MediaPlayer : GLib.Object{
 			args += " --term-status-msg='${=time-pos} ${pause} ${mute} ${volume}'";
 			
 			//window id
-			args += " --wid=%u".printf(WindowID);
+			args += " --wid=%u".printf(window_id);
 		}
 		else if (primary_player == "mplayer"){
 
@@ -109,11 +108,11 @@ public class MediaPlayer : GLib.Object{
 			args += " -slave -noquiet -msglevel all=6 -nofs -idle -osdlevel 0 -colorkey 0x101010";
 			
 			//widowid
-			args += " -wid %u".printf(WindowID);
+			args += " -wid %u".printf(window_id);
 		}
 
-		if (ExtraOptions.length > 0){
-			args += " " + ExtraOptions.strip();
+		if (extra_options.length > 0){
+			args += " " + extra_options.strip();
 		}
 
         log_debug(args);
@@ -195,7 +194,7 @@ public class MediaPlayer : GLib.Object{
 
 				parse_line(err_line);
 
-				log_debug("err:" + err_line);
+				//log_debug("err:" + err_line);
 				err_line = dis_err.read_line (null); //read next
 			}
 
@@ -212,29 +211,29 @@ public class MediaPlayer : GLib.Object{
 		MatchInfo match;
 		
 		if (rex_mpv.match(line, 0, out match)){
-			Position = double.parse(match.fetch(1));
-			IsPaused = (match.fetch(2) == "yes") ? true : false;
-			IsMuted = (match.fetch(3) == "yes") ? true : false;
-			Volume = int.parse(match.fetch(4));
+			position = double.parse(match.fetch(1));
+			is_paused = (match.fetch(2) == "yes") ? true : false;
+			is_muted = (match.fetch(3) == "yes") ? true : false;
+			volume = int.parse(match.fetch(4));
 			//log_debug("rex_mpv");
 		}
 		else if (rex_av.match(line, 0, out match)){
-			Position = double.parse(match.fetch(2));
-			IsPaused = false;
+			position = double.parse(match.fetch(2));
+			is_paused = false;
 			//log_debug("rex_av");
 		}
 		else if (rex_video.match(line, 0, out match)){
-			Position = double.parse(match.fetch(1));
-			IsPaused = false;
+			position = double.parse(match.fetch(1));
+			is_paused = false;
 			//log_debug("rex_video");
 		}
 		else if (rex_audio.match(line, 0, out match)){
-			Position = double.parse(match.fetch(1));
-			IsPaused = false;
+			position = double.parse(match.fetch(1));
+			is_paused = false;
 			//log_debug("rex_audio");
 		}
 		else if (rex_pause.match(line, 0, out match)){
-			IsPaused = true;
+			is_paused = true;
 			//log_debug("rex_pause");
 		}
 		else{
@@ -279,7 +278,7 @@ public class MediaPlayer : GLib.Object{
 					}
 				}*/
 
-				log_debug("out:" + out_line);
+				//log_debug("out:" + out_line);
 				out_line = dis_out.read_line (null);  //read next
 			}
 
@@ -309,13 +308,15 @@ public class MediaPlayer : GLib.Object{
 		}
 	}
 
-	public void Open(MediaFile _mFile, bool pause, bool mute, bool loop){
+	public void open_file(MediaFile _mFile, bool _pause, bool _mute, bool _loop){
+
+		log_debug("MediaPlayer: open_file(): muted: %s, paused: %s".printf(_mute.to_string(), _pause.to_string()));
 		
 		mFile = _mFile;
 
 		if (!process_is_running(process_id)){
 			
-			StartPlayer();
+			start_player();
 		}
 
 		string f = mFile.Path;
@@ -331,18 +332,20 @@ public class MediaPlayer : GLib.Object{
 			write_to_stdin("loadfile %s".printf(f));
 		}
 		
-		if (pause){
-			FrameStep(); //'frame_step' will pause the video, 'pause' will toggle
+		if (_pause){
+			sleep(100);
+			framestep(); //'frame_step' will pause the video, 'pause' will toggle
 		}
-		if (mute){
-			Mute();
+		if (_mute){
+			sleep(100);
+			mute();
 		}
-		if (loop){
-			Loop();
+		if (_loop){
+			loop_file();
 		}
 	}
 
-	public void Loop(){
+	public void loop_file(){
 		
 		if (primary_player == "mpv"){
 			write_to_stdin("cycle loop 100 ");
@@ -352,17 +355,17 @@ public class MediaPlayer : GLib.Object{
 		}
 	}
 
-	public void Pause(){
-		FrameStep();
+	public void pause(){
+		framestep();
 	}
 
-	public void UnPause(){
-		if (IsPaused){
-			PauseToggle();
+	public void unpause(){
+		if (is_paused){
+			toggle_pause();
 		}
 	}
 	
-	public void PauseToggle(){
+	public void toggle_pause(){
 		//pause/unpause
 		if (primary_player == "mpv"){
 			write_to_stdin("cycle pause ");
@@ -372,9 +375,9 @@ public class MediaPlayer : GLib.Object{
 		}
 	}
 
-	public void Mute(){
+	public void mute(){
 
-		log_debug("Mute()");
+		log_debug("mute()");
 		
 		if (primary_player == "mplayer"){
 			write_to_stdin("mute 1");
@@ -383,12 +386,12 @@ public class MediaPlayer : GLib.Object{
 			write_to_stdin("cycle mute 1");
 		}
 
-		IsMuted = true;
+		is_muted = true;
 	}
 
-	public void UnMute(){
+	public void unmute(){
 
-		log_debug("UnMute()");
+		log_debug("unmute()");
 		
 		if (primary_player == "mplayer"){
 			write_to_stdin("mute 0");
@@ -397,29 +400,29 @@ public class MediaPlayer : GLib.Object{
 			write_to_stdin("cycle mute 1");
 		}
 
-		IsMuted = false;
+		is_muted = false;
 	}
 
-	public void SetVolume(int percent){
+	public void set_volume(int percent){
 		
-		Volume = percent;
+		volume = percent;
 		
 		if (primary_player == "mpv"){
-			write_to_stdin("set volume %d".printf(Volume));
+			write_to_stdin("set volume %d".printf(volume));
 		}
 		else{
-			write_to_stdin("volume %d 1".printf(Volume));
+			write_to_stdin("volume %d 1".printf(volume));
 		}
 	}
 	
-	public void Stop(){
+	public void stop(){
 		
 		write_to_stdin("stop ");
 	}
 
-	public void Quit(){
+	public void quit(){
 
-		log_debug("MediaPlayer.quit()");
+		log_debug("MediaPlayer:quit()");
 		
 		write_to_stdin("quit ");
 		
@@ -428,9 +431,10 @@ public class MediaPlayer : GLib.Object{
 		}
 	}
 
-	public void ToggleFullScreen(){
+	public void toggle_fullscreen(){
 
 		if (primary_player == "mplayer"){
+			
 			write_to_stdin("fullscreen 1");
 		}
 		else{
@@ -438,43 +442,54 @@ public class MediaPlayer : GLib.Object{
 		}
 	}
 
-	public void ChangeRectangle(int parameter, int amount){
+	public void change_rect(int parameter, int amount){
+		
 		write_to_stdin("change_rectangle %d %d ".printf(parameter, amount));
 	}
 
-	public void UpdateRectangle_Left(int change){
-		ChangeRectangle(2, change);
-		ChangeRectangle(0, -change);
-		if (IsPaused){
-			FrameStep();
+	public void update_rect_left(int change){
+		
+		change_rect(2, change);
+		change_rect(0, -change);
+		
+		if (is_paused){
+			framestep();
 		}
 	}
 
-	public void UpdateRectangle_Right(int change){
-		//ChangeRectangle(2, change);
-		ChangeRectangle(0, -change);
-		if (IsPaused){
-			FrameStep();
+	public void update_rect_right(int change){
+		
+		//change_rect(2, change);
+		change_rect(0, -change);
+		
+		if (is_paused){
+			framestep();
 		}
 	}
 
-	public void UpdateRectangle_Top(int change){
-		ChangeRectangle(3, change);
-		ChangeRectangle(1, -change);
-		if (IsPaused){
-			FrameStep();
+	public void update_rect_top(int change){
+		
+		change_rect(3, change);
+		
+		change_rect(1, -change);
+		
+		if (is_paused){
+			framestep();
 		}
 	}
 
-	public void UpdateRectangle_Bottom(int change){
-		//ChangeRectangle(3, change);
-		ChangeRectangle(1, -change);
-		if (IsPaused){
-			FrameStep();
+	public void update_rect_bottom(int change){
+		
+		//change_rect(3, change);
+		change_rect(1, -change);
+		
+		if (is_paused){
+			framestep();
 		}
 	}
 
 	public void Mpv_Crop(){
+		
 		int w = mFile.SourceWidth - mFile.CropL - mFile.CropR;
 		int h = mFile.SourceHeight - mFile.CropT - mFile.CropB;
 		int x = mFile.CropL;
@@ -483,23 +498,30 @@ public class MediaPlayer : GLib.Object{
 		write_to_stdin("vf set \"crop=%d:%d:%d:%d\"".printf(w,h,x,y));
 	}
 	
-	public void FrameStep(){
+	public void framestep(){
+		
 		write_to_stdin("frame_step ");
 	}
 
-	public void SetRectangle(){
-		ChangeRectangle(0, - mFile.CropL - mFile.CropR); //0=width
-		FrameStep();
-		ChangeRectangle(1, - mFile.CropT - mFile.CropB); //1=height
-		FrameStep();
-		ChangeRectangle(2, mFile.CropL); //2=x
-		FrameStep();
-		ChangeRectangle(3, mFile.CropT); //3=y
-		FrameStep();
+	public void set_rect(){
+		
+		change_rect(0, - mFile.CropL - mFile.CropR); //0=width
+		framestep();
+		
+		change_rect(1, - mFile.CropT - mFile.CropB); //1=height
+		framestep();
+		
+		change_rect(2, mFile.CropL); //2=x
+		framestep();
+		
+		change_rect(3, mFile.CropT); //3=y
+		framestep();
 	}
 	
-	public void Seek(double seconds){
+	public void seek(double seconds){
+		
 		if (primary_player == "mpv"){
+			
 			write_to_stdin("seek %.1f absolute".printf(seconds));
 		}
 		else{
@@ -507,9 +529,12 @@ public class MediaPlayer : GLib.Object{
 		}
 	}
 
-	public void Exit(){
+	public void exit(){
+		
 		write_to_stdin("quit ");
+		
 		is_running = false;
+		
 		process_kill(proc_id);
 	}
 }
