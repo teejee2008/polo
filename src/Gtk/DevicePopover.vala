@@ -182,7 +182,7 @@ public class DevicePopover : Gtk.Popover {
 				pixcell.pixbuf = dev.get_icon(22);
 			//}
 
-			pixcell.ypad = dev.has_parent() ? 0 : 5;
+			//pixcell.ypad = dev.has_parent() ? 0 : 5;
 		});
 
 		// text ---------------------------------------

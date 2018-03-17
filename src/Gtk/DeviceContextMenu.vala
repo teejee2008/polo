@@ -516,9 +516,13 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		string mpath = "";
 
 		// unmount if mounted, and save the mount path
+		
 		if (dev.is_mounted){
+			
 			mpath = dev.mount_points[0].mount_point;
+			
 			if (!dev.unmount(window)){
+				
 				log_debug("device is still mounted!");
 				mpath = "";
 			}
@@ -531,13 +535,19 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 		}
 
 		// lock the device's parent if device is unmounted and encrypted
+		
 		if (dev.is_on_encrypted_partition){
+			
 			log_debug("locking device...");
+			
 			ok = dev.parent.lock_device(window);
 
+			Thread.usleep(100);
+			
 			if (ok){
 				string title =  _("Device Locked");
 				OSDNotify.notify_send(title, "", 1000, "low", "info");
+				log_msg(title);
 			}
 		}
 		else{
@@ -546,7 +556,7 @@ public class DeviceContextMenu : Gtk.Menu, IPaneActive {
 
 		// reset views that were displaying the mounted path
 		if (mpath.length > 0){
-			log_debug("resetting views for the mount path");
+			//log_debug("resetting views for the mount path");
 			//window.reset_views_with_path_prefix(mpath);
 		}
 

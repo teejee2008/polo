@@ -76,10 +76,26 @@ public class IconManager : GLib.Object {
 		}
 	}
 
-	public static Gdk.Pixbuf? lookup(string icon_name, int icon_size, bool symbolic = false, bool use_hardcoded = false){
+	public static Gdk.Pixbuf? lookup(string icon_names, int icon_size, bool symbolic = false, bool use_hardcoded = false){
 
 		Gdk.Pixbuf? pixbuf = null;
 
+		var names = icon_names.split(",");
+
+		if (names.length > 1){
+
+			foreach(string name in names){
+
+				pixbuf = lookup(name, icon_size, symbolic, use_hardcoded);
+				
+				if (pixbuf != null){ return pixbuf; }
+			}
+
+			return pixbuf;
+		}
+
+		string icon_name = icon_names;
+		
 		if (icon_name.length == 0){ return null; }
 
 		if (!use_hardcoded){
@@ -101,6 +117,7 @@ public class IconManager : GLib.Object {
 				if (file_exists(img_file)){
 
 					pixbuf = load_pixbuf_from_file_at_scale(img_file, icon_size);
+					
 					if (pixbuf != null){ return pixbuf; }
 				}
 			}
