@@ -1,3 +1,24 @@
+polo-file-manager (18.3) xenial; urgency=low
+
+  * New device manager
+
+  * New file preview and properties pane
+
+  * Allow normal users to change user and group for files. Use gksu/polkit for admin authorization.
+
+  * Persist admin authorization till application exit
+
+  * Fixed: Closing main window would close any applications that were started by it
+
+  * Fixed: Enter key opens selection bar instead of opening selected item
+
+  * Fixed: Warnings when trying to read folders which are not readable by current user
+
+  * Headerbar: New option to show pathbars when headerbar is enabled
+  
+ -- Tony George <tony.george.kol@gmail.com>  Sun, 18 Mar 2017 10:00:00 +0530
+
+
 polo-file-manager (18.2) xenial; urgency=low
 
   * Checksum: Added options for generating and verifying checksums
