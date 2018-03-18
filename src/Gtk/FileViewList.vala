@@ -2340,6 +2340,9 @@ public class FileViewList : Gtk.Box {
 		if (current_item.is_trash){
 			set_columns("name,size,deletion_date,original_path");
 		}
+		else{
+			set_columns(App.selected_columns);
+		}
 	}
 	
 	// refresh  ---------------------------------------
