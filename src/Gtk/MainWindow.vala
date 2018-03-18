@@ -143,6 +143,10 @@ public class MainWindow : Gtk.Window {
 				open_donate_window();
 			}
 
+			if (propbar.visible){
+				propbar.stop_preview();
+			}
+
 			log_debug("MainWindow: exiting...");
 		
 			window_is_closing = true; // set after save_session()
@@ -994,8 +998,8 @@ public class MainWindow : Gtk.Window {
 		dialog.logo = get_app_icon(128,".svg");
 
 		//dialog.license = "";
-		dialog.website = "http://teejeetech.in";
-		dialog.website_label = "http://teejeetech.blogspot.in";
+		dialog.website = "https://github.com/teejee2008";
+		dialog.website_label = "https://github.com/teejee2008";
 
 		dialog.initialize();
 		dialog.show_all();

@@ -187,9 +187,7 @@ public class FilePropertiesPanel : Gtk.Box {
 
 		App.propbar_visible = false;
 
-		if (box_preview != null){
-			box_preview.quit();
-		}
+		stop_preview();
 
 		gtk_hide(this);
 	}
@@ -206,6 +204,12 @@ public class FilePropertiesPanel : Gtk.Box {
 		}
 	}
 
+	public void stop_preview(){
+
+		if (box_preview != null){
+			box_preview.quit();
+		}
+	}
 }
 
 
