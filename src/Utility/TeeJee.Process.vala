@@ -552,6 +552,8 @@ namespace TeeJee.ProcessHelper{
 		 * Sends signal SIGTERM to the process to allow it to quit gracefully.
 		 * */
 
+		if (process_pid < 1){ return; }
+
 		int[] child_pids = get_process_children(process_pid);
 		Posix.kill(process_pid, Posix.SIGTERM);
 		log_debug("SIGTERM: pid=%d".printf(process_pid));
@@ -560,8 +562,10 @@ namespace TeeJee.ProcessHelper{
 			Pid childPid;
 			foreach (long pid in child_pids){
 				childPid = (Pid) pid;
-				Posix.kill(childPid, Posix.SIGTERM);
-				log_debug("SIGTERM: pid=%d".printf(childPid));
+				if (childPid > 1){
+					Posix.kill(childPid, Posix.SIGTERM);
+					log_debug("SIGTERM: pid=%d".printf(childPid));
+				}
 			}
 		}
 	}
@@ -572,6 +576,8 @@ namespace TeeJee.ProcessHelper{
 		 * Sends signal SIGKILL to the process to kill it forcefully.
 		 * It is recommended to use the function process_quit() instead.
 		 * */
+
+		if (process_pid < 1){ return; }
 		
 		int[] child_pids = get_process_children (process_pid);
 		Posix.kill (process_pid, Posix.SIGKILL);
@@ -581,8 +587,10 @@ namespace TeeJee.ProcessHelper{
 			Pid childPid;
 			foreach (long pid in child_pids){
 				childPid = (Pid) pid;
-				Posix.kill (childPid, Posix.SIGKILL);
-				log_debug("SIGKILL: pid=%d".printf(childPid));
+				if (childPid > 1){
+					Posix.kill (childPid, Posix.SIGKILL);
+					log_debug("SIGKILL: pid=%d".printf(childPid));
+				}
 			}
 		}
 	}
