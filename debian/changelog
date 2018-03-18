@@ -1,3 +1,10 @@
+polo-file-manager (18.3.1) xenial; urgency=low
+
+  * Fixed: Closing properties panel can crash desktop session!
+  
+ -- Tony George <tony.george.kol@gmail.com>  Sun, 18 Mar 2017 14:00:00 +0530
+
+
 polo-file-manager (18.3) xenial; urgency=low
 
   * New device manager
