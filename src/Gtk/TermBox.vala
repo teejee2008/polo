@@ -249,7 +249,7 @@ public class TermBox : Gtk.Box {
 			cmd = "%s\n".printf(cmd);
 		}
 		
-		term.feed_child(cmd, -1);
+		term.feed_child(cmd.to_utf8());
 	}
 
 	public void refresh(){
