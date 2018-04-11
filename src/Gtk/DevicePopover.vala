@@ -684,7 +684,7 @@ public class DevicePopover : Gtk.Popover {
 
 		// edit -----------------------
 
-		button = new Gtk.Button.with_label(_("Actions"));
+		button = new Gtk.Button.with_label(_("Manage"));
 		bbox.add(button);
 
 		button.clicked.connect(btn_manage_mode);
@@ -1137,6 +1137,10 @@ public class DevicePopover : Gtk.Popover {
 
 		string std_out, std_err;
 		int status = App.exec_admin(cmd, out std_out, out std_err);
+
+		//log_debug("O:" + std_out);
+
+		//log_debug("E:" + std_err);
 
 		gtk_set_busy(false, App.main_window);
 

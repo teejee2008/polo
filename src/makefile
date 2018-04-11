@@ -46,7 +46,8 @@ app-util-gtk3:
 	valac "polo-gtk3-helper.vala" -o polo-gtk3-helper --pkg gtk+-3.0
 
 app-util-disk:
-	valac --Xcc="-lm" "polo-disk.vala" Util.vala -o polo-disk --pkg posix --pkg gio-unix-2.0
+	valac --Xcc="-lm" -X -D'GETTEXT_PACKAGE="${app_name}"' \
+		"polo-disk.vala" Console/*.vala -o polo-disk --pkg posix --pkg gio-unix-2.0 --pkg gee-0.8
 
 app-translations:
 

@@ -51,8 +51,6 @@ public const int PLUGIN_VER_CLAMAV = 1;
 const string GETTEXT_PACKAGE = "";
 const string LOCALE_DIR = "/usr/share/locale";
 
-extern void exit(int exit_code);
-
 public class Main : GLib.Object {
 
 	// static defaults ---------------------------------
@@ -199,7 +197,8 @@ public class Main : GLib.Object {
 	public bool pathbar_show_swap = true;
 	public bool pathbar_show_other = true;
 	public bool pathbar_show_close = true;
-
+	public bool pathbar_show_eject = true;
+	
 	public bool statusbar_unified = false;
 
 	public bool confirm_delete = true;
@@ -696,7 +695,8 @@ public class Main : GLib.Object {
 		config.set_string_member("pathbar_show_swap", pathbar_show_swap.to_string());
 		config.set_string_member("pathbar_show_other", pathbar_show_other.to_string());
 		config.set_string_member("pathbar_show_close", pathbar_show_close.to_string());
-
+		config.set_string_member("pathbar_show_eject", pathbar_show_eject.to_string());
+		
 		config.set_string_member("statusbar_unified", statusbar_unified.to_string());
 
 		config.set_string_member("tabs_bottom", tabs_bottom.to_string());
@@ -908,7 +908,8 @@ public class Main : GLib.Object {
 		pathbar_show_swap = json_get_bool_from_string(config, "pathbar_show_swap", pathbar_show_swap);
 		pathbar_show_other = json_get_bool_from_string(config, "pathbar_show_other", pathbar_show_other);
 		pathbar_show_close = json_get_bool_from_string(config, "pathbar_show_close", pathbar_show_close);
-
+		pathbar_show_eject = json_get_bool_from_string(config, "pathbar_show_eject", pathbar_show_eject);
+		
 		statusbar_unified = json_get_bool_from_string(config, "statusbar_unified", statusbar_unified);
 
 		tabs_bottom = json_get_bool_from_string(config, "tabs_bottom", tabs_bottom);

@@ -50,9 +50,17 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 	public string mapped_name = "";
 	public string uuid = "";
 	public string label = "";
+	public string partuuid = "";
 	public string partlabel = "";
+	
 	public int major = -1;
 	public int minor = -1;
+
+	public string device_mapper = "";
+	public string device_by_uuid = "";
+	public string device_by_label = "";
+	public string device_by_partuuid = "";  // gpt only
+	public string device_by_partlabel = ""; // gpt only
 
 	public string type = ""; // disk, part, crypt, loop, rom, lvm
 	public string fstype = ""; // iso9660, ext4, btrfs, ...
@@ -117,7 +125,7 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 		
 		return monitor;
 	}
-
+	
 	public static void test_lsblk_version(){
 
 		if ((lsblk_version != null) && (lsblk_version.length > 0)){
@@ -137,6 +145,10 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 	}
 
 	public static Gee.ArrayList<Device> get_devices(){
+		if (device_list == null){
+			get_block_devices();
+		}
+		
 		return device_list;
 	}
 
@@ -287,6 +299,12 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 	public bool is_encrypted_partition {
 		get {
 			return fstype.down().contains("luks");
+		}
+	}
+
+	public bool is_unlocked {
+		get {
+			return has_children;
 		}
 	}
 
@@ -674,7 +692,7 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 		
 		foreach(var dev_df in list_df){
 			
-			var dev = find_device_in_list_by_uuid(list, dev_df.uuid);
+			var dev = get_device_by_uuid(dev_df.uuid, list);
 			
 			if (dev != null){
 				dev.size_bytes = dev_df.size_bytes;
@@ -692,7 +710,7 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 
 		foreach(var dev_mtab in list_mtab){
 			
-			var dev = find_device_in_list_by_uuid(list, dev_mtab.uuid);
+			var dev = get_device_by_uuid(dev_mtab.uuid, list);
 			
 			if (dev != null){
 				dev.mount_points = dev_mtab.mount_points;
@@ -796,7 +814,7 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 
 					if ((parent != null) && (child != null)){
 						child.pkname = parent.kname;
-						log_debug("%s -> %s".printf(parent.kname, child.kname));
+						//log_debug("%s -> %s".printf(parent.kname, child.kname));
 					}
 
 				}
@@ -855,49 +873,33 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 			cmd = "lsblk --bytes --pairs --output NAME,KNAME,LABEL,UUID,TYPE,FSTYPE,SIZE,MOUNTPOINT,MODEL,RO,RM,MAJ:MIN";
 		}
 		else{
-			cmd = "lsblk --bytes --pairs --output NAME,KNAME,LABEL,PARTLABEL,UUID,TYPE,FSTYPE,SIZE,MOUNTPOINT,MODEL,RO,HOTPLUG,MAJ:MIN,PKNAME,VENDOR,SERIAL,REV";
+			cmd = "lsblk --bytes --pairs --output NAME,KNAME,LABEL,UUID,TYPE,FSTYPE,SIZE,MOUNTPOINT,MODEL,RO,HOTPLUG,MAJ:MIN,PARTLABEL,PARTUUID,PKNAME,VENDOR,SERIAL,REV";
 		}
 
 		if (dev_name.length > 0){
 			cmd += " %s".printf(dev_name);
 		}
 
-		//if (LOG_DEBUG){
-		//	log_debug("");
-		//	log_debug(cmd);
-		//}
-
 		ret_val = exec_sync(cmd, out std_out, out std_err);
-
-		//if (ret_val != 0){
-		//	var msg = "lsblk: " + _("Failed to get partition list");
-		//	msg += (device_file.length > 0) ? ": " + device_file : "";
-		//	log_error (msg);
-		//	return list; //return empty map
-		//}
 
 		/*
 		sample output
 		-----------------
 		NAME="sda" KNAME="sda" PKNAME="" LABEL="" UUID="" FSTYPE="" SIZE="119.2G" MOUNTPOINT="" HOTPLUG="0"
-
 		NAME="sda1" KNAME="sda1" PKNAME="sda" LABEL="" UUID="5345-E139" FSTYPE="vfat" SIZE="47.7M" MOUNTPOINT="/boot/efi" HOTPLUG="0"
-
 		NAME="mmcblk0p1" KNAME="mmcblk0p1" PKNAME="mmcblk0" LABEL="" UUID="3c0e4bbf" FSTYPE="crypto_LUKS" SIZE="60.4G" MOUNTPOINT="" HOTPLUG="1"
-
 		NAME="luks-3c0" KNAME="dm-1" PKNAME="mmcblk0p1" LABEL="" UUID="f0d933c0-" FSTYPE="ext4" SIZE="60.4G" MOUNTPOINT="/mnt/sdcard" HOTPLUG="0"
-		*/
 
-		/*
 		Note: Multiple loop devices can have same UUIDs.
 		Example: Loop devices created by mounting the same ISO multiple times.
 		*/
 
-		//parse output and build filesystem map -------------
+		// parse output and add to list --------------------------------------------
 
 		int index = -1;
 
 		foreach(string line in std_out.split("\n")){
+			
 			if (line.strip().length == 0) { continue; }
 
 			try{
@@ -905,18 +907,21 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 					rex = new Regex("""NAME="(.*)" KNAME="(.*)" LABEL="(.*)" UUID="(.*)" TYPE="(.*)" FSTYPE="(.*)" SIZE="(.*)" MOUNTPOINT="(.*)" MODEL="(.*)" RO="([0-9]+)" RM="([0-9]+)" MAJ:MIN="([0-9:]+)"""");
 				}
 				else{
-					rex = new Regex("""NAME="(.*)" KNAME="(.*)" LABEL="(.*)" PARTLABEL="(.*)" UUID="(.*)" TYPE="(.*)" FSTYPE="(.*)" SIZE="(.*)" MOUNTPOINT="(.*)" MODEL="(.*)" RO="([0-9]+)" HOTPLUG="([0-9]+)" MAJ:MIN="([0-9:]+)" PKNAME="(.*)" VENDOR="(.*)" SERIAL="(.*)" REV="(.*)"""");
+					rex = new Regex("""NAME="(.*)" KNAME="(.*)" LABEL="(.*)" UUID="(.*)" TYPE="(.*)" FSTYPE="(.*)" SIZE="(.*)" MOUNTPOINT="(.*)" MODEL="(.*)" RO="([0-9]+)" HOTPLUG="([0-9]+)" MAJ:MIN="([0-9:]+)" PARTLABEL="(.*)" PARTUUID="(.*)" PKNAME="(.*)" VENDOR="(.*)" SERIAL="(.*)" REV="(.*)"""");
 				}
 
 				if (rex.match (line, 0, out match)){
 
 					Device pi = new Device();
+
 					int pos = 0;
+					
 					pi.name = match.fetch(++pos).strip();
 					pi.kname = match.fetch(++pos).strip();
-					pi.label = match.fetch(++pos); // do not strip - labels can have leading or trailing spaces
-					pi.partlabel = match.fetch(++pos); // do not strip - labels can have leading or trailing spaces
+					
+					pi.label = match.fetch(++pos); // don't strip; labels can have leading or trailing spaces
 					pi.uuid = match.fetch(++pos).strip();
+
 					pi.type = match.fetch(++pos).strip().down();
 
 					pi.fstype = match.fetch(++pos).strip().down();
@@ -943,6 +948,10 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 					}
 					
 					if (!lsblk_is_ancient){
+						
+						pi.partlabel = match.fetch(++pos); // don't strip; labels can have leading or trailing spaces
+						pi.partuuid = match.fetch(++pos).strip();
+					
 						pi.pkname = match.fetch(++pos).strip();
 						pi.vendor = match.fetch(++pos).strip();
 						pi.serial = match.fetch(++pos).strip();
@@ -952,16 +961,30 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 					pi.order = ++index;
 					pi.device = "/dev/%s".printf(pi.kname);
 
-					//if ((pi.type == "crypt") && (pi.pkname.length > 0)){
-					//	pi.name = "%s (unlocked)".printf(pi.pkname);
-					//}
+					if (pi.uuid.length > 0){
+						pi.device_by_uuid = "/dev/disk/by-uuid/%s".printf(pi.uuid);
+						pi.symlinks.add(pi.device_by_uuid);
+					}
 
-					//if ((pi.uuid.length > 0) && (pi.pkname.length > 0)){
-						list.add(pi);
-					//}
+					if (pi.label.length > 0){
+						pi.device_by_label = "/dev/disk/by-label/%s".printf(pi.label);
+						pi.symlinks.add(pi.device_by_label);
+					}
+
+					if (pi.partuuid.length > 0){
+						pi.device_by_partuuid = "/dev/disk/by-partuuid/%s".printf(pi.partuuid);
+						pi.symlinks.add(pi.device_by_partuuid);
+					}
+
+					if (pi.partlabel.length > 0){
+						pi.device_by_partlabel = "/dev/disk/by-partlabel/%s".printf(pi.partlabel);
+						pi.symlinks.add(pi.device_by_partlabel);
+					}
+
+					list.add(pi);
 				}
 				else{
-					log_debug("no-match: %s".printf(line));
+					log_error("no-match: %s".printf(line));
 				}
 			}
 			catch(Error e){
@@ -969,50 +992,32 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 			}
 		}
 
-		// already sorted
-		/*list.sort((a,b)=>{
-			return (a.order - b.order);
-		});*/
+		// add aliases from /dev/mapper/ -------------------------------
 
-		// add aliases from /dev/disk/by-uuid/
+		try{
+			var f_mapper = File.new_for_path ("/dev/mapper");
 
-		foreach(var dev in list){
-			var dev_by_uuid = path_combine("/dev/disk/by-uuid/", dev.uuid);
-			if (file_exists(dev_by_uuid)){
-				dev.symlinks.add(dev_by_uuid);
-			}
-		}
-
-		// add aliases from /dev/mapper/
-
-		try
-		{
-			File f_dev_mapper = File.new_for_path ("/dev/mapper");
-
-			FileEnumerator enumerator = f_dev_mapper.enumerate_children (
-				"%s,%s".printf(
-					FileAttribute.STANDARD_NAME, FileAttribute.STANDARD_SYMLINK_TARGET),
-				FileQueryInfoFlags.NOFOLLOW_SYMLINKS);
+			var enumerator = f_mapper.enumerate_children (
+				"%s,%s".printf(FileAttribute.STANDARD_NAME,
+					FileAttribute.STANDARD_SYMLINK_TARGET),
+					FileQueryInfoFlags.NOFOLLOW_SYMLINKS);
 
 			FileInfo info;
 			while ((info = enumerator.next_file ()) != null) {
 
 				if (info.get_name() == "control") { continue; }
 
-				File f_mapped = f_dev_mapper.resolve_relative_path(info.get_name());
+				string target = info.get_symlink_target();
 
-				string mapped_file = f_mapped.get_path();
-				string mapped_device = info.get_symlink_target();
-				mapped_device = mapped_device.replace("..","/dev");
-				//log_debug("info.get_name(): %s".printf(info.get_name()));
-				//log_debug("info.get_symlink_target(): %s".printf(info.get_symlink_target()));
-				//log_debug("mapped_file: %s".printf(mapped_file));
-				//log_debug("mapped_device: %s".printf(mapped_device));
+				if (target == null){ continue; }
+				
+				string target_device = target.replace("..","/dev");
 
 				foreach(var dev in list){
-					if (dev.device == mapped_device){
-						dev.mapped_name = mapped_file.replace("/dev/mapper/","");
-						dev.symlinks.add(mapped_file);
+					if (dev.device == target_device){
+						dev.mapped_name = info.get_name();
+						dev.device_mapper = "/dev/mapper/" + info.get_name();
+						dev.symlinks.add(dev.device_mapper);
 						//log_debug("found link: %s -> %s".printf(mapped_file, dev.device));
 						break;
 					}
@@ -1022,6 +1027,8 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 		catch (Error e) {
 			log_error (e.message);
 		}
+
+		// update relationships ----------------------------------------
 
 		foreach (var part in list){
 			find_child_devices(list, part);
@@ -1041,34 +1048,6 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 		return list;
 	}
 
-	/* Not useful */
-	public static Gee.ArrayList<Device> get_block_devices_using_glib(){
-
-		log_debug("Device: get_block_devices_using_glib()");
-		
-		var list = new Gee.ArrayList<Device>();
-
-		var vmon = VolumeMonitor.get();
-		var volumes = vmon.get_volumes(); 
-		foreach (var volume in volumes) {
-			Device dev = new Device();
-			dev.uuid = volume.get_uuid();
-			list.add(dev);
-			/*
-			stdout.printf (" - name: %s\n", volume.get_name());
-			stdout.printf (" - uuid: %s\n", volume.get_uuid());
-			stdout.printf (" - UUID: %s\n", volume.get_identifier(GLib.VolumeIdentifier.UUID));
-			stdout.printf (" - LABEL: %s\n", volume.get_identifier(GLib.VolumeIdentifier.LABEL));
-			stdout.printf (" - UNIX_DEVICE: %s\n", volume.get_identifier(GLib.VolumeIdentifier.UNIX_DEVICE));
-			stdout.printf (" - NFS_MOUNT: %s\n", volume.get_identifier(GLib.VolumeIdentifier.NFS_MOUNT));
-			stdout.printf (" - HAL_UDI: %s\n", volume.get_identifier(GLib.VolumeIdentifier.HAL_UDI));
-			stdout.printf (" - CLASS: %s\n", volume.get_identifier(GLib.VolumeIdentifier.CLASS));
-			* */
-		}
-		
-		return list;
-	}
-
 	public static Gee.ArrayList<Device> get_disk_space_using_df(string dev_name_or_mount_point = ""){
 
 		/*
@@ -1076,25 +1055,21 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 		Populates device, type, size, used and mount_point_list
 		*/
 
+		//log_debug("Device: get_disk_space_using_df()");
+
 		var list = new Gee.ArrayList<Device>();
 
-		string std_out;
-		string std_err;
-		string cmd;
-		int ret_val;
-
-		cmd = "df -T -B1";
-
+		string cmd = "df -T -B1";
 		if (dev_name_or_mount_point.length > 0){
 			cmd += " '%s'".printf(escape_single_quote(dev_name_or_mount_point));
 		}
+		log_debug(cmd);
 
-		if (LOG_DEBUG){
-			//log_debug(cmd);
-		}
-
-		ret_val = exec_sync(cmd, out std_out, out std_err);
+		string std_out, std_err;
+		exec_sync(cmd, out std_out, out std_err);
 		//ret_val is not reliable, no need to check
+
+		//log_debug(std_out);
 
 		/*
 		sample output
@@ -1116,7 +1091,7 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 			if (++line_num == 1) { continue; }
 			if (line.strip().length == 0) { continue; }
 
-			Device pi = new Device();
+			var pi = new Device();
 
 			//parse & populate fields ------------------
 
@@ -1160,6 +1135,8 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 			 * Use get_mounted_filesystems_using_mtab() if mount info is required
 			 * */
 
+			if (!pi.device.has_prefix("/")){ continue; }
+
 			// resolve device name --------------------
 
 			//log_debug("pi.device=%s".printf(pi.device));
@@ -1181,7 +1158,7 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 			}
 		}
 
-		log_debug("Device: get_disk_space_using_df(): %d".printf(list.size));
+		//log_debug("Device: get_disk_space_using_df(): %d".printf(list.size));
 
 		return list;
 	}
@@ -1302,7 +1279,9 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 			// add to map -------------------------
 
 			if (pi.uuid.length > 0){
-				var dev = find_device_in_list_by_uuid(list, pi.uuid);
+				
+				var dev = get_device_by_uuid(pi.uuid, list);
+				
 				if (dev == null){
 					list.add(pi);
 				}
@@ -1339,142 +1318,13 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 		return dev;
 	}
 
-	// deprecated: use get_block_devices_using_lsblk() instead
-	public static Gee.ArrayList<Device> get_block_devices_using_blkid(string dev_name = ""){
-
-		/* Returns list of mounted partitions using 'blkid' command
-		   Populates device, type, uuid, label */
-
-		var list = new Gee.ArrayList<Device>();
-
-		string std_out;
-		string std_err;
-		string cmd;
-		int ret_val;
-		Regex rex;
-		MatchInfo match;
-
-		cmd = "/sbin/blkid" + ((dev_name.length > 0) ? " " + dev_name: "");
-
-		if (LOG_DEBUG){
-			log_debug(cmd);
-		}
-
-		ret_val = exec_script_sync(cmd, out std_out, out std_err);
-		if (ret_val != 0){
-			var msg = "blkid: " + _("Failed to get partition list");
-			msg += (dev_name.length > 0) ? ": " + dev_name : "";
-			log_error(msg);
-			return list; //return empty list
-		}
-
-		/*
-		sample output
-		-----------------
-		/dev/sda1: LABEL="System Reserved" UUID="F476B08076B04560" TYPE="ntfs"
-		/dev/sda2: LABEL="windows" UUID="BE00B6DB00B69A3B" TYPE="ntfs"
-		/dev/sda3: UUID="03f3f35d-71fa-4dff-b740-9cca19e7555f" TYPE="ext4"
-		*/
-
-		//parse output and build filesystem map -------------
-
-		foreach(string line in std_out.split("\n")){
-			if (line.strip().length == 0) { continue; }
-
-			Device pi = new Device();
-
-			pi.device = line.split(":")[0].strip();
-
-			if (pi.device.length == 0) { continue; }
-
-			//exclude non-standard devices --------------------
-
-			if (!pi.device.has_prefix("/dev/")){
-				continue;
-			}
-
-			if (pi.device.has_prefix("/dev/sd") || pi.device.has_prefix("/dev/hd") || pi.device.has_prefix("/dev/mapper/") || pi.device.has_prefix("/dev/dm")) {
-				//ok
-			}
-			else if (pi.device.has_prefix("/dev/disk/by-uuid/")){
-				//ok, get uuid
-				pi.uuid = pi.device.replace("/dev/disk/by-uuid/","");
-			}
-			else{
-				continue; //skip
-			}
-
-			//parse & populate fields ------------------
-
-			try{
-				rex = new Regex("""LABEL=\"([^\"]*)\"""");
-				if (rex.match (line, 0, out match)){
-					pi.label = match.fetch(1); // do not strip - labels can have leading or trailing spaces
-				}
-
-				rex = new Regex("""UUID=\"([^\"]*)\"""");
-				if (rex.match (line, 0, out match)){
-					pi.uuid = match.fetch(1).strip();
-				}
-
-				rex = new Regex("""TYPE=\"([^\"]*)\"""");
-				if (rex.match (line, 0, out match)){
-					pi.fstype = match.fetch(1).strip();
-				}
-			}
-			catch(Error e){
-				log_error (e.message);
-			}
-
-			//add to map -------------------------
-
-			if (pi.uuid.length > 0){
-				list.add(pi);
-			}
-		}
-
-		log_debug("Device: get_block_devices_using_blkid(): %d".printf(list.size));
-
-		return list;
-	}
-
 	// static helpers ----------------------------------
 
-	public static void print_device_list_short(Gee.ArrayList<Device> list){
-	
-		string txt = "";
-		foreach(var item in list){
-			txt += (txt.length == 0) ? "" : " ";
-			txt += "%s".printf(file_basename(item.device));
-		}
-		log_debug("Devices: " + txt);
-	}
-	
-	public static Device? find_device_in_list_by_name(Gee.ArrayList<Device> list, string dev_name){
+	public static Device? get_device_by_uuid(string uuid, Gee.ArrayList<Device>? _list = null){
 
+		var list = (_list == null) ? device_list : _list;
+		
 		foreach(var dev in list){
-			if (dev.device == dev_name){
-				return dev;
-			}
-		}
-
-		return null;
-	}
-
-	public static Device? find_device_in_list_by_uuid(Gee.ArrayList<Device> list, string dev_uuid){
-
-		foreach(var dev in list){
-			if (dev.uuid == dev_uuid){
-				return dev;
-			}
-		}
-
-		return null;
-	}
-
-	public static Device? get_device_by_uuid(string uuid){
-
-		foreach(var dev in device_list){
 			if (dev.uuid == uuid){
 				return dev;
 			}
@@ -1483,11 +1333,13 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 		return null;
 	}
 
-	public static Device? get_device_by_name(string file_name){
+	public static Device? get_device_by_name(string file_name, Gee.ArrayList<Device>? _list = null){
 
 		var device_name = resolve_device_name(file_name);
 
-		foreach(var dev in device_list){
+		var list = (_list == null) ? device_list : _list;
+		
+		foreach(var dev in list){
 			if (dev.device == device_name){
 				return dev;
 			}
@@ -1503,11 +1355,21 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 		//print_device_list_short(list);
 
 		if (list.size > 0){
-			return list[0];
+			
+			string name = list[0].device;
+			
+			string resolved = resolve_device_name(name);
+			//log_debug("get_device_by_path: resolved: %s -> %s".printf(name, resolved));
+			
+			var dev = get_device_by_name(resolved);
+			//log_debug("get_device_by_path: device: '%s' -> %s".printf(path_to_check, dev.device));
+			
+			return dev;
 		}
 
 		return null;
 	}
+
 
 	public static string get_uuid_by_name(string device){
 
@@ -1538,7 +1400,7 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 
 		var list_mtab = get_mounted_filesystems_using_mtab();
 
-		var dev = find_device_in_list_by_uuid(list_mtab, uuid);
+		var dev = get_device_by_uuid(uuid, list_mtab);
 
 		if (dev != null){
 			return dev.mount_points;
@@ -1571,29 +1433,76 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 		return false;
 	}
 
-	public static string resolve_device_name(string dev_alias){
 
-		string resolved = dev_alias;
+	public static Device? resolve_device(string _dev_alias){
 
-		if (dev_alias.has_prefix("/dev/mapper/")){
+		if (_dev_alias.length == 0){ return null; }
+		
+		string dev_alias = _dev_alias;
+		
+		if (dev_alias.down().has_prefix("uuid=")){
+			
+			dev_alias = dev_alias.split("=",2)[1].strip().down();
+		}
+		else if (file_exists(dev_alias) && file_is_symlink(dev_alias)){
+
 			var link_path = file_get_symlink_target(dev_alias);
-			if (link_path.has_prefix("../")){
-				resolved = link_path.replace("../","/dev/");
+			
+			dev_alias = link_path.replace("../../../","/dev/").replace("../../","/dev/").replace("../","/dev/");
+		}
+
+		foreach(var dev in device_list){
+			
+			if (dev.device == dev_alias){
+				return dev;
+			}
+			else if (dev.uuid == dev_alias){
+				return dev;
+			}
+			else if (dev.label == dev_alias){
+				return dev;
+			}
+			else if (dev.partuuid == dev_alias){
+				return dev;
+			}
+			else if (dev.partlabel == dev_alias){
+				return dev;
+			}
+			else if (dev.device_by_uuid == dev_alias){
+				return dev;
+			}
+			else if (dev.device_by_label == dev_alias){
+				return dev;
+			}
+			else if (dev.device_by_partuuid == dev_alias){
+				return dev;
+			}
+			else if (dev.device_by_partlabel == dev_alias){
+				return dev;
+			}
+			else if (dev.device_mapper == dev_alias){
+				return dev;
+			}
+			else if (dev.mapped_name == dev_alias){ // check last
+				return dev;
 			}
 		}
 
-		if (dev_alias.has_prefix("/dev/disk/")){
-			var link_path = file_get_symlink_target(dev_alias);
-			if (link_path.has_prefix("../../")){
-				resolved = link_path.replace("../../","/dev/");
-			}
-		}
+		return null;
+	}
 
-		if (dev_alias != resolved){
-			//log_debug("Device: resolved '%s' to '%s'".printf(dev_alias, resolved));
-		}
+	public static string resolve_device_name(string _dev_alias){
 
-		return resolved;
+		if (_dev_alias.length == 0){ return ""; }
+
+		var dev = resolve_device(_dev_alias);
+
+		if (dev != null){
+			return dev.device;
+		}
+		else{
+			return "";
+		}
 	}
 
 	
@@ -1695,14 +1604,24 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 		this.symlinks = dev2.symlinks;
 		this.parent = dev2.parent;
 		this.children = dev2.children;
-	}
 
+		// aliases
+		this.device_mapper = dev2.device_mapper;
+		this.device_by_uuid = dev2.device_by_uuid;
+		this.device_by_label = dev2.device_by_label;
+		this.device_by_partuuid = dev2.device_by_partuuid;
+		this.device_by_partlabel = dev2.device_by_partlabel;
+		
+		this.major = dev2.major;
+		this.minor = dev2.minor;
+	}
+	
 	public Device copy(){
 		var dev = new Device();
 		dev.copy_fields_from(this);
 		return dev;
 	}
-
+	
 	public Device? query_changes(){
 
 		foreach (var dev in get_block_devices()){
@@ -1717,29 +1636,23 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 
 	public void query_disk_space(){
 
-		/* Updates disk space info */
+		var list2 = get_disk_space_using_df(device);
 
-		var list_df = get_disk_space_using_df(device);
+		var dev2 = get_device_by_uuid(uuid, list2);
 
-		var dev_df = find_device_in_list_by_uuid(list_df, uuid);
-
-		if (dev_df != null){
-			// update fields
-			size_bytes = dev_df.size_bytes;
-			used_bytes = dev_df.used_bytes;
-			available_bytes = dev_df.available_bytes;
+		if (dev2 != null){
+			// update size fields
+			size_bytes = dev2.size_bytes;
+			used_bytes = dev2.used_bytes;
+			available_bytes = dev2.available_bytes;
 		}
 	}
 
 	public void query_mount_points(){
 
-		/* Updates mount point information */
-
-		mount_points.clear();
-
 		var list = get_mounted_filesystems_using_mtab();
 		
-		var dev = find_device_in_list_by_name(list, device);
+		var dev = get_device_by_name(device, list);
 		
 		if (dev != null){
 			mount_points = dev.mount_points; // update field
@@ -2144,7 +2057,7 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 		// check if already mounted and return mount point -------------
 
 		var list = Device.get_block_devices();
-		var dev = find_device_in_list_by_uuid(list, uuid);
+		var dev = get_device_by_uuid(uuid, list);
 		if (dev != null){
 			return dev.mount_points[0].mount_point;
 		}
@@ -2440,6 +2353,44 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 			}
 		}
 
+		return s.strip();
+	}
+
+	public string description_disk_friendly(){
+
+		var dev = this;
+
+		while (dev.has_parent()){
+			dev = dev.parent;
+		}
+
+		string s = "";
+			
+		if (dev.vendor.length > 0){
+			s += " " + dev.vendor;
+		}
+		
+		if (dev.model.length > 0){
+			s += " " + dev.model;
+		}
+		
+		if (dev.size_bytes > 0) {
+			
+			if (s.strip().length == 0){
+				
+				s += "%s Device".printf(format_file_size(dev.size_bytes, false, "", true, 0));
+			}
+			else{
+				s += " (%s)".printf(format_file_size(dev.size_bytes, false, "", true, 0));
+			}
+		}
+		
+		if (s.has_prefix("ATA ")){
+			s = s[4:s.length];
+		}
+
+		s = dev.device + " - " + s.strip();
+		
 		return s.strip();
 	}
 
@@ -2781,6 +2732,16 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 		}
 
 		log_debug("");
+	}
+
+	public static void print_device_list_short(Gee.ArrayList<Device> list){
+	
+		string txt = "";
+		foreach(var item in list){
+			txt += (txt.length == 0) ? "" : " ";
+			txt += "%s".printf(file_basename(item.device));
+		}
+		log_debug("Devices: " + txt);
 	}
 
 }

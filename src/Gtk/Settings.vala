@@ -253,6 +253,7 @@ public class Settings : Gtk.Box, IPaneActive {
 		add_pathbar_item_next(vbox_items);
 		add_pathbar_item_up(vbox_items);
 		add_pathbar_item_home(vbox_items);
+		add_pathbar_item_eject(vbox_items);
 		add_pathbar_item_swap(vbox_items);
 		add_pathbar_item_other(vbox_items);
 
@@ -894,6 +895,26 @@ public class Settings : Gtk.Box, IPaneActive {
 		});
 	}
 
+	private void add_pathbar_item_eject(Gtk.Container box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Eject Device"));
+		box.add(chk);
+
+		chk.active = App.pathbar_show_eject;
+
+		chk.toggled.connect(()=>{
+
+			if (App.pathbar_show_eject == chk.active){ return; }
+
+			App.pathbar_show_eject = chk.active;
+
+			foreach(var pn in window.panes){
+				pn.pathbar.refresh_icon_visibility();
+			}
+			window.pathbar.refresh_icon_visibility();
+		});
+	}
+
 	private void add_pathbar_item_swap(Gtk.Container box){
 
 		var chk = new Gtk.CheckButton.with_label(_("Swap"));
@@ -933,7 +954,7 @@ public class Settings : Gtk.Box, IPaneActive {
 			window.pathbar.refresh_icon_visibility();
 		});
 	}
-
+	
 	/*private void add_pathbar_item_close(Gtk.Container box){
 
 		var chk = new Gtk.CheckButton.with_label(_("Close"));

@@ -1,5 +1,7 @@
 src/polo-gtk
 src/gtk3-version-polo
+src/polo-disk
+src/polo-gtk3-helper
 release/source
 release/amd64
 release/i386
@@ -14,11 +16,6 @@ release/*.run
 .git
 .bzr
 *~
-
 po-temp/
-
 *.rpm
 
-src/polo-disk
-
-src/polo-gtk3-helper

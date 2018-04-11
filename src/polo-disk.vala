@@ -21,6 +21,11 @@
  *
  */
 
+using TeeJee.FileSystem;
+using TeeJee.ProcessHelper;
+using TeeJee.System;
+using TeeJee.Misc;
+
 public static int main(string[] args) {
 
 	string help_text = "Syntax: polo-disk {backup|restore} --file <disk-image> --device <device-file> --user <user> [--gz|--bz2]\n";
@@ -38,6 +43,8 @@ public static int main(string[] args) {
 	string username = "";
 
 	check_admin_access();
+
+	Device.get_block_devices();
 
 	//parse options
 	for (int k = 1; k < args.length; k++) {
@@ -149,7 +156,9 @@ public static int main(string[] args) {
 
 		// unmount ------------------------------------
 
-		if (device_is_mounted(device)){
+		var dev = Device.get_device_by_name(device);
+		
+		if (dev.is_mounted){
 
 			cmd = "umount %s".printf(device);
 
@@ -230,7 +239,9 @@ public static int main(string[] args) {
 
 		// unmount ------------------------------------
 
-		if (device_is_mounted(device)){
+		var dev = Device.get_device_by_name(device);
+		
+		if (dev.is_mounted){
 
 			cmd = "umount %s".printf(device);
 
@@ -308,23 +319,47 @@ public static int main(string[] args) {
 
 		//http://www.redhatgeek.com/linux/remove-a-disk-from-redhatcentos-linux-without-rebooting-the-system
 
-		//cmd = "umount %s?*".printf(device);
+		var dev = Device.get_device_by_name(device);
 
-		cmd = "ls %s?* | xargs -n1 umount -l".printf(device);
-		
+		while (dev.has_parent()){
+			dev = dev.parent;
+		}
+
+		if (dev.is_mounted){ // partition-less disk may be mounted
+			dev.unmount();
+		}
+
+		foreach(var child in dev.children){
+			if (child.is_mounted){
+				child.unmount();
+			}
+			if (child.is_encrypted_partition){
+				child.lock_device();
+			}
+		}
+
 		string kname = device.replace("/dev/","").strip();
 
-		// mark offline
-		string sysfile = "/sys/block/%s/device/state".printf(kname);
-		//file_write(sysfile, "offline", true);
-		cmd = "echo 'offline' > %s".printf(sysfile);
-		Posix.system(cmd);
+		// mark offline ------------------
 
-		// delete entries from system
+		string sysfile = "/sys/block/%s/device/state".printf(kname);
+		
+		if (file_exists(sysfile)){
+			//file_write(sysfile, "offline", true);
+			cmd = "echo 'offline' > %s".printf(sysfile);
+			Posix.system(cmd);
+		}
+
+		// delete entries from system ------------------------
+		
 		sysfile = "/sys/block/%s/device/delete".printf(kname);
-		//file_write(sysfile, "1", true);
-		cmd = "echo '1' > %s".printf(sysfile);
-		Posix.system(cmd);
+
+		if (file_exists(sysfile)){
+			//file_write(sysfile, "1", true);
+			cmd = "echo '1' > %s".printf(sysfile);
+			Posix.system(cmd);
+		}
+		
 		break;
 	}
 
@@ -343,7 +378,9 @@ public bool format_device(string device, string fstype, string username){
 	
 	// unmount ------------------------------------
 
-	if (device_is_mounted(device)){
+	var dev = Device.get_device_by_name(device);
+		
+	if (dev.is_mounted){
 
 		string cmd = "umount %s".printf(device);
 
@@ -359,7 +396,7 @@ public bool format_device(string device, string fstype, string username){
 	
 	// format ------------------------------------
 
-	thread_sleep(100);
+	sleep(100);
 	
 	string cmd_format = fstype_command(fstype);
 				
@@ -398,7 +435,7 @@ public void set_device_owner(string device, string username){
 
 	// mount ------------------------------------
 
-	thread_sleep(100);
+	sleep(100);
 	
 	string cmd = "mount %s '%s'".printf(device, escape_single_quote(mpath));
 
@@ -413,7 +450,7 @@ public void set_device_owner(string device, string username){
 
 	// chown ------------------------------------
 
-	thread_sleep(100);
+	sleep(100);
 	
 	cmd = "chown %s:%s '%s'".printf(username, username, escape_single_quote(mpath));
 
@@ -428,7 +465,7 @@ public void set_device_owner(string device, string username){
 
 	// unmount ------------------------------------
 
-	thread_sleep(100);
+	sleep(100);
 	
 	cmd = "umount '%s'".printf(escape_single_quote(mpath));
 

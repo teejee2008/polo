@@ -32,7 +32,11 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
-public class FileViewList : Gtk.Box {
+public interface IFileViewList{
+	
+}
+
+public class FileViewList : Gtk.Box, IFileViewList {
 
 	private Gtk.Box contents;
 	private Gtk.Overlay overlay;

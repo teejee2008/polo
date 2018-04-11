@@ -2,7 +2,7 @@
 /*
  * TeeJee.System.vala
  *
- * Copyright 2012-18 Tony George <teejeetech@gmail.com>
+ * Copyright 2017 Tony George <teejeetech@gmail.com>
  *
  * This program is free software; you can redistribute it and/or modify
  * it under the terms of the GNU General Public License as published by
@@ -32,32 +32,22 @@ namespace TeeJee.System{
 	using TeeJee.FileSystem;
 	
 	// user ---------------------------------------------------
-	
-	public bool user_is_admin (){
 
-		/* Check if current application is running with admin priviledges */
+	public void check_admin_access(){ 
+     
+		if (!user_is_admin()){ 
 
-		try{
-			// create a process
-			string[] argv = { "sleep", "10" };
-			Pid procId;
-			Process.spawn_async(null, argv, null, SpawnFlags.SEARCH_PATH, null, out procId);
-
-			// try changing the priority
-			Posix.setpriority (Posix.PRIO_PROCESS, procId, -5);
-
-			// check if priority was changed successfully
-			if (Posix.getpriority (Posix.PRIO_PROCESS, procId) == -5)
-				return true;
-			else
-				return false;
-		}
-		catch (Error e) {
-			log_error (e.message);
-			return false;
-		}
+			log_error("Admin access is needed!"); 
+			log_error("Run as root, or using 'sudo' or 'pkexec'"); 
+			exit(1); 
+		} 
 	}
-
+  
+	public bool user_is_admin(){
+		
+		return (get_user_id_effective() == 0);
+	}
+	
 	public int get_user_id(){
 
 		// returns actual user id of current user (even for applications executed with sudo and pkexec)
@@ -65,14 +55,12 @@ namespace TeeJee.System{
 		string pkexec_uid = GLib.Environment.get_variable("PKEXEC_UID");
 
 		if (pkexec_uid != null){
-			
 			return int.parse(pkexec_uid);
 		}
 
 		string sudo_user = GLib.Environment.get_variable("SUDO_USER");
 
 		if (sudo_user != null){
-			
 			return get_user_id_from_username(sudo_user);
 		}
 
@@ -110,100 +98,50 @@ namespace TeeJee.System{
 
 	public int get_user_id_from_username(string username){
 		
-		// check local user accounts in /etc/passwd -------------------
+		int user_id = -1;
 
 		foreach(var line in file_read("/etc/passwd").split("\n")){
-			
 			var arr = line.split(":");
-			
-			if ((arr.length >= 3) && (arr[0] == username)){
-				
-				return int.parse(arr[2]);
+			if (arr.length < 3) { continue; }
+			if (arr[0] == username){
+				user_id = int.parse(arr[2]);
+				break;
 			}
 		}
 
-		// check remote user accounts with getent -------------------
-			
-		var arr = get_user_with_getent(username).split(":");
-
-		if ((arr.length >= 3) && (arr[0] == username)){
-
-			return int.parse(arr[2]);
-		}
-
-		// not found --------------------
-		
-		log_error("UserId not found for userName: %s".printf(username));
-
-		return -1;
+		return user_id;
 	}
 
 	public string get_username_from_uid(int user_id){
-
-		// check local user accounts in /etc/passwd -------------------
 		
+		string username = "";
+
 		foreach(var line in file_read("/etc/passwd").split("\n")){
-			
 			var arr = line.split(":");
-			
-			if ((arr.length >= 3) && (arr[2] == user_id.to_string())){
-				
-				return arr[0];
+			if (arr.length < 3) { continue; }
+			if (int.parse(arr[2]) == user_id){
+				username = arr[0];
+				break;
 			}
 		}
 
-		// check remote user accounts with getent -------------------
-			
-		var arr = get_user_with_getent(user_id.to_string()).split(":");
-
-		if ((arr.length >= 3) && (arr[2] == user_id.to_string())){
-
-			return arr[0];
-		}
-
-		// not found --------------------
-		
-		log_error("Username not found for uid: %d".printf(user_id));
-
-		return "";
+		return username;
 	}
 
 	public string get_user_home(string username = get_username()){
-
-		// check local user accounts in /etc/passwd -------------------
 		
-		foreach(var line in file_read("/etc/passwd").split("\n")){
-			
-			var arr = line.split(":");
-			
-			if ((arr.length >= 6) && (arr[0] == username)){
+		string userhome = "";
 
-				return arr[5];
+		foreach(var line in file_read("/etc/passwd").split("\n")){
+			var arr = line.split(":");
+			if (arr.length < 6) { continue; }
+			if (arr[0] == username){
+				userhome = arr[5];
+				break;
 			}
 		}
 
-		// check remote user accounts with getent -------------------
-		
-		var arr = get_user_with_getent(username).split(":");
-		
-		if ((arr.length >= 6) && (arr[0] == username)){
-
-			return arr[5];
-		}
-
-		// not found --------------------
-
-		log_error("Home directory not found for user: %s".printf(username));
-
-		return "";
-	}
-
-	public string get_user_with_getent(string user_name_or_uid){
-
-		string cmd = "getent passwd " + user_name_or_uid;
-		string std_out, std_err;
-		exec_sync(cmd, out std_out, out std_err);
-		return std_out;
+		return userhome;
 	}
 
 	public string get_user_home_effective(){
@@ -263,50 +201,6 @@ namespace TeeJee.System{
 		}
 	}
 
-	public string get_desktop_name(){
-
-		/* Return the names of the current Desktop environment */
-
-		int pid = -1;
-
-		pid = get_pid_by_name("cinnamon");
-		if (pid > 0){
-			return "Cinnamon";
-		}
-
-		pid = get_pid_by_name("xfdesktop");
-		if (pid > 0){
-			return "Xfce";
-		}
-
-		pid = get_pid_by_name("lxsession");
-		if (pid > 0){
-			return "LXDE";
-		}
-
-		pid = get_pid_by_name("gnome-shell");
-		if (pid > 0){
-			return "Gnome";
-		}
-
-		pid = get_pid_by_name("wingpanel");
-		if (pid > 0){
-			return "Elementary";
-		}
-
-		pid = get_pid_by_name("unity-panel-service");
-		if (pid > 0){
-			return "Unity";
-		}
-
-		pid = get_pid_by_name("plasma-desktop");
-		if (pid > 0){
-			return "KDE";
-		}
-
-		return "Unknown";
-	}
-
 	public Gee.ArrayList<string> list_dir_names(string path){
 		var list = new Gee.ArrayList<string>();
 		
@@ -334,53 +228,69 @@ namespace TeeJee.System{
 		return list;
 	}
 
-	public int get_display_width(){
-		return Gdk.Screen.get_default().get_width();
-	}
-
-	public int get_display_height(){
-		return Gdk.Screen.get_default().get_height();
-	}
-	
 	// internet helpers ----------------------
 	
 	public bool check_internet_connectivity(){
+		
 		bool connected = false;
-		connected = check_internet_connectivity_test1();
+		connected = check_internet_connectivity_test();
 
 		if (connected){
 			return connected;
 		}
 		
 		if (!connected){
-			connected = check_internet_connectivity_test2();
+			log_error("Internet connection is not active");
 		}
 
 	    return connected;
 	}
 
+	public bool check_internet_connectivity_test(){
+		
+		string std_err, std_out;
+
+		string cmd = "url='http://google.com'\n";
+		
+		cmd += "httpCode=$(curl -o /dev/null --silent --head --write-out '%{http_code}\n' $url)";
+		
+		cmd += "test $httpCode -lt 400 && test $httpCode -gt 0\n";
+		
+		cmd += "exit $?";
+		
+		int status = exec_script_sync(cmd, out std_out, out std_err, false);
+
+	    return (status == 0);
+	}
+
 	public bool check_internet_connectivity_test1(){
-		int exit_code = -1;
-		string std_err;
-		string std_out;
+
+		// Deprecated: 'ping' may be disabled on enterprise systems
+
+		string std_err, std_out;
 
 		string cmd = "ping -q -w 1 -c 1 `ip r | grep default | cut -d ' ' -f 3`\n";
+		
 		cmd += "exit $?";
-		exit_code = exec_script_sync(cmd, out std_out, out std_err, false);
+		
+		int status = exec_script_sync(cmd, out std_out, out std_err, false);
 
-	    return (exit_code == 0);
+	    return (status == 0);
 	}
 
 	public bool check_internet_connectivity_test2(){
-		int exit_code = -1;
-		string std_err;
-		string std_out;
+
+		// Deprecated: 'ping' may be disabled on enterprise systems
+		
+		string std_err, std_out;
 
 		string cmd = "ping -q -w 1 -c 1 google.com\n";
+		
 		cmd += "exit $?";
-		exit_code = exec_script_sync(cmd, out std_out, out std_err, false);
+		
+		int status = exec_script_sync(cmd, out std_out, out std_err, false);
 
-	    return (exit_code == 0);
+	    return (status == 0);
 	}
 
 	public bool shutdown (){
@@ -407,118 +317,24 @@ namespace TeeJee.System{
 	// open -----------------------------
 
 	public bool xdg_open (string file, string user = ""){
+		
 		string path = get_cmd_path ("xdg-open");
+		
 		if ((path != null) && (path != "")){
+			
 			string cmd = "xdg-open '%s'".printf(escape_single_quote(file));
+			
 			if (user.length > 0){
 				cmd = "pkexec --user %s env DISPLAY=$DISPLAY XAUTHORITY=$XAUTHORITY ".printf(user) + cmd;
 			}
+			
 			log_debug(cmd);
+			
 			int status = exec_script_async(cmd);
+			
 			return (status == 0);
 		}
-		return false;
-	}
-
-	public bool exo_open_folder (string dir_path, bool xdg_open_try_first = true){
-
-		/* Tries to open the given directory in a file manager */
-
-		/*
-		xdg-open is a desktop-independent tool for configuring the default applications of a user.
-		Inside a desktop environment (e.g. GNOME, KDE, Xfce), xdg-open simply passes the arguments
-		to that desktop environment's file-opener application (gvfs-open, kde-open, exo-open, respectively).
-		We will first try using xdg-open and then check for specific file managers if it fails.
-		*/
-
-		string path;
-		int status;
 		
-		if (xdg_open_try_first){
-			//try using xdg-open
-			path = get_cmd_path ("xdg-open");
-			if ((path != null)&&(path != "")){
-				string cmd = "xdg-open '%s'".printf(escape_single_quote(dir_path));
-				status = exec_script_async (cmd);
-				return (status == 0);
-			}
-		}
-
-		foreach(string app_name in
-			new string[]{ "nemo", "nautilus", "thunar", "pantheon-files", "marlin"}){
-				
-			path = get_cmd_path (app_name);
-			if ((path != null)&&(path != "")){
-				string cmd = "%s '%s'".printf(app_name, escape_single_quote(dir_path));
-				status = exec_script_async (cmd);
-				return (status == 0);
-			}
-		}
-
-		if (xdg_open_try_first == false){
-			//try using xdg-open
-			path = get_cmd_path ("xdg-open");
-			if ((path != null)&&(path != "")){
-				string cmd = "xdg-open '%s'".printf(escape_single_quote(dir_path));
-				status = exec_script_async (cmd);
-				return (status == 0);
-			}
-		}
-
-		return false;
-	}
-
-	public bool exo_open_textfile (string txt_file){
-
-		/* Tries to open the given text file in a text editor */
-
-		string path;
-		int status;
-		string cmd;
-		
-		path = get_cmd_path ("exo-open");
-		if ((path != null)&&(path != "")){
-			cmd = "exo-open '%s'".printf(escape_single_quote(txt_file));
-			status = exec_script_async (cmd);
-			return (status == 0);
-		}
-
-		path = get_cmd_path ("gedit");
-		if ((path != null)&&(path != "")){
-			cmd = "gedit --new-document '%s'".printf(escape_single_quote(txt_file));
-			status = exec_script_async (cmd);
-			return (status == 0);
-		}
-
-		return false;
-	}
-
-	public bool exo_open_url (string url){
-
-		/* Tries to open the given text file in a text editor */
-
-		string path;
-		int status;
-		//string cmd;
-		
-		path = get_cmd_path ("exo-open");
-		if ((path != null)&&(path != "")){
-			status = exec_script_async ("exo-open \"" + url + "\"");
-			return (status == 0);
-		}
-
-		path = get_cmd_path ("firefox");
-		if ((path != null)&&(path != "")){
-			status = exec_script_async ("firefox \"" + url + "\"");
-			return (status == 0);
-		}
-
-		path = get_cmd_path ("chromium-browser");
-		if ((path != null)&&(path != "")){
-			status = exec_script_async ("chromium-browser \"" + url + "\"");
-			return (status == 0);
-		}
-
 		return false;
 	}
 
@@ -613,6 +429,7 @@ namespace TeeJee.System{
 		}
 		log_msg("%s %lu\n".printf(seconds.to_string(), microseconds));
 	}	
+
 
 	public void set_numeric_locale(string type){
 		Intl.setlocale(GLib.LocaleCategory.NUMERIC, type);

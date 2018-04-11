@@ -90,6 +90,8 @@ public class Pathbar : Gtk.Box {
 	private Gtk.EventBox ebox_open_other;
 	private Gtk.Image img_open_other;
 
+	private Gtk.EventBox ebox_eject;
+
 	//private Gtk.EventBox ebox_close;
 	//private Gtk.Image img_close;
 
@@ -139,6 +141,8 @@ public class Pathbar : Gtk.Box {
 
 		add_item_link_box();
 
+		add_item_eject();
+
 		add_item_open_other();
 
 		add_item_swap();
@@ -180,9 +184,6 @@ public class Pathbar : Gtk.Box {
 	}
 
 	// disk menu
-
-	//private Gtk.Popover popup_dev;
-	//private Sidebar sidebar_dev;
 
 	private DevicePopover dev_popup;
 
@@ -459,6 +460,15 @@ public class Pathbar : Gtk.Box {
 			img_open_other.pixbuf = IconManager.lookup_image("go-previous-symbolic",ICON_SIZE).pixbuf;
 		}
 
+		// eject ------------------------------
+
+		if (App.pathbar_show_eject){
+			gtk_show(ebox_eject);
+		}
+		else{
+			gtk_hide(ebox_eject);
+		}
+
 		// margins ----------------------------
 
 		if (App.pathbar_show_other){
@@ -482,6 +492,7 @@ public class Pathbar : Gtk.Box {
 		else{
 			ebox_swap.margin_left = 0;
 		}
+
 
 		// close ---------------
 
@@ -957,6 +968,93 @@ public class Pathbar : Gtk.Box {
 		ebox.button_press_event.connect((event)=>{
 			if (event.button != 1) { return false; }
 			view.swap_location_with_opposite_pane();
+			return true;
+		});
+	}
+
+	private void add_item_eject(){
+
+		log_debug("Pathbar: add_item_eject()");
+
+		var ebox = gtk_add_event_box(this);
+		ebox.margin_left = 0;
+		//ebox.margin_right = 3;
+		ebox_eject = ebox;
+
+		var img = IconManager.lookup_image("media-eject", 16);
+		ebox.add(img);
+
+		var tt = _("Eject storage device");
+		img.set_tooltip_text(tt);
+		ebox.set_tooltip_text(tt);
+
+		ebox.button_press_event.connect((event)=>{
+			
+			if (event.button != 1) { return false; }
+
+			if (!view.check_tool("polo-disk")){ return false; }
+
+			if (view == null){ return false; }
+
+			if (view.current_item == null){ return false; }
+
+			string path1 = view.current_item.file_path;
+
+			var dev = Device.get_device_by_path(path1);
+
+			if (dev == null){ return false; }
+			
+			while (dev.has_parent()){
+				dev = dev.parent;
+			}
+
+			string txt, msg;
+			
+			if (dev.is_system_device){
+				txt = _("System Device");
+				msg = _("System devices cannot be ejected while system is running") + "\n\n" + dev.description_disk_friendly();
+				gtk_messagebox(txt, msg, window, true);
+				return false;
+			}
+			else if (!dev.removable){
+				txt = _("Non-Removable Device");
+				msg = _("Device is not removable") + "\n\n" + dev.description_disk_friendly();
+				gtk_messagebox(txt, msg, window, true);
+				return false;
+			}
+
+			txt = _("Eject Device ?");
+			msg = dev.description_disk_friendly();
+			var resp = gtk_messagebox_yes_no(txt, msg, window, true);
+			if (resp != Gtk.ResponseType.YES){
+				return false;
+			}
+			
+			string disk = (dev.pkname_toplevel.length > 0) ? dev.pkname_toplevel : dev.kname;
+
+			string cmd = "polo-disk eject --device /dev/%s".printf(disk);
+			
+			gtk_set_busy(true, window);
+
+			string std_out, std_err;
+			App.exec_admin(cmd, out std_out, out std_err);
+
+			gtk_set_busy(false, window);
+
+			var list = Device.get_block_devices();
+			
+			if (Device.get_device_by_name(dev.device, list) == null){
+				
+				txt = _("Device Ejected");
+				msg = dev.description_friendly();
+				gtk_messagebox(txt, msg, window, false);
+			}
+			else{
+				txt = _("Failed to Eject Device");
+				msg = _("Device may be non-removable, or in-use by another process") + "\n\n" + std_err;
+				gtk_messagebox(txt, msg, App.main_window, true);
+			}
+			
 			return true;
 		});
 	}

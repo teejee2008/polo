@@ -78,6 +78,7 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		add_menu_view(menu_shell);
 		add_menu_go(menu_shell);
 		add_menu_cloud(menu_shell);
+		//add_menu_cloud(menu_session);
 		add_menu_tools(menu_shell);
 		add_menu_help(menu_shell);
 		
