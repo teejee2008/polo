@@ -178,9 +178,9 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 
 				// use numeric sorting for numbered partitions --------------
 		
-				var match_a = regex_match("""^(.*)([0-9]+)$""", a.kname);
+				var match_a = regex_match("""^([a-zA-Z]*)([0-9]+)$""", a.kname);
 					
-				var match_b = regex_match("""^(.*)([0-9]+)$""", b.kname);
+				var match_b = regex_match("""^([a-zA-Z]*)([0-9]+)$""", b.kname);
 
 				if ((match_a != null) && (match_b != null)){
 					
@@ -1658,7 +1658,7 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 			mount_points = dev.mount_points; // update field
 		}
 	}
-
+	
 	// mounting ---------------------------------
 
 	public static bool automount_udisks(Device dev, Gtk.Window? parent_window, bool show_on_success = false){
