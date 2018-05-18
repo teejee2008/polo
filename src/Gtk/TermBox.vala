@@ -116,7 +116,7 @@ public class TermBox : Gtk.Box {
 		//#endif
 		
 		term.scroll_on_keystroke = true;
-		term.scroll_on_output = true;
+		term.scroll_on_output = false;
 		term.scrollback_lines = 100000;
 
 		if (App.term_font != null){
