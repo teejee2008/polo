@@ -90,6 +90,8 @@ public class DevicePopoverSettingsWindow : Gtk.Window {
 		
 		init_dm_show_snap(vbox_main);
 
+		init_dm_disable_automount(vbox_main);
+
 		init_width(vbox_main);
 
 		init_height(vbox_main);
@@ -228,6 +230,52 @@ public class DevicePopoverSettingsWindow : Gtk.Window {
 
 		size_label.add_widget(label);
 		size_combo.add_widget(spin);
+	}
+
+	private void init_dm_disable_automount(Gtk.Container box){
+
+		var chk = new Gtk.CheckButton.with_label(_("Disable auto-mount for removable devices (recommended)"));
+		box.add(chk);
+
+		chk.set_tooltip_text(_("Creates rule for udisks2 to prevent auto-mounting of removable devices.\n\nDevices will be mounted only when you open them using Polo or another file manager. This is good for security as partitions will remain unmounted till it is actually needed.\n\nThis option will take effect after system reboot or after udisks2 service is restarted."));
+
+		string rules_file = "/etc/udev/rules.d/85-no-automount.rules";
+		
+		chk.active = file_exists(rules_file);
+
+		chk.toggled.connect(chk_automount_toggled);
+	}
+
+	private void chk_automount_toggled(Gtk.Widget widget){
+
+		Gtk.CheckButton chk = (Gtk.CheckButton) widget;
+		
+		string rules_file = "/etc/udev/rules.d/85-no-automount.rules";
+		
+		if (chk.active){
+				
+			if (!file_exists(rules_file)){
+
+				string rfile = path_combine(App.share_dir, "files/udisks2/udisks2-automount-disable.sh");
+				string cmd = "sh '%s'".printf(escape_single_quote(rfile));
+				string std_out, std_err;
+				int status = App.exec_admin(cmd, out std_out, out std_err);
+
+				if (!file_exists(rules_file)){
+					//chk.active = false;
+				}
+			}
+		}
+		else{
+			string rfile = path_combine(App.share_dir, "files/udisks2/udisks2-automount-enable.sh");
+			string cmd = "sh '%s'".printf(escape_single_quote(rfile));
+			string std_out, std_err;
+			int status = App.exec_admin(cmd, out std_out, out std_err);
+
+			if (file_exists(rules_file)){
+				//chk.active = true;
+			}
+		}
 	}
 
 	private void init_actions() {
