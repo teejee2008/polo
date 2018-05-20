@@ -237,7 +237,7 @@ public class DevicePopoverSettingsWindow : Gtk.Window {
 		var chk = new Gtk.CheckButton.with_label(_("Disable auto-mount for removable devices (recommended)"));
 		box.add(chk);
 
-		chk.set_tooltip_text(_("Creates rule for udisks2 to prevent auto-mounting of removable devices.\n\nDevices will be mounted only when you open them using Polo or another file manager. This is good for security as partitions will remain unmounted till it is actually needed.\n\nThis option will take effect after system reboot or after udisks2 service is restarted."));
+		chk.set_tooltip_text(_("Creates rule for udisks2 to prevent auto-mounting of removable devices.\n\nDevices will be mounted only when you open them using Polo or another file manager. This is good for security as partitions will remain unmounted till they are actually needed."));
 
 		string rules_file = "/etc/udev/rules.d/85-no-automount.rules";
 		
