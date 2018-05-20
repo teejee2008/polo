@@ -169,6 +169,7 @@ public class FilePropertiesWindow : Gtk.Window {
 		
 		if ((dir_item == null) && (device == null)){
 			add_property(vbox, _("Device"), _("Unknown"));
+			log_debug("(dir_item == null) && (device == null)");
 			return;
 		}
 
@@ -177,6 +178,9 @@ public class FilePropertiesWindow : Gtk.Window {
 		}
 		else{
 			device = Device.get_device_by_path(dir_item.file_path);
+		}
+
+		if (device == null){
 			add_property(vbox, _("Device"), _("Unknown"));
 			log_error("device is NULL: Device.get_device_by_path(%s)".printf(dir_item.file_path));
 			return;
