@@ -50,6 +50,8 @@ public class FilePropertiesBox : Gtk.Box {
 	private Gtk.ComboBox cmb_user;
 	private Gtk.ComboBox cmb_group;
 
+	private Gtk.Label lbl_size;
+
 	private TouchFileDateContextMenu menu_accessed;
 	private TouchFileDateContextMenu menu_modified;
 
@@ -146,7 +148,7 @@ public class FilePropertiesBox : Gtk.Box {
 				file_item.file_size
 			);
 
-			add_property(vbox, _("Size"), txt);
+			lbl_size = add_property(vbox, _("Size"), txt);
 		}
 
 		// contents ----------
@@ -319,7 +321,12 @@ public class FilePropertiesBox : Gtk.Box {
 		// preview ---------------------
 
 		if (!panel_mode){
-			init_preview_image(hbox); 
+			
+			init_preview_image(hbox);
+		}
+
+		if ((file_item != null) && file_item.is_directory){
+			calculate_dirsize();
 		}
 	} 
  
@@ -622,6 +629,52 @@ public class FilePropertiesBox : Gtk.Box {
 		}
 
 		box.add(image);
+	}
+
+	private bool calculate_dirsize_running = false;
+	private FileTask calculate_dirsize_task;
+	private uint tmr_calculate_dirsize = 0;
+	
+	private void calculate_dirsize(){
+
+		if ((calculate_dirsize_task != null) && calculate_dirsize_task.is_running){
+			calculate_dirsize_task.stop();
+			if (tmr_calculate_dirsize > 0){
+				Source.remove(tmr_calculate_dirsize);
+			}
+		}
+
+		lbl_size.label = _("Checking...");
+		var task = new FileTask();
+		
+		task.complete.connect(()=>{
+			
+			calculate_dirsize_running = false;
+			calculate_dirsize_task = null;
+
+			if (tmr_calculate_dirsize > 0){
+				Source.remove(tmr_calculate_dirsize);
+			}
+			
+			lbl_size.label = dir_item.file_size_formatted;
+		});
+
+		int elapsed = 0;
+
+		tmr_calculate_dirsize = Timeout.add(1000, ()=>{
+
+			elapsed += 1;
+			
+			lbl_size.label = _("Checking...") + " %ds".printf(elapsed);
+			
+			return calculate_dirsize_running;
+		});
+
+		calculate_dirsize_task = task;
+
+		calculate_dirsize_running = true;
+		
+		task.calculate_dirsize_async(new FileItem[] { dir_item });
 	}
 
 	// helpers ---------------------------

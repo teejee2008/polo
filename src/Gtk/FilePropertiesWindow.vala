@@ -241,8 +241,6 @@ public class FilePropertiesWindow : Gtk.Window {
 		area.set_size_request(-1, 30);
 		area.hexpand = true;
 		area.margin_top = 6;
-		area.margin_left = 6;
-		area.margin_right = 6;
 		vbox.add(area);
 		area_fs = area;
 
