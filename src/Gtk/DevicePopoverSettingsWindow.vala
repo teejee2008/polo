@@ -59,7 +59,7 @@ public class DevicePopoverSettingsWindow : Gtk.Window {
 		deletable = true;
 		resizable = false;
 
-		set_title(_("Settings"));
+		set_title(_("Device Manager Settings"));
 		
 		vbox_main = new Gtk.Box(Orientation.VERTICAL, 6);
 		vbox_main.margin = 12;
