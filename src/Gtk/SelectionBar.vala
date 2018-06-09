@@ -131,11 +131,24 @@ public class SelectionBar : Gtk.Box {
 		});
 
 		txt.key_press_event.connect((event) => {
+			
 			string key_name = Gdk.keyval_name(event.keyval);
-			if (key_name.down() == "escape"){
+			
+			switch (key_name.down()){
+			case "escape":
+				close_panel(true);
+				return false;
+			case "enter":
+			case "return":
+				view.open_first_selected_item();
 				close_panel(true);
 				return false;
 			}
+
+			if (key_name.down().length > 1){
+				return false;
+			}
+
 			add_action_delayed();
 			return false;
 		});

@@ -1243,7 +1243,7 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		submenu.add(item);
 
 		item.activate.connect (() => {
-			view.open_selected_item();
+			view.open_first_selected_item();
 		});
 
 		//if (add_accel){
