@@ -95,6 +95,8 @@ public class FileViewList : Gtk.Box, IFileViewList {
 	public bool view_initialized = false;
 
 	public string filter_pattern = "";
+	public bool filter_pattern_match_start = false;
+	
 	public int query_items_delay = 0;
 	
 	public Gee.ArrayList<FileItemMonitor> monitors = new Gee.ArrayList<FileItemMonitor>();
@@ -3076,7 +3078,10 @@ public class FileViewList : Gtk.Box, IFileViewList {
 		}
 
 		if (filter_pattern.length > 0){
-			if (item.file_name.down().contains(filter_pattern) && display){
+			if (filter_pattern_match_start && item.file_name.down().has_prefix(filter_pattern) && display){
+				display = true;
+			}
+			else if (!filter_pattern_match_start && item.file_name.down().contains(filter_pattern) && display){
 				display = true;
 			}
 			else{
@@ -3106,8 +3111,9 @@ public class FileViewList : Gtk.Box, IFileViewList {
 		select_items(list);
 	}
 
-	public void filter(string pattern){
+	public void filter(string pattern, bool pattern_match_start){
 		filter_pattern = pattern;
+		filter_pattern_match_start = pattern_match_start;
 		refilter();
 	}
 

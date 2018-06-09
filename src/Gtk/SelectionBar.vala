@@ -90,10 +90,10 @@ public class SelectionBar : Gtk.Box {
 		
 		add_entry();
 
-		add_option_match_start();
-
 		add_toggle_buttons();
 
+		add_option_match_start();
+		
 		add_close_button();
 
 		var separator = new Gtk.Separator(Gtk.Orientation.HORIZONTAL);
@@ -167,7 +167,7 @@ public class SelectionBar : Gtk.Box {
 
 		button.active = true;
 
-		button.set_tooltip_text(_("Match only at beginning of file name"));
+		button.set_tooltip_text(_("Match beginning of file name"));
 
 		button.toggled.connect(()=>{
 			execute_action();
@@ -193,6 +193,7 @@ public class SelectionBar : Gtk.Box {
 
 		button.toggled.connect(()=>{
 			if (opt_filter.active){
+				chk_match_start.active = false;
 				execute_action();
 			}
 		});
@@ -327,7 +328,7 @@ public class SelectionBar : Gtk.Box {
 
 		log_debug("SelectionBar: filter_items_by_pattern()");
 
-		view.filter(txt_pattern.text);
+		view.filter(txt_pattern.text, chk_match_start.active);
 	}
 
 }
