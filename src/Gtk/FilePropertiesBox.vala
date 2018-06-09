@@ -631,50 +631,63 @@ public class FilePropertiesBox : Gtk.Box {
 		box.add(image);
 	}
 
-	private bool calculate_dirsize_running = false;
-	private FileTask calculate_dirsize_task;
-	private uint tmr_calculate_dirsize = 0;
+	private FileTask dirsize_task;
+	private ulong dirsize_complete_id = 0;
+	private uint tmr_dirsize_progress = 0;
 	
 	private void calculate_dirsize(){
 
-		if ((calculate_dirsize_task != null) && calculate_dirsize_task.is_running){
-			calculate_dirsize_task.stop();
-			if (tmr_calculate_dirsize > 0){
-				Source.remove(tmr_calculate_dirsize);
+		if ((dirsize_task != null) && dirsize_task.is_running){
+
+			dirsize_task.disconnect(dirsize_complete_id);
+	
+			if (tmr_dirsize_progress > 0){
+				Source.remove(tmr_dirsize_progress);
 			}
+
+			//dirsize_task.stop();
+
+			dirsize_task = null;
 		}
 
 		lbl_size.label = _("Checking...");
-		var task = new FileTask();
 		
-		task.complete.connect(()=>{
-			
-			calculate_dirsize_running = false;
-			calculate_dirsize_task = null;
+		dirsize_task = new FileTask();
 
-			if (tmr_calculate_dirsize > 0){
-				Source.remove(tmr_calculate_dirsize);
-			}
+		// task complete --------
+		
+		dirsize_complete_id = dirsize_task.complete.connect(()=>{
 			
-			lbl_size.label = dir_item.file_size_formatted;
+			dirsize_task = null;
+
+			if (tmr_dirsize_progress > 0){
+				Source.remove(tmr_dirsize_progress);
+			}
+
+			string txt = "%s (%'ld bytes)".printf(
+				dir_item.file_size_formatted,
+				dir_item.file_size
+			);
+			
+			lbl_size.label = txt;
 		});
 
+		// progress ---------
+		
 		int elapsed = 0;
 
-		tmr_calculate_dirsize = Timeout.add(1000, ()=>{
+		tmr_dirsize_progress = Timeout.add(1000, ()=>{
 
 			elapsed += 1;
 			
 			lbl_size.label = _("Checking...") + " %ds".printf(elapsed);
 			
-			return calculate_dirsize_running;
+			return dirsize_task.is_running;
 		});
 
-		calculate_dirsize_task = task;
-
-		calculate_dirsize_running = true;
+		// execute ---------
 		
-		task.calculate_dirsize_async(new FileItem[] { dir_item });
+		dirsize_task.calculate_dirsize_async(new FileItem[] { dir_item });
 	}
 
 	// helpers ---------------------------

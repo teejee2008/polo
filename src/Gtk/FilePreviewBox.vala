@@ -136,6 +136,8 @@ public class FilePreviewBox : Gtk.Box {
 	
 	public void preview_file(FileItem _file_item){
 
+		status_timer_stop();
+
 		log_debug("FilePreviewBox: preview_file()");
 		
 		file_item = _file_item;
@@ -250,6 +252,8 @@ public class FilePreviewBox : Gtk.Box {
 		}
 
 		log_debug("FilePreviewBox: preview_mplayer(): done");
+
+		status_timer_start();
 
 		return true;
 	}
