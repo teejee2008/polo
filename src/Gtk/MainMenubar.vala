@@ -1396,25 +1396,30 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		});
 
 		string key = "<Control>l";
+		string key2 = "<Alt>d";
 
 		context_normal.connect(()=>{
 			item.sensitive = true;
 			add_action_accel(item, key);
+			add_action_accel(item, key2);
 		});
 
 		context_cloud.connect(()=>{
 			item.sensitive = true;
 			add_action_accel(item, key);
+			add_action_accel(item, key2);
 		});
 
 		context_trash.connect(()=>{
 			item.sensitive = true;
 			add_action_accel(item, key);
+			add_action_accel(item, key2);
 		});
 
 		context_archive.connect(()=>{
 			item.sensitive = true;
 			add_action_accel(item, key);
+			add_action_accel(item, key2);
 		});
 
 		context_term.connect(()=>{
@@ -1428,6 +1433,7 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		context_none.connect(()=>{
 			item.sensitive = false;
 			remove_action_accel(item, key);
+			remove_action_accel(item, key2);
 		});
 	}
 
