@@ -54,16 +54,16 @@ public class FilePropertiesPanel : Gtk.Box {
 		init_ui_empty();
 	}
 
-	public void show_properties_for_file(FileItem _file_item){
+	public void show_properties_for_file(FileItem _file_item, bool query_size){
 
 		file_item = _file_item;
 
 		if (ui_empty){
 			init_ui_for_file();
-			update_ui_for_file();
+			update_ui_for_file(query_size);
 		}
 		else{
-			update_ui_for_file();
+			update_ui_for_file(query_size);
 		}
 	}
 
@@ -129,7 +129,7 @@ public class FilePropertiesPanel : Gtk.Box {
 		this.show_all();
 	}
 
-	private void update_ui_for_file(){
+	private void update_ui_for_file(bool query_size){
 
 		if (ui_empty){
 			init_ui_for_file();
@@ -143,7 +143,7 @@ public class FilePropertiesPanel : Gtk.Box {
 
 		box_preview.preview_file(file_item);
 		
-		var group_label = box_props.show_properties_for_file(file_item);
+		var group_label = box_props.show_properties_for_file(file_item, query_size);
 
 		box_perms.show_properties_for_file(file_item, group_label);
 

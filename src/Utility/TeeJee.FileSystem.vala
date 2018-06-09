@@ -680,6 +680,30 @@ namespace TeeJee.FileSystem{
 			return path_combine(GLib.Environment.get_current_dir(), file_path);
 		}
 	}
+
+	public string file_resolve_relative_path(string file_path, string current_dir){
+
+		if (file_path.has_prefix("/")){
+			return file_path;
+		}
+
+		string fullpath = current_dir;
+		
+		foreach(var part in file_path.split("/")){
+			
+			if (part == "."){
+				fullpath = fullpath;
+			}
+			else if (part == ".."){
+				fullpath = file_parent(fullpath);
+			}
+			else{
+				fullpath = path_combine(fullpath, part);
+			}
+		}
+
+		return fullpath;
+	}
 	
 	// file info -----------------
 

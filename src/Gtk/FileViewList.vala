@@ -565,6 +565,8 @@ public class FileViewList : Gtk.Box, IFileViewList {
 		treeview.row_collapsed.connect(treeview_row_collapsed);
 	}
 
+	private string propbar_last_folder_path = "";
+	
 	private void on_selection_changed(){
 		
 		pane.statusbar.refresh_selection_counts();
@@ -574,8 +576,14 @@ public class FileViewList : Gtk.Box, IFileViewList {
 			var selected_items = get_selected_items();
 			if (selected_items.size == 0){ return; }
 
+			bool query_size = true;
+			if (propbar_last_folder_path != current_location){
+				propbar_last_folder_path = current_location;
+				query_size = false;
+			}
+			
 			Timeout.add(10, ()=>{
-				App.main_window.propbar.show_properties_for_file(selected_items[0]);
+				App.main_window.propbar.show_properties_for_file(selected_items[0], query_size);
 				return false;
 			});
 		}
@@ -3031,7 +3039,7 @@ public class FileViewList : Gtk.Box, IFileViewList {
 		return found;
 	}
 
-	private void refresh_iter_by_file_path(string file_path){
+	public void refresh_iter_by_file_path(string file_path){
 
 		if (store == null){ return; }
 

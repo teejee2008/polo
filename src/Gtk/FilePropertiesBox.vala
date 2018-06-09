@@ -36,7 +36,7 @@ using TeeJee.Misc;
 public class FilePropertiesBox : Gtk.Box {
 
 	private FileItem? file_item;
-	private FileItem? dir_item;
+	//private FileItem? dir_item;
 
 	private Gtk.SizeGroup group_label;
 	private Gtk.SizeGroup group1_value;
@@ -73,21 +73,21 @@ public class FilePropertiesBox : Gtk.Box {
 		gtk_container_remove_children(this);
 	}
 
-	public Gtk.SizeGroup show_properties_for_file(FileItem _file_item){
+	public Gtk.SizeGroup show_properties_for_file(FileItem _file_item, bool query_size){
 
 		file_item = _file_item;
-		dir_item = file_item.is_directory ? file_item : (new FileItem.from_path(file_item.file_location));
+		//dir_item = file_item.is_directory ? file_item : (new FileItem.from_path(file_item.file_location));
 
 		file_item.query_file_info();
 		
-		init_ui_for_file();
+		init_ui_for_file(query_size);
 
 		this.show_all();
 
 		return group_label; // will be used by FilePropertiesPanel to align contents in FilePermissionsBox
 	}
 
-	private void init_ui_for_file(){
+	private void init_ui_for_file(bool query_size){
 
 		gtk_container_remove_children(this);
 		
@@ -325,7 +325,7 @@ public class FilePropertiesBox : Gtk.Box {
 			init_preview_image(hbox);
 		}
 
-		if ((file_item != null) && file_item.is_directory){
+		if ((file_item != null) && file_item.is_directory && query_size){
 			calculate_dirsize();
 		}
 	} 
@@ -637,15 +637,17 @@ public class FilePropertiesBox : Gtk.Box {
 	
 	private void calculate_dirsize(){
 
+		if (!file_item.is_directory){ return; }
+		
 		if ((dirsize_task != null) && dirsize_task.is_running){
 
 			dirsize_task.disconnect(dirsize_complete_id);
-	
+
 			if (tmr_dirsize_progress > 0){
 				Source.remove(tmr_dirsize_progress);
 			}
 
-			//dirsize_task.stop();
+			dirsize_task.stop();
 
 			dirsize_task = null;
 		}
@@ -665,11 +667,13 @@ public class FilePropertiesBox : Gtk.Box {
 			}
 
 			string txt = "%s (%'ld bytes)".printf(
-				dir_item.file_size_formatted,
-				dir_item.file_size
+				file_item.file_size_formatted,
+				file_item.file_size
 			);
 			
 			lbl_size.label = txt;
+
+			App.main_window.active_pane.view.refresh_iter_by_file_path(file_item.file_path);
 		});
 
 		// progress ---------
@@ -680,14 +684,14 @@ public class FilePropertiesBox : Gtk.Box {
 
 			elapsed += 1;
 			
-			lbl_size.label = _("Checking...") + " %ds".printf(elapsed);
+			lbl_size.label = "> %s (%s... %ds)".printf(format_file_size(dirsize_task.stat_size), _("Checking"), elapsed);
 			
 			return dirsize_task.is_running;
 		});
 
 		// execute ---------
 		
-		dirsize_task.calculate_dirsize_async(new FileItem[] { dir_item });
+		dirsize_task.calculate_dirsize_async(new FileItem[] { file_item });
 	}
 
 	// helpers ---------------------------

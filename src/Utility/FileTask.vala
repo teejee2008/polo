@@ -847,6 +847,10 @@ public class FileTask : GLib.Object {
 		log_debug("FileTask: stop()");
 
 		aborted = true;
+
+		if (calculate_dirsize_current_item != null){
+			calculate_dirsize_current_item.calculate_size_from_disk_aborted = true;
+		}
 		
 		if (rsync != null){
 			rsync.stop();
@@ -1251,6 +1255,8 @@ public class FileTask : GLib.Object {
 	}
 
 	// calculate_dirsize ------------------------------------------
+
+	private FileItem calculate_dirsize_current_item = null;
 	
 	public void calculate_dirsize_async(FileItem[] _items) {
 
@@ -1261,12 +1267,6 @@ public class FileTask : GLib.Object {
 		
 		log_debug("FileTask: calculate_dirsize_async(): %d".printf(items.length));
 
-		foreach(var item in items){
-			if (item.is_directory){
-				item.query_children_pending = true;
-			}
-		}
-		
 		try {
 			//start thread
 			Thread.create<void> (calculate_dirsize_async_thread, true);
@@ -1281,18 +1281,19 @@ public class FileTask : GLib.Object {
 	private void calculate_dirsize_async_thread() {
 		
 		log_debug("FileTask: calculate_dirsize_async_thread()");
-
+	
 		foreach(var item in items){
+			
 			if (aborted){ break; }
-			if (item.is_directory){
-				item.query_children(-1, true);
-				//item.query_children_pending = false;
-			}
-		}
 
-		foreach(var item in items){
-			if (item.is_directory){
-				item.query_children_pending = false;
+			if (item.dir_size_queried){ continue; }
+			
+			calculate_dirsize_current_item = item;
+
+			item.file_size = item.calculate_size_from_disk(item.file_path, true);
+			
+			if (aborted){
+				item.file_size = 0;
 			}
 		}
 
@@ -1421,6 +1422,18 @@ public class FileTask : GLib.Object {
 		}
 	}
 
+	public int64 stat_size{
+		get{
+			if (calculate_dirsize_current_item != null){
+				return calculate_dirsize_current_item.calculate_dirsize_from_disk_result;
+			}
+			else{
+				return 0;
+			}
+		}
+	}
+
+		
 	private string _status = "";
 	
 	public string status{

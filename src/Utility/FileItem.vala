@@ -330,7 +330,13 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		set{
 			_file_size = value;
 			if (is_directory){
-				dir_size_queried = true;
+				if (_file_size > 0){
+					dir_size_queried = true;
+				}
+				else{
+					dir_size_queried = false;
+					_file_size = 0;
+				}
 			}
 		}
 	}
@@ -355,7 +361,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 		if (depth_is_negative){
 			file_size = dir_size;
-			dir_size_queried = true;
 		}
 		
 		return dir_size;
@@ -399,6 +404,82 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 		return count;
 	}
 
+
+	public bool calculate_size_from_disk_aborted = false;
+	public int64 calculate_dirsize_from_disk_result = 0;
+	
+	private Gee.ArrayList<string> calculate_size_from_disk_pathlist;
+	
+	public int64 calculate_size_from_disk(string file_path, bool first_item){
+
+		//log_debug("FileItem:calculate_size_from_disk(): " + file_path);
+		
+		if (first_item){
+			calculate_size_from_disk_aborted = false;
+			calculate_size_from_disk_pathlist = new Gee.ArrayList<string>();
+			calculate_dirsize_from_disk_result = 0;
+		}
+
+		if (calculate_size_from_disk_aborted){ return 0; }
+
+		int64 size = 0;
+			
+		try{
+			File file = File.parse_name(file_path);
+			FileInfo child_info;
+			
+			if (file.query_exists()) {
+				
+				FileInfo info = file.query_info("%s,%s,%s".printf(FileAttribute.STANDARD_TYPE,
+					FileAttribute.STANDARD_SIZE, FileAttribute.STANDARD_SYMLINK_TARGET), FileQueryInfoFlags.NOFOLLOW_SYMLINKS);
+
+				if (info.get_file_type() == FileType.SYMBOLIC_LINK) {
+					
+					string target = info.get_symlink_target();
+					string targetpath = file_resolve_relative_path(target, file_parent(file_path));
+					log_debug("symlink:" + target + " > " + targetpath);
+
+					if (calculate_size_from_disk_pathlist.contains(targetpath)){ return 0; }
+					calculate_size_from_disk_pathlist.add(targetpath);
+
+					info = file.query_info("%s,%s".printf(FileAttribute.STANDARD_TYPE, FileAttribute.STANDARD_SIZE), 0);
+				}
+
+				if (calculate_size_from_disk_pathlist.contains(file_path)){ return 0; }
+				calculate_size_from_disk_pathlist.add(file_path);
+				
+				if (info.get_file_type() == FileType.DIRECTORY){
+
+					FileEnumerator enumerator = file.enumerate_children("%s".printf(FileAttribute.STANDARD_NAME), FileQueryInfoFlags.NOFOLLOW_SYMLINKS);
+					
+					while ((child_info = enumerator.next_file()) != null) {
+
+						string child_name = child_info.get_name();
+
+						string child_path = path_combine(file_path, child_name);
+							
+						size += calculate_size_from_disk(child_path, false);
+					}
+				}
+				else{
+					size = info.get_size();
+
+					calculate_dirsize_from_disk_result += size;
+				}
+			}
+		}
+		catch (Error e) {
+			log_error (e.message);
+		}
+
+		if (first_item){
+			calculate_size_from_disk_aborted = false;
+			calculate_size_from_disk_pathlist = new Gee.ArrayList<string>();
+		}
+
+		return size;
+	}
+
 	public int64 item_count = 0;
 
 	public int64 file_count = 0;
@@ -425,12 +506,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 						txt += _("empty");
 					}
 				}
-				else if (query_children_running){
-					txt += "...";
-				}
-				else if (query_children_pending){
-					txt += "";
-				}
 				else if (children_queried){
 					
 					if (item_count == 1){
@@ -444,7 +519,7 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 					}
 				}
 				else{
-					txt += format_file_size(file_size);
+					txt += "";
 				}
 			}
 			else {
@@ -1207,7 +1282,9 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 			this.content_type = info.get_content_type();
 
 			// size
-			this._file_size = info.get_size();
+			if (this.file_type != FileType.DIRECTORY){
+				this._file_size = info.get_size();
+			}
 
 			// modified
 			this.modified = (new DateTime.from_timeval_utc(info.get_modification_time())).to_local();
@@ -1609,7 +1686,6 @@ public class FileItem : GLib.Object, Gee.Comparable<FileItem> {
 
 				if (query_children_aborted) {
 					item.query_children_aborted = true;
-					//item.dir_size_queried = false;
 					return null;
 				}
 				

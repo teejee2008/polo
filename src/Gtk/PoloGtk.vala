@@ -43,7 +43,7 @@ public class PoloGtk : GLib.Object {
 
 		init_tmp(AppShortName);
 
-		LOG_TIMESTAMP = false;
+		LOG_TIMESTAMP = true;
 
 		parse_arguments(args);
 		

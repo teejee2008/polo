@@ -40,7 +40,6 @@ public class FilePropertiesWindow : Gtk.Window {
 	
 	private Gtk.DrawingArea area_fs;
 	private FileItem? file_item;
-	private FileItem? dir_item;
 	private Device? device;
 	private MediaFile mfile;
 
@@ -61,7 +60,6 @@ public class FilePropertiesWindow : Gtk.Window {
 	public FilePropertiesWindow.for_file(FileItem _file_item) {
 
 		file_item = _file_item;
-		dir_item = file_item.is_directory ? file_item : (new FileItem.from_path(file_item.file_location));
 
 		file_item.query_file_info();
 		
@@ -142,7 +140,7 @@ public class FilePropertiesWindow : Gtk.Window {
 		box_props = new FilePropertiesBox(this, false);
 		stack.add_titled (box_props, _("General"), _("General"));
 
-		box_props.show_properties_for_file(file_item);
+		box_props.show_properties_for_file(file_item, true);
 	} 
  
 	// filesystem tab ------------------------------------------------------
@@ -166,6 +164,8 @@ public class FilePropertiesWindow : Gtk.Window {
 		group1_value = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
 
 		// get device for file_item ---------------------------
+
+		var dir_item = file_item.is_directory ? file_item : (new FileItem.from_path(file_item.file_location));
 		
 		if ((dir_item == null) && (device == null)){
 			add_property(vbox, _("Device"), _("Unknown"));

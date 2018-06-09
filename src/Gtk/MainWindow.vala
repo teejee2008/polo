@@ -900,7 +900,7 @@ public class MainWindow : Gtk.Window {
 				var selected = view.get_selected_items();
 				
 				if (selected.size > 0){
-					propbar.show_properties_for_file(selected[0]);
+					propbar.show_properties_for_file(selected[0], true);
 				}
 			}
 		}
