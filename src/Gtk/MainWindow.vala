@@ -360,7 +360,7 @@ public class MainWindow : Gtk.Window {
 
 		// add the navigation box to the left pane of pane_nav
 		sidebar = new Sidebar(null,null,null);
-		pane_nav.pack1(sidebar, true, true); // resize, shrink
+		pane_nav.pack1(sidebar, false, false); // resize, shrink
 
 		App.trashcan.query_completed.connect(()=>{
 			if (sidebar == null){ return; }
@@ -384,7 +384,7 @@ public class MainWindow : Gtk.Window {
 		// add the properties panel to the right pane of pane_props
 		propbar = new FilePropertiesPanel(this);
 		gtk_hide(propbar);
-		pane_prop.pack2(propbar, true, true); // resize, shrink
+		pane_prop.pack2(propbar, false, false); // resize, shrink
 	}
 
 	private void init_layout_box(){
