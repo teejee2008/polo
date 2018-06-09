@@ -56,7 +56,8 @@ public class SelectionBar : Gtk.Box {
 	private Gtk.Entry txt_pattern;
 	private Gtk.RadioButton opt_select;
 	private Gtk.RadioButton opt_filter;
-
+	private Gtk.CheckButton chk_match_start;
+	
 	private Gtk.Box hbox;
 
 	public string text {
@@ -88,6 +89,8 @@ public class SelectionBar : Gtk.Box {
 		//hbox.add(label);
 		
 		add_entry();
+
+		add_option_match_start();
 
 		add_toggle_buttons();
 
@@ -156,6 +159,21 @@ public class SelectionBar : Gtk.Box {
 		//txt.set_no_show_all(true);
 	}
 
+	private void add_option_match_start(){
+
+		var button = new Gtk.CheckButton.with_label(_("Match Start"));
+		hbox.add(button);
+		chk_match_start = button;
+
+		button.active = true;
+
+		button.set_tooltip_text(_("Match only at beginning of file name"));
+
+		button.toggled.connect(()=>{
+			execute_action();
+		});
+	}
+	
 	private void add_toggle_buttons(){
 
 		var button = new Gtk.RadioButton.with_label_from_widget (null, _("Select"));
@@ -285,7 +303,10 @@ public class SelectionBar : Gtk.Box {
 			
 		var list = new Gee.ArrayList<string>();
 		foreach(var item in view.current_item.children.values){
-			if (item.file_name.down().contains(txt_pattern.text)){
+			if (chk_match_start.active && item.file_name.down().has_prefix(txt_pattern.text)){
+				list.add(item.file_path);
+			}
+			else if (!chk_match_start.active && item.file_name.down().contains(txt_pattern.text)){
 				list.add(item.file_path);
 			}
 		}
