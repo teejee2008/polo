@@ -141,6 +141,8 @@ public class FileContextMenu : Gtk.Menu {
 		
 		add_disk_usage(this, sg_icon, sg_label);
 
+		add_dir_size_calculate(this, sg_icon, sg_label);
+
 		add_file_compare(this, sg_icon, sg_label);
 		
 		add_archive_actions(this, sg_icon, sg_label);
@@ -1606,6 +1608,10 @@ public class FileContextMenu : Gtk.Menu {
 		log_debug("FileContextMenu: add_disk_usage()");
 
 		var baobab = DesktopApp.get_app_by_filename("org.gnome.baobab.desktop");
+		if (baobab == null){
+			baobab = DesktopApp.get_app_by_filename("mate-disk-usage-analyzer.desktop");
+		}
+
 		if (baobab == null){ return; }
 
 		var menu_item = gtk_menu_add_item(
@@ -1618,6 +1624,27 @@ public class FileContextMenu : Gtk.Menu {
 
 		menu_item.activate.connect(() => {
 			view.analyze_disk_usage();
+		});
+	}
+
+	private void add_dir_size_calculate(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		if (!App.show_context_menu_disk_usage) { return; }
+		
+		if (!view.is_normal_directory){ return; }
+
+		log_debug("FileContextMenu: add_dir_size_calculate()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Calculate Size..."),
+			"",
+			IconManager.lookup_image("disk-usage-analyzer", 16),
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect(() => {
+			view.calculate_directory_sizes();
 		});
 	}
 
