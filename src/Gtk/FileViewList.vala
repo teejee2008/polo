@@ -1918,18 +1918,13 @@ public class FileViewList : Gtk.Box, IFileViewList {
 		string key_string = event.str;
 		
 		log_debug("key_string: %s, key_name: %s".printf(key_string, key_name));
-		
-		switch(key_name.down()){
-		case "up":
-		case "down":
-		case "left":
-		case "right":
-		case "tab":
+
+		if (key_name.down() == "backspace"){
+			go_back();
 			return false;
-		case "enter":
-		case "return":
-			pane.pathbar.finish_editing();
-			window.pathbar.finish_editing();
+		}
+		
+		if (key_name.down().length > 1){
 			return false;
 		}
 
@@ -4098,12 +4093,12 @@ public class FileViewList : Gtk.Box, IFileViewList {
 		}
 	}
 	
-	public void open_selected_item(){
+	public void open_first_selected_item(){
 
 		var selected_items = get_selected_items();
 		if (selected_items.size == 0){ return; }
 
-		log_debug("action.open_selected_item()");
+		log_debug("action.open_first_selected_item()");
 		
 		open(selected_items[0], null);
 	}
