@@ -4755,6 +4755,11 @@ public class FileViewList : Gtk.Box, IFileViewList {
 		log_debug("action.analyze_disk_usage()");
 
 		var baobab = DesktopApp.get_app_by_filename("org.gnome.baobab.desktop");
+		
+		if (baobab == null){
+			baobab = DesktopApp.get_app_by_filename("mate-disk-usage-analyzer.desktop");
+		}
+
 		if (baobab == null){ return; }
 
 		var selected_items = get_selected_items();
