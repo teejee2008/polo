@@ -1633,6 +1633,8 @@ public class FileContextMenu : Gtk.Menu {
 		
 		if (!view.is_normal_directory){ return; }
 
+		if ((selected_item != null) && !selected_item.is_directory){ return; }
+		
 		log_debug("FileContextMenu: add_dir_size_calculate()");
 
 		var menu_item = gtk_menu_add_item(
