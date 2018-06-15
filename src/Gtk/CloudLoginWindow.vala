@@ -39,7 +39,7 @@ public class CloudLoginWindow : Gtk.Window, IPaneActive {
 	private Gtk.SizeGroup size_label;
 	private Gtk.SizeGroup size_combo;
 	
-	private Gtk.Window window;
+	private MainWindow window;
 	
 	private Gtk.Entry txt_name;
 	private Gtk.ComboBox cmb_type;
@@ -52,7 +52,7 @@ public class CloudLoginWindow : Gtk.Window, IPaneActive {
 	private Gtk.Button btn_cancel;
 	private Gtk.Button btn_finish;
 	
-	public CloudLoginWindow(Gtk.Window _window) {
+	public CloudLoginWindow(MainWindow _window) {
 		
 		set_transient_for(_window);
 		window_position = WindowPosition.CENTER_ON_PARENT;
@@ -214,13 +214,13 @@ public class CloudLoginWindow : Gtk.Window, IPaneActive {
 		box.add(button);
 		btn_cancel = button;
 		
-		button = new Gtk.Button.with_label(_("Authorize"));
+		button = new Gtk.Button.with_label(_("Next"));
 		button.clicked.connect(btn_add_clicked);
 		box.add(button);
 		btn_add = button;
 		
 		button = new Gtk.Button.with_label(_("Finish"));
-		button.clicked.connect(btn_finish_clicked);
+		//button.clicked.connect(btn_finish_clicked);
 		box.add(button);
 		btn_finish = button;
 		
@@ -253,99 +253,17 @@ public class CloudLoginWindow : Gtk.Window, IPaneActive {
 		
 		log_debug("btn_add_clicked()");
 
-		foreach(var acc in App.rclone.accounts){
-			if (acc.name == account_name){
-				gtk_messagebox(_("Account name exists"), _("An account exists with this name. Enter a new name for the account."), this, true);
-				return;
-			}
-		}
-		
-		string txt = _("Account Authorization");
-		string msg = _("A new browser window will open.\n\nSelect the account to add and authorize rclone\n\nClose the browser window when done\n\nCome back to Polo and click 'Finish' to add the account");
+		string txt = _("Account Configuration");
+		string msg = _("Account setup will be started in a terminal window. Answer the prompts and finish setup to add account.");
 		gtk_messagebox(txt, msg, this, false);
 
-		TermBox term;
-
-		//if (LOG_DEBUG){
-		//	var tab = App.main_window.layout_box.panel1.add_new_terminal_tab();
-		//	term = tab.pane.terminal;
-		//	terminal = term;
-		//}
-		//else{
-		term = new TermBox(pane);
-		term.start_shell();
-		terminal = term;
-		//}
-		sleep(200);
+		string acc_name = account_name;
+		string acc_type = account_type;
 		
-		term.feed_command("rclone config");
-		sleep(200);
-		
-		term.feed_command("n");
-		sleep(200);
-		
-		term.feed_command(account_name);
-		sleep(200);
-		
-		term.feed_command(account_type);
-		sleep(200);
-		
-		term.feed_command("");
-		sleep(200);
-		
-		term.feed_command("");
-		sleep(200);
-
-		term.feed_command("");
-		sleep(200);
-		
-		term.feed_command("y");
-		sleep(200);
-
-		gtk_show(lbl_message);
-		gtk_show(btn_finish);
-		gtk_hide(btn_add);
-		gtk_hide(box_name);
-		gtk_hide(box_type);
-		
-		txt_name.sensitive = false;
-		cmb_type.sensitive = false;
-	}
-
-	private void btn_finish_clicked(){
-
-		log_debug("btn_finish_clicked()");
-
-		terminal.feed_command("n");
-		sleep(200);
-		
-		terminal.feed_command("y");
-		sleep(200);
-		
-		terminal.feed_command("q");
-		sleep(200);
-		
-		terminal.exit_shell();
-
-		App.rclone.query_accounts();
-		bool account_added = false;
-		foreach(var acc in App.rclone.accounts){
-			if (acc.name == account_name){
-				account_added = true;
-				break;
-			}
-		}
-
-		if (account_added){
-			string txt = _("Account Added");
-			string msg = _("Account was added successfully.\n\nYou can browse the storage by selecting account from 'Cloud' menu");
-			gtk_messagebox(txt, msg, this, false);
-		}
-		else{
-			string txt = _("Account Not Added");
-			string msg = _("Type 'rclone config' in a terminal window to add accounts manually.");
-			gtk_messagebox(txt, msg, this, true);
-		}
+		Timeout.add(100, ()=>{
+			window.run_rclone_config(acc_name, acc_type);
+			return false;
+		});
 		
 		this.destroy();
 	}
@@ -353,20 +271,7 @@ public class CloudLoginWindow : Gtk.Window, IPaneActive {
 	private void btn_cancel_clicked(){
 		
 		log_debug("btn_cancel_clicked()");
-
-		if (terminal != null){
-
-			terminal.feed_command("d");
-			sleep(200);
-			
-			terminal.feed_command("q");
-			sleep(200);
-
-			process_quit(terminal.get_child_pid());
-			
-			terminal.exit_shell();
-		}
-
+		
 		this.destroy();
 	}
 }
