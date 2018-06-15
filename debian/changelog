@@ -1,8 +1,37 @@
-polo-file-manager (18.3.1) xenial; urgency=low
+polo-file-manager (18.6) xenial; urgency=low
 
-  * Fixed: Closing properties panel can crash desktop session!
+  * Added support for workspaces
+
+  * DeviceManager: Added option to disable automount for removable devices
+
+  * Set bash as default shell for embedded terminal
+
+  * Display folder size in Properties Window and Properties Panel
+
+  * Added context menu action to calculate directory size
+
+  * Cloud: Fixed: "Add Account" option was broken with newer versions of rclone. A terminal tab will be opened for
+  user to answer prompts displayed by rclone.
   
- -- Tony George <tony.george.kol@gmail.com>  Sun, 18 Mar 2017 14:00:00 +0530
+  * Fixed: Partitions in device manager were not ordered correctly. Device names like sda11 were displayed after
+  sda1 due to alphabetic sorting. Partitions are now sorted numerically.
+
+  * Fixed: File-system tab was sometimes empty in File Properties window
+
+  * Fixed: Calculating folder sizes sometimes caused application to crash
+
+  * #181 : Fixed: Home, End, Pg Up, Pg Down keys open selection bar instead of scrolling the lis
+
+  * #196 : Fixed: Pressing Enter after selecting items with selection bar will open the first selected file or folder
+
+  * #197 :  Selection bar: Added option to match at start of file name. This makes it easier to navigate through
+  folders using the  keyboard.
+
+  * Pressing Backspace key will navigate to previous folder
+
+  * "Disk Usage" context menu action will use mate-disk-usage-analyzer if baobab is not installed.
+  
+ -- Tony George <tony.george.kol@gmail.com>  Fri, 15 Jun 2018 14:00:00 +0530
 
 
 polo-file-manager (18.3) xenial; urgency=low
@@ -23,7 +52,7 @@ polo-file-manager (18.3) xenial; urgency=low
 
   * Headerbar: New option to show pathbars when headerbar is enabled
   
- -- Tony George <tony.george.kol@gmail.com>  Sun, 18 Mar 2017 10:00:00 +0530
+ -- Tony George <tony.george.kol@gmail.com>  Sun, 18 Mar 2018 10:00:00 +0530
 
 
 polo-file-manager (18.2) xenial; urgency=low
@@ -70,7 +99,7 @@ polo-file-manager (18.2) xenial; urgency=low
 
   * HeaderBarMode: Use the new bookmarks popover
 
- -- Tony George <tony.george.kol@gmail.com>  Sun, 11 Feb 2017 10:00:00 +0530
+ -- Tony George <tony.george.kol@gmail.com>  Sun, 11 Feb 2018 10:00:00 +0530
 
 
 polo-file-manager (18.1) xenial; urgency=low
@@ -90,7 +119,7 @@ polo-file-manager (18.1) xenial; urgency=low
 
   * Installers now use XZ compression and are much smaller in size
 
- -- Tony George <tony.george.kol@gmail.com>  Sun, 07 Jan 2017 10:00:00 +0530
+ -- Tony George <tony.george.kol@gmail.com>  Sun, 07 Jan 2018 10:00:00 +0530
 
 
 polo-file-manager (17.10) xenial; urgency=low
