@@ -60,6 +60,8 @@ public class FileViewTab : Gtk.Box {
 	// parents
 	public Gtk.Notebook notebook;
 
+	public signal void tab_closed();
+
 	public FileViewTab(LayoutPanel parent_panel, Gtk.Notebook parent_notebook){
 		//base(Gtk.Orientation.VERTICAL, 6); // issue with vala
 		Object(orientation: Gtk.Orientation.VERTICAL, spacing: 0); // work-around
@@ -90,7 +92,7 @@ public class FileViewTab : Gtk.Box {
 
 		// add label ------------------------------------
 		
-		var box_label = new Gtk.Box(Orientation.HORIZONTAL, 0);
+		var box_label = new Gtk.Box(Orientation.HORIZONTAL, 10);
 		//add_active_icon(box_label);
 
 		add_locked_icon(box_label);
@@ -218,7 +220,7 @@ public class FileViewTab : Gtk.Box {
 		
 		var img = IconManager.lookup_image("tab-close", 16, false, true);
 		var ebox = new Gtk.EventBox();
-		ebox.margin_left = 10;
+		//ebox.margin_left = 10;
 		ebox.add(img);
 		box.add(ebox);
 		ebox_close = ebox;
@@ -415,6 +417,8 @@ public class FileViewTab : Gtk.Box {
 		window.active_pane = panel.pane;
 
 		window.update_accelerators_for_active_pane();
+
+		tab_closed(); // signal
 	}
 
 	public void select_tab(){

@@ -45,7 +45,7 @@ public class LayoutPanel : Gtk.Box {
 	// parents
 	private MainWindow window;
 	private LayoutBox layout_box;
-	
+
 	public LayoutPanel(LayoutBox parent_layout_box, bool add_middle_toolbar = false){
 		//base(Gtk.Orientation.VERTICAL, 6); // issue with vala
 		Object(orientation: Gtk.Orientation.HORIZONTAL, spacing: 0); // work-around

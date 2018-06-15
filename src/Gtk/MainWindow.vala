@@ -76,6 +76,8 @@ public class MainWindow : Gtk.Window {
 
 	public static Gee.ArrayList<MainWindow> instances;
 
+	public string current_workspace_file_name = "";
+
 	public const Gtk.TargetEntry[] drop_target_types = {
 		{ "text/uri-list", 0, 0 }
 	};
@@ -1038,6 +1040,33 @@ public class MainWindow : Gtk.Window {
 		layout_box.panel1.run_script_in_new_terminal_tab(cmd, _("Running p7zip Installation Script"));
 	}
 
+	public void run_rclone_config(string account_name, string account_type){
+
+		log_debug("run_rclone_config(): %s, %s".printf(account_name, account_type));
+		
+		string sh_path = path_combine(App.share_dir, "files/install-rclone.sh");
+		string cmd = sh_path;
+
+		layout_box.panel1.run_script_in_new_terminal_tab(cmd, _("Running Rclone Installation Script"));
+
+		var tab = layout_box.panel1.add_new_terminal_tab();
+		var term = tab.pane.terminal;
+
+		term.feed_command("rclone config");
+		sleep(200);
+		
+		term.feed_command("n");
+		sleep(200);
+		
+		term.feed_command(account_name);
+		sleep(200);
+		
+		term.feed_command(account_type);
+		sleep(200);
+
+		//tab.tab_closed.connect();
+	}
+	
 	public void add_rclone_account(){
 
 		err_log_clear();
@@ -1098,11 +1127,13 @@ public class MainWindow : Gtk.Window {
 
 	// session -------------------------------
 	
-	public void save_session(){
+	public void save_session(string session_file_path = ""){
 
 		log_msg("MainWindow: save_session()");
 
-		if (!App.session_lock.lock_acquired){ return; }
+		if (session_file_path.length == 0){
+			if (!App.session_lock.lock_acquired){ return; }
+		}
 
 		if (!window_is_ready){ return; }
 
@@ -1195,28 +1226,49 @@ public class MainWindow : Gtk.Window {
 		json.set_root(node);
 
 		try{
-			json.to_file(App.app_conf_session);
+			if (session_file_path.length > 0){
+				json.to_file(session_file_path);
+				log_msg("session saved: " + session_file_path);
+			}
+			else{
+				json.to_file(App.app_conf_session);
+				log_msg("session saved: " + App.app_conf_session);
+			}
 		}
 		catch (Error e) {
 	        log_error (e.message);
 	    }
-
-	    log_msg("session saved");
 
 	    log_trace("session saved: %s".printf(timer_elapsed_string(timer)));
 
 		set_numeric_locale("");
 	}
 
-	public bool load_session(){
+	public bool load_session(string session_file_path = ""){
 
-		if (!App.restore_last_session){ return false; }
+		if (session_file_path.length == 0) {
 
-		if (!App.session_lock.lock_acquired){ return false; }
+			if (!App.restore_last_session){ return false; }
 
-		if (!file_exists(App.app_conf_session)){ return false; }
+			if (!App.session_lock.lock_acquired){ return false; }
 
-		var win = new LoadingWindow(this, _("Restoring session..."), "", false);
+			if (!file_exists(App.app_conf_session)){ return false; }
+		}
+		else{
+			if (!file_exists(session_file_path)){ return false; }
+		}
+
+		string msg = "";
+		if (session_file_path.length > 0){
+			msg = _("Loading workspace...");
+		}
+		else{
+			msg = _("Restoring session...");
+		}
+
+		this.sensitive = false;
+		
+		var win = new LoadingWindow(this, msg, "", false);
 		win.show_all();
 
 		log_debug("restoring session: %s".printf(string.nfill(60,'=')));
@@ -1226,13 +1278,35 @@ public class MainWindow : Gtk.Window {
 		var parser = new Json.Parser();
 
         try{
-			parser.load_from_file(App.app_conf_session);
+			if (session_file_path.length > 0){
+				parser.load_from_file(session_file_path);
+			}
+			else{
+				parser.load_from_file(App.app_conf_session);
+			}
+			
 		}
 		catch (Error e) {
 	        log_error (e.message);
 	    }
 
 		var timer = timer_start();
+
+		// close open tabs ------------------------------
+
+		var old_tabs = new Gee.ArrayList<FileViewTab>();
+		
+		foreach(var panel in layout_box.panels){
+
+			foreach(var tab in panel.tabs){
+
+				if (tab.is_dummy) { continue; }
+
+				old_tabs.add(tab);
+			}
+		}
+		
+		// ----------------------------------------------
 
 	    TreeModelCache.enable();
 
@@ -1265,9 +1339,15 @@ public class MainWindow : Gtk.Window {
 
 		set_numeric_locale("");
 
+		foreach(var tab in old_tabs){
+			tab.close_tab();
+		}
+
 		TreeModelCache.disable();
 
 		win.close();
+
+		this.sensitive = true;
 
 		log_msg("session restored: %s".printf(string.nfill(60,'=')));
 
@@ -1352,5 +1432,95 @@ public class MainWindow : Gtk.Window {
 		log_debug("session-load: tab: %d: ok".printf(panel.tabs.size - 1));
 
 		return true;
+	}
+
+	// workspace ---------------------------------------
+
+	public void save_workspace(){
+		
+		log_debug("action.save_workspace()");
+
+		log_debug("current_workspace_file_name: " + current_workspace_file_name);
+		
+		if (current_workspace_file_name.length > 0){
+
+			var ws_file = path_combine(App.app_conf_dir_workspaces, current_workspace_file_name);
+
+			if (file_exists(ws_file)){
+				
+				log_debug("file_name: " + ws_file);
+				save_session(ws_file);
+				
+				return;
+			}
+		}
+
+		// else
+		save_workspace_as();
+	}
+
+	public void save_workspace_as(){
+
+		log_debug("action.save_workspace_as()");
+
+		string? new_name = _("New Workspace");
+		string file_path_new = file_generate_unique_name(path_combine(App.app_conf_dir_workspaces, new_name));
+		new_name = file_basename(file_path_new);
+		
+		do {
+			new_name = gtk_inputbox(_("Save Workspace"),_("Enter workspace name"), this, false, new_name);
+			if ((new_name == null) || (new_name.length == 0)){
+				return;
+			}
+
+			file_path_new = path_combine(App.app_conf_dir_workspaces, new_name + ".json");
+
+			if (file_or_dir_exists(file_path_new)){
+				gtk_messagebox(_("File exists"), _("Enter another name"), this, true);
+			}
+			else{
+				break;
+			}
+		}
+		while(file_exists(file_path_new));
+
+		current_workspace_file_name = file_basename(file_path_new);
+		log_debug("current_workspace_file_name: " + current_workspace_file_name);
+		
+		save_session(file_path_new);
+	}
+
+	public void load_workspace(string ws_name){
+
+		log_debug("action.load_workspace(): " + ws_name);
+		
+		var ws_file = path_combine(App.app_conf_dir_workspaces, ws_name);
+		
+		if (!file_exists(ws_file)){
+			log_debug("Missing: " + ws_file);
+			return;
+		}
+
+		load_session(ws_file);
+
+		current_workspace_file_name = file_basename(ws_file);
+	}
+
+	public bool remove_workspace(string ws_name){
+
+		log_debug("action.remove_workspace(): " + ws_name);
+		
+		var ws_file = path_combine(App.app_conf_dir_workspaces, ws_name);
+		
+		if (file_exists(ws_file)){
+			file_delete(ws_file);
+			log_debug("removed: " + ws_file);
+		}
+		
+		return !file_exists(ws_file);
+	}
+
+	public void list_workspaces(){
+		
 	}
 }

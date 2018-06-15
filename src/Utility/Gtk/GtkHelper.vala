@@ -608,7 +608,6 @@ namespace TeeJee.GtkHelper{
 		
 		var lbl = new Gtk.Label(label);
 		lbl.xalign = 0.0f;
-		lbl.margin_right = 6;
 		lbl.set_use_markup(true);
 		box.add(lbl);
 

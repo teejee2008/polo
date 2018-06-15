@@ -77,6 +77,7 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		add_menu_edit(menu_shell);
 		add_menu_view(menu_shell);
 		add_menu_go(menu_shell);
+		add_menu_workspace(menu_shell);
 		add_menu_cloud(menu_shell);
 		//add_menu_cloud(menu_session);
 		add_menu_tools(menu_shell);
@@ -1437,7 +1438,132 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		});
 	}
 
+	// workspace --------------------------------------------------------------------------------------------
 
+	private Gtk.Menu workspace_submenu;
+	
+	private void add_menu_workspace(Gtk.MenuShell menu_shell){
+
+		log_debug("MainMenuBar: add_menu_workspace()");
+		
+		var menu_item = new Gtk.MenuItem.with_label(_("Workspace"));
+		menu_shell.add(menu_item);
+
+		var submenu = new Gtk.Menu();
+		menu_item.set_submenu(submenu);
+		workspace_submenu = submenu;
+		
+		add_workspace_refresh(submenu);
+	}
+
+	private void add_workspace_refresh(Gtk.Menu menu){
+		
+		log_debug("mainmenu: cloud: refresh()");
+
+		gtk_container_remove_children(menu);
+
+		add_workspace_save(menu);
+
+		add_workspace_save_as(menu);
+
+		add_workspace_remove(menu);
+		
+		gtk_menu_add_separator(menu);
+		
+		add_workspace_select(menu);
+
+		menu.show_all();
+	}
+
+	private void add_workspace_save(Gtk.Menu submenu){
+
+		var item = new Gtk.MenuItem.with_label (_("Save"));
+		submenu.add(item);
+
+		item.activate.connect (() => {
+			window.save_workspace();
+			add_workspace_refresh(workspace_submenu);
+		});
+	}
+
+	private void add_workspace_save_as(Gtk.Menu submenu){
+
+		var item = new Gtk.MenuItem.with_label (_("Save As..."));
+		submenu.add(item);
+
+		item.activate.connect (() => {
+			window.save_workspace_as();
+			add_workspace_refresh(workspace_submenu);
+		});
+	}
+
+	private void add_workspace_remove(Gtk.Menu menu){
+
+		var item = new Gtk.MenuItem.with_label (_("Remove"));
+		menu.add(item);
+
+		var submenu = new Gtk.Menu();
+		item.set_submenu(submenu);
+
+		var sg_icon = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+		var sg_label = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+
+		var workspaces = dir_list_names(App.app_conf_dir_workspaces);
+		
+		foreach(var fname in workspaces){
+
+			var subitem = new Gtk.MenuItem.with_label(file_get_title(fname));
+			submenu.add(subitem);
+			
+			subitem.activate.connect (() => {
+				
+				bool ok = window.remove_workspace(fname);
+				
+				if (ok){
+					gtk_messagebox(_("Workspace Removed"), "%s".printf(file_get_title(fname)), window, false);
+					submenu.remove(subitem);
+				}
+				else {
+					gtk_messagebox(_("Failed to Remove Workspace"), "%s".printf(file_get_title(fname)), window, false);
+				}
+
+				add_workspace_refresh(workspace_submenu);
+			});
+		}
+		
+		submenu.show_all();
+	}
+
+	private void add_workspace_select(Gtk.Menu submenu){
+
+		/*var item = new Gtk.MenuItem.with_label (_("Remove"));
+		submenu.add(item);
+
+		item.activate.connect (() => {
+			window.remove_workspace();
+		});*/
+
+		var sg_icon = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+		var sg_label = new Gtk.SizeGroup(Gtk.SizeGroupMode.HORIZONTAL);
+
+		var workspaces = dir_list_names(App.app_conf_dir_workspaces);
+		
+		foreach(var fname in workspaces){
+
+			var item = new Gtk.MenuItem.with_label(file_get_title(fname));
+			submenu.add(item);
+			
+			item.activate.connect (() => {
+
+				log_debug("menu_item_clicked: %s".printf(fname), true);
+				
+				window.load_workspace(fname);
+			});
+		}
+	}
+
+	// cloud --------------------------------------------------------------------------------
+	
 	private void add_menu_cloud(Gtk.MenuShell menu_shell){
 
 		log_debug("MainMenuBar: add_menu_cloud()");

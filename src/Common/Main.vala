@@ -124,6 +124,7 @@ public class Main : GLib.Object {
 	public string app_conf_dir_path = "";
 	public string app_conf_dir_path_open = "";
 	public string app_conf_dir_remotes = "";
+	public string app_conf_dir_workspaces = "";
 
 	public string rclone_mounts = "";
 
@@ -402,6 +403,9 @@ public class Main : GLib.Object {
 		
 		app_conf_dir_remotes   = path_combine(app_conf_dir_path, "remotes");
 		dir_create(app_conf_dir_remotes);
+
+		app_conf_dir_workspaces   = path_combine(app_conf_dir_path, "workspaces");
+		dir_create(app_conf_dir_workspaces);
 		
 		app_conf_path    = path_combine(app_conf_dir_path, "polo.json");
 		app_conf_folders = path_combine(app_conf_dir_path, "polo-folders.json");
