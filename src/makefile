@@ -12,17 +12,30 @@ man1dir=$(mandir)/man1
 app_name=polo
 app_fullname='Polo'
 
-vte_version=$(shell { ((ldconfig -p | grep libvte-2.91*.so) >/dev/null && echo 'vte-2.91') || echo 'vte-2.90'; } )
-vte_symbols=$(shell { ((ldconfig -p | grep libvte-2.91*.so) >/dev/null && echo '-D VTE_291') || echo ''; } )
+# vte -----------------------------
+
+vte_symbol = -D VTE_291
+vte_version=$(shell { (pkg-config --modversion vte-2.91 | cut -d. -f2); } )
+
+ifeq ($(shell { test ${vte_version} -lt 52 ; echo $$? ; } ), 0)
+vte_symbol=$(shell echo '-D VTE_291_OLD')
+else
+vte_symbol=$(shell echo '-D VTE_291')
+endif
+
+# gtk3 -----------------------------------------------------------------
+
 gtk3_version=$(shell { (pkg-config --modversion gtk+-3.0 | cut -d. -f2); } )
 
 ifeq ($(shell { test ${gtk3_version} -gt 17 ; echo $$? ; } ), 0)
-gtk3_symbols=$(shell { echo '-D GTK3_18'; } )
+gtk3_symbol=$(shell { echo '-D GTK3_18'; } )
 else
-gtk3_symbols=$(shell { echo ''; } )
+gtk3_symbol=$(shell { echo ''; } )
 endif
 
-define_symbols=$(shell { echo "${vte_symbols} ${gtk3_symbols}"; } )
+# symbols --------------------------
+
+define_symbols=$(shell { echo "${vte_symbol} ${gtk3_symbol}"; } )
 
 all: app-gtk app-translations app-util-disk app-util-gtk3 
 
@@ -30,7 +43,7 @@ app-gtk:
 
 	#polo-gtk
 	valac -X -D'GETTEXT_PACKAGE="${app_name}"' \
-		--Xcc="-lm" ${define_symbols} --thread \
+		--Xcc="-lm" ${define_symbols} --Xcc="-O3" --thread \
 		Common/Main.vala \
 		Gtk/*.vala \
 		Utility/*.vala \
@@ -39,7 +52,7 @@ app-gtk:
 		--target-glib 2.32 --pkg glib-2.0 \
 		--pkg gio-unix-2.0 --pkg posix --pkg gtk+-3.0 \
 		--pkg gee-0.8 --pkg json-glib-1.0 --pkg libxml-2.0 \
-		--pkg $(vte_version) \
+		--pkg vte-2.91 \
 		--pkg gdk-x11-3.0
 
 app-util-gtk3:

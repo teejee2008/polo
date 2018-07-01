@@ -248,8 +248,16 @@ public class TermBox : Gtk.Box {
 		if (newline){
 			cmd = "%s\n".printf(cmd);
 		}
-		
+
+		#if VTE_291_OLD
+		 
 		term.feed_child(cmd, -1);
+
+		#else 
+ 
+		term.feed_child(cmd.to_utf8());  
+		 
+		#endif
 	}
 
 	public void refresh(){
