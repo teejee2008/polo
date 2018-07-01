@@ -692,7 +692,7 @@ namespace TeeJee.FileSystem{
 		foreach(var part in file_path.split("/")){
 			
 			if (part == "."){
-				fullpath = fullpath;
+				//fullpath = fullpath;
 			}
 			else if (part == ".."){
 				fullpath = file_parent(fullpath);

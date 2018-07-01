@@ -23,10 +23,11 @@
  */
  
 namespace TeeJee.ProcessHelper{
+	
 	using TeeJee.Logging;
 	using TeeJee.FileSystem;
 	using TeeJee.Misc;
-
+	
 	public string TEMP_DIR;
 	
 	/* Convenience functions for executing commands and managing processes */

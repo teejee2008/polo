@@ -50,7 +50,7 @@ namespace TeeJee.JsonHelper{
 			return def_value;
 		}
 	}
-	
+
 	public bool json_get_bool(Json.Object jobj, string member, bool def_value){
 		if (jobj.has_member(member)){
 			return jobj.get_boolean_member(member);
