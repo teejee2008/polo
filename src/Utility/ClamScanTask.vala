@@ -34,7 +34,6 @@ using TeeJee.GtkHelper;
 using TeeJee.System;
 using TeeJee.Misc;
 
-
 public class ClamScanTask : AsyncTask {
 
 	public Gee.ArrayList<string> scan_list;
@@ -46,6 +45,11 @@ public class ClamScanTask : AsyncTask {
 	public string file_path = "";
 
 	public string error_log = "";
+
+	public string scan_summary = "";
+
+	private bool summary_started = false;
+	private bool summary_ended = false;
 
 	public Gee.ArrayList<ClamScanResult> results;
 
@@ -178,6 +182,19 @@ public class ClamScanTask : AsyncTask {
 		else if (line.has_prefix("E:")){
 			error_log += "%s\n".printf(line);
 			log_error(line);
+		}
+		else{
+			if (line.contains("SCAN SUMMARY")){
+				summary_started = true;
+				// do not append
+			}
+			else if (line.contains("END SUMMARY")){
+				summary_ended = true;
+				// do not append
+			}
+			else if (summary_started && !summary_ended){
+				scan_summary += line + "\n";
+			}
 		}
 
 		mutex_parser.unlock();

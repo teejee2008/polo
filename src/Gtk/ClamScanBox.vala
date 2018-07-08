@@ -514,7 +514,7 @@ public class ClamScanBox : Gtk.Box {
 		treeview.set_model(store);
 		treeview.columns_autosize();
 
-		string txt = "%s: %d".printf(_("Found"), clamav.results.size);
+		string txt = "%d %s".printf(clamav.results.size, _("Found"));
 		lbl_results_found.label = format_text(txt, true, false, true);
 		
 		log_debug("ClamScanBox: refresh(): end");
@@ -598,12 +598,15 @@ public class ClamScanBox : Gtk.Box {
 				
 				gtk_show(frame_results);
 
-				string txt = "%s: %d".printf(_("Found"), clamav.results.size);
+				string txt = "%d %s".printf(clamav.results.size, _("Found"));
 				lbl_results_found.label = format_text(txt, true, false, true);
 
 				log_debug("clamav.task_complete.connect(): timeout: exit");
 
-				treeview.columns_autosize();
+				string title = _("Scan Summary");
+				string msg = clamav.scan_summary;
+				gtk_messagebox(title, msg, window, true);
+				
 				return false;
 			});
 

@@ -1828,7 +1828,7 @@ public class FileContextMenu : Gtk.Menu {
 
 		var menu_item = gtk_menu_add_item(
 			menu,
-			_("Quick Scan (Recommended)"),
+			_("Quick Scan"),
 			_("+ Skip archives\n+ Skip large files (> 5 MB)"),
 			IconManager.lookup_image("clamav", 16),
 			sg_icon,
