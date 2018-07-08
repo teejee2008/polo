@@ -42,11 +42,11 @@ public const string AppWikiVersion = ""; // update only if wiki page exists
 public const string AppAuthor = "Tony George";
 public const string AppAuthorEmail = "teejeetech@gmail.com";
 
-public const int PLUGIN_VER_ISO = 3;
-public const int PLUGIN_VER_PDF = 3;
-public const int PLUGIN_VER_IMAGE = 3;
-public const int PLUGIN_VER_YT = 4;
-public const int PLUGIN_VER_CLAMAV = 1;
+public const int PLUGIN_VER_ISO = 18070;
+public const int PLUGIN_VER_PDF = 18070;
+public const int PLUGIN_VER_IMAGE = 18070;
+public const int PLUGIN_VER_YT = 18070;
+public const int PLUGIN_VER_CLAMAV = 18070;
 
 const string GETTEXT_PACKAGE = "";
 const string LOCALE_DIR = "/usr/share/locale";

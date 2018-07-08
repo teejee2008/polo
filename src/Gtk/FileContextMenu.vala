@@ -1639,7 +1639,7 @@ public class FileContextMenu : Gtk.Menu {
 
 		var menu_item = gtk_menu_add_item(
 			menu,
-			_("Calculate Size..."),
+			_("Calculate Folder Size"),
 			"",
 			IconManager.lookup_image("disk-usage-analyzer", 16),
 			sg_icon,
@@ -1808,12 +1808,73 @@ public class FileContextMenu : Gtk.Menu {
 			sg_icon,
 			sg_label);
 
+		var sub_menu = new Gtk.Menu();
+		sub_menu.reserve_toggle_size = false;
+		menu_item.submenu = sub_menu;
+
+		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		var sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		
+		add_scan_mode_fast(sub_menu, sg_icon_sub, sg_label_sub);
+
+		add_scan_mode_deep(sub_menu, sg_icon_sub, sg_label_sub);
+	}
+
+	private void add_scan_mode_fast(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		if (selected_item == null){ return; }
+
+		log_debug("FileContextMenu: add_scan_fast()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Quick Scan (Recommended)"),
+			_("+ Skip archives\n+ Skip large files (> 5 MB)"),
+			IconManager.lookup_image("clamav", 16),
+			sg_icon,
+			sg_label);
+
 		menu_item.activate.connect (() => {
+
 			var tab = panel.add_tab();
 			tab.select_tab();
-			//tab.pane.show_clamav_view();
-		
-			//tab.pane.view_checksum.generate(selected_items, ChecksumType.MD5);
+			tab.pane.show_clamav_view("scan");
+
+			var list = new Gee.ArrayList<string>();
+			foreach(var item in selected_items){
+				list.add(item.file_path);
+			}
+			
+			tab.pane.view_clamav.scan(list, "fast");
+		});
+	}
+
+	private void add_scan_mode_deep(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+
+		if (selected_item == null){ return; }
+
+		log_debug("FileContextMenu: add_scan_deep()");
+
+		var menu_item = gtk_menu_add_item(
+			menu,
+			_("Deep Scan"),
+			_("+ Scan inside archives\n+ Scan all files (no size limit)\n+ Scan for potentially unwanted applications (PUAs)"),
+			IconManager.lookup_image("clamav", 16),
+			sg_icon,
+			sg_label);
+
+		menu_item.activate.connect (() => {
+
+			var tab = panel.add_tab();
+			tab.select_tab();
+			tab.pane.show_clamav_view("scan");
+
+			var list = new Gee.ArrayList<string>();
+			foreach(var item in selected_items){
+				list.add(item.file_path);
+			}
+			
+			tab.pane.view_clamav.scan(list, "deep");
 		});
 	}
 

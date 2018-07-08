@@ -136,7 +136,7 @@ public class PlacesPopover : Gtk.Popover {
 		treeview.rubber_banding = false;
 		treeview.has_tooltip = true;
 		treeview.enable_search = false;
-		treeview.set_rules_hint(false);
+		//treeview.set_rules_hint(false);
 		treeview.activate_on_single_click = true;
 		treeview.expand = true;
 		treeview_places = treeview;

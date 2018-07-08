@@ -21,7 +21,6 @@
  *
  */
 
-
 using Gtk;
 using Gee;
 using Json;

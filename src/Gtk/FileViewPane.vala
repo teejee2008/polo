@@ -37,8 +37,11 @@ public class FileViewPane : Gtk.Box {
 
 	//public FileViewToolbar toolbar;
 	public Pathbar pathbar;
+	
 	public FileViewList view;
 	public ChecksumBox view_checksum;
+	public ClamScanBox view_clamav;
+	
 	public MediaBar mediabar;
 	public SelectionBar selection_bar;
 	public AdminBar adminbar;
@@ -325,6 +328,20 @@ public class FileViewPane : Gtk.Box {
 		view.current_item = null;
 		
 		gtk_show(view_checksum);
+
+		gtk_hide(box_pathbar_view);
+
+		gtk_hide(statusbar);
+	}
+
+	public void show_clamav_view(string ui_mode){
+		
+		view_clamav = new ClamScanBox(tab, ui_mode);
+		this.add(view_clamav);
+
+		view.current_item = null;
+		
+		gtk_show(view_clamav);
 
 		gtk_hide(box_pathbar_view);
 

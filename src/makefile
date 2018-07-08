@@ -43,7 +43,7 @@ app-gtk:
 
 	#polo-gtk
 	valac -X -D'GETTEXT_PACKAGE="${app_name}"' \
-		--Xcc="-lm" ${define_symbols} --Xcc="-O3" --thread \
+		--Xcc="-lm" ${define_symbols} --Xcc="-O0" --thread \
 		Common/Main.vala \
 		Gtk/*.vala \
 		Utility/*.vala \
