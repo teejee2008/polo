@@ -644,7 +644,7 @@ public class ArchiveTask : AsyncTask {
 		bool is_tar_volume = ArchiveTask.is_multi_volume_tar(archive_path, out file_pattern);	
 		if (is_tar_volume){
 			// escape spaces in path and do not enclose in quotes
-			cmd += "cat %s | tar xvf - -C '%s' --overwrite --overwrite-dir".printf(
+			cmd += "cat %s | tar xvf - -C '%s' --overwrite".printf(
 				file_pattern.replace(" ","\\ "),
 				escape_single_quote(extraction_path));
 
