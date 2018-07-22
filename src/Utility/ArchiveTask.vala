@@ -662,7 +662,7 @@ public class ArchiveTask : AsyncTask {
 		
 		foreach(string extension in array_concat(Main.extensions_tar_compressed, Main.extensions_tar)) {
 			if (archive_path.has_suffix(extension)) {
-				cmd += "tar xvf '%s' -C '%s' --overwrite --overwrite-dir".printf(
+				cmd += "tar xvf '%s' -C '%s' --overwrite".printf(
 					escape_single_quote(archive_path),
 					escape_single_quote(extraction_path));
 
