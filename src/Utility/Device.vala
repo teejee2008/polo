@@ -472,7 +472,7 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 
 	public bool unlock(string mapped_name, string passphrase, Gtk.Window? parent_window, bool show_on_success = false){
 
-		// depends: gvfs-mount cryptsetup
+		// depends: gio cryptsetup
 		
 		/* Unlocks a LUKS device using provided passphrase.
 		 * Prompts the user for passphrase if empty.
@@ -518,7 +518,7 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 
 				var counter = new TimeoutCounter();
 				counter.kill_process_on_timeout("cryptsetup", 20, true);
-				string cmd = "gvfs-mount -d '%s'".printf(device);
+				string cmd = "gio mount -d '%s'".printf(device);
 
 				log_debug(cmd);
 				Posix.system(cmd);
@@ -531,7 +531,7 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 
 				// use password to unlock
 
-				var cmd = "echo '%s' | gvfs-mount -d '%s'\n".printf(luks_pass, device);
+				var cmd = "echo '%s' | gio mount -d '%s'\n".printf(luks_pass, device);
 
 				log_debug(cmd.replace(luks_pass, "**PASSWORD**"));
 
@@ -573,7 +573,7 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 
 				// use password to unlock
 
-				var cmd = "echo '%s' | gvfs-mount -d '%s'\n".printf(luks_pass, device);
+				var cmd = "echo '%s' | gio mount -d '%s'\n".printf(luks_pass, device);
 
 				log_debug(cmd.replace(luks_pass, "**PASSWORD**"));
 

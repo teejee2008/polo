@@ -333,7 +333,7 @@ namespace TeeJee.FileSystem{
 		
 		if (!file_or_dir_exists(file_path)){ return true; }
 		
-		string cmd = "gvfs-trash '%s'".printf(escape_single_quote(file_path));
+		string cmd = "gio trash '%s'".printf(escape_single_quote(file_path));
 		log_debug(cmd);
 		
 		string std_out, std_err;

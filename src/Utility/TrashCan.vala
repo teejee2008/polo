@@ -287,9 +287,9 @@ public class TrashCan : FileItem {
 
 	public static bool empty_trash(){
 		
-		if (cmd_exists("gvfs-trash")){
+		if (cmd_exists("gio trash")){
 			
-			string cmd = "gvfs-trash --empty";
+			string cmd = "gio trash --empty";
 			
 			string std_out, std_err;
 			int status = exec_sync(cmd, out std_out, out std_err);

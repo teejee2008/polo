@@ -164,7 +164,7 @@ public class GvfsMounts: GLib.Object {
 
 		string std_out, std_err;
 
-		string cmd = "gvfs-mount";
+		string cmd = "gio mount";
 		if (unmount){
 			cmd += " -u";
 		}
@@ -188,7 +188,7 @@ public class GvfsMounts: GLib.Object {
 		sh += "echo '%s' >> samba.props \n".printf(escape_single_quote(smb_domain));
 		sh += "echo '%s' >> samba.props \n".printf(escape_single_quote(smb_password));
 
-		string cmd = "gvfs-mount '%s' < ./samba.props".printf(escape_single_quote(file_uri));
+		string cmd = "gio mount '%s' < ./samba.props".printf(escape_single_quote(file_uri));
 		sh += cmd + "\n";
 		log_debug(cmd);
 		
@@ -206,7 +206,7 @@ public class GvfsMounts: GLib.Object {
 		
 		string std_out, std_err;
 
-		string cmd = "gvfs-mount -u '%s'".printf(escape_single_quote(file_uri));
+		string cmd = "gio mount -u '%s'".printf(escape_single_quote(file_uri));
 
 		log_debug(cmd);
 		
