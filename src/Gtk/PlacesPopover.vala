@@ -394,7 +394,16 @@ public class PlacesPopover : Gtk.Popover {
 
 		// cursor
 		var cursor = new Gdk.Cursor.from_name(Gdk.Display.get_default(), "pointer");
-		scrolled.get_window().set_cursor(cursor);
+		//scrolled.get_window().set_cursor(cursor);
+
+		if (scrolled.get_realized()){
+			scrolled.get_window().set_cursor(cursor);
+		}
+		else{
+			scrolled.realize.connect(()=>{
+				scrolled.get_window().set_cursor(cursor);
+			});
+		}
 
 		treeview.row_activated.connect(treeview_bookmarks_row_activated);
 	}

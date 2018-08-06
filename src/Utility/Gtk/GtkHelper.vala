@@ -44,10 +44,16 @@ namespace TeeJee.GtkHelper{
 			cursor = new Gdk.Cursor.from_name(Gdk.Display.get_default(), "default");
 		}
 
-		var window = win.get_window();
+		if (win != null) {
 
-		if (window != null) {
-			window.set_cursor (cursor);
+			if (win.get_realized()){
+				win.get_window().set_cursor(cursor);
+			}
+			else{
+				win.realize.connect(()=>{
+					win.get_window().set_cursor(cursor);
+				});
+			}
 		}
 
 		gtk_do_events();
