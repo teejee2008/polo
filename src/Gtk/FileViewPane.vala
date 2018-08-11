@@ -132,7 +132,7 @@ public class FileViewPane : Gtk.Box {
 		file_operations_box = new Gtk.Box(Orientation.VERTICAL, 6);
 		add(file_operations_box);
 
-		message_box = new Gtk.Box(Orientation.VERTICAL, 1);
+		message_box = new Gtk.Box(Orientation.VERTICAL, 0);
 		add(message_box);
 
 		//add(selection_bar);

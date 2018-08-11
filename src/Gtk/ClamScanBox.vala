@@ -40,6 +40,10 @@ public class ClamScanBox : Gtk.Box {
 	private Gtk.ListStore store;
 	private Gtk.TreeModelFilter filter;
 
+	private Gtk.Button btn_quarantine;
+	private Gtk.Button btn_delete;
+	private Gtk.Button btn_restore;
+
 	// columns
 	public Gtk.TreeViewColumn col_name;
 	public Gtk.TreeViewColumn col_status;
@@ -68,6 +72,8 @@ public class ClamScanBox : Gtk.Box {
 	public Gtk.Label lbl_results;
 	public Gtk.Label lbl_results_found;
 
+	public Gtk.Frame frame_quarantine_location;
+	
 	public string ui_mode = "scan";
 
 	public ClamScanTask clamav;
@@ -97,6 +103,8 @@ public class ClamScanBox : Gtk.Box {
 
 	private void init_ui(){
 
+		init_quarantine_location_panel();
+		
 		init_treeview();
 
 		init_progress_panel();
@@ -105,6 +113,7 @@ public class ClamScanBox : Gtk.Box {
 
 		gtk_hide(frame_progress);
 		gtk_hide(frame_results);
+		gtk_hide(frame_quarantine_location);
 	}
 
 	// progress panel ------------------------------
@@ -204,37 +213,60 @@ public class ClamScanBox : Gtk.Box {
 
 		// actions -------------------
 
+		// move to quarantine -----------------------------
+		
 		var button = new Gtk.Button.with_label(_("Move to Quarantine"));
-		button.image = IconManager.lookup_image("dialog-apply", 16);
-		button.always_show_image = true;
+		//button.image = IconManager.lookup_image("dialog-apply", 16);
+		//button.always_show_image = true;
 		hbox.add(button);
+
+		btn_quarantine = button;
 
 		button.clicked.connect(()=>{
 
 			string tmp_file = get_temp_file_path(false);
 
-			var list = new Gee.ArrayList<ClamScanResult>();
+			var selected_list = new Gee.ArrayList<ClamScanResult>();
+
+			log_debug("clamav.results: %d".printf(clamav.results.size));
 			
 			string txt = "";
 			foreach(var res in clamav.results){
 				if (res.selected){
-					list.add(res);
+					selected_list.add(res);
 					log_debug("Selected: " + res.file_path);
 					txt += "%s\n".printf(res.file_path);
 				}
 			}
 			file_write(tmp_file, txt);
 
-			string cmd = "pkexec polo-clamav --scripted --quarantine-from '%s'".printf(escape_single_quote(tmp_file));
+			if (selected_list.size == 0){
+				gtk_messagebox(_("Nothing Selected"), _("Select some items"), window, true);
+				return;
+			}
 
+			string cmd = "";
+
+			if (clamav.admin_mode){
+				cmd += "pkexec ";
+			}
+
+			cmd += "polo-clamav --scripted --quarantine-from '%s'".printf(escape_single_quote(tmp_file));
+			
 			log_debug(cmd);
 			
-			Posix.system(cmd);
+			if (clamav.admin_mode){
+				string std_out, std_err;
+				int status = App.exec_admin(cmd, out std_out, out std_err);
+			}
+			else{
+				Posix.system(cmd);
+			}
 
-			int count = 0;
-			foreach(var res in list){
+			int moved_count = 0;
+			foreach(var res in selected_list){
 				if (!file_exists(res.file_path)){
-					count++;
+					moved_count++;
 					clamav.results.remove(res);
 				}
 			}
@@ -242,8 +274,207 @@ public class ClamScanBox : Gtk.Box {
 			refresh();
 			
 			string ttl = _("Files Moved");
-			string msg = "%d %s".printf(count, _(" files moved to quarantine"));
-			gtk_messagebox(ttl, msg, window, false);
+			
+			string msg = "";
+
+			if (moved_count > 0){
+				msg += "%s: %d".printf(_("Moved to quarantine"), moved_count);
+			}
+
+			bool is_error = false;
+			
+			if (moved_count < selected_list.size){
+
+				ttl = _("Failed to move some files");
+
+				if (msg.length > 0){
+					msg += "\n\n";
+				}
+				
+				msg += "<b>%s: %d</b>".printf(_("Access Denied"), (selected_list.size - moved_count));
+
+				msg += "\n\n" + _("Run scan as Admin to quarantine files not owned by you.");
+
+				is_error = true;
+			}
+			
+			gtk_messagebox(ttl, msg, window, is_error);
+		});
+
+		// restore -----------------------------
+		
+		button = new Gtk.Button.with_label(_("Restore"));
+		//button.image = IconManager.lookup_image("dialog-warning", 16);
+		//button.always_show_image = true;
+		hbox.add(button);
+
+		btn_restore = button;
+
+		button.clicked.connect(()=>{
+
+			string tmp_file = get_temp_file_path(false);
+
+			var selected_list = new Gee.ArrayList<ClamScanResult>();
+
+			log_debug("clamav.results: %d".printf(clamav.results.size));
+			
+			string txt = "";
+			foreach(var res in clamav.results){
+				if (res.selected){
+					selected_list.add(res);
+					log_debug("Selected: " + res.file_path);
+					txt += "%s\n".printf(res.file_path);
+				}
+			}
+			file_write(tmp_file, txt);
+
+			if (selected_list.size == 0){
+				gtk_messagebox(_("Nothing Selected"), _("Select some items"), window, true);
+				return;
+			}
+
+			string cmd = "";
+
+			if (clamav.admin_mode){
+				cmd += "pkexec ";
+			}
+
+			cmd += "polo-clamav --scripted --restore-from '%s'".printf(escape_single_quote(tmp_file));
+			
+			log_debug(cmd);
+
+			if (clamav.admin_mode){
+				string std_out, std_err;
+				int status = App.exec_admin(cmd, out std_out, out std_err);
+			}
+			else{
+				Posix.system(cmd);
+			}
+
+			int moved_count = 0;
+			foreach(var res in selected_list){
+				if (file_exists(res.file_path)){
+					moved_count++;
+					clamav.results.remove(res);
+				}
+			}
+
+			refresh();
+			
+			string ttl = _("Files Restored");
+			
+			string msg = "";
+
+			if (moved_count > 0){
+				msg += "%s: %d".printf(_("Restored"), moved_count);
+			}
+
+			bool is_error = false;
+			
+			if (moved_count < selected_list.size){
+
+				ttl = _("Failed to restore some files");
+
+				if (msg.length > 0){
+					msg += "\n\n";
+				}
+				
+				msg += "<b>%s: %d</b>".printf(_("Access Denied"), (selected_list.size - moved_count));
+
+				//msg += "\n\n" + _("Run scan as Admin to restore files not owned by you.");
+
+				is_error = true;
+			}
+			
+			gtk_messagebox(ttl, msg, window, is_error);
+		});
+
+		// delete -----------------------------
+		
+		button = new Gtk.Button.with_label(_("Delete"));
+		//button.image = IconManager.lookup_image("dialog-apply", 16);
+		//button.always_show_image = true;
+		hbox.add(button);
+
+		btn_delete = button;
+
+		button.clicked.connect(()=>{
+
+			string tmp_file = get_temp_file_path(false);
+
+			var selected_list = new Gee.ArrayList<ClamScanResult>();
+
+			log_debug("clamav.results: %d".printf(clamav.results.size));
+			
+			string txt = "";
+			foreach(var res in clamav.results){
+				if (res.selected){
+					selected_list.add(res);
+					log_debug("Selected: " + res.file_path);
+					txt += "%s\n".printf(res.file_path);
+				}
+			}
+			file_write(tmp_file, txt);
+
+			if (selected_list.size == 0){
+				gtk_messagebox(_("Nothing Selected"), _("Select some items"), window, true);
+				return;
+			}
+
+			string cmd = "";
+
+			if (clamav.admin_mode){
+				cmd += "pkexec ";
+			}
+
+			cmd += "polo-clamav --scripted --delete-from '%s'".printf(escape_single_quote(tmp_file));
+			
+			log_debug(cmd);
+			
+			if (clamav.admin_mode){
+				string std_out, std_err;
+				int status = App.exec_admin(cmd, out std_out, out std_err);
+			}
+			else{
+				Posix.system(cmd);
+			}
+
+			int deleted_count = 0;
+			foreach(var res in selected_list){
+				if (!file_exists(res.archive_path)){
+					deleted_count++;
+					clamav.results.remove(res);
+				}
+			}
+
+			refresh();
+			
+			string ttl = _("Files Deleted");
+			
+			string msg = "";
+
+			if (deleted_count > 0){
+				msg += "%s: %d".printf(_("Deleted"), deleted_count);
+			}
+
+			bool is_error = false;
+			
+			if (deleted_count < selected_list.size){
+
+				ttl = _("Failed to delete some files");
+
+				if (msg.length > 0){
+					msg += "\n\n";
+				}
+				
+				msg += "<b>%s: %d</b>".printf(_("Access Denied"), (selected_list.size - deleted_count));
+
+				//msg += "\n\n" + _("Run scan as Admin to restore files not owned by you.");
+
+				is_error = true;
+			}
+
+			gtk_messagebox(ttl, msg, window, is_error);
 		});
 
 		// close
@@ -258,6 +489,59 @@ public class ClamScanBox : Gtk.Box {
 		});
 	}
 
+	private void init_quarantine_location_panel(){
+
+		var frame = new Gtk.Frame(null);
+		add(frame);
+		frame_quarantine_location = frame;
+
+		var contents = new Gtk.Box(Orientation.VERTICAL, 6);
+		contents.margin = 6;
+		frame.add(contents);
+
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
+		contents.add(hbox);
+
+		var label = new Gtk.Label(_("Location"));
+		hbox.add(label);
+
+		var entry = new Gtk.Entry();
+		entry.set_size_request(400,-1);
+		hbox.add(entry);
+
+		entry.text = "%s/.quarantine".printf(App.user_home);
+
+		var button = new Gtk.RadioButton.with_label_from_widget (null, _("Local"));
+		hbox.add(button);
+		var opt_local = button;
+
+		button.toggled.connect(()=>{
+			if (opt_local.active){
+				gtk_set_busy(true, App.main_window);
+				clamav.admin_mode = false;
+				clamav.list();
+				entry.text = "%s/.quarantine".printf(App.user_home);
+				refresh();
+				gtk_set_busy(false, App.main_window);
+			}
+		});
+		
+		button = new Gtk.RadioButton.with_label_from_widget (button, _("System"));
+		hbox.add(button);
+		var opt_system = button;
+
+		button.toggled.connect(()=>{
+			if (opt_system.active){
+				gtk_set_busy(true, App.main_window);
+				clamav.admin_mode = true;
+				clamav.list();
+				entry.text = "/quarantine";
+				refresh();
+				gtk_set_busy(false, App.main_window);
+			}
+		});
+	}
+	
 	// treeview -----------------------------------
 	
 	private void init_treeview() {
@@ -287,6 +571,10 @@ public class ClamScanBox : Gtk.Box {
 
 		add_col_modified();
 
+		if (ui_mode == "list"){
+			add_col_quarantined();
+		}
+
 		add_col_spacer();
 	}
 
@@ -301,7 +589,7 @@ public class ClamScanBox : Gtk.Box {
 		treeview.append_column(col);
 		col_name = col;
 
-		if (ui_mode == "manage"){
+		if (ui_mode == "list"){
 			col.title = _("Original Path");
 		}
 
@@ -471,6 +759,42 @@ public class ClamScanBox : Gtk.Box {
 			crt.scale = App.listview_font_scale;
 		});
 	}
+
+	private void add_col_quarantined() {
+
+		// column
+		var col = new Gtk.TreeViewColumn();
+		col.title = _("Quarantined");
+		//col.clickable = true;
+		col.resizable = true;
+		//col.expand = true;
+		col.min_width = 150;
+		treeview.append_column(col);
+		col_status = col;
+
+		// cell icon
+		var cell_pix = new Gtk.CellRendererPixbuf ();
+		cell_pix.xpad = 5;
+		col.pack_start(cell_pix, false);
+
+		// cell text
+		var cell_text = new Gtk.CellRendererText ();
+		cell_text.ellipsize = Pango.EllipsizeMode.END;
+		col.pack_start (cell_text, true);
+		
+		// render text
+		col.set_cell_data_func (cell_text, (cell_layout, cell, model, iter) => {
+
+			var crt = cell as Gtk.CellRendererText;
+
+			ClamScanResult res;
+			model.get (iter, 1, out res, -1);
+
+			crt.text = res.quarantined;
+
+			crt.scale = App.listview_font_scale;
+		});
+	}
 	
 	private void add_col_spacer() {
 
@@ -524,7 +848,7 @@ public class ClamScanBox : Gtk.Box {
 
 		TreeIter iter;
 		store.append(out iter);
-		store.set(iter, 0, true);
+		store.set(iter, 0, res.selected);
 		store.set(iter, 1, res);
 
 		treeview.columns_autosize();
@@ -532,13 +856,15 @@ public class ClamScanBox : Gtk.Box {
 
 	// actions ----------------------------------------------------
 	
-	public void scan(Gee.ArrayList<string> _scan_list, string _scan_mode){
+	public void scan(Gee.ArrayList<string> _scan_list, string _scan_mode, bool _admin_mode){
 
 		log_debug("ClamScanBox: scan()");
-
+		
 		scan_list = _scan_list;
 
 		clamav.scan_mode = _scan_mode;
+
+		clamav.admin_mode = _admin_mode;
 
 		if (scan_list.size == 1){
 			tab.tab_name = "Scan: %s".printf(file_basename(scan_list[0]));
@@ -553,6 +879,11 @@ public class ClamScanBox : Gtk.Box {
 		
 		gtk_show(frame_progress);
 		gtk_hide(frame_results);
+		gtk_hide(frame_quarantine_location);
+
+		gtk_hide(btn_restore);
+		gtk_hide(btn_delete);
+		gtk_show(btn_quarantine);
 		
 		refresh(); // create empty store
 
@@ -595,7 +926,7 @@ public class ClamScanBox : Gtk.Box {
 				log_debug("clamav.task_complete.connect(): timeout");
 				
 				gtk_hide(frame_progress);
-				
+				gtk_hide(frame_quarantine_location);
 				gtk_show(frame_results);
 
 				string txt = "%d %s".printf(clamav.results.size, _("Found"));
@@ -606,6 +937,8 @@ public class ClamScanBox : Gtk.Box {
 				string title = _("Scan Summary");
 				string msg = clamav.scan_summary;
 				gtk_messagebox(title, msg, window, true);
+
+				btn_quarantine.sensitive = (clamav.results.size > 0);
 				
 				return false;
 			});
@@ -625,6 +958,23 @@ public class ClamScanBox : Gtk.Box {
 		// start ---------------
 		
 		clamav.scan(scan_list);
+	}
+
+	public void show_quarantined(bool _admin_mode){
+
+		gtk_show(btn_restore);
+		gtk_show(btn_delete);
+		gtk_hide(btn_quarantine);
+		gtk_show(frame_quarantine_location);
+		gtk_show(frame_results);
+
+		tab.tab_name = _("Quarantined Files");
+
+		clamav.admin_mode = _admin_mode;
+
+		clamav.list();
+		
+		refresh();
 	}
 }
 

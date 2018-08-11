@@ -38,6 +38,7 @@ public class ClamScanTask : AsyncTask {
 
 	public Gee.ArrayList<string> scan_list;
 	public string scan_mode = "fast";
+	public bool admin_mode = false;
 	
 	public string scanned = "";
 	public string found = "";
@@ -70,6 +71,12 @@ public class ClamScanTask : AsyncTask {
 			//0 scanned, 0 found, 00:00:00 elapsed ~ /filepath
 			regex_list["status"] = new Regex("""^([0-9]+) scanned, ([0-9]+) found, ([0-9:]+) elapsed ~ (.*)$""");
 			regex_list["found"] = new Regex("""^(.*): (.*) (FOUND)$""");
+			regex_list["path"] = new Regex("""^PATH: (.*)$""");
+			regex_list["archive"] = new Regex("""^ARCHIVE: (.*)$""");
+			regex_list["signature"] = new Regex("""^SIGNATURE: (.*)$""");
+			regex_list["modified"] = new Regex("""^MODIFIED: (.*)$""");
+			regex_list["quarantined"] = new Regex("""^QUARANTINED: (.*)$""");
+			regex_list["size"] = new Regex("""^SIZE: (.*)$""");
 		}
 		catch (Error e) {
 			log_error (e.message);
@@ -87,7 +94,11 @@ public class ClamScanTask : AsyncTask {
 	
 		string cmd = "";
 
-		cmd = "pkexec polo-clamav --scripted";
+		if (admin_mode){
+			cmd += "pkexec ";
+		}
+		
+		cmd += "polo-clamav --scripted";
 
 		if (scan_mode == "fast"){
 			cmd += " --fast-scan";
@@ -116,6 +127,68 @@ public class ClamScanTask : AsyncTask {
 		scan_list = _scan_list;
 
 		execute();
+	}
+
+	public void list(){
+
+		log_debug("ClamScanTask.list()");
+		
+		string cmd = "";
+
+		if (admin_mode){
+			cmd += "pkexec ";
+		}
+		
+		cmd += "polo-clamav --scripted --list";
+
+		string std_out, std_err;
+		
+		if (admin_mode){
+			int status = App.exec_admin(cmd, out std_out, out std_err);
+		}
+		else{
+			exec_sync(cmd, out std_out, out std_err);
+		}
+
+		results.clear();
+
+		var res = new ClamScanResult();
+		
+		foreach(string line in std_out.split("\n")){
+
+			MatchInfo match;
+			
+			if (regex_list["path"].match(line, 0, out match)) {
+			
+				res = new ClamScanResult();
+				res.file_path = match.fetch(1);
+				results.add(res);
+			}
+			else if (regex_list["archive"].match(line, 0, out match)) {
+			
+				res.archive_path = match.fetch(1);
+			}
+			else if (regex_list["signature"].match(line, 0, out match)) {
+			
+				res.signature = match.fetch(1);
+			}
+			else if (regex_list["modified"].match(line, 0, out match)) {
+			
+				res.modified = match.fetch(1);
+			}
+			else if (regex_list["quarantined"].match(line, 0, out match)) {
+			
+				res.quarantined = match.fetch(1);
+			}
+			else if (regex_list["modified"].match(line, 0, out match)) {
+			
+				res.modified = match.fetch(1);
+			}
+			else if (regex_list["size"].match(line, 0, out match)) {
+			
+				res.size = match.fetch(1);
+			}
+		}
 	}
 
 	private void execute() {
@@ -258,8 +331,10 @@ public class ClamScanTask : AsyncTask {
 public class ClamScanResult : GLib.Object{
 
 	public string file_path = "";
+	public string archive_path = "";
 	public string signature = "";
 	public string modified = "";
+	public string quarantined = "";
 	public string size = "";
 
 	public bool selected = true;

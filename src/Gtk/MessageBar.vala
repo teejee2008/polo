@@ -91,6 +91,9 @@ public class MessageBar : Gtk.Box {
 		else if (message_text.strip().split("\n").length > 1){
 			scrolled.set_size_request(-1, 50);
 		}
+		else {
+			scrolled.set_size_request(-1, 10);
+		}
 
 		var box = new Gtk.Box(Gtk.Orientation.HORIZONTAL, 6);
 		scrolled.add(box);
@@ -139,7 +142,7 @@ public class MessageBar : Gtk.Box {
 
 		var label = new Gtk.Label("<span weight=\"bold\">%s</span>".printf("X"));
 		label.set_use_markup(true);
-		label.margin = 6;
+		//label.margin = 6;
 		ebox.add(label);
 		add(ebox);
 		

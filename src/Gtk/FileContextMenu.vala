@@ -1815,12 +1815,35 @@ public class FileContextMenu : Gtk.Menu {
 		var sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
 		var sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
 		
-		add_scan_mode_fast(sub_menu, sg_icon_sub, sg_label_sub);
+		add_scan_mode_fast(sub_menu, sg_icon_sub, sg_label_sub, false);
 
-		add_scan_mode_deep(sub_menu, sg_icon_sub, sg_label_sub);
+		add_scan_mode_deep(sub_menu, sg_icon_sub, sg_label_sub, false);
+
+		// admin sub-menu -------------------------
+
+		gtk_menu_add_separator(sub_menu);
+		
+		menu_item = gtk_menu_add_item(
+			sub_menu,
+			_("As Admin"),
+			"",
+			null,
+			sg_icon,
+			sg_label);
+			
+		sub_menu = new Gtk.Menu();
+		sub_menu.reserve_toggle_size = false;
+		menu_item.submenu = sub_menu;
+
+		sg_icon_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+		sg_label_sub = new Gtk.SizeGroup(SizeGroupMode.HORIZONTAL);
+
+		add_scan_mode_fast(sub_menu, sg_icon_sub, sg_label_sub, true);
+
+		add_scan_mode_deep(sub_menu, sg_icon_sub, sg_label_sub, true);	
 	}
 
-	private void add_scan_mode_fast(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+	private void add_scan_mode_fast(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label, bool as_admin){
 
 		if (selected_item == null){ return; }
 
@@ -1845,11 +1868,11 @@ public class FileContextMenu : Gtk.Menu {
 				list.add(item.file_path);
 			}
 			
-			tab.pane.view_clamav.scan(list, "fast");
+			tab.pane.view_clamav.scan(list, "fast", as_admin);
 		});
 	}
 
-	private void add_scan_mode_deep(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label){
+	private void add_scan_mode_deep(Gtk.Menu menu, Gtk.SizeGroup sg_icon, Gtk.SizeGroup sg_label, bool as_admin){
 
 		if (selected_item == null){ return; }
 
@@ -1874,7 +1897,7 @@ public class FileContextMenu : Gtk.Menu {
 				list.add(item.file_path);
 			}
 			
-			tab.pane.view_clamav.scan(list, "deep");
+			tab.pane.view_clamav.scan(list, "deep", as_admin);
 		});
 	}
 

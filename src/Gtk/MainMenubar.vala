@@ -1839,6 +1839,8 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 
 		add_reset_session(submenu);
 
+		add_show_quarantined_files(submenu);
+
 		add_test_action(submenu);
 
 		add_test_action2(submenu);
@@ -1958,6 +1960,21 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 		item.activate.connect (() => {
 			file_delete(App.app_conf_session);
 			exit(0); // exit immediately
+		});
+	}
+
+	private void add_show_quarantined_files(Gtk.Menu menu){
+
+		var item = new Gtk.MenuItem.with_label (_("Quarantined Files"));
+		item.set_tooltip_text(_("Show Quarantined Files"));
+		menu.add(item);
+
+		item.activate.connect (() => {
+			
+			var tab = panel.add_tab();
+			tab.select_tab();
+			tab.pane.show_clamav_view("list");
+			tab.pane.view_clamav.show_quarantined(false);
 		});
 	}
 

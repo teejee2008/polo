@@ -37,16 +37,16 @@ using TeeJee.Misc;
 public Main App;
 public const string AppName = "Polo File Manager";
 public const string AppShortName = "polo";
-public const string AppVersion = "18.6 BETA";
+public const string AppVersion = "18.8 BETA";
 public const string AppWikiVersion = ""; // update only if wiki page exists
 public const string AppAuthor = "Tony George";
 public const string AppAuthorEmail = "teejeetech@gmail.com";
 
-public const int PLUGIN_VER_ISO = 18070;
-public const int PLUGIN_VER_PDF = 18070;
-public const int PLUGIN_VER_IMAGE = 18070;
-public const int PLUGIN_VER_YT = 18070;
-public const int PLUGIN_VER_CLAMAV = 18070;
+public const int PLUGIN_VER_ISO    = 18080;
+public const int PLUGIN_VER_PDF    = 18080;
+public const int PLUGIN_VER_IMAGE  = 18080;
+public const int PLUGIN_VER_YT     = 18080;
+public const int PLUGIN_VER_CLAMAV = 18080;
 
 const string GETTEXT_PACKAGE = "";
 const string LOCALE_DIR = "/usr/share/locale";

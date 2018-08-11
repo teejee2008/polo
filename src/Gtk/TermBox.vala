@@ -255,8 +255,8 @@ public class TermBox : Gtk.Box {
 
 		#else 
  
-		term.feed_child(cmd.to_utf8());  
-		 
+		term.feed_child(cmd, -1);  
+		
 		#endif
 	}
 
@@ -404,6 +404,7 @@ public class TermBox : Gtk.Box {
 	}
 
 	public Proc[] get_child_processes(){
+		
 		return Proc.enumerate_descendants(child_pid, null);
 	}
 

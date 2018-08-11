@@ -15,9 +15,9 @@ app_fullname='Polo'
 # vte -----------------------------
 
 vte_symbol = -D VTE_291
-vte_version=$(shell { (pkg-config --modversion vte-2.91 | cut -d. -f2); } )
+vte_version=$(shell { (pkg-config --modversion vte-2.91 | cut -d. -f 2,3); } )
 
-ifeq ($(shell { test ${vte_version} -lt 52 ; echo $$? ; } ), 0)
+ifeq ($(shell { test ${vte_version} -lt 52.2 ; echo $$? ; } ), 0)
 vte_symbol=$(shell echo '-D VTE_291_OLD')
 else
 vte_symbol=$(shell echo '-D VTE_291')
