@@ -1859,6 +1859,8 @@ public class FileContextMenu : Gtk.Menu {
 
 		menu_item.activate.connect (() => {
 
+			if (!view.check_clamav()) { return; }
+
 			var tab = panel.add_tab();
 			tab.select_tab();
 			tab.pane.show_clamav_view("scan");
@@ -1888,6 +1890,8 @@ public class FileContextMenu : Gtk.Menu {
 
 		menu_item.activate.connect (() => {
 
+			if (!view.check_clamav()) { return; }
+			
 			var tab = panel.add_tab();
 			tab.select_tab();
 			tab.pane.show_clamav_view("scan");

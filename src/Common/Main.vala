@@ -557,7 +557,8 @@ public class Main : GLib.Object {
 		tools["youtube-dl"] = new Tool("youtube-dl","youtube-dl","youtube-dl Downloader");
 		tools["diffuse"] = new Tool("diffuse","diffuse","File Compare Utility");
 		tools["groot"] = new Tool("groot","groot","Groot Utility for chroot");
-
+		tools["clamav"] = new Tool("clamscan","clamav","ClamAV antivirus scanner");
+		
 		check_all_tools();
 	}
 

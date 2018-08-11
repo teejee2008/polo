@@ -5738,6 +5738,10 @@ public class FileViewList : Gtk.Box, IFileViewList {
 		return check_tool("diffuse");
 	}
 
+	public bool check_clamav(){
+		return check_tool("clamav");
+	}
+
 	/*private bool check_bcompare(){
 		return check_tool("bcompare");
 	}*/
