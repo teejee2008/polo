@@ -88,10 +88,6 @@ public class FilePropertiesPanel : Gtk.Box {
 		label.label = "<i>%s</i>".printf(label.label);
 		vbox.add(label);
 
-		if (box_preview != null){
-			box_preview.stop();
-		}
-
 		ui_empty = true;
 
 		this.show_all();
@@ -133,10 +129,6 @@ public class FilePropertiesPanel : Gtk.Box {
 
 		if (ui_empty){
 			init_ui_for_file();
-		}
-
-		if (box_preview != null){
-			box_preview.stop();
 		}
 
 		log_debug("FilePropertiesPanel: update_ui_for_file()");
@@ -187,8 +179,6 @@ public class FilePropertiesPanel : Gtk.Box {
 
 		App.propbar_visible = false;
 
-		stop_preview();
-
 		gtk_hide(this);
 	}
 	
@@ -201,13 +191,6 @@ public class FilePropertiesPanel : Gtk.Box {
 		}
 		else{
 			show_panel();
-		}
-	}
-
-	public void stop_preview(){
-
-		if (box_preview != null){
-			box_preview.quit();
 		}
 	}
 }

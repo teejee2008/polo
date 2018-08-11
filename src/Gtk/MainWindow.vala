@@ -145,10 +145,6 @@ public class MainWindow : Gtk.Window {
 				open_donate_window();
 			}
 
-			if (propbar.visible){
-				propbar.stop_preview();
-			}
-
 			log_debug("MainWindow: exiting...");
 		
 			window_is_closing = true; // set after save_session()
