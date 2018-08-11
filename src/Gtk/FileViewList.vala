@@ -578,14 +578,14 @@ public class FileViewList : Gtk.Box, IFileViewList {
 			var selected_items = get_selected_items();
 			if (selected_items.size == 0){ return; }
 
-			bool query_size = true;
+			/*bool query_size = true;
 			if (propbar_last_folder_path != current_location){
 				propbar_last_folder_path = current_location;
 				query_size = false;
-			}
+			}*/
 			
 			Timeout.add(10, ()=>{
-				App.main_window.propbar.show_properties_for_file(selected_items[0], query_size);
+				App.main_window.propbar.show_properties_for_file(selected_items[0], false);
 				return false;
 			});
 		}
