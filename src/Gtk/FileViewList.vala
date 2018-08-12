@@ -3201,34 +3201,52 @@ public class FileViewList : Gtk.Box, IFileViewList {
 
 		switch (event){
 		case FileMonitorEvent.RENAMED:
-			current_item.rename_child(file_basename(src.get_path()), file_basename(dest.get_path()));
-			refresh_iter_by_file_path(dest.get_path());
-			break;
-		case FileMonitorEvent.CHANGES_DONE_HINT:
-			refresh_delayed_add(true, false);
-			break;
-		case FileMonitorEvent.DELETED:
-		case FileMonitorEvent.MOVED_OUT:
-			current_item.remove_child(file_basename(src.get_path()));
-			remove_iter_by_file_path(src.get_path());
-			if (current_item.children.size == 0){
-				set_overlay_on_empty();
+		
+			if ((current_item != null) && (dest != null)){
+				
+				current_item.rename_child(file_basename(src.get_path()), file_basename(dest.get_path()));
+				refresh_iter_by_file_path(dest.get_path());
 			}
 			break;
+			
+		case FileMonitorEvent.CHANGES_DONE_HINT:
+		
+			refresh_delayed_add(true, false);
+			break;
+			
+		case FileMonitorEvent.DELETED:
+		case FileMonitorEvent.MOVED_OUT:
+		
+			if (current_item != null){
+				
+				current_item.remove_child(file_basename(src.get_path()));
+				remove_iter_by_file_path(src.get_path());
+				
+				if (current_item.children.size == 0){
+					set_overlay_on_empty();
+				}
+			}
+			break;
+			
 		case FileMonitorEvent.UNMOUNTED:
 			set_overlay_on_unmount();
 			break;
+			
 		case FileMonitorEvent.CREATED:
 		case FileMonitorEvent.MOVED_IN:
-			if(!current_item.has_child(file_basename(src.get_path()))){
+		
+			if((current_item != null) && !current_item.has_child(file_basename(src.get_path()))){
+				
 				append_item_to_treeview_by_file_path(src.get_path());
 				remove_overlay();
 			}
+			
 			remove_overlay();
 			break;
+			
 		case FileMonitorEvent.CHANGED:
 			//if(!current_item.has_child(file_basename(src.get_path()))){
-				refresh_iter_by_file_path(src.get_path());
+			refresh_iter_by_file_path(src.get_path());
 			//}
 			break;
 		/*
