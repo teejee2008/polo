@@ -255,7 +255,7 @@ public class TermBox : Gtk.Box {
 
 		#else 
  
-		term.feed_child(cmd, -1);  
+		term.feed_child(cmd.to_utf8());  
 		
 		#endif
 	}
