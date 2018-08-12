@@ -19,3 +19,5 @@ release/*.run
 po-temp/
 *.rpm
 
+
+src/share/polo/images/clamav-trademark\.webp

@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
-"POT-Creation-Date: 2018-04-11 16:26+0530\n"
+"POT-Creation-Date: 2018-07-08 18:02+0530\n"
 "PO-Revision-Date: 2017-09-17 16:05+0530\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: Heimen Stoffels <vistausss@outlook.com>\n"
@@ -27,19 +27,23 @@ msgstr ""
 msgid " (locked)"
 msgstr "Ontgrendeld"
 
-#: Common/Main.vala:1331
+#: Gtk/ClamScanBox.vala:252
+msgid " files moved to quarantine"
+msgstr ""
+
+#: Common/Main.vala:1338
 msgid ""
 "'pkexec' or 'gksu' is needed for executing admin operations. Install "
 "required packages and try again."
 msgstr ""
 
-#: Gtk/FilePropertiesWindow.vala:193 Gtk/FilePropertiesWindow.vala:195
+#: Gtk/FilePropertiesWindow.vala:197 Gtk/FilePropertiesWindow.vala:199
 #: Gtk/Sidebar.vala:725 Gtk/Sidebar.vala:727 Utility/Device.vala:2507
 #: Utility/Device.vala:2509 Utility/Device.vala:2511
 msgid "(empty)"
 msgstr "(Leeg)"
 
-#: Gtk/FileContextMenu.vala:1154
+#: Gtk/FileContextMenu.vala:1156
 msgid "..."
 msgstr "..."
 
@@ -75,57 +79,32 @@ msgstr ""
 "Er zal een dynamisch toegewezen schijf worden gecreëerd met de opgegeven "
 "grootte. De bestandsgrootte zal gaandeweg toenemen."
 
-#: Gtk/MainWindow.vala:995
+#: Gtk/MainWindow.vala:997
 msgid "A modern file manager for Linux"
 msgstr "Een moderne bestandsbeheerder voor Linux"
 
-#: Gtk/CloudLoginWindow.vala:264
-msgid ""
-"A new browser window will open.\n"
-"\n"
-"Select the account to add and authorize rclone\n"
-"\n"
-"Close the browser window when done\n"
-"\n"
-"Come back to Polo and click 'Finish' to add the account"
-msgstr ""
-"Er wordt een nieuw browservenster geopend.\n"
-"\n"
-"Selecteer het toe te voegen account en autoriseer rclone\n"
-"\n"
-"Sluit het browservenster en kom, als u klaar bent,\n"
-"\n"
-"terug naar Polo en druk op 'Afronden' om het account toe te voegen"
-
-#: Gtk/FileViewToolbar.vala:518 Gtk/MainMenubar.vala:1958
+#: Gtk/FileViewToolbar.vala:518 Gtk/MainMenubar.vala:2090
 msgid "About"
 msgstr "Over"
 
-#: Gtk/FileViewList.vala:1039
+#: Gtk/FileViewList.vala:1049
 msgid "Access"
 msgstr "Toegang"
 
-#: Gtk/FilePropertiesBox.vala:281
+#: Gtk/FilePropertiesBox.vala:283
 msgid "Accessed"
 msgstr "Benaderd"
 
-#: Gtk/CloudLoginWindow.vala:340
-msgid "Account Added"
-msgstr "Account toegevoegd"
-
-#: Gtk/CloudLoginWindow.vala:263
-msgid "Account Authorization"
+#: Gtk/CloudLoginWindow.vala:256
+#, fuzzy
+msgid "Account Configuration"
 msgstr "Account-autorisatie"
 
 #: Gtk/CloudLoginWindow.vala:114
 msgid "Account Name"
 msgstr "Accountnaam"
 
-#: Gtk/CloudLoginWindow.vala:345
-msgid "Account Not Added"
-msgstr "Account niet toegevoegd"
-
-#: Gtk/MainMenubar.vala:1545
+#: Gtk/MainMenubar.vala:1677
 msgid "Account Removed"
 msgstr "Account verwijderd"
 
@@ -133,34 +112,22 @@ msgstr "Account verwijderd"
 msgid "Account Type"
 msgstr "Accountsoort"
 
-#: Gtk/CloudLoginWindow.vala:258
-msgid "Account name exists"
-msgstr ""
-"Accountnaam bestaat al\n"
-"Accountnaam bestaat al\n"
-"Accountnaam bestaat"
-
-#: Gtk/CloudLoginWindow.vala:341
+#: Gtk/CloudLoginWindow.vala:257
 msgid ""
-"Account was added successfully.\n"
-"\n"
-"You can browse the storage by selecting account from 'Cloud' menu"
+"Account setup will be started in a terminal window. Answer the prompts and "
+"finish setup to add account."
 msgstr ""
-"Het account is succesvol toegevoegd.\n"
-"\n"
-"U kunt door de externe opslag bladeren door het account te selecteren vanuit "
-"het 'Cloud'-menu"
 
-#: Gtk/Settings.vala:1052
+#: Gtk/Settings.vala:1073
 msgid "Action button"
 msgstr "Actieknop"
 
-#: Gtk/FilePropertiesBox.vala:690 Gtk/FilePropertiesBox.vala:736
+#: Gtk/FilePropertiesBox.vala:760 Gtk/FilePropertiesBox.vala:806
 #: Gtk/Sidebar.vala:1204
 msgid "Actions"
 msgstr "Acties"
 
-#: Gtk/MainMenubar.vala:1476
+#: Gtk/MainMenubar.vala:1608
 msgid "Add Account"
 msgstr "Account toevoegen"
 
@@ -172,7 +139,7 @@ msgstr "Bladwijzer toevoegen"
 msgid "Add Cloud Storage Account"
 msgstr "Cloudopslag-account toevoegen"
 
-#: Gtk/FileContextMenu.vala:2239 Gtk/Settings.vala:2709
+#: Gtk/FileContextMenu.vala:2269 Gtk/Settings.vala:2730
 msgid "Add Password"
 msgstr "Wachtwoord toevoegen"
 
@@ -184,11 +151,11 @@ msgstr "Bladwijzer toevoegen"
 msgid "Add bookmark for this location"
 msgstr "Bladwijzer toevoegen voor deze locatie"
 
-#: Gtk/FileContextMenu.vala:733
+#: Gtk/FileContextMenu.vala:735
 msgid "Admin Window"
 msgstr "Adminvenster"
 
-#: Gtk/Settings.vala:2313
+#: Gtk/Settings.vala:2334
 msgid "Advanced"
 msgstr "Geavanceerd"
 
@@ -205,15 +172,11 @@ msgstr "Apparaat is succesvol aangekoppeld"
 msgid "Almquist shell (ash)"
 msgstr "Almquist shell (ash)"
 
-#: Gtk/Settings.vala:2581
+#: Gtk/Settings.vala:2602
 msgid "Amount of RAM to allocate for guest machine"
 msgstr "Hoeveelheid RAM-geheugen die de gastmachine mag gebruiken"
 
-#: Gtk/CloudLoginWindow.vala:258
-msgid "An account exists with this name. Enter a new name for the account."
-msgstr "Er bestaat al een account met deze naam. Voer een nieuwe naam in."
-
-#: Gtk/FileViewList.vala:4574
+#: Gtk/FileViewList.vala:4583
 msgid "Another file exists with this name"
 msgstr "Er bestaat al een bestand met deze naam"
 
@@ -221,11 +184,11 @@ msgstr "Er bestaat al een bestand met deze naam"
 msgid "Another instance of this application is running"
 msgstr "Er draait al een proces van deze applicatie"
 
-#: Common/Main.vala:1005 Common/Main.vala:1155 Common/Main.vala:1244
+#: Common/Main.vala:1012 Common/Main.vala:1162 Common/Main.vala:1251
 msgid "App config loaded"
 msgstr "App-configuratie geladen"
 
-#: Common/Main.vala:785 Common/Main.vala:1122 Common/Main.vala:1200
+#: Common/Main.vala:791 Common/Main.vala:1129 Common/Main.vala:1207
 msgid "App config saved"
 msgstr "App-configuratie opgeslagen"
 
@@ -237,11 +200,11 @@ msgstr "Applicatie-informatie"
 msgid "Apply"
 msgstr "Toepassen"
 
-#: Gtk/FilePropertiesBox.vala:502 Gtk/FilePropertiesBox.vala:539
+#: Gtk/FilePropertiesBox.vala:509 Gtk/FilePropertiesBox.vala:546
 msgid "Apply recursively to directory contents"
 msgstr "Recursief toepassen op mapinhoud"
 
-#: Gtk/FileContextMenu.vala:1459 Gtk/Settings.vala:2616
+#: Gtk/FileContextMenu.vala:1461 Gtk/Settings.vala:2637
 msgid "Archive"
 msgstr "Archief"
 
@@ -268,15 +231,11 @@ msgstr ""
 msgid "Authorization was started"
 msgstr "Autorisatie is gestart"
 
-#: Gtk/CloudLoginWindow.vala:217
-msgid "Authorize"
-msgstr "Autoriseren"
-
 #: Utility/Gtk/AboutWindow.vala:426
 msgid "Authors"
 msgstr "Auteurs"
 
-#: Gtk/FilePropertiesWindow.vala:228 Utility/Device.vala:2558
+#: Gtk/FilePropertiesWindow.vala:232 Utility/Device.vala:2558
 #, c-format
 msgid "Available"
 msgstr "Beschikbaar"
@@ -285,8 +244,8 @@ msgstr "Beschikbaar"
 msgid "BZip2 Compressed Disk Image"
 msgstr ""
 
-#: Gtk/FileViewToolbar.vala:159 Gtk/MainMenubar.vala:1256 Gtk/Pathbar.vala:808
-#: Gtk/Settings.vala:394 Gtk/Settings.vala:819 Utility/Gtk/AboutWindow.vala:343
+#: Gtk/FileViewToolbar.vala:159 Gtk/MainMenubar.vala:1257 Gtk/Pathbar.vala:820
+#: Gtk/Settings.vala:395 Gtk/Settings.vala:820 Utility/Gtk/AboutWindow.vala:343
 #: Utility/Gtk/AboutWindow.vala:375
 msgid "Back"
 msgstr "Terug"
@@ -333,7 +292,7 @@ msgstr "Beste video + Beste audio (samenvoegen)"
 msgid "Block Size"
 msgstr "Blokgrootte"
 
-#: Gtk/FilePropertiesBox.vala:201
+#: Gtk/FilePropertiesBox.vala:203
 msgid "Blocks"
 msgstr "Blokken"
 
@@ -341,16 +300,16 @@ msgstr "Blokken"
 msgid "Bookmark"
 msgstr "Bladwijzers"
 
-#: Gtk/FileViewToolbar.vala:291 Gtk/Pathbar.vala:170 Gtk/Settings.vala:564
-#: Gtk/Settings.vala:779 Gtk/Settings.vala:1016 Gtk/Sidebar.vala:362
+#: Gtk/FileViewToolbar.vala:291 Gtk/Pathbar.vala:172 Gtk/Settings.vala:565
+#: Gtk/Settings.vala:780 Gtk/Settings.vala:1037 Gtk/Sidebar.vala:362
 msgid "Bookmarks"
 msgstr "Bladwijzers"
 
-#: Gtk/FileContextMenu.vala:2564 Gtk/Settings.vala:2864
+#: Gtk/FileContextMenu.vala:2594 Gtk/Settings.vala:2885
 msgid "Boost Color"
 msgstr "Kleur verbeteren"
 
-#: Gtk/FileContextMenu.vala:2565
+#: Gtk/FileContextMenu.vala:2595
 msgid ""
 "Boost color (more saturation). This can be used for correcting photos that "
 "are too dull (less color)."
@@ -358,23 +317,23 @@ msgstr ""
 "Kleur verbeteren (meer verzadiging). Dit kan worden gebruikt voor het "
 "corrigeren van foto's die te saai zijn (minder kleur)."
 
-#: Gtk/FileContextMenu.vala:2022
+#: Gtk/FileContextMenu.vala:2052
 msgid "Boot Disk"
 msgstr "Opstartschijf"
 
-#: Gtk/FileContextMenu.vala:1687
+#: Gtk/FileContextMenu.vala:1716
 msgid "Boot ISO file in QEMU-KVM virtual machine"
 msgstr "ISO-bestand opstarten in QEMU-KVM virtuele machine"
 
-#: Gtk/FileContextMenu.vala:2063
+#: Gtk/FileContextMenu.vala:2093
 msgid "Boot from an ISO file with the selected disk attached"
 msgstr "Opstarten van een ISO-bestand met de geselecteerde schijf aangekoppeld"
 
-#: Gtk/FileContextMenu.vala:1686
+#: Gtk/FileContextMenu.vala:1715
 msgid "Boot in VM"
 msgstr "Opstarten in VM"
 
-#: Gtk/FileContextMenu.vala:2023
+#: Gtk/FileContextMenu.vala:2053
 msgid "Boot the selected disk in a virtual machine"
 msgstr "De geselecteerde schijf opstarten in een virtuele machine"
 
@@ -382,13 +341,13 @@ msgstr "De geselecteerde schijf opstarten in een virtuele machine"
 msgid "Bourne again shell (bash)"
 msgstr "Bourne again shell (bash)"
 
-#: Gtk/FileViewList.vala:387
+#: Gtk/FileViewList.vala:389
 #, c-format
 msgid "Broken"
 msgstr "Kapot"
 
 #: Utility/FileTask.vala:335 Utility/FileTask.vala:390
-#: Utility/FileTask.vala:454 Utility/FileTask.vala:1165
+#: Utility/FileTask.vala:454 Utility/FileTask.vala:1169
 msgid "Building file list..."
 msgstr "Bezig met bouwen van bestandslijst..."
 
@@ -401,34 +360,40 @@ msgstr "C shell (csh)"
 msgid "CHANGED"
 msgstr ""
 
-#: Gtk/Settings.vala:2410
+#: Gtk/Settings.vala:2431
 msgid "CPU"
 msgstr "CPU"
 
-#: Gtk/Settings.vala:2511
+#: Gtk/Settings.vala:2532
 msgid "CPU Cores"
 msgstr "CPU-kernen"
 
-#: Gtk/Settings.vala:2539
+#: Gtk/Settings.vala:2560
 msgid "CPU Limit (%)"
 msgstr "CPU-limiet (%)"
 
-#: Gtk/Settings.vala:2448
+#: Gtk/Settings.vala:2469
 msgid "CPU type to emulate for guest machine"
 msgstr "Na te bootsen CPU-type voor gastmachine"
 
-#: Gtk/MainMenubar.vala:1765
+#: Gtk/FileContextMenu.vala:1642
+#, fuzzy
+msgid "Calculate Size..."
+msgstr "Bezig met berekenen van mapgrootte..."
+
+#: Gtk/MainMenubar.vala:1897
 msgid "Calculate directory sizes"
 msgstr "Mapgroottes berekenen"
 
-#: Gtk/FileViewList.vala:2827
+#: Gtk/FileViewList.vala:2832
 msgid "Calculating dir size..."
 msgstr "Bezig met berekenen van mapgrootte..."
 
-#: Gtk/ChecksumBox.vala:211 Gtk/CloudLoginWindow.vala:212
-#: Gtk/ConnectServerWindow.vala:538 Gtk/ConnectServerWindow.vala:583
-#: Gtk/CreateArchiveWindow.vala:2029 Gtk/FileConflictDialog.vala:274
-#: Gtk/KvmCreateDiskWindow.vala:362 Gtk/ProgressPanelDeviceWriterTask.vala:119
+#: Gtk/ChecksumBox.vala:211 Gtk/ClamScanBox.vala:187
+#: Gtk/CloudLoginWindow.vala:212 Gtk/ConnectServerWindow.vala:537
+#: Gtk/ConnectServerWindow.vala:582 Gtk/CreateArchiveWindow.vala:2029
+#: Gtk/FileConflictDialog.vala:274 Gtk/KvmCreateDiskWindow.vala:362
+#: Gtk/ProgressPanelDeviceWriterTask.vala:119
 #: Gtk/ProgressPanelFileTask.vala:133 Gtk/ProgressPanelImageTask.vala:109
 #: Gtk/ProgressPanelKvmTask.vala:135 Gtk/ProgressPanelPdfTask.vala:109
 #: Gtk/ProgressPanelVideoDownloadTask.vala:110
@@ -440,7 +405,7 @@ msgstr "Bezig met berekenen van mapgrootte..."
 msgid "Cancel"
 msgstr "Annuleren"
 
-#: Gtk/FileViewTab.vala:458 Gtk/LayoutBox.vala:508 Gtk/MainWindow.vala:164
+#: Gtk/FileViewTab.vala:462 Gtk/LayoutBox.vala:508 Gtk/MainWindow.vala:166
 msgid "Cancel File Operations?"
 msgstr "Bestandsoperaties annuleren?"
 
@@ -456,11 +421,11 @@ msgstr "Geannuleerd"
 msgid "Cancelled by user"
 msgstr "Geannuleerd door gebruiker"
 
-#: Gtk/FileViewList.vala:6148
+#: Gtk/FileViewList.vala:6162
 msgid "Cannot create archive in this location"
 msgstr "Archief kan niet worden gecreëerd op deze locatie"
 
-#: Gtk/FileViewList.vala:5988
+#: Gtk/FileViewList.vala:6002
 msgid "Cannot extract to this location"
 msgstr "Kan niet uitpakken naar deze locatie"
 
@@ -472,7 +437,7 @@ msgstr "Applicatie-instellingen wijzigen"
 msgid "Change Directory"
 msgstr "Map wijzigen"
 
-#: Gtk/Settings.vala:1946 Gtk/Settings.vala:2147
+#: Gtk/Settings.vala:1967 Gtk/Settings.vala:2168
 msgid "Change column spacing"
 msgstr "Kolomruimte wijzigen"
 
@@ -480,19 +445,19 @@ msgstr "Kolomruimte wijzigen"
 msgid "Change directory to current path"
 msgstr "Map wijzigen naar huidig pad"
 
-#: Gtk/Settings.vala:1684
+#: Gtk/Settings.vala:1705
 msgid "Change font size"
 msgstr "Lettertypegrootte wijzigen"
 
-#: Gtk/Settings.vala:1718 Gtk/Settings.vala:1873 Gtk/Settings.vala:2074
+#: Gtk/Settings.vala:1739 Gtk/Settings.vala:1894 Gtk/Settings.vala:2095
 msgid "Change icon size"
 msgstr "Pictogramgrootte wijzigen"
 
-#: Gtk/Settings.vala:1761 Gtk/Settings.vala:1911 Gtk/Settings.vala:2112
+#: Gtk/Settings.vala:1782 Gtk/Settings.vala:1932 Gtk/Settings.vala:2133
 msgid "Change row spacing"
 msgstr "Rijruimte wijzigen"
 
-#: Gtk/FilePropertiesBox.vala:295
+#: Gtk/FilePropertiesBox.vala:297
 msgid "Changed"
 msgstr "Gewijzigd"
 
@@ -509,7 +474,7 @@ msgstr ""
 "Wijzigingen kunnen worden verworpen door het opgehaalde bestand te "
 "verwijderen of worden afgerond door het samen te voegen met de basis"
 
-#: Gtk/Settings.vala:666
+#: Gtk/Settings.vala:667
 msgid ""
 "Changes will take effect after application is restarted.\n"
 "Your session will be maintained.\n"
@@ -526,11 +491,11 @@ msgstr ""
 msgid "Check"
 msgstr "Controleren"
 
-#: Gtk/MainMenubar.vala:1835
+#: Gtk/MainMenubar.vala:1967
 msgid "Check external tools"
 msgstr "Externe hulpmiddelen controleren"
 
-#: Gtk/FileViewList.vala:2393
+#: Gtk/FileViewList.vala:2398
 msgid "Check if internet connection is active"
 msgstr "Controleren of er een actieve internetverbinding is"
 
@@ -544,8 +509,18 @@ msgstr ""
 msgid "Check your internet connectivity."
 msgstr ""
 
+#: Gtk/FilePropertiesBox.vala:687
+#, fuzzy
+msgid "Checking"
+msgstr "Controleren"
+
+#: Gtk/FilePropertiesBox.vala:655
+#, fuzzy
+msgid "Checking..."
+msgstr "Bezig met kopiëren..."
+
 #: Gtk/ChecksumBox.vala:625 Gtk/ChecksumBox.vala:1229
-#: Gtk/FileContextMenu.vala:1802 Gtk/Settings.vala:2628
+#: Gtk/FileContextMenu.vala:1832 Gtk/Settings.vala:2649
 #, c-format
 msgid "Checksum"
 msgstr ""
@@ -583,11 +558,11 @@ msgstr "Klassieke pictogrammen (één paneel + zijbalk + pictogramweergave)"
 msgid "Classic List (Single-Pane + SideBar + ListView)"
 msgstr "Klassieke lijst (één paneel + zijbalk + lijstweergave)"
 
-#: Gtk/MainMenubar.vala:1719
+#: Gtk/MainMenubar.vala:1851
 msgid "Clean thumbnail cache"
 msgstr "Voorbeeldminiaturen-cache legen"
 
-#: Gtk/MainWindow.vala:1022
+#: Gtk/MainWindow.vala:1024
 msgid "Cleaning Thumbnail Cache..."
 msgstr "Bezig met legen van cache..."
 
@@ -595,7 +570,7 @@ msgstr "Bezig met legen van cache..."
 msgid "Clear the terminal output"
 msgstr "Terminal-uitvoer wissen"
 
-#: Gtk/MainMenubar.vala:1720
+#: Gtk/MainMenubar.vala:1852
 msgid ""
 "Clear the thumbnails in system cache. New thumbnails will be generated when "
 "folders are browsed using any file manager."
@@ -623,13 +598,13 @@ msgstr "Klik om te selecteren"
 msgid "Click to copy checksum to clipboard"
 msgstr "Bestandspad kopiëren naar klembord"
 
-#: Gtk/Pathbar.vala:317
+#: Gtk/Pathbar.vala:319
 msgid "Click to edit path"
 msgstr "Klik om pad te bewerken"
 
-#: Gtk/DevicePopoverSettingsWindow.vala:244 Gtk/FileViewTab.vala:327
-#: Gtk/MessageBar.vala:149 Gtk/SelectionBar.vala:172 Gtk/WizardWindow.vala:143
-#: Utility/Gtk/AboutWindow.vala:400
+#: Gtk/ClamScanBox.vala:258 Gtk/DevicePopoverSettingsWindow.vala:292
+#: Gtk/FileViewTab.vala:329 Gtk/MessageBar.vala:149 Gtk/SelectionBar.vala:204
+#: Gtk/WizardWindow.vala:143 Utility/Gtk/AboutWindow.vala:400
 msgid "Close"
 msgstr "Sluiten"
 
@@ -637,7 +612,7 @@ msgstr "Sluiten"
 msgid "Close Window"
 msgstr "Venster sluiten"
 
-#: Gtk/Settings.vala:1110
+#: Gtk/Settings.vala:1131
 msgid "Close button (R)"
 msgstr "Sluitknop (R)"
 
@@ -645,7 +620,7 @@ msgstr "Sluitknop (R)"
 msgid "Close this window"
 msgstr "Dit venster sluiten"
 
-#: Gtk/MainWindow.vala:165
+#: Gtk/MainWindow.vala:167
 msgid ""
 "Closing the application will cancel running file operations.\n"
 "Do you want to cancel?"
@@ -654,7 +629,7 @@ msgstr ""
 "geannuleerd.\n"
 "Wilt u annuleren?"
 
-#: Gtk/FileViewTab.vala:459
+#: Gtk/FileViewTab.vala:463
 msgid ""
 "Closing this pane will cancel file operations running in this pane.\n"
 "Do you want to cancel?"
@@ -672,7 +647,7 @@ msgstr ""
 "tabblad geannuleerd.\n"
 "Wilt u annuleren?"
 
-#: Gtk/MainMenubar.vala:1439
+#: Gtk/MainMenubar.vala:1571
 msgid "Cloud"
 msgstr "Cloud"
 
@@ -685,11 +660,11 @@ msgstr ""
 msgid "Code Contributions"
 msgstr "Codebijdragen"
 
-#: Gtk/Settings.vala:1939
+#: Gtk/Settings.vala:1960
 msgid "Col spacing"
 msgstr "Kolomruimte"
 
-#: Gtk/Settings.vala:2278
+#: Gtk/Settings.vala:2299
 msgid "Columns"
 msgstr "Kolommen"
 
@@ -705,19 +680,19 @@ msgstr "Orthodox met pictogrammen (twee panelen + pictogramweergave)"
 msgid "Commander List (Dual-Pane + ListView)"
 msgstr "Orthodox (twee panelen + lijstweergave)"
 
-#: Common/Main.vala:515
+#: Common/Main.vala:520
 msgid "Commands listed below are not available on this system"
 msgstr "De opdrachten hieronder zijn niet beschikbaar op dit systeem"
 
-#: Gtk/FileContextMenu.vala:1086
+#: Gtk/FileContextMenu.vala:1088
 msgid "Compare"
 msgstr "Vergelijken"
 
-#: Gtk/FileContextMenu.vala:1117
+#: Gtk/FileContextMenu.vala:1119
 msgid "Compare text file with file in opposite pane"
 msgstr "Tegenovergestelde paneel kan niet worden gevonden!"
 
-#: Gtk/FileContextMenu.vala:1087
+#: Gtk/FileContextMenu.vala:1089
 msgid "Compare text files side-by-side"
 msgstr ""
 
@@ -726,11 +701,11 @@ msgid "Comparing items..."
 msgstr "Bezig met vergelijken van items..."
 
 #: Gtk/CreateArchiveWindow.vala:115 Gtk/CreateArchiveWindow.vala:2036
-#: Gtk/FileContextMenu.vala:1491
+#: Gtk/FileContextMenu.vala:1493
 msgid "Compress"
 msgstr "Comprimeren"
 
-#: Gtk/FileContextMenu.vala:1492
+#: Gtk/FileContextMenu.vala:1494
 msgid "Compress selected items and create new archive"
 msgstr "Comprimeer geselecteerde items en creëer een nieuw archief"
 
@@ -746,47 +721,47 @@ msgstr "Bezig met comprimeren"
 msgid "Confirm Passphrase"
 msgstr "Wachtwoord bevestigen"
 
-#: Gtk/Settings.vala:1556
+#: Gtk/Settings.vala:1577
 msgid "Confirm before deleting files"
 msgstr "Bevestiging vragen bij verwijderen van bestanden"
 
-#: Gtk/Settings.vala:1568
+#: Gtk/Settings.vala:1589
 msgid "Confirm before trashing files"
 msgstr "Bevestiging vragen bij verplaatsen naar prullenbak"
 
-#: Gtk/Settings.vala:1226
+#: Gtk/Settings.vala:1247
 msgid "Confirmation"
 msgstr "Bevestiging"
 
-#: Gtk/ConnectServerWindow.vala:588
+#: Gtk/ConnectServerWindow.vala:587
 msgid "Connect"
 msgstr "Verbinden"
 
-#: Gtk/FileContextMenu.vala:1754
+#: Gtk/FileContextMenu.vala:1783
 msgid "Connect a USB device and come back to this menu"
 msgstr "Verbind een USB-apparaat en keer terug naar dit menu"
 
-#: Gtk/ConnectServerWindow.vala:114
+#: Gtk/ConnectServerWindow.vala:113
 msgid "Connect to Server"
 msgstr "Verbinden met server"
 
-#: Gtk/MainMenubar.vala:380
+#: Gtk/MainMenubar.vala:381
 msgid "Connect to Server..."
 msgstr "Verbinden met server..."
 
-#: Gtk/ConnectServerWindow.vala:506
+#: Gtk/ConnectServerWindow.vala:505
 msgid "Connecting to Server..."
 msgstr "Bezig met verbinden met server..."
 
-#: Gtk/FileViewList.vala:1082
+#: Gtk/FileViewList.vala:1092
 msgid "Content Type"
 msgstr "Inhoudssoort"
 
-#: Gtk/FilePropertiesBox.vala:162
+#: Gtk/FilePropertiesBox.vala:164
 msgid "Contents"
 msgstr "Inhoud"
 
-#: Gtk/Settings.vala:2836
+#: Gtk/Settings.vala:2857
 msgid "Convert"
 msgstr "Converteren"
 
@@ -794,15 +769,15 @@ msgstr "Converteren"
 msgid "Convert Virtual Disk"
 msgstr "Virtuele schijf converteren"
 
-#: Gtk/FileContextMenu.vala:2681
+#: Gtk/FileContextMenu.vala:2711
 msgid "Convert to"
 msgstr "Converteren naar"
 
-#: Gtk/FileContextMenu.vala:2509
+#: Gtk/FileContextMenu.vala:2539
 msgid "Convert to black and white"
 msgstr "Converteren naar zwart-wit"
 
-#: Gtk/FileContextMenu.vala:2082
+#: Gtk/FileContextMenu.vala:2112
 msgid "Convert to..."
 msgstr "Converteren naar..."
 
@@ -811,8 +786,8 @@ msgid "Converting disk format..."
 msgstr "Bezig met converteren van schijfformaat..."
 
 #: Gtk/CreateArchiveWindow.vala:654 Gtk/CreateArchiveWindow.vala:705
-#: Gtk/CreateArchiveWindow.vala:720 Gtk/FileContextMenu.vala:847
-#: Gtk/MainMenubar.vala:559 Gtk/TermContextMenu.vala:119
+#: Gtk/CreateArchiveWindow.vala:720 Gtk/FileContextMenu.vala:849
+#: Gtk/MainMenubar.vala:560 Gtk/TermContextMenu.vala:119
 msgid "Copy"
 msgstr "Kopiëren"
 
@@ -826,7 +801,7 @@ msgstr ""
 "\n"
 "Kopieer geselecteerde items in het actieve paneel"
 
-#: Gtk/FileContextMenu.vala:1244
+#: Gtk/FileContextMenu.vala:1246
 msgid "Copy Across"
 msgstr "Heen-en-weer kopiëren"
 
@@ -841,19 +816,19 @@ msgstr ""
 "Kopieer geselecteerde items van het actieve paneel naar het paneel "
 "ertegenover"
 
-#: Gtk/FileContextMenu.vala:1410
+#: Gtk/FileContextMenu.vala:1412
 msgid "Copy Path(s)"
 msgstr "Pad(en) kopiëren"
 
-#: Gtk/FileContextMenu.vala:1204
+#: Gtk/FileContextMenu.vala:1206
 msgid "Copy To..."
 msgstr "Kopiëren naar..."
 
-#: Gtk/FileContextMenu.vala:1411
+#: Gtk/FileContextMenu.vala:1413
 msgid "Copy file path to clipboard"
 msgstr "Bestandspad kopiëren naar klembord"
 
-#: Gtk/FileContextMenu.vala:848
+#: Gtk/FileContextMenu.vala:850
 msgid "Copy selected items"
 msgstr "Geselecteerde items kopiëren"
 
@@ -861,11 +836,11 @@ msgstr "Geselecteerde items kopiëren"
 msgid "Copy selected text to clipboard"
 msgstr "Geselecteerde tekst kopiëren naar het klembord"
 
-#: Gtk/FileContextMenu.vala:1205
+#: Gtk/FileContextMenu.vala:1207
 msgid "Copy to another location"
 msgstr "Naar andere locatie kopiëren"
 
-#: Gtk/FileContextMenu.vala:1245
+#: Gtk/FileContextMenu.vala:1247
 msgid "Copy to other pane"
 msgstr "Naar andere paneel kopiëren"
 
@@ -901,24 +876,24 @@ msgstr "Pad kan niet worden gevonden"
 msgid "Could not find file"
 msgstr "Bestand kan niet worden gevonden"
 
-#: Gtk/FileViewList.vala:5006
+#: Gtk/FileViewList.vala:5020
 #, c-format
 msgid "Could not find file in opposite pane"
 msgstr "Tegenovergestelde paneel kan niet worden gevonden!"
 
-#: Gtk/FileViewList.vala:3356
+#: Gtk/FileViewList.vala:3365
 msgid "Could not find path"
 msgstr "Pad kan niet worden gevonden"
 
-#: Gtk/FileViewList.vala:4300
+#: Gtk/FileViewList.vala:4309
 msgid "Could not find the opposite pane!"
 msgstr "Tegenovergestelde paneel kan niet worden gevonden!"
 
-#: Gtk/FileViewList.vala:5941
+#: Gtk/FileViewList.vala:5955
 msgid "Could not open file as archive"
 msgstr "Bestand kan niet worden geopend als archief"
 
-#: Gtk/FileViewList.vala:2751
+#: Gtk/FileViewList.vala:2756
 msgid "Counting items..."
 msgstr "Bezig met tellen van items..."
 
@@ -930,31 +905,31 @@ msgstr "Creëren"
 msgid "Create Derived Disk"
 msgstr "Afgeleide schijf creëren"
 
-#: Gtk/FileContextMenu.vala:1982
+#: Gtk/FileContextMenu.vala:2012
 msgid "Create Derived Disk..."
 msgstr "Afgeleide schijf creëren..."
 
-#: Gtk/FileViewList.vala:4619
+#: Gtk/FileViewList.vala:4628
 msgid "Create Directory"
 msgstr "Map creëren"
 
-#: Gtk/FileContextMenu.vala:1965
+#: Gtk/FileContextMenu.vala:1995
 msgid "Create Disk..."
 msgstr "Schijf creëren..."
 
-#: Gtk/FileViewList.vala:4653 Gtk/FileViewList.vala:4689
+#: Gtk/FileViewList.vala:4662 Gtk/FileViewList.vala:4698
 msgid "Create File"
 msgstr "Bestand creëren"
 
-#: Gtk/FileContextMenu.vala:2002
+#: Gtk/FileContextMenu.vala:2032
 msgid "Create Merged Disk..."
 msgstr "Samengevoegde schijf creëren..."
 
-#: Gtk/MainMenubar.vala:338 Gtk/MiddleToolbar.vala:328
+#: Gtk/MainMenubar.vala:339 Gtk/MiddleToolbar.vala:328
 msgid "Create New File"
 msgstr "Nieuw bestand creëren"
 
-#: Gtk/MainMenubar.vala:296 Gtk/MiddleToolbar.vala:347
+#: Gtk/MainMenubar.vala:297 Gtk/MiddleToolbar.vala:347
 msgid "Create New Folder"
 msgstr "Nieuwe map creëren"
 
@@ -962,11 +937,11 @@ msgstr "Nieuwe map creëren"
 msgid "Create Virtual Disk"
 msgstr "Virtuele schijf creëren"
 
-#: Gtk/FileContextMenu.vala:1966
+#: Gtk/FileContextMenu.vala:1996
 msgid "Create a virtual hard disk file"
 msgstr "Virtueel harde schijf-bestand creëren"
 
-#: Gtk/FileContextMenu.vala:2003
+#: Gtk/FileContextMenu.vala:2033
 msgid ""
 "Create a virtual hard disk file by merging selected derived disk with it's "
 "base"
@@ -974,38 +949,47 @@ msgstr ""
 "Creëer een virtueel harde schijf-bestand door geselecteerde afgeleide "
 "schijven samen te voegen met de basis"
 
-#: Gtk/FileContextMenu.vala:1983
+#: Gtk/FileContextMenu.vala:2013
 msgid "Create a virtual hard disk file that uses selected disk as the base"
 msgstr ""
 "Creëer een virtueel harde schijf-bestand dat de geselecteerde schijf als "
 "basis gebruikt"
 
-#: Gtk/FileViewList.vala:4427
+#: Gtk/FileViewList.vala:4436
 msgid "Create copies of selected items?"
 msgstr "Kopieën creëren van geselecteerde items?"
 
-#: Gtk/FileContextMenu.vala:781
+#: Gtk/FileContextMenu.vala:783
 msgid "Create new file from template"
 msgstr "Nieuw bestand creëren uit sjabloon"
 
-#: Gtk/FileContextMenu.vala:655
+#: Gtk/FileContextMenu.vala:657
 msgid "Create new file in this location"
 msgstr "Nieuw bestand creëren op deze locatie"
 
-#: Gtk/FileContextMenu.vala:635
+#: Gtk/FileContextMenu.vala:637
 msgid "Create new folder in this location"
 msgstr "Nieuwe map creëren op deze locatie"
 
-#: Gtk/FilePropertiesBox.vala:263 Gtk/KvmCreateDiskWindow.vala:463
+#: Gtk/FilePropertiesBox.vala:265 Gtk/KvmCreateDiskWindow.vala:463
 #: Gtk/ProgressPanelArchiveTask.vala:752 Gtk/ProgressPanelImageTask.vala:207
 #: Gtk/ProgressPanelKvmTask.vala:258
 #, c-format
 msgid "Created"
 msgstr "Gecreëerd"
 
-#: Utility/TeeJee.FileSystem.vala:759
+#: Utility/TeeJee.FileSystem.vala:783
 msgid "Created directory"
 msgstr "Map gecreëerd"
+
+#: Gtk/DevicePopoverSettingsWindow.vala:240
+msgid ""
+"Creates rule for udisks2 to prevent auto-mounting of removable devices.\n"
+"\n"
+"Devices will be mounted only when you open them using Polo or another file "
+"manager. This is good for security as partitions will remain unmounted till "
+"they are actually needed."
+msgstr ""
 
 #: Gtk/ProgressPanelFileTask.vala:181
 msgid "Creating hard links:"
@@ -1027,7 +1011,7 @@ msgstr "Met dank aan"
 msgid "Customize"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:821 Gtk/MainMenubar.vala:517
+#: Gtk/FileContextMenu.vala:823 Gtk/MainMenubar.vala:518
 msgid "Cut"
 msgstr "Knippen"
 
@@ -1041,11 +1025,11 @@ msgstr ""
 "\n"
 "Knip de geselecteerde items uit het actieve paneel"
 
-#: Gtk/FileContextMenu.vala:822
+#: Gtk/FileContextMenu.vala:824
 msgid "Cut selected items"
 msgstr "Geselecteerde items knippen"
 
-#: Gtk/Settings.vala:313 Gtk/Settings.vala:979
+#: Gtk/Settings.vala:314 Gtk/Settings.vala:1000
 msgid "Dark theme"
 msgstr "Donker thema"
 
@@ -1057,15 +1041,15 @@ msgstr "Gegevens:"
 msgid "Debian Almquist shell (dash)"
 msgstr "Debian Almquist shell (dash)"
 
-#: Gtk/MainMenubar.vala:1860
+#: Gtk/MainMenubar.vala:1992
 msgid "Debug: List Devices"
 msgstr "Foutopsporing: apparaten opsommen"
 
-#: Gtk/MainMenubar.vala:1847
+#: Gtk/MainMenubar.vala:1979
 msgid "Debug: List FileItem Objects"
 msgstr "Foutopsporing: bestandsitem-objecten opsommen"
 
-#: Gtk/MainMenubar.vala:1873
+#: Gtk/MainMenubar.vala:2005
 msgid "Debug: Monitors"
 msgstr "Foutopsporing: monitoren"
 
@@ -1073,15 +1057,15 @@ msgstr "Foutopsporing: monitoren"
 msgid "Default shell (sh)"
 msgstr "Standaard shell (sh)"
 
-#: Gtk/Settings.vala:1287
+#: Gtk/Settings.vala:1308
 msgid "Default view mode to use for new panes"
 msgstr "Standaard weergavemodus voor nieuwe panelen"
 
-#: Gtk/Settings.vala:1211
+#: Gtk/Settings.vala:1232
 msgid "Defaults"
 msgstr "Standaardwaarden"
 
-#: Gtk/FileContextMenu.vala:985 Gtk/MainMenubar.vala:691 Gtk/TrashBar.vala:98
+#: Gtk/FileContextMenu.vala:987 Gtk/MainMenubar.vala:692 Gtk/TrashBar.vala:98
 msgid "Delete"
 msgstr "Verwijderen"
 
@@ -1095,15 +1079,15 @@ msgstr ""
 "\n"
 "Items permanent verwijderen (zonder ze naar de prullenbak te sturen)"
 
-#: Gtk/FileContextMenu.vala:986 Gtk/TrashBar.vala:102
+#: Gtk/FileContextMenu.vala:988 Gtk/TrashBar.vala:102
 msgid "Delete selected items permanently"
 msgstr "Geselecteerde items permanent verwijderen"
 
-#: Gtk/FileViewList.vala:4504
+#: Gtk/FileViewList.vala:4513
 msgid "Delete selected items?"
 msgstr "Geselecteerde items verwijderen?"
 
-#: Utility/TeeJee.FileSystem.vala:797
+#: Utility/TeeJee.FileSystem.vala:821
 msgid "Deleted directory"
 msgstr "Map verwijderd"
 
@@ -1128,11 +1112,11 @@ msgstr ""
 msgid "Desktop"
 msgstr "Bureaublad"
 
-#: Gtk/FileViewList.vala:5988 Gtk/FileViewList.vala:6010
+#: Gtk/FileViewList.vala:6002 Gtk/FileViewList.vala:6024
 msgid "Destination directory does not exist"
 msgstr "Bestemmingsmap bestaat niet"
 
-#: Gtk/FileViewList.vala:6148
+#: Gtk/FileViewList.vala:6162
 msgid "Destination path is inside an archive (!)"
 msgstr "Bestemmingspad bevindt zich binnen een archief (!)"
 
@@ -1141,7 +1125,7 @@ msgid "Details"
 msgstr "Details"
 
 #: Gtk/DevicePopover.vala:156 Gtk/FilePropertiesWindow.vala:171
-#: Gtk/FilePropertiesWindow.vala:180 Gtk/FilePropertiesWindow.vala:185
+#: Gtk/FilePropertiesWindow.vala:184 Gtk/FilePropertiesWindow.vala:189
 #: Gtk/Sidebar.vala:717 Utility/Device.vala:459 Utility/Device.vala:466
 #: Utility/Device.vala:601 Utility/Device.vala:606 Utility/Device.vala:1707
 #: Utility/Device.vala:1713 Utility/Device.vala:1912 Utility/Device.vala:1917
@@ -1150,14 +1134,18 @@ msgstr "Details"
 msgid "Device"
 msgstr "Apparaat"
 
+#: Gtk/Pathbar.vala:1048
+#, fuzzy
+msgid "Device Ejected"
+msgstr "Apparaat is veilig uitgeworpen en klaar voor gebruik"
+
 #: Gtk/DeviceContextMenu.vala:548
 msgid "Device Locked"
 msgstr "Apparaat is vergrendeld"
 
-#: Gtk/Pathbar.vala:1037
-#, fuzzy
-msgid "Device Safely Ejected"
-msgstr "Apparaat is veilig uitgeworpen en klaar voor gebruik"
+#: Gtk/DevicePopoverSettingsWindow.vala:62
+msgid "Device Manager Settings"
+msgstr ""
 
 #: Gtk/DeviceContextMenu.vala:381 Gtk/DeviceContextMenu.vala:412
 msgid "Device Unmounted"
@@ -1168,12 +1156,12 @@ msgstr "Apparaat is ontkoppeld"
 msgid "Device is in use by the system"
 msgstr ""
 
-#: Gtk/Pathbar.vala:1010
+#: Gtk/Pathbar.vala:1021
 #, fuzzy
 msgid "Device is not removable"
 msgstr "Apparaat is ontkoppeld"
 
-#: Gtk/Pathbar.vala:1043
+#: Gtk/Pathbar.vala:1054
 msgid "Device may be non-removable, or in-use by another process"
 msgstr ""
 
@@ -1194,12 +1182,12 @@ msgstr "Apparaat is veilig uitgeworpen en klaar voor gebruik"
 msgid "Device was restored successfully from disk image"
 msgstr "Apparaat is succesvol aangekoppeld"
 
-#: Gtk/FileViewList.vala:3348
+#: Gtk/FileViewList.vala:3357
 msgid "Device was unmounted"
 msgstr "Apparaat is ontkoppeld"
 
-#: Gtk/FileViewToolbar.vala:315 Gtk/Pathbar.vala:202 Gtk/Settings.vala:581
-#: Gtk/Settings.vala:799 Gtk/Settings.vala:1034 Gtk/Sidebar.vala:381
+#: Gtk/FileViewToolbar.vala:315 Gtk/Pathbar.vala:204 Gtk/Settings.vala:582
+#: Gtk/Settings.vala:800 Gtk/Settings.vala:1055 Gtk/Sidebar.vala:381
 msgid "Devices"
 msgstr "Apparaten"
 
@@ -1235,19 +1223,23 @@ msgstr ""
 "Bedankt,\n"
 "Tony George"
 
-#: Utility/TeeJee.FileSystem.vala:935
+#: Utility/TeeJee.FileSystem.vala:959
 msgid "Dir not found"
 msgstr "Map niet gevonden"
 
-#: Gtk/FileViewList.vala:4627
+#: Gtk/FileViewList.vala:4636
 msgid "Directory exists"
 msgstr "Map bestaat"
 
-#: Gtk/FileContextMenu.vala:1635
+#: Gtk/DevicePopoverSettingsWindow.vala:237
+msgid "Disable auto-mount for removable devices (recommended)"
+msgstr ""
+
+#: Gtk/FileContextMenu.vala:1664
 msgid "Disk Image"
 msgstr "Schijfgebruik"
 
-#: Gtk/FileContextMenu.vala:1613 Gtk/Settings.vala:2592
+#: Gtk/FileContextMenu.vala:1619 Gtk/Settings.vala:2613
 msgid "Disk Usage"
 msgstr "Schijfgebruik"
 
@@ -1255,7 +1247,7 @@ msgstr "Schijfgebruik"
 msgid "Disk image was created successfully from device"
 msgstr ""
 
-#: Gtk/FileViewList.vala:5206
+#: Gtk/FileViewList.vala:5220
 msgid "Disk is Read-Only"
 msgstr "Schijf is alleen-lezen"
 
@@ -1277,11 +1269,11 @@ msgstr "Documentatie"
 msgid "Documents"
 msgstr "Documenten"
 
-#: Gtk/ConnectServerWindow.vala:333
+#: Gtk/ConnectServerWindow.vala:332
 msgid "Domain"
 msgstr "Domein"
 
-#: Gtk/FileViewToolbar.vala:498 Gtk/MainMenubar.vala:1948
+#: Gtk/FileViewToolbar.vala:498 Gtk/MainMenubar.vala:2080
 #: Utility/Gtk/DonationWindow.vala:40
 msgid "Donate"
 msgstr "Doneren"
@@ -1306,7 +1298,7 @@ msgstr "Downloaden"
 msgid "Download Selected Format"
 msgstr "Geselecteerd formaat downloaden"
 
-#: Gtk/MainMenubar.vala:1742
+#: Gtk/MainMenubar.vala:1874
 msgid ""
 "Download and install p7zip v16.02. Installs binaries from p7zip, p7zip-full "
 "and p7zip-rar packages."
@@ -1314,7 +1306,7 @@ msgstr ""
 "Download en installeer p7zip v16.02. Installeert de pakketten p7zip, p7zip-"
 "full en p7zip-rar."
 
-#: Gtk/MainMenubar.vala:1731
+#: Gtk/MainMenubar.vala:1863
 msgid "Download and install the latest version of Rclone"
 msgstr "Download en installeer de nieuwste versie van Rclone"
 
@@ -1339,13 +1331,13 @@ msgstr "Downloads"
 msgid "Drag to Re-order"
 msgstr ""
 
-#: Gtk/Settings.vala:1850 Gtk/Settings.vala:2036 Gtk/Settings.vala:2237
+#: Gtk/Settings.vala:1871 Gtk/Settings.vala:2057 Gtk/Settings.vala:2258
 msgid "Draw semi-transparent icons and thumbnails for hidden items"
 msgstr ""
 "Semi-doorzichtige pictogrammen en voorbeeldminiaturen weergeven voor "
 "verborgen items"
 
-#: Gtk/Settings.vala:1820 Gtk/Settings.vala:2006 Gtk/Settings.vala:2207
+#: Gtk/Settings.vala:1841 Gtk/Settings.vala:2027 Gtk/Settings.vala:2228
 msgid ""
 "Draw tiny emblems on the icon or thumbnail image to indicate folder "
 "contents, symlinks and read-only permissions.\n"
@@ -1365,7 +1357,7 @@ msgstr "Twee panelen"
 msgid "Dual Horizontal"
 msgstr "Twee panelen - horizontaal"
 
-#: Gtk/MainMenubar.vala:1059
+#: Gtk/MainMenubar.vala:1060
 msgid "Dual Pane Mode"
 msgstr "Twee panelen-modus"
 
@@ -1382,15 +1374,15 @@ msgstr "Duur"
 msgid "ERROR"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:482 Gtk/PlacesPopover.vala:539
+#: Gtk/MainMenubar.vala:483 Gtk/PlacesPopover.vala:539
 msgid "Edit"
 msgstr "Bewerken"
 
-#: Gtk/FileViewTab.vala:259
+#: Gtk/FileViewTab.vala:261
 msgid "Edit Name"
 msgstr "Tabbladnaam bewerken"
 
-#: Gtk/FileViewList.vala:399
+#: Gtk/FileViewList.vala:401
 #, c-format
 msgid "Effective permissions for current user"
 msgstr "Effectieve rechten voor huidige gebruiker"
@@ -1399,12 +1391,17 @@ msgstr "Effectieve rechten voor huidige gebruiker"
 msgid "Eject"
 msgstr "Uitwerpen"
 
-#: Gtk/Pathbar.vala:1015
+#: Gtk/Settings.vala:900
+#, fuzzy
+msgid "Eject Device"
+msgstr "Apparaat uitwerpen"
+
+#: Gtk/Pathbar.vala:1026
 #, fuzzy
 msgid "Eject Device ?"
 msgstr "Apparaat uitwerpen"
 
-#: Gtk/Pathbar.vala:976
+#: Gtk/Pathbar.vala:987
 #, fuzzy
 msgid "Eject storage device"
 msgstr "Terugzetten"
@@ -1413,11 +1410,11 @@ msgstr "Terugzetten"
 msgid "Elapsed:"
 msgstr "Verstreken:"
 
-#: Gtk/Settings.vala:2048
+#: Gtk/Settings.vala:2069
 msgid "Ellipsize file name"
 msgstr "Bestandsnaam ingekort weergeven"
 
-#: Gtk/Settings.vala:2051
+#: Gtk/Settings.vala:2072
 msgid ""
 "Ellipsize long file names with 3 dots. Uncheck this option to display entire "
 "file name."
@@ -1425,7 +1422,7 @@ msgstr ""
 "Bestandsnamen weergeven met 3 puntjes. Vink dit uit om de hele bestandsnaam "
 "te weergeven."
 
-#: Gtk/Settings.vala:1817 Gtk/Settings.vala:2003 Gtk/Settings.vala:2204
+#: Gtk/Settings.vala:1838 Gtk/Settings.vala:2024 Gtk/Settings.vala:2225
 msgid "Emblems"
 msgstr "Emblemen"
 
@@ -1441,11 +1438,11 @@ msgstr "Prullenbak legen"
 msgid "Emptying Trash:"
 msgstr "Bezig met legen van prullenbak:"
 
-#: Utility/FileTask.vala:989
+#: Utility/FileTask.vala:993
 msgid "Emptying trash..."
 msgstr "Bezig met legen van prullenbak..."
 
-#: Gtk/Settings.vala:599
+#: Gtk/Settings.vala:600
 msgid "Enabled (R)"
 msgstr "Ingeschakeld (R)"
 
@@ -1457,7 +1454,7 @@ msgstr "Versleutelen"
 msgid "Encrypt file names"
 msgstr "Bestandsnamen versleutelen"
 
-#: Gtk/FilePropertiesBox.vala:190
+#: Gtk/FilePropertiesBox.vala:192
 msgid "Encrypted"
 msgstr "Versleuteld"
 
@@ -1475,11 +1472,11 @@ msgstr "Versleuteld archief"
 msgid "Encrypted device"
 msgstr "Versleuteld apparaat"
 
-#: Gtk/ConnectServerWindow.vala:952
+#: Gtk/ConnectServerWindow.vala:951
 msgid "Enter IP address in correct format (Eg: 192.0.10.1)"
 msgstr "Voer het IP-adres in met de juiste opmaak (bijv.: 192.0.10.1)"
 
-#: Gtk/ConnectServerWindow.vala:962
+#: Gtk/ConnectServerWindow.vala:961
 msgid "Enter NETBIOS name in correct format (1-15 alpha-numeric characters)"
 msgstr ""
 "Voer de NETBIOS-naam in met de juiste opmaak (1-15 alfanumerieke tekens)"
@@ -1496,20 +1493,20 @@ msgstr "Wachtwoord invoeren"
 msgid "Enter Password to Unlock"
 msgstr "Voer wachtwoord in om te ontgrendelen"
 
-#: Gtk/FileViewList.vala:4627 Gtk/FileViewList.vala:4661
-#: Gtk/FileViewList.vala:4701
+#: Gtk/FileViewList.vala:4636 Gtk/FileViewList.vala:4670
+#: Gtk/FileViewList.vala:4710 Gtk/MainWindow.vala:1479
 msgid "Enter another name"
 msgstr "Nog een naam invoeren"
 
-#: Gtk/FileViewList.vala:4619
+#: Gtk/FileViewList.vala:4628
 msgid "Enter directory name"
 msgstr "Mapnaam invoeren"
 
-#: Gtk/FileViewList.vala:4653 Gtk/FileViewList.vala:4689
+#: Gtk/FileViewList.vala:4662 Gtk/FileViewList.vala:4698
 msgid "Enter file name"
 msgstr "Bestandsnaam invoeren"
 
-#: Gtk/FileViewList.vala:4555
+#: Gtk/FileViewList.vala:4564
 msgid "Enter new name"
 msgstr "Nieuwe naam invoeren"
 
@@ -1518,27 +1515,32 @@ msgstr "Nieuwe naam invoeren"
 msgid "Enter passphrase to unlock '%s'"
 msgstr "Voer wachtwoord in om '%s' te ontgrendelen"
 
-#: Gtk/FileViewList.vala:5459
+#: Gtk/FileViewList.vala:5473
 msgid "Enter password for PDF document"
 msgstr "Voer wachtwoord in voor PDF-document"
 
-#: Utility/Gtk/GtkHelper.vala:919
+#: Utility/Gtk/GtkHelper.vala:918
 msgid "Enter path or browse for directory"
 msgstr "Voer een pad in of blader naar een map"
 
-#: Gtk/SelectionBar.vala:109
+#: Gtk/SelectionBar.vala:112
 msgid "Enter pattern for selecting or filtering items in view"
 msgstr ""
 "Voer het patroon in om te gebruiken voor selectie of itemfiltering in deze "
 "weergave"
 
-#: Gtk/ConnectServerWindow.vala:967
+#: Gtk/ConnectServerWindow.vala:966
 msgid "Enter share name to connect (Required)"
 msgstr "Voer deel-naam in om te verbinden (vereist)"
 
-#: Gtk/FileViewList.vala:4574
+#: Gtk/FileViewList.vala:4583
 msgid "Enter unique name for selected file"
 msgstr "Voer een unieke naam in voor het geselecteerde bestand"
+
+#: Gtk/MainWindow.vala:1471
+#, fuzzy
+msgid "Enter workspace name"
+msgstr "Nieuwe naam invoeren"
 
 #: Gtk/ProgressPanelArchiveTask.vala:771 Gtk/ProgressPanelArchiveTask.vala:782
 #: Gtk/ProgressPanelImageTask.vala:198 Gtk/ProgressPanelKvmTask.vala:217
@@ -1549,16 +1551,16 @@ msgstr "Voer een unieke naam in voor het geselecteerde bestand"
 msgid "Error"
 msgstr "Fout"
 
-#: Gtk/FileViewList.vala:2392
+#: Gtk/FileViewList.vala:2397
 msgid "Error Connecting to Server"
 msgstr "Fout bij verbinden met server"
 
-#: Gtk/FileViewList.vala:3373
+#: Gtk/FileViewList.vala:3382
 #, c-format
 msgid "Error opening directory: Permission denied"
 msgstr "Fout bij openen van map: toegang geweigerd"
 
-#: Gtk/ConnectServerWindow.vala:171
+#: Gtk/ConnectServerWindow.vala:170
 msgid "Example: 192.0.2.1"
 msgstr "Bijv.: 192.0.2.1"
 
@@ -1572,12 +1574,12 @@ msgid "Executing action..."
 msgstr "Bezig met uitvoeren van actie..."
 
 #: Gtk/DevicePopover.vala:1041 Gtk/DiskFormatContextMenu.vala:103
-#: Gtk/FileViewList.vala:5143
+#: Gtk/FileViewList.vala:5157
 #, c-format
 msgid "Existing data on device will be destroyed"
 msgstr "Bestaande gegevens op het apparaat worden vernietigd"
 
-#: Gtk/MainMenubar.vala:434
+#: Gtk/MainMenubar.vala:435
 msgid "Exit"
 msgstr "Afsluiten"
 
@@ -1585,7 +1587,7 @@ msgstr "Afsluiten"
 msgid "Exit Media View"
 msgstr ""
 
-#: Common/Main.vala:1295
+#: Common/Main.vala:1302
 msgid "Exiting Application"
 msgstr "Bezig met afsluiten van app"
 
@@ -1602,23 +1604,23 @@ msgstr ""
 msgid "External Tools"
 msgstr "Externe hulpmiddelen"
 
-#: Gtk/MainMenubar.vala:1834
+#: Gtk/MainMenubar.vala:1966
 msgid "External tools"
 msgstr "Externe hulpmiddelen"
 
-#: Gtk/FileContextMenu.vala:1559
+#: Gtk/FileContextMenu.vala:1561
 msgid "Extract Across"
 msgstr "Heen-en-weer uitpakken"
 
-#: Gtk/FileContextMenu.vala:1584
+#: Gtk/FileContextMenu.vala:1586
 msgid "Extract Here"
 msgstr "Hier uitpakken"
 
-#: Gtk/FileContextMenu.vala:1536
+#: Gtk/FileContextMenu.vala:1538
 msgid "Extract To.."
 msgstr "Uitpakken naar..."
 
-#: Gtk/FileContextMenu.vala:1585
+#: Gtk/FileContextMenu.vala:1587
 msgid ""
 "Extract archives in same location. New folder will be created with archive "
 "name."
@@ -1626,14 +1628,14 @@ msgstr ""
 "Archieven uitpakken op dezelfde locatie. Er zal een nieuwe map worden "
 "gecreëerd met de archiefnaam."
 
-#: Gtk/FileContextMenu.vala:1537
+#: Gtk/FileContextMenu.vala:1539
 msgid ""
 "Extract archives to another location. Existing files will be overwritten."
 msgstr ""
 "Archieven uitpakken naar een andere locatie. Bestaande bestanden worden "
 "overschreven."
 
-#: Gtk/FileContextMenu.vala:1560
+#: Gtk/FileContextMenu.vala:1562
 msgid ""
 "Extract archives to the opposite pane. Existing files will be overwritten."
 msgstr ""
@@ -1662,20 +1664,25 @@ msgstr ""
 msgid "FS"
 msgstr ""
 
-#: Gtk/ConnectServerWindow.vala:1045
+#: Gtk/ConnectServerWindow.vala:1044
 msgid "Failed to Connect"
 msgstr "Verbinden is mislukt"
 
-#: Gtk/Pathbar.vala:1042
+#: Gtk/Pathbar.vala:1053
 #, fuzzy
 msgid "Failed to Eject Device"
 msgstr "Vergrendelen van apparaat is mislukt"
 
-#: Gtk/MainMenubar.vala:1550
+#: Gtk/MainMenubar.vala:1682
 msgid "Failed to Remove Account"
 msgstr "Account verwijderen is mislukt"
 
-#: Utility/TeeJee.FileSystem.vala:1227
+#: Gtk/MainMenubar.vala:1527
+#, fuzzy
+msgid "Failed to Remove Workspace"
+msgstr "Account verwijderen is mislukt"
+
+#: Utility/TeeJee.FileSystem.vala:1251
 msgid "Failed to change owner/group!"
 msgstr "Wijzigen van eigenaar/groep is mislukt!"
 
@@ -1683,7 +1690,7 @@ msgstr "Wijzigen van eigenaar/groep is mislukt!"
 msgid "Failed to copy file"
 msgstr "Kopiëren van bestand is mislukt"
 
-#: Utility/TeeJee.FileSystem.vala:769
+#: Utility/TeeJee.FileSystem.vala:793
 msgid "Failed to create directory"
 msgstr "Creëren van map is mislukt"
 
@@ -1699,7 +1706,7 @@ msgstr "Creëren van symlink is mislukt"
 msgid "Failed to delete items"
 msgstr "Verwijderen van items is mislukt"
 
-#: Common/Main.vala:1363
+#: Common/Main.vala:1370
 #, fuzzy
 msgid "Failed to execute operation as admin"
 msgstr "Verkrijgen van partitielijst is mislukt"
@@ -1724,7 +1731,7 @@ msgstr "Lezen van bestand is mislukt"
 msgid "Failed to rename item"
 msgstr "Itemnaam wijzigen is mislukt"
 
-#: Utility/TeeJee.FileSystem.vala:1207
+#: Utility/TeeJee.FileSystem.vala:1231
 msgid "Failed to set permissions!"
 msgstr "Instellen van rechten is mislukt!"
 
@@ -1747,12 +1754,12 @@ msgstr "Ontkoppelen van apparaat is mislukt"
 msgid "Failed to unmount device"
 msgstr "Aankoppelen van apparaat is mislukt"
 
-#: Gtk/FilePropertiesBox.vala:488 Gtk/FilePropertiesBox.vala:566
+#: Gtk/FilePropertiesBox.vala:495 Gtk/FilePropertiesBox.vala:573
 #, fuzzy
 msgid "Failed to update Group"
 msgstr "Wijzigen van eigenaar/groep is mislukt!"
 
-#: Gtk/FilePropertiesBox.vala:461 Gtk/FilePropertiesBox.vala:529
+#: Gtk/FilePropertiesBox.vala:468 Gtk/FilePropertiesBox.vala:536
 #, fuzzy
 msgid "Failed to update Owner"
 msgstr "Verwijderen van items is mislukt"
@@ -1774,9 +1781,9 @@ msgstr "Snelst"
 msgid "Fetching info..."
 msgstr "Bezig met ophalen van informatie..."
 
-#: Gtk/ChecksumBox.vala:494 Gtk/ChecksumBox.vala:1572
-#: Gtk/FileContextMenu.vala:654 Gtk/KvmCreateDiskWindow.vala:428
-#: Gtk/MainMenubar.vala:124 Gtk/ProgressPanelDeviceWriterTask.vala:195
+#: Gtk/ChecksumBox.vala:494 Gtk/ChecksumBox.vala:1572 Gtk/ClamScanBox.vala:307
+#: Gtk/FileContextMenu.vala:656 Gtk/KvmCreateDiskWindow.vala:428
+#: Gtk/MainMenubar.vala:125 Gtk/ProgressPanelDeviceWriterTask.vala:195
 #: Gtk/ProgressPanelImageTask.vala:156 Gtk/ProgressPanelKvmTask.vala:203
 #: Gtk/ProgressPanelPdfTask.vala:156
 #, c-format
@@ -1787,7 +1794,7 @@ msgstr "Bestand"
 msgid "File Conflict"
 msgstr "Bestandsconflict"
 
-#: Gtk/Settings.vala:1401
+#: Gtk/Settings.vala:1422
 msgid "File Manager"
 msgstr "Bestandsbeheerder"
 
@@ -1795,7 +1802,7 @@ msgstr "Bestandsbeheerder"
 msgid "File Name"
 msgstr "Bestandsnaam"
 
-#: Gtk/FileViewList.vala:5005
+#: Gtk/FileViewList.vala:5019
 msgid "File Not Found"
 msgstr "Bestand niet gevonden"
 
@@ -1809,7 +1816,8 @@ msgstr "Bestandsoperaties annuleren?"
 msgid "File Properties"
 msgstr "Eigenschappen"
 
-#: Gtk/FileViewList.vala:4661 Gtk/FileViewList.vala:4701
+#: Gtk/FileViewList.vala:4670 Gtk/FileViewList.vala:4710
+#: Gtk/MainWindow.vala:1479
 msgid "File exists"
 msgstr "Bestaat bestaat al"
 
@@ -1818,7 +1826,7 @@ msgstr "Bestaat bestaat al"
 msgid "File has a non-standard format or is not a checksum file"
 msgstr ""
 
-#: Utility/TeeJee.FileSystem.vala:1087 Utility/TeeJee.FileSystem.vala:1137
+#: Utility/TeeJee.FileSystem.vala:1111 Utility/TeeJee.FileSystem.vala:1161
 msgid "File is missing"
 msgstr "Bestand ontbreekt"
 
@@ -1828,11 +1836,11 @@ msgstr "Bestand is geen archief of is een niet-ondersteund formaat"
 
 #: Gtk/PoloGtk.vala:106 Utility/GtkBookmark.vala:122 Utility/MimeTypes.vala:88
 #: Utility/RsyncTask.vala:288 Utility/TeeJee.FileSystem.vala:465
-#: Utility/TeeJee.FileSystem.vala:964 Utility/XdgUserDirectories.vala:143
+#: Utility/TeeJee.FileSystem.vala:988 Utility/XdgUserDirectories.vala:143
 msgid "File not found"
 msgstr "Bestand niet gevonden"
 
-#: Gtk/FileViewList.vala:406
+#: Gtk/FileViewList.vala:408
 #, c-format
 msgid "File type"
 msgstr "Bestandstype"
@@ -1865,7 +1873,7 @@ msgstr ""
 "Handig voor uitvoerbare bestanden. Stelt iedereen met de juiste rechten in "
 "staat om het bestand uit te voeren met de eigenaarsrechten."
 
-#: Gtk/FilePropertiesWindow.vala:197
+#: Gtk/FilePropertiesWindow.vala:201
 #, fuzzy
 msgid "FileSystem"
 msgstr "Bestandssysteem"
@@ -1873,6 +1881,11 @@ msgstr "Bestandssysteem"
 #: Gtk/ChecksumBox.vala:957
 msgid "Files Missing"
 msgstr "Bestand ontbreekt"
+
+#: Gtk/ClamScanBox.vala:251
+#, fuzzy
+msgid "Files Moved"
+msgstr "Bestandsbeheerder"
 
 #: Gtk/ChecksumBox.vala:995
 #, c-format
@@ -1898,13 +1911,13 @@ msgstr ""
 msgid "Files:"
 msgstr "Bestanden:"
 
-#: Gtk/FilePropertiesWindow.vala:158 Gtk/PlacesPopover.vala:637
+#: Gtk/FilePropertiesWindow.vala:156 Gtk/PlacesPopover.vala:637
 #: Gtk/Sidebar.vala:339 Gtk/Sidebar.vala:729 Utility/Device.vala:2517
 #, c-format
 msgid "Filesystem"
 msgstr "Bestandssysteem"
 
-#: Gtk/SelectionBar.vala:159
+#: Gtk/SelectionBar.vala:190
 msgid "Filter"
 msgstr "Filteren"
 
@@ -1938,7 +1951,7 @@ msgstr "Vastgezette kolom"
 msgid "Flash Complete"
 msgstr "Flashen voltooid"
 
-#: Gtk/FileViewList.vala:5142
+#: Gtk/FileViewList.vala:5156
 #, c-format
 msgid "Flash ISO to device?"
 msgstr "ISO flashen naar apparaat?"
@@ -1947,11 +1960,11 @@ msgstr "ISO flashen naar apparaat?"
 msgid "Flashing ISO to device..."
 msgstr "Bezig met flashen van ISO naar apparaat..."
 
-#: Gtk/FileContextMenu.vala:634
+#: Gtk/FileContextMenu.vala:636
 msgid "Folder"
 msgstr "Map"
 
-#: Gtk/FileViewList.vala:3364
+#: Gtk/FileViewList.vala:3373
 msgid "Folder is empty"
 msgstr "De map is leeg"
 
@@ -1960,7 +1973,7 @@ msgid ""
 "Folder may have been deleted or renamed, or device may have been unmounted"
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:1391
+#: Gtk/FileContextMenu.vala:1393
 msgid "Follow Symlink Path"
 msgstr "Symlinkpad volgen"
 
@@ -1972,7 +1985,7 @@ msgstr "Symlinkpad volgen in submappen"
 msgid "Font"
 msgstr "Lettertype"
 
-#: Gtk/Settings.vala:1677
+#: Gtk/Settings.vala:1698
 msgid "Font scale"
 msgstr "Lettertypegrootte"
 
@@ -2000,13 +2013,13 @@ msgstr "ISO flashen naar apparaat?"
 msgid "Formatting Failed"
 msgstr ""
 
-#: Gtk/FileViewToolbar.vala:180 Gtk/MainMenubar.vala:1301 Gtk/Pathbar.vala:838
-#: Gtk/Settings.vala:411 Gtk/Settings.vala:839
+#: Gtk/FileViewToolbar.vala:180 Gtk/MainMenubar.vala:1302 Gtk/Pathbar.vala:850
+#: Gtk/Settings.vala:412 Gtk/Settings.vala:840
 msgid "Forward"
 msgstr "Vooruit"
 
 #: Gtk/ChecksumBox.vala:862 Gtk/ChecksumBox.vala:1310 Gtk/ChecksumBox.vala:1373
-#: Gtk/ToolsWindow.vala:155
+#: Gtk/ClamScanBox.vala:612 Gtk/ToolsWindow.vala:155
 #, c-format
 msgid "Found"
 msgstr "Gevonden"
@@ -2020,12 +2033,12 @@ msgstr "Vrij"
 msgid "Friendly interactive shell (fish)"
 msgstr "Friendly interactive shell (fish)"
 
-#: Gtk/FilePreviewBox.vala:444
+#: Gtk/FilePreviewBox.vala:448
 #, fuzzy
 msgid "Fullscreen"
 msgstr "Volledig scherm-modus"
 
-#: Gtk/MainMenubar.vala:1135
+#: Gtk/MainMenubar.vala:1136
 msgid "Fullscreen Mode"
 msgstr "Volledig scherm-modus"
 
@@ -2037,7 +2050,7 @@ msgstr "GNOME Schijven (gnome-disks) is niet geïnstalleerd"
 msgid "GTK Theme"
 msgstr "GTK-thema"
 
-#: Gtk/Settings.vala:1146
+#: Gtk/Settings.vala:1167
 msgid "GTK theme to use"
 msgstr "Het te gebruiken GTK-thema"
 
@@ -2045,12 +2058,12 @@ msgstr "Het te gebruiken GTK-thema"
 msgid "GZip Compressed Disk Image"
 msgstr ""
 
-#: Gtk/FilePropertiesWindow.vala:143 Gtk/Settings.vala:1201
+#: Gtk/FilePropertiesWindow.vala:141 Gtk/Settings.vala:1222
 msgid "General"
 msgstr "Algemeen"
 
-#: Gtk/FileContextMenu.vala:1833 Gtk/FileContextMenu.vala:1856
-#: Gtk/FileContextMenu.vala:1879 Gtk/FileContextMenu.vala:1902
+#: Gtk/FileContextMenu.vala:1863 Gtk/FileContextMenu.vala:1886
+#: Gtk/FileContextMenu.vala:1909 Gtk/FileContextMenu.vala:1932
 msgid "Generate checksums"
 msgstr ""
 
@@ -2058,31 +2071,31 @@ msgstr ""
 msgid "Generating checksums..."
 msgstr "Bezig met genereren van voorbeelden..."
 
-#: Gtk/FileViewList.vala:3447
+#: Gtk/FileViewList.vala:3456
 msgid "Generating thumbnails..."
 msgstr "Bezig met genereren van voorbeelden..."
 
-#: Gtk/Settings.vala:679 Gtk/Settings.vala:1071
+#: Gtk/Settings.vala:680 Gtk/Settings.vala:1092
 msgid "Global"
 msgstr "Algemeen"
 
-#: Gtk/MainMenubar.vala:1219
+#: Gtk/MainMenubar.vala:1220
 msgid "Go"
 msgstr "Ga"
 
-#: Gtk/Pathbar.vala:868
+#: Gtk/Pathbar.vala:880
 msgid "Go Up"
 msgstr "Ga omhoog"
 
-#: Gtk/FileViewList.vala:3740
+#: Gtk/FileViewList.vala:3749
 msgid "Go to location"
 msgstr "Ga naar locatie"
 
-#: Gtk/Settings.vala:2462
+#: Gtk/Settings.vala:2483
 msgid "Graphics"
 msgstr "Videokaart"
 
-#: Gtk/Settings.vala:2498
+#: Gtk/Settings.vala:2519
 msgid ""
 "Graphics card to emulate for guest machine.\n"
 "\n"
@@ -2113,8 +2126,8 @@ msgstr ""
 "\n"
 "<b>qxl</b> - Krachtige videokaart voor het gebruiken van SPICE."
 
-#: Gtk/FilePermissionsBox.vala:122 Gtk/FilePropertiesBox.vala:391
-#: Gtk/FileViewList.vala:418 Gtk/FileViewList.vala:953
+#: Gtk/FilePermissionsBox.vala:122 Gtk/FilePropertiesBox.vala:398
+#: Gtk/FileViewList.vala:420 Gtk/FileViewList.vala:963
 #, c-format
 msgid "Group"
 msgstr "Groep"
@@ -2123,19 +2136,19 @@ msgstr "Groep"
 msgid "Headerbar"
 msgstr "Kopbalk"
 
-#: Gtk/FilePropertiesBox.vala:237
+#: Gtk/FilePropertiesBox.vala:239
 msgid "Headers"
 msgstr "Koppen"
 
-#: Gtk/DevicePopoverSettingsWindow.vala:212
+#: Gtk/DevicePopoverSettingsWindow.vala:214
 msgid "Height"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1887
+#: Gtk/MainMenubar.vala:2019
 msgid "Help"
 msgstr "Hulp"
 
-#: Gtk/CreateArchiveWindow.vala:1802 Gtk/FileContextMenu.vala:1346
+#: Gtk/CreateArchiveWindow.vala:1802 Gtk/FileContextMenu.vala:1348
 #: Gtk/PasswordDialog.vala:202
 msgid "Hide"
 msgstr "Verbergen"
@@ -2150,20 +2163,20 @@ msgstr "Map"
 msgid "Hide Other Files"
 msgstr "Geselecteerde items verbergen"
 
-#: Gtk/FileContextMenu.vala:1347
+#: Gtk/FileContextMenu.vala:1349
 msgid "Hide selected items"
 msgstr "Geselecteerde items verbergen"
 
-#: Gtk/ConnectServerWindow.vala:608
+#: Gtk/ConnectServerWindow.vala:607
 msgid "History"
 msgstr "Geschiedenis"
 
-#: Gtk/FileViewToolbar.vala:221 Gtk/Pathbar.vala:898 Gtk/PlacesPopover.vala:638
-#: Gtk/Settings.vala:462 Gtk/Settings.vala:879 Gtk/Sidebar.vala:340
+#: Gtk/FileViewToolbar.vala:221 Gtk/Pathbar.vala:910 Gtk/PlacesPopover.vala:638
+#: Gtk/Settings.vala:463 Gtk/Settings.vala:880 Gtk/Sidebar.vala:340
 msgid "Home"
 msgstr "Persoonlijke map"
 
-#: Gtk/MainMenubar.vala:1908
+#: Gtk/MainMenubar.vala:2040
 msgid "Homepage"
 msgstr "Startpagina"
 
@@ -2171,7 +2184,7 @@ msgstr "Startpagina"
 msgid "Horizontal"
 msgstr "Horizontaal"
 
-#: Gtk/ConnectServerWindow.vala:659
+#: Gtk/ConnectServerWindow.vala:658
 msgid "Host IP (Eg: 192.0.10.1)"
 msgstr "Host-IP (bijv.: 192.0.10.1)"
 
@@ -2179,29 +2192,29 @@ msgstr "Host-IP (bijv.: 192.0.10.1)"
 msgid "Icon Themes & Utilities"
 msgstr "Pictogramthema's en hulpmiddelen"
 
-#: Gtk/Settings.vala:1625
+#: Gtk/Settings.vala:1646
 msgid "Icon View"
 msgstr "Pictogramweergave"
 
-#: Gtk/Settings.vala:1711 Gtk/Settings.vala:1866 Gtk/Settings.vala:2067
+#: Gtk/Settings.vala:1732 Gtk/Settings.vala:1887 Gtk/Settings.vala:2088
 msgid "Icon size"
 msgstr "Pictogramgrootte"
 
-#: Gtk/FileViewToolbar.vala:398 Gtk/Settings.vala:1309 Gtk/ViewPopover.vala:134
+#: Gtk/FileViewToolbar.vala:398 Gtk/Settings.vala:1330 Gtk/ViewPopover.vala:134
 msgid "Icons"
 msgstr "Pictogrammen"
 
-#: Gtk/Settings.vala:2656 Gtk/Settings.vala:2670
+#: Gtk/Settings.vala:2677 Gtk/Settings.vala:2691
 msgid "If selected, the action will remove original file on success"
 msgstr ""
 "Als dit wordt geselecteerd, dan zal de actie, indien succesvol, het "
 "originele bestand verwijderen"
 
-#: Gtk/Settings.vala:2684 Gtk/Settings.vala:2698 Gtk/Settings.vala:2712
-#: Gtk/Settings.vala:2726 Gtk/Settings.vala:2740 Gtk/Settings.vala:2754
-#: Gtk/Settings.vala:2768 Gtk/Settings.vala:2783 Gtk/Settings.vala:2797
-#: Gtk/Settings.vala:2811 Gtk/Settings.vala:2825 Gtk/Settings.vala:2839
-#: Gtk/Settings.vala:2853 Gtk/Settings.vala:2867
+#: Gtk/Settings.vala:2705 Gtk/Settings.vala:2719 Gtk/Settings.vala:2733
+#: Gtk/Settings.vala:2747 Gtk/Settings.vala:2761 Gtk/Settings.vala:2775
+#: Gtk/Settings.vala:2789 Gtk/Settings.vala:2804 Gtk/Settings.vala:2818
+#: Gtk/Settings.vala:2832 Gtk/Settings.vala:2846 Gtk/Settings.vala:2860
+#: Gtk/Settings.vala:2874 Gtk/Settings.vala:2888
 msgid ""
 "If selected, the action will replace original file on success, instead of "
 "creating new file."
@@ -2215,11 +2228,11 @@ msgid ""
 "automatically."
 msgstr ""
 
-#: Gtk/FileContextMenu.vala:2411
+#: Gtk/FileContextMenu.vala:2441
 msgid "Image"
 msgstr "Afbeelding"
 
-#: Gtk/Settings.vala:2386
+#: Gtk/Settings.vala:2407
 msgid "Image Actions"
 msgstr "Afbeeldingsacties"
 
@@ -2241,23 +2254,23 @@ msgstr "Indicator"
 msgid "Insane"
 msgstr "Supersnel"
 
-#: Gtk/MainMenubar.vala:1730
+#: Gtk/MainMenubar.vala:1862
 msgid "Install Rclone (Cloud Storage Support)"
 msgstr "Installeer Rclone (cloudopslag-ondersteuning)"
 
-#: Gtk/FileContextMenu.vala:2062
+#: Gtk/FileContextMenu.vala:2092
 msgid "Install from ISO..."
 msgstr "Installeren vanuit ISO-bestand..."
 
-#: Gtk/MainMenubar.vala:1741
+#: Gtk/MainMenubar.vala:1873
 msgid "Install p7zip 16.02 (Archive Support)"
 msgstr "Installeer p7zip 16.02 (archief-ondersteuning)"
 
-#: Gtk/FileViewList.vala:5750 Gtk/FileViewList.vala:5771
+#: Gtk/FileViewList.vala:5764 Gtk/FileViewList.vala:5785
 msgid "Install required packages and try again"
 msgstr "Installeer de vereiste pakketten en probeer het opnieuw"
 
-#: Gtk/FileViewList.vala:4300
+#: Gtk/FileViewList.vala:4309
 msgid "Internal Error"
 msgstr "Interne fout"
 
@@ -2265,15 +2278,15 @@ msgstr "Interne fout"
 msgid "Invalid Passphrase"
 msgstr "Ongeldige wachtwoordzin"
 
-#: Gtk/FileViewList.vala:6010
+#: Gtk/FileViewList.vala:6024
 msgid "Invalid Path"
 msgstr "Ongeldig pad"
 
-#: Gtk/ConnectServerWindow.vala:952 Gtk/ConnectServerWindow.vala:962
+#: Gtk/ConnectServerWindow.vala:951 Gtk/ConnectServerWindow.vala:961
 msgid "Invalid Server Name"
 msgstr "Ongeldige servernaam"
 
-#: Gtk/MainMenubar.vala:1918
+#: Gtk/MainMenubar.vala:2050
 msgid "Issue Tracker"
 msgstr "Probleemtracker"
 
@@ -2283,11 +2296,11 @@ msgstr ""
 "Probleemtracker ~ Rapporteer problemen, vraag om nieuwe mogelijkheden, stel "
 "vragen"
 
-#: Gtk/FileConflictDialog.vala:349 Utility/FileTask.vala:1096
+#: Gtk/FileConflictDialog.vala:349 Utility/FileTask.vala:1100
 msgid "Item"
 msgstr "Item"
 
-#: Gtk/FileViewList.vala:394
+#: Gtk/FileViewList.vala:396
 msgid "Item is not a symbolic link"
 msgstr "Item is geen symbolische link"
 
@@ -2295,15 +2308,15 @@ msgstr "Item is geen symbolische link"
 msgid "Items"
 msgstr "Items"
 
-#: Gtk/FileContextMenu.vala:1927 Gtk/Settings.vala:2640
+#: Gtk/FileContextMenu.vala:1957 Gtk/Settings.vala:2661
 msgid "KVM"
 msgstr "KVM"
 
-#: Gtk/FilePropertiesWindow.vala:353
+#: Gtk/FilePropertiesWindow.vala:355
 msgid "Key"
 msgstr "Sleutel"
 
-#: Gtk/MainMenubar.vala:1938
+#: Gtk/MainMenubar.vala:2070
 msgid "Keyboard Shortcuts"
 msgstr "Sneltoetsen"
 
@@ -2311,26 +2324,26 @@ msgstr "Sneltoetsen"
 msgid "Korn shell (ksh)"
 msgstr "Korn shell (ksh)"
 
-#: Gtk/FilePropertiesWindow.vala:193 Gtk/Sidebar.vala:725
+#: Gtk/FilePropertiesWindow.vala:197 Gtk/Sidebar.vala:725
 #: Utility/Device.vala:2509
 #, c-format
 msgid "Label"
 msgstr "Label"
 
-#: Gtk/Settings.vala:370
+#: Gtk/Settings.vala:371
 msgid "Labels beside icons"
 msgstr "Labels naast pictogrammen"
 
-#: Gtk/Settings.vala:296
+#: Gtk/Settings.vala:297
 msgid "Large icons"
 msgstr "Grote pictogrammen"
 
-#: Gtk/FileViewList.vala:403
+#: Gtk/FileViewList.vala:405
 #, c-format
 msgid "Last modified date"
 msgstr "Laatst aangepast-datum"
 
-#: Gtk/MainMenubar.vala:1035
+#: Gtk/MainMenubar.vala:1036
 msgid "Layout"
 msgstr "Indeling"
 
@@ -2347,7 +2360,7 @@ msgstr "Niveau"
 msgid "License"
 msgstr "Licentie"
 
-#: Gtk/Settings.vala:2553
+#: Gtk/Settings.vala:2574
 msgid ""
 "Limit the CPU usage for VM process. It is recommended to keep this below 90 "
 "to prevent the host system from becoming unresponsive when intensive tasks "
@@ -2357,16 +2370,16 @@ msgstr ""
 "de 90% te houden om te voorkomen dat het hostsysteem niet meer reageert als "
 "er intensieve taken zijn in het gastsysteem."
 
-#: Gtk/FileViewList.vala:387 Gtk/FileViewList.vala:390
+#: Gtk/FileViewList.vala:389 Gtk/FileViewList.vala:392
 #, c-format
 msgid "Link to"
 msgstr "Koppelen aan"
 
-#: Gtk/FileViewToolbar.vala:391 Gtk/Settings.vala:1307 Gtk/ViewPopover.vala:127
+#: Gtk/FileViewToolbar.vala:391 Gtk/Settings.vala:1328 Gtk/ViewPopover.vala:127
 msgid "List"
 msgstr "Lijst"
 
-#: Gtk/Settings.vala:1607
+#: Gtk/Settings.vala:1628
 msgid "List View"
 msgstr "Lijstweergave"
 
@@ -2382,11 +2395,16 @@ msgstr "Bezig met herstellen van items..."
 msgid "Listing source items..."
 msgstr "Bezig met opsommen van bronitems..."
 
-#: Gtk/FileViewList.vala:3386
+#: Gtk/MainWindow.vala:1263
+#, fuzzy
+msgid "Loading workspace..."
+msgstr "Bezig met laden..."
+
+#: Gtk/FileViewList.vala:3395
 msgid "Loading..."
 msgstr "Bezig met laden..."
 
-#: Gtk/CreateArchiveWindow.vala:404 Gtk/FilePropertiesBox.vala:123
+#: Gtk/CreateArchiveWindow.vala:404 Gtk/FilePropertiesBox.vala:125
 msgid "Location"
 msgstr "Locatie"
 
@@ -2398,19 +2416,19 @@ msgstr "Locatie niet gevonden"
 msgid "Lock"
 msgstr "Vergrendelen"
 
-#: Gtk/FileViewTab.vala:295
+#: Gtk/FileViewTab.vala:297
 msgid "Lock Path"
 msgstr "Pad"
 
-#: Gtk/MainMenubar.vala:1477
+#: Gtk/MainMenubar.vala:1609
 msgid "Login to cloud storage account"
 msgstr "Inloggen op cloudopslag-account"
 
-#: Gtk/MainMenubar.vala:1502
+#: Gtk/MainMenubar.vala:1634
 msgid "Logout from cloud storage account"
 msgstr "Uitloggen van cloudopslag-account"
 
-#: Gtk/FileViewList.vala:1168
+#: Gtk/FileViewList.vala:1178
 msgid "MD5"
 msgstr "MD5"
 
@@ -2441,17 +2459,25 @@ msgstr "Apparaat beheren met GNOME Schijven"
 msgid "Manage..."
 msgstr "Beheren..."
 
-#: Gtk/FilePropertiesWindow.vala:188 Gtk/Sidebar.vala:720
+#: Gtk/FilePropertiesWindow.vala:192 Gtk/Sidebar.vala:720
 #: Utility/Device.vala:2502
 #, c-format
 msgid "Mapped"
 msgstr "In kaart gebracht"
 
+#: Gtk/SelectionBar.vala:164
+msgid "Match Start"
+msgstr ""
+
+#: Gtk/SelectionBar.vala:170
+msgid "Match beginning of file name"
+msgstr ""
+
 #: Gtk/TermContextMenu.vala:412
 msgid "Maximize"
 msgstr "Maximaliseren"
 
-#: Gtk/Settings.vala:1259
+#: Gtk/Settings.vala:1280
 msgid "Maximize on startup"
 msgstr "Gemaximaliseerd opstarten"
 
@@ -2463,19 +2489,19 @@ msgstr "Terminal maximaliseren om tabblad op te vullen"
 msgid "Maximum"
 msgstr "Maximum"
 
-#: Gtk/FileViewToolbar.vala:412 Gtk/Settings.vala:1313 Gtk/ViewPopover.vala:148
+#: Gtk/FileViewToolbar.vala:412 Gtk/Settings.vala:1334 Gtk/ViewPopover.vala:148
 msgid "Media"
 msgstr "Media"
 
-#: Gtk/FilePropertiesWindow.vala:346
+#: Gtk/FilePropertiesWindow.vala:348
 msgid "MediaInfo"
 msgstr "Media-informatie"
 
-#: Gtk/FileViewList.vala:3375
+#: Gtk/FileViewList.vala:3384
 msgid "Menubar: File > New Admin Window"
 msgstr "Menubalk: Bestand > Nieuw administratorvenster"
 
-#: Gtk/FileContextMenu.vala:2222 Gtk/Settings.vala:2667
+#: Gtk/FileContextMenu.vala:2252 Gtk/Settings.vala:2688
 msgid "Merge"
 msgstr "Samenvoegen"
 
@@ -2483,20 +2509,20 @@ msgstr "Samenvoegen"
 msgid "Merge Derived Disk"
 msgstr "Afgeleide schijf samenvoegen"
 
-#: Gtk/FileContextMenu.vala:2223
+#: Gtk/FileContextMenu.vala:2253
 msgid "Merge selected PDF files into one document"
 msgstr "Geselecteerde PDF-bestanden samenvoegen in één document"
 
-#: Gtk/CreateArchiveWindow.vala:614 Gtk/FilePropertiesBox.vala:184
+#: Gtk/CreateArchiveWindow.vala:614 Gtk/FilePropertiesBox.vala:186
 msgid "Method"
 msgstr "Methode"
 
-#: Gtk/FilePropertiesBox.vala:249 Utility/FileItem.vala:658
+#: Gtk/FilePropertiesBox.vala:251 Utility/FileItem.vala:733
 #, c-format
 msgid "Mime"
 msgstr "Mime"
 
-#: Gtk/FileViewList.vala:409
+#: Gtk/FileViewList.vala:411
 #, c-format
 msgid "Mime type"
 msgstr "Mimesoort"
@@ -2514,11 +2540,11 @@ msgstr ""
 msgid "Missing"
 msgstr "Ontbreken"
 
-#: Common/Main.vala:1331 Gtk/MainWindow.vala:601
+#: Common/Main.vala:1338 Gtk/MainWindow.vala:603
 msgid "Missing Dependencies"
 msgstr "Ontbrekende afhankelijkheden"
 
-#: Gtk/DeviceContextMenu.vala:579 Gtk/FileViewList.vala:5749
+#: Gtk/DeviceContextMenu.vala:579 Gtk/FileViewList.vala:5763
 msgid "Missing Dependency"
 msgstr "Ontbrekende afhankelijkheid"
 
@@ -2526,7 +2552,7 @@ msgstr "Ontbrekende afhankelijkheid"
 msgid "Missing Icon"
 msgstr "Ontbrekend pictogram"
 
-#: Gtk/FileViewList.vala:5770
+#: Gtk/FileViewList.vala:5784
 msgid "Missing Plugin"
 msgstr "Ontbrekende plug-in"
 
@@ -2535,24 +2561,24 @@ msgstr "Ontbrekende plug-in"
 msgid "Model"
 msgstr "Model"
 
-#: Gtk/FileConflictDialog.vala:543 Gtk/FileConflictDialog.vala:555
-#: Gtk/FilePropertiesBox.vala:267 Gtk/FileViewList.vala:824
-#: Utility/FileItem.vala:655
+#: Gtk/ClamScanBox.vala:454 Gtk/FileConflictDialog.vala:543
+#: Gtk/FileConflictDialog.vala:555 Gtk/FilePropertiesBox.vala:269
+#: Gtk/FileViewList.vala:834 Utility/FileItem.vala:730
 #, c-format
 msgid "Modified"
 msgstr "Bewerkt"
 
-#: Gtk/FileContextMenu.vala:1155
+#: Gtk/FileContextMenu.vala:1157
 msgid "More options"
 msgstr "Meer opties"
 
 #: Gtk/DeviceContextMenu.vala:179 Gtk/DevicePopover.vala:513
-#: Gtk/FileContextMenu.vala:1665 Gtk/Sidebar.vala:732 Utility/Device.vala:2521
+#: Gtk/FileContextMenu.vala:1694 Gtk/Sidebar.vala:732 Utility/Device.vala:2521
 #, c-format
 msgid "Mount"
 msgstr "Aankoppelen"
 
-#: Gtk/FileContextMenu.vala:2042
+#: Gtk/FileContextMenu.vala:2072
 msgid "Mount Disk"
 msgstr "Schijf aankoppelen"
 
@@ -2561,11 +2587,11 @@ msgstr "Schijf aankoppelen"
 msgid "Mount Path"
 msgstr "Aankoppelen"
 
-#: Gtk/FileContextMenu.vala:1666
+#: Gtk/FileContextMenu.vala:1695
 msgid "Mount the disk image as read-only device"
 msgstr "ISO-bestand aankoppelen als alleen-lezen-schijf"
 
-#: Gtk/FileContextMenu.vala:2043
+#: Gtk/FileContextMenu.vala:2073
 msgid "Mount the selected disk"
 msgstr "Geselecteerde schijf aankoppelen"
 
@@ -2573,12 +2599,12 @@ msgstr "Geselecteerde schijf aankoppelen"
 msgid "Mount this volume"
 msgstr "Dit volume aankoppelen"
 
-#: Gtk/FilePropertiesWindow.vala:200
+#: Gtk/FilePropertiesWindow.vala:204
 #, fuzzy
 msgid "MountPath"
 msgstr "Aankoppelen"
 
-#: Gtk/FileViewList.vala:5092
+#: Gtk/FileViewList.vala:5106
 #, c-format
 msgid "Mounted ISO"
 msgstr "ISO aangekoppeld"
@@ -2587,7 +2613,7 @@ msgstr "ISO aangekoppeld"
 msgid "Mounted successfully"
 msgstr "Succesvol aangekoppeld"
 
-#: Gtk/FileContextMenu.vala:1262
+#: Gtk/FileContextMenu.vala:1264
 msgid "Move Across"
 msgstr "Heen-en-weer verplaatsen"
 
@@ -2606,7 +2632,7 @@ msgstr ""
 msgid "Move Down"
 msgstr "Omlaag verplaatsen"
 
-#: Gtk/FileContextMenu.vala:1222
+#: Gtk/FileContextMenu.vala:1224
 msgid "Move To..."
 msgstr "Verplaatsen naar..."
 
@@ -2614,7 +2640,7 @@ msgstr "Verplaatsen naar..."
 msgid "Move Up"
 msgstr "Omhoog verplaatsen"
 
-#: Gtk/FileContextMenu.vala:964
+#: Gtk/FileContextMenu.vala:966
 msgid "Move files to recycle bin"
 msgstr "Bestanden verplaatsen naar prullenbak"
 
@@ -2626,11 +2652,16 @@ msgstr "Geselecteerd item omlaag verplaatsen"
 msgid "Move selected item up"
 msgstr "Geselecteerd item omhoog verplaatsen"
 
-#: Gtk/FileContextMenu.vala:1223
+#: Gtk/ClamScanBox.vala:221
+#, fuzzy
+msgid "Move to Quarantine"
+msgstr "Naar andere locatie verplaatsen"
+
+#: Gtk/FileContextMenu.vala:1225
 msgid "Move to another location"
 msgstr "Naar andere locatie verplaatsen"
 
-#: Gtk/FileContextMenu.vala:1263
+#: Gtk/FileContextMenu.vala:1265
 msgid "Move to other pane"
 msgstr "Naar ander paneel verplaatsen"
 
@@ -2655,7 +2686,7 @@ msgstr "Meerdere items geselecteerd"
 msgid "Music"
 msgstr "Muziek"
 
-#: Gtk/FilePreviewBox.vala:431 Gtk/FilePreviewBox.vala:435
+#: Gtk/FilePreviewBox.vala:435 Gtk/FilePreviewBox.vala:439
 msgid "Mute"
 msgstr ""
 
@@ -2663,44 +2694,48 @@ msgstr ""
 msgid "N/A"
 msgstr "n.v.t."
 
-#: Gtk/ConnectServerWindow.vala:678
+#: Gtk/ConnectServerWindow.vala:677
 msgid "NETBIOS Name"
 msgstr "NETBIOS-naam"
 
-#: Gtk/FileViewList.vala:400
+#: Gtk/FileViewList.vala:402
 msgid "NTD = Rename Trash Delete"
 msgstr "NNV = Naam wijzigen Naar prullenbak Verwijderen"
 
 #: Gtk/ColumnSelectionBox.vala:111 Gtk/CreateArchiveWindow.vala:259
-#: Gtk/FilePropertiesBox.vala:113 Gtk/FileViewList.vala:666
-#: Utility/FileItem.vala:652
+#: Gtk/FilePropertiesBox.vala:115 Gtk/FileViewList.vala:676
+#: Utility/FileItem.vala:727
 #, c-format
 msgid "Name"
 msgstr "Naam"
 
-#: Gtk/FileContextMenu.vala:592
+#: Gtk/FileContextMenu.vala:594
 msgid "New"
 msgstr "Nieuw"
 
-#: Gtk/MainMenubar.vala:251
+#: Gtk/MainMenubar.vala:252
 msgid "New Admin Window"
 msgstr "Nieuw administratorvenster"
 
-#: Gtk/FileViewList.vala:4648
+#: Gtk/FileViewList.vala:4657
 msgid "New File"
 msgstr "Nieuw bestand"
 
-#: Gtk/FileViewList.vala:4614
+#: Gtk/FileViewList.vala:4623
 msgid "New Folder"
 msgstr "Nieuwe map"
 
-#: Gtk/FileViewTab.vala:361 Gtk/MainMenubar.vala:159
+#: Gtk/FileViewTab.vala:363 Gtk/MainMenubar.vala:160
 msgid "New Tab"
 msgstr "Nieuw tabblad"
 
-#: Gtk/MainMenubar.vala:206
+#: Gtk/MainMenubar.vala:207
 msgid "New Window"
 msgstr "Nieuw venster"
+
+#: Gtk/MainWindow.vala:1466
+msgid "New Workspace"
+msgstr ""
 
 #: Gtk/KvmCreateDiskWindow.vala:338
 #, c-format
@@ -2719,38 +2754,38 @@ msgstr ""
 "De nieuwe schijf zal worden gecreëerd door het samenvoegen van de inhoud van "
 "de afgeleide en basisbestanden"
 
-#: Gtk/WizardWindow.vala:114
+#: Gtk/CloudLoginWindow.vala:217 Gtk/WizardWindow.vala:114
 msgid "Next"
 msgstr "Volgende"
 
-#: Gtk/FilePropertiesBox.vala:189 Gtk/FilePropertiesBox.vala:194
+#: Gtk/FilePropertiesBox.vala:191 Gtk/FilePropertiesBox.vala:196
 #: Utility/Gtk/CustomMessageDialog.vala:180
 msgid "No"
 msgstr "Nee"
 
-#: Gtk/FileViewList.vala:6143
+#: Gtk/FileViewList.vala:6157
 msgid "No Files Selected"
 msgstr "Geen bestanden geselecteerd"
 
-#: Gtk/FileViewList.vala:5583 Gtk/FileViewList.vala:5603
-#: Gtk/FileViewList.vala:5623 Gtk/FileViewList.vala:5643
-#: Gtk/FileViewList.vala:5663 Gtk/FileViewList.vala:5683
+#: Gtk/FileViewList.vala:5597 Gtk/FileViewList.vala:5617
+#: Gtk/FileViewList.vala:5637 Gtk/FileViewList.vala:5657
+#: Gtk/FileViewList.vala:5677 Gtk/FileViewList.vala:5697
 msgid "No Images Selected"
 msgstr "Geen afbeeldingen geselecteerd"
 
-#: Gtk/FileViewList.vala:5563
+#: Gtk/FileViewList.vala:5577
 msgid "No JPEGs Selected"
 msgstr "Geen JPEG-bestanden geselecteerd"
 
-#: Gtk/FileViewList.vala:5541
+#: Gtk/FileViewList.vala:5555
 msgid "No PNGs Selected"
 msgstr "Geen PNG-bestanden geselecteerd"
 
-#: Gtk/FileViewList.vala:4571
+#: Gtk/FileViewList.vala:4580
 msgid "No Permission"
 msgstr "Geen toegang"
 
-#: Gtk/FileContextMenu.vala:1753
+#: Gtk/FileContextMenu.vala:1782
 msgid "No USB devices found"
 msgstr "Geen USB-apparaten gevonden"
 
@@ -2759,7 +2794,7 @@ msgstr "Geen USB-apparaten gevonden"
 msgid "No files found"
 msgstr "Geen USB-apparaten gevonden"
 
-#: Gtk/Pathbar.vala:1009
+#: Gtk/Pathbar.vala:1020
 #, fuzzy
 msgid "Non-Removable Device"
 msgstr "Verwijderen"
@@ -2768,8 +2803,8 @@ msgstr "Verwijderen"
 msgid "Normal"
 msgstr "Normaal"
 
-#: Gtk/FileViewList.vala:5039 Gtk/FileViewList.vala:5046
-#: Gtk/FileViewList.vala:5940 Gtk/FileViewList.vala:6036
+#: Gtk/FileViewList.vala:5053 Gtk/FileViewList.vala:5060
+#: Gtk/FileViewList.vala:5954 Gtk/FileViewList.vala:6050
 msgid "Not Supported"
 msgstr "Niet ondersteund"
 
@@ -2778,7 +2813,7 @@ msgstr "Niet ondersteund"
 msgid "Notes"
 msgstr ""
 
-#: Gtk/Settings.vala:2526
+#: Gtk/Settings.vala:2547
 msgid ""
 "Number of CPU cores to emulate for guest machine. This can be greater than "
 "the number of cores on host machine."
@@ -2796,8 +2831,8 @@ msgid "OK"
 msgstr "Oké"
 
 #: Gtk/DeviceContextMenu.vala:153 Gtk/DevicePopover.vala:495
-#: Gtk/FileContextMenu.vala:242 Gtk/FileContextMenu.vala:311
-#: Gtk/FileContextMenu.vala:1513 Gtk/MainMenubar.vala:1242
+#: Gtk/FileContextMenu.vala:244 Gtk/FileContextMenu.vala:313
+#: Gtk/FileContextMenu.vala:1515 Gtk/MainMenubar.vala:1243
 msgid "Open"
 msgstr "Openen"
 
@@ -2805,63 +2840,63 @@ msgstr "Openen"
 msgid "Open Home folder"
 msgstr "Persoonlijke map openen"
 
-#: Gtk/MainMenubar.vala:1391
+#: Gtk/MainMenubar.vala:1392
 msgid "Open Location..."
 msgstr "Locatie openen..."
 
-#: Gtk/Settings.vala:919
+#: Gtk/Settings.vala:940
 msgid "Open Opposite"
 msgstr "Tegenovergestelde openen"
 
-#: Gtk/FileContextMenu.vala:1035
+#: Gtk/FileContextMenu.vala:1037
 msgid "Open Original Location"
 msgstr "Originele locatie openen"
 
-#: Gtk/FileContextMenu.vala:802
+#: Gtk/FileContextMenu.vala:804
 msgid "Open Templates Folder"
 msgstr "Sjablonenmap openen"
 
-#: Gtk/FileContextMenu.vala:1058
+#: Gtk/FileContextMenu.vala:1060
 msgid "Open Trash Directory"
 msgstr "Prullenbak openen"
 
-#: Gtk/FileContextMenu.vala:334 Gtk/FileContextMenu.vala:368
+#: Gtk/FileContextMenu.vala:336 Gtk/FileContextMenu.vala:370
 msgid "Open With"
 msgstr "Openen met"
 
-#: Gtk/FileContextMenu.vala:677
+#: Gtk/FileContextMenu.vala:679
 msgid "Open a terminal window"
 msgstr "Terminalvenster openen"
 
-#: Gtk/FileViewList.vala:3374
+#: Gtk/FileViewList.vala:3383
 msgid "Open an admin window to browse this folder"
 msgstr "Open een administratorvenster om deze map te kunnen verkennen"
 
-#: Gtk/FileContextMenu.vala:1514
+#: Gtk/FileContextMenu.vala:1516
 msgid "Open archive"
 msgstr "Archief openen"
 
-#: Gtk/FileContextMenu.vala:570
+#: Gtk/FileContextMenu.vala:572
 msgid "Open as Admin"
 msgstr "Als administrator openen"
 
-#: Gtk/FileContextMenu.vala:571
+#: Gtk/FileContextMenu.vala:573
 msgid "Open folder as administrator"
 msgstr "Map openen als administrator"
 
-#: Gtk/FileContextMenu.vala:529
+#: Gtk/FileContextMenu.vala:531
 msgid "Open folder in new tab"
 msgstr "Map openen op nieuw tabblad"
 
-#: Gtk/FileContextMenu.vala:550
+#: Gtk/FileContextMenu.vala:552
 msgid "Open folder in new window"
 msgstr "Map openen in nieuw venster"
 
-#: Gtk/FileContextMenu.vala:528
+#: Gtk/FileContextMenu.vala:530
 msgid "Open in New Tab"
 msgstr "Openen op nieuw tabblad"
 
-#: Gtk/FileContextMenu.vala:549
+#: Gtk/FileContextMenu.vala:551
 msgid "Open in New Window"
 msgstr "Openen in nieuw venster"
 
@@ -2877,11 +2912,11 @@ msgstr "Linkerpaneel-locatie openen in rechterpaneel"
 msgid "Open menu"
 msgstr "Menu openen"
 
-#: Gtk/FileContextMenu.vala:696
+#: Gtk/FileContextMenu.vala:698
 msgid "Open new tab"
 msgstr "Nieuw tabblad openen"
 
-#: Gtk/FileContextMenu.vala:715
+#: Gtk/FileContextMenu.vala:717
 msgid "Open new window"
 msgstr "Nieuw venster openen"
 
@@ -2893,15 +2928,15 @@ msgstr "Persoonlijke map openen"
 msgid "Open right-pane location in left pane"
 msgstr "Rechterpaneel-locatie openen in linkerpaneel"
 
-#: Gtk/FileContextMenu.vala:312
+#: Gtk/FileContextMenu.vala:314
 msgid "Open selected item"
 msgstr "Geselecteerd item openen"
 
-#: Gtk/FileContextMenu.vala:803
+#: Gtk/FileContextMenu.vala:805
 msgid "Open templates folder"
 msgstr "Sjablonenmap openen"
 
-#: Gtk/FileContextMenu.vala:1059
+#: Gtk/FileContextMenu.vala:1061
 msgid "Open the actual location of trashed item in a new tab"
 msgstr "Werkelijke locatie van item in prullenbak openen op nieuw tabblad"
 
@@ -2909,7 +2944,7 @@ msgstr "Werkelijke locatie van item in prullenbak openen op nieuw tabblad"
 msgid "Open the next visited location"
 msgstr "Volgende bezochte locatie openen"
 
-#: Gtk/FileContextMenu.vala:1036
+#: Gtk/FileContextMenu.vala:1038
 msgid "Open the original location of trashed item in a new tab"
 msgstr "Originele locatie van item in prullenbak openen op nieuw tabblad"
 
@@ -2921,61 +2956,61 @@ msgstr "Bovenliggende locatie openen"
 msgid "Open the previous visited location"
 msgstr "Vorige bezochte locatie openen"
 
-#: Gtk/FileContextMenu.vala:1392
+#: Gtk/FileContextMenu.vala:1394
 msgid "Open the symbolic link's target location"
 msgstr "Doellocatie van symlink openen"
 
-#: Gtk/Pathbar.vala:928
+#: Gtk/Pathbar.vala:940
 msgid "Open this directory path in opposite pane"
 msgstr "Dit mappad openen in het tegenovergestelde paneel"
 
-#: Gtk/FileContextMenu.vala:734
+#: Gtk/FileContextMenu.vala:736
 msgid "Open window as administrator"
 msgstr "Venster openen als administrator"
 
-#: Gtk/FileContextMenu.vala:298
+#: Gtk/FileContextMenu.vala:300
 msgid "Open with default application"
 msgstr "Openen met standaard applicatie"
 
-#: Gtk/FileContextMenu.vala:335 Gtk/FileContextMenu.vala:394
+#: Gtk/FileContextMenu.vala:337 Gtk/FileContextMenu.vala:396
 msgid "Open with other applications"
 msgstr "Openen met andere applicaties"
 
-#: Gtk/Settings.vala:2765
+#: Gtk/Settings.vala:2786
 msgid "Optimize"
 msgstr "Optimaliseren"
 
-#: Gtk/FileContextMenu.vala:2324
+#: Gtk/FileContextMenu.vala:2354
 msgid "Optimize For"
 msgstr "Optimaliseren voor"
 
-#: Gtk/Settings.vala:2780
+#: Gtk/Settings.vala:2801
 msgid "Optimize PNG"
 msgstr "PNG optimaliseren"
 
-#: Gtk/FileContextMenu.vala:2474
+#: Gtk/FileContextMenu.vala:2504
 msgid "Optimize PNG (lossless)"
 msgstr "PNG optimaliseren (zonder kwaliteitsverlies)"
 
-#: Gtk/ConnectServerWindow.vala:304 Gtk/ConnectServerWindow.vala:347
-#: Gtk/ConnectServerWindow.vala:390 Gtk/ConnectServerWindow.vala:434
+#: Gtk/ConnectServerWindow.vala:303 Gtk/ConnectServerWindow.vala:346
+#: Gtk/ConnectServerWindow.vala:389 Gtk/ConnectServerWindow.vala:433
 msgid "Optional"
 msgstr "Optioneel"
 
-#: Gtk/ConnectServerWindow.vala:684
+#: Gtk/ConnectServerWindow.vala:683
 msgid "Optional: WORKGROUP (default)"
 msgstr "Optioneel: WORKGROUP (standaard)"
 
-#: Gtk/ConnectServerWindow.vala:668
+#: Gtk/ConnectServerWindow.vala:667
 msgid "Optional: anonymous (default)"
 msgstr "Optioneel: anoniem (standaard)"
 
-#: Gtk/ConnectServerWindow.vala:689
+#: Gtk/ConnectServerWindow.vala:688
 msgid "Optional: guest (default)"
 msgstr "Optioneel: gast (standaard)"
 
-#: Gtk/PoloGtk.vala:144 Gtk/Settings.vala:1806 Gtk/Settings.vala:1990
-#: Gtk/Settings.vala:2193
+#: Gtk/PoloGtk.vala:144 Gtk/Settings.vala:1827 Gtk/Settings.vala:2011
+#: Gtk/Settings.vala:2214
 msgid "Options"
 msgstr "Opties"
 
@@ -2983,19 +3018,19 @@ msgstr "Opties"
 msgid "Original Checksum"
 msgstr ""
 
-#: Gtk/FileViewList.vala:1254
+#: Gtk/FileViewList.vala:1264
 msgid "Original Location"
 msgstr "Originele locatie"
 
-#: Gtk/FileContextMenu.vala:393
+#: Gtk/FileContextMenu.vala:395
 msgid "Other"
 msgstr "Overig"
 
-#: Gtk/FileContextMenu.vala:502 Gtk/FilePermissionsBox.vala:130
+#: Gtk/FileContextMenu.vala:504 Gtk/FilePermissionsBox.vala:130
 msgid "Others"
 msgstr "Overigen"
 
-#: Gtk/FileViewList.vala:5778
+#: Gtk/FileViewList.vala:5792
 msgid "Outdated Plugin"
 msgstr "Verouderde plug-in"
 
@@ -3003,23 +3038,23 @@ msgstr "Verouderde plug-in"
 msgid "Overwrite existing file?"
 msgstr "Bestaand bestand overschrijven?"
 
-#: Gtk/FilePropertiesBox.vala:331 Gtk/FileViewList.vala:910
+#: Gtk/FilePropertiesBox.vala:338 Gtk/FileViewList.vala:920
 msgid "Owner"
 msgstr "Eigenaar"
 
-#: Gtk/FileContextMenu.vala:2161
+#: Gtk/FileContextMenu.vala:2191
 msgid "PDF"
 msgstr "PDF"
 
-#: Gtk/Settings.vala:2363
+#: Gtk/Settings.vala:2384
 msgid "PDF Actions"
 msgstr "PDF-acties"
 
-#: Gtk/FilePropertiesBox.vala:213 Gtk/FileViewList.vala:867
+#: Gtk/FilePropertiesBox.vala:215 Gtk/FileViewList.vala:877
 msgid "Packed"
 msgstr "Ingepakt"
 
-#: Gtk/Settings.vala:2140
+#: Gtk/Settings.vala:2161
 msgid "Padding"
 msgstr "Opvulling"
 
@@ -3027,13 +3062,13 @@ msgstr "Opvulling"
 msgid "Panes"
 msgstr "Panelen"
 
-#: Gtk/FilePropertiesWindow.vala:195 Gtk/Sidebar.vala:727
+#: Gtk/FilePropertiesWindow.vala:199 Gtk/Sidebar.vala:727
 #: Utility/Device.vala:2511
 #, c-format
 msgid "PartLabel"
 msgstr "Label"
 
-#: Gtk/FileViewList.vala:6037
+#: Gtk/FileViewList.vala:6051
 msgid "Partial extraction not supported for solid archives"
 msgstr "Gedeeltelijk uitpakken wordt niet ondersteund voor solide archieven"
 
@@ -3045,7 +3080,7 @@ msgstr ""
 msgid "Passes"
 msgstr "Passeringen"
 
-#: Gtk/ConnectServerWindow.vala:419
+#: Gtk/ConnectServerWindow.vala:418
 msgid "Password"
 msgstr "Wachtwoord"
 
@@ -3061,7 +3096,7 @@ msgstr "Wachtwoord is niet ingesteld voor versleuteld archief"
 msgid "Passwords do not match"
 msgstr "Wachtwoorden komen niet overeen"
 
-#: Gtk/MainMenubar.vala:603 Gtk/TermContextMenu.vala:140
+#: Gtk/MainMenubar.vala:604 Gtk/TermContextMenu.vala:140
 msgid "Paste"
 msgstr "Plakken"
 
@@ -3075,23 +3110,23 @@ msgstr ""
 "\n"
 "Items plakken in het actieve paneel"
 
-#: Gtk/FileContextMenu.vala:1321
+#: Gtk/FileContextMenu.vala:1323
 msgid "Paste Hardlinks"
 msgstr "Harde koppelingen plakken"
 
-#: Gtk/FileContextMenu.vala:906
+#: Gtk/FileContextMenu.vala:908
 msgid "Paste Here"
 msgstr "Hier plakken"
 
-#: Gtk/FileContextMenu.vala:876
+#: Gtk/FileContextMenu.vala:878
 msgid "Paste Into Folder"
 msgstr "In map plakken"
 
-#: Gtk/FileContextMenu.vala:1284
+#: Gtk/FileContextMenu.vala:1286
 msgid "Paste Symlinks"
 msgstr "Symlinks plakken"
 
-#: Gtk/FileContextMenu.vala:1303
+#: Gtk/FileContextMenu.vala:1305
 msgid "Paste Symlinks (relative)"
 msgstr "Symlinks plakken (relatief)"
 
@@ -3099,7 +3134,7 @@ msgstr "Symlinks plakken (relatief)"
 msgid "Paste clipboard contents"
 msgstr "Klembordinhoud plakken"
 
-#: Gtk/FileContextMenu.vala:1322
+#: Gtk/FileContextMenu.vala:1324
 msgid ""
 "Paste hard links to selected items in this directory.\n"
 "\n"
@@ -3112,15 +3147,15 @@ msgstr ""
 "schijf. Hierdoor kunnen de items zich bevinden in meerdere mappen zonder "
 "extra ruimte in beslag te nemen."
 
-#: Gtk/FileContextMenu.vala:907
+#: Gtk/FileContextMenu.vala:909
 msgid "Paste items in current directory"
 msgstr "Items plakken in huidige map"
 
-#: Gtk/FileContextMenu.vala:877
+#: Gtk/FileContextMenu.vala:879
 msgid "Paste items into selected directory"
 msgstr "Items plakken in geselecteerde map"
 
-#: Gtk/FileContextMenu.vala:1285
+#: Gtk/FileContextMenu.vala:1287
 msgid ""
 "Paste symbolic links to selected items in this directory. Absolute path will "
 "be used for symlink target."
@@ -3128,7 +3163,7 @@ msgstr ""
 "Symlinks plakken naar geselecteerde items in deze map. Het absolute pad zal "
 "worden gebruikt voor het symlinkdoel."
 
-#: Gtk/FileContextMenu.vala:1304
+#: Gtk/FileContextMenu.vala:1306
 msgid ""
 "Paste symbolic links to selected items in this directory. Relative paths "
 "will be used for symlink target.\n"
@@ -3159,18 +3194,18 @@ msgstr "Pad niet gevonden"
 msgid "Pathbar"
 msgstr "Locatiebalk"
 
-#: Gtk/FilePreviewBox.vala:421 Gtk/ProgressPanelArchiveTask.vala:460
+#: Gtk/FilePreviewBox.vala:425 Gtk/ProgressPanelArchiveTask.vala:460
 #: Gtk/ProgressPanelArchiveTask.vala:463 Gtk/ProgressPanelArchiveTask.vala:484
 #: Gtk/ProgressPanelArchiveTask.vala:485 Gtk/ProgressPanelArchiveTask.vala:630
 msgid "Pause"
 msgstr "Pauzeren"
 
-#: Gtk/Settings.vala:1249
+#: Gtk/Settings.vala:1270
 msgid "Performance"
 msgstr ""
 
-#: Gtk/FilePermissionsBox.vala:88 Gtk/FilePropertiesWindow.vala:327
-#: Gtk/FileViewList.vala:421 Gtk/FileViewList.vala:996
+#: Gtk/FilePermissionsBox.vala:88 Gtk/FilePropertiesWindow.vala:329
+#: Gtk/FileViewList.vala:423 Gtk/FileViewList.vala:1006
 #, c-format
 msgid "Permissions"
 msgstr "Rechten"
@@ -3179,23 +3214,23 @@ msgstr "Rechten"
 msgid "Pictures"
 msgstr "Afbeeldingen"
 
-#: Gtk/Settings.vala:998 Gtk/Sidebar.vala:334
+#: Gtk/Settings.vala:1019 Gtk/Sidebar.vala:334
 msgid "Places"
 msgstr "Locaties"
 
-#: Gtk/FilePreviewBox.vala:417
+#: Gtk/FilePreviewBox.vala:421
 msgid "Play"
 msgstr ""
 
-#: Common/Main.vala:516
+#: Common/Main.vala:521
 msgid "Please install required packages and try running again"
 msgstr "Installeer de vereiste pakketten en probeer het opnieuw"
 
-#: Gtk/MainMenubar.vala:1823
+#: Gtk/MainMenubar.vala:1955
 msgid "Polo will be restarted with a fresh session"
 msgstr "Polo zal opnieuw worden gestart met een gloednieuwe sessie"
 
-#: Gtk/ConnectServerWindow.vala:185
+#: Gtk/ConnectServerWindow.vala:184
 msgid "Port"
 msgstr "Poort"
 
@@ -3203,15 +3238,15 @@ msgstr "Poort"
 msgid "Position of fixed columns cannot be changed"
 msgstr "De positie van vastgezette kolommen kan niet worden gewijzigd"
 
-#: Gtk/MainMenubar.vala:873
+#: Gtk/MainMenubar.vala:874
 msgid "Preferences"
 msgstr "Voorkeuren"
 
 #: Gtk/ProgressPanelDeviceWriterTask.vala:90 Gtk/ProgressPanelFileTask.vala:95
 #: Gtk/ProgressPanelImageTask.vala:80 Gtk/ProgressPanelKvmTask.vala:106
 #: Gtk/ProgressPanelPdfTask.vala:80 Gtk/ProgressPanelVideoDownloadTask.vala:410
-#: Utility/FileTask.vala:242 Utility/FileTask.vala:902
-#: Utility/FileTask.vala:1028
+#: Utility/FileTask.vala:242 Utility/FileTask.vala:906
+#: Utility/FileTask.vala:1032
 msgid "Preparing..."
 msgstr "Bezig met voorbereiden..."
 
@@ -3224,13 +3259,13 @@ msgid "Processed:"
 msgstr "Verwerkt:"
 
 #: Gtk/DeviceContextMenu.vala:293 Gtk/DevicePopover.vala:641
-#: Gtk/FileContextMenu.vala:2735 Gtk/FilePropertiesWindow.vala:89
+#: Gtk/FileContextMenu.vala:2765 Gtk/FilePropertiesWindow.vala:87
 #: Gtk/FileViewToolbar.vala:448 Gtk/MiddleToolbar.vala:309
-#: Gtk/Settings.vala:496
+#: Gtk/Settings.vala:497
 msgid "Properties"
 msgstr "Eigenschappen"
 
-#: Gtk/FileContextMenu.vala:2240
+#: Gtk/FileContextMenu.vala:2270
 msgid "Protect the PDF document by adding password"
 msgstr "Beveilig het PDF-document door een wachtwoord toe te voegen"
 
@@ -3264,7 +3299,7 @@ msgstr "Drie panelen"
 msgid "Quad Pane"
 msgstr "Drie panelen"
 
-#: Gtk/Settings.vala:1583
+#: Gtk/Settings.vala:1604
 msgid ""
 "Query items in subfolders when a folder is loaded.\n"
 "\n"
@@ -3273,7 +3308,7 @@ msgid ""
 "Disabled - Folders display size of directory file in 'Size' column"
 msgstr ""
 
-#: Gtk/Settings.vala:1580
+#: Gtk/Settings.vala:1601
 msgid "Query subfolders"
 msgstr ""
 
@@ -3281,11 +3316,11 @@ msgstr ""
 msgid "Queued"
 msgstr "In wachtrij"
 
-#: Gtk/Settings.vala:2566
+#: Gtk/Settings.vala:2587
 msgid "RAM (MB)"
 msgstr "RAM (MB)"
 
-#: Gtk/FileViewList.vala:400
+#: Gtk/FileViewList.vala:402
 msgid "RWX = Read Write Execute"
 msgstr "RWX = Read (lezen) Write (schrijven) Execute (uitvoeren)"
 
@@ -3298,11 +3333,11 @@ msgstr "Ratio:"
 msgid "Raw Disk Image"
 msgstr "Schijfgebruik"
 
-#: Gtk/MainMenubar.vala:1484
+#: Gtk/MainMenubar.vala:1616
 msgid "Rclone Not Found"
 msgstr "Rclone kan niet worden gevonden"
 
-#: Gtk/MainMenubar.vala:1485
+#: Gtk/MainMenubar.vala:1617
 msgid ""
 "Rclone is needed for cloud storage support.\n"
 "\n"
@@ -3317,7 +3352,7 @@ msgstr ""
 msgid "Read"
 msgstr "Lezen"
 
-#: Gtk/FileViewList.vala:5206
+#: Gtk/FileViewList.vala:5220
 msgid ""
 "Read-only disks cannot be booted.\n"
 "\n"
@@ -3341,7 +3376,7 @@ msgstr ""
 "afgeleide schijf creëren uit dit bestand en daarvan opstarten i.p.v. deze "
 "schijf direct op te starten."
 
-#: Gtk/FilePropertiesWindow.vala:203 Gtk/Sidebar.vala:735
+#: Gtk/FilePropertiesWindow.vala:207 Gtk/Sidebar.vala:735
 #: Utility/Device.vala:2524
 #, c-format
 msgid "ReadOnly"
@@ -3351,15 +3386,15 @@ msgstr "Alleen-lezen"
 msgid "Reading"
 msgstr "Bezig met lezen"
 
-#: Gtk/MainMenubar.vala:1754
+#: Gtk/MainMenubar.vala:1886
 msgid "Rebuild font cache"
 msgstr "Lettertypecache herbouwen"
 
-#: Gtk/MainWindow.vala:1010
+#: Gtk/MainWindow.vala:1012
 msgid "Rebuilding Font Cache..."
 msgstr "Bezig met herbouwen van cache..."
 
-#: Gtk/MainMenubar.vala:1755
+#: Gtk/MainMenubar.vala:1887
 msgid ""
 "Rebuilds the system font cache, so that newly installed fonts become visible "
 "to applications"
@@ -3367,23 +3402,23 @@ msgstr ""
 "Herbouwt de systeem-lettertypecache zodat nieuw geïnstalleerde lettertypen "
 "zichtbaar worden voor applicaties"
 
-#: Gtk/FileContextMenu.vala:2525
+#: Gtk/FileContextMenu.vala:2555
 msgid "Reduce Color"
 msgstr "Kleur reduceren"
 
-#: Gtk/FileContextMenu.vala:2307 Gtk/Settings.vala:2681
+#: Gtk/FileContextMenu.vala:2337 Gtk/Settings.vala:2702
 msgid "Reduce File Size"
 msgstr "Bestandsgrootte beperken"
 
-#: Gtk/Settings.vala:2794
+#: Gtk/Settings.vala:2815
 msgid "Reduce JPEG"
 msgstr "JPEG reduceren"
 
-#: Gtk/FileContextMenu.vala:2491
+#: Gtk/FileContextMenu.vala:2521
 msgid "Reduce JPEG Quality"
 msgstr "JPEG-kwaliteit reduceren"
 
-#: Gtk/FileContextMenu.vala:2526
+#: Gtk/FileContextMenu.vala:2556
 msgid ""
 "Reduce color (less saturation). This can be used for correcting photos that "
 "are over-saturated (too much color)."
@@ -3391,13 +3426,13 @@ msgstr ""
 "Kleur reduceren (minder verzadiging). Dit kan worden gebruikt voor het "
 "corrigeren van overbelichte (teveel kleur) foto's."
 
-#: Gtk/FileContextMenu.vala:2492
+#: Gtk/FileContextMenu.vala:2522
 msgid "Reduce file size of JPEG images by reducing quality"
 msgstr ""
 "Bestandsgrootte van JPEG-afbeeldingen reduceren door de kwaliteit te "
 "verminderen"
 
-#: Gtk/FileContextMenu.vala:2475
+#: Gtk/FileContextMenu.vala:2505
 msgid ""
 "Reduce file size of PNG images without losing quality. PNG files will be re-"
 "packed using better compression algorithms."
@@ -3406,7 +3441,7 @@ msgstr ""
 "verminderen. PNG-bestanden worden opnieuw verpakt met betere compressie-"
 "algoritmen."
 
-#: Gtk/FileContextMenu.vala:2308
+#: Gtk/FileContextMenu.vala:2338
 msgid ""
 "Reduce the file size of PDF document by downscaling images. Use the "
 "'Optimize For' submenu for more options."
@@ -3419,7 +3454,7 @@ msgstr ""
 msgid "Reformat"
 msgstr "Formaat"
 
-#: Gtk/FileViewToolbar.vala:241 Gtk/MainMenubar.vala:915 Gtk/Settings.vala:445
+#: Gtk/FileViewToolbar.vala:241 Gtk/MainMenubar.vala:916 Gtk/Settings.vala:446
 msgid "Reload"
 msgstr "Herladen"
 
@@ -3431,28 +3466,28 @@ msgstr "Huidige locatie herladen"
 msgid "Remaining:"
 msgstr "Resterend:"
 
-#: Gtk/Settings.vala:1516
+#: Gtk/Settings.vala:1537
 msgid "Remember last session"
 msgstr "Laatste sessie onthouden"
 
-#: Gtk/ConnectServerWindow.vala:1123
+#: Gtk/ConnectServerWindow.vala:1122
 msgid "Remote config loaded"
 msgstr "Configuratie van op afstand is geladen"
 
-#: Gtk/ConnectServerWindow.vala:1092
+#: Gtk/ConnectServerWindow.vala:1091
 msgid "Remote config saved"
 msgstr "Configuratie van op afstand is opgeslagen"
 
-#: Gtk/FilePropertiesWindow.vala:205 Utility/Device.vala:2526
+#: Gtk/FilePropertiesWindow.vala:209 Utility/Device.vala:2526
 #, fuzzy, c-format
 msgid "Removable"
 msgstr "Verwijderen"
 
-#: Gtk/BookmarkContextMenu.vala:113
+#: Gtk/BookmarkContextMenu.vala:113 Gtk/MainMenubar.vala:1502
 msgid "Remove"
 msgstr "Verwijderen"
 
-#: Gtk/MainMenubar.vala:1501
+#: Gtk/MainMenubar.vala:1633
 msgid "Remove Account"
 msgstr "Account verwijderen"
 
@@ -3460,12 +3495,12 @@ msgstr "Account verwijderen"
 msgid "Remove Bookmark"
 msgstr "Bladwijzer verwijderen"
 
-#: Gtk/FileContextMenu.vala:2273 Gtk/FileContextMenu.vala:2508
-#: Gtk/Settings.vala:2850
+#: Gtk/FileContextMenu.vala:2303 Gtk/FileContextMenu.vala:2538
+#: Gtk/Settings.vala:2871
 msgid "Remove Color"
 msgstr "Kleur verwijderen"
 
-#: Gtk/FileContextMenu.vala:2256 Gtk/Settings.vala:2723
+#: Gtk/FileContextMenu.vala:2286 Gtk/Settings.vala:2744
 msgid "Remove Password"
 msgstr "Wachtwoord verwijderen"
 
@@ -3477,24 +3512,24 @@ msgstr "Bladwijzer verwijderen"
 msgid "Remove bookmark for this location"
 msgstr "Bladwijzer voor deze locatie verwijderen"
 
-#: Gtk/Settings.vala:2737
+#: Gtk/Settings.vala:2758
 msgid "Remove color"
 msgstr "Kleur verwijderen"
 
-#: Gtk/FileContextMenu.vala:2274
+#: Gtk/FileContextMenu.vala:2304
 msgid "Remove colors from PDF document"
 msgstr "Kleuren uit dit PDF-document verwijderen"
 
-#: Utility/FileTask.vala:1174
+#: Utility/FileTask.vala:1178
 msgid "Removing items..."
 msgstr "Bezig met verwijderen van items..."
 
-#: Gtk/BookmarkContextMenu.vala:89 Gtk/FileContextMenu.vala:941
-#: Gtk/FileViewList.vala:4555 Gtk/MainMenubar.vala:740 Gtk/Sidebar.vala:1182
+#: Gtk/BookmarkContextMenu.vala:89 Gtk/FileContextMenu.vala:943
+#: Gtk/FileViewList.vala:4564 Gtk/MainMenubar.vala:741 Gtk/Sidebar.vala:1182
 msgid "Rename"
 msgstr "Naam wijzigen"
 
-#: Gtk/FileContextMenu.vala:942 Gtk/MiddleToolbar.vala:211
+#: Gtk/FileContextMenu.vala:944 Gtk/MiddleToolbar.vala:211
 msgid "Rename selected item"
 msgstr "Geselecteerd item hernoemen"
 
@@ -3518,7 +3553,7 @@ msgstr "Bestaande bestanden vervangen?"
 msgid "Replace Older"
 msgstr "Oudere hervangen"
 
-#: Gtk/Settings.vala:2358
+#: Gtk/Settings.vala:2379
 #, fuzzy
 msgid "Replace Original Files?"
 msgstr "Originele bestanden vervangen?"
@@ -3539,7 +3574,7 @@ msgstr "Geselecteerde bestanden vervangen"
 msgid "Replaced"
 msgstr "Vervangen"
 
-#: Gtk/FileViewList.vala:4421
+#: Gtk/FileViewList.vala:4430
 msgid "Requested operation is not possible"
 msgstr "De gevraagde operatie is niet mogelijk"
 
@@ -3547,17 +3582,17 @@ msgstr "De gevraagde operatie is niet mogelijk"
 msgid "Required for"
 msgstr "Vereist voor"
 
-#: Gtk/Settings.vala:314 Gtk/Settings.vala:980
+#: Gtk/Settings.vala:315 Gtk/Settings.vala:1001
 msgid "Requires theme support. Use the 'darker' variant of Gtk theme."
 msgstr ""
 "Vereist thema-ondersteuning. Gebruik de 'donkere' variant van het GTK-thema."
 
-#: Gtk/ColumnSelectionBox.vala:181 Gtk/Settings.vala:1792
-#: Gtk/Settings.vala:1976 Gtk/Settings.vala:2179 Gtk/TermContextMenu.vala:369
+#: Gtk/ColumnSelectionBox.vala:181 Gtk/Settings.vala:1813
+#: Gtk/Settings.vala:1997 Gtk/Settings.vala:2200 Gtk/TermContextMenu.vala:369
 msgid "Reset"
 msgstr "Herstellen"
 
-#: Gtk/FileViewTab.vala:277
+#: Gtk/FileViewTab.vala:279
 msgid "Reset Name"
 msgstr "Tabbladnaam herstellen"
 
@@ -3565,7 +3600,7 @@ msgstr "Tabbladnaam herstellen"
 msgid "Reset and clear"
 msgstr "Herstellen en wissen"
 
-#: Gtk/MainMenubar.vala:1822
+#: Gtk/MainMenubar.vala:1954
 msgid "Reset session and restart"
 msgstr "Sessie herstellen en opnieuw starten"
 
@@ -3573,11 +3608,11 @@ msgstr "Sessie herstellen en opnieuw starten"
 msgid "Reset to default columns"
 msgstr "Herstellen naar standaard kolommen"
 
-#: Gtk/Settings.vala:2808
+#: Gtk/Settings.vala:2829
 msgid "Resize"
 msgstr "Vergroten/verkleinen"
 
-#: Gtk/FileContextMenu.vala:2603
+#: Gtk/FileContextMenu.vala:2633
 msgid "Resize to"
 msgstr "Vergroten/verkleinen naar"
 
@@ -3590,11 +3625,11 @@ msgstr ""
 msgid "Resolving conflicts..."
 msgstr "Bezig met oplossen van conflicten..."
 
-#: Gtk/Settings.vala:665
+#: Gtk/Settings.vala:666
 msgid "Restart Application ?"
 msgstr "Applicatie opnieuw starten?"
 
-#: Gtk/DevicePopover.vala:575 Gtk/FileContextMenu.vala:1432
+#: Gtk/DevicePopover.vala:575 Gtk/FileContextMenu.vala:1434
 #: Gtk/TrashBar.vala:134
 msgid "Restore"
 msgstr "Terugzetten"
@@ -3609,7 +3644,7 @@ msgstr "Flashen voltooid"
 msgid "Restore device?"
 msgstr "Terugzetten"
 
-#: Gtk/FileContextMenu.vala:1433
+#: Gtk/FileContextMenu.vala:1435
 msgid "Restore item to the original location"
 msgstr "Item terugzetten naar originele locatie"
 
@@ -3621,7 +3656,7 @@ msgstr "Geselecteerde items terugzetten naar originele locaties"
 msgid "Restoring device from disk image..."
 msgstr ""
 
-#: Gtk/MainWindow.vala:1219
+#: Gtk/MainWindow.vala:1266
 msgid "Restoring session..."
 msgstr "Bezig met herstellen van sessie..."
 
@@ -3638,28 +3673,28 @@ msgstr "Hervatten"
 msgid "Revision"
 msgstr "Revisie"
 
-#: Gtk/FileContextMenu.vala:2363 Gtk/FileContextMenu.vala:2642
-#: Gtk/Settings.vala:2751 Gtk/Settings.vala:2822
+#: Gtk/FileContextMenu.vala:2393 Gtk/FileContextMenu.vala:2672
+#: Gtk/Settings.vala:2772 Gtk/Settings.vala:2843
 msgid "Rotate"
 msgstr "Draaien"
 
-#: Gtk/Settings.vala:1754 Gtk/Settings.vala:1904 Gtk/Settings.vala:2105
+#: Gtk/Settings.vala:1775 Gtk/Settings.vala:1925 Gtk/Settings.vala:2126
 msgid "Row spacing"
 msgstr "Rijruimte"
 
-#: Gtk/FileContextMenu.vala:1014
+#: Gtk/FileContextMenu.vala:1016
 msgid "Run in Terminal"
 msgstr "Uitvoeren in terminal"
 
-#: Gtk/FileContextMenu.vala:1015
+#: Gtk/FileContextMenu.vala:1017
 msgid "Run the selected script in a terminal window"
 msgstr "Geselecteerd script uitvoeren in een terminalvenster"
 
-#: Gtk/MainWindow.vala:1030
+#: Gtk/MainWindow.vala:1032 Gtk/MainWindow.vala:1050
 msgid "Running Rclone Installation Script"
 msgstr "Bezig met uitvoeren van Rclone-installatiescript"
 
-#: Gtk/MainWindow.vala:1038
+#: Gtk/MainWindow.vala:1040
 msgid "Running p7zip Installation Script"
 msgstr "Bezig met uitvoeren van p7zip-installatiescript"
 
@@ -3673,12 +3708,21 @@ msgid "SYMLINK"
 msgstr ""
 
 #: Gtk/ChecksumBox.vala:252 Gtk/ChecksumBox.vala:255 Gtk/ChecksumBox.vala:299
+#: Gtk/MainMenubar.vala:1480
 msgid "Save"
 msgstr ""
 
 #: Gtk/ChecksumBox.vala:1094 Gtk/ChecksumBox.vala:1501
 #: Gtk/DevicePopover.vala:1068
 msgid "Save As"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:1491
+msgid "Save As..."
+msgstr ""
+
+#: Gtk/MainWindow.vala:1471
+msgid "Save Workspace"
 msgstr ""
 
 #: Gtk/ChecksumBox.vala:1199 Gtk/ChecksumBox.vala:1615
@@ -3698,15 +3742,20 @@ msgstr ""
 msgid "Saving results..."
 msgstr "Bezig met verplaatsen..."
 
-#: Gtk/FileContextMenu.vala:1776 Gtk/Settings.vala:2604
+#: Gtk/FileContextMenu.vala:1805 Gtk/Settings.vala:2625
 msgid "Scan for Malware"
 msgstr ""
 
-#: Gtk/SelectionBar.vala:148
+#: Gtk/ClamScanBox.vala:574
+#, fuzzy
+msgid "Scanning files..."
+msgstr "Bezig met herstellen van items..."
+
+#: Gtk/SelectionBar.vala:179
 msgid "Select"
 msgstr "Selecteren"
 
-#: Gtk/FileConflictDialog.vala:257 Gtk/MainMenubar.vala:783
+#: Gtk/FileConflictDialog.vala:257 Gtk/MainMenubar.vala:784
 msgid "Select All"
 msgstr "Alles selecteren"
 
@@ -3718,11 +3767,11 @@ msgstr "Selecteer archieflocatie"
 msgid "Select Columns"
 msgstr "Selecteer kolommen"
 
-#: Gtk/FileViewList.vala:4315
+#: Gtk/FileViewList.vala:4324
 msgid "Select Copy Destination"
 msgstr "Selecteer kopieerbestemming"
 
-#: Gtk/FileViewList.vala:5981
+#: Gtk/FileViewList.vala:5995
 msgid "Select Destination"
 msgstr "Selecteer bestemming"
 
@@ -3731,7 +3780,7 @@ msgstr "Selecteer bestemming"
 msgid "Select Disk Image"
 msgstr "Schijfgebruik"
 
-#: Utility/Gtk/GtkHelper.vala:748
+#: Utility/Gtk/GtkHelper.vala:747
 msgid "Select File(s)"
 msgstr "Selecteer bestand(en)"
 
@@ -3739,7 +3788,7 @@ msgstr "Selecteer bestand(en)"
 msgid "Select Files to Replace"
 msgstr "Selecteer te vervangen bestanden:"
 
-#: Utility/Gtk/GtkHelper.vala:752
+#: Utility/Gtk/GtkHelper.vala:751
 msgid "Select Folder(s)"
 msgstr "Selecteer map(pen)"
 
@@ -3751,7 +3800,7 @@ msgstr "Selecteer lettertype"
 msgid "Select Format"
 msgstr "Selecteer formaat"
 
-#: Gtk/FileViewList.vala:5234
+#: Gtk/FileViewList.vala:5248
 msgid "Select ISO File"
 msgstr "Selecteer ISO-bestand"
 
@@ -3763,11 +3812,11 @@ msgstr "Selecteer indelingsstijl"
 msgid "Select ListView Columns"
 msgstr "Selecteer lijstweergave-kolommen"
 
-#: Gtk/FileViewList.vala:4315
+#: Gtk/FileViewList.vala:4324
 msgid "Select Move Destination"
 msgstr "Selecteer verplaatsbestemming"
 
-#: Gtk/FileConflictDialog.vala:263 Gtk/MainMenubar.vala:828
+#: Gtk/FileConflictDialog.vala:263 Gtk/MainMenubar.vala:829
 msgid "Select None"
 msgstr "Selecteer niks"
 
@@ -3775,11 +3824,11 @@ msgstr "Selecteer niks"
 msgid "Select Older"
 msgstr "Selecteer oudere"
 
-#: Utility/Gtk/GtkHelper.vala:929
+#: Utility/Gtk/GtkHelper.vala:928
 msgid "Select Path"
 msgstr "Selecteer pad"
 
-#: Gtk/FileContextMenu.vala:1135
+#: Gtk/FileContextMenu.vala:1137
 msgid "Select Second File..."
 msgstr "Selecteer ISO-bestand"
 
@@ -3792,7 +3841,7 @@ msgstr "Selecteer alle bestanden in de lijst"
 msgid "Select file to view properties"
 msgstr "Bestandseigenschappen weergeven"
 
-#: Gtk/MainMenubar.vala:1810
+#: Gtk/MainMenubar.vala:1942
 msgid "Select layout and style"
 msgstr "Selecteer indeling en stijl"
 
@@ -3800,7 +3849,7 @@ msgstr "Selecteer indeling en stijl"
 msgid "Select older files in list"
 msgstr "Selecteer oudere bestanden in de lijst"
 
-#: Gtk/FileContextMenu.vala:1136
+#: Gtk/FileContextMenu.vala:1138
 msgid "Select second file for compare"
 msgstr "Selecteer te verplaatsen item"
 
@@ -3808,21 +3857,21 @@ msgstr "Selecteer te verplaatsen item"
 msgid "Select single item to move"
 msgstr "Selecteer te verplaatsen item"
 
-#: Gtk/FileViewList.vala:5563
+#: Gtk/FileViewList.vala:5577
 msgid "Select the JPEG image files to convert"
 msgstr "Selecteer de te converteren JPEG-bestanden"
 
-#: Gtk/FileViewList.vala:5541
+#: Gtk/FileViewList.vala:5555
 msgid "Select the PNG image files to convert"
 msgstr "Selecteer de te converteren PNG-bestanden"
 
-#: Gtk/FileViewList.vala:5583 Gtk/FileViewList.vala:5603
-#: Gtk/FileViewList.vala:5623 Gtk/FileViewList.vala:5643
-#: Gtk/FileViewList.vala:5663 Gtk/FileViewList.vala:5683
+#: Gtk/FileViewList.vala:5597 Gtk/FileViewList.vala:5617
+#: Gtk/FileViewList.vala:5637 Gtk/FileViewList.vala:5657
+#: Gtk/FileViewList.vala:5677 Gtk/FileViewList.vala:5697
 msgid "Select the image files to convert"
 msgstr "Selecteer de te converteren afbeeldingsbestanden"
 
-#: Gtk/FileViewList.vala:5040 Gtk/FileViewList.vala:5047
+#: Gtk/FileViewList.vala:5054 Gtk/FileViewList.vala:5061
 #, c-format
 msgid "Selected item is not a text file"
 msgstr "Selecteer te vervangen bestanden:"
@@ -3832,78 +3881,78 @@ msgstr "Selecteer te vervangen bestanden:"
 msgid "Serial"
 msgstr "Serieel"
 
-#: Gtk/ConnectServerWindow.vala:157
+#: Gtk/ConnectServerWindow.vala:156
 msgid "Server"
 msgstr "Server"
 
-#: Gtk/Settings.vala:1234
+#: Gtk/Settings.vala:1255
 msgid "Session & Startup"
 msgstr "Sessie & Opstarten"
 
-#: Gtk/FileContextMenu.vala:447
+#: Gtk/FileContextMenu.vala:449
 msgid "Set Default"
 msgstr "Als standaard instellen"
 
-#: Gtk/FileContextMenu.vala:477
+#: Gtk/FileContextMenu.vala:479
 msgid "Set as Default and Open With"
 msgstr "Als standaard en openen met instellen"
 
-#: Gtk/FileContextMenu.vala:2455
+#: Gtk/FileContextMenu.vala:2485
 msgid "Set as Wallpaper"
 msgstr "Instellen als achtergrond"
 
-#: Gtk/FileContextMenu.vala:448 Gtk/FileContextMenu.vala:503
+#: Gtk/FileContextMenu.vala:450 Gtk/FileContextMenu.vala:505
 msgid "Set default application for file type"
 msgstr "Instellen als standaard applicatie voor bestandstype"
 
-#: Gtk/Settings.vala:1793 Gtk/Settings.vala:1977 Gtk/Settings.vala:2180
+#: Gtk/Settings.vala:1814 Gtk/Settings.vala:1998 Gtk/Settings.vala:2201
 msgid "Set default values"
 msgstr "Standaardwaarden instellen"
 
-#: Gtk/FileContextMenu.vala:2456
+#: Gtk/FileContextMenu.vala:2486
 msgid "Set the image as wallpaper"
 msgstr "Afbeelding instellen als bureaubladachtergrond"
 
-#: Gtk/Settings.vala:1411
+#: Gtk/Settings.vala:1432
 msgid "Sets the default application for opening folders"
 msgstr "Stelt de standaard applicatie in voor het openen van mappen"
 
-#: Gtk/DevicePopoverSettingsWindow.vala:62 Gtk/FileViewToolbar.vala:478
-#: Gtk/SettingsWindow.vala:49 Gtk/TermContextMenu.vala:222
+#: Gtk/FileViewToolbar.vala:478 Gtk/SettingsWindow.vala:49
+#: Gtk/TermContextMenu.vala:222
 msgid "Settings"
 msgstr "Instellingen"
 
-#: Gtk/ConnectServerWindow.vala:290
+#: Gtk/ConnectServerWindow.vala:289
 msgid "Share"
 msgstr "Delen"
 
-#: Gtk/ConnectServerWindow.vala:967
+#: Gtk/ConnectServerWindow.vala:966
 msgid "Share Name Not Specified"
 msgstr "Deel-naam is niet opgegeven"
 
-#: Gtk/FileViewList.vala:3376
+#: Gtk/FileViewList.vala:3385
 msgid "Shortcut: [Super] + N"
 msgstr "Snelkoppeling: [Super] + N"
 
 #: Gtk/CreateArchiveWindow.vala:1725 Gtk/CreateArchiveWindow.vala:1805
 #: Gtk/PasswordDialog.vala:110 Gtk/PasswordDialog.vala:202
-#: Gtk/Settings.vala:277 Gtk/Settings.vala:960
+#: Gtk/Settings.vala:278 Gtk/Settings.vala:981
 msgid "Show"
 msgstr "Weergeven"
 
-#: Gtk/Settings.vala:1017
+#: Gtk/Settings.vala:1038
 msgid "Show 'Bookmarks' section in sidebar"
 msgstr "'Bladwijzers'-sectie weergeven in zijbalk"
 
-#: Gtk/Settings.vala:1035
+#: Gtk/Settings.vala:1056
 msgid "Show 'Devices' section in sidebar"
 msgstr "'Apparaten'-sectie weergeven in zijbalk"
 
-#: Gtk/Settings.vala:999
+#: Gtk/Settings.vala:1020
 msgid "Show 'Places' section in sidebar"
 msgstr "'Locaties'-sectie weergeven in zijbalk"
 
-#: Gtk/Settings.vala:1053
+#: Gtk/Settings.vala:1074
 msgid "Show Action button for sidebar items"
 msgstr "Actieknop weergeven op zijbalkitems"
 
@@ -3912,7 +3961,7 @@ msgstr "Actieknop weergeven op zijbalkitems"
 msgid "Show Folders"
 msgstr "Labels weergeven"
 
-#: Gtk/MainMenubar.vala:959 Gtk/ViewPopover.vala:279
+#: Gtk/MainMenubar.vala:960 Gtk/ViewPopover.vala:279
 msgid "Show Hidden"
 msgstr "Verborgen weergeven"
 
@@ -3925,25 +3974,25 @@ msgstr "Lijst van bestanden weergeven"
 msgid "Show Sidebar"
 msgstr "Zijbalk weergeven"
 
-#: Gtk/DevicePopoverSettingsWindow.vala:145
+#: Gtk/DevicePopoverSettingsWindow.vala:147
 #, fuzzy
 msgid "Show column headers"
 msgstr "Labels weergeven"
 
-#: Gtk/DevicePopoverSettingsWindow.vala:115
+#: Gtk/DevicePopoverSettingsWindow.vala:117
 msgid "Show column: File System"
 msgstr ""
 
-#: Gtk/DevicePopoverSettingsWindow.vala:130
+#: Gtk/DevicePopoverSettingsWindow.vala:132
 #, fuzzy
 msgid "Show column: Mount Path"
 msgstr "Aankoppelen"
 
-#: Gtk/DevicePopoverSettingsWindow.vala:100
+#: Gtk/DevicePopoverSettingsWindow.vala:102
 msgid "Show column: Size"
 msgstr ""
 
-#: Gtk/Settings.vala:600
+#: Gtk/Settings.vala:601
 msgid ""
 "Show combined HeaderBar instead of Toolbar and Pathbars [Restart Required]"
 msgstr ""
@@ -3958,51 +4007,51 @@ msgstr "Bestandseigenschappen weergeven"
 msgid "Show hidden items"
 msgstr "Verborgen bestanden weergeven"
 
-#: Gtk/Settings.vala:2338
+#: Gtk/Settings.vala:2359
 #, fuzzy
 msgid "Show in Context Menu?"
 msgstr "KVM weergeven in rechtermuisknopmenu"
 
-#: Gtk/Settings.vala:350
+#: Gtk/Settings.vala:351
 msgid "Show labels"
 msgstr "Labels weergeven"
 
-#: Gtk/Settings.vala:371
+#: Gtk/Settings.vala:372
 msgid "Show labels beside icons"
 msgstr "Labels weergeven naast pictogrammen"
 
-#: Gtk/Settings.vala:351
+#: Gtk/Settings.vala:352
 msgid "Show labels for toolbar items"
 msgstr "Labels weergeven voor werkbalkitems"
 
-#: Gtk/Settings.vala:644
+#: Gtk/Settings.vala:645
 #, fuzzy
 msgid "Show pathbar"
 msgstr "Werkbalk weergeven"
 
-#: Gtk/Settings.vala:643
+#: Gtk/Settings.vala:644
 #, fuzzy
 msgid "Show pathbars"
 msgstr "Werkbalk weergeven"
 
-#: Gtk/Settings.vala:680
+#: Gtk/Settings.vala:681
 msgid "Show single pathbar for active pane"
 msgstr "Eén locatiebalk weergeven voor actief paneel"
 
-#: Gtk/Settings.vala:1072
+#: Gtk/Settings.vala:1093
 msgid "Show single statusbar for active pane"
 msgstr "Eén statusbalk weergeven voor actief paneel"
 
-#: Gtk/DevicePopoverSettingsWindow.vala:160
+#: Gtk/DevicePopoverSettingsWindow.vala:162
 #, fuzzy
 msgid "Show snap volumes"
 msgstr "Labels weergeven"
 
-#: Gtk/Settings.vala:1111
+#: Gtk/Settings.vala:1132
 msgid "Show tab close button (requires application restart)"
 msgstr "Sluitknoppen weergeven op tabbladen (herstart vereist)"
 
-#: Gtk/Settings.vala:1091
+#: Gtk/Settings.vala:1112
 msgid "Show tabs at the bottom of the window"
 msgstr "Tabbladen weergeven aan onderkant van venster"
 
@@ -4010,15 +4059,15 @@ msgstr "Tabbladen weergeven aan onderkant van venster"
 msgid "Show the list of files"
 msgstr "Lijst van bestanden weergeven"
 
-#: Gtk/Settings.vala:961
+#: Gtk/Settings.vala:982
 msgid "Show the sidebar panel"
 msgstr "Zijbalkpaneel weergeven"
 
-#: Gtk/Settings.vala:278
+#: Gtk/Settings.vala:279
 msgid "Show the toolbar"
 msgstr "Werkbalk weergeven"
 
-#: Gtk/Settings.vala:1835 Gtk/Settings.vala:2021 Gtk/Settings.vala:2222
+#: Gtk/Settings.vala:1856 Gtk/Settings.vala:2042 Gtk/Settings.vala:2243
 msgid ""
 "Show thumbnail previews in place of icons.\n"
 "\n"
@@ -4028,7 +4077,7 @@ msgstr ""
 "\n"
 "Schakel dit uit om mappen sneller te laden."
 
-#: Gtk/Settings.vala:628
+#: Gtk/Settings.vala:629
 msgid "Show window buttons on the left side [Restart Required]"
 msgstr "Vensterknoppen aan de linkerkant weergeven [herstart vereist]"
 
@@ -4040,6 +4089,10 @@ msgstr ""
 msgid "Sidebar"
 msgstr "Zijbalk"
 
+#: Gtk/ClamScanBox.vala:382
+msgid "Signature"
+msgstr ""
+
 #: Gtk/ViewPopover.vala:211
 msgid "Single"
 msgstr "Eén"
@@ -4048,15 +4101,16 @@ msgstr "Eén"
 msgid "Single Pane"
 msgstr "Eén paneel"
 
-#: Gtk/Settings.vala:1499
+#: Gtk/Settings.vala:1520
 msgid "Single window mode"
 msgstr "Eén venster-modus"
 
-#: Gtk/DevicePopover.vala:253 Gtk/FileConflictDialog.vala:542
-#: Gtk/FileConflictDialog.vala:554 Gtk/FilePropertiesBox.vala:149
-#: Gtk/FilePropertiesWindow.vala:214 Gtk/FileViewList.vala:768
-#: Gtk/Sidebar.vala:1290 Gtk/Statusbar.vala:359 Utility/Device.vala:2551
-#: Utility/FileItem.vala:653 Utility/VideoDownloadTask.vala:319
+#: Gtk/ClamScanBox.vala:418 Gtk/DevicePopover.vala:253
+#: Gtk/FileConflictDialog.vala:542 Gtk/FileConflictDialog.vala:554
+#: Gtk/FilePropertiesBox.vala:151 Gtk/FilePropertiesWindow.vala:218
+#: Gtk/FileViewList.vala:778 Gtk/Sidebar.vala:1290 Gtk/Statusbar.vala:359
+#: Utility/Device.vala:2551 Utility/FileItem.vala:728
+#: Utility/VideoDownloadTask.vala:319
 #, c-format
 msgid "Size"
 msgstr "Grootte"
@@ -4073,11 +4127,11 @@ msgstr "Alles overslaan"
 msgid "Skip existing files"
 msgstr "Bestaande bestanden overslaan"
 
-#: Gtk/FilePropertiesBox.vala:195
+#: Gtk/FilePropertiesBox.vala:197
 msgid "Solid"
 msgstr "Solide"
 
-#: Gtk/FileContextMenu.vala:2719 Gtk/MainMenubar.vala:1198
+#: Gtk/FileContextMenu.vala:2749 Gtk/MainMenubar.vala:1199
 #: Gtk/ViewPopover.vala:354
 msgid "Sort By"
 msgstr "Sorteren op"
@@ -4090,7 +4144,7 @@ msgstr "Aflopend sorteren"
 msgid "Source"
 msgstr "Bron"
 
-#: Gtk/FileViewList.vala:4420 Gtk/FileViewList.vala:4426
+#: Gtk/FileViewList.vala:4429 Gtk/FileViewList.vala:4435
 msgid "Source and destination are same"
 msgstr "Bron en bestemming zijn hetzelfde"
 
@@ -4103,11 +4157,11 @@ msgstr "Speciale snufjes"
 msgid "Speed:"
 msgstr "Snelheid:"
 
-#: Gtk/FileContextMenu.vala:2205 Gtk/Settings.vala:2653
+#: Gtk/FileContextMenu.vala:2235 Gtk/Settings.vala:2674
 msgid "Split"
 msgstr "Splitsen"
 
-#: Gtk/FileContextMenu.vala:2206
+#: Gtk/FileContextMenu.vala:2236
 msgid "Split PDF document by page"
 msgstr "PDF-document splitsen per pagina"
 
@@ -4135,7 +4189,7 @@ msgstr "Statusbalk"
 msgid "Stop"
 msgstr "Stoppen"
 
-#: Utility/TeeJee.Process.vala:629
+#: Utility/TeeJee.Process.vala:630
 msgid "Stopped"
 msgstr "Gestopt"
 
@@ -4143,7 +4197,7 @@ msgstr "Gestopt"
 msgid "Store"
 msgstr "Opslaan"
 
-#: Gtk/Settings.vala:702
+#: Gtk/Settings.vala:703
 msgid "Style"
 msgstr "Stijl"
 
@@ -4151,19 +4205,19 @@ msgstr "Stijl"
 msgid "Style Wizard"
 msgstr "Stijlwizard"
 
-#: Gtk/MainMenubar.vala:1809
+#: Gtk/MainMenubar.vala:1941
 msgid "Style wizard"
 msgstr "Stijlwizard"
 
-#: Gtk/Settings.vala:899
+#: Gtk/Settings.vala:920
 msgid "Swap"
 msgstr "Omwisselen"
 
-#: Gtk/MiddleToolbar.vala:391 Gtk/Pathbar.vala:952
+#: Gtk/MiddleToolbar.vala:391 Gtk/Pathbar.vala:964
 msgid "Swap directory path with opposite pane"
 msgstr "Mappad omwisselen met tegenovergestelde paneel"
 
-#: Gtk/FileViewList.vala:1211
+#: Gtk/FileViewList.vala:1221
 msgid "Symlink Target"
 msgstr "Symlink-doel"
 
@@ -4173,7 +4227,7 @@ msgstr "Syntax"
 
 #: Gtk/DeviceContextMenu.vala:370 Gtk/DeviceContextMenu.vala:401
 #: Gtk/DeviceContextMenu.vala:506 Gtk/DiskFormatContextMenu.vala:94
-#: Gtk/Pathbar.vala:1003
+#: Gtk/Pathbar.vala:1014
 #, fuzzy
 msgid "System Device"
 msgstr "Versleuteld apparaat"
@@ -4185,13 +4239,13 @@ msgid "System devices cannot be changed while system is running"
 msgstr ""
 "De indeling kan niet worden gewijzigd zolang er bestandsoperaties bezig zijn"
 
-#: Gtk/Pathbar.vala:1004
+#: Gtk/Pathbar.vala:1015
 #, fuzzy
 msgid "System devices cannot be ejected while system is running"
 msgstr ""
 "De indeling kan niet worden gewijzigd zolang er bestandsoperaties bezig zijn"
 
-#: Gtk/FileContextMenu.vala:695
+#: Gtk/FileContextMenu.vala:697
 msgid "Tab"
 msgstr "Tabblad"
 
@@ -4199,21 +4253,21 @@ msgstr "Tabblad"
 msgid "Tabs"
 msgstr "Tabbladen"
 
-#: Gtk/Settings.vala:1090
+#: Gtk/Settings.vala:1111
 msgid "Tabs at bottom"
 msgstr "Tabbladen onderaan"
 
-#: Gtk/FilePropertiesBox.vala:133
+#: Gtk/FilePropertiesBox.vala:135
 #, fuzzy
 msgid "Target"
 msgstr "Linkdoel"
 
-#: Gtk/FileContextMenu.vala:676 Gtk/FileViewToolbar.vala:428
-#: Gtk/Settings.vala:479 Gtk/Settings.vala:1346
+#: Gtk/FileContextMenu.vala:678 Gtk/FileViewToolbar.vala:428
+#: Gtk/Settings.vala:480 Gtk/Settings.vala:1367
 msgid "Terminal"
 msgstr "Terminal"
 
-#: Gtk/Settings.vala:1356
+#: Gtk/Settings.vala:1377
 msgid "Terminal emulator to use for terminal panes"
 msgstr "Te gebruiken terminal-emulator voor terminalpanelen"
 
@@ -4221,7 +4275,7 @@ msgstr "Te gebruiken terminal-emulator voor terminalpanelen"
 msgid "Testing"
 msgstr "Bezig met testen"
 
-#: Gtk/FileViewList.vala:6143
+#: Gtk/FileViewList.vala:6157
 msgid "There are no files selected for compression"
 msgstr "Er zijn geen bestanden geselecteerd om te comprimeren"
 
@@ -4233,7 +4287,7 @@ msgstr "Er zijn fouten opgetreden tijdens het verwerken van het archief."
 msgid "There were some errors:"
 msgstr "Er zijn fouten opgetreden:"
 
-#: Gtk/Settings.vala:1150
+#: Gtk/Settings.vala:1171
 msgid ""
 "This application is designed for the Arc GTK theme. It may not look right "
 "with other themes."
@@ -4241,15 +4295,15 @@ msgstr ""
 "Deze applicatie is ontworpen voor het Arc GTK-thema; met andere thema's kan "
 "de app er minder goed uitzien."
 
-#: Gtk/Settings.vala:1832 Gtk/Settings.vala:2018 Gtk/Settings.vala:2219
+#: Gtk/Settings.vala:1853 Gtk/Settings.vala:2039 Gtk/Settings.vala:2240
 msgid "Thumbnails"
 msgstr "Miniatuurvoorbeelden"
 
-#: Gtk/Settings.vala:1643
+#: Gtk/Settings.vala:1664
 msgid "Tile View"
 msgstr "Tegelweergave"
 
-#: Gtk/FileViewToolbar.vala:405 Gtk/Settings.vala:1311 Gtk/ViewPopover.vala:141
+#: Gtk/FileViewToolbar.vala:405 Gtk/Settings.vala:1332 Gtk/ViewPopover.vala:141
 msgid "Tiles"
 msgstr "Tegels"
 
@@ -4257,7 +4311,7 @@ msgstr "Tegels"
 msgid "Title"
 msgstr "Titel"
 
-#: Gtk/FileContextMenu.vala:1116
+#: Gtk/FileContextMenu.vala:1118
 #, c-format
 msgid "To '%s' in Opposite Pane"
 msgstr ""
@@ -4270,7 +4324,7 @@ msgstr "Middelste werkbalk weergeven/verbergen"
 msgid "Toggle Sidebar"
 msgstr "Zijbalk weergeven/verbergen"
 
-#: Gtk/MainMenubar.vala:390
+#: Gtk/MainMenubar.vala:391
 msgid "Toggle Terminal Pane"
 msgstr "Terminalpaneel weergeven/verbergen"
 
@@ -4288,7 +4342,7 @@ msgstr "Terminalpaneel weergeven/verbergen"
 msgid "Toolbar"
 msgstr "Werkbalk"
 
-#: Gtk/MainMenubar.vala:1688
+#: Gtk/MainMenubar.vala:1820
 msgid "Tools"
 msgstr "Hulpmiddelen"
 
@@ -4308,12 +4362,12 @@ msgstr "Recursief aanraken (symlinks volgen)"
 msgid "Translations"
 msgstr "Vertalingen"
 
-#: Gtk/Settings.vala:1847 Gtk/Settings.vala:2033 Gtk/Settings.vala:2234
+#: Gtk/Settings.vala:1868 Gtk/Settings.vala:2054 Gtk/Settings.vala:2255
 msgid "Transparency"
 msgstr "Doorzichtigheid"
 
-#: Gtk/FileContextMenu.vala:963 Gtk/FileViewPane.vala:153
-#: Gtk/MainMenubar.vala:646 Gtk/PlacesPopover.vala:646 Gtk/Sidebar.vala:348
+#: Gtk/FileContextMenu.vala:965 Gtk/FileViewPane.vala:156
+#: Gtk/MainMenubar.vala:647 Gtk/PlacesPopover.vala:646 Gtk/Sidebar.vala:348
 msgid "Trash"
 msgstr "Naar prullenbak"
 
@@ -4327,11 +4381,11 @@ msgstr ""
 "\n"
 "Bestanden verplaatsen naar prullenbak"
 
-#: Gtk/FileViewList.vala:4439
+#: Gtk/FileViewList.vala:4448
 msgid "Trash selected items?"
 msgstr "Geselecteerde items verplaatsen naar prullenbak?"
 
-#: Gtk/FileViewList.vala:1297
+#: Gtk/FileViewList.vala:1307
 msgid "Trashed On"
 msgstr "Weggegooid op"
 
@@ -4339,19 +4393,13 @@ msgstr "Weggegooid op"
 msgid "Try pasting the URL again."
 msgstr ""
 
-#: Gtk/ConnectServerWindow.vala:220 Gtk/FileConflictDialog.vala:541
-#: Gtk/FileConflictDialog.vala:553 Gtk/FilePropertiesBox.vala:177
-#: Gtk/FilePropertiesBox.vala:245 Gtk/FileViewList.vala:1125
-#: Utility/FileItem.vala:657 Utility/VideoDownloadTask.vala:318
+#: Gtk/ConnectServerWindow.vala:219 Gtk/FileConflictDialog.vala:541
+#: Gtk/FileConflictDialog.vala:553 Gtk/FilePropertiesBox.vala:179
+#: Gtk/FilePropertiesBox.vala:247 Gtk/FileViewList.vala:1135
+#: Utility/FileItem.vala:732 Utility/VideoDownloadTask.vala:318
 #, c-format
 msgid "Type"
 msgstr "Type"
-
-#: Gtk/CloudLoginWindow.vala:346
-msgid "Type 'rclone config' in a terminal window to add accounts manually."
-msgstr ""
-"Typ 'rclone config' in een terminalvenster om accounts handmatig toe te "
-"voegen."
 
 #: Gtk/Settings.vala:153
 msgid "UI"
@@ -4362,11 +4410,11 @@ msgstr "Uiterlijk"
 msgid "UNKNOWN"
 msgstr ""
 
-#: Gtk/ConnectServerWindow.vala:467
+#: Gtk/ConnectServerWindow.vala:466
 msgid "URI"
 msgstr "URI"
 
-#: Gtk/FilePropertiesWindow.vala:191 Gtk/Sidebar.vala:723
+#: Gtk/FilePropertiesWindow.vala:195 Gtk/Sidebar.vala:723
 #: Utility/Device.vala:2507
 #, c-format
 msgid "UUID"
@@ -4388,23 +4436,23 @@ msgstr "De-maximaliseren"
 msgid "UnMaximize the terminal"
 msgstr "Terminal de-maximaliseren"
 
-#: Gtk/FileContextMenu.vala:2290 Gtk/Settings.vala:2695
+#: Gtk/FileContextMenu.vala:2320 Gtk/Settings.vala:2716
 msgid "Uncompress"
 msgstr "De-comprimeren"
 
-#: Gtk/FileContextMenu.vala:2291
+#: Gtk/FileContextMenu.vala:2321
 msgid "Uncompress PDF document"
 msgstr "PDF-document de-comprimeren"
 
-#: Gtk/FileContextMenu.vala:1369
+#: Gtk/FileContextMenu.vala:1371
 msgid "Unhide"
 msgstr "Weergeven"
 
-#: Gtk/FileContextMenu.vala:1370
+#: Gtk/FileContextMenu.vala:1372
 msgid "Unhide selected items"
 msgstr "Geselecteerde items niet langer verbergen"
 
-#: Gtk/FilePropertiesWindow.vala:171 Gtk/FilePropertiesWindow.vala:180
+#: Gtk/FilePropertiesWindow.vala:171 Gtk/FilePropertiesWindow.vala:184
 #, fuzzy
 msgid "Unknown"
 msgstr "Onbekend formaat"
@@ -4422,7 +4470,7 @@ msgstr "Onbekend formaat"
 msgid "Unlock"
 msgstr "Ontgrendeld"
 
-#: Gtk/FileViewTab.vala:310
+#: Gtk/FileViewTab.vala:312
 msgid "Unlock Path"
 msgstr "Selecteer pad"
 
@@ -4450,16 +4498,16 @@ msgstr "Dit volume ontkoppelen"
 msgid "Unmounting from"
 msgstr "Bezig met ontkoppelen van"
 
-#: Gtk/FilePropertiesBox.vala:225
+#: Gtk/FilePropertiesBox.vala:227
 msgid "Unpacked"
 msgstr "Uitgepakt"
 
-#: Gtk/FileContextMenu.vala:2257
+#: Gtk/FileContextMenu.vala:2287
 msgid "Unprotect the PDF document by removing password"
 msgstr "PDF-document niet langer beveiligen door het wachtwoord te verwijderen"
 
-#: Gtk/FileViewToolbar.vala:201 Gtk/MainMenubar.vala:1346 Gtk/Settings.vala:428
-#: Gtk/Settings.vala:859
+#: Gtk/FileViewToolbar.vala:201 Gtk/MainMenubar.vala:1347 Gtk/Settings.vala:429
+#: Gtk/Settings.vala:860
 msgid "Up"
 msgstr "Omhoog"
 
@@ -4467,7 +4515,7 @@ msgstr "Omhoog"
 msgid "Update recursively for all items inside the folder"
 msgstr "Recursief bijwerken op alle items in de map"
 
-#: Gtk/FileViewList.vala:5779
+#: Gtk/FileViewList.vala:5793
 msgid "Update required packages and try again"
 msgstr "Werk de vereiste pakketten bij en probeer het opnieuw"
 
@@ -4489,13 +4537,13 @@ msgstr "Bezig met uploaden van bestanden naar cloudopslag:"
 msgid "Uploading items..."
 msgstr "Bezig met uploaden van items..."
 
-#: Gtk/FilePropertiesWindow.vala:221 Gtk/Sidebar.vala:1292
+#: Gtk/FilePropertiesWindow.vala:225 Gtk/Sidebar.vala:1292
 #: Gtk/Statusbar.vala:361 Utility/Device.vala:2554
 #, c-format
 msgid "Used"
 msgstr "Gebruikt"
 
-#: Gtk/FilePermissionsBox.vala:114 Gtk/FileViewList.vala:415
+#: Gtk/FilePermissionsBox.vala:114 Gtk/FileViewList.vala:417
 #, c-format
 msgid "User"
 msgstr "Gebruiker"
@@ -4504,7 +4552,7 @@ msgstr "Gebruiker"
 msgid "User cancelled the password prompt"
 msgstr "Gebruiker heeft het wachtwoordvenster geannuleerd"
 
-#: Gtk/ConnectServerWindow.vala:376
+#: Gtk/ConnectServerWindow.vala:375
 msgid "Username"
 msgstr "Gebruikersnaam"
 
@@ -4512,7 +4560,7 @@ msgstr "Gebruikersnaam"
 msgid "Utility"
 msgstr "Hulpmiddel"
 
-#: Gtk/FilePropertiesWindow.vala:354
+#: Gtk/FilePropertiesWindow.vala:356
 msgid "Value"
 msgstr "Waarde"
 
@@ -4547,21 +4595,21 @@ msgstr ""
 msgid "Videos"
 msgstr "Video's"
 
-#: Gtk/FileViewToolbar.vala:266 Gtk/MainMenubar.vala:886
-#: Gtk/MainMenubar.vala:1047 Gtk/Settings.vala:547 Gtk/Settings.vala:1600
+#: Gtk/FileViewToolbar.vala:266 Gtk/MainMenubar.vala:887
+#: Gtk/MainMenubar.vala:1048 Gtk/Settings.vala:548 Gtk/Settings.vala:1621
 #: Gtk/ViewPopover.vala:116
 msgid "View"
 msgstr "Weergave"
 
-#: Gtk/Settings.vala:1277
+#: Gtk/Settings.vala:1298
 msgid "View Mode"
 msgstr "Weergavemodus"
 
-#: Gtk/FileContextMenu.vala:2736
+#: Gtk/FileContextMenu.vala:2766
 msgid "View file properties"
 msgstr "Bestandseigenschappen weergeven"
 
-#: Gtk/Settings.vala:2319
+#: Gtk/Settings.vala:2340
 msgid "Virtual Machine"
 msgstr "Virtuele machine"
 
@@ -4573,11 +4621,11 @@ msgstr "Webpagina"
 msgid "Website ~ teejeetech.in"
 msgstr "Website ~ teejeetech.in"
 
-#: Gtk/DevicePopoverSettingsWindow.vala:184
+#: Gtk/DevicePopoverSettingsWindow.vala:186
 msgid "Width"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1928
+#: Gtk/MainMenubar.vala:2060
 msgid "Wiki"
 msgstr "Wiki"
 
@@ -4585,11 +4633,11 @@ msgstr "Wiki"
 msgid "Wiki ~ Documentation & Help"
 msgstr "Wiki ~ Documentatie & Hulp"
 
-#: Gtk/FileContextMenu.vala:714
+#: Gtk/FileContextMenu.vala:716
 msgid "Window"
 msgstr "Venster"
 
-#: Gtk/Settings.vala:627
+#: Gtk/Settings.vala:628
 msgid "Window buttons on left"
 msgstr "Vensterknoppen links plaatsen"
 
@@ -4597,16 +4645,24 @@ msgstr "Vensterknoppen links plaatsen"
 msgid "Word Size"
 msgstr "Woordgrootte"
 
+#: Gtk/MainMenubar.vala:1449
+msgid "Workspace"
+msgstr ""
+
+#: Gtk/MainMenubar.vala:1523
+msgid "Workspace Removed"
+msgstr ""
+
 #: Gtk/FilePermissionsBox.vala:140 Gtk/FilePermissionsBox.vala:146
 #: Gtk/FilePermissionsBox.vala:152
 msgid "Write"
 msgstr "Schrijven"
 
-#: Gtk/FileContextMenu.vala:1710
+#: Gtk/FileContextMenu.vala:1739
 msgid "Write ISO file to USB drive"
 msgstr "ISO-bestand naar USB-schijf schrijven"
 
-#: Gtk/FileContextMenu.vala:1709
+#: Gtk/FileContextMenu.vala:1738
 msgid "Write to USB"
 msgstr "Schrijven naar USB"
 
@@ -4614,12 +4670,12 @@ msgstr "Schrijven naar USB"
 msgid "Wrong password"
 msgstr "Onjuist wachtwoord"
 
-#: Gtk/FilePropertiesBox.vala:189 Gtk/FilePropertiesBox.vala:194
+#: Gtk/FilePropertiesBox.vala:191 Gtk/FilePropertiesBox.vala:196
 #: Utility/Gtk/CustomMessageDialog.vala:179
 msgid "Yes"
 msgstr "Ja"
 
-#: Gtk/FileViewList.vala:4571
+#: Gtk/FileViewList.vala:4580
 msgid "You do not have permission to rename this item"
 msgstr "U heeft geen toestemming om de naam van dit item te wijzigen"
 
@@ -4639,11 +4695,11 @@ msgstr ""
 msgid "[Warning] Deleted invalid lock"
 msgstr "[Waarschuwing] Ongeldige vergrendeling verwijderen"
 
-#: Utility/FileTask.vala:1378
+#: Utility/FileTask.vala:1379
 msgid "deleted"
 msgstr "verwijderd"
 
-#: Utility/FileItem.vala:425 Utility/FileItem.vala:443
+#: Utility/FileItem.vala:506 Utility/FileItem.vala:518
 msgid "empty"
 msgstr "leeg"
 
@@ -4659,19 +4715,19 @@ msgstr "vrij"
 msgid "hidden"
 msgstr "verborgen"
 
-#: Utility/FileItem.vala:437
+#: Utility/FileItem.vala:512
 msgid "item"
 msgstr "item"
 
-#: Utility/FileItem.vala:440
+#: Utility/FileItem.vala:515
 msgid "items"
 msgstr "items"
 
-#: Gtk/FileViewList.vala:4505
+#: Gtk/FileViewList.vala:4514
 msgid "selected item(s) will be deleted permanently"
 msgstr "geselecteerd(e) item(s) wordt/worden permanent verwijderd"
 
-#: Gtk/FileViewList.vala:4440
+#: Gtk/FileViewList.vala:4449
 msgid "selected item(s) will be moved to trash"
 msgstr "geselecteerd(e) item(s) wordt/worden verplaatst naar de prullenbak"
 
@@ -4684,9 +4740,59 @@ msgstr "tcsh shell (tcsh)"
 msgid "transferred"
 msgstr "overgedragen"
 
-#: Utility/FileTask.vala:1378
+#: Utility/FileTask.vala:1379
 msgid "trashed"
 msgstr "in prullenbak gegooid"
+
+#~ msgid ""
+#~ "A new browser window will open.\n"
+#~ "\n"
+#~ "Select the account to add and authorize rclone\n"
+#~ "\n"
+#~ "Close the browser window when done\n"
+#~ "\n"
+#~ "Come back to Polo and click 'Finish' to add the account"
+#~ msgstr ""
+#~ "Er wordt een nieuw browservenster geopend.\n"
+#~ "\n"
+#~ "Selecteer het toe te voegen account en autoriseer rclone\n"
+#~ "\n"
+#~ "Sluit het browservenster en kom, als u klaar bent,\n"
+#~ "\n"
+#~ "terug naar Polo en druk op 'Afronden' om het account toe te voegen"
+
+#~ msgid "Account Added"
+#~ msgstr "Account toegevoegd"
+
+#~ msgid "Account Not Added"
+#~ msgstr "Account niet toegevoegd"
+
+#~ msgid "Account name exists"
+#~ msgstr ""
+#~ "Accountnaam bestaat al\n"
+#~ "Accountnaam bestaat al\n"
+#~ "Accountnaam bestaat"
+
+#~ msgid ""
+#~ "Account was added successfully.\n"
+#~ "\n"
+#~ "You can browse the storage by selecting account from 'Cloud' menu"
+#~ msgstr ""
+#~ "Het account is succesvol toegevoegd.\n"
+#~ "\n"
+#~ "U kunt door de externe opslag bladeren door het account te selecteren "
+#~ "vanuit het 'Cloud'-menu"
+
+#~ msgid "An account exists with this name. Enter a new name for the account."
+#~ msgstr "Er bestaat al een account met deze naam. Voer een nieuwe naam in."
+
+#~ msgid "Authorize"
+#~ msgstr "Autoriseren"
+
+#~ msgid "Type 'rclone config' in a terminal window to add accounts manually."
+#~ msgstr ""
+#~ "Typ 'rclone config' in een terminalvenster om accounts handmatig toe te "
+#~ "voegen."
 
 #~ msgid "Failed to get partition list"
 #~ msgstr "Verkrijgen van partitielijst is mislukt"

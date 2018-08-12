@@ -1,3 +1,23 @@
+polo-file-manager (18.8) xenial; urgency=low
+
+  * Added support for ClamAV
+
+  * #206 - Fixed build errors with newer versions of libvte291
+
+  * Fixed: Extracting compressed TAR archive throws an error "--overwrite-dir cannot be used with --overwrite"
+
+  * Fixed: Connecting to remote servers throws an error that "gvfs-mount command is deprecated" in Ubuntu Bionic.
+  gvfs commands have been replaced by their equivalent gio commands.
+
+  * Fixed GTK errors due to set_cursor() being attached before widget is realized
+
+  * Removed live preview for videos in Properties panel
+
+  * Disabled calculation of directory sizes in Properties panel
+	
+ -- Tony George <tony.george.kol@gmail.com>  Sun, 12 Aug 2018 10:00:00 +0530
+ 
+
 polo-file-manager (18.6) xenial; urgency=low
 
   * Added support for workspaces
