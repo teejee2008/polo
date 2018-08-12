@@ -234,7 +234,7 @@ public class Pathbar : Gtk.Box {
 		// scrolled
 		scrolled = new Gtk.ScrolledWindow(null, null);
 		scrolled.hexpand = true;
-		scrolled.hscrollbar_policy = PolicyType.AUTOMATIC; // clips child without showing scrollbar
+		scrolled.hscrollbar_policy = PolicyType.EXTERNAL; // clips child without showing scrollbar
 		scrolled.vscrollbar_policy = PolicyType.NEVER;
 		//scrolled.set_shadow_type(ShadowType.ETCHED_IN);
 		add(scrolled);
