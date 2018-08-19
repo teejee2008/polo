@@ -1861,7 +1861,7 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 
 	private void add_install_rclone(Gtk.Menu menu){
 
-		var item = new Gtk.MenuItem.with_label (_("Install Rclone (Cloud Storage Support)"));
+		var item = new Gtk.MenuItem.with_label (_("Install/Update Rclone (Cloud Storage Support)"));
 		item.set_tooltip_text(_("Download and install the latest version of Rclone"));
 		menu.add(item);
 
