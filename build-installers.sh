@@ -9,11 +9,18 @@ cd $DIR
 rm -vf release/*.run
 rm -vf release/*.deb
 
-# build debs
-sh build-deb.sh
+arches=""
+if [ -z $1 ]; then
+	arches="i386 amd64"
+	# build deb
+	sh build-deb.sh
+else
+	arches="$1"
+	# build deb
+	sh build-deb.sh "$1"
+fi
 
-
-for arch in i386 amd64
+for arch in $arches
 do
 
 rm -rfv release/${arch}/files
@@ -37,7 +44,7 @@ sanity --generate --base-path release/${arch} --out-path release --arch ${arch} 
 
 if [ $? -ne 0 ]; then cd "$backup"; echo "Failed"; exit 1; fi
 
-mv -v release/*${arch}.run release/${pkg_name}-v${pkg_version}-${arch}.run
+mv -v release/*${arch}.run release/${pkg_name}-v${pkg_version}-${arch}.run 
 
 echo "--------------------------------------------------------------------------"
 
