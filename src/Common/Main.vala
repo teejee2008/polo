@@ -37,7 +37,7 @@ using TeeJee.Misc;
 public Main App;
 public const string AppName = "Polo File Manager";
 public const string AppShortName = "polo";
-public const string AppVersion = "18.8 BETA";
+public const string AppVersion = "18.10 BETA";
 public const string AppWikiVersion = ""; // update only if wiki page exists
 public const string AppAuthor = "Tony George";
 public const string AppAuthorEmail = "teejeetech@gmail.com";

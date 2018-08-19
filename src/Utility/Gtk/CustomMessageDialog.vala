@@ -131,7 +131,7 @@ public class CustomMessageDialog : Gtk.Dialog {
 		// image ----------------
 		
 		var img = new Image.from_icon_name(icon_name, Gtk.IconSize.DIALOG);
-		img.margin_right = 12;
+		img.margin = 12;
 		hbox_contents.add(img);
 		
 		// label -------------------
@@ -149,7 +149,7 @@ public class CustomMessageDialog : Gtk.Dialog {
 		lbl_msg.wrap = true;
 		lbl_msg.wrap_mode = Pango.WrapMode.WORD_CHAR;
 		lbl_msg.use_markup = true;
-		lbl_msg.margin_right = 25;
+		lbl_msg.margin = 12;
 		
 		//sw_msg
 		sw_msg = new Gtk.ScrolledWindow(null, null);
@@ -180,7 +180,6 @@ public class CustomMessageDialog : Gtk.Dialog {
 			btn_no = (Gtk.Button) add_button (_("No"), Gtk.ResponseType.NO);
 			btn_yes.grab_focus();
 			break;
-			
 		}
 	}
 }
