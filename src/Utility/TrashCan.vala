@@ -48,7 +48,15 @@ public class TrashCan : FileItem {
 		}
 	}
 
+	public static bool use_gio;
+	
+	static construct {
+		
+		use_gio = cmd_exists("gio");
+	}
+
 	public TrashCan(int _user_id, string _user_name, string _user_home) {
+		
 		this.is_trash = true;
 		this.user_id = _user_id.to_string();
 		this.user_name = _user_name;
@@ -286,17 +294,14 @@ public class TrashCan : FileItem {
 	}
 
 	public static bool empty_trash(){
+
+		string cmd_name = use_gio ? "gio trash" : "gvfs-trash";
+			
+		string cmd = "%s --empty".printf(cmd_name);
 		
-		if (cmd_exists("gio trash")){
-			
-			string cmd = "gio trash --empty";
-			
-			string std_out, std_err;
-			int status = exec_sync(cmd, out std_out, out std_err);
-			
-			return (status == 0);
-		}
+		string std_out, std_err;
+		int status = exec_sync(cmd, out std_out, out std_err);
 		
-		return false;
+		return (status == 0);
 	}
 }

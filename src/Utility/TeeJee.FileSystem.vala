@@ -327,29 +327,6 @@ namespace TeeJee.FileSystem{
 		return !file_or_dir_exists(file_path);
 	}
 
-	public bool file_trash_cmd(string file_path, Gtk.Window? window = null, out string error_msg = null){
-
-		error_msg = "";
-		
-		if (!file_or_dir_exists(file_path)){ return true; }
-		
-		string cmd = "gio trash '%s'".printf(escape_single_quote(file_path));
-		log_debug(cmd);
-		
-		string std_out, std_err;
-		int status = exec_sync(cmd, out std_out, out std_err);
-		if (status != 0){
-			log_error(std_err);
-			if (window != null){
-				gtk_messagebox(_("Failed to move items to trash"), std_err, window, true);
-			}
-			error_msg = std_err;
-			return false;
-		}
-		
-		return true;
-	}
-
 	public bool file_shred(string file_path){
 
 		/* Check and delete file */

@@ -94,6 +94,8 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 
 	private static DeviceMonitor? monitor;
 
+	public static bool use_gio;
+
 	// static -----------------------------
 	
 	public static void init(){
@@ -103,6 +105,8 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 		get_block_devices();
 		
 		get_monitor();
+
+		use_gio = cmd_exists("gio");
 
 		log_debug("Device.init(): exit");
 	}
@@ -518,7 +522,9 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 
 				var counter = new TimeoutCounter();
 				counter.kill_process_on_timeout("cryptsetup", 20, true);
-				string cmd = "gio mount -d '%s'".printf(device);
+
+				string cmd_name = use_gio ? "gio mount" : "gvfs-mount";
+				string cmd = "%s -d '%s'".printf(cmd_name, device);
 
 				log_debug(cmd);
 				Posix.system(cmd);
@@ -531,7 +537,8 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 
 				// use password to unlock
 
-				var cmd = "echo '%s' | gio mount -d '%s'\n".printf(luks_pass, device);
+				string cmd_name = use_gio ? "gio mount" : "gvfs-mount";
+				var cmd = "echo '%s' | %s -d '%s'\n".printf(luks_pass, cmd_name, device);
 
 				log_debug(cmd.replace(luks_pass, "**PASSWORD**"));
 
@@ -573,7 +580,8 @@ public class Device : GLib.Object, Gee.Comparable<Device>{
 
 				// use password to unlock
 
-				var cmd = "echo '%s' | gio mount -d '%s'\n".printf(luks_pass, device);
+				string cmd_name = use_gio ? "gio mount" : "gvfs-mount";
+				var cmd = "echo '%s' | %s -d '%s'\n".printf(luks_pass, cmd_name, device);
 
 				log_debug(cmd.replace(luks_pass, "**PASSWORD**"));
 

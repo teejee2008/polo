@@ -47,9 +47,17 @@ public class GvfsTask : AsyncTask {
 	public string password = "";
 
 	public GvfsTaskType action;
+
+	public static bool use_gio;
 	
 	public GvfsTask(){
+		
 		init_regular_expressions();
+	}
+
+	static construct {
+		
+		use_gio = cmd_exists("gio");
 	}
 	
 	private void init_regular_expressions(){
@@ -77,6 +85,8 @@ public class GvfsTask : AsyncTask {
 
 		string sh = "";
 		string cmd = "";
+
+		string cmd_name = use_gio ? "gio mount" : "gvfs-mount";
 		
 		switch(action){
 		case GvfsTaskType.MOUNT:
@@ -87,7 +97,7 @@ public class GvfsTask : AsyncTask {
 				sh += "echo '%s' >> samba.props \n".printf(escape_single_quote(domain));
 				sh += "echo '%s' >> samba.props \n".printf(escape_single_quote(password));
 				
-				cmd = "gio mount '%s' < ./samba.props".printf(escape_single_quote(uri));
+				cmd = "%s '%s' < ./samba.props".printf(cmd_name, escape_single_quote(uri));
 				sh += cmd + "\n";
 			}
 			else{
@@ -97,15 +107,18 @@ public class GvfsTask : AsyncTask {
 				sh += "echo '%s' >> samba.props \n".printf(escape_single_quote(username));
 				sh += "echo '%s' >> samba.props \n".printf(escape_single_quote(password));
 				
-				cmd = "gio mount '%s' < ./samba.props".printf(escape_single_quote(uri));
+				cmd = "%s '%s' < ./samba.props".printf(cmd_name, escape_single_quote(uri));
 				sh += cmd + "\n";
 			}
 
 			break;
 			
 		case GvfsTaskType.UNMOUNT:
-			cmd += "gio mount -u '%s'".printf(escape_single_quote(uri));
+		
+			cmd += "%s -u '%s'".printf(cmd_name, escape_single_quote(uri));
+			
 			sh += cmd + "\n";
+			
 			break;
 		}
 

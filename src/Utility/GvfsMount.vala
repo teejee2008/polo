@@ -33,7 +33,14 @@ public class GvfsMounts: GLib.Object {
 
 	public static Gee.HashMap<string,FileItem> map;
 
+	public static bool use_gio;
+
 	// static methods
+
+	static construct {
+		
+		use_gio = cmd_exists("gio");
+	}
 	
 	public static Gee.ArrayList<FileItem> get_mounts(int userid){
 
@@ -164,11 +171,11 @@ public class GvfsMounts: GLib.Object {
 
 		string std_out, std_err;
 
-		string cmd = "gio mount";
-		if (unmount){
-			cmd += " -u";
-		}
-		cmd += " '%s'".printf(escape_single_quote(file_uri));
+		string cmd_name = use_gio ? "gio mount" : "gvfs-mount";
+
+		if (unmount){ cmd_name += " -u"; }
+		
+		string cmd = "%s '%s'".printf(cmd_name, escape_single_quote(file_uri));
 
 		log_debug(cmd);
 		
@@ -182,13 +189,15 @@ public class GvfsMounts: GLib.Object {
 	}
 
 	private static bool gvfs_mount_samba(string file_uri, string smb_username, string smb_domain, string smb_password){
+
+		string cmd_name = use_gio ? "gio mount" : "gvfs-mount";
 		
 		string sh = "";
 		sh += "echo '%s' >> samba.props \n".printf(escape_single_quote(smb_username));
 		sh += "echo '%s' >> samba.props \n".printf(escape_single_quote(smb_domain));
 		sh += "echo '%s' >> samba.props \n".printf(escape_single_quote(smb_password));
 
-		string cmd = "gio mount '%s' < ./samba.props".printf(escape_single_quote(file_uri));
+		string cmd = "%s '%s' < ./samba.props".printf(cmd_name, escape_single_quote(file_uri));
 		sh += cmd + "\n";
 		log_debug(cmd);
 		
@@ -206,7 +215,9 @@ public class GvfsMounts: GLib.Object {
 		
 		string std_out, std_err;
 
-		string cmd = "gio mount -u '%s'".printf(escape_single_quote(file_uri));
+		string cmd_name = use_gio ? "gio mount" : "gvfs-mount";
+
+		string cmd = "%s -u '%s'".printf(cmd_name, escape_single_quote(file_uri));
 
 		log_debug(cmd);
 		
