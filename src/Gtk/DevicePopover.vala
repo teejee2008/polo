@@ -913,7 +913,9 @@ public class DevicePopover : Gtk.Popover {
 		Device.print_logical_children();
 	}
 
-	private Gtk.TreeIter add_device(Gtk.TreeStore model, Device dev, Gtk.TreeIter? iter_parent){
+	private Gtk.TreeIter? add_device(Gtk.TreeStore model, Device dev, Gtk.TreeIter? iter_parent){
+
+		if (dev.size_bytes < 100 * KB){ return null; }
 		
 		TreeIter iter;
 		model.append(out iter, iter_parent);
