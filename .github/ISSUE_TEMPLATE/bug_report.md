@@ -24,4 +24,4 @@ If applicable, add screenshots to help explain your problem.
  - Desktop [e.g. MATE, XFCE]
  - Application Version [e.g. v18.8]
 
-***Note: Paid support is now available for this application. Please make a donation for [$10 via PayPal](https://www.paypal.com/cgi-bin/webscr?business=teejeetech@gmail.com&cmd=_xclick&currency_code=USD&amount=5&item_name=Polo%20Support) if you need help with an issue.***
+***NOTE: Paid support is now available for this application. Please make a donation for [$10 via PayPal](https://www.paypal.com/cgi-bin/webscr?business=teejeetech@gmail.com&cmd=_xclick&currency_code=USD&amount=10&item_name=Polo%20Support) if you need support for this issue.***
