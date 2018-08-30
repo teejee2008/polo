@@ -297,6 +297,12 @@ public class MainWindow : Gtk.Window {
 
 		Timeout.add(100, ()=>{
 			restore_propbar_position();
+
+			if (!App.donation_displayed){
+				open_donate_window();
+				App.donation_displayed = true;
+			}
+			
 			return false;
 		});
 
@@ -942,13 +948,13 @@ public class MainWindow : Gtk.Window {
 	}
 
 	public void open_donate_window(){
+		
 		log_debug("open_donate_window()");
-		var dialog = new DonationWindow();
-		dialog.set_transient_for(this);
-		dialog.run();
-		dialog.destroy();
+		
+		var dialog = new DonationWindow(this);
+		dialog.show_all();
 	}
-
+	
 	public void open_about_window(){
 
 		var dialog = new AboutWindow();

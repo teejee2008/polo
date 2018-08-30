@@ -313,6 +313,8 @@ public class Main : GLib.Object {
 
 	public string admin_pass = "";
 
+	public bool donation_displayed = false;
+
 	public string[] supported_formats_open;
 
 	// donation counter
@@ -770,6 +772,8 @@ public class Main : GLib.Object {
 		config.set_string_member("audio_muted", audio_muted.to_string());
 		config.set_string_member("playback_paused", playback_paused.to_string());
 
+		config.set_string_member("donation_displayed", donation_displayed.to_string());
+
 		save_folder_selections();
 		
 		GtkBookmark.save_bookmarks();
@@ -1005,6 +1009,8 @@ public class Main : GLib.Object {
 		audio_volume = json_get_int_from_string(config, "audio_volume", audio_volume);
 		audio_muted = json_get_bool_from_string(config, "audio_muted", audio_muted);
 		playback_paused = json_get_bool_from_string(config, "playback_paused", playback_paused);
+
+		donation_displayed = json_get_bool_from_string(config, "donation_displayed", donation_displayed);
 		
 		load_folder_selections();
 
