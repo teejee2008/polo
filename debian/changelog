@@ -1,3 +1,12 @@
+polo-file-manager (18.8.2) xenial; urgency=low
+
+  * Fixed: Device Manager: Hide swap and extended partitions
+
+  * Updated donation window
+
+ -- Tony George <tony.george.kol@gmail.com>  Fri, 31 Aug 2018 10:00:00 +0530
+ 
+
 polo-file-manager (18.8.1) xenial; urgency=low
 
   * Fixed: Added support for both 'gio' and 'gvfs' commands

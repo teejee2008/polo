@@ -41,7 +41,7 @@ public class DonationWindow : Gtk.Window {
 
 	public DonationWindow(Gtk.Window window) {
 
-		set_title(_("Donate"));
+		set_title("");
 		set_transient_for(window);
 		window_position = WindowPosition.CENTER_ON_PARENT;
 		set_destroy_with_parent (true);
@@ -76,7 +76,7 @@ public class DonationWindow : Gtk.Window {
 			"https://www.patreon.com/bePatron?u=3059450");
 
 		
-		msg = _("This application was created for my own use. It is being distributed as a free, open-source project in the hope that it may be useful to people. This does not mean that I provide free support and free work, for changes and features that you may require. Please see sections below for more information.");
+		msg = _("This application was created for my own use. It is being distributed as a free, open-source project in the hope that it may be useful to people. This does not mean that I provide free support and free work, for changes and features that you may require. See sections below for more information.");
 		
 		var label = add_label(msg);
 
@@ -84,7 +84,7 @@ public class DonationWindow : Gtk.Window {
 
 		msg = format_heading(_("Feature Requests")) + "   ";
 		
-		msg += _("If you need changes to this application, please add your requirements to the issue tracker. You can sponsor your own request, or sponsor an existing request by making a donation with PayPal. Items available for sponsorship are labelled as <i>\"OpenForSponsorship\"</i>, along with an amount for the work involved. You can make a donation for that amount with PayPal, and leave a comment on the thread, or email me with the issue number. I will work on it the next time I update the application, and changes will be included in the next release.");
+		msg += _("If you need changes to this application, add your requirements to the issue tracker. You can sponsor your own request, or sponsor an existing request by making a donation with PayPal. Items available for sponsorship are labelled as <i>\"OpenForSponsorship\"</i>, along with an amount for the work involved. You can make a donation for that amount with PayPal, and leave a comment on the thread, or email me with the issue number. I will work on it the next time I update the application, and changes will be included in the next release.");
 
 		add_label(msg);
 
@@ -141,7 +141,7 @@ public class DonationWindow : Gtk.Window {
 
 		hbox = add_hbox();
 		
-		var button = new Gtk.Button.with_label(_("Close Window"));
+		var button = new Gtk.Button.with_label(_("Close"));
 		button.margin_top = 12;
 		hbox.add(button);
 		

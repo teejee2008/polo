@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
-"POT-Creation-Date: 2018-08-12 22:16+0530\n"
+"POT-Creation-Date: 2018-08-31 23:39+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -21,15 +21,15 @@ msgstr ""
 msgid " (locked)"
 msgstr ""
 
-#: Common/Main.vala:1339
+#: Common/Main.vala:1345
 msgid ""
 "'pkexec' or 'gksu' is needed for executing admin operations. Install "
 "required packages and try again."
 msgstr ""
 
 #: Gtk/FilePropertiesWindow.vala:197 Gtk/FilePropertiesWindow.vala:199
-#: Gtk/Sidebar.vala:725 Gtk/Sidebar.vala:727 Utility/Device.vala:2507
-#: Utility/Device.vala:2509 Utility/Device.vala:2511
+#: Gtk/Sidebar.vala:725 Gtk/Sidebar.vala:727 Utility/Device.vala:2515
+#: Utility/Device.vala:2517 Utility/Device.vala:2519
 msgid "(empty)"
 msgstr ""
 
@@ -80,7 +80,7 @@ msgid ""
 "will increase gradually as disk is modified."
 msgstr ""
 
-#: Gtk/MainWindow.vala:993
+#: Gtk/MainWindow.vala:999
 msgid "A modern file manager for Linux"
 msgstr ""
 
@@ -189,11 +189,11 @@ msgstr ""
 msgid "Another instance of this application is running"
 msgstr ""
 
-#: Common/Main.vala:1013 Common/Main.vala:1163 Common/Main.vala:1252
+#: Common/Main.vala:1019 Common/Main.vala:1169 Common/Main.vala:1258
 msgid "App config loaded"
 msgstr ""
 
-#: Common/Main.vala:792 Common/Main.vala:1130 Common/Main.vala:1208
+#: Common/Main.vala:796 Common/Main.vala:1136 Common/Main.vala:1214
 msgid "App config saved"
 msgstr ""
 
@@ -244,12 +244,12 @@ msgstr ""
 msgid "Authors"
 msgstr ""
 
-#: Gtk/FilePropertiesWindow.vala:232 Utility/Device.vala:2558
+#: Gtk/FilePropertiesWindow.vala:232 Utility/Device.vala:2566
 #, c-format
 msgid "Available"
 msgstr ""
 
-#: Gtk/DevicePopover.vala:1088
+#: Gtk/DevicePopover.vala:1092
 msgid "BZip2 Compressed Disk Image"
 msgstr ""
 
@@ -275,7 +275,7 @@ msgstr ""
 msgid "Base"
 msgstr ""
 
-#: Utility/Gtk/DonationWindow.vala:104
+#: Utility/Gtk/DonationWindow.vala:75
 msgid "Become a Patron"
 msgstr ""
 
@@ -557,7 +557,7 @@ msgstr ""
 msgid "Clean thumbnail cache"
 msgstr ""
 
-#: Gtk/MainWindow.vala:1020
+#: Gtk/MainWindow.vala:1026
 msgid "Cleaning Thumbnail Cache..."
 msgstr ""
 
@@ -601,7 +601,7 @@ msgstr ""
 msgid "Close"
 msgstr ""
 
-#: Utility/Gtk/DonationWindow.vala:136
+#: Utility/Gtk/DonationWindow.vala:144
 msgid "Close Window"
 msgstr ""
 
@@ -664,7 +664,7 @@ msgstr ""
 msgid "Commander List (Dual-Pane + ListView)"
 msgstr ""
 
-#: Common/Main.vala:520
+#: Common/Main.vala:522
 msgid "Commands listed below are not available on this system"
 msgstr ""
 
@@ -848,7 +848,7 @@ msgstr ""
 msgid "Could not find bookmarked path"
 msgstr ""
 
-#: Utility/Device.vala:1726
+#: Utility/Device.vala:1734
 #, c-format
 msgid "Could not find file"
 msgstr ""
@@ -951,7 +951,7 @@ msgstr ""
 msgid "Created"
 msgstr ""
 
-#: Utility/TeeJee.FileSystem.vala:783
+#: Utility/TeeJee.FileSystem.vala:760
 msgid "Created directory"
 msgstr ""
 
@@ -1064,7 +1064,7 @@ msgstr ""
 msgid "Deleted"
 msgstr ""
 
-#: Utility/TeeJee.FileSystem.vala:821
+#: Utility/TeeJee.FileSystem.vala:798
 msgid "Deleted directory"
 msgstr ""
 
@@ -1101,10 +1101,10 @@ msgstr ""
 
 #: Gtk/DevicePopover.vala:156 Gtk/FilePropertiesWindow.vala:171
 #: Gtk/FilePropertiesWindow.vala:184 Gtk/FilePropertiesWindow.vala:189
-#: Gtk/Sidebar.vala:717 Utility/Device.vala:459 Utility/Device.vala:466
-#: Utility/Device.vala:601 Utility/Device.vala:606 Utility/Device.vala:1707
-#: Utility/Device.vala:1713 Utility/Device.vala:1912 Utility/Device.vala:1917
-#: Utility/Device.vala:2499 Utility/KvmTask.vala:314
+#: Gtk/Sidebar.vala:717 Utility/Device.vala:463 Utility/Device.vala:470
+#: Utility/Device.vala:609 Utility/Device.vala:614 Utility/Device.vala:1715
+#: Utility/Device.vala:1721 Utility/Device.vala:1920 Utility/Device.vala:1925
+#: Utility/Device.vala:2507 Utility/KvmTask.vala:314
 #, c-format
 msgid "Device"
 msgstr ""
@@ -1125,7 +1125,7 @@ msgstr ""
 msgid "Device Unmounted"
 msgstr ""
 
-#: Gtk/DevicePopover.vala:1021 Gtk/DevicePopover.vala:1054
+#: Gtk/DevicePopover.vala:1025 Gtk/DevicePopover.vala:1058
 #, c-format
 msgid "Device is in use by the system"
 msgstr ""
@@ -1138,11 +1138,11 @@ msgstr ""
 msgid "Device may be non-removable, or in-use by another process"
 msgstr ""
 
-#: Utility/Device.vala:458 Utility/Device.vala:1706
+#: Utility/Device.vala:462 Utility/Device.vala:1714
 msgid "Device mounted successfully"
 msgstr ""
 
-#: Utility/Device.vala:1766
+#: Utility/Device.vala:1774
 msgid "Device name is empty!"
 msgstr ""
 
@@ -1167,23 +1167,7 @@ msgstr ""
 msgid "Dictionary"
 msgstr ""
 
-#: Utility/Gtk/DonationWindow.vala:57
-msgid ""
-"Did you find this application useful?\n"
-"\n"
-"You can buy me a coffee or make a donation via PayPal to show your support.\n"
-"\n"
-"This application includes a few extra features for people who have "
-"contributed to the project through donations, translations, etc. You can "
-"make a donation for $10 or more via PayPal to receive the plugins by email. "
-"Your contributions will help keep the project alive and support future "
-"development.\n"
-"\n"
-"Thanks,\n"
-"Tony George"
-msgstr ""
-
-#: Utility/TeeJee.FileSystem.vala:959
+#: Utility/TeeJee.FileSystem.vala:936
 msgid "Dir not found"
 msgstr ""
 
@@ -1231,15 +1215,15 @@ msgid "Domain"
 msgstr ""
 
 #: Gtk/FileViewToolbar.vala:498 Gtk/MainMenubar.vala:2097
-#: Utility/Gtk/DonationWindow.vala:40
+#: Utility/Gtk/DonationWindow.vala:44
 msgid "Donate"
 msgstr ""
 
-#: Utility/Gtk/DonationWindow.vala:96
-msgid "Donate with PayPal"
+#: Utility/Gtk/DonationWindow.vala:72
+msgid "Donate (5$)"
 msgstr ""
 
-#: Utility/Gtk/DonationWindow.vala:88
+#: Utility/Gtk/DonationWindow.vala:125 Utility/Gtk/DonationWindow.vala:133
 msgid "Donation Features"
 msgstr ""
 
@@ -1402,7 +1386,7 @@ msgstr ""
 msgid "Encrypted"
 msgstr ""
 
-#: Utility/Device.vala:1868
+#: Utility/Device.vala:1876
 msgid "Encrypted Device"
 msgstr ""
 
@@ -1411,7 +1395,7 @@ msgstr ""
 msgid "Encrypted archive"
 msgstr ""
 
-#: Utility/Device.vala:619
+#: Utility/Device.vala:627
 #, c-format
 msgid "Encrypted device"
 msgstr ""
@@ -1432,12 +1416,12 @@ msgstr ""
 msgid "Enter Password"
 msgstr ""
 
-#: Utility/Device.vala:621 Utility/FileItemArchive.vala:364
+#: Utility/Device.vala:629 Utility/FileItemArchive.vala:364
 msgid "Enter Password to Unlock"
 msgstr ""
 
 #: Gtk/FileViewList.vala:4654 Gtk/FileViewList.vala:4688
-#: Gtk/FileViewList.vala:4728 Gtk/MainWindow.vala:1475
+#: Gtk/FileViewList.vala:4728 Gtk/MainWindow.vala:1481
 msgid "Enter another name"
 msgstr ""
 
@@ -1453,7 +1437,7 @@ msgstr ""
 msgid "Enter new name"
 msgstr ""
 
-#: Utility/Device.vala:1869
+#: Utility/Device.vala:1877
 #, c-format
 msgid "Enter passphrase to unlock '%s'"
 msgstr ""
@@ -1478,14 +1462,14 @@ msgstr ""
 msgid "Enter unique name for selected file"
 msgstr ""
 
-#: Gtk/MainWindow.vala:1467
+#: Gtk/MainWindow.vala:1473
 msgid "Enter workspace name"
 msgstr ""
 
 #: Gtk/ProgressPanelArchiveTask.vala:771 Gtk/ProgressPanelArchiveTask.vala:782
 #: Gtk/ProgressPanelImageTask.vala:198 Gtk/ProgressPanelKvmTask.vala:217
 #: Gtk/ProgressPanelKvmTask.vala:220 Gtk/ProgressPanelPdfTask.vala:198
-#: Utility/Device.vala:1689 Utility/KvmTask.vala:311
+#: Utility/Device.vala:1697 Utility/KvmTask.vala:311
 #: Utility/Gtk/GtkHelper.vala:18
 #, c-format
 msgid "Error"
@@ -1513,7 +1497,7 @@ msgstr ""
 msgid "Executing action..."
 msgstr ""
 
-#: Gtk/DevicePopover.vala:1041 Gtk/DiskFormatContextMenu.vala:103
+#: Gtk/DevicePopover.vala:1045 Gtk/DiskFormatContextMenu.vala:103
 #: Gtk/FileViewList.vala:5175
 #, c-format
 msgid "Existing data on device will be destroyed"
@@ -1527,7 +1511,7 @@ msgstr ""
 msgid "Exit Media View"
 msgstr ""
 
-#: Common/Main.vala:1303
+#: Common/Main.vala:1309
 msgid "Exiting Application"
 msgstr ""
 
@@ -1612,23 +1596,23 @@ msgstr ""
 msgid "Failed to Remove Workspace"
 msgstr ""
 
-#: Utility/TeeJee.FileSystem.vala:1251
+#: Utility/TeeJee.FileSystem.vala:1228
 msgid "Failed to change owner/group!"
 msgstr ""
 
-#: Utility/TeeJee.FileSystem.vala:451
+#: Utility/TeeJee.FileSystem.vala:428
 msgid "Failed to copy file"
 msgstr ""
 
-#: Utility/TeeJee.FileSystem.vala:793
+#: Utility/TeeJee.FileSystem.vala:770
 msgid "Failed to create directory"
 msgstr ""
 
-#: Utility/TeeJee.FileSystem.vala:653
+#: Utility/TeeJee.FileSystem.vala:630
 msgid "Failed to create hard link"
 msgstr ""
 
-#: Utility/TeeJee.FileSystem.vala:630
+#: Utility/TeeJee.FileSystem.vala:607
 msgid "Failed to create symlink"
 msgstr ""
 
@@ -1640,31 +1624,27 @@ msgstr ""
 msgid "Failed to delete some files"
 msgstr ""
 
-#: Common/Main.vala:1371
+#: Common/Main.vala:1377
 msgid "Failed to execute operation as admin"
 msgstr ""
 
-#: Utility/Device.vala:465 Utility/Device.vala:1712
+#: Utility/Device.vala:469 Utility/Device.vala:1720
 msgid "Failed to mount device"
 msgstr ""
 
-#: Utility/TeeJee.FileSystem.vala:470
+#: Utility/TeeJee.FileSystem.vala:447
 msgid "Failed to move file"
-msgstr ""
-
-#: Utility/TeeJee.FileSystem.vala:344
-msgid "Failed to move items to trash"
 msgstr ""
 
 #: Gtk/ClamScanBox.vala:288
 msgid "Failed to move some files"
 msgstr ""
 
-#: Utility/TeeJee.FileSystem.vala:385
+#: Utility/TeeJee.FileSystem.vala:362
 msgid "Failed to read file"
 msgstr ""
 
-#: Utility/TeeJee.FileSystem.vala:534
+#: Utility/TeeJee.FileSystem.vala:511
 msgid "Failed to rename item"
 msgstr ""
 
@@ -1672,7 +1652,7 @@ msgstr ""
 msgid "Failed to restore some files"
 msgstr ""
 
-#: Utility/TeeJee.FileSystem.vala:1231
+#: Utility/TeeJee.FileSystem.vala:1208
 msgid "Failed to set permissions!"
 msgstr ""
 
@@ -1680,17 +1660,17 @@ msgstr ""
 msgid "Failed to trash items"
 msgstr ""
 
-#: Utility/Device.vala:543 Utility/Device.vala:565 Utility/Device.vala:585
-#: Utility/Device.vala:600 Utility/Device.vala:1851 Utility/Device.vala:1874
-#: Utility/Device.vala:1895 Utility/Device.vala:1911
+#: Utility/Device.vala:550 Utility/Device.vala:572 Utility/Device.vala:593
+#: Utility/Device.vala:608 Utility/Device.vala:1859 Utility/Device.vala:1882
+#: Utility/Device.vala:1903 Utility/Device.vala:1919
 msgid "Failed to unlock device"
 msgstr ""
 
-#: Utility/Device.vala:2122
+#: Utility/Device.vala:2130
 msgid "Failed to unmount"
 msgstr ""
 
-#: Gtk/DevicePopover.vala:1020 Gtk/DevicePopover.vala:1053
+#: Gtk/DevicePopover.vala:1024 Gtk/DevicePopover.vala:1057
 #, c-format
 msgid "Failed to unmount device"
 msgstr ""
@@ -1703,7 +1683,7 @@ msgstr ""
 msgid "Failed to update Owner"
 msgstr ""
 
-#: Utility/TeeJee.FileSystem.vala:433
+#: Utility/TeeJee.FileSystem.vala:410
 msgid "Failed to write file"
 msgstr ""
 
@@ -1713,6 +1693,10 @@ msgstr ""
 
 #: Gtk/CreateArchiveWindow.vala:846 Gtk/CreateArchiveWindow.vala:865
 msgid "Fastest"
+msgstr ""
+
+#: Utility/Gtk/DonationWindow.vala:85
+msgid "Feature Requests"
 msgstr ""
 
 #: Gtk/ProgressPanelVideoDownloadTask.vala:64
@@ -1754,7 +1738,7 @@ msgid "File Properties"
 msgstr ""
 
 #: Gtk/FileViewList.vala:4688 Gtk/FileViewList.vala:4728
-#: Gtk/MainWindow.vala:1475
+#: Gtk/MainWindow.vala:1481
 msgid "File exists"
 msgstr ""
 
@@ -1763,7 +1747,7 @@ msgstr ""
 msgid "File has a non-standard format or is not a checksum file"
 msgstr ""
 
-#: Utility/TeeJee.FileSystem.vala:1111 Utility/TeeJee.FileSystem.vala:1161
+#: Utility/TeeJee.FileSystem.vala:1088 Utility/TeeJee.FileSystem.vala:1138
 msgid "File is missing"
 msgstr ""
 
@@ -1772,8 +1756,8 @@ msgid "File is not an archive or format is unsupported"
 msgstr ""
 
 #: Gtk/PoloGtk.vala:106 Utility/GtkBookmark.vala:122 Utility/MimeTypes.vala:88
-#: Utility/RsyncTask.vala:288 Utility/TeeJee.FileSystem.vala:465
-#: Utility/TeeJee.FileSystem.vala:988 Utility/XdgUserDirectories.vala:143
+#: Utility/RsyncTask.vala:288 Utility/TeeJee.FileSystem.vala:442
+#: Utility/TeeJee.FileSystem.vala:965 Utility/XdgUserDirectories.vala:143
 msgid "File not found"
 msgstr ""
 
@@ -1845,7 +1829,7 @@ msgid "Files:"
 msgstr ""
 
 #: Gtk/FilePropertiesWindow.vala:156 Gtk/PlacesPopover.vala:646
-#: Gtk/Sidebar.vala:339 Gtk/Sidebar.vala:729 Utility/Device.vala:2517
+#: Gtk/Sidebar.vala:339 Gtk/Sidebar.vala:729 Utility/Device.vala:2525
 #, c-format
 msgid "Filesystem"
 msgstr ""
@@ -1980,7 +1964,7 @@ msgstr ""
 msgid "GTK theme to use"
 msgstr ""
 
-#: Gtk/DevicePopover.vala:1084
+#: Gtk/DevicePopover.vala:1088
 msgid "GZip Compressed Disk Image"
 msgstr ""
 
@@ -1999,6 +1983,14 @@ msgstr ""
 
 #: Gtk/FileViewList.vala:3474
 msgid "Generating thumbnails..."
+msgstr ""
+
+#: Utility/Gtk/DonationWindow.vala:136
+msgid "Get Donation Plugins ($10)"
+msgstr ""
+
+#: Utility/Gtk/DonationWindow.vala:109
+msgid "Get Support ($10)"
 msgstr ""
 
 #: Gtk/Settings.vala:680 Gtk/Settings.vala:1092
@@ -2100,6 +2092,16 @@ msgstr ""
 msgid "Host IP (Eg: 192.0.10.1)"
 msgstr ""
 
+#: Utility/Gtk/DonationWindow.vala:127
+msgid ""
+"I sometimes create exclusive plugins to encourage people to contribute. You "
+"can make a contribution by translating the application to other languages, "
+"by submitting code changes, or by making a donation for $10 with PayPal. "
+"Contributors are added to an email distribution list, and plugins are sent "
+"by email. These plugins are open-source. You can request the source code "
+"after receiving the plugins."
+msgstr ""
+
 #: Utility/Gtk/AboutWindow.vala:466
 msgid "Icon Themes & Utilities"
 msgstr ""
@@ -2128,6 +2130,24 @@ msgstr ""
 msgid ""
 "If selected, the action will replace original file on success, instead of "
 "creating new file."
+msgstr ""
+
+#: Utility/Gtk/DonationWindow.vala:66
+msgid ""
+"If you find this application useful, and wish to support its development, "
+"use the button below to make a donation with PayPal."
+msgstr ""
+
+#: Utility/Gtk/DonationWindow.vala:87
+msgid ""
+"If you need changes to this application, please add your requirements to the "
+"issue tracker. You can sponsor your own request, or sponsor an existing "
+"request by making a donation with PayPal. Items available for sponsorship "
+"are labelled as <i>\"OpenForSponsorship\"</i>, along with an amount for the "
+"work involved. You can make a donation for that amount with PayPal, and "
+"leave a comment on the thread, or email me with the issue number. I will "
+"work on it the next time I update the application, and changes will be "
+"included in the next release."
 msgstr ""
 
 #: Gtk/MediaBar.vala:187
@@ -2166,10 +2186,6 @@ msgstr ""
 msgid "Insane"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:1864
-msgid "Install Rclone (Cloud Storage Support)"
-msgstr ""
-
 #: Gtk/FileContextMenu.vala:2179
 msgid "Install from ISO..."
 msgstr ""
@@ -2182,11 +2198,15 @@ msgstr ""
 msgid "Install required packages and try again"
 msgstr ""
 
+#: Gtk/MainMenubar.vala:1864
+msgid "Install/Update Rclone (Cloud Storage Support)"
+msgstr ""
+
 #: Gtk/FileViewList.vala:4327
 msgid "Internal Error"
 msgstr ""
 
-#: Utility/Device.vala:584
+#: Utility/Device.vala:592
 msgid "Invalid Passphrase"
 msgstr ""
 
@@ -2198,12 +2218,8 @@ msgstr ""
 msgid "Invalid Server Name"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:2067
+#: Gtk/MainMenubar.vala:2067 Utility/Gtk/DonationWindow.vala:112
 msgid "Issue Tracker"
-msgstr ""
-
-#: Utility/Gtk/DonationWindow.vala:112
-msgid "Issue Tracker ~ Report Issues, Request Features, Ask Questions"
 msgstr ""
 
 #: Gtk/FileConflictDialog.vala:349 Utility/FileTask.vala:1100
@@ -2216,6 +2232,10 @@ msgstr ""
 
 #: Gtk/Settings.vala:218 Gtk/Settings.vala:249
 msgid "Items"
+msgstr ""
+
+#: Utility/Gtk/DonationWindow.vala:93
+msgid "Items for Sponsorship"
 msgstr ""
 
 #: Gtk/FileContextMenu.vala:2044 Gtk/Settings.vala:2661
@@ -2235,7 +2255,7 @@ msgid "Korn shell (ksh)"
 msgstr ""
 
 #: Gtk/FilePropertiesWindow.vala:197 Gtk/Sidebar.vala:725
-#: Utility/Device.vala:2509
+#: Utility/Device.vala:2517
 #, c-format
 msgid "Label"
 msgstr ""
@@ -2301,7 +2321,7 @@ msgstr ""
 msgid "Listing source items..."
 msgstr ""
 
-#: Gtk/MainWindow.vala:1259
+#: Gtk/MainWindow.vala:1265
 msgid "Loading workspace..."
 msgstr ""
 
@@ -2347,7 +2367,7 @@ msgstr ""
 msgid "MISSING"
 msgstr ""
 
-#: Utility/Device.vala:2544
+#: Utility/Device.vala:2552
 #, c-format
 msgid "Major"
 msgstr ""
@@ -2369,7 +2389,7 @@ msgid "Manage..."
 msgstr ""
 
 #: Gtk/FilePropertiesWindow.vala:192 Gtk/Sidebar.vala:720
-#: Utility/Device.vala:2502
+#: Utility/Device.vala:2510
 #, c-format
 msgid "Mapped"
 msgstr ""
@@ -2440,7 +2460,7 @@ msgstr ""
 msgid "Minimize"
 msgstr ""
 
-#: Utility/Device.vala:2546
+#: Utility/Device.vala:2554
 #, c-format
 msgid "Minor"
 msgstr ""
@@ -2449,7 +2469,7 @@ msgstr ""
 msgid "Missing"
 msgstr ""
 
-#: Common/Main.vala:1339 Gtk/MainWindow.vala:599
+#: Common/Main.vala:1345 Gtk/MainWindow.vala:605
 msgid "Missing Dependencies"
 msgstr ""
 
@@ -2465,7 +2485,7 @@ msgstr ""
 msgid "Missing Plugin"
 msgstr ""
 
-#: Utility/Device.vala:2533
+#: Utility/Device.vala:2541
 #, c-format
 msgid "Model"
 msgstr ""
@@ -2482,7 +2502,7 @@ msgid "More options"
 msgstr ""
 
 #: Gtk/DeviceContextMenu.vala:179 Gtk/DevicePopover.vala:513
-#: Gtk/FileContextMenu.vala:1694 Gtk/Sidebar.vala:732 Utility/Device.vala:2521
+#: Gtk/FileContextMenu.vala:1694 Gtk/Sidebar.vala:732 Utility/Device.vala:2529
 #, c-format
 msgid "Mount"
 msgstr ""
@@ -2636,7 +2656,7 @@ msgstr ""
 msgid "New Window"
 msgstr ""
 
-#: Gtk/MainWindow.vala:1462
+#: Gtk/MainWindow.vala:1468
 msgid "New Workspace"
 msgstr ""
 
@@ -2966,7 +2986,7 @@ msgid "Panes"
 msgstr ""
 
 #: Gtk/FilePropertiesWindow.vala:199 Gtk/Sidebar.vala:727
-#: Utility/Device.vala:2511
+#: Utility/Device.vala:2519
 #, c-format
 msgid "PartLabel"
 msgstr ""
@@ -3065,8 +3085,8 @@ msgid ""
 "will change if disk is mounted at another path."
 msgstr ""
 
-#: Gtk/FileConflictDialog.vala:405 Utility/Device.vala:459
-#: Utility/Device.vala:1707
+#: Gtk/FileConflictDialog.vala:405 Utility/Device.vala:463
+#: Utility/Device.vala:1715
 msgid "Path"
 msgstr ""
 
@@ -3106,7 +3126,7 @@ msgstr ""
 msgid "Places"
 msgstr ""
 
-#: Common/Main.vala:521
+#: Common/Main.vala:523
 msgid "Please install required packages and try running again"
 msgstr ""
 
@@ -3217,7 +3237,7 @@ msgstr ""
 msgid "Ratio:"
 msgstr ""
 
-#: Gtk/DevicePopover.vala:1092
+#: Gtk/DevicePopover.vala:1096
 msgid "Raw Disk Image"
 msgstr ""
 
@@ -3251,7 +3271,7 @@ msgid ""
 msgstr ""
 
 #: Gtk/FilePropertiesWindow.vala:207 Gtk/Sidebar.vala:735
-#: Utility/Device.vala:2524
+#: Utility/Device.vala:2532
 #, c-format
 msgid "ReadOnly"
 msgstr ""
@@ -3264,7 +3284,7 @@ msgstr ""
 msgid "Rebuild font cache"
 msgstr ""
 
-#: Gtk/MainWindow.vala:1008
+#: Gtk/MainWindow.vala:1014
 msgid "Rebuilding Font Cache..."
 msgstr ""
 
@@ -3340,7 +3360,7 @@ msgstr ""
 msgid "Remote config saved"
 msgstr ""
 
-#: Gtk/FilePropertiesWindow.vala:209 Utility/Device.vala:2526
+#: Gtk/FilePropertiesWindow.vala:209 Utility/Device.vala:2534
 #, c-format
 msgid "Removable"
 msgstr ""
@@ -3498,7 +3518,7 @@ msgstr ""
 msgid "Restore Complete"
 msgstr ""
 
-#: Gtk/DevicePopover.vala:1040
+#: Gtk/DevicePopover.vala:1044
 #, c-format
 msgid "Restore device?"
 msgstr ""
@@ -3520,7 +3540,7 @@ msgstr ""
 msgid "Restoring device from disk image..."
 msgstr ""
 
-#: Gtk/MainWindow.vala:1262
+#: Gtk/MainWindow.vala:1268
 msgid "Restoring session..."
 msgstr ""
 
@@ -3532,7 +3552,7 @@ msgstr ""
 msgid "Resume"
 msgstr ""
 
-#: Utility/Device.vala:2541
+#: Utility/Device.vala:2549
 #, c-format
 msgid "Revision"
 msgstr ""
@@ -3558,11 +3578,11 @@ msgstr ""
 msgid "Run the selected script in a terminal window"
 msgstr ""
 
-#: Gtk/MainWindow.vala:1028 Gtk/MainWindow.vala:1046
+#: Gtk/MainWindow.vala:1034 Gtk/MainWindow.vala:1052
 msgid "Running Rclone Installation Script"
 msgstr ""
 
-#: Gtk/MainWindow.vala:1036
+#: Gtk/MainWindow.vala:1042
 msgid "Running p7zip Installation Script"
 msgstr ""
 
@@ -3581,7 +3601,7 @@ msgid "Save"
 msgstr ""
 
 #: Gtk/ChecksumBox.vala:1094 Gtk/ChecksumBox.vala:1501
-#: Gtk/DevicePopover.vala:1068
+#: Gtk/DevicePopover.vala:1072
 msgid "Save As"
 msgstr ""
 
@@ -3589,7 +3609,7 @@ msgstr ""
 msgid "Save As..."
 msgstr ""
 
-#: Gtk/MainWindow.vala:1467
+#: Gtk/MainWindow.vala:1473
 msgid "Save Workspace"
 msgstr ""
 
@@ -3646,7 +3666,7 @@ msgstr ""
 msgid "Select Destination"
 msgstr ""
 
-#: Gtk/DevicePopover.vala:1068
+#: Gtk/DevicePopover.vala:1072
 msgid "Select Disk Image"
 msgstr ""
 
@@ -3749,7 +3769,7 @@ msgstr ""
 msgid "Selected item is not a text file"
 msgstr ""
 
-#: Utility/Device.vala:2537
+#: Utility/Device.vala:2545
 #, c-format
 msgid "Serial"
 msgstr ""
@@ -3975,7 +3995,7 @@ msgstr ""
 #: Gtk/FileConflictDialog.vala:542 Gtk/FileConflictDialog.vala:554
 #: Gtk/FilePropertiesBox.vala:151 Gtk/FilePropertiesWindow.vala:218
 #: Gtk/FileViewList.vala:778 Gtk/Sidebar.vala:1290 Gtk/Statusbar.vala:359
-#: Utility/Device.vala:2551 Utility/FileItem.vala:728
+#: Utility/Device.vala:2559 Utility/FileItem.vala:728
 #: Utility/VideoDownloadTask.vala:319
 #, c-format
 msgid "Size"
@@ -4038,6 +4058,10 @@ msgstr ""
 msgid "Split archive into volumes of specified size (in MB)"
 msgstr ""
 
+#: Utility/Gtk/DonationWindow.vala:96
+msgid "Sponsor a Feature"
+msgstr ""
+
 #: Gtk/TermContextMenu.vala:202
 msgid "Start chroot session in current directory"
 msgstr ""
@@ -4072,6 +4096,10 @@ msgstr ""
 
 #: Gtk/MainMenubar.vala:1943
 msgid "Style wizard"
+msgstr ""
+
+#: Utility/Gtk/DonationWindow.vala:101
+msgid "Support"
 msgstr ""
 
 #: Gtk/Settings.vala:920
@@ -4154,6 +4182,15 @@ msgstr ""
 msgid ""
 "This application is designed for the Arc GTK theme. It may not look right "
 "with other themes."
+msgstr ""
+
+#: Utility/Gtk/DonationWindow.vala:79
+msgid ""
+"This application was created for my own use. It is being distributed as a "
+"free, open-source project in the hope that it may be useful to people. This "
+"does not mean that I provide free support and free work, for changes and "
+"features that you may require. Please see sections below for more "
+"information."
 msgstr ""
 
 #: Gtk/Settings.vala:1853 Gtk/Settings.vala:2039 Gtk/Settings.vala:2240
@@ -4272,7 +4309,7 @@ msgid "URI"
 msgstr ""
 
 #: Gtk/FilePropertiesWindow.vala:195 Gtk/Sidebar.vala:723
-#: Utility/Device.vala:2507
+#: Utility/Device.vala:2515
 #, c-format
 msgid "UUID"
 msgstr ""
@@ -4329,11 +4366,11 @@ msgstr ""
 msgid "Unlock Path"
 msgstr ""
 
-#: Utility/Device.vala:606 Utility/Device.vala:1917
+#: Utility/Device.vala:614 Utility/Device.vala:1925
 msgid "Unlocked"
 msgstr ""
 
-#: Utility/Device.vala:605 Utility/Device.vala:1916
+#: Utility/Device.vala:613 Utility/Device.vala:1924
 msgid "Unlocked successfully"
 msgstr ""
 
@@ -4349,7 +4386,7 @@ msgstr ""
 msgid "Unmount this volume"
 msgstr ""
 
-#: Utility/Device.vala:2111
+#: Utility/Device.vala:2119
 msgid "Unmounting from"
 msgstr ""
 
@@ -4392,8 +4429,19 @@ msgstr ""
 msgid "Uploading items..."
 msgstr ""
 
+#: Utility/Gtk/DonationWindow.vala:103
+msgid ""
+"Use the issue tracker for reporting issues, asking questions, and requesting "
+"features. I check the tracker once a month. If you need an immediate "
+"response, use the button below to make a donation for $10 with PayPal. Add "
+"your questions to the tracker and send me an email with the issue number "
+"(teejeetech@gmail.com). This option is for queries you may have about the "
+"application, and for help with issues you are facing. This does not cover "
+"development work for bug fixes and features."
+msgstr ""
+
 #: Gtk/FilePropertiesWindow.vala:225 Gtk/Sidebar.vala:1292
-#: Gtk/Statusbar.vala:361 Utility/Device.vala:2554
+#: Gtk/Statusbar.vala:361 Utility/Device.vala:2562
 #, c-format
 msgid "Used"
 msgstr ""
@@ -4403,7 +4451,7 @@ msgstr ""
 msgid "User"
 msgstr ""
 
-#: Utility/Device.vala:566 Utility/Device.vala:1875
+#: Utility/Device.vala:573 Utility/Device.vala:1883
 msgid "User cancelled the password prompt"
 msgstr ""
 
@@ -4419,7 +4467,7 @@ msgstr ""
 msgid "Value"
 msgstr ""
 
-#: Utility/Device.vala:2529
+#: Utility/Device.vala:2537
 #, c-format
 msgid "Vendor"
 msgstr ""
@@ -4472,10 +4520,6 @@ msgstr ""
 msgid "Web Page"
 msgstr ""
 
-#: Utility/Gtk/DonationWindow.vala:128
-msgid "Website ~ teejeetech.in"
-msgstr ""
-
 #: Gtk/DevicePopoverSettingsWindow.vala:186
 msgid "Width"
 msgstr ""
@@ -4484,8 +4528,8 @@ msgstr ""
 msgid "Wiki"
 msgstr ""
 
-#: Utility/Gtk/DonationWindow.vala:120
-msgid "Wiki ~ Documentation & Help"
+#: Utility/Gtk/DonationWindow.vala:117
+msgid "Wiki (Documentation)"
 msgstr ""
 
 #: Gtk/FileContextMenu.vala:716
@@ -4521,7 +4565,7 @@ msgstr ""
 msgid "Write to USB"
 msgstr ""
 
-#: Utility/Device.vala:542 Utility/Device.vala:1850 Utility/Device.vala:1894
+#: Utility/Device.vala:549 Utility/Device.vala:1858 Utility/Device.vala:1902
 msgid "Wrong password"
 msgstr ""
 
