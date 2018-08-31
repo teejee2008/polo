@@ -48,7 +48,7 @@ public class DonationWindow : Gtk.Window {
 		set_modal (true);
 		set_deletable(true);
 		set_skip_taskbar_hint(false);
-		set_default_size (400, 700);
+		set_default_size (400, 400);
 		icon = get_app_icon(16);
 
 		//vbox_main
@@ -63,24 +63,45 @@ public class DonationWindow : Gtk.Window {
 
 		// -----------------------------
 
-		string msg = _("If you find this application useful, you can make a donation with PayPal to support this project. Your contributions will help keep this project alive and support future development.");
+		string msg = _("If you find this application useful, and wish to support its development, use the button below to make a donation with PayPal.");
 		
 		add_label(msg);
 
 		var hbox = add_hbox();
 		
-		add_link_button(hbox, _("Donate ($5)"),
+		add_link_button(hbox, _("Donate (5$)"),
 			"https://www.paypal.com/cgi-bin/webscr?business=teejeetech@gmail.com&cmd=_xclick&currency_code=USD&amount=5.00&item_name=%s+Donation".printf(appname));
 
 		add_link_button(hbox, _("Become a Patron"),
 			"https://www.patreon.com/bePatron?u=3059450");
 
+		
+		msg = _("This application was created for my own use. It is being distributed as a free, open-source project in the hope that it may be useful to people. This does not mean that I provide free support and free work, for changes and features that you may require. Please see sections below for more information.");
+		
+		var label = add_label(msg);
+
 		// -----------------------------
 
-		add_heading(_("Paid Support"));
+		msg = format_heading(_("Feature Requests")) + "   ";
 		
-		msg = _("If you need support for this application, use the button below to make a donation with PayPal. You can either email me directly (teejeetech@gmail.com), or add your questions to the Issue Tracker, and send me the issue number. This option is only for queries you may have about the application, and for help with issues you are facing. This does not cover development work.");
+		msg += _("If you need changes to this application, please add your requirements to the issue tracker. You can sponsor your own request, or sponsor an existing request by making a donation with PayPal. Items available for sponsorship are labelled as <i>\"OpenForSponsorship\"</i>, along with an amount for the work involved. You can make a donation for that amount with PayPal, and leave a comment on the thread, or email me with the issue number. I will work on it the next time I update the application, and changes will be included in the next release.");
 
+		add_label(msg);
+
+		hbox = add_hbox();
+		
+		add_link_button(hbox, _("Items for Sponsorship"),
+			"https://github.com/teejee2008/" + appname.down() + "/issues?q=is%3Aissue+is%3Aopen+label%3AOpenForSponsorship");
+			
+		add_link_button(hbox, _("Sponsor a Feature"),
+			"https://www.paypal.com/cgi-bin/webscr?business=teejeetech@gmail.com&cmd=_xclick&currency_code=USD&item_name=%s+Sponsor".printf(appname));
+
+		// -----------------------------
+
+		msg = format_heading(_("Support")) + "   ";
+		
+		msg += _("Use the issue tracker for reporting issues, asking questions, and requesting features. I check the tracker once a month. If you need an immediate response, use the button below to make a donation for $10 with PayPal. Add your questions to the tracker and send me an email with the issue number (teejeetech@gmail.com). This option is for queries you may have about the application, and for help with issues you are facing. This does not cover development work for bug fixes and features.");
+		
 		add_label(msg);
 
 		hbox = add_hbox();
@@ -88,16 +109,6 @@ public class DonationWindow : Gtk.Window {
 		add_link_button(hbox, _("Get Support ($10)"),
 			"https://www.paypal.com/cgi-bin/webscr?business=teejeetech@gmail.com&cmd=_xclick&currency_code=USD&amount=10.00&item_name=%s+Support".printf(appname));
 
-		// -----------------------------
-
-		add_heading(_("Free Support"));
-		
-		msg = _("Please use the GitHub Issue Tracker to report issues, request features, and ask questions. Search for a topic to find answers for common questions, and solutions for common issues. Issues and features will be picked up from this tracker and implemented in a future release.");
-		
-		add_label(msg);
-		
-		hbox = add_hbox();
-		
 		add_link_button(hbox, _("Issue Tracker"),
 			"https://github.com/teejee2008/%s/issues".printf(appname.down()));
 
@@ -106,14 +117,14 @@ public class DonationWindow : Gtk.Window {
 			add_link_button(hbox, _("Wiki (Documentation)"),
 				"https://github.com/teejee2008/%s/wiki".printf(appname.down()));
 		}
-
+		
 		// -----------------------------
 
 		if (has_donation_plugins){
 			
-			add_heading(_("Donation Features"));
+			msg = format_heading(_("Donation Features")) + "   ";
 			
-			msg = _("I sometimes create exclusive plugins to encourage people to contribute. You can make a contribution by translating the application to other languages, submitting code changes, or by making a donation for $10 with PayPal. Contributors are added to an email distribution list, and plugins are sent by email.");
+			msg += _("I sometimes create exclusive plugins to encourage people to contribute. You can make a contribution by translating the application to other languages, by submitting code changes, or by making a donation for $10 with PayPal. Contributors are added to an email distribution list, and plugins are sent by email. These plugins are open-source. You can request the source code after receiving the plugins.");
 
 			add_label(msg);
 
@@ -125,22 +136,6 @@ public class DonationWindow : Gtk.Window {
 			add_link_button(hbox, _("Get Donation Plugins ($10)"),
 				"https://www.paypal.com/cgi-bin/webscr?business=teejeetech@gmail.com&cmd=_xclick&currency_code=USD&amount=10.00&item_name=%s+Donation+Plugins".printf(appname));
 		}
-		
-		// -----------------------------
-
-		add_heading(_("Sponsored Features"));
-		
-		msg = _("You can sponsor the development for a bugfix or feature. These items are labelled as <i>\"OpenForSponsorship\"</i> in the issue tracker, along with an amount for the work involved. You can make a donation for that amount via PayPal, and either leave a comment on the thread, or email me with the issue number. I will work on it the next time I update the application, and changes will be included in the next release.");
-
-		add_label(msg);
-
-		hbox = add_hbox();
-		
-		add_link_button(hbox, _("Items for Sponsorship"),
-			"https://github.com/teejee2008/" + appname.down() + "/issues?q=is%3Aissue+is%3Aopen+label%3AOpenForSponsorship");
-			
-		add_link_button(hbox, _("Sponsor a Feature"),
-			"https://www.paypal.com/cgi-bin/webscr?business=teejeetech@gmail.com&cmd=_xclick&currency_code=USD&item_name=%s+Sponsor".printf(appname));
 		
 		// close window ---------------------------------------------------------
 
@@ -158,18 +153,23 @@ public class DonationWindow : Gtk.Window {
 	}
 
 	private void add_heading(string msg){
-
-		var label = new Gtk.Label("<span weight=\"bold\" size=\"large\">%s</span>".printf(msg));
+		
+		var label = new Gtk.Label("<span weight=\"bold\" size=\"large\" style=\"italic\">%s</span>".printf(msg));
 		label.wrap = true;
 		label.wrap_mode = Pango.WrapMode.WORD;
 		label.set_use_markup(true);
 		label.max_width_chars = 50;
 		label.xalign = 0.0f;
-		label.margin_top = 6;
+		label.margin_top = 12;
 		vbox_main.add(label);
 	}
+	
+	private string format_heading(string msg){
 
-	private void add_label(string msg){
+		return "<span weight=\"bold\" size=\"large\" style=\"italic\">%s</span>".printf(msg);
+	}
+
+	private Gtk.Label add_label(string msg){
 
 		var label = new Gtk.Label(msg);
 		label.wrap = true;
@@ -184,6 +184,8 @@ public class DonationWindow : Gtk.Window {
 		scrolled.vscrollbar_policy = PolicyType.NEVER;
 		scrolled.add(label);
 		vbox_main.add(scrolled);
+
+		return label;
 	}
 
 	private Gtk.ButtonBox add_hbox(){
