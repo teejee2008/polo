@@ -916,6 +916,8 @@ public class DevicePopover : Gtk.Popover {
 	private Gtk.TreeIter? add_device(Gtk.TreeStore model, Device dev, Gtk.TreeIter? iter_parent){
 
 		if (dev.size_bytes < 100 * KB){ return null; }
+
+		if (dev.fstype == "swap") { return null; }
 		
 		TreeIter iter;
 		model.append(out iter, iter_parent);
