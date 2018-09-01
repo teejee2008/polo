@@ -41,10 +41,8 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 	private FileItemArchive? archive;
 
 	// ui for archive_task
-	//private Gtk.Grid grid_stats;
 	private Gtk.Spinner spinner;
 	private Gtk.Label lbl_header;
-	private Gtk.Label lbl_status;
 	private Gtk.Box hbox_bar;
 	private Gtk.DrawingArea drawing_area;
 	private Gtk.Label lbl_file_count_value;
@@ -55,13 +53,19 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 	private Gtk.Label lbl_elapsed_value;
 	private Gtk.Label lbl_remaining_value;
 	private Gtk.Label lbl_speed_value;
+	
 	//actions
-	//private Gtk.Box hbox_actions;
 	private Gtk.Button btn_background;
 	private Gtk.Button btn_pause;
 	private Gtk.Button btn_stop;
 	private Gtk.Button btn_finish;
 	private double progress_prev;
+
+	private Gtk.Label lbl_prg_status;
+	private Gtk.ProgressBar prg_status;
+
+	private Gtk.Label lbl_prg_ratio;
+	private Gtk.ProgressBar prg_ratio;
 	
 	private uint tmr_password = 0;
 	private uint tmr_next = 0;
@@ -129,7 +133,9 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		lbl_header = label;
 		
 		init_labels();
+		
 		init_progress_bar();
+		
 		init_command_buttons();
 	}
 
@@ -140,15 +146,18 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		
 		//grid_stats
 		var grid_stats = new Grid();
-		grid_stats.set_column_spacing (6);
+		grid_stats.set_column_spacing(20);
 		grid_stats.set_row_spacing (3);
 		grid_stats.column_homogeneous = true;
 		//grid_stats.hexpand = true;
 		hbox.add(grid_stats);
 
+		grid_stats.margin_bottom = 12;
+
 		int row = -1;
 
 		//lbl_file_count -----------------------------------------
+		
 		var lbl_file_count = new Gtk.Label(_("Files:"));
 		lbl_file_count.xalign = 0.0f;
 		grid_stats.attach(lbl_file_count, 0, ++row, 1, 1);
@@ -159,6 +168,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		grid_stats.attach(lbl_file_count_value, 1, row, 1, 1);
 
 		//lbl_elapsed -----------------------------------------
+		
 		var lbl_elapsed = new Gtk.Label(_("Elapsed:"));
 		lbl_elapsed.xalign = 0.0f;
 		grid_stats.attach(lbl_elapsed, 0, ++row, 1, 1);
@@ -169,6 +179,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		grid_stats.attach(lbl_elapsed_value, 1, row, 1, 1);
 
 		//lbl_remaining -----------------------------------------
+		
 		var lbl_remaining = new Gtk.Label(_("Remaining:"));
 		lbl_remaining.xalign = 0.0f;
 		grid_stats.attach(lbl_remaining, 0, ++row, 1, 1);
@@ -179,6 +190,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		grid_stats.attach(lbl_remaining_value, 1, row, 1, 1);
 
 		//lbl_speed -----------------------------------------
+		
 		var lbl_speed = new Gtk.Label(_("Speed:"));
 		lbl_speed.xalign = 0.0f;
 		grid_stats.attach(lbl_speed, 0, ++row, 1, 1);
@@ -191,9 +203,10 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		row = -1;
 
 		//lbl_data -------------------------------------------------
+		
 		var lbl_data = new Gtk.Label(_("Data:"));
 		lbl_data.xalign = 0.0f;
-		lbl_data.margin_left = 12;
+		//lbl_data.margin_left = 12;
 		grid_stats.attach(lbl_data, 2, ++row, 1, 1);
 
 		//lbl_data_value
@@ -202,9 +215,10 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		grid_stats.attach(lbl_data_value, 3, row, 1, 1);
 
 		//lbl_processed ------------------------------------------
+		
 		var lbl_processed = new Gtk.Label(_("Processed:"));
 		lbl_processed.xalign = 0.0f;
-		lbl_processed.margin_left = 12;
+		//lbl_processed.margin_left = 12;
 		grid_stats.attach(lbl_processed, 2, ++row, 1, 1);
 
 		//lbl_processed_value
@@ -213,9 +227,10 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		grid_stats.attach(lbl_processed_value, 3, row, 1, 1);
 
 		//lbl_compressed -----------------------------------------
+		
 		var lbl_compressed = new Gtk.Label(_("Compressed:"));
 		lbl_compressed.xalign = 0.0f;
-		lbl_compressed.margin_left = 12;
+		//lbl_compressed.margin_left = 12;
 		grid_stats.attach(lbl_compressed, 2, ++row, 1, 1);
 
 		//lbl_compressed_value
@@ -224,9 +239,10 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		grid_stats.attach(lbl_compressed_value, 3, row, 1, 1);
 
 		//lbl_ratio -----------------------------------------
+		
 		var lbl_ratio = new Gtk.Label(_("Ratio:"));
 		lbl_ratio.xalign = 0.0f;
-		lbl_ratio.margin_left = 12;
+		//lbl_ratio.margin_left = 12;
 		grid_stats.attach(lbl_ratio, 2, ++row, 1, 1);
 
 		//lbl_ratio_value
@@ -237,208 +253,46 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		var label = new Gtk.Label("");
 		label.hexpand = true;
 		hbox.add(label);
-
-		//hbox_status_line ---------------------------------------
-
-		var hbox_status_line = new Gtk.Box(Orientation.HORIZONTAL, 6);
-		hbox_status_line.margin_top = 12;
-		contents.add (hbox_status_line);
-
-		spinner = new Gtk.Spinner();
-		hbox_status_line.add(spinner);
-
-		//lbl_status
-		lbl_status = new Gtk.Label("");
-		lbl_status.xalign = 0.0f;
-		lbl_status.ellipsize = Pango.EllipsizeMode.MIDDLE;
-		lbl_status.max_width_chars = 50;
-		hbox_status_line.add(lbl_status);
-
 	}
 
 	private void init_progress_bar() {
+
+		var hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
+		contents.add(hbox);
 		
-		drawing_area = new Gtk.DrawingArea();
-		drawing_area.set_size_request(-1, 20);
-		drawing_area.hexpand = true;
+		var label = new Gtk.Label(_("Progress:"));
+		label.xalign = 0.0f;
+		hbox.add(label);
+
+		label = new Gtk.Label("");
+		label.xalign = 0.0f;
+		hbox.add(label);
 		
-		var sw_progress = new Gtk.ScrolledWindow(null, null);
-		sw_progress.set_shadow_type (ShadowType.ETCHED_IN);
-		sw_progress.hscrollbar_policy = PolicyType.NEVER;
-		sw_progress.vscrollbar_policy = PolicyType.NEVER;
-		//sw_progress.expand = true;
-		sw_progress.add (drawing_area);
-
-		hbox_bar = new Gtk.Box(Orientation.HORIZONTAL, 6);
-		contents.add (hbox_bar);
-		hbox_bar.add(sw_progress);
+		lbl_prg_status = label;
 		
-		drawing_area.draw.connect (drawing_area_draw);
-	}
+		var prg = new Gtk.ProgressBar();
+		//prg.show_text = true;
+		contents.add(prg);
+		prg_status = prg;
 
-	private bool drawing_area_draw(Cairo.Context context){
+		// ----------------------------------------------------
 
-		if (task.archive == null){ return true; }
+		hbox = new Gtk.Box(Orientation.HORIZONTAL, 6);
+		contents.add(hbox);
 
-		weak Gtk.StyleContext style_context = drawing_area.get_style_context ();
+		label = new Gtk.Label(_("Compression:"));
+		label.xalign = 0.0f;
+		hbox.add(label);
 
-		var color_default = style_context.get_color (0);
-
-		//https://www.google.co.in/design/spec/style/color.html#color-color-palette
-
-		var color_blue_100 = Gdk.RGBA();
-		color_blue_100.parse("#BBDEFB");
-		color_blue_100.alpha = 1.0;
-
-		var color_blue_200 = Gdk.RGBA();
-		color_blue_200.parse("#90CAF9");
-		color_blue_200.alpha = 1.0;
-
-		var color_blue_300 = Gdk.RGBA();
-		color_blue_300.parse("#64B5F6");
-		color_blue_300.alpha = 1.0;
-
-		var color_white = Gdk.RGBA();
-		color_white.parse("white");
-		color_white.alpha = 1.0;
-
-		var color_black = Gdk.RGBA();
-		color_black.parse("black");
-		color_black.alpha = 1.0;
-
-		var color_grey_700 = Gdk.RGBA();
-		color_grey_700.parse("#616161");
-		color_grey_700.alpha = 1.0;
-
-		var color_grey_800 = Gdk.RGBA();
-		color_grey_800.parse("#424242");
-		color_grey_800.alpha = 1.0;
-
-		var color_grey_D8 = Gdk.RGBA();
-		color_grey_D8.parse("#D8D8D8");
-		color_grey_D8.alpha = 1.0;
-
-		var color_grey_BD = Gdk.RGBA();
-		color_grey_BD.parse("#BDBDBD");
-		color_grey_BD.alpha = 1.0;
-
-		var color_grey_A4 = Gdk.RGBA();
-		color_grey_A4.parse("#A4A4A4");
-		color_grey_A4.alpha = 1.0;
-
-		var color_grey_84 = Gdk.RGBA();
-		color_grey_84.parse("#848484");
-		color_grey_84.alpha = 1.0;
-
-		var color_red = Gdk.RGBA();
-		color_red.parse("red");
-		color_red.alpha = 1.0;
-
-		var color_blue = Gdk.RGBA();
-		color_blue.parse("blue");
-		color_blue.alpha = 1.0;
-
-		var color_progress = color_grey_BD;
-		var color_ratio = color_grey_84;
+		label = new Gtk.Label("");
+		label.xalign = 0.0f;
+		hbox.add(label);
 		
-		color_default = color_black;
+		lbl_prg_ratio = label;
 
-		int w = drawing_area.get_allocated_width();
-		int h = drawing_area.get_allocated_height();
-
-		int x = 0;
-		int y = 0;
-
-		
-		//------ BEGIN CONTEXT -------------------------------------------------
-		//Draw lighter bar for processed data
-		
-		context.set_line_width (1);
-		Gdk.cairo_set_source_rgba (context, color_progress);
-
-		if (task.progress > progress_prev) {
-			x = (int)(task.progress * w);
-			progress_prev = task.progress;
-		}
-		else {
-			x = (int)(progress_prev * w);
-		}
-		context.rectangle(0, 0, x, h);
-
-		context.fill();
-		//------ END CONTEXT ---------------------------------------------------
-
-		if (task.progress > 0) {
-			//------ BEGIN CONTEXT -------------------------------------------------
-			//Draw progress % text
-			
-			context.set_line_width (1);
-			context.set_font_size(12);
-			Gdk.cairo_set_source_rgba (context, color_grey_700);
-
-			y = (int) (h / 2.0);
-			context.move_to (w - 40, y + 3);
-			context.show_text("%.0f %%".printf(task.progress * 100));
-			//log_msg("%.0f %%".printf(task.progress * 100));
-			context.stroke();
-			//------ END CONTEXT ---------------------------------------------------
-		}
-
-		if (task.action == ArchiveAction.CREATE){
-			
-			//------ BEGIN CONTEXT -------------------------------------------------
-			//Draw darker bar for compressed data
-			
-			context.set_line_width (1);
-			Gdk.cairo_set_source_rgba (context, color_ratio);
-
-			x = (int)((task.compressed_bytes * 1.0 * w ) / task.archive.file_size) ;
-			context.rectangle(0, 0, x, h);
-
-			context.fill();
-			//------ END CONTEXT ---------------------------------------------------
-		}
-		
-
-		if ((task.action == ArchiveAction.CREATE) && (task.archive.compression_ratio > 0)) {
-			//------ BEGIN CONTEXT -------------------------------------------------
-			//Draw compression ratio text
-			
-			context.set_line_width (1);
-			context.set_font_size(12);
-			Gdk.cairo_set_source_rgba (context, color_grey_700);
-
-			y = (int) (h / 2.0);
-
-			if (x > (w - 40)) {
-				x = 0;
-			}
-			context.move_to (x + 3, y + 3);
-			context.show_text("%.0f %%".printf(task.archive.compression_ratio));
-			context.stroke();
-			//------ END CONTEXT ---------------------------------------------------
-		}
-
-		//------ BEGIN CONTEXT -------------------------------------------------
-		context.set_line_width (1);
-		Gdk.cairo_set_source_rgba (context, color_black);
-
-		context.move_to(0, 0);
-		context.line_to(w, 0);
-		context.line_to(w, h);
-		context.line_to(0, h);
-		context.line_to(0, 0);
-
-		context.stroke();
-		//------ END CONTEXT ---------------------------------------------------
-
-		return true;
-	}
-	
-	private void redraw_progressbar() {
-		drawing_area.queue_draw_area(0, 0,
-		                             drawing_area.get_allocated_width(),
-		                             drawing_area.get_allocated_height());
+		prg = new Gtk.ProgressBar();
+		contents.add(prg);
+		prg_ratio= prg;
 	}
 
 	private void init_command_buttons() {
@@ -452,11 +306,9 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		hbox_actions.homogeneous = true;
 		hbox.add(hbox_actions);
 
-		//hbox_actions.set_size_request(def_width, -1);
-		
 		//btn_pause ---------------------------------------------------
 
-		btn_pause = new Gtk.Button.from_stock ("media-playback-pause");
+		btn_pause = new Gtk.Button();
 		btn_pause.set_tooltip_text (_("Pause"));
 		hbox_actions.add(btn_pause);
 
@@ -495,14 +347,14 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 
 		//btn_stop -----------------------------------------------------
 		
-		btn_stop = new Gtk.Button.from_stock ("process-stop");
+		btn_stop = new Gtk.Button();
 		btn_stop.set_tooltip_text (_("Stop"));
 		hbox_actions.add(btn_stop);
 
 		btn_stop.label = _("Stop");
 		btn_stop.always_show_image = true;
 		btn_stop.image_position = PositionType.LEFT;
-		btn_stop.image = IconManager.lookup_image("process-stop", 32);
+		btn_stop.image = IconManager.lookup_image("process-stop", 16);
 
 		btn_stop.clicked.connect(() => {
 			cancel();
@@ -511,7 +363,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 
 		//btn_finish ---------------------------------------------------
 
-		btn_finish = new Gtk.Button.from_stock ("window-close");
+		btn_finish = new Gtk.Button();
 		btn_finish.set_tooltip_text (_("Close this window"));
 		btn_finish.set_size_request(100,30);
 		btn_finish.no_show_all = true;
@@ -621,7 +473,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		spinner.visible = true;
 		gtk_do_events();
 		
-		lbl_status.label = "Preparing...";
+		//lbl_status.label = "Preparing...";
 		progress_prev = 0.0;
 		task.progress = 0.0;
 
@@ -650,7 +502,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 			}
 			
 			// status line
-			lbl_status.label = task.stat_status_line;
+			//lbl_status.label = task.stat_status_line;
 
 			// elapsed time
 			lbl_elapsed_value.label = task.stat_time_elapsed;
@@ -678,6 +530,14 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 				lbl_data_value.label = format_file_size(task.archive.file_size);
 				previous_archive = task.archive;
 			}
+
+			prg_status.fraction = task.progress;
+
+			lbl_prg_status.label = "%.0f %%".printf(task.progress * 100.0);
+
+			prg_ratio.fraction = task.compression_ratio / 100.0;
+
+			lbl_prg_ratio.label = task.stat_compression_ratio;
 			
 			gtk_do_events();
 
@@ -699,8 +559,6 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 			return false;
 		}
 
-		redraw_progressbar();
-
 		return true;
 	}
 	
@@ -717,6 +575,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		}
 		
 		task_complete();
+		
 		finish();
 	}
 
@@ -801,50 +660,6 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		task_complete();
 	}
 
-	/*private string prompt_for_extraction_path(){
-		
-		log_debug("ProgressPanelArchiveTask: prompt_for_extraction_path()");
-		
-		bool ok = false;
-		string outpath = "";
-		
-		//chooser
-		var chooser = new Gtk.FileChooserDialog(
-			_("Select Extraction Location"),
-			window,
-			FileChooserAction.SELECT_FOLDER,
-			"_Cancel",
-			Gtk.ResponseType.CANCEL,
-			"_Open",
-			Gtk.ResponseType.ACCEPT
-		);
-
-		chooser.select_multiple = false;
-		//chooser.set_filename(archive_location);
-
-		if (App.last_output_dir.length > 0){
-			chooser.set_current_folder(App.last_output_dir);
-		}
-		else{
-			chooser.set_current_folder(App.user_home);
-		}
-		
-		if (chooser.run() == Gtk.ResponseType.ACCEPT) {
-			outpath = chooser.get_filename();
-			App.last_output_dir = task.extraction_path;
-			ok = true;
-		}
-		else{
-			log_msg(_("Cancelled by user"));
-			ok = false;
-		}
-		
-		chooser.close();
-		gtk_do_events();
-
-		return outpath;
-	}*/
-
 	private bool prompt_for_password_and_restart_task(){
 
 		log_debug("ProgressPanelArchiveTask: prompt_for_password_and_restart_task()");
@@ -880,6 +695,7 @@ public class ProgressPanelArchiveTask : ProgressPanel {
 		}
 
 		was_restarted = false;
+		
 		start_task(); // start next
 		
 		return false;
