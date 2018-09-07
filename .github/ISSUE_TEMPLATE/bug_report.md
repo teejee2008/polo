@@ -19,9 +19,11 @@ A clear and concise description of what you expected to happen.
 **Screenshots**
 If applicable, add screenshots to help explain your problem.
 
-**System (please complete the following information):**
+**System:**
  - Linux Distribution Name and Version: [e.g. Ubuntu 16.04]
  - Desktop [e.g. MATE, XFCE]
  - Application Version [e.g. v18.8]
 
-***NOTE: Paid support is now available for this application. Please make a donation for [$10 via PayPal](https://www.paypal.com/cgi-bin/webscr?business=teejeetech@gmail.com&cmd=_xclick&currency_code=USD&amount=10&item_name=Polo%20Support) if you need support for this issue.***
+***Consider making a donation to support this project***
+
+[![](https://www.paypalobjects.com/en_US/i/btn/btn_donate_LG.gif)](https://www.paypal.com/cgi-bin/webscr?business=teejeetech@gmail.com&cmd=_xclick&currency_code=USD&item_name=Polo%20Donation)
