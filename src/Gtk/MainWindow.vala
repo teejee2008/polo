@@ -296,12 +296,13 @@ public class MainWindow : Gtk.Window {
 		}
 
 		Timeout.add(100, ()=>{
+			
 			restore_propbar_position();
 
-			if (!App.donation_displayed){
-				open_donate_window();
-				App.donation_displayed = true;
-			}
+			//if (!App.donation_displayed){
+			//	open_donate_window();
+			//	App.donation_displayed = true;
+			//}
 			
 			return false;
 		});
