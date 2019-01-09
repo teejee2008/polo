@@ -87,7 +87,7 @@ app-translations:
 		Utility/Gtk/*.vala
 
 	# update translation files
-	for lang in de nl fr; do \
+	for lang in de nl fr tr; do \
 		msgmerge --update -v ../po/${app_name}-$$lang.po ../${app_name}.pot ; \
 	done
 	
@@ -131,7 +131,7 @@ install:
 	install -m 0755 ../debian/${app_name}-gtk.appdata.xml "$(DESTDIR)$(sharedir)/appdata"
 
 	# translations
-	for lang in de nl fr; do \
+	for lang in de nl fr tr; do \
 		mkdir -p "$(DESTDIR)$(localedir)/$$lang/LC_MESSAGES"; \
 		msgfmt --check --verbose -o "$(DESTDIR)$(localedir)/$$lang/LC_MESSAGES/${app_name}.mo" ../po/${app_name}-$$lang.po ; \
 	done
