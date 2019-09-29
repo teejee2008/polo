@@ -2,7 +2,9 @@
 Name=Polo
 Name[en_US]=Polo
 Comment=Polo File Manager
+Comment[tr_TR]=Polo Dosya Yöneticisi
 GenericName=File Manager
+GenericName[tr_TR]=Dosya Yöneticisi
 Exec=polo-gtk %F
 Icon=polo
 Terminal=false
