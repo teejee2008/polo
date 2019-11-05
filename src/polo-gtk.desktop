@@ -12,5 +12,5 @@ Type=Application
 Categories=System;Utility;GTK;FileTools;FileManager;
 StartupNotify=false
 X-KDE-StartupNotify=false
-StartupWMClass=Polo-gtk
+# StartupWMClass=Polo-gtk
 MimeType=inode/directory;
