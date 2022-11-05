@@ -998,13 +998,13 @@ public class MainWindow : Gtk.Window {
 
 		dialog.program_name = AppName;
 		dialog.comments = _("A modern file manager for Linux");
-		dialog.copyright = "Copyright © 2012-18 Tony George (%s)".printf(AppAuthorEmail);
+		dialog.copyright = "Copyright © 2012-22 Tony George (%s)".printf(AppAuthorEmail);
 		dialog.version = AppVersion;
 		dialog.logo = get_app_icon(128,".svg");
 
 		//dialog.license = "";
-		dialog.website = "https://github.com/teejee2008";
-		dialog.website_label = "https://github.com/teejee2008";
+		dialog.website = "https://teejeetech.com";
+		dialog.website_label = "https://teejeetech.com";
 
 		dialog.initialize();
 		dialog.show_all();
