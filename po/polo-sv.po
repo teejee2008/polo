@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: Polo 18.8.3 BETA\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
-"POT-Creation-Date: 2018-08-31 23:39+0530\n"
+"POT-Creation-Date: 2022-11-05 11:58+0530\n"
 "PO-Revision-Date: 2019-02-20 13:07+0100\n"
 "Last-Translator: Åke Engelbrektson <eson@svenskasprakfiler.se>\n"
 "Language-Team: Svenska Språkfiler <contactform@svenskasprakfiler.se>\n"
@@ -74,10 +74,10 @@ msgstr "2H"
 msgid "4"
 msgstr "4"
 
-#: Gtk/ProgressPanelArchiveTask.vala:157 Gtk/ProgressPanelArchiveTask.vala:167
-#: Gtk/ProgressPanelArchiveTask.vala:177 Gtk/ProgressPanelArchiveTask.vala:187
-#: Gtk/ProgressPanelArchiveTask.vala:200 Gtk/ProgressPanelArchiveTask.vala:211
-#: Gtk/ProgressPanelArchiveTask.vala:222 Gtk/ProgressPanelArchiveTask.vala:233
+#: Gtk/ProgressPanelArchiveTask.vala:166 Gtk/ProgressPanelArchiveTask.vala:177
+#: Gtk/ProgressPanelArchiveTask.vala:188 Gtk/ProgressPanelArchiveTask.vala:199
+#: Gtk/ProgressPanelArchiveTask.vala:213 Gtk/ProgressPanelArchiveTask.vala:225
+#: Gtk/ProgressPanelArchiveTask.vala:237 Gtk/ProgressPanelArchiveTask.vala:249
 msgid "???"
 msgstr "???"
 
@@ -90,7 +90,7 @@ msgstr ""
 "En dynamiskt allokerad disk kommer att skapas med angiven storlek. "
 "Filstorleken ökar gradvis allt eftersom disken ändras."
 
-#: Gtk/MainWindow.vala:999
+#: Gtk/MainWindow.vala:1000
 msgid "A modern file manager for Linux"
 msgstr "En modern filhanterare för Linux"
 
@@ -287,7 +287,7 @@ msgstr "Säkerhetskopiering slutförd"
 msgid "Base"
 msgstr "Bas"
 
-#: Utility/Gtk/DonationWindow.vala:75
+#: Utility/Gtk/DonationWindow.vala:80
 msgid "Become a Patron"
 msgstr "Bli en beskyddare"
 
@@ -431,11 +431,11 @@ msgstr "Vill du avbryta filåtgärderna?"
 msgid "Cancel this file operation"
 msgstr "Avbryt den här filåtgärden"
 
-#: Gtk/ProgressPanelArchiveTask.vala:737 Gtk/ProgressPanelArchiveTask.vala:740
+#: Gtk/ProgressPanelArchiveTask.vala:596 Gtk/ProgressPanelArchiveTask.vala:599
 msgid "Cancelled"
 msgstr "Stoppad"
 
-#: Gtk/ProgressPanelArchiveTask.vala:865
+#: Gtk/ProgressPanelArchiveTask.vala:680
 msgid "Cancelled by user"
 msgstr "Avbruten av användaren"
 
@@ -577,7 +577,7 @@ msgstr "Klassisk lista (Enkelpanel + Sidofält + Listvy)"
 msgid "Clean thumbnail cache"
 msgstr "Rensa miniatyr-cachen"
 
-#: Gtk/MainWindow.vala:1026
+#: Gtk/MainWindow.vala:1027
 msgid "Cleaning Thumbnail Cache..."
 msgstr "Rensar miniatyr-cache..."
 
@@ -620,18 +620,15 @@ msgstr "Klicka för att redigera sökväg"
 #: Gtk/ClamScanBox.vala:482 Gtk/DevicePopoverSettingsWindow.vala:292
 #: Gtk/FileViewTab.vala:329 Gtk/MessageBar.vala:152 Gtk/SelectionBar.vala:204
 #: Gtk/WizardWindow.vala:143 Utility/Gtk/AboutWindow.vala:400
+#: Utility/Gtk/DonationWindow.vala:137
 msgid "Close"
 msgstr "Stäng"
-
-#: Utility/Gtk/DonationWindow.vala:144
-msgid "Close Window"
-msgstr "Stäng fönstret"
 
 #: Gtk/Settings.vala:1131
 msgid "Close button (R)"
 msgstr "Stängknapp (R)"
 
-#: Gtk/MainHeaderBar.vala:313 Gtk/ProgressPanelArchiveTask.vala:515
+#: Gtk/MainHeaderBar.vala:313 Gtk/ProgressPanelArchiveTask.vala:367
 msgid "Close this window"
 msgstr "Stäng detta fönster"
 
@@ -723,12 +720,17 @@ msgstr "Komprimera"
 msgid "Compress selected items and create new archive"
 msgstr "Komprimera markerade objekt och skapa ett nytt arkiv"
 
-#: Gtk/ProgressPanelArchiveTask.vala:216
+#: Gtk/ProgressPanelArchiveTask.vala:231
 msgid "Compressed:"
 msgstr "Komprimerad:"
 
-#: Gtk/ProgressPanelArchiveTask.vala:98
+#: Gtk/ProgressPanelArchiveTask.vala:102
 msgid "Compressing"
+msgstr "Komprimerar"
+
+#: Gtk/ProgressPanelArchiveTask.vala:283
+#, fuzzy
+msgid "Compression:"
 msgstr "Komprimerar"
 
 #: Gtk/PasswordDialog.vala:129
@@ -983,7 +985,7 @@ msgid "Create new folder in this location"
 msgstr "Skapa ny mapp på denna plats"
 
 #: Gtk/FilePropertiesBox.vala:265 Gtk/KvmCreateDiskWindow.vala:463
-#: Gtk/ProgressPanelArchiveTask.vala:752 Gtk/ProgressPanelImageTask.vala:207
+#: Gtk/ProgressPanelArchiveTask.vala:611 Gtk/ProgressPanelImageTask.vala:207
 #: Gtk/ProgressPanelKvmTask.vala:258
 #, c-format
 msgid "Created"
@@ -1050,7 +1052,7 @@ msgstr "Klipp ut markerade objekt"
 msgid "Dark theme"
 msgstr "Mörkt tema"
 
-#: Gtk/ProgressPanelArchiveTask.vala:194
+#: Gtk/ProgressPanelArchiveTask.vala:207
 msgid "Data:"
 msgstr "Data:"
 
@@ -1269,15 +1271,11 @@ msgid "Domain"
 msgstr "Domän"
 
 #: Gtk/FileViewToolbar.vala:498 Gtk/MainMenubar.vala:2097
-#: Utility/Gtk/DonationWindow.vala:44
+#: Utility/Gtk/DonationWindow.vala:44 Utility/Gtk/DonationWindow.vala:77
 msgid "Donate"
 msgstr "Donera"
 
-#: Utility/Gtk/DonationWindow.vala:72
-msgid "Donate (5$)"
-msgstr "Donera (5$)"
-
-#: Utility/Gtk/DonationWindow.vala:125 Utility/Gtk/DonationWindow.vala:133
+#: Utility/Gtk/DonationWindow.vala:118 Utility/Gtk/DonationWindow.vala:126
 msgid "Donation Features"
 msgstr "Donationsfunktioner"
 
@@ -1396,7 +1394,7 @@ msgstr "Vill du avmontera enheten?"
 msgid "Eject storage device"
 msgstr "Avmontera lagringsenheten"
 
-#: Gtk/ProgressPanelArchiveTask.vala:162
+#: Gtk/ProgressPanelArchiveTask.vala:172
 msgid "Elapsed:"
 msgstr "Förfluten:"
 
@@ -1483,7 +1481,7 @@ msgid "Enter Password to Unlock"
 msgstr "Ange lösenord för att låsa upp"
 
 #: Gtk/FileViewList.vala:4654 Gtk/FileViewList.vala:4688
-#: Gtk/FileViewList.vala:4728 Gtk/MainWindow.vala:1481
+#: Gtk/FileViewList.vala:4728 Gtk/MainWindow.vala:1482
 msgid "Enter another name"
 msgstr "Ange ett annat namn"
 
@@ -1524,11 +1522,11 @@ msgstr "Ange resursnamn för att ansluta (Obligatoriskt)"
 msgid "Enter unique name for selected file"
 msgstr "Ange ett unikt namn för den valda filen"
 
-#: Gtk/MainWindow.vala:1473
+#: Gtk/MainWindow.vala:1474
 msgid "Enter workspace name"
 msgstr "Ange namn på arbetsytan"
 
-#: Gtk/ProgressPanelArchiveTask.vala:771 Gtk/ProgressPanelArchiveTask.vala:782
+#: Gtk/ProgressPanelArchiveTask.vala:630 Gtk/ProgressPanelArchiveTask.vala:641
 #: Gtk/ProgressPanelImageTask.vala:198 Gtk/ProgressPanelKvmTask.vala:217
 #: Gtk/ProgressPanelKvmTask.vala:220 Gtk/ProgressPanelPdfTask.vala:198
 #: Utility/Device.vala:1697 Utility/KvmTask.vala:311
@@ -1622,15 +1620,15 @@ msgid ""
 "Extract archives to the opposite pane. Existing files will be overwritten."
 msgstr "Extrahera arkiv till motsatt panel. Befintliga filer skrivs över."
 
-#: Gtk/ProgressPanelArchiveTask.vala:755
+#: Gtk/ProgressPanelArchiveTask.vala:614
 msgid "Extracted"
 msgstr "Extraherade"
 
-#: Gtk/ProgressPanelArchiveTask.vala:101
+#: Gtk/ProgressPanelArchiveTask.vala:105
 msgid "Extracting"
 msgstr "Extraherar"
 
-#: Gtk/ProgressPanelArchiveTask.vala:591
+#: Gtk/ProgressPanelArchiveTask.vala:443
 msgid "Extraction path not specified"
 msgstr "Extraktionssökväg inte specificerad"
 
@@ -1759,7 +1757,7 @@ msgstr "Snabb"
 msgid "Fastest"
 msgstr "Snabbast"
 
-#: Utility/Gtk/DonationWindow.vala:85
+#: Utility/Gtk/DonationWindow.vala:106
 msgid "Feature Requests"
 msgstr "Funktionsönskemål"
 
@@ -1802,7 +1800,7 @@ msgid "File Properties"
 msgstr "Filegenskaper"
 
 #: Gtk/FileViewList.vala:4688 Gtk/FileViewList.vala:4728
-#: Gtk/MainWindow.vala:1481
+#: Gtk/MainWindow.vala:1482
 msgid "File exists"
 msgstr "Filen finns redan"
 
@@ -1815,7 +1813,7 @@ msgstr "Filen har inget standardformat eller är ingen kontrollsummefil"
 msgid "File is missing"
 msgstr "Filen saknas"
 
-#: Gtk/ProgressPanelArchiveTask.vala:768
+#: Gtk/ProgressPanelArchiveTask.vala:627
 msgid "File is not an archive or format is unsupported"
 msgstr "Filen är inget arkiv eller stöds inte"
 
@@ -1898,7 +1896,7 @@ msgstr "Filer som refereras i kontrollsummefilen saknas på disk"
 msgid "Files verified"
 msgstr "Filer verifierade"
 
-#: Gtk/ProgressPanelArchiveTask.vala:152
+#: Gtk/ProgressPanelArchiveTask.vala:161
 msgid "Files:"
 msgstr "Filer:"
 
@@ -2060,13 +2058,10 @@ msgstr "Beräknar kontrollsummor..."
 msgid "Generating thumbnails..."
 msgstr "Genererar miniatyrer..."
 
-#: Utility/Gtk/DonationWindow.vala:136
-msgid "Get Donation Plugins ($10)"
+#: Utility/Gtk/DonationWindow.vala:129
+#, fuzzy
+msgid "Get Plugins ($10)"
 msgstr "Hämta donationsinstick ($10)"
-
-#: Utility/Gtk/DonationWindow.vala:109
-msgid "Get Support ($10)"
-msgstr "Få support ($10)"
 
 #: Gtk/Settings.vala:680 Gtk/Settings.vala:1092
 msgid "Global"
@@ -2178,7 +2173,7 @@ msgstr "Horisontell"
 msgid "Host IP (Eg: 192.0.10.1)"
 msgstr "Värd-IP (Exempel: 192.0.10.1)"
 
-#: Utility/Gtk/DonationWindow.vala:127
+#: Utility/Gtk/DonationWindow.vala:120
 msgid ""
 "I sometimes create exclusive plugins to encourage people to contribute. You "
 "can make a contribution by translating the application to other languages, "
@@ -2226,33 +2221,14 @@ msgstr ""
 "Vid aktivering, kommer originalfilen att att ersättas, istället för att ny "
 "fil skapas."
 
-#: Utility/Gtk/DonationWindow.vala:66
+#: Utility/Gtk/DonationWindow.vala:71
+#, fuzzy
 msgid ""
-"If you find this application useful, and wish to support its development, "
-"use the button below to make a donation with PayPal."
+"If you find this application useful, consider making a donation to support "
+"the development."
 msgstr ""
 "Om du finner det här programmet användbart och vill stödja dess utveckling, "
 "kan du använda nedanstående knapp och donera via payPal."
-
-#: Utility/Gtk/DonationWindow.vala:87
-msgid ""
-"If you need changes to this application, please add your requirements to the "
-"issue tracker. You can sponsor your own request, or sponsor an existing "
-"request by making a donation with PayPal. Items available for sponsorship "
-"are labelled as <i>\"OpenForSponsorship\"</i>, along with an amount for the "
-"work involved. You can make a donation for that amount with PayPal, and "
-"leave a comment on the thread, or email me with the issue number. I will "
-"work on it the next time I update the application, and changes will be "
-"included in the next release."
-msgstr ""
-"Om du behöver några förändringar i det här programmet, kan du lägga till "
-"dina önskemål i ärendehanteraren. Du kan sponsra ditt eget eller ett "
-"befintligt önskemål genom att donera via PayPal. Objekt tillgängliga för "
-"sponsring är märkta som <i>\"OpenForSponsorship\"</i>, tillsammans med en "
-"summa för det aktuella arbetet. Du kan donera den summan via PayPal och "
-"lämna en kommentar i tråden, eller skicka mig ett e-postmeddelande med "
-"ärendenumret. Jag kommer att arbeta med önskemålet nästa gång jag uppdaterar "
-"programmet och ändringarna inkluderas i nästa version."
 
 #: Gtk/MediaBar.vala:187
 msgid ""
@@ -2324,7 +2300,7 @@ msgstr "Ogiltig sökväg"
 msgid "Invalid Server Name"
 msgstr "Ogiltigt servernamn"
 
-#: Gtk/MainMenubar.vala:2067 Utility/Gtk/DonationWindow.vala:112
+#: Gtk/MainMenubar.vala:2067 Utility/Gtk/DonationWindow.vala:95
 msgid "Issue Tracker"
 msgstr "Ärendehanterare"
 
@@ -2339,10 +2315,6 @@ msgstr "Objektet är ingen symbolisk länk"
 #: Gtk/Settings.vala:218 Gtk/Settings.vala:249
 msgid "Items"
 msgstr "Objekt"
-
-#: Utility/Gtk/DonationWindow.vala:93
-msgid "Items for Sponsorship"
-msgstr "Objekt för sponsring"
 
 #: Gtk/FileContextMenu.vala:2044 Gtk/Settings.vala:2661
 msgid "KVM"
@@ -2430,7 +2402,7 @@ msgstr "Listar filer..."
 msgid "Listing source items..."
 msgstr "Listar källobjekt..."
 
-#: Gtk/MainWindow.vala:1265
+#: Gtk/MainWindow.vala:1266
 msgid "Loading workspace..."
 msgstr "Läser in arbetsyta..."
 
@@ -2578,7 +2550,7 @@ msgstr "Mindre"
 msgid "Missing"
 msgstr "Saknas"
 
-#: Common/Main.vala:1345 Gtk/MainWindow.vala:605
+#: Common/Main.vala:1345 Gtk/MainWindow.vala:606
 msgid "Missing Dependencies"
 msgstr "Saknade beroenden"
 
@@ -2768,7 +2740,7 @@ msgstr "Ny flik"
 msgid "New Window"
 msgstr "Nytt fönster"
 
-#: Gtk/MainWindow.vala:1468
+#: Gtk/MainWindow.vala:1469
 msgid "New Workspace"
 msgstr "Ny arbetsyta"
 
@@ -2860,7 +2832,7 @@ msgstr ""
 "kärnor på värddatorn."
 
 #: Gtk/ChecksumBox.vala:349 Gtk/ChecksumBox.vala:1418 Gtk/ChecksumBox.vala:1477
-#: Gtk/FileConflictDialog.vala:254 Gtk/ProgressPanelArchiveTask.vala:521
+#: Gtk/FileConflictDialog.vala:254 Gtk/ProgressPanelArchiveTask.vala:373
 #: Utility/Gtk/CustomMessageDialog.vala:170
 #: Utility/Gtk/CustomMessageDialog.vala:174 Utility/Gtk/GtkHelper.vala:159
 #: Utility/Gtk/LoadingWindow.vala:110
@@ -3235,9 +3207,9 @@ msgstr "Sökvägen hittades inte"
 msgid "Pathbar"
 msgstr "Adressfält"
 
-#: Gtk/ProgressPanelArchiveTask.vala:460 Gtk/ProgressPanelArchiveTask.vala:463
-#: Gtk/ProgressPanelArchiveTask.vala:484 Gtk/ProgressPanelArchiveTask.vala:485
-#: Gtk/ProgressPanelArchiveTask.vala:630
+#: Gtk/ProgressPanelArchiveTask.vala:312 Gtk/ProgressPanelArchiveTask.vala:315
+#: Gtk/ProgressPanelArchiveTask.vala:336 Gtk/ProgressPanelArchiveTask.vala:337
+#: Gtk/ProgressPanelArchiveTask.vala:482
 msgid "Pause"
 msgstr "Paus"
 
@@ -3291,9 +3263,14 @@ msgstr "Förbereder..."
 msgid "Previous"
 msgstr "Föregående"
 
-#: Gtk/ProgressPanelArchiveTask.vala:205
+#: Gtk/ProgressPanelArchiveTask.vala:219
 msgid "Processed:"
 msgstr "Bearbetade:"
+
+#: Gtk/ProgressPanelArchiveTask.vala:263
+#, fuzzy
+msgid "Progress:"
+msgstr "Komprimerad:"
 
 #: Gtk/DeviceContextMenu.vala:293 Gtk/DevicePopover.vala:641
 #: Gtk/FileContextMenu.vala:2852 Gtk/FilePropertiesWindow.vala:87
@@ -3378,7 +3355,7 @@ msgstr "RAM (MB)"
 msgid "RWX = Read Write Execute"
 msgstr "RWX = Läs Skriv Kör"
 
-#: Gtk/ProgressPanelArchiveTask.vala:227
+#: Gtk/ProgressPanelArchiveTask.vala:243
 msgid "Ratio:"
 msgstr "Proportion:"
 
@@ -3435,7 +3412,7 @@ msgstr ""
 msgid "ReadOnly"
 msgstr "Skrivskyddad"
 
-#: Gtk/ProgressPanelArchiveTask.vala:104
+#: Gtk/ProgressPanelArchiveTask.vala:108
 msgid "Reading"
 msgstr "Läser"
 
@@ -3443,7 +3420,7 @@ msgstr "Läser"
 msgid "Rebuild font cache"
 msgstr "Återskapa teckensnitts-cache"
 
-#: Gtk/MainWindow.vala:1014
+#: Gtk/MainWindow.vala:1015
 msgid "Rebuilding Font Cache..."
 msgstr "Återskapar teckensnitts-cache..."
 
@@ -3511,7 +3488,7 @@ msgstr "Uppdatera"
 msgid "Reload current location"
 msgstr "Uppdatera aktuell plats"
 
-#: Gtk/ProgressPanelArchiveTask.vala:172
+#: Gtk/ProgressPanelArchiveTask.vala:183
 msgid "Remaining:"
 msgstr "Återstår:"
 
@@ -3707,7 +3684,7 @@ msgstr "Återställd"
 msgid "Restoring device from disk image..."
 msgstr "Återställer enhet från diskavbild..."
 
-#: Gtk/MainWindow.vala:1268
+#: Gtk/MainWindow.vala:1269
 msgid "Restoring session..."
 msgstr "Återställer session..."
 
@@ -3715,7 +3692,7 @@ msgstr "Återställer session..."
 msgid "Restoring trashed files:"
 msgstr "Återställer kastade filer:"
 
-#: Gtk/ProgressPanelArchiveTask.vala:489 Gtk/ProgressPanelArchiveTask.vala:490
+#: Gtk/ProgressPanelArchiveTask.vala:341 Gtk/ProgressPanelArchiveTask.vala:342
 msgid "Resume"
 msgstr "Återuppta"
 
@@ -3747,11 +3724,11 @@ msgstr ""
 msgid "Run the selected script in a terminal window"
 msgstr "Kör det valda skriptet i ett terminalfönster"
 
-#: Gtk/MainWindow.vala:1034 Gtk/MainWindow.vala:1052
+#: Gtk/MainWindow.vala:1035 Gtk/MainWindow.vala:1053
 msgid "Running Rclone Installation Script"
 msgstr "Kör installationsskriptet för Rclone"
 
-#: Gtk/MainWindow.vala:1042
+#: Gtk/MainWindow.vala:1043
 msgid "Running p7zip Installation Script"
 msgstr "Kör installationsskriptet för p7zip"
 
@@ -3778,7 +3755,7 @@ msgstr "Spara som"
 msgid "Save As..."
 msgstr "Spara som..."
 
-#: Gtk/MainWindow.vala:1473
+#: Gtk/MainWindow.vala:1474
 msgid "Save Workspace"
 msgstr "Spara arbetsyta"
 
@@ -4212,7 +4189,7 @@ msgstr "Källa och mål är samma"
 msgid "Special"
 msgstr "Special"
 
-#: Gtk/ProgressPanelArchiveTask.vala:182
+#: Gtk/ProgressPanelArchiveTask.vala:194
 msgid "Speed:"
 msgstr "Hastighet:"
 
@@ -4232,10 +4209,6 @@ msgstr "Delningsstorlek (MB)"
 msgid "Split archive into volumes of specified size (in MB)"
 msgstr "Dela upp arkiv i volymer av specificerad storlek (i MB)"
 
-#: Utility/Gtk/DonationWindow.vala:96
-msgid "Sponsor a Feature"
-msgstr "Sponsra en funktion"
-
 #: Gtk/TermContextMenu.vala:202
 msgid "Start chroot session in current directory"
 msgstr "Starta chroot-session i aktuell mapp"
@@ -4248,7 +4221,7 @@ msgstr "Status"
 msgid "Statusbar"
 msgstr "Statusfält"
 
-#: Gtk/ProgressPanelArchiveTask.vala:499 Gtk/ProgressPanelArchiveTask.vala:502
+#: Gtk/ProgressPanelArchiveTask.vala:351 Gtk/ProgressPanelArchiveTask.vala:354
 msgid "Stop"
 msgstr "Stopp"
 
@@ -4272,7 +4245,7 @@ msgstr "Stilguide"
 msgid "Style wizard"
 msgstr "Stilguide"
 
-#: Utility/Gtk/DonationWindow.vala:101
+#: Utility/Gtk/DonationWindow.vala:85
 msgid "Support"
 msgstr "Support"
 
@@ -4336,7 +4309,7 @@ msgstr "Terminal"
 msgid "Terminal emulator to use for terminal panes"
 msgstr "Terminalemulator att användas i terminalpaneler"
 
-#: Gtk/ProgressPanelArchiveTask.vala:107
+#: Gtk/ProgressPanelArchiveTask.vala:111
 msgid "Testing"
 msgstr "Testar"
 
@@ -4344,7 +4317,7 @@ msgstr "Testar"
 msgid "There are no files selected for compression"
 msgstr "Inga filer har valts för komprimering"
 
-#: Gtk/ProgressPanelArchiveTask.vala:781
+#: Gtk/ProgressPanelArchiveTask.vala:640
 msgid "There were errors while processing the archive."
 msgstr "Fel inträffade när arkivet bearbetades."
 
@@ -4360,19 +4333,22 @@ msgstr ""
 "Detta program är designat för Arc GTK-temat. Det kanske inte ser riktigt ut "
 "med andra teman."
 
-#: Utility/Gtk/DonationWindow.vala:79
+#: Utility/Gtk/DonationWindow.vala:110
 msgid ""
-"This application was created for my own use. It is being distributed as a "
-"free, open-source project in the hope that it may be useful to people. This "
-"does not mean that I provide free support and free work, for changes and "
-"features that you may require. Please see sections below for more "
-"information."
+"This application was created for my own use in my spare time. It's not "
+"practical for me to work for free, on every change that is requested. If you "
+"need new features or changes to the application, consider making a donation "
+"to sponsor the work. If you are a developer, consider contributing to the "
+"project, by picking up items from the issue tracker and submitting code "
+"changes."
 msgstr ""
-"Det här programmet har skapats för min egen användning. Det distribueras som "
-"ett fritt, öppen källkodsprojekt med hopp om att det skall vara användbart "
-"för folk. Detta innebär inte att jag tillhandahåller gratis support och "
-"arbete, med ändringar och funktioner som du kanske önskar. Se nedanstående "
-"sektioner för mer information."
+
+#: Utility/Gtk/DonationWindow.vala:67
+msgid ""
+"This software is free for personal and commercial use. It is distributed in "
+"the hope that it is useful but without any warranty. See the GNU General "
+"Public License v2 or later for more information"
+msgstr ""
 
 #: Gtk/Settings.vala:1853 Gtk/Settings.vala:2039 Gtk/Settings.vala:2240
 msgid "Thumbnails"
@@ -4538,7 +4514,7 @@ msgstr "Okänd"
 msgid "Unknown File Format"
 msgstr "Okänt filformat"
 
-#: Gtk/ProgressPanelArchiveTask.vala:767 Gtk/ProgressPanelArchiveTask.vala:771
+#: Gtk/ProgressPanelArchiveTask.vala:626 Gtk/ProgressPanelArchiveTask.vala:630
 msgid "Unknown Format"
 msgstr "Okänt format"
 
@@ -4613,23 +4589,11 @@ msgstr "Laddar upp filer till molnlagring:"
 msgid "Uploading items..."
 msgstr "Laddar upp objekt..."
 
-#: Utility/Gtk/DonationWindow.vala:103
+#: Utility/Gtk/DonationWindow.vala:89
 msgid ""
 "Use the issue tracker for reporting issues, asking questions, and requesting "
-"features. I check the tracker once a month. If you need an immediate "
-"response, use the button below to make a donation for $10 with PayPal. Add "
-"your questions to the tracker and send me an email with the issue number "
-"(teejeetech@gmail.com). This option is for queries you may have about the "
-"application, and for help with issues you are facing. This does not cover "
-"development work for bug fixes and features."
+"features. Please avoid reporting issues by email."
 msgstr ""
-"Använd ärendehanteraren för att rapportera fel, ställa frågor och be om "
-"funktioner. Jag kollar hanteraren en gång per månad. Om du behöver "
-"omedelbart svar, kan du använda nedanstående knapp och donera $10 via "
-"PayPal. Lägg till dina ärenden i hanteraren och sänd mig ett e-"
-"postmeddelande med ärendenummer (teejeetech@gmail.com). Detta alternativ är "
-"till för frågor du kan ha om programmet och för hjälp med eventuella "
-"problem. Det täcker inte utvecklingsarbete med feljustering och funktioner."
 
 #: Gtk/FilePropertiesWindow.vala:225 Gtk/Sidebar.vala:1292
 #: Gtk/Statusbar.vala:361 Utility/Device.vala:2562
@@ -4715,13 +4679,9 @@ msgstr "Webbsida"
 msgid "Width"
 msgstr "Bredd"
 
-#: Gtk/MainMenubar.vala:2077
+#: Gtk/MainMenubar.vala:2077 Utility/Gtk/DonationWindow.vala:100
 msgid "Wiki"
 msgstr "Wiki"
-
-#: Utility/Gtk/DonationWindow.vala:117
-msgid "Wiki (Documentation)"
-msgstr "Wiki (Dokumentation)"
 
 #: Gtk/FileContextMenu.vala:716
 msgid "Window"
@@ -4833,6 +4793,74 @@ msgstr "överfört"
 #: Utility/FileTask.vala:1379
 msgid "trashed"
 msgstr "kastat"
+
+#~ msgid "Close Window"
+#~ msgstr "Stäng fönstret"
+
+#~ msgid "Donate (5$)"
+#~ msgstr "Donera (5$)"
+
+#~ msgid "Get Support ($10)"
+#~ msgstr "Få support ($10)"
+
+#~ msgid ""
+#~ "If you need changes to this application, please add your requirements to "
+#~ "the issue tracker. You can sponsor your own request, or sponsor an "
+#~ "existing request by making a donation with PayPal. Items available for "
+#~ "sponsorship are labelled as <i>\"OpenForSponsorship\"</i>, along with an "
+#~ "amount for the work involved. You can make a donation for that amount "
+#~ "with PayPal, and leave a comment on the thread, or email me with the "
+#~ "issue number. I will work on it the next time I update the application, "
+#~ "and changes will be included in the next release."
+#~ msgstr ""
+#~ "Om du behöver några förändringar i det här programmet, kan du lägga till "
+#~ "dina önskemål i ärendehanteraren. Du kan sponsra ditt eget eller ett "
+#~ "befintligt önskemål genom att donera via PayPal. Objekt tillgängliga för "
+#~ "sponsring är märkta som <i>\"OpenForSponsorship\"</i>, tillsammans med en "
+#~ "summa för det aktuella arbetet. Du kan donera den summan via PayPal och "
+#~ "lämna en kommentar i tråden, eller skicka mig ett e-postmeddelande med "
+#~ "ärendenumret. Jag kommer att arbeta med önskemålet nästa gång jag "
+#~ "uppdaterar programmet och ändringarna inkluderas i nästa version."
+
+#~ msgid "Items for Sponsorship"
+#~ msgstr "Objekt för sponsring"
+
+#~ msgid "Sponsor a Feature"
+#~ msgstr "Sponsra en funktion"
+
+#~ msgid ""
+#~ "This application was created for my own use. It is being distributed as a "
+#~ "free, open-source project in the hope that it may be useful to people. "
+#~ "This does not mean that I provide free support and free work, for changes "
+#~ "and features that you may require. Please see sections below for more "
+#~ "information."
+#~ msgstr ""
+#~ "Det här programmet har skapats för min egen användning. Det distribueras "
+#~ "som ett fritt, öppen källkodsprojekt med hopp om att det skall vara "
+#~ "användbart för folk. Detta innebär inte att jag tillhandahåller gratis "
+#~ "support och arbete, med ändringar och funktioner som du kanske önskar. Se "
+#~ "nedanstående sektioner för mer information."
+
+#~ msgid ""
+#~ "Use the issue tracker for reporting issues, asking questions, and "
+#~ "requesting features. I check the tracker once a month. If you need an "
+#~ "immediate response, use the button below to make a donation for $10 with "
+#~ "PayPal. Add your questions to the tracker and send me an email with the "
+#~ "issue number (teejeetech@gmail.com). This option is for queries you may "
+#~ "have about the application, and for help with issues you are facing. This "
+#~ "does not cover development work for bug fixes and features."
+#~ msgstr ""
+#~ "Använd ärendehanteraren för att rapportera fel, ställa frågor och be om "
+#~ "funktioner. Jag kollar hanteraren en gång per månad. Om du behöver "
+#~ "omedelbart svar, kan du använda nedanstående knapp och donera $10 via "
+#~ "PayPal. Lägg till dina ärenden i hanteraren och sänd mig ett e-"
+#~ "postmeddelande med ärendenummer (teejeetech@gmail.com). Detta alternativ "
+#~ "är till för frågor du kan ha om programmet och för hjälp med eventuella "
+#~ "problem. Det täcker inte utvecklingsarbete med feljustering och "
+#~ "funktioner."
+
+#~ msgid "Wiki (Documentation)"
+#~ msgstr "Wiki (Dokumentation)"
 
 #~ msgid ""
 #~ "A new browser window will open.\n"

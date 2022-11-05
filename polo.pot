@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
-"POT-Creation-Date: 2018-08-31 23:39+0530\n"
+"POT-Creation-Date: 2022-11-05 12:03+0530\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -66,10 +66,10 @@ msgstr ""
 msgid "4"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:157 Gtk/ProgressPanelArchiveTask.vala:167
-#: Gtk/ProgressPanelArchiveTask.vala:177 Gtk/ProgressPanelArchiveTask.vala:187
-#: Gtk/ProgressPanelArchiveTask.vala:200 Gtk/ProgressPanelArchiveTask.vala:211
-#: Gtk/ProgressPanelArchiveTask.vala:222 Gtk/ProgressPanelArchiveTask.vala:233
+#: Gtk/ProgressPanelArchiveTask.vala:166 Gtk/ProgressPanelArchiveTask.vala:177
+#: Gtk/ProgressPanelArchiveTask.vala:188 Gtk/ProgressPanelArchiveTask.vala:199
+#: Gtk/ProgressPanelArchiveTask.vala:213 Gtk/ProgressPanelArchiveTask.vala:225
+#: Gtk/ProgressPanelArchiveTask.vala:237 Gtk/ProgressPanelArchiveTask.vala:249
 msgid "???"
 msgstr ""
 
@@ -80,7 +80,7 @@ msgid ""
 "will increase gradually as disk is modified."
 msgstr ""
 
-#: Gtk/MainWindow.vala:999
+#: Gtk/MainWindow.vala:1000
 msgid "A modern file manager for Linux"
 msgstr ""
 
@@ -275,7 +275,7 @@ msgstr ""
 msgid "Base"
 msgstr ""
 
-#: Utility/Gtk/DonationWindow.vala:75
+#: Utility/Gtk/DonationWindow.vala:80
 msgid "Become a Patron"
 msgstr ""
 
@@ -417,11 +417,11 @@ msgstr ""
 msgid "Cancel this file operation"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:737 Gtk/ProgressPanelArchiveTask.vala:740
+#: Gtk/ProgressPanelArchiveTask.vala:596 Gtk/ProgressPanelArchiveTask.vala:599
 msgid "Cancelled"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:865
+#: Gtk/ProgressPanelArchiveTask.vala:680
 msgid "Cancelled by user"
 msgstr ""
 
@@ -557,7 +557,7 @@ msgstr ""
 msgid "Clean thumbnail cache"
 msgstr ""
 
-#: Gtk/MainWindow.vala:1026
+#: Gtk/MainWindow.vala:1027
 msgid "Cleaning Thumbnail Cache..."
 msgstr ""
 
@@ -598,18 +598,15 @@ msgstr ""
 #: Gtk/ClamScanBox.vala:482 Gtk/DevicePopoverSettingsWindow.vala:292
 #: Gtk/FileViewTab.vala:329 Gtk/MessageBar.vala:152 Gtk/SelectionBar.vala:204
 #: Gtk/WizardWindow.vala:143 Utility/Gtk/AboutWindow.vala:400
+#: Utility/Gtk/DonationWindow.vala:137
 msgid "Close"
-msgstr ""
-
-#: Utility/Gtk/DonationWindow.vala:144
-msgid "Close Window"
 msgstr ""
 
 #: Gtk/Settings.vala:1131
 msgid "Close button (R)"
 msgstr ""
 
-#: Gtk/MainHeaderBar.vala:313 Gtk/ProgressPanelArchiveTask.vala:515
+#: Gtk/MainHeaderBar.vala:313 Gtk/ProgressPanelArchiveTask.vala:367
 msgid "Close this window"
 msgstr ""
 
@@ -693,12 +690,16 @@ msgstr ""
 msgid "Compress selected items and create new archive"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:216
+#: Gtk/ProgressPanelArchiveTask.vala:231
 msgid "Compressed:"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:98
+#: Gtk/ProgressPanelArchiveTask.vala:102
 msgid "Compressing"
+msgstr ""
+
+#: Gtk/ProgressPanelArchiveTask.vala:283
+msgid "Compression:"
 msgstr ""
 
 #: Gtk/PasswordDialog.vala:129
@@ -945,7 +946,7 @@ msgid "Create new folder in this location"
 msgstr ""
 
 #: Gtk/FilePropertiesBox.vala:265 Gtk/KvmCreateDiskWindow.vala:463
-#: Gtk/ProgressPanelArchiveTask.vala:752 Gtk/ProgressPanelImageTask.vala:207
+#: Gtk/ProgressPanelArchiveTask.vala:611 Gtk/ProgressPanelImageTask.vala:207
 #: Gtk/ProgressPanelKvmTask.vala:258
 #, c-format
 msgid "Created"
@@ -1003,7 +1004,7 @@ msgstr ""
 msgid "Dark theme"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:194
+#: Gtk/ProgressPanelArchiveTask.vala:207
 msgid "Data:"
 msgstr ""
 
@@ -1215,15 +1216,11 @@ msgid "Domain"
 msgstr ""
 
 #: Gtk/FileViewToolbar.vala:498 Gtk/MainMenubar.vala:2097
-#: Utility/Gtk/DonationWindow.vala:44
+#: Utility/Gtk/DonationWindow.vala:44 Utility/Gtk/DonationWindow.vala:77
 msgid "Donate"
 msgstr ""
 
-#: Utility/Gtk/DonationWindow.vala:72
-msgid "Donate (5$)"
-msgstr ""
-
-#: Utility/Gtk/DonationWindow.vala:125 Utility/Gtk/DonationWindow.vala:133
+#: Utility/Gtk/DonationWindow.vala:118 Utility/Gtk/DonationWindow.vala:126
 msgid "Donation Features"
 msgstr ""
 
@@ -1336,7 +1333,7 @@ msgstr ""
 msgid "Eject storage device"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:162
+#: Gtk/ProgressPanelArchiveTask.vala:172
 msgid "Elapsed:"
 msgstr ""
 
@@ -1421,7 +1418,7 @@ msgid "Enter Password to Unlock"
 msgstr ""
 
 #: Gtk/FileViewList.vala:4654 Gtk/FileViewList.vala:4688
-#: Gtk/FileViewList.vala:4728 Gtk/MainWindow.vala:1481
+#: Gtk/FileViewList.vala:4728 Gtk/MainWindow.vala:1482
 msgid "Enter another name"
 msgstr ""
 
@@ -1462,11 +1459,11 @@ msgstr ""
 msgid "Enter unique name for selected file"
 msgstr ""
 
-#: Gtk/MainWindow.vala:1473
+#: Gtk/MainWindow.vala:1474
 msgid "Enter workspace name"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:771 Gtk/ProgressPanelArchiveTask.vala:782
+#: Gtk/ProgressPanelArchiveTask.vala:630 Gtk/ProgressPanelArchiveTask.vala:641
 #: Gtk/ProgressPanelImageTask.vala:198 Gtk/ProgressPanelKvmTask.vala:217
 #: Gtk/ProgressPanelKvmTask.vala:220 Gtk/ProgressPanelPdfTask.vala:198
 #: Utility/Device.vala:1697 Utility/KvmTask.vala:311
@@ -1560,15 +1557,15 @@ msgid ""
 "Extract archives to the opposite pane. Existing files will be overwritten."
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:755
+#: Gtk/ProgressPanelArchiveTask.vala:614
 msgid "Extracted"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:101
+#: Gtk/ProgressPanelArchiveTask.vala:105
 msgid "Extracting"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:591
+#: Gtk/ProgressPanelArchiveTask.vala:443
 msgid "Extraction path not specified"
 msgstr ""
 
@@ -1695,7 +1692,7 @@ msgstr ""
 msgid "Fastest"
 msgstr ""
 
-#: Utility/Gtk/DonationWindow.vala:85
+#: Utility/Gtk/DonationWindow.vala:106
 msgid "Feature Requests"
 msgstr ""
 
@@ -1738,7 +1735,7 @@ msgid "File Properties"
 msgstr ""
 
 #: Gtk/FileViewList.vala:4688 Gtk/FileViewList.vala:4728
-#: Gtk/MainWindow.vala:1481
+#: Gtk/MainWindow.vala:1482
 msgid "File exists"
 msgstr ""
 
@@ -1751,7 +1748,7 @@ msgstr ""
 msgid "File is missing"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:768
+#: Gtk/ProgressPanelArchiveTask.vala:627
 msgid "File is not an archive or format is unsupported"
 msgstr ""
 
@@ -1824,7 +1821,7 @@ msgstr ""
 msgid "Files verified"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:152
+#: Gtk/ProgressPanelArchiveTask.vala:161
 msgid "Files:"
 msgstr ""
 
@@ -1985,12 +1982,8 @@ msgstr ""
 msgid "Generating thumbnails..."
 msgstr ""
 
-#: Utility/Gtk/DonationWindow.vala:136
-msgid "Get Donation Plugins ($10)"
-msgstr ""
-
-#: Utility/Gtk/DonationWindow.vala:109
-msgid "Get Support ($10)"
+#: Utility/Gtk/DonationWindow.vala:129
+msgid "Get Plugins ($10)"
 msgstr ""
 
 #: Gtk/Settings.vala:680 Gtk/Settings.vala:1092
@@ -2092,7 +2085,7 @@ msgstr ""
 msgid "Host IP (Eg: 192.0.10.1)"
 msgstr ""
 
-#: Utility/Gtk/DonationWindow.vala:127
+#: Utility/Gtk/DonationWindow.vala:120
 msgid ""
 "I sometimes create exclusive plugins to encourage people to contribute. You "
 "can make a contribution by translating the application to other languages, "
@@ -2132,22 +2125,10 @@ msgid ""
 "creating new file."
 msgstr ""
 
-#: Utility/Gtk/DonationWindow.vala:66
+#: Utility/Gtk/DonationWindow.vala:71
 msgid ""
-"If you find this application useful, and wish to support its development, "
-"use the button below to make a donation with PayPal."
-msgstr ""
-
-#: Utility/Gtk/DonationWindow.vala:87
-msgid ""
-"If you need changes to this application, please add your requirements to the "
-"issue tracker. You can sponsor your own request, or sponsor an existing "
-"request by making a donation with PayPal. Items available for sponsorship "
-"are labelled as <i>\"OpenForSponsorship\"</i>, along with an amount for the "
-"work involved. You can make a donation for that amount with PayPal, and "
-"leave a comment on the thread, or email me with the issue number. I will "
-"work on it the next time I update the application, and changes will be "
-"included in the next release."
+"If you find this application useful, consider making a donation to support "
+"the development."
 msgstr ""
 
 #: Gtk/MediaBar.vala:187
@@ -2218,7 +2199,7 @@ msgstr ""
 msgid "Invalid Server Name"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:2067 Utility/Gtk/DonationWindow.vala:112
+#: Gtk/MainMenubar.vala:2067 Utility/Gtk/DonationWindow.vala:95
 msgid "Issue Tracker"
 msgstr ""
 
@@ -2232,10 +2213,6 @@ msgstr ""
 
 #: Gtk/Settings.vala:218 Gtk/Settings.vala:249
 msgid "Items"
-msgstr ""
-
-#: Utility/Gtk/DonationWindow.vala:93
-msgid "Items for Sponsorship"
 msgstr ""
 
 #: Gtk/FileContextMenu.vala:2044 Gtk/Settings.vala:2661
@@ -2321,7 +2298,7 @@ msgstr ""
 msgid "Listing source items..."
 msgstr ""
 
-#: Gtk/MainWindow.vala:1265
+#: Gtk/MainWindow.vala:1266
 msgid "Loading workspace..."
 msgstr ""
 
@@ -2469,7 +2446,7 @@ msgstr ""
 msgid "Missing"
 msgstr ""
 
-#: Common/Main.vala:1345 Gtk/MainWindow.vala:605
+#: Common/Main.vala:1345 Gtk/MainWindow.vala:606
 msgid "Missing Dependencies"
 msgstr ""
 
@@ -2656,7 +2633,7 @@ msgstr ""
 msgid "New Window"
 msgstr ""
 
-#: Gtk/MainWindow.vala:1468
+#: Gtk/MainWindow.vala:1469
 msgid "New Workspace"
 msgstr ""
 
@@ -2741,7 +2718,7 @@ msgid ""
 msgstr ""
 
 #: Gtk/ChecksumBox.vala:349 Gtk/ChecksumBox.vala:1418 Gtk/ChecksumBox.vala:1477
-#: Gtk/FileConflictDialog.vala:254 Gtk/ProgressPanelArchiveTask.vala:521
+#: Gtk/FileConflictDialog.vala:254 Gtk/ProgressPanelArchiveTask.vala:373
 #: Utility/Gtk/CustomMessageDialog.vala:170
 #: Utility/Gtk/CustomMessageDialog.vala:174 Utility/Gtk/GtkHelper.vala:159
 #: Utility/Gtk/LoadingWindow.vala:110
@@ -3102,9 +3079,9 @@ msgstr ""
 msgid "Pathbar"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:460 Gtk/ProgressPanelArchiveTask.vala:463
-#: Gtk/ProgressPanelArchiveTask.vala:484 Gtk/ProgressPanelArchiveTask.vala:485
-#: Gtk/ProgressPanelArchiveTask.vala:630
+#: Gtk/ProgressPanelArchiveTask.vala:312 Gtk/ProgressPanelArchiveTask.vala:315
+#: Gtk/ProgressPanelArchiveTask.vala:336 Gtk/ProgressPanelArchiveTask.vala:337
+#: Gtk/ProgressPanelArchiveTask.vala:482
 msgid "Pause"
 msgstr ""
 
@@ -3158,8 +3135,12 @@ msgstr ""
 msgid "Previous"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:205
+#: Gtk/ProgressPanelArchiveTask.vala:219
 msgid "Processed:"
+msgstr ""
+
+#: Gtk/ProgressPanelArchiveTask.vala:263
+msgid "Progress:"
 msgstr ""
 
 #: Gtk/DeviceContextMenu.vala:293 Gtk/DevicePopover.vala:641
@@ -3233,7 +3214,7 @@ msgstr ""
 msgid "RWX = Read Write Execute"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:227
+#: Gtk/ProgressPanelArchiveTask.vala:243
 msgid "Ratio:"
 msgstr ""
 
@@ -3276,7 +3257,7 @@ msgstr ""
 msgid "ReadOnly"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:104
+#: Gtk/ProgressPanelArchiveTask.vala:108
 msgid "Reading"
 msgstr ""
 
@@ -3284,7 +3265,7 @@ msgstr ""
 msgid "Rebuild font cache"
 msgstr ""
 
-#: Gtk/MainWindow.vala:1014
+#: Gtk/MainWindow.vala:1015
 msgid "Rebuilding Font Cache..."
 msgstr ""
 
@@ -3344,7 +3325,7 @@ msgstr ""
 msgid "Reload current location"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:172
+#: Gtk/ProgressPanelArchiveTask.vala:183
 msgid "Remaining:"
 msgstr ""
 
@@ -3540,7 +3521,7 @@ msgstr ""
 msgid "Restoring device from disk image..."
 msgstr ""
 
-#: Gtk/MainWindow.vala:1268
+#: Gtk/MainWindow.vala:1269
 msgid "Restoring session..."
 msgstr ""
 
@@ -3548,7 +3529,7 @@ msgstr ""
 msgid "Restoring trashed files:"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:489 Gtk/ProgressPanelArchiveTask.vala:490
+#: Gtk/ProgressPanelArchiveTask.vala:341 Gtk/ProgressPanelArchiveTask.vala:342
 msgid "Resume"
 msgstr ""
 
@@ -3578,11 +3559,11 @@ msgstr ""
 msgid "Run the selected script in a terminal window"
 msgstr ""
 
-#: Gtk/MainWindow.vala:1034 Gtk/MainWindow.vala:1052
+#: Gtk/MainWindow.vala:1035 Gtk/MainWindow.vala:1053
 msgid "Running Rclone Installation Script"
 msgstr ""
 
-#: Gtk/MainWindow.vala:1042
+#: Gtk/MainWindow.vala:1043
 msgid "Running p7zip Installation Script"
 msgstr ""
 
@@ -3609,7 +3590,7 @@ msgstr ""
 msgid "Save As..."
 msgstr ""
 
-#: Gtk/MainWindow.vala:1473
+#: Gtk/MainWindow.vala:1474
 msgid "Save Workspace"
 msgstr ""
 
@@ -4038,7 +4019,7 @@ msgstr ""
 msgid "Special"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:182
+#: Gtk/ProgressPanelArchiveTask.vala:194
 msgid "Speed:"
 msgstr ""
 
@@ -4058,10 +4039,6 @@ msgstr ""
 msgid "Split archive into volumes of specified size (in MB)"
 msgstr ""
 
-#: Utility/Gtk/DonationWindow.vala:96
-msgid "Sponsor a Feature"
-msgstr ""
-
 #: Gtk/TermContextMenu.vala:202
 msgid "Start chroot session in current directory"
 msgstr ""
@@ -4074,7 +4051,7 @@ msgstr ""
 msgid "Statusbar"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:499 Gtk/ProgressPanelArchiveTask.vala:502
+#: Gtk/ProgressPanelArchiveTask.vala:351 Gtk/ProgressPanelArchiveTask.vala:354
 msgid "Stop"
 msgstr ""
 
@@ -4098,7 +4075,7 @@ msgstr ""
 msgid "Style wizard"
 msgstr ""
 
-#: Utility/Gtk/DonationWindow.vala:101
+#: Utility/Gtk/DonationWindow.vala:85
 msgid "Support"
 msgstr ""
 
@@ -4162,7 +4139,7 @@ msgstr ""
 msgid "Terminal emulator to use for terminal panes"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:107
+#: Gtk/ProgressPanelArchiveTask.vala:111
 msgid "Testing"
 msgstr ""
 
@@ -4170,7 +4147,7 @@ msgstr ""
 msgid "There are no files selected for compression"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:781
+#: Gtk/ProgressPanelArchiveTask.vala:640
 msgid "There were errors while processing the archive."
 msgstr ""
 
@@ -4184,13 +4161,21 @@ msgid ""
 "with other themes."
 msgstr ""
 
-#: Utility/Gtk/DonationWindow.vala:79
+#: Utility/Gtk/DonationWindow.vala:110
 msgid ""
-"This application was created for my own use. It is being distributed as a "
-"free, open-source project in the hope that it may be useful to people. This "
-"does not mean that I provide free support and free work, for changes and "
-"features that you may require. Please see sections below for more "
-"information."
+"This application was created for my own use in my spare time. It's not "
+"practical for me to work for free, on every change that is requested. If you "
+"need new features or changes to the application, consider making a donation "
+"to sponsor the work. If you are a developer, consider contributing to the "
+"project, by picking up items from the issue tracker and submitting code "
+"changes."
+msgstr ""
+
+#: Utility/Gtk/DonationWindow.vala:67
+msgid ""
+"This software is free for personal and commercial use. It is distributed in "
+"the hope that it is useful but without any warranty. See the GNU General "
+"Public License v2 or later for more information"
 msgstr ""
 
 #: Gtk/Settings.vala:1853 Gtk/Settings.vala:2039 Gtk/Settings.vala:2240
@@ -4354,7 +4339,7 @@ msgstr ""
 msgid "Unknown File Format"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:767 Gtk/ProgressPanelArchiveTask.vala:771
+#: Gtk/ProgressPanelArchiveTask.vala:626 Gtk/ProgressPanelArchiveTask.vala:630
 msgid "Unknown Format"
 msgstr ""
 
@@ -4429,15 +4414,10 @@ msgstr ""
 msgid "Uploading items..."
 msgstr ""
 
-#: Utility/Gtk/DonationWindow.vala:103
+#: Utility/Gtk/DonationWindow.vala:89
 msgid ""
 "Use the issue tracker for reporting issues, asking questions, and requesting "
-"features. I check the tracker once a month. If you need an immediate "
-"response, use the button below to make a donation for $10 with PayPal. Add "
-"your questions to the tracker and send me an email with the issue number "
-"(teejeetech@gmail.com). This option is for queries you may have about the "
-"application, and for help with issues you are facing. This does not cover "
-"development work for bug fixes and features."
+"features. Please avoid reporting issues by email."
 msgstr ""
 
 #: Gtk/FilePropertiesWindow.vala:225 Gtk/Sidebar.vala:1292
@@ -4524,12 +4504,8 @@ msgstr ""
 msgid "Width"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:2077
+#: Gtk/MainMenubar.vala:2077 Utility/Gtk/DonationWindow.vala:100
 msgid "Wiki"
-msgstr ""
-
-#: Utility/Gtk/DonationWindow.vala:117
-msgid "Wiki (Documentation)"
 msgstr ""
 
 #: Gtk/FileContextMenu.vala:716

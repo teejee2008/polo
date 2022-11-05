@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
-"POT-Creation-Date: 2018-08-31 23:39+0530\n"
+"POT-Creation-Date: 2022-11-05 11:55+0530\n"
 "PO-Revision-Date: 2017-09-17 16:05+0530\n"
 "Last-Translator: Heimen Stoffels <vistausss@outlook.com>\n"
 "Language-Team: Heimen Stoffels <vistausss@outlook.com>\n"
@@ -72,10 +72,10 @@ msgstr "2u"
 msgid "4"
 msgstr "4"
 
-#: Gtk/ProgressPanelArchiveTask.vala:157 Gtk/ProgressPanelArchiveTask.vala:167
-#: Gtk/ProgressPanelArchiveTask.vala:177 Gtk/ProgressPanelArchiveTask.vala:187
-#: Gtk/ProgressPanelArchiveTask.vala:200 Gtk/ProgressPanelArchiveTask.vala:211
-#: Gtk/ProgressPanelArchiveTask.vala:222 Gtk/ProgressPanelArchiveTask.vala:233
+#: Gtk/ProgressPanelArchiveTask.vala:166 Gtk/ProgressPanelArchiveTask.vala:177
+#: Gtk/ProgressPanelArchiveTask.vala:188 Gtk/ProgressPanelArchiveTask.vala:199
+#: Gtk/ProgressPanelArchiveTask.vala:213 Gtk/ProgressPanelArchiveTask.vala:225
+#: Gtk/ProgressPanelArchiveTask.vala:237 Gtk/ProgressPanelArchiveTask.vala:249
 msgid "???"
 msgstr "???"
 
@@ -88,7 +88,7 @@ msgstr ""
 "Er zal een dynamisch toegewezen schijf worden gecreëerd met de opgegeven "
 "grootte. De bestandsgrootte zal gaandeweg toenemen."
 
-#: Gtk/MainWindow.vala:999
+#: Gtk/MainWindow.vala:1000
 msgid "A modern file manager for Linux"
 msgstr "Een moderne bestandsbeheerder voor Linux"
 
@@ -287,7 +287,7 @@ msgstr "Flashen voltooid"
 msgid "Base"
 msgstr "Basis"
 
-#: Utility/Gtk/DonationWindow.vala:75
+#: Utility/Gtk/DonationWindow.vala:80
 msgid "Become a Patron"
 msgstr "Patron worden"
 
@@ -432,11 +432,11 @@ msgstr "Bestandsoperaties annuleren?"
 msgid "Cancel this file operation"
 msgstr "Deze bestandsoperatie annuleren"
 
-#: Gtk/ProgressPanelArchiveTask.vala:737 Gtk/ProgressPanelArchiveTask.vala:740
+#: Gtk/ProgressPanelArchiveTask.vala:596 Gtk/ProgressPanelArchiveTask.vala:599
 msgid "Cancelled"
 msgstr "Geannuleerd"
 
-#: Gtk/ProgressPanelArchiveTask.vala:865
+#: Gtk/ProgressPanelArchiveTask.vala:680
 msgid "Cancelled by user"
 msgstr "Geannuleerd door gebruiker"
 
@@ -581,7 +581,7 @@ msgstr "Klassieke lijst (één paneel + zijbalk + lijstweergave)"
 msgid "Clean thumbnail cache"
 msgstr "Voorbeeldminiaturen-cache legen"
 
-#: Gtk/MainWindow.vala:1026
+#: Gtk/MainWindow.vala:1027
 msgid "Cleaning Thumbnail Cache..."
 msgstr "Bezig met legen van cache..."
 
@@ -624,18 +624,15 @@ msgstr "Klik om pad te bewerken"
 #: Gtk/ClamScanBox.vala:482 Gtk/DevicePopoverSettingsWindow.vala:292
 #: Gtk/FileViewTab.vala:329 Gtk/MessageBar.vala:152 Gtk/SelectionBar.vala:204
 #: Gtk/WizardWindow.vala:143 Utility/Gtk/AboutWindow.vala:400
+#: Utility/Gtk/DonationWindow.vala:137
 msgid "Close"
 msgstr "Sluiten"
-
-#: Utility/Gtk/DonationWindow.vala:144
-msgid "Close Window"
-msgstr "Venster sluiten"
 
 #: Gtk/Settings.vala:1131
 msgid "Close button (R)"
 msgstr "Sluitknop (R)"
 
-#: Gtk/MainHeaderBar.vala:313 Gtk/ProgressPanelArchiveTask.vala:515
+#: Gtk/MainHeaderBar.vala:313 Gtk/ProgressPanelArchiveTask.vala:367
 msgid "Close this window"
 msgstr "Dit venster sluiten"
 
@@ -728,12 +725,17 @@ msgstr "Comprimeren"
 msgid "Compress selected items and create new archive"
 msgstr "Comprimeer geselecteerde items en creëer een nieuw archief"
 
-#: Gtk/ProgressPanelArchiveTask.vala:216
+#: Gtk/ProgressPanelArchiveTask.vala:231
 msgid "Compressed:"
 msgstr "Gecomprimeerd:"
 
-#: Gtk/ProgressPanelArchiveTask.vala:98
+#: Gtk/ProgressPanelArchiveTask.vala:102
 msgid "Compressing"
+msgstr "Bezig met comprimeren"
+
+#: Gtk/ProgressPanelArchiveTask.vala:283
+#, fuzzy
+msgid "Compression:"
 msgstr "Bezig met comprimeren"
 
 #: Gtk/PasswordDialog.vala:129
@@ -991,7 +993,7 @@ msgid "Create new folder in this location"
 msgstr "Nieuwe map creëren op deze locatie"
 
 #: Gtk/FilePropertiesBox.vala:265 Gtk/KvmCreateDiskWindow.vala:463
-#: Gtk/ProgressPanelArchiveTask.vala:752 Gtk/ProgressPanelImageTask.vala:207
+#: Gtk/ProgressPanelArchiveTask.vala:611 Gtk/ProgressPanelImageTask.vala:207
 #: Gtk/ProgressPanelKvmTask.vala:258
 #, c-format
 msgid "Created"
@@ -1052,7 +1054,7 @@ msgstr "Geselecteerde items knippen"
 msgid "Dark theme"
 msgstr "Donker thema"
 
-#: Gtk/ProgressPanelArchiveTask.vala:194
+#: Gtk/ProgressPanelArchiveTask.vala:207
 msgid "Data:"
 msgstr "Gegevens:"
 
@@ -1275,16 +1277,11 @@ msgid "Domain"
 msgstr "Domein"
 
 #: Gtk/FileViewToolbar.vala:498 Gtk/MainMenubar.vala:2097
-#: Utility/Gtk/DonationWindow.vala:44
+#: Utility/Gtk/DonationWindow.vala:44 Utility/Gtk/DonationWindow.vala:77
 msgid "Donate"
 msgstr "Doneren"
 
-#: Utility/Gtk/DonationWindow.vala:72
-#, fuzzy
-msgid "Donate (5$)"
-msgstr "Doneren"
-
-#: Utility/Gtk/DonationWindow.vala:125 Utility/Gtk/DonationWindow.vala:133
+#: Utility/Gtk/DonationWindow.vala:118 Utility/Gtk/DonationWindow.vala:126
 msgid "Donation Features"
 msgstr "Donatiefuncties"
 
@@ -1408,7 +1405,7 @@ msgstr "Apparaat uitwerpen"
 msgid "Eject storage device"
 msgstr "Terugzetten"
 
-#: Gtk/ProgressPanelArchiveTask.vala:162
+#: Gtk/ProgressPanelArchiveTask.vala:172
 msgid "Elapsed:"
 msgstr "Verstreken:"
 
@@ -1496,7 +1493,7 @@ msgid "Enter Password to Unlock"
 msgstr "Voer wachtwoord in om te ontgrendelen"
 
 #: Gtk/FileViewList.vala:4654 Gtk/FileViewList.vala:4688
-#: Gtk/FileViewList.vala:4728 Gtk/MainWindow.vala:1481
+#: Gtk/FileViewList.vala:4728 Gtk/MainWindow.vala:1482
 msgid "Enter another name"
 msgstr "Nog een naam invoeren"
 
@@ -1539,12 +1536,12 @@ msgstr "Voer deel-naam in om te verbinden (vereist)"
 msgid "Enter unique name for selected file"
 msgstr "Voer een unieke naam in voor het geselecteerde bestand"
 
-#: Gtk/MainWindow.vala:1473
+#: Gtk/MainWindow.vala:1474
 #, fuzzy
 msgid "Enter workspace name"
 msgstr "Nieuwe naam invoeren"
 
-#: Gtk/ProgressPanelArchiveTask.vala:771 Gtk/ProgressPanelArchiveTask.vala:782
+#: Gtk/ProgressPanelArchiveTask.vala:630 Gtk/ProgressPanelArchiveTask.vala:641
 #: Gtk/ProgressPanelImageTask.vala:198 Gtk/ProgressPanelKvmTask.vala:217
 #: Gtk/ProgressPanelKvmTask.vala:220 Gtk/ProgressPanelPdfTask.vala:198
 #: Utility/Device.vala:1697 Utility/KvmTask.vala:311
@@ -1644,15 +1641,15 @@ msgstr ""
 "Archieven uitpakken naar het andere paneel. Bestaande bestanden worden "
 "overschreven."
 
-#: Gtk/ProgressPanelArchiveTask.vala:755
+#: Gtk/ProgressPanelArchiveTask.vala:614
 msgid "Extracted"
 msgstr "Uitgepakt"
 
-#: Gtk/ProgressPanelArchiveTask.vala:101
+#: Gtk/ProgressPanelArchiveTask.vala:105
 msgid "Extracting"
 msgstr "Bezig met uitpakken"
 
-#: Gtk/ProgressPanelArchiveTask.vala:591
+#: Gtk/ProgressPanelArchiveTask.vala:443
 msgid "Extraction path not specified"
 msgstr "Uitpakpad niet opgegeven"
 
@@ -1789,7 +1786,7 @@ msgstr "Snel"
 msgid "Fastest"
 msgstr "Snelst"
 
-#: Utility/Gtk/DonationWindow.vala:85
+#: Utility/Gtk/DonationWindow.vala:106
 msgid "Feature Requests"
 msgstr ""
 
@@ -1834,7 +1831,7 @@ msgid "File Properties"
 msgstr "Eigenschappen"
 
 #: Gtk/FileViewList.vala:4688 Gtk/FileViewList.vala:4728
-#: Gtk/MainWindow.vala:1481
+#: Gtk/MainWindow.vala:1482
 msgid "File exists"
 msgstr "Bestaat bestaat al"
 
@@ -1847,7 +1844,7 @@ msgstr ""
 msgid "File is missing"
 msgstr "Bestand ontbreekt"
 
-#: Gtk/ProgressPanelArchiveTask.vala:768
+#: Gtk/ProgressPanelArchiveTask.vala:627
 msgid "File is not an archive or format is unsupported"
 msgstr "Bestand is geen archief of is een niet-ondersteund formaat"
 
@@ -1934,7 +1931,7 @@ msgstr ""
 msgid "Files verified"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:152
+#: Gtk/ProgressPanelArchiveTask.vala:161
 msgid "Files:"
 msgstr "Bestanden:"
 
@@ -2097,13 +2094,9 @@ msgstr "Bezig met genereren van voorbeelden..."
 msgid "Generating thumbnails..."
 msgstr "Bezig met genereren van voorbeelden..."
 
-#: Utility/Gtk/DonationWindow.vala:136
-msgid "Get Donation Plugins ($10)"
-msgstr ""
-
-#: Utility/Gtk/DonationWindow.vala:109
+#: Utility/Gtk/DonationWindow.vala:129
 #, fuzzy
-msgid "Get Support ($10)"
+msgid "Get Plugins ($10)"
 msgstr "Niet ondersteund"
 
 #: Gtk/Settings.vala:680 Gtk/Settings.vala:1092
@@ -2219,7 +2212,7 @@ msgstr "Horizontaal"
 msgid "Host IP (Eg: 192.0.10.1)"
 msgstr "Host-IP (bijv.: 192.0.10.1)"
 
-#: Utility/Gtk/DonationWindow.vala:127
+#: Utility/Gtk/DonationWindow.vala:120
 msgid ""
 "I sometimes create exclusive plugins to encourage people to contribute. You "
 "can make a contribution by translating the application to other languages, "
@@ -2263,22 +2256,10 @@ msgstr ""
 "Als dit wordt geselecteerd, dan zal de actie, indien succesvol, het "
 "originele bestand verwijderen i.p.v. een nieuw bestand te creëren."
 
-#: Utility/Gtk/DonationWindow.vala:66
+#: Utility/Gtk/DonationWindow.vala:71
 msgid ""
-"If you find this application useful, and wish to support its development, "
-"use the button below to make a donation with PayPal."
-msgstr ""
-
-#: Utility/Gtk/DonationWindow.vala:87
-msgid ""
-"If you need changes to this application, please add your requirements to the "
-"issue tracker. You can sponsor your own request, or sponsor an existing "
-"request by making a donation with PayPal. Items available for sponsorship "
-"are labelled as <i>\"OpenForSponsorship\"</i>, along with an amount for the "
-"work involved. You can make a donation for that amount with PayPal, and "
-"leave a comment on the thread, or email me with the issue number. I will "
-"work on it the next time I update the application, and changes will be "
-"included in the next release."
+"If you find this application useful, consider making a donation to support "
+"the development."
 msgstr ""
 
 #: Gtk/MediaBar.vala:187
@@ -2350,7 +2331,7 @@ msgstr "Ongeldig pad"
 msgid "Invalid Server Name"
 msgstr "Ongeldige servernaam"
 
-#: Gtk/MainMenubar.vala:2067 Utility/Gtk/DonationWindow.vala:112
+#: Gtk/MainMenubar.vala:2067 Utility/Gtk/DonationWindow.vala:95
 msgid "Issue Tracker"
 msgstr "Probleemtracker"
 
@@ -2365,10 +2346,6 @@ msgstr "Item is geen symbolische link"
 #: Gtk/Settings.vala:218 Gtk/Settings.vala:249
 msgid "Items"
 msgstr "Items"
-
-#: Utility/Gtk/DonationWindow.vala:93
-msgid "Items for Sponsorship"
-msgstr ""
 
 #: Gtk/FileContextMenu.vala:2044 Gtk/Settings.vala:2661
 msgid "KVM"
@@ -2457,7 +2434,7 @@ msgstr "Bezig met herstellen van items..."
 msgid "Listing source items..."
 msgstr "Bezig met opsommen van bronitems..."
 
-#: Gtk/MainWindow.vala:1265
+#: Gtk/MainWindow.vala:1266
 #, fuzzy
 msgid "Loading workspace..."
 msgstr "Bezig met laden..."
@@ -2608,7 +2585,7 @@ msgstr ""
 msgid "Missing"
 msgstr "Ontbreken"
 
-#: Common/Main.vala:1345 Gtk/MainWindow.vala:605
+#: Common/Main.vala:1345 Gtk/MainWindow.vala:606
 msgid "Missing Dependencies"
 msgstr "Ontbrekende afhankelijkheden"
 
@@ -2802,7 +2779,7 @@ msgstr "Nieuw tabblad"
 msgid "New Window"
 msgstr "Nieuw venster"
 
-#: Gtk/MainWindow.vala:1468
+#: Gtk/MainWindow.vala:1469
 msgid "New Workspace"
 msgstr ""
 
@@ -2896,7 +2873,7 @@ msgstr ""
 "het aantal kernen van de hostmachine."
 
 #: Gtk/ChecksumBox.vala:349 Gtk/ChecksumBox.vala:1418 Gtk/ChecksumBox.vala:1477
-#: Gtk/FileConflictDialog.vala:254 Gtk/ProgressPanelArchiveTask.vala:521
+#: Gtk/FileConflictDialog.vala:254 Gtk/ProgressPanelArchiveTask.vala:373
 #: Utility/Gtk/CustomMessageDialog.vala:170
 #: Utility/Gtk/CustomMessageDialog.vala:174 Utility/Gtk/GtkHelper.vala:159
 #: Utility/Gtk/LoadingWindow.vala:110
@@ -3273,9 +3250,9 @@ msgstr "Pad niet gevonden"
 msgid "Pathbar"
 msgstr "Locatiebalk"
 
-#: Gtk/ProgressPanelArchiveTask.vala:460 Gtk/ProgressPanelArchiveTask.vala:463
-#: Gtk/ProgressPanelArchiveTask.vala:484 Gtk/ProgressPanelArchiveTask.vala:485
-#: Gtk/ProgressPanelArchiveTask.vala:630
+#: Gtk/ProgressPanelArchiveTask.vala:312 Gtk/ProgressPanelArchiveTask.vala:315
+#: Gtk/ProgressPanelArchiveTask.vala:336 Gtk/ProgressPanelArchiveTask.vala:337
+#: Gtk/ProgressPanelArchiveTask.vala:482
 msgid "Pause"
 msgstr "Pauzeren"
 
@@ -3329,9 +3306,14 @@ msgstr "Bezig met voorbereiden..."
 msgid "Previous"
 msgstr "Vorige"
 
-#: Gtk/ProgressPanelArchiveTask.vala:205
+#: Gtk/ProgressPanelArchiveTask.vala:219
 msgid "Processed:"
 msgstr "Verwerkt:"
+
+#: Gtk/ProgressPanelArchiveTask.vala:263
+#, fuzzy
+msgid "Progress:"
+msgstr "Gecomprimeerd:"
 
 #: Gtk/DeviceContextMenu.vala:293 Gtk/DevicePopover.vala:641
 #: Gtk/FileContextMenu.vala:2852 Gtk/FilePropertiesWindow.vala:87
@@ -3413,7 +3395,7 @@ msgstr "RAM (MB)"
 msgid "RWX = Read Write Execute"
 msgstr "RWX = Read (lezen) Write (schrijven) Execute (uitvoeren)"
 
-#: Gtk/ProgressPanelArchiveTask.vala:227
+#: Gtk/ProgressPanelArchiveTask.vala:243
 msgid "Ratio:"
 msgstr "Ratio:"
 
@@ -3471,7 +3453,7 @@ msgstr ""
 msgid "ReadOnly"
 msgstr "Alleen-lezen"
 
-#: Gtk/ProgressPanelArchiveTask.vala:104
+#: Gtk/ProgressPanelArchiveTask.vala:108
 msgid "Reading"
 msgstr "Bezig met lezen"
 
@@ -3479,7 +3461,7 @@ msgstr "Bezig met lezen"
 msgid "Rebuild font cache"
 msgstr "Lettertypecache herbouwen"
 
-#: Gtk/MainWindow.vala:1014
+#: Gtk/MainWindow.vala:1015
 msgid "Rebuilding Font Cache..."
 msgstr "Bezig met herbouwen van cache..."
 
@@ -3551,7 +3533,7 @@ msgstr "Herladen"
 msgid "Reload current location"
 msgstr "Huidige locatie herladen"
 
-#: Gtk/ProgressPanelArchiveTask.vala:172
+#: Gtk/ProgressPanelArchiveTask.vala:183
 msgid "Remaining:"
 msgstr "Resterend:"
 
@@ -3750,7 +3732,7 @@ msgstr "Terugzetten"
 msgid "Restoring device from disk image..."
 msgstr ""
 
-#: Gtk/MainWindow.vala:1268
+#: Gtk/MainWindow.vala:1269
 msgid "Restoring session..."
 msgstr "Bezig met herstellen van sessie..."
 
@@ -3758,7 +3740,7 @@ msgstr "Bezig met herstellen van sessie..."
 msgid "Restoring trashed files:"
 msgstr "Bezig met herstellen van bestanden:"
 
-#: Gtk/ProgressPanelArchiveTask.vala:489 Gtk/ProgressPanelArchiveTask.vala:490
+#: Gtk/ProgressPanelArchiveTask.vala:341 Gtk/ProgressPanelArchiveTask.vala:342
 msgid "Resume"
 msgstr "Hervatten"
 
@@ -3788,11 +3770,11 @@ msgstr ""
 msgid "Run the selected script in a terminal window"
 msgstr "Geselecteerd script uitvoeren in een terminalvenster"
 
-#: Gtk/MainWindow.vala:1034 Gtk/MainWindow.vala:1052
+#: Gtk/MainWindow.vala:1035 Gtk/MainWindow.vala:1053
 msgid "Running Rclone Installation Script"
 msgstr "Bezig met uitvoeren van Rclone-installatiescript"
 
-#: Gtk/MainWindow.vala:1042
+#: Gtk/MainWindow.vala:1043
 msgid "Running p7zip Installation Script"
 msgstr "Bezig met uitvoeren van p7zip-installatiescript"
 
@@ -3819,7 +3801,7 @@ msgstr ""
 msgid "Save As..."
 msgstr ""
 
-#: Gtk/MainWindow.vala:1473
+#: Gtk/MainWindow.vala:1474
 msgid "Save Workspace"
 msgstr ""
 
@@ -4265,7 +4247,7 @@ msgstr "Bron en bestemming zijn hetzelfde"
 msgid "Special"
 msgstr "Speciale snufjes"
 
-#: Gtk/ProgressPanelArchiveTask.vala:182
+#: Gtk/ProgressPanelArchiveTask.vala:194
 msgid "Speed:"
 msgstr "Snelheid:"
 
@@ -4285,11 +4267,6 @@ msgstr "Splitsingsgrootte (MB)"
 msgid "Split archive into volumes of specified size (in MB)"
 msgstr "Archief splitsen in volumes van opgegeven grootte (in MB)"
 
-#: Utility/Gtk/DonationWindow.vala:96
-#, fuzzy
-msgid "Sponsor a Feature"
-msgstr "Donatiefuncties"
-
 #: Gtk/TermContextMenu.vala:202
 msgid "Start chroot session in current directory"
 msgstr ""
@@ -4302,7 +4279,7 @@ msgstr "Status"
 msgid "Statusbar"
 msgstr "Statusbalk"
 
-#: Gtk/ProgressPanelArchiveTask.vala:499 Gtk/ProgressPanelArchiveTask.vala:502
+#: Gtk/ProgressPanelArchiveTask.vala:351 Gtk/ProgressPanelArchiveTask.vala:354
 msgid "Stop"
 msgstr "Stoppen"
 
@@ -4326,7 +4303,7 @@ msgstr "Stijlwizard"
 msgid "Style wizard"
 msgstr "Stijlwizard"
 
-#: Utility/Gtk/DonationWindow.vala:101
+#: Utility/Gtk/DonationWindow.vala:85
 #, fuzzy
 msgid "Support"
 msgstr "Niet ondersteund"
@@ -4397,7 +4374,7 @@ msgstr "Terminal"
 msgid "Terminal emulator to use for terminal panes"
 msgstr "Te gebruiken terminal-emulator voor terminalpanelen"
 
-#: Gtk/ProgressPanelArchiveTask.vala:107
+#: Gtk/ProgressPanelArchiveTask.vala:111
 msgid "Testing"
 msgstr "Bezig met testen"
 
@@ -4405,7 +4382,7 @@ msgstr "Bezig met testen"
 msgid "There are no files selected for compression"
 msgstr "Er zijn geen bestanden geselecteerd om te comprimeren"
 
-#: Gtk/ProgressPanelArchiveTask.vala:781
+#: Gtk/ProgressPanelArchiveTask.vala:640
 msgid "There were errors while processing the archive."
 msgstr "Er zijn fouten opgetreden tijdens het verwerken van het archief."
 
@@ -4421,13 +4398,21 @@ msgstr ""
 "Deze applicatie is ontworpen voor het Arc GTK-thema; met andere thema's kan "
 "de app er minder goed uitzien."
 
-#: Utility/Gtk/DonationWindow.vala:79
+#: Utility/Gtk/DonationWindow.vala:110
 msgid ""
-"This application was created for my own use. It is being distributed as a "
-"free, open-source project in the hope that it may be useful to people. This "
-"does not mean that I provide free support and free work, for changes and "
-"features that you may require. Please see sections below for more "
-"information."
+"This application was created for my own use in my spare time. It's not "
+"practical for me to work for free, on every change that is requested. If you "
+"need new features or changes to the application, consider making a donation "
+"to sponsor the work. If you are a developer, consider contributing to the "
+"project, by picking up items from the issue tracker and submitting code "
+"changes."
+msgstr ""
+
+#: Utility/Gtk/DonationWindow.vala:67
+msgid ""
+"This software is free for personal and commercial use. It is distributed in "
+"the hope that it is useful but without any warranty. See the GNU General "
+"Public License v2 or later for more information"
 msgstr ""
 
 #: Gtk/Settings.vala:1853 Gtk/Settings.vala:2039 Gtk/Settings.vala:2240
@@ -4596,7 +4581,7 @@ msgstr "Onbekend formaat"
 msgid "Unknown File Format"
 msgstr ""
 
-#: Gtk/ProgressPanelArchiveTask.vala:767 Gtk/ProgressPanelArchiveTask.vala:771
+#: Gtk/ProgressPanelArchiveTask.vala:626 Gtk/ProgressPanelArchiveTask.vala:630
 msgid "Unknown Format"
 msgstr "Onbekend formaat"
 
@@ -4672,15 +4657,10 @@ msgstr "Bezig met uploaden van bestanden naar cloudopslag:"
 msgid "Uploading items..."
 msgstr "Bezig met uploaden van items..."
 
-#: Utility/Gtk/DonationWindow.vala:103
+#: Utility/Gtk/DonationWindow.vala:89
 msgid ""
 "Use the issue tracker for reporting issues, asking questions, and requesting "
-"features. I check the tracker once a month. If you need an immediate "
-"response, use the button below to make a donation for $10 with PayPal. Add "
-"your questions to the tracker and send me an email with the issue number "
-"(teejeetech@gmail.com). This option is for queries you may have about the "
-"application, and for help with issues you are facing. This does not cover "
-"development work for bug fixes and features."
+"features. Please avoid reporting issues by email."
 msgstr ""
 
 #: Gtk/FilePropertiesWindow.vala:225 Gtk/Sidebar.vala:1292
@@ -4767,14 +4747,9 @@ msgstr "Webpagina"
 msgid "Width"
 msgstr ""
 
-#: Gtk/MainMenubar.vala:2077
+#: Gtk/MainMenubar.vala:2077 Utility/Gtk/DonationWindow.vala:100
 msgid "Wiki"
 msgstr "Wiki"
-
-#: Utility/Gtk/DonationWindow.vala:117
-#, fuzzy
-msgid "Wiki (Documentation)"
-msgstr "Documentatie"
 
 #: Gtk/FileContextMenu.vala:716
 msgid "Window"
@@ -4886,6 +4861,21 @@ msgstr "overgedragen"
 #: Utility/FileTask.vala:1379
 msgid "trashed"
 msgstr "in prullenbak gegooid"
+
+#~ msgid "Close Window"
+#~ msgstr "Venster sluiten"
+
+#, fuzzy
+#~ msgid "Donate (5$)"
+#~ msgstr "Doneren"
+
+#, fuzzy
+#~ msgid "Sponsor a Feature"
+#~ msgstr "Donatiefuncties"
+
+#, fuzzy
+#~ msgid "Wiki (Documentation)"
+#~ msgstr "Documentatie"
 
 #~ msgid ""
 #~ "Did you find this application useful?\n"

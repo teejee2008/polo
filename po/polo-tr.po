@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
-"POT-Creation-Date: 2018-08-31 23:39+0530\n"
+"POT-Creation-Date: 2022-11-05 12:02+0530\n"
 "PO-Revision-Date: 2019-09-29 19:41+0530\n"
 "Last-Translator: Yaşar Çiv\n"
 "Language-Team: milislinux.org <yasarciv67@gmail.com>\n"
@@ -76,10 +76,10 @@ msgstr "2H"
 msgid "4"
 msgstr "4"
 
-#: Gtk/ProgressPanelArchiveTask.vala:157 Gtk/ProgressPanelArchiveTask.vala:167
-#: Gtk/ProgressPanelArchiveTask.vala:177 Gtk/ProgressPanelArchiveTask.vala:187
-#: Gtk/ProgressPanelArchiveTask.vala:200 Gtk/ProgressPanelArchiveTask.vala:211
-#: Gtk/ProgressPanelArchiveTask.vala:222 Gtk/ProgressPanelArchiveTask.vala:233
+#: Gtk/ProgressPanelArchiveTask.vala:166 Gtk/ProgressPanelArchiveTask.vala:177
+#: Gtk/ProgressPanelArchiveTask.vala:188 Gtk/ProgressPanelArchiveTask.vala:199
+#: Gtk/ProgressPanelArchiveTask.vala:213 Gtk/ProgressPanelArchiveTask.vala:225
+#: Gtk/ProgressPanelArchiveTask.vala:237 Gtk/ProgressPanelArchiveTask.vala:249
 msgid "???"
 msgstr "???"
 
@@ -92,7 +92,7 @@ msgstr ""
 "Belirtilen boyutta dinamik olarak ayrılmış bir disk oluşturulacak. Disk "
 "değiştirildiği için dosya boyutu yavaş yavaş artacaktır."
 
-#: Gtk/MainWindow.vala:999
+#: Gtk/MainWindow.vala:1000
 msgid "A modern file manager for Linux"
 msgstr "Linux için modern bir dosya yöneticisi"
 
@@ -268,8 +268,8 @@ msgid "BZip2 Compressed Disk Image"
 msgstr "BZip2 Sıkıştırılmış Disk Görüntüsü"
 
 #: Gtk/FileViewToolbar.vala:159 Gtk/MainMenubar.vala:1257 Gtk/Pathbar.vala:820
-#: Gtk/Settings.vala:395 Gtk/Settings.vala:820
-#: Utility/Gtk/AboutWindow.vala:343 Utility/Gtk/AboutWindow.vala:375
+#: Gtk/Settings.vala:395 Gtk/Settings.vala:820 Utility/Gtk/AboutWindow.vala:343
+#: Utility/Gtk/AboutWindow.vala:375
 msgid "Back"
 msgstr "Geri"
 
@@ -289,7 +289,7 @@ msgstr "Yedekleme Tamamlandı"
 msgid "Base"
 msgstr "Taban"
 
-#: Utility/Gtk/DonationWindow.vala:75
+#: Utility/Gtk/DonationWindow.vala:80
 msgid "Become a Patron"
 msgstr "Patron ol"
 
@@ -433,11 +433,11 @@ msgstr "Dosya İşlemlerini İptal Et?"
 msgid "Cancel this file operation"
 msgstr "Bu dosya işlemini iptal et"
 
-#: Gtk/ProgressPanelArchiveTask.vala:737 Gtk/ProgressPanelArchiveTask.vala:740
+#: Gtk/ProgressPanelArchiveTask.vala:596 Gtk/ProgressPanelArchiveTask.vala:599
 msgid "Cancelled"
 msgstr "İptal Edildi"
 
-#: Gtk/ProgressPanelArchiveTask.vala:865
+#: Gtk/ProgressPanelArchiveTask.vala:680
 msgid "Cancelled by user"
 msgstr "Kullanıcı tarafından iptal edildi"
 
@@ -579,7 +579,7 @@ msgstr "Klasik Liste (Tek Bölmeli +Yan Çubuk + Simge Görünümü)"
 msgid "Clean thumbnail cache"
 msgstr "Küçük resim önbelleğini temizle"
 
-#: Gtk/MainWindow.vala:1026
+#: Gtk/MainWindow.vala:1027
 msgid "Cleaning Thumbnail Cache..."
 msgstr "Küçük Resim Önbelleği Temizleniyor..."
 
@@ -623,18 +623,15 @@ msgstr "Yolu düzenlemek için tıklayın"
 #: Gtk/ClamScanBox.vala:482 Gtk/DevicePopoverSettingsWindow.vala:292
 #: Gtk/FileViewTab.vala:329 Gtk/MessageBar.vala:152 Gtk/SelectionBar.vala:204
 #: Gtk/WizardWindow.vala:143 Utility/Gtk/AboutWindow.vala:400
+#: Utility/Gtk/DonationWindow.vala:137
 msgid "Close"
 msgstr "Kapat"
-
-#: Utility/Gtk/DonationWindow.vala:144
-msgid "Close Window"
-msgstr "Pencereyi Kapat"
 
 #: Gtk/Settings.vala:1131
 msgid "Close button (R)"
 msgstr "Kapat düğmesi (R)"
 
-#: Gtk/MainHeaderBar.vala:313 Gtk/ProgressPanelArchiveTask.vala:515
+#: Gtk/MainHeaderBar.vala:313 Gtk/ProgressPanelArchiveTask.vala:367
 msgid "Close this window"
 msgstr "Bu pencereyi kapat"
 
@@ -725,12 +722,17 @@ msgstr "Sıkıştır"
 msgid "Compress selected items and create new archive"
 msgstr "Seçili öğeleri sıkıştır ve yeni arşiv oluştur"
 
-#: Gtk/ProgressPanelArchiveTask.vala:216
+#: Gtk/ProgressPanelArchiveTask.vala:231
 msgid "Compressed:"
 msgstr "Sıkıştırılmış:"
 
-#: Gtk/ProgressPanelArchiveTask.vala:98
+#: Gtk/ProgressPanelArchiveTask.vala:102
 msgid "Compressing"
+msgstr "Sıkıştırılıyor"
+
+#: Gtk/ProgressPanelArchiveTask.vala:283
+#, fuzzy
+msgid "Compression:"
 msgstr "Sıkıştırılıyor"
 
 #: Gtk/PasswordDialog.vala:129
@@ -986,7 +988,7 @@ msgid "Create new folder in this location"
 msgstr "Bu konumda yeni klasör oluştur"
 
 #: Gtk/FilePropertiesBox.vala:265 Gtk/KvmCreateDiskWindow.vala:463
-#: Gtk/ProgressPanelArchiveTask.vala:752 Gtk/ProgressPanelImageTask.vala:207
+#: Gtk/ProgressPanelArchiveTask.vala:611 Gtk/ProgressPanelImageTask.vala:207
 #: Gtk/ProgressPanelKvmTask.vala:258
 #, c-format
 msgid "Created"
@@ -1053,7 +1055,7 @@ msgstr "Seçili öğeleri kes"
 msgid "Dark theme"
 msgstr "Koyu Tema"
 
-#: Gtk/ProgressPanelArchiveTask.vala:194
+#: Gtk/ProgressPanelArchiveTask.vala:207
 msgid "Data:"
 msgstr "Veri:"
 
@@ -1274,15 +1276,11 @@ msgid "Domain"
 msgstr "Etki alanı"
 
 #: Gtk/FileViewToolbar.vala:498 Gtk/MainMenubar.vala:2097
-#: Utility/Gtk/DonationWindow.vala:44
+#: Utility/Gtk/DonationWindow.vala:44 Utility/Gtk/DonationWindow.vala:77
 msgid "Donate"
 msgstr "Bağış Yap"
 
-#: Utility/Gtk/DonationWindow.vala:72
-msgid "Donate (5$)"
-msgstr "Bağış Yap (5$)"
-
-#: Utility/Gtk/DonationWindow.vala:125 Utility/Gtk/DonationWindow.vala:133
+#: Utility/Gtk/DonationWindow.vala:118 Utility/Gtk/DonationWindow.vala:126
 msgid "Donation Features"
 msgstr "Bağış Özellikleri"
 
@@ -1401,7 +1399,7 @@ msgstr "Aygıt Çıkarılsın mı?"
 msgid "Eject storage device"
 msgstr "Depolama aygıtını çıkar"
 
-#: Gtk/ProgressPanelArchiveTask.vala:162
+#: Gtk/ProgressPanelArchiveTask.vala:172
 msgid "Elapsed:"
 msgstr "Geçen:"
 
@@ -1488,7 +1486,7 @@ msgid "Enter Password to Unlock"
 msgstr "Kilidi Açmak İçin Parola Girin"
 
 #: Gtk/FileViewList.vala:4654 Gtk/FileViewList.vala:4688
-#: Gtk/FileViewList.vala:4728 Gtk/MainWindow.vala:1481
+#: Gtk/FileViewList.vala:4728 Gtk/MainWindow.vala:1482
 msgid "Enter another name"
 msgstr "Başka isim girin"
 
@@ -1529,11 +1527,11 @@ msgstr "Bağlanmak için paylaşım adı girin (Gerekli)"
 msgid "Enter unique name for selected file"
 msgstr "Seçilen dosya için benzersiz bir ad girin"
 
-#: Gtk/MainWindow.vala:1473
+#: Gtk/MainWindow.vala:1474
 msgid "Enter workspace name"
 msgstr "Çalışma sayfası adı girin"
 
-#: Gtk/ProgressPanelArchiveTask.vala:771 Gtk/ProgressPanelArchiveTask.vala:782
+#: Gtk/ProgressPanelArchiveTask.vala:630 Gtk/ProgressPanelArchiveTask.vala:641
 #: Gtk/ProgressPanelImageTask.vala:198 Gtk/ProgressPanelKvmTask.vala:217
 #: Gtk/ProgressPanelKvmTask.vala:220 Gtk/ProgressPanelPdfTask.vala:198
 #: Utility/Device.vala:1697 Utility/KvmTask.vala:311
@@ -1630,15 +1628,15 @@ msgid ""
 msgstr ""
 "Arşivleri karşı bölmeye çıkarın. Mevcut dosyaların üzerine yazılacaktır."
 
-#: Gtk/ProgressPanelArchiveTask.vala:755
+#: Gtk/ProgressPanelArchiveTask.vala:614
 msgid "Extracted"
 msgstr "Çıkarılan"
 
-#: Gtk/ProgressPanelArchiveTask.vala:101
+#: Gtk/ProgressPanelArchiveTask.vala:105
 msgid "Extracting"
 msgstr "Çıkarılıyor"
 
-#: Gtk/ProgressPanelArchiveTask.vala:591
+#: Gtk/ProgressPanelArchiveTask.vala:443
 msgid "Extraction path not specified"
 msgstr "Çıkarma yolu belirtilmedi"
 
@@ -1766,7 +1764,7 @@ msgstr "Hızlı"
 msgid "Fastest"
 msgstr "En Hızlı"
 
-#: Utility/Gtk/DonationWindow.vala:85
+#: Utility/Gtk/DonationWindow.vala:106
 msgid "Feature Requests"
 msgstr "Özellik Talepleri"
 
@@ -1809,7 +1807,7 @@ msgid "File Properties"
 msgstr "Dosya Özellikleri"
 
 #: Gtk/FileViewList.vala:4688 Gtk/FileViewList.vala:4728
-#: Gtk/MainWindow.vala:1481
+#: Gtk/MainWindow.vala:1482
 msgid "File exists"
 msgstr "Dosya var"
 
@@ -1822,7 +1820,7 @@ msgstr "Dosya standart olmayan bir biçime sahip veya bir sağlama dosyası değ
 msgid "File is missing"
 msgstr "Dosya eksik"
 
-#: Gtk/ProgressPanelArchiveTask.vala:768
+#: Gtk/ProgressPanelArchiveTask.vala:627
 msgid "File is not an archive or format is unsupported"
 msgstr "Dosya bir arşiv veya biçim desteklenmiyor"
 
@@ -1905,7 +1903,7 @@ msgstr "Sağlama toplamı dosyasında başvurulan dosyalar diskte yok"
 msgid "Files verified"
 msgstr "Dosyalar doğrulandı"
 
-#: Gtk/ProgressPanelArchiveTask.vala:152
+#: Gtk/ProgressPanelArchiveTask.vala:161
 msgid "Files:"
 msgstr "Dosyalar:"
 
@@ -2016,9 +2014,8 @@ msgstr "Biçimlendirme Başarısız"
 msgid "Forward"
 msgstr "İleri"
 
-#: Gtk/ChecksumBox.vala:862 Gtk/ChecksumBox.vala:1310
-#: Gtk/ChecksumBox.vala:1373 Gtk/ClamScanBox.vala:841 Gtk/ClamScanBox.vala:932
-#: Gtk/ToolsWindow.vala:155
+#: Gtk/ChecksumBox.vala:862 Gtk/ChecksumBox.vala:1310 Gtk/ChecksumBox.vala:1373
+#: Gtk/ClamScanBox.vala:841 Gtk/ClamScanBox.vala:932 Gtk/ToolsWindow.vala:155
 #, c-format
 msgid "Found"
 msgstr "Bulundu"
@@ -2069,13 +2066,10 @@ msgstr "Sağlama toplamları oluşturuluyor..."
 msgid "Generating thumbnails..."
 msgstr "Küçük resimler oluşturuluyor..."
 
-#: Utility/Gtk/DonationWindow.vala:136
-msgid "Get Donation Plugins ($10)"
+#: Utility/Gtk/DonationWindow.vala:129
+#, fuzzy
+msgid "Get Plugins ($10)"
 msgstr "Bağış Eklentileri Alın (10$)"
-
-#: Utility/Gtk/DonationWindow.vala:109
-msgid "Get Support ($10)"
-msgstr "Destek Alın (10$)"
 
 #: Gtk/Settings.vala:680 Gtk/Settings.vala:1092
 msgid "Global"
@@ -2123,8 +2117,8 @@ msgstr ""
 "<b>std</b> - 1280x1024x16'dan daha yüksek çözünürlükleri destekler. Linux, "
 "Windows XP ve daha yeni bir konuk yerleşik bir sürücüye sahiptir.\n"
 "\n"
-"<b>vmware</b> - VMware SVGA-II grafik kartı. Linux misafirleri için "
-"xf86-video-vmware sürücüsü ve Windows için VMware araçlarının kurulumunu "
+"<b>vmware</b> - VMware SVGA-II grafik kartı. Linux misafirleri için xf86-"
+"video-vmware sürücüsü ve Windows için VMware araçlarının kurulumunu "
 "gerektirir.\n"
 "\n"
 "<b>qxl</b> - SPICE ile kullanım için daha güçlü grafik kartı."
@@ -2174,9 +2168,8 @@ msgstr "Seçilen öğeleri gizle"
 msgid "History"
 msgstr "Geçmiş"
 
-#: Gtk/FileViewToolbar.vala:221 Gtk/Pathbar.vala:910
-#: Gtk/PlacesPopover.vala:647 Gtk/Settings.vala:463 Gtk/Settings.vala:880
-#: Gtk/Sidebar.vala:340
+#: Gtk/FileViewToolbar.vala:221 Gtk/Pathbar.vala:910 Gtk/PlacesPopover.vala:647
+#: Gtk/Settings.vala:463 Gtk/Settings.vala:880 Gtk/Sidebar.vala:340
 msgid "Home"
 msgstr "Ev"
 
@@ -2192,7 +2185,7 @@ msgstr "Yatay"
 msgid "Host IP (Eg: 192.0.10.1)"
 msgstr "Ana Makine-IP (Örnek: 192.0.10.1)"
 
-#: Utility/Gtk/DonationWindow.vala:127
+#: Utility/Gtk/DonationWindow.vala:120
 msgid ""
 "I sometimes create exclusive plugins to encourage people to contribute. You "
 "can make a contribution by translating the application to other languages, "
@@ -2239,33 +2232,14 @@ msgid ""
 msgstr ""
 "Seçilirse, eylem, yeni dosya oluşturmak yerine asıl dosyanın yerini alır."
 
-#: Utility/Gtk/DonationWindow.vala:66
+#: Utility/Gtk/DonationWindow.vala:71
+#, fuzzy
 msgid ""
-"If you find this application useful, and wish to support its development, "
-"use the button below to make a donation with PayPal."
+"If you find this application useful, consider making a donation to support "
+"the development."
 msgstr ""
 "Bu uygulamayı yararlı buluyorsanız ve gelişimini desteklemek istiyorsanız, "
 "PayPal ile bağış yapmak için aşağıdaki düğmeyi kullanın."
-
-#: Utility/Gtk/DonationWindow.vala:87
-msgid ""
-"If you need changes to this application, please add your requirements to the "
-"issue tracker. You can sponsor your own request, or sponsor an existing "
-"request by making a donation with PayPal. Items available for sponsorship "
-"are labelled as <i>\"OpenForSponsorship\"</i>, along with an amount for the "
-"work involved. You can make a donation for that amount with PayPal, and "
-"leave a comment on the thread, or email me with the issue number. I will "
-"work on it the next time I update the application, and changes will be "
-"included in the next release."
-msgstr ""
-"Bu uygulamada değişiklik yapmanız gerekiyorsa, lütfen sorun izleyiciye "
-"gereksinimlerinizi ekleyin. PayPal'a bağış yaparak kendi isteğinize veya "
-"mevcut bir isteğe maddi destekçi olabilirsiniz. Maddi Destek için uygun "
-"öğeler, ilgili çalışma için bir miktarla birlikte <i> \"OpenForSponsorship\" "
-"</i> olarak etiketlenir. PayPal ile bu tutar için bağış yapabilir, konu "
-"hakkında bir yorum bırakabilir veya sorun numarası ile bana e-posta "
-"gönderebilirsiniz. Bir dahaki sefere uygulamayı güncellediğimde üzerinde "
-"çalışacağım ve değişiklikler bir sonraki sürümde yer alacak."
 
 #: Gtk/MediaBar.vala:187
 msgid ""
@@ -2337,7 +2311,7 @@ msgstr "Geçersiz Yol"
 msgid "Invalid Server Name"
 msgstr "Geçersiz Sunucu Adı"
 
-#: Gtk/MainMenubar.vala:2067 Utility/Gtk/DonationWindow.vala:112
+#: Gtk/MainMenubar.vala:2067 Utility/Gtk/DonationWindow.vala:95
 msgid "Issue Tracker"
 msgstr "Sorun İzleyicisi"
 
@@ -2352,10 +2326,6 @@ msgstr "Öğe sembolik bir bağlantı değil"
 #: Gtk/Settings.vala:218 Gtk/Settings.vala:249
 msgid "Items"
 msgstr "Öğeler"
-
-#: Utility/Gtk/DonationWindow.vala:93
-msgid "Items for Sponsorship"
-msgstr "Maddi Destek Öğeleri"
 
 #: Gtk/FileContextMenu.vala:2044 Gtk/Settings.vala:2661
 msgid "KVM"
@@ -2443,7 +2413,7 @@ msgstr "Öğeler listeleniyor..."
 msgid "Listing source items..."
 msgstr "Kaynak öğeler listeleniyor..."
 
-#: Gtk/MainWindow.vala:1265
+#: Gtk/MainWindow.vala:1266
 msgid "Loading workspace..."
 msgstr "Çalışma sayfası yükleniyor..."
 
@@ -2591,7 +2561,7 @@ msgstr "Küçük"
 msgid "Missing"
 msgstr "Eksik"
 
-#: Common/Main.vala:1345 Gtk/MainWindow.vala:605
+#: Common/Main.vala:1345 Gtk/MainWindow.vala:606
 msgid "Missing Dependencies"
 msgstr "Eksik Bağımlılıklar"
 
@@ -2781,7 +2751,7 @@ msgstr "Yeni Sekme"
 msgid "New Window"
 msgstr "Yeni Pencere"
 
-#: Gtk/MainWindow.vala:1468
+#: Gtk/MainWindow.vala:1469
 msgid "New Workspace"
 msgstr "Yeni Çalışma Alanı"
 
@@ -2871,9 +2841,8 @@ msgstr ""
 "Konuk makine için taklit edilecek CPU çekirdeği sayısı. Bu, ana makinedeki "
 "çekirdek sayısından daha büyük olabilir."
 
-#: Gtk/ChecksumBox.vala:349 Gtk/ChecksumBox.vala:1418
-#: Gtk/ChecksumBox.vala:1477 Gtk/FileConflictDialog.vala:254
-#: Gtk/ProgressPanelArchiveTask.vala:521
+#: Gtk/ChecksumBox.vala:349 Gtk/ChecksumBox.vala:1418 Gtk/ChecksumBox.vala:1477
+#: Gtk/FileConflictDialog.vala:254 Gtk/ProgressPanelArchiveTask.vala:373
 #: Utility/Gtk/CustomMessageDialog.vala:170
 #: Utility/Gtk/CustomMessageDialog.vala:174 Utility/Gtk/GtkHelper.vala:159
 #: Utility/Gtk/LoadingWindow.vala:110
@@ -3249,9 +3218,9 @@ msgstr "Yol bulunamadı"
 msgid "Pathbar"
 msgstr "Yol çubuğu"
 
-#: Gtk/ProgressPanelArchiveTask.vala:460 Gtk/ProgressPanelArchiveTask.vala:463
-#: Gtk/ProgressPanelArchiveTask.vala:484 Gtk/ProgressPanelArchiveTask.vala:485
-#: Gtk/ProgressPanelArchiveTask.vala:630
+#: Gtk/ProgressPanelArchiveTask.vala:312 Gtk/ProgressPanelArchiveTask.vala:315
+#: Gtk/ProgressPanelArchiveTask.vala:336 Gtk/ProgressPanelArchiveTask.vala:337
+#: Gtk/ProgressPanelArchiveTask.vala:482
 msgid "Pause"
 msgstr "Beklet"
 
@@ -3295,9 +3264,9 @@ msgstr "Tercihler"
 
 #: Gtk/ProgressPanelDeviceWriterTask.vala:90 Gtk/ProgressPanelFileTask.vala:95
 #: Gtk/ProgressPanelImageTask.vala:80 Gtk/ProgressPanelKvmTask.vala:106
-#: Gtk/ProgressPanelPdfTask.vala:80
-#: Gtk/ProgressPanelVideoDownloadTask.vala:410 Utility/FileTask.vala:242
-#: Utility/FileTask.vala:906 Utility/FileTask.vala:1032
+#: Gtk/ProgressPanelPdfTask.vala:80 Gtk/ProgressPanelVideoDownloadTask.vala:410
+#: Utility/FileTask.vala:242 Utility/FileTask.vala:906
+#: Utility/FileTask.vala:1032
 msgid "Preparing..."
 msgstr "Hazırlanıyor..."
 
@@ -3305,9 +3274,14 @@ msgstr "Hazırlanıyor..."
 msgid "Previous"
 msgstr "Önceki"
 
-#: Gtk/ProgressPanelArchiveTask.vala:205
+#: Gtk/ProgressPanelArchiveTask.vala:219
 msgid "Processed:"
 msgstr "İşlenmiş:"
+
+#: Gtk/ProgressPanelArchiveTask.vala:263
+#, fuzzy
+msgid "Progress:"
+msgstr "Sıkıştırılmış:"
 
 #: Gtk/DeviceContextMenu.vala:293 Gtk/DevicePopover.vala:641
 #: Gtk/FileContextMenu.vala:2852 Gtk/FilePropertiesWindow.vala:87
@@ -3394,7 +3368,7 @@ msgstr "RAM (MB)"
 msgid "RWX = Read Write Execute"
 msgstr "RWX = Okuma Yazma Çalıştırma"
 
-#: Gtk/ProgressPanelArchiveTask.vala:227
+#: Gtk/ProgressPanelArchiveTask.vala:243
 msgid "Ratio:"
 msgstr "Oranı:"
 
@@ -3450,7 +3424,7 @@ msgstr ""
 msgid "ReadOnly"
 msgstr "Salt Okunur"
 
-#: Gtk/ProgressPanelArchiveTask.vala:104
+#: Gtk/ProgressPanelArchiveTask.vala:108
 msgid "Reading"
 msgstr "Okunuyor"
 
@@ -3458,7 +3432,7 @@ msgstr "Okunuyor"
 msgid "Rebuild font cache"
 msgstr "Yazı tipi önbelleğini yeniden oluştur"
 
-#: Gtk/MainWindow.vala:1014
+#: Gtk/MainWindow.vala:1015
 msgid "Rebuilding Font Cache..."
 msgstr "Yazı Tipi Önbelleği Yeniden Oluşturuluyor..."
 
@@ -3500,8 +3474,8 @@ msgstr "Kaliteyi düşürerek JPEG görüntülerin dosya boyutunu küçültün"
 
 #: Gtk/FileContextMenu.vala:2592
 msgid ""
-"Reduce file size of PNG images without losing quality. PNG files will be "
-"re-packed using better compression algorithms."
+"Reduce file size of PNG images without losing quality. PNG files will be re-"
+"packed using better compression algorithms."
 msgstr ""
 "PNG resimlerin dosya boyutunu kaliteden düşürmeden küçültün. PNG dosyaları "
 "daha iyi sıkıştırma algoritmaları kullanılarak yeniden paketlenir."
@@ -3526,7 +3500,7 @@ msgstr "Yenile"
 msgid "Reload current location"
 msgstr "Geçerli konumu yeniden yükle"
 
-#: Gtk/ProgressPanelArchiveTask.vala:172
+#: Gtk/ProgressPanelArchiveTask.vala:183
 msgid "Remaining:"
 msgstr "Kalan:"
 
@@ -3722,7 +3696,7 @@ msgstr "Geri Yüklendi"
 msgid "Restoring device from disk image..."
 msgstr "Aygıtı disk görüntüsünden geri yükle ..."
 
-#: Gtk/MainWindow.vala:1268
+#: Gtk/MainWindow.vala:1269
 msgid "Restoring session..."
 msgstr "Oturum geri yükleniyor..."
 
@@ -3730,7 +3704,7 @@ msgstr "Oturum geri yükleniyor..."
 msgid "Restoring trashed files:"
 msgstr "Çöpten dosyaları geri yükleme:"
 
-#: Gtk/ProgressPanelArchiveTask.vala:489 Gtk/ProgressPanelArchiveTask.vala:490
+#: Gtk/ProgressPanelArchiveTask.vala:341 Gtk/ProgressPanelArchiveTask.vala:342
 msgid "Resume"
 msgstr "Devam et"
 
@@ -3762,11 +3736,11 @@ msgstr ""
 msgid "Run the selected script in a terminal window"
 msgstr "Seçili betiği bir terminal penceresinde çalıştır"
 
-#: Gtk/MainWindow.vala:1034 Gtk/MainWindow.vala:1052
+#: Gtk/MainWindow.vala:1035 Gtk/MainWindow.vala:1053
 msgid "Running Rclone Installation Script"
 msgstr "Rclone Kurulum Betiğini Çalıştırma"
 
-#: Gtk/MainWindow.vala:1042
+#: Gtk/MainWindow.vala:1043
 msgid "Running p7zip Installation Script"
 msgstr "P7zip Kurulum Betiğini Çalıştırma"
 
@@ -3793,7 +3767,7 @@ msgstr "Farklı Kaydet"
 msgid "Save As..."
 msgstr "Farklı Kaydet..."
 
-#: Gtk/MainWindow.vala:1473
+#: Gtk/MainWindow.vala:1474
 msgid "Save Workspace"
 msgstr "Çalışma Alanını Kaydet"
 
@@ -4229,7 +4203,7 @@ msgstr "Kaynak ve hedef aynı"
 msgid "Special"
 msgstr "Özel"
 
-#: Gtk/ProgressPanelArchiveTask.vala:182
+#: Gtk/ProgressPanelArchiveTask.vala:194
 msgid "Speed:"
 msgstr "Hız:"
 
@@ -4249,10 +4223,6 @@ msgstr "Ayırma Boyutu (MB)"
 msgid "Split archive into volumes of specified size (in MB)"
 msgstr "Arşivi belirtilen boyutta birimlere ayır (MB cinsinden)"
 
-#: Utility/Gtk/DonationWindow.vala:96
-msgid "Sponsor a Feature"
-msgstr "Bir Özelliğe Maddi Destekçi Olun"
-
 #: Gtk/TermContextMenu.vala:202
 msgid "Start chroot session in current directory"
 msgstr "Geçerli dizinde chroot oturumunu başlat"
@@ -4265,7 +4235,7 @@ msgstr "Durum"
 msgid "Statusbar"
 msgstr "Durum çubuğu"
 
-#: Gtk/ProgressPanelArchiveTask.vala:499 Gtk/ProgressPanelArchiveTask.vala:502
+#: Gtk/ProgressPanelArchiveTask.vala:351 Gtk/ProgressPanelArchiveTask.vala:354
 msgid "Stop"
 msgstr "Durdur"
 
@@ -4289,7 +4259,7 @@ msgstr "Tarz Sihirbazı"
 msgid "Style wizard"
 msgstr "Tarz sihirbazı"
 
-#: Utility/Gtk/DonationWindow.vala:101
+#: Utility/Gtk/DonationWindow.vala:85
 msgid "Support"
 msgstr "Destek"
 
@@ -4353,7 +4323,7 @@ msgstr "Komut Satırı"
 msgid "Terminal emulator to use for terminal panes"
 msgstr "Terminal bölmeleri için kullanılacak terminal emülatörü"
 
-#: Gtk/ProgressPanelArchiveTask.vala:107
+#: Gtk/ProgressPanelArchiveTask.vala:111
 msgid "Testing"
 msgstr "Test etme"
 
@@ -4361,7 +4331,7 @@ msgstr "Test etme"
 msgid "There are no files selected for compression"
 msgstr "Sıkıştırma için seçilen dosya yok"
 
-#: Gtk/ProgressPanelArchiveTask.vala:781
+#: Gtk/ProgressPanelArchiveTask.vala:640
 msgid "There were errors while processing the archive."
 msgstr "Arşiv işlenirken hatalar oluştu."
 
@@ -4377,19 +4347,22 @@ msgstr ""
 "Bu uygulama Arc GTK teması için tasarlanmıştır. Diğer temalarla doğru "
 "görünmeyebilir."
 
-#: Utility/Gtk/DonationWindow.vala:79
+#: Utility/Gtk/DonationWindow.vala:110
 msgid ""
-"This application was created for my own use. It is being distributed as a "
-"free, open-source project in the hope that it may be useful to people. This "
-"does not mean that I provide free support and free work, for changes and "
-"features that you may require. Please see sections below for more "
-"information."
+"This application was created for my own use in my spare time. It's not "
+"practical for me to work for free, on every change that is requested. If you "
+"need new features or changes to the application, consider making a donation "
+"to sponsor the work. If you are a developer, consider contributing to the "
+"project, by picking up items from the issue tracker and submitting code "
+"changes."
 msgstr ""
-"Bu uygulama kendi kullanımım için oluşturuldu. İnsanlara faydalı olacağı "
-"umuduyla ücretsiz, açık kaynaklı bir proje olarak dağıtılmaktadır. Bu, "
-"ihtiyaç duyabileceğiniz değişiklikler ve özellikler için ücretsiz destek ve "
-"ücretsiz çalışma sağladığım anlamına gelmez. Lütfen daha fazla bilgi için "
-"aşağıdaki bölümlere bakın."
+
+#: Utility/Gtk/DonationWindow.vala:67
+msgid ""
+"This software is free for personal and commercial use. It is distributed in "
+"the hope that it is useful but without any warranty. See the GNU General "
+"Public License v2 or later for more information"
+msgstr ""
 
 #: Gtk/Settings.vala:1853 Gtk/Settings.vala:2039 Gtk/Settings.vala:2240
 msgid "Thumbnails"
@@ -4555,7 +4528,7 @@ msgstr "Bilinmeyen"
 msgid "Unknown File Format"
 msgstr "Bilinmeyen Dosya Biçimi"
 
-#: Gtk/ProgressPanelArchiveTask.vala:767 Gtk/ProgressPanelArchiveTask.vala:771
+#: Gtk/ProgressPanelArchiveTask.vala:626 Gtk/ProgressPanelArchiveTask.vala:630
 msgid "Unknown Format"
 msgstr "Bilinmeyen Biçim"
 
@@ -4599,8 +4572,8 @@ msgstr "Paketlenmemiş"
 msgid "Unprotect the PDF document by removing password"
 msgstr "Parolayı kaldırarak PDF belgesini korumasız yapın"
 
-#: Gtk/FileViewToolbar.vala:201 Gtk/MainMenubar.vala:1347
-#: Gtk/Settings.vala:429 Gtk/Settings.vala:860
+#: Gtk/FileViewToolbar.vala:201 Gtk/MainMenubar.vala:1347 Gtk/Settings.vala:429
+#: Gtk/Settings.vala:860
 msgid "Up"
 msgstr "Yukarı"
 
@@ -4630,24 +4603,11 @@ msgstr "Dosyaları bulut depolama alanına yükleme:"
 msgid "Uploading items..."
 msgstr "Öğeler yükleniyor..."
 
-#: Utility/Gtk/DonationWindow.vala:103
+#: Utility/Gtk/DonationWindow.vala:89
 msgid ""
 "Use the issue tracker for reporting issues, asking questions, and requesting "
-"features. I check the tracker once a month. If you need an immediate "
-"response, use the button below to make a donation for $10 with PayPal. Add "
-"your questions to the tracker and send me an email with the issue number "
-"(teejeetech@gmail.com). This option is for queries you may have about the "
-"application, and for help with issues you are facing. This does not cover "
-"development work for bug fixes and features."
+"features. Please avoid reporting issues by email."
 msgstr ""
-"Sorunları bildirmek, soru sormak ve özellik istemek için sorun izleyiciyi "
-"kullanın. İzleyiciyi ayda bir kez kontrol ediyorum. Hemen yanıt vermem "
-"gerekiyorsa, PayPal ile 10 $ 'lık bağış yapmak için aşağıdaki düğmeyi "
-"kullanın. Sorularınızı izleyiciye ekleyin ve bana sorun numarasını bir "
-"e-posta ile gönderin (teejeetech@gmail.com). Bu seçenek, uygulama hakkında "
-"sahip olabileceğiniz sorular ve karşı karşıya kaldığınız sorunlarla ilgili "
-"yardım içindir. Bu, hata düzeltmeleri ve özellikler için geliştirme "
-"çalışmalarını kapsamaz."
 
 #: Gtk/FilePropertiesWindow.vala:225 Gtk/Sidebar.vala:1292
 #: Gtk/Statusbar.vala:361 Utility/Device.vala:2562
@@ -4733,13 +4693,9 @@ msgstr "Web Sayfası"
 msgid "Width"
 msgstr "Genişlik"
 
-#: Gtk/MainMenubar.vala:2077
+#: Gtk/MainMenubar.vala:2077 Utility/Gtk/DonationWindow.vala:100
 msgid "Wiki"
 msgstr "Wiki"
-
-#: Utility/Gtk/DonationWindow.vala:117
-msgid "Wiki (Documentation)"
-msgstr "Wiki (Belgeleme)"
 
 #: Gtk/FileContextMenu.vala:716
 msgid "Window"
@@ -4851,3 +4807,72 @@ msgstr "aktarılan"
 #: Utility/FileTask.vala:1379
 msgid "trashed"
 msgstr "çöpe atılan"
+
+#~ msgid "Close Window"
+#~ msgstr "Pencereyi Kapat"
+
+#~ msgid "Donate (5$)"
+#~ msgstr "Bağış Yap (5$)"
+
+#~ msgid "Get Support ($10)"
+#~ msgstr "Destek Alın (10$)"
+
+#~ msgid ""
+#~ "If you need changes to this application, please add your requirements to "
+#~ "the issue tracker. You can sponsor your own request, or sponsor an "
+#~ "existing request by making a donation with PayPal. Items available for "
+#~ "sponsorship are labelled as <i>\"OpenForSponsorship\"</i>, along with an "
+#~ "amount for the work involved. You can make a donation for that amount "
+#~ "with PayPal, and leave a comment on the thread, or email me with the "
+#~ "issue number. I will work on it the next time I update the application, "
+#~ "and changes will be included in the next release."
+#~ msgstr ""
+#~ "Bu uygulamada değişiklik yapmanız gerekiyorsa, lütfen sorun izleyiciye "
+#~ "gereksinimlerinizi ekleyin. PayPal'a bağış yaparak kendi isteğinize veya "
+#~ "mevcut bir isteğe maddi destekçi olabilirsiniz. Maddi Destek için uygun "
+#~ "öğeler, ilgili çalışma için bir miktarla birlikte <i> "
+#~ "\"OpenForSponsorship\" </i> olarak etiketlenir. PayPal ile bu tutar için "
+#~ "bağış yapabilir, konu hakkında bir yorum bırakabilir veya sorun numarası "
+#~ "ile bana e-posta gönderebilirsiniz. Bir dahaki sefere uygulamayı "
+#~ "güncellediğimde üzerinde çalışacağım ve değişiklikler bir sonraki sürümde "
+#~ "yer alacak."
+
+#~ msgid "Items for Sponsorship"
+#~ msgstr "Maddi Destek Öğeleri"
+
+#~ msgid "Sponsor a Feature"
+#~ msgstr "Bir Özelliğe Maddi Destekçi Olun"
+
+#~ msgid ""
+#~ "This application was created for my own use. It is being distributed as a "
+#~ "free, open-source project in the hope that it may be useful to people. "
+#~ "This does not mean that I provide free support and free work, for changes "
+#~ "and features that you may require. Please see sections below for more "
+#~ "information."
+#~ msgstr ""
+#~ "Bu uygulama kendi kullanımım için oluşturuldu. İnsanlara faydalı olacağı "
+#~ "umuduyla ücretsiz, açık kaynaklı bir proje olarak dağıtılmaktadır. Bu, "
+#~ "ihtiyaç duyabileceğiniz değişiklikler ve özellikler için ücretsiz destek "
+#~ "ve ücretsiz çalışma sağladığım anlamına gelmez. Lütfen daha fazla bilgi "
+#~ "için aşağıdaki bölümlere bakın."
+
+#~ msgid ""
+#~ "Use the issue tracker for reporting issues, asking questions, and "
+#~ "requesting features. I check the tracker once a month. If you need an "
+#~ "immediate response, use the button below to make a donation for $10 with "
+#~ "PayPal. Add your questions to the tracker and send me an email with the "
+#~ "issue number (teejeetech@gmail.com). This option is for queries you may "
+#~ "have about the application, and for help with issues you are facing. This "
+#~ "does not cover development work for bug fixes and features."
+#~ msgstr ""
+#~ "Sorunları bildirmek, soru sormak ve özellik istemek için sorun izleyiciyi "
+#~ "kullanın. İzleyiciyi ayda bir kez kontrol ediyorum. Hemen yanıt vermem "
+#~ "gerekiyorsa, PayPal ile 10 $ 'lık bağış yapmak için aşağıdaki düğmeyi "
+#~ "kullanın. Sorularınızı izleyiciye ekleyin ve bana sorun numarasını bir e-"
+#~ "posta ile gönderin (teejeetech@gmail.com). Bu seçenek, uygulama hakkında "
+#~ "sahip olabileceğiniz sorular ve karşı karşıya kaldığınız sorunlarla "
+#~ "ilgili yardım içindir. Bu, hata düzeltmeleri ve özellikler için "
+#~ "geliştirme çalışmalarını kapsamaz."
+
+#~ msgid "Wiki (Documentation)"
+#~ msgstr "Wiki (Belgeleme)"
