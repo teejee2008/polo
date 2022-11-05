@@ -628,13 +628,14 @@ public class MediaClip : GLib.Object{
 }
 
 public abstract class MediaStream : GLib.Object{
+	
     public MediaStreamType Type = MediaStreamType.UNKNOWN;
     public int Index = -1;
     public int TypeIndex = -1;
     public string Description = "";
 	public bool IsSelected = true;
 	
-	public MediaStream(MediaStreamType _type){
+	internal MediaStream(MediaStreamType _type){
 		Type = _type;
 	}
 	

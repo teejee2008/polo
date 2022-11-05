@@ -50,7 +50,7 @@ app-gtk:
 
 	#polo-gtk
 	valac -X -D'GETTEXT_PACKAGE="${app_name}"' \
-		--Xcc="-lm" ${define_symbols} --Xcc="-O3" --thread \
+		--Xcc="-lm" ${define_symbols} --Xcc="-Os" \
 		Common/Main.vala \
 		Gtk/*.vala \
 		Utility/*.vala \
@@ -63,11 +63,11 @@ app-gtk:
 		--pkg gdk-x11-3.0
 
 app-util-gtk3:
-	valac "polo-gtk3-helper.vala" --Xcc="-O3" -o polo-gtk3-helper --pkg gtk+-3.0
+	valac "polo-gtk3-helper.vala" --Xcc="-Os" -o polo-gtk3-helper --pkg gtk+-3.0
 
 app-util-disk:
 	valac --Xcc="-lm" -X -D'GETTEXT_PACKAGE="${app_name}"' \
-		"polo-disk.vala" Console/*.vala --Xcc="-O3" -o polo-disk --pkg posix --pkg gio-unix-2.0 --pkg gee-0.8
+		"polo-disk.vala" Console/*.vala --Xcc="-Os" -o polo-disk --pkg posix --pkg gio-unix-2.0 --pkg gee-0.8
 
 app-translations:
 

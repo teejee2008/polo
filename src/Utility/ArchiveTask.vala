@@ -144,7 +144,7 @@ public class ArchiveTask : AsyncTask {
 		}
 	}
 
-	public static double 7zip_version {
+	public static double sevenzip_version {
 		get {
 			if ((7zip_version_name == null) || (7zip_version_name.length == 0)){
 				
@@ -441,7 +441,7 @@ public class ArchiveTask : AsyncTask {
 		}
 
 		// verbose output
-		if (ArchiveTask.7zip_version >= 15.05){
+		if (ArchiveTask.sevenzip_version >= 15.05){
 			cmd += " -bb1";
 		}
 
@@ -594,7 +594,7 @@ public class ArchiveTask : AsyncTask {
 					escape_single_quote(working_dir),
 					escape_single_quote(working_dir));
 
-				if (ArchiveTask.7zip_version >= 15.05){
+				if (ArchiveTask.sevenzip_version >= 15.05){
 					cmd += " -bb1";
 				}
 		
@@ -619,7 +619,7 @@ public class ArchiveTask : AsyncTask {
 			
 		cmd += "7z l '%s' -y".printf(escape_single_quote(archive_path));
 
-		if (ArchiveTask.7zip_version >= 15.05){
+		if (ArchiveTask.sevenzip_version >= 15.05){
 			cmd += " -bb1";
 		}
 
@@ -711,7 +711,7 @@ public class ArchiveTask : AsyncTask {
 					escape_single_quote(working_dir),
 					escape_single_quote(working_dir));
 
-				if (ArchiveTask.7zip_version >= 15.05){
+				if (ArchiveTask.sevenzip_version >= 15.05){
 					cmd += " -bb1";
 				}
 				
@@ -750,7 +750,7 @@ public class ArchiveTask : AsyncTask {
 		}
 		archive.extract_list.clear();
 		
-		if (ArchiveTask.7zip_version >= 15.05){
+		if (ArchiveTask.sevenzip_version >= 15.05){
 			cmd += " -bb1";
 		}
 		

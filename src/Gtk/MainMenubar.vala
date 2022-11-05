@@ -1880,7 +1880,7 @@ public class MainMenuBar : Gtk.MenuBar, IPaneActive {
 			window.install_p7zip();
 		});
 
-		item.sensitive = (ArchiveTask.7zip_version < 16.02);
+		item.sensitive = (ArchiveTask.sevenzip_version < 16.02);
 	}
 
 	private void add_rebuild_font_cache(Gtk.Menu menu){
