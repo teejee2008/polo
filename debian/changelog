@@ -1,8 +1,10 @@
-polo-file-manager (18.8.4) jammy; urgency=low
+polo-file-manager (18.8.5) jammy; urgency=low
 
   * Fix build errors on Jammy
+  
+  * Update dependencies
 
- -- Tony George <tony.george.kol@gmail.com>  Sat, 05 Nov 2022 10:00:00 +0530
+ -- Tony George <tony.george.kol@gmail.com>  Sun, 06 Nov 2022 10:00:00 +0530
 
 
 polo-file-manager (18.8.3) xenial; urgency=low
