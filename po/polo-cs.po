@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
 "POT-Creation-Date: 2022-11-05 12:03+0530\n"
-"PO-Revision-Date: 2023-11-04 16:24+0100\n"
+"PO-Revision-Date: 2023-11-04 16:53+0100\n"
 "Last-Translator: Amerey.eu <info@amerey.eu>\n"
 "Language-Team: \n"
 "Language: cs\n"
@@ -19,7 +19,7 @@ msgstr ""
 
 #: Gtk/DevicePopover.vala:232
 msgid " (locked)"
-msgstr " (zamčeno)"
+msgstr " (uzamčeno)"
 
 #: Common/Main.vala:1345
 msgid ""
@@ -2256,70 +2256,70 @@ msgstr ""
 
 #: Gtk/MainMenubar.vala:2067 Utility/Gtk/DonationWindow.vala:95
 msgid "Issue Tracker"
-msgstr ""
+msgstr "Sledování problémů"
 
 #: Gtk/FileConflictDialog.vala:349 Utility/FileTask.vala:1100
 msgid "Item"
-msgstr ""
+msgstr "Položka"
 
 #: Gtk/FileViewList.vala:396
 msgid "Item is not a symbolic link"
-msgstr ""
+msgstr "Položka není symbolický odkaz"
 
 #: Gtk/Settings.vala:218 Gtk/Settings.vala:249
 msgid "Items"
-msgstr ""
+msgstr "Položky"
 
 #: Gtk/FileContextMenu.vala:2044 Gtk/Settings.vala:2661
 msgid "KVM"
-msgstr ""
+msgstr "KVM"
 
 #: Gtk/FilePropertiesWindow.vala:355
 msgid "Key"
-msgstr ""
+msgstr "Klíč"
 
 #: Gtk/MainMenubar.vala:2087
 msgid "Keyboard Shortcuts"
-msgstr ""
+msgstr "Klávesové zkratky"
 
 #: Utility/Shell.vala:46
 msgid "Korn shell (ksh)"
-msgstr ""
+msgstr "Korn shell (ksh)"
 
 #: Gtk/FilePropertiesWindow.vala:197 Gtk/Sidebar.vala:725
 #: Utility/Device.vala:2517
 #, c-format
 msgid "Label"
-msgstr ""
+msgstr "Popisek"
 
 #: Gtk/Settings.vala:371
 msgid "Labels beside icons"
-msgstr ""
+msgstr "Popisky vedle ikon"
 
 #: Gtk/Settings.vala:297
 msgid "Large icons"
-msgstr ""
+msgstr "Velké ikony"
 
 #: Gtk/FileViewList.vala:405
 #, c-format
 msgid "Last modified date"
-msgstr ""
+msgstr "Datum poslední změny"
 
 #: Gtk/MainMenubar.vala:1036
 msgid "Layout"
-msgstr ""
+msgstr "Rozložení"
 
 #: Gtk/LayoutBox.vala:529
 msgid "Layout cannot be changed while file operations are running"
-msgstr ""
+msgstr "Rozvržení nelze změnit, pokud jsou spuštěny operace se soubory"
 
 #: Gtk/CreateArchiveWindow.vala:771
 msgid "Level"
-msgstr ""
+msgstr "Úroveň"
 
 #: Utility/Gtk/AboutWindow.vala:315 Utility/Gtk/AboutWindow.vala:350
 msgid "License"
-msgstr ""
+msgstr "License"
 
 #: Gtk/Settings.vala:2574
 msgid ""
@@ -2327,68 +2327,71 @@ msgid ""
 "to prevent the host system from becoming unresponsive when intensive tasks "
 "are running in the guest OS."
 msgstr ""
+"Omezte využití procesoru pro proces VM. Doporučuje se ponechat tuto hodnotu "
+"pod 90, aby se zabránilo tomu, že hostitelský systém přestane reagovat, když "
+"v hostujícím OS běží náročné úlohy."
 
 #: Gtk/FileViewList.vala:389 Gtk/FileViewList.vala:392
 #, c-format
 msgid "Link to"
-msgstr ""
+msgstr "Odkaz na"
 
 #: Gtk/FileViewToolbar.vala:391 Gtk/Settings.vala:1328 Gtk/ViewPopover.vala:127
 msgid "List"
-msgstr ""
+msgstr "Seznam"
 
 #: Gtk/Settings.vala:1628
 msgid "List View"
-msgstr ""
+msgstr "Zobrazení seznamu"
 
 #: Utility/FileTask.vala:276
 msgid "Listing destination items..."
-msgstr ""
+msgstr "Výpis cílových položek..."
 
 #: Gtk/ChecksumBox.vala:850 Gtk/ChecksumBox.vala:1327
 msgid "Listing files..."
-msgstr ""
+msgstr "Výpis souborů..."
 
 #: Utility/FileTask.vala:281
 msgid "Listing source items..."
-msgstr ""
+msgstr "Výpis zdrojových položek..."
 
 #: Gtk/MainWindow.vala:1266
 msgid "Loading workspace..."
-msgstr ""
+msgstr "Načítání pracovního prostoru..."
 
 #: Gtk/FileViewList.vala:3413
 msgid "Loading..."
-msgstr ""
+msgstr "Načítání..."
 
 #: Gtk/ClamScanBox.vala:514
 msgid "Local"
-msgstr ""
+msgstr "Místní"
 
 #: Gtk/ClamScanBox.vala:505 Gtk/CreateArchiveWindow.vala:404
 #: Gtk/FilePropertiesBox.vala:125
 msgid "Location"
-msgstr ""
+msgstr "Umístění"
 
 #: Gtk/Sidebar.vala:968
 msgid "Location not found"
-msgstr ""
+msgstr "Umístění nebylo nalezeno"
 
 #: Gtk/DeviceContextMenu.vala:225 Gtk/DevicePopover.vala:540
 msgid "Lock"
-msgstr ""
+msgstr "Zamknout"
 
 #: Gtk/FileViewTab.vala:297
 msgid "Lock Path"
-msgstr ""
+msgstr "Zamknout cestu"
 
 #: Gtk/MainMenubar.vala:1609
 msgid "Login to cloud storage account"
-msgstr ""
+msgstr "Přihlásit se k účtu cloudového úložiště"
 
 #: Gtk/MainMenubar.vala:1634
 msgid "Logout from cloud storage account"
-msgstr ""
+msgstr "Odhlásit se z účtu cloudového úložiště"
 
 #: Gtk/FileViewList.vala:1178
 msgid "MD5"
@@ -2402,23 +2405,23 @@ msgstr ""
 #: Utility/Device.vala:2552
 #, c-format
 msgid "Major"
-msgstr ""
+msgstr "Hlavní"
 
 #: Gtk/FileViewToolbar.vala:499
 msgid "Make a donation"
-msgstr ""
+msgstr "Darujte"
 
 #: Gtk/DevicePopover.vala:687
 msgid "Manage"
-msgstr ""
+msgstr "Spravovat"
 
 #: Gtk/DeviceContextMenu.vala:270
 msgid "Manage device using GNOME disk utility"
-msgstr ""
+msgstr "Správa zařízení pomocí diskové utility GNOME"
 
 #: Gtk/DeviceContextMenu.vala:269
 msgid "Manage..."
-msgstr ""
+msgstr "Spravovat..."
 
 #: Gtk/FilePropertiesWindow.vala:192 Gtk/Sidebar.vala:720
 #: Utility/Device.vala:2510
@@ -2472,7 +2475,7 @@ msgstr ""
 
 #: Gtk/FileContextMenu.vala:2340
 msgid "Merge selected PDF files into one document"
-msgstr ""
+msgstr "Sloučit vybrané soubory PDF do jednoho dokumentu"
 
 #: Gtk/CreateArchiveWindow.vala:614 Gtk/FilePropertiesBox.vala:186
 msgid "Method"
@@ -2481,16 +2484,16 @@ msgstr ""
 #: Gtk/FilePropertiesBox.vala:251 Utility/FileItem.vala:733
 #, c-format
 msgid "Mime"
-msgstr ""
+msgstr "Mime"
 
 #: Gtk/FileViewList.vala:411
 #, c-format
 msgid "Mime type"
-msgstr ""
+msgstr "Typ Mime"
 
 #: Gtk/MainHeaderBar.vala:292
 msgid "Minimize"
-msgstr ""
+msgstr "Minimalizovat"
 
 #: Utility/Device.vala:2554
 #, c-format
@@ -3212,7 +3215,7 @@ msgstr "Předchozí"
 
 #: Gtk/ProgressPanelArchiveTask.vala:219
 msgid "Processed:"
-msgstr ""
+msgstr "Zpracováno:"
 
 #: Gtk/ProgressPanelArchiveTask.vala:263
 msgid "Progress:"
@@ -3297,7 +3300,7 @@ msgstr "RAM (MB)"
 
 #: Gtk/FileViewList.vala:402
 msgid "RWX = Read Write Execute"
-msgstr ""
+msgstr "RWX = Čtení Zápis Spuštění"
 
 #: Gtk/ProgressPanelArchiveTask.vala:243
 msgid "Ratio:"
@@ -3436,20 +3439,20 @@ msgstr "Zbývající:"
 
 #: Gtk/Settings.vala:1537
 msgid "Remember last session"
-msgstr ""
+msgstr "Zapamatovat si poslední relaci"
 
 #: Gtk/ConnectServerWindow.vala:1122
 msgid "Remote config loaded"
-msgstr ""
+msgstr "Načtena vzdálená konfigurace"
 
 #: Gtk/ConnectServerWindow.vala:1091
 msgid "Remote config saved"
-msgstr ""
+msgstr "Vzdálená konfigurace byla uložena"
 
 #: Gtk/FilePropertiesWindow.vala:209 Utility/Device.vala:2534
 #, c-format
 msgid "Removable"
-msgstr ""
+msgstr "Odnímatelné"
 
 #: Gtk/BookmarkContextMenu.vala:113 Gtk/MainMenubar.vala:1502
 msgid "Remove"
@@ -3457,101 +3460,101 @@ msgstr "Odstranit"
 
 #: Gtk/MainMenubar.vala:1633
 msgid "Remove Account"
-msgstr ""
+msgstr "Odstranit účet"
 
 #: Gtk/BookmarksMenu.vala:61 Gtk/PlacesPopover.vala:710
 msgid "Remove Bookmark"
-msgstr ""
+msgstr "Odstranit záložku"
 
 #: Gtk/FileContextMenu.vala:2390 Gtk/FileContextMenu.vala:2625
 #: Gtk/Settings.vala:2871
 msgid "Remove Color"
-msgstr ""
+msgstr "Odebrat barvu"
 
 #: Gtk/FileContextMenu.vala:2373 Gtk/Settings.vala:2744
 msgid "Remove Password"
-msgstr ""
+msgstr "Odstranit heslo"
 
 #: Gtk/Sidebar.vala:538
 msgid "Remove bookmark"
-msgstr ""
+msgstr "Odstranit záložku"
 
 #: Gtk/Sidebar.vala:539
 msgid "Remove bookmark for this location"
-msgstr ""
+msgstr "Odebrat záložku pro toto místo"
 
 #: Gtk/Settings.vala:2758
 msgid "Remove color"
-msgstr ""
+msgstr "Odebrat barvu"
 
 #: Gtk/FileContextMenu.vala:2391
 msgid "Remove colors from PDF document"
-msgstr ""
+msgstr "Odstranit barvy z PDF dokumentu"
 
 #: Utility/FileTask.vala:1178
 msgid "Removing items..."
-msgstr ""
+msgstr "Odebírání položek..."
 
 #: Gtk/BookmarkContextMenu.vala:89 Gtk/FileContextMenu.vala:943
 #: Gtk/FileViewList.vala:4582 Gtk/MainMenubar.vala:741 Gtk/Sidebar.vala:1182
 msgid "Rename"
-msgstr ""
+msgstr "Přejmenovat"
 
 #: Gtk/FileContextMenu.vala:944 Gtk/MiddleToolbar.vala:211
 msgid "Rename selected item"
-msgstr ""
+msgstr "Přejmenovat vybranou položku"
 
 #: Gtk/ProgressPanelFileTask.vala:173
 msgid "Renaming files on cloud storage:"
-msgstr ""
+msgstr "Přejmenování souborů v cloudovém úložišti:"
 
 #: Utility/FileTask.vala:161
 msgid "Renaming items..."
-msgstr ""
+msgstr "Přejmenování položek..."
 
 #: Gtk/FileConflictDialog.vala:131
 msgid "Replace All"
-msgstr ""
+msgstr "Nahradit vše"
 
 #: Gtk/FileConflictDialog.vala:96
 msgid "Replace Existing Files?"
-msgstr ""
+msgstr "Nahradit stávající soubory?"
 
 #: Gtk/FileConflictDialog.vala:163
 msgid "Replace Older"
-msgstr ""
+msgstr "Nahradit starší"
 
 #: Gtk/Settings.vala:2379
 msgid "Replace Original Files?"
-msgstr ""
+msgstr "Nahradit původní soubory?"
 
 #: Gtk/FileConflictDialog.vala:132
 msgid "Replace all existing files"
-msgstr ""
+msgstr "Nahradit všechny existující soubory"
 
 #: Gtk/FileConflictDialog.vala:164
 msgid "Replace older files only"
-msgstr ""
+msgstr "Nahradit pouze starší soubory"
 
 #: Gtk/FileConflictDialog.vala:255
 msgid "Replace the selected files"
-msgstr ""
+msgstr "Nahradit vybrané soubory"
 
 #: Gtk/ProgressPanelImageTask.vala:207
 msgid "Replaced"
-msgstr ""
+msgstr "Nahrazeno"
 
 #: Gtk/FileViewList.vala:4448
 msgid "Requested operation is not possible"
-msgstr ""
+msgstr "Požadovaná operace není možná"
 
 #: Gtk/ToolsWindow.vala:98
 msgid "Required for"
-msgstr ""
+msgstr "Vyžadováno pro"
 
 #: Gtk/Settings.vala:315 Gtk/Settings.vala:1001
 msgid "Requires theme support. Use the 'darker' variant of Gtk theme."
-msgstr ""
+msgstr "Vyžaduje podporu tématu. Použijte „tmavší“ variantu tématu Gtk."
 
 #: Gtk/ColumnSelectionBox.vala:181 Gtk/Settings.vala:1813
 #: Gtk/Settings.vala:1997 Gtk/Settings.vala:2200 Gtk/TermContextMenu.vala:369
@@ -3560,88 +3563,88 @@ msgstr "Resetovat"
 
 #: Gtk/FileViewTab.vala:279
 msgid "Reset Name"
-msgstr ""
+msgstr "Resetovat jméno"
 
 #: Gtk/TermContextMenu.vala:180
 msgid "Reset and clear"
-msgstr ""
+msgstr "Resetovat a vymazat"
 
 #: Gtk/MainMenubar.vala:1956
 msgid "Reset session and restart"
-msgstr ""
+msgstr "Resetovat relaci a restartovat"
 
 #: Gtk/ColumnSelectionBox.vala:182
 msgid "Reset to default columns"
-msgstr ""
+msgstr "Obnovit výchozí sloupce"
 
 #: Gtk/Settings.vala:2829
 msgid "Resize"
-msgstr ""
+msgstr "Změnit velikost"
 
 #: Gtk/FileContextMenu.vala:2720
 msgid "Resize to"
-msgstr ""
+msgstr "Změnit velikost na"
 
 #: Utility/VideoDownloadTask.vala:317
 #, c-format
 msgid "Resolution"
-msgstr ""
+msgstr "Rozlišení"
 
 #: Gtk/ProgressPanelFileTask.vala:375
 msgid "Resolving conflicts..."
-msgstr ""
+msgstr "Řešení konfliktů..."
 
 #: Gtk/Settings.vala:666
 msgid "Restart Application ?"
-msgstr ""
+msgstr "Restartovat aplikaci?"
 
 #: Gtk/ClamScanBox.vala:306 Gtk/DevicePopover.vala:575
 #: Gtk/FileContextMenu.vala:1434 Gtk/TrashBar.vala:134
 msgid "Restore"
-msgstr ""
+msgstr "Obnovit"
 
 #: Gtk/ProgressPanelDeviceWriterTask.vala:260
 msgid "Restore Complete"
-msgstr ""
+msgstr "Obnovení dokončeno"
 
 #: Gtk/DevicePopover.vala:1044
 #, c-format
 msgid "Restore device?"
-msgstr ""
+msgstr "Obnovit zařízení?"
 
 #: Gtk/FileContextMenu.vala:1435
 msgid "Restore item to the original location"
-msgstr ""
+msgstr "Obnovit položku na původní umístění"
 
 #: Gtk/TrashBar.vala:138
 msgid "Restore selected items to original locations"
-msgstr ""
+msgstr "Obnovit vybrané položky na původní umístění"
 
 #: Gtk/ClamScanBox.vala:369
 #, c-format
 msgid "Restored"
-msgstr ""
+msgstr "Obnoveno"
 
 #: Gtk/ProgressPanelDeviceWriterTask.vala:139
 msgid "Restoring device from disk image..."
-msgstr ""
+msgstr "Obnovování zařízení z obrazu disku..."
 
 #: Gtk/MainWindow.vala:1269
 msgid "Restoring session..."
-msgstr ""
+msgstr "Obnovování relace..."
 
 #: Gtk/ProgressPanelFileTask.vala:160
 msgid "Restoring trashed files:"
-msgstr ""
+msgstr "Obnovení souborů z koše:"
 
 #: Gtk/ProgressPanelArchiveTask.vala:341 Gtk/ProgressPanelArchiveTask.vala:342
 msgid "Resume"
-msgstr ""
+msgstr "Pokračovat"
 
 #: Utility/Device.vala:2549
 #, c-format
 msgid "Revision"
-msgstr ""
+msgstr "Revize"
 
 #: Gtk/FileContextMenu.vala:2480 Gtk/FileContextMenu.vala:2759
 #: Gtk/Settings.vala:2772 Gtk/Settings.vala:2843
@@ -3650,31 +3653,32 @@ msgstr "Otočit"
 
 #: Gtk/Settings.vala:1775 Gtk/Settings.vala:1925 Gtk/Settings.vala:2126
 msgid "Row spacing"
-msgstr ""
+msgstr "Mezery mezi řádky"
 
 #: Gtk/FileContextMenu.vala:1016
 msgid "Run in Terminal"
-msgstr ""
+msgstr "Spustit v Terminálu"
 
 #: Gtk/ClamScanBox.vala:296
 msgid "Run scan as Admin to quarantine files not owned by you."
 msgstr ""
+"Spustit skenování jako správce a dát do karantény soubory, které nevlastníte."
 
 #: Gtk/FileContextMenu.vala:1017
 msgid "Run the selected script in a terminal window"
-msgstr ""
+msgstr "Spustit vybraný skript v okně terminálu"
 
 #: Gtk/MainWindow.vala:1035 Gtk/MainWindow.vala:1053
 msgid "Running Rclone Installation Script"
-msgstr ""
+msgstr "Spuštění instalačního skriptu Rclone"
 
 #: Gtk/MainWindow.vala:1043
 msgid "Running p7zip Installation Script"
-msgstr ""
+msgstr "Spuštění instalačního skriptu p7zip"
 
 #: Gtk/AdminBar.vala:55
 msgid "Running with Admin Priviledges (!)"
-msgstr ""
+msgstr "Spuštění s oprávněními správce (!)"
 
 #: Gtk/ChecksumBox.vala:364 Gtk/ChecksumBox.vala:1445 Gtk/ChecksumBox.vala:1486
 #, c-format
@@ -3706,15 +3710,15 @@ msgstr "Uloženo"
 
 #: Gtk/ChecksumBox.vala:1142
 msgid "Saving checksums..."
-msgstr ""
+msgstr "Ukládání kontrolních součtů..."
 
 #: Gtk/ProgressPanelDeviceWriterTask.vala:136
 msgid "Saving device to disk image..."
-msgstr ""
+msgstr "Ukládání zařízení na obraz disku..."
 
 #: Gtk/ChecksumBox.vala:1546
 msgid "Saving results..."
-msgstr ""
+msgstr "Ukládání výsledků..."
 
 #: Gtk/ClamScanBox.vala:937
 msgid "Scan Summary"
@@ -3738,7 +3742,7 @@ msgstr "Vybrat vše"
 
 #: Gtk/CreateArchiveWindow.vala:428
 msgid "Select Archive Location"
-msgstr ""
+msgstr "Vybrat Umístění archivu"
 
 #: Gtk/ViewPopover.vala:446
 msgid "Select Columns"
@@ -3746,15 +3750,15 @@ msgstr "Vybrat Sloupce"
 
 #: Gtk/FileViewList.vala:4342
 msgid "Select Copy Destination"
-msgstr ""
+msgstr "Vybrat cíl kopírování"
 
 #: Gtk/FileViewList.vala:6017
 msgid "Select Destination"
-msgstr ""
+msgstr "Vybrat cíl"
 
 #: Gtk/DevicePopover.vala:1072
 msgid "Select Disk Image"
-msgstr ""
+msgstr "Vybrat obraz disku"
 
 #: Utility/Gtk/GtkHelper.vala:753
 msgid "Select File(s)"
