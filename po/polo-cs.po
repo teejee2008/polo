@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
 "POT-Creation-Date: 2022-11-05 12:03+0530\n"
-"PO-Revision-Date: 2023-11-04 17:47+0100\n"
+"PO-Revision-Date: 2023-11-04 18:27+0100\n"
 "Last-Translator: Amerey.eu <info@amerey.eu>\n"
 "Language-Team: \n"
 "Language: cs\n"
@@ -1643,7 +1643,7 @@ msgstr ""
 
 #: Gtk/DevicePopover.vala:323
 msgid "FS"
-msgstr ""
+msgstr "FS"
 
 #: Gtk/ConnectServerWindow.vala:1044
 msgid "Failed to Connect"
@@ -1655,11 +1655,11 @@ msgstr "Nepodařilo se vysunout zařízení"
 
 #: Gtk/MainMenubar.vala:1682
 msgid "Failed to Remove Account"
-msgstr ""
+msgstr "Účet se nepodařilo odebrat"
 
 #: Gtk/MainMenubar.vala:1527
 msgid "Failed to Remove Workspace"
-msgstr ""
+msgstr "Odebrání pracovního prostoru se nezdařilo"
 
 #: Utility/TeeJee.FileSystem.vala:1228
 msgid "Failed to change owner/group!"
@@ -1699,75 +1699,75 @@ msgstr "Připojení zařízení se nezdařilo"
 
 #: Utility/TeeJee.FileSystem.vala:447
 msgid "Failed to move file"
-msgstr ""
+msgstr "Soubor se nepodařilo přesunout"
 
 #: Gtk/ClamScanBox.vala:288
 msgid "Failed to move some files"
-msgstr ""
+msgstr "Přesunutí některých souborů se nezdařilo"
 
 #: Utility/TeeJee.FileSystem.vala:362
 msgid "Failed to read file"
-msgstr ""
+msgstr "Soubor se nepodařilo přečíst"
 
 #: Utility/TeeJee.FileSystem.vala:511
 msgid "Failed to rename item"
-msgstr ""
+msgstr "Položku se nepodařilo přejmenovat"
 
 #: Gtk/ClamScanBox.vala:376
 msgid "Failed to restore some files"
-msgstr ""
+msgstr "Obnovení některých souborů se nezdařilo"
 
 #: Utility/TeeJee.FileSystem.vala:1208
 msgid "Failed to set permissions!"
-msgstr ""
+msgstr "Nastavení oprávnění se nezdařilo!"
 
 #: Utility/TeeJee.FileSystem.vala:297
 msgid "Failed to trash items"
-msgstr ""
+msgstr "Položky se nepodařilo přesunout do koše"
 
 #: Utility/Device.vala:550 Utility/Device.vala:572 Utility/Device.vala:593
 #: Utility/Device.vala:608 Utility/Device.vala:1859 Utility/Device.vala:1882
 #: Utility/Device.vala:1903 Utility/Device.vala:1919
 msgid "Failed to unlock device"
-msgstr ""
+msgstr "Zařízení se nepodařilo odemknout"
 
 #: Utility/Device.vala:2130
 msgid "Failed to unmount"
-msgstr ""
+msgstr "Odpojení se nezdařilo"
 
 #: Gtk/DevicePopover.vala:1024 Gtk/DevicePopover.vala:1057
 #, c-format
 msgid "Failed to unmount device"
-msgstr ""
+msgstr "Zařízení se nepodařilo odpojit"
 
 #: Gtk/FilePropertiesBox.vala:495 Gtk/FilePropertiesBox.vala:573
 msgid "Failed to update Group"
-msgstr ""
+msgstr "Aktualizace skupiny se nezdařila"
 
 #: Gtk/FilePropertiesBox.vala:468 Gtk/FilePropertiesBox.vala:536
 msgid "Failed to update Owner"
-msgstr ""
+msgstr "Aktualizace vlastníka se nezdařila"
 
 #: Utility/TeeJee.FileSystem.vala:410
 msgid "Failed to write file"
-msgstr ""
+msgstr "Zápis souboru se nezdařil"
 
 #: Gtk/CreateArchiveWindow.vala:849 Gtk/CreateArchiveWindow.vala:868
 msgid "Fast"
-msgstr ""
+msgstr "Rychle"
 
 #: Gtk/CreateArchiveWindow.vala:846 Gtk/CreateArchiveWindow.vala:865
 msgid "Fastest"
-msgstr ""
+msgstr "Nejrychleji"
 
 #: Utility/Gtk/DonationWindow.vala:106
 msgid "Feature Requests"
-msgstr ""
+msgstr "Požadavky na funkce"
 
 #: Gtk/ProgressPanelVideoDownloadTask.vala:64
 #: Gtk/ProgressPanelVideoDownloadTask.vala:92
 msgid "Fetching info..."
-msgstr ""
+msgstr "Načítání informací..."
 
 #: Gtk/ChecksumBox.vala:494 Gtk/ChecksumBox.vala:1572 Gtk/ClamScanBox.vala:585
 #: Gtk/FileContextMenu.vala:656 Gtk/KvmCreateDiskWindow.vala:428
@@ -1780,56 +1780,57 @@ msgstr "Soubor"
 
 #: Gtk/FileConflictDialog.vala:78
 msgid "File Conflict"
-msgstr ""
+msgstr "Konflikt souborů"
 
 #: Gtk/Settings.vala:1422
 msgid "File Manager"
-msgstr ""
+msgstr "Správce souborů"
 
 #: Gtk/KvmCreateDiskWindow.vala:136
 msgid "File Name"
-msgstr ""
+msgstr "Název souboru"
 
 #: Gtk/FileViewList.vala:5037
 msgid "File Not Found"
-msgstr ""
+msgstr "Soubor nenalezen"
 
 #: Gtk/LayoutBox.vala:528
 msgid "File Operation Running"
-msgstr ""
+msgstr "Operace se souborem běží"
 
 #: Gtk/FilePropertiesPanel.vala:78
 msgid "File Properties"
-msgstr ""
+msgstr "Vlastnosti souboru"
 
 #: Gtk/FileViewList.vala:4688 Gtk/FileViewList.vala:4728
 #: Gtk/MainWindow.vala:1482
 msgid "File exists"
-msgstr ""
+msgstr "Soubor existuje"
 
 #: Gtk/ChecksumBox.vala:1222
 #, c-format
 msgid "File has a non-standard format or is not a checksum file"
 msgstr ""
+"Soubor má nestandardní formát nebo se nejedná o soubor kontrolního součtu"
 
 #: Utility/TeeJee.FileSystem.vala:1088 Utility/TeeJee.FileSystem.vala:1138
 msgid "File is missing"
-msgstr ""
+msgstr "Soubor chybí"
 
 #: Gtk/ProgressPanelArchiveTask.vala:627
 msgid "File is not an archive or format is unsupported"
-msgstr ""
+msgstr "Soubor není archiv nebo formát není podporován"
 
 #: Gtk/PoloGtk.vala:106 Utility/GtkBookmark.vala:122 Utility/MimeTypes.vala:88
 #: Utility/RsyncTask.vala:288 Utility/TeeJee.FileSystem.vala:442
 #: Utility/TeeJee.FileSystem.vala:965 Utility/XdgUserDirectories.vala:143
 msgid "File not found"
-msgstr ""
+msgstr "Soubor nenalezen"
 
 #: Gtk/FileViewList.vala:408
 #, c-format
 msgid "File type"
-msgstr ""
+msgstr "Typ souboru"
 
 #: Gtk/FilePermissionsBox.vala:192
 msgid ""
@@ -1839,6 +1840,11 @@ msgid ""
 "Useful for executable files. Allows anybody who has permission to execute "
 "the file, to run it with the group's priviledges."
 msgstr ""
+"Soubor bude spuštěn s oprávněními skupiny souboru namísto oprávnění "
+"uživatele, který soubor spouští.\n"
+"\n"
+"Užitečné pro spustitelné soubory. Umožňuje komukoli, kdo má oprávnění "
+"spustit soubor, spustit jej s privilegii skupiny."
 
 #: Gtk/FilePermissionsBox.vala:189
 msgid ""
@@ -1848,46 +1854,51 @@ msgid ""
 "Useful for executable files. Allows anybody who has permission to execute "
 "the file, to run it with the owner's priviledges."
 msgstr ""
+"Soubor bude spuštěn s oprávněními skupiny souboru namísto oprávnění "
+"uživatele, který soubor spouští.\n"
+"\n"
+"Užitečné pro spustitelné soubory. Umožňuje komukoli, kdo má oprávnění "
+"spustit soubor, spustit jej s privilegii skupiny."
 
 #: Gtk/FilePropertiesWindow.vala:201
 msgid "FileSystem"
-msgstr ""
+msgstr "Souborový systém"
 
 #: Gtk/ClamScanBox.vala:452
 msgid "Files Deleted"
-msgstr ""
+msgstr "Soubory smazány"
 
 #: Gtk/ChecksumBox.vala:957
 msgid "Files Missing"
-msgstr ""
+msgstr "Soubory chybí"
 
 #: Gtk/ClamScanBox.vala:276
 msgid "Files Moved"
-msgstr ""
+msgstr "Soubory přesunuty"
 
 #: Gtk/ClamScanBox.vala:364
 msgid "Files Restored"
-msgstr ""
+msgstr "Soubory obnoveny"
 
 #: Gtk/ChecksumBox.vala:995
 #, c-format
 msgid "Files changed"
-msgstr ""
+msgstr "Soubory změněny"
 
 #: Gtk/ChecksumBox.vala:975 Gtk/ChecksumBox.vala:1000
 #, c-format
 msgid "Files missing on disk"
-msgstr ""
+msgstr "Na disku chybí soubory"
 
 #: Gtk/ChecksumBox.vala:960
 #, c-format
 msgid "Files referenced in checksum file are missing on disk"
-msgstr ""
+msgstr "Na disku chybí soubory uvedené v souboru kontrolního součtu"
 
 #: Gtk/ChecksumBox.vala:970 Gtk/ChecksumBox.vala:991
 #, c-format
 msgid "Files verified"
-msgstr ""
+msgstr "Soubory ověřeny"
 
 #: Gtk/ProgressPanelArchiveTask.vala:161
 msgid "Files:"
@@ -1897,141 +1908,143 @@ msgstr "Soubory:"
 #: Gtk/Sidebar.vala:339 Gtk/Sidebar.vala:729 Utility/Device.vala:2525
 #, c-format
 msgid "Filesystem"
-msgstr ""
+msgstr "Souborový systém"
 
 #: Gtk/SelectionBar.vala:190
 msgid "Filter"
-msgstr ""
+msgstr "Filtrovat"
 
 #: Gtk/Statusbar.vala:495
 msgid "Filter Items"
-msgstr ""
+msgstr "Filtrovat položky"
 
 #: Gtk/CloudLoginWindow.vala:222
 msgid "Finish"
-msgstr ""
+msgstr "Dokončit"
 
 #: Gtk/ProgressPanelImageTask.vala:224 Gtk/ProgressPanelPdfTask.vala:230
 #: Gtk/ProgressPanelVideoDownloadTask.vala:593 Utility/KvmTask.vala:195
 msgid "Finished with errors"
-msgstr ""
+msgstr "Dokončeno s chybami"
 
 #: Gtk/LayoutPanel.vala:219
 #, c-format
 msgid "Finished ~ Close Tab to exit"
-msgstr ""
+msgstr "Dokončeno ~ Ukončete zavřením karty"
 
 #: Gtk/TermContextMenu.vala:393
 msgid "Fish Config"
-msgstr ""
+msgstr "Fish Configurace"
 
 #: Gtk/ColumnSelectionBox.vala:306 Gtk/ColumnSelectionBox.vala:341
 msgid "Fixed Column"
-msgstr ""
+msgstr "Pevný sloupec"
 
 #: Gtk/ProgressPanelDeviceWriterTask.vala:248
 msgid "Flash Complete"
-msgstr ""
+msgstr "Flash dokončen"
 
 #: Gtk/FileViewList.vala:5174
 #, c-format
 msgid "Flash ISO to device?"
-msgstr ""
+msgstr "Flash ISO na zařízení?"
 
 #: Gtk/ProgressPanelDeviceWriterTask.vala:133
 msgid "Flashing ISO to device..."
-msgstr ""
+msgstr "Nahrávání ISO na zařízení..."
 
 #: Gtk/FileContextMenu.vala:636
 msgid "Folder"
-msgstr ""
+msgstr "Složka"
 
 #: Gtk/FileViewList.vala:3391
 msgid "Folder is empty"
-msgstr ""
+msgstr "Složka je prázdná"
 
 #: Gtk/PlacesPopover.vala:492
 msgid ""
 "Folder may have been deleted or renamed, or device may have been unmounted"
 msgstr ""
+"Složka mohla být odstraněna nebo přejmenována nebo zařízení mohlo být "
+"odpojeno"
 
 #: Gtk/FileContextMenu.vala:1393
 msgid "Follow Symlink Path"
-msgstr ""
+msgstr "Pokračujte podle cesty Symlink"
 
 #: Gtk/TouchFileDateContextMenu.vala:122
 msgid "Follow into symlinked subfolders"
-msgstr ""
+msgstr "Pokračujte do podsložek se symbolickými odkazy"
 
 #: Gtk/TermContextMenu.vala:255
 msgid "Font"
-msgstr ""
+msgstr "Písmo"
 
 #: Gtk/Settings.vala:1698
 msgid "Font scale"
-msgstr ""
+msgstr "Měřítko písma"
 
 #: Gtk/PoloGtk.vala:146
 #, c-format
 msgid "Forces new window to be opened (overrides single-instance mode)"
-msgstr ""
+msgstr "Vynutí otevření nového okna (přepíše režim jedné instance)"
 
 #: Gtk/TermContextMenu.vala:291
 msgid "Foreground Color"
-msgstr ""
+msgstr "Barva popředí"
 
 #: Gtk/CreateArchiveWindow.vala:487
 msgid "Format"
-msgstr ""
+msgstr "Formátovat"
 
 #: Gtk/DiskFormatContextMenu.vala:101
 #, c-format
 msgid "Format device?"
-msgstr ""
+msgstr "Formátovat zařízení?"
 
 #: Gtk/DiskFormatContextMenu.vala:134
 msgid "Formatting Failed"
-msgstr ""
+msgstr "Formátování se nezdařilo"
 
 #: Gtk/FileViewToolbar.vala:180 Gtk/MainMenubar.vala:1302 Gtk/Pathbar.vala:850
 #: Gtk/Settings.vala:412 Gtk/Settings.vala:840
 msgid "Forward"
-msgstr ""
+msgstr "Dopředu"
 
 #: Gtk/ChecksumBox.vala:862 Gtk/ChecksumBox.vala:1310 Gtk/ChecksumBox.vala:1373
 #: Gtk/ClamScanBox.vala:841 Gtk/ClamScanBox.vala:932 Gtk/ToolsWindow.vala:155
 #, c-format
 msgid "Found"
-msgstr ""
+msgstr "Nalezeno"
 
 #: Gtk/Sidebar.vala:1297 Gtk/Statusbar.vala:366
 #, c-format
 msgid "Free"
-msgstr ""
+msgstr "Volné"
 
 #: Utility/Shell.vala:43
 msgid "Friendly interactive shell (fish)"
-msgstr ""
+msgstr "Friendly interactive shell (fish)"
 
 #: Gtk/MainMenubar.vala:1136
 msgid "Fullscreen Mode"
-msgstr ""
+msgstr "Režim celé obrazovky"
 
 #: Gtk/DeviceContextMenu.vala:580
 msgid "GNOME Disk Uitility (gnome-disks) is not installed"
-msgstr ""
+msgstr "Disková utilita GNOME (gnome-disks) není nainstalována"
 
 #: Gtk/Settings.vala:166
 msgid "GTK Theme"
-msgstr ""
+msgstr "Téma GTK"
 
 #: Gtk/Settings.vala:1167
 msgid "GTK theme to use"
-msgstr ""
+msgstr "Použít téma GTK"
 
 #: Gtk/DevicePopover.vala:1088
 msgid "GZip Compressed Disk Image"
-msgstr ""
+msgstr "GZip Compressed Disk Image"
 
 #: Gtk/FilePropertiesWindow.vala:141 Gtk/Settings.vala:1222
 msgid "General"
@@ -2040,39 +2053,39 @@ msgstr "Obecné"
 #: Gtk/FileContextMenu.vala:1950 Gtk/FileContextMenu.vala:1973
 #: Gtk/FileContextMenu.vala:1996 Gtk/FileContextMenu.vala:2019
 msgid "Generate checksums"
-msgstr ""
+msgstr "Generovat kontrolní součty"
 
 #: Gtk/ChecksumBox.vala:922
 msgid "Generating checksums..."
-msgstr ""
+msgstr "Generování kontrolních součtů..."
 
 #: Gtk/FileViewList.vala:3474
 msgid "Generating thumbnails..."
-msgstr ""
+msgstr "Generování miniatur..."
 
 #: Utility/Gtk/DonationWindow.vala:129
 msgid "Get Plugins ($10)"
-msgstr ""
+msgstr "Získat pluginy (10 $)"
 
 #: Gtk/Settings.vala:680 Gtk/Settings.vala:1092
 msgid "Global"
-msgstr ""
+msgstr "Globální"
 
 #: Gtk/MainMenubar.vala:1220
 msgid "Go"
-msgstr ""
+msgstr "Přejít"
 
 #: Gtk/Pathbar.vala:880
 msgid "Go Up"
-msgstr ""
+msgstr "Přejít nahoru"
 
 #: Gtk/FileViewList.vala:3767
 msgid "Go to location"
-msgstr ""
+msgstr "Přejít na umístění"
 
 #: Gtk/Settings.vala:2483
 msgid "Graphics"
-msgstr ""
+msgstr "Grafika"
 
 #: Gtk/Settings.vala:2519
 msgid ""
@@ -2090,47 +2103,62 @@ msgid ""
 "\n"
 "<b>qxl</b> - More powerful graphics card for use with SPICE."
 msgstr ""
+"Grafická karta k emulaci pro hostující počítač.\n"
+"\n"
+"  cirrus &lt; std &lt; vmware &lt; qxl\n"
+"\n"
+"<b>cirrus</b> – jednoduchá grafická karta; každý hostující OS má vestavěný "
+"ovladač.\n"
+"\n"
+"<b>std</b> – Podporuje rozlišení vyšší než 1280x1024x16. Linux, Windows XP a "
+"novější mají vestavěný ovladač.\n"
+"\n"
+"<b>vmware</b> – grafická karta VMware SVGA-II. Vyžaduje instalaci ovladače "
+"xf86-video-vmware pro hosty se systémem Linux a nástroje VMware pro "
+"Windows.\n"
+"\n"
+"<b>qxl</b> – Výkonnější grafická karta pro použití se SPICE."
 
 #: Gtk/FilePermissionsBox.vala:122 Gtk/FilePropertiesBox.vala:398
 #: Gtk/FileViewList.vala:420 Gtk/FileViewList.vala:963
 #, c-format
 msgid "Group"
-msgstr ""
+msgstr "Skupina"
 
 #: Gtk/Settings.vala:171
 msgid "Headerbar"
-msgstr ""
+msgstr "Lišta záhlaví"
 
 #: Gtk/FilePropertiesBox.vala:239
 msgid "Headers"
-msgstr ""
+msgstr "Záhlaví"
 
 #: Gtk/DevicePopoverSettingsWindow.vala:214
 msgid "Height"
-msgstr ""
+msgstr "Výška"
 
 #: Gtk/MainMenubar.vala:2036
 msgid "Help"
-msgstr ""
+msgstr "Nápověda"
 
 #: Gtk/CreateArchiveWindow.vala:1802 Gtk/FileContextMenu.vala:1348
 #: Gtk/PasswordDialog.vala:202
 msgid "Hide"
-msgstr ""
+msgstr "Skrýt"
 
 #: Gtk/MediaBar.vala:277
 #, c-format
 msgid "Hide Folders"
-msgstr ""
+msgstr "Skrýt složky"
 
 #: Gtk/MediaBar.vala:284
 #, c-format
 msgid "Hide Other Files"
-msgstr ""
+msgstr "Skrýt další soubory"
 
 #: Gtk/FileContextMenu.vala:1349
 msgid "Hide selected items"
-msgstr ""
+msgstr "Skrýt vybrané položky"
 
 #: Gtk/ConnectServerWindow.vala:607
 msgid "History"
@@ -2139,19 +2167,19 @@ msgstr "Historie"
 #: Gtk/FileViewToolbar.vala:221 Gtk/Pathbar.vala:910 Gtk/PlacesPopover.vala:647
 #: Gtk/Settings.vala:463 Gtk/Settings.vala:880 Gtk/Sidebar.vala:340
 msgid "Home"
-msgstr ""
+msgstr "Domov"
 
 #: Gtk/MainMenubar.vala:2057
 msgid "Homepage"
-msgstr ""
+msgstr "Domovská stránka"
 
 #: Gtk/ViewPopover.vala:221
 msgid "Horizontal"
-msgstr ""
+msgstr "Horizontální"
 
 #: Gtk/ConnectServerWindow.vala:658
 msgid "Host IP (Eg: 192.0.10.1)"
-msgstr ""
+msgstr "IP hostitele (např.: 192.0.10.1)"
 
 #: Utility/Gtk/DonationWindow.vala:120
 msgid ""
@@ -2162,26 +2190,31 @@ msgid ""
 "by email. These plugins are open-source. You can request the source code "
 "after receiving the plugins."
 msgstr ""
+"Někdy vytvářím exkluzivní pluginy, abych povzbudil lidi, aby přispívali. "
+"Přispět můžete překladem aplikace do jiných jazyků, odesláním změn kódu nebo "
+"darem ve výši 10 $ prostřednictvím služby PayPal. Přispěvatelé jsou přidáni "
+"do e-mailového distribučního seznamu a pluginy jsou odesílány e-mailem. Tyto "
+"pluginy jsou open source. Po obdržení pluginů si můžete vyžádat zdrojový kód."
 
 #: Utility/Gtk/AboutWindow.vala:466
 msgid "Icon Themes & Utilities"
-msgstr ""
+msgstr "Témata ikon a nástroje"
 
 #: Gtk/Settings.vala:1646
 msgid "Icon View"
-msgstr ""
+msgstr "Zobrazení ikon"
 
 #: Gtk/Settings.vala:1732 Gtk/Settings.vala:1887 Gtk/Settings.vala:2088
 msgid "Icon size"
-msgstr ""
+msgstr "Velikost ikony"
 
 #: Gtk/FileViewToolbar.vala:398 Gtk/Settings.vala:1330 Gtk/ViewPopover.vala:134
 msgid "Icons"
-msgstr ""
+msgstr "ikony"
 
 #: Gtk/Settings.vala:2677 Gtk/Settings.vala:2691
 msgid "If selected, the action will remove original file on success"
-msgstr ""
+msgstr "Pokud je vybrána, úspěšná akce odstraní původní soubor"
 
 #: Gtk/Settings.vala:2705 Gtk/Settings.vala:2719 Gtk/Settings.vala:2733
 #: Gtk/Settings.vala:2747 Gtk/Settings.vala:2761 Gtk/Settings.vala:2775
@@ -2192,22 +2225,28 @@ msgid ""
 "If selected, the action will replace original file on success, instead of "
 "creating new file."
 msgstr ""
+"Pokud je vybrána, úspěšná akce nahradí původní soubor místo vytvoření nového "
+"souboru."
 
 #: Utility/Gtk/DonationWindow.vala:71
 msgid ""
 "If you find this application useful, consider making a donation to support "
 "the development."
 msgstr ""
+"Pokud považujete tuto aplikaci za užitečnou, zvažte poskytnutí daru na "
+"podporu vývoje."
 
 #: Gtk/MediaBar.vala:187
 msgid ""
 "Ignore photos and videos in this location and do not switch to Media View "
 "automatically."
 msgstr ""
+"Ignorovat fotografie a videa v tomto umístění a nepřepínat automaticky do "
+"zobrazení médií."
 
 #: Gtk/FileContextMenu.vala:2528
 msgid "Image"
-msgstr ""
+msgstr "Obrázek"
 
 #: Gtk/Settings.vala:2407
 msgid "Image Actions"
