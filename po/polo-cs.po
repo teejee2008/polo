@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
 "POT-Creation-Date: 2022-11-05 12:03+0530\n"
-"PO-Revision-Date: 2023-11-04 16:53+0100\n"
+"PO-Revision-Date: 2023-11-04 17:47+0100\n"
 "Last-Translator: Amerey.eu <info@amerey.eu>\n"
 "Language-Team: \n"
 "Language: cs\n"
@@ -483,7 +483,7 @@ msgid "Changelog"
 msgstr "Seznam změn"
 
 #: Gtk/KvmCreateDiskWindow.vala:339
-#, fuzzy, c-format
+#, c-format
 msgid ""
 "Changes can be discarded by deleting the derived file, or finalized by "
 "merging it with base"
@@ -1260,20 +1260,20 @@ msgstr ""
 
 #: Utility/Gtk/AboutWindow.vala:458
 msgid "Documentation"
-msgstr ""
+msgstr "Dokumentace"
 
 #: Gtk/PlacesPopover.vala:648 Gtk/Sidebar.vala:341
 msgid "Documents"
-msgstr ""
+msgstr "Dokumenty"
 
 #: Gtk/ConnectServerWindow.vala:332
 msgid "Domain"
-msgstr ""
+msgstr "Doména"
 
 #: Gtk/FileViewToolbar.vala:498 Gtk/MainMenubar.vala:2097
 #: Utility/Gtk/DonationWindow.vala:44 Utility/Gtk/DonationWindow.vala:77
 msgid "Donate"
-msgstr ""
+msgstr "Darovat"
 
 #: Utility/Gtk/DonationWindow.vala:118 Utility/Gtk/DonationWindow.vala:126
 msgid "Donation Features"
@@ -1281,50 +1281,52 @@ msgstr ""
 
 #: Utility/Gtk/AboutWindow.vala:474
 msgid "Donations"
-msgstr ""
+msgstr "Dary"
 
 #: Gtk/ProgressPanelVideoDownloadTask.vala:247
 msgid "Download"
-msgstr ""
+msgstr "Stáhnout"
 
 #: Gtk/ProgressPanelVideoDownloadTask.vala:248
 msgid "Download Selected Format"
-msgstr ""
+msgstr "Stáhnout vybraný formát"
 
 #: Gtk/MainMenubar.vala:1876
 msgid ""
 "Download and install p7zip v16.02. Installs binaries from p7zip, p7zip-full "
 "and p7zip-rar packages."
 msgstr ""
+"Stáhnout a nainstalovat p7zip v16.02. Nainstaluje binární soubory z balíčků "
+"p7zip, p7zip-full a p7zip-rar."
 
 #: Gtk/MainMenubar.vala:1865
 msgid "Download and install the latest version of Rclone"
-msgstr ""
+msgstr "Stáhnout a nainstalovat nejnovější verzi Rclone"
 
 #: Gtk/ProgressPanelVideoDownloadTask.vala:499
 #, c-format
 msgid "Downloading"
-msgstr ""
+msgstr "Stahování"
 
 #: Gtk/ProgressPanelFileTask.vala:147
 msgid "Downloading files from cloud storage:"
-msgstr ""
+msgstr "Stahování souborů z cloudového úložiště:"
 
 #: Utility/FileTask.vala:464
 msgid "Downloading items..."
-msgstr ""
+msgstr "Stahování položek..."
 
 #: Gtk/PlacesPopover.vala:649 Gtk/Sidebar.vala:342
 msgid "Downloads"
-msgstr ""
+msgstr "Stahování"
 
 #: Gtk/PlacesPopover.vala:431
 msgid "Drag to Re-order"
-msgstr ""
+msgstr "Přetažením změníte pořadí"
 
 #: Gtk/Settings.vala:1871 Gtk/Settings.vala:2057 Gtk/Settings.vala:2258
 msgid "Draw semi-transparent icons and thumbnails for hidden items"
-msgstr ""
+msgstr "Nakreslit poloprůhledné ikony a miniatury skrytých položek"
 
 #: Gtk/Settings.vala:1841 Gtk/Settings.vala:2027 Gtk/Settings.vala:2228
 msgid ""
@@ -1333,26 +1335,30 @@ msgid ""
 "\n"
 "Disable this for faster loading of directories."
 msgstr ""
+"Nakreslit na ikonu nebo miniaturu drobné emblémy, které označují obsah "
+"složky, symbolické odkazy a oprávnění pouze pro čtení.\n"
+"\n"
+"Zakažte pro rychlejší načítání adresářů."
 
 #: Gtk/ViewPopover.vala:216
 msgid "Dual"
-msgstr ""
+msgstr "Duální"
 
 #: Gtk/FileViewToolbar.vala:360
 msgid "Dual Horizontal"
-msgstr ""
+msgstr "Duální horizontální"
 
 #: Gtk/MainMenubar.vala:1060
 msgid "Dual Pane Mode"
-msgstr ""
+msgstr "Režim dvou panelů"
 
 #: Gtk/FileViewToolbar.vala:350
 msgid "Dual Vertical"
-msgstr ""
+msgstr "Duální vertikální"
 
 #: Gtk/ProgressPanelVideoDownloadTask.vala:319
 msgid "Duration"
-msgstr ""
+msgstr "Doba trvání"
 
 #: Gtk/ChecksumBox.vala:369 Gtk/ChecksumBox.vala:1490
 #, c-format
@@ -1365,158 +1371,161 @@ msgstr "Upravit"
 
 #: Gtk/FileViewTab.vala:261
 msgid "Edit Name"
-msgstr ""
+msgstr "Upravit jméno"
 
 #: Gtk/FileViewList.vala:401
 #, c-format
 msgid "Effective permissions for current user"
-msgstr ""
+msgstr "Platná oprávnění pro aktuálního uživatele"
 
 #: Gtk/DevicePopover.vala:630
 msgid "Eject"
-msgstr ""
+msgstr "Vysunout"
 
 #: Gtk/Settings.vala:900
 msgid "Eject Device"
-msgstr ""
+msgstr "Vysunout zařízení"
 
 #: Gtk/Pathbar.vala:1026
 msgid "Eject Device ?"
-msgstr ""
+msgstr "Vysunout zařízení?"
 
 #: Gtk/Pathbar.vala:987
 msgid "Eject storage device"
-msgstr ""
+msgstr "Vysunout úložné zařízení"
 
 #: Gtk/ProgressPanelArchiveTask.vala:172
 msgid "Elapsed:"
-msgstr ""
+msgstr "Uplynulý:"
 
 #: Gtk/Settings.vala:2069
 msgid "Ellipsize file name"
-msgstr ""
+msgstr "Zkrátit název souboru"
 
 #: Gtk/Settings.vala:2072
 msgid ""
 "Ellipsize long file names with 3 dots. Uncheck this option to display entire "
 "file name."
 msgstr ""
+"Zkrátit dlouhé názvy souborů 3 tečkami. Chcete-li zobrazit celý název "
+"souboru, zrušte zaškrtnutí této možnosti."
 
 #: Gtk/Settings.vala:1838 Gtk/Settings.vala:2024 Gtk/Settings.vala:2225
+#, fuzzy
 msgid "Emblems"
-msgstr ""
+msgstr "Emblémy"
 
 #: Gtk/TrashBar.vala:170
 msgid "Empty Trash"
-msgstr ""
+msgstr "Vysypat koš"
 
 #: Gtk/TrashBar.vala:175
 msgid "Empty trash can"
-msgstr ""
+msgstr "Vysypat koš"
 
 #: Gtk/ProgressPanelFileTask.vala:166
 msgid "Emptying Trash:"
-msgstr ""
+msgstr "Vysypání koše:"
 
 #: Utility/FileTask.vala:993
 msgid "Emptying trash..."
-msgstr ""
+msgstr "Vysypávání koše..."
 
 #: Gtk/Settings.vala:600
 msgid "Enabled (R)"
-msgstr ""
+msgstr "Povoleno (R)"
 
 #: Gtk/CreateArchiveWindow.vala:1688
 msgid "Encrypt"
-msgstr ""
+msgstr "Šifrovat"
 
 #: Gtk/CreateArchiveWindow.vala:1857 Gtk/CreateArchiveWindow.vala:1858
 msgid "Encrypt file names"
-msgstr ""
+msgstr "Šifrovat názvy souborů"
 
 #: Gtk/FilePropertiesBox.vala:192
 msgid "Encrypted"
-msgstr ""
+msgstr "Zašifrováno"
 
 #: Utility/Device.vala:1876
 msgid "Encrypted Device"
-msgstr ""
+msgstr "Šifrované zařízení"
 
 #: Utility/FileItemArchive.vala:358
 #, c-format
 msgid "Encrypted archive"
-msgstr ""
+msgstr "Šifrovaný archiv"
 
 #: Utility/Device.vala:627
 #, c-format
 msgid "Encrypted device"
-msgstr ""
+msgstr "Šifrované zařízení"
 
 #: Gtk/ConnectServerWindow.vala:951
 msgid "Enter IP address in correct format (Eg: 192.0.10.1)"
-msgstr ""
+msgstr "Zadejte IP adresu ve správném formátu (např.: 192.0.10.1)"
 
 #: Gtk/ConnectServerWindow.vala:961
 msgid "Enter NETBIOS name in correct format (1-15 alpha-numeric characters)"
-msgstr ""
+msgstr "Zadejte název NETBIOS ve správném formátu (1–15 alfanumerických znaků)"
 
 #: Gtk/PasswordDialog.vala:98
 msgid "Enter Passphrase"
-msgstr ""
+msgstr "Zadejte přístupovou frázi"
 
 #: Gtk/CreateArchiveWindow.vala:1696
 msgid "Enter Password"
-msgstr ""
+msgstr "Zadejte heslo"
 
 #: Utility/Device.vala:629 Utility/FileItemArchive.vala:364
 msgid "Enter Password to Unlock"
-msgstr ""
+msgstr "Zadejte heslo pro odemknutí"
 
 #: Gtk/FileViewList.vala:4654 Gtk/FileViewList.vala:4688
 #: Gtk/FileViewList.vala:4728 Gtk/MainWindow.vala:1482
 msgid "Enter another name"
-msgstr ""
+msgstr "Zadejte jiné jméno"
 
 #: Gtk/FileViewList.vala:4646
 msgid "Enter directory name"
-msgstr ""
+msgstr "Zadejte název adresáře"
 
 #: Gtk/FileViewList.vala:4680 Gtk/FileViewList.vala:4716
 msgid "Enter file name"
-msgstr ""
+msgstr "Zadejte název souboru"
 
 #: Gtk/FileViewList.vala:4582
 msgid "Enter new name"
-msgstr ""
+msgstr "Zadejte nový název"
 
 #: Utility/Device.vala:1877
 #, c-format
 msgid "Enter passphrase to unlock '%s'"
-msgstr ""
+msgstr "Zadejte heslo pro odemknutí '%s'"
 
 #: Gtk/FileViewList.vala:5491
 msgid "Enter password for PDF document"
-msgstr ""
+msgstr "Zadejte heslo pro dokument PDF"
 
 #: Utility/Gtk/GtkHelper.vala:924
 msgid "Enter path or browse for directory"
-msgstr ""
+msgstr "Zadejte cestu nebo vyhledejte adresář"
 
 #: Gtk/SelectionBar.vala:112
 msgid "Enter pattern for selecting or filtering items in view"
-msgstr ""
+msgstr "Zadejte vzor pro výběr nebo filtrování položek v zobrazení"
 
 #: Gtk/ConnectServerWindow.vala:966
 msgid "Enter share name to connect (Required)"
-msgstr ""
+msgstr "Zadejte název sdílené položky pro připojení (vyžadováno)"
 
 #: Gtk/FileViewList.vala:4601
 msgid "Enter unique name for selected file"
-msgstr ""
+msgstr "Zadejte jedinečný název vybraného souboru"
 
 #: Gtk/MainWindow.vala:1474
 msgid "Enter workspace name"
-msgstr ""
+msgstr "Zadejte název pracovního prostoru"
 
 #: Gtk/ProgressPanelArchiveTask.vala:630 Gtk/ProgressPanelArchiveTask.vala:641
 #: Gtk/ProgressPanelImageTask.vala:198 Gtk/ProgressPanelKvmTask.vala:217
@@ -1529,31 +1538,31 @@ msgstr "Chyba"
 
 #: Gtk/FileViewList.vala:2397
 msgid "Error Connecting to Server"
-msgstr ""
+msgstr "Chyba při připojování k serveru"
 
 #: Gtk/FileViewList.vala:3400
 #, c-format
 msgid "Error opening directory: Permission denied"
-msgstr ""
+msgstr "Chyba při otevírání adresáře: Oprávnění odepřeno"
 
 #: Gtk/ConnectServerWindow.vala:170
 msgid "Example: 192.0.2.1"
-msgstr ""
+msgstr "Příklad: 192.0.2.1"
 
 #: Gtk/FilePermissionsBox.vala:142 Gtk/FilePermissionsBox.vala:148
 #: Gtk/FilePermissionsBox.vala:154
 msgid "Execute"
-msgstr ""
+msgstr "Provést"
 
 #: Gtk/ProgressPanelImageTask.vala:53 Gtk/ProgressPanelPdfTask.vala:53
 msgid "Executing action..."
-msgstr ""
+msgstr "Provádění akce..."
 
 #: Gtk/DevicePopover.vala:1045 Gtk/DiskFormatContextMenu.vala:103
 #: Gtk/FileViewList.vala:5175
 #, c-format
 msgid "Existing data on device will be destroyed"
-msgstr ""
+msgstr "Stávající data na zařízení budou zničena"
 
 #: Gtk/MainMenubar.vala:435
 msgid "Exit"
@@ -1561,72 +1570,76 @@ msgstr "Opustit"
 
 #: Gtk/MediaBar.vala:238
 msgid "Exit Media View"
-msgstr ""
+msgstr "Ukončit zobrazení médií"
 
 #: Common/Main.vala:1309
 msgid "Exiting Application"
-msgstr ""
+msgstr "Ukončení aplikace"
 
 #: Gtk/ChecksumBox.vala:296
 msgid "Export CSV"
-msgstr ""
+msgstr "Export CSV"
 
 #: Utility/VideoDownloadTask.vala:316
 #, c-format
 msgid "Extension"
-msgstr ""
+msgstr "Rozšíření"
 
 #: Gtk/ToolsWindow.vala:43
 msgid "External Tools"
-msgstr ""
+msgstr "Externí nástroje"
 
 #: Gtk/MainMenubar.vala:1983
 msgid "External tools"
-msgstr ""
+msgstr "Externí nástroje"
 
 #: Gtk/FileContextMenu.vala:1561
 msgid "Extract Across"
-msgstr ""
+msgstr "Extrahovat napříč"
 
 #: Gtk/FileContextMenu.vala:1586
 msgid "Extract Here"
-msgstr ""
+msgstr "Extrahujte zde"
 
 #: Gtk/FileContextMenu.vala:1538
 msgid "Extract To.."
-msgstr ""
+msgstr "Rozbalit do.."
 
 #: Gtk/FileContextMenu.vala:1587
 msgid ""
 "Extract archives in same location. New folder will be created with archive "
 "name."
 msgstr ""
+"Extrahujte archivy na stejném místě. Vytvoří se nová složka s názvem archivu."
 
 #: Gtk/FileContextMenu.vala:1539
 msgid ""
 "Extract archives to another location. Existing files will be overwritten."
 msgstr ""
+"Extrahujte archivy do jiného umístění. Existující soubory budou přepsány."
 
 #: Gtk/FileContextMenu.vala:1562
 msgid ""
 "Extract archives to the opposite pane. Existing files will be overwritten."
 msgstr ""
+"Extrahujte archivy do protějšího panelu. Existující soubory budou přepsány."
 
 #: Gtk/ProgressPanelArchiveTask.vala:614
 msgid "Extracted"
-msgstr ""
+msgstr "Extrahováno"
 
 #: Gtk/ProgressPanelArchiveTask.vala:105
 msgid "Extracting"
-msgstr ""
+msgstr "Extrakce"
 
 #: Gtk/ProgressPanelArchiveTask.vala:443
 msgid "Extraction path not specified"
-msgstr ""
+msgstr "Cesta extrakce není specifikována"
 
 #: Gtk/WizardWindow.vala:189
 msgid "Extreme (Quad-Pane + ListView + Global Pathbar + Global Statusbar)"
 msgstr ""
+"Extrémní (4 panely + seznam + Globální lišta cest + Globální status bar)"
 
 #: Gtk/DevicePopover.vala:323
 msgid "FS"
@@ -1634,11 +1647,11 @@ msgstr ""
 
 #: Gtk/ConnectServerWindow.vala:1044
 msgid "Failed to Connect"
-msgstr ""
+msgstr "Nepodařilo se připojit"
 
 #: Gtk/Pathbar.vala:1053
 msgid "Failed to Eject Device"
-msgstr ""
+msgstr "Nepodařilo se vysunout zařízení"
 
 #: Gtk/MainMenubar.vala:1682
 msgid "Failed to Remove Account"
@@ -1650,39 +1663,39 @@ msgstr ""
 
 #: Utility/TeeJee.FileSystem.vala:1228
 msgid "Failed to change owner/group!"
-msgstr ""
+msgstr "Nepodařilo se změnit vlastníka/skupinu!"
 
 #: Utility/TeeJee.FileSystem.vala:428
 msgid "Failed to copy file"
-msgstr ""
+msgstr "Soubor se nepodařilo zkopírovat"
 
 #: Utility/TeeJee.FileSystem.vala:770
 msgid "Failed to create directory"
-msgstr ""
+msgstr "Vytvoření adresáře se nezdařilo"
 
 #: Utility/TeeJee.FileSystem.vala:630
 msgid "Failed to create hard link"
-msgstr ""
+msgstr "Nepodařilo se vytvořit pevný odkaz"
 
 #: Utility/TeeJee.FileSystem.vala:607
 msgid "Failed to create symlink"
-msgstr ""
+msgstr "Nepodařilo se vytvořit symbolický odkaz"
 
 #: Utility/TeeJee.FileSystem.vala:269 Utility/TeeJee.FileSystem.vala:321
 msgid "Failed to delete items"
-msgstr ""
+msgstr "Položky se nepodařilo smazat"
 
 #: Gtk/ClamScanBox.vala:464
 msgid "Failed to delete some files"
-msgstr ""
+msgstr "Smazání některých souborů se nezdařilo"
 
 #: Common/Main.vala:1377
 msgid "Failed to execute operation as admin"
-msgstr ""
+msgstr "Nepodařilo se provést operaci jako správce"
 
 #: Utility/Device.vala:469 Utility/Device.vala:1720
 msgid "Failed to mount device"
-msgstr ""
+msgstr "Připojení zařízení se nezdařilo"
 
 #: Utility/TeeJee.FileSystem.vala:447
 msgid "Failed to move file"
@@ -4398,7 +4411,7 @@ msgstr ""
 
 #: Gtk/ProgressPanelVideoDownloadTask.vala:508
 msgid "Try pasting the URL again."
-msgstr ""
+msgstr "Zkuste adresu URL vložit znovu."
 
 #: Gtk/ConnectServerWindow.vala:219 Gtk/FileConflictDialog.vala:541
 #: Gtk/FileConflictDialog.vala:553 Gtk/FilePropertiesBox.vala:179
@@ -4415,7 +4428,7 @@ msgstr "UI"
 #: Gtk/ChecksumBox.vala:374
 #, c-format
 msgid "UNKNOWN"
-msgstr ""
+msgstr "NEZNÁMÝ"
 
 #: Gtk/ConnectServerWindow.vala:466
 msgid "URI"
@@ -4429,83 +4442,83 @@ msgstr "UUID"
 
 #: Gtk/CreateArchiveWindow.vala:858 Gtk/CreateArchiveWindow.vala:877
 msgid "Ultra"
-msgstr ""
+msgstr "Ultra"
 
 #: Gtk/FileConflictDialog.vala:264
 msgid "Un-select all files in list"
-msgstr ""
+msgstr "Zrušit výběr všech souborů v seznamu"
 
 #: Gtk/TermContextMenu.vala:431
 msgid "UnMaximize"
-msgstr ""
+msgstr "Zrušit maximalizaci"
 
 #: Gtk/TermContextMenu.vala:432
 msgid "UnMaximize the terminal"
-msgstr ""
+msgstr "Zrušit maximalizaci terminálu"
 
 #: Gtk/FileContextMenu.vala:2407 Gtk/Settings.vala:2716
 msgid "Uncompress"
-msgstr ""
+msgstr "Dekomprimovat"
 
 #: Gtk/FileContextMenu.vala:2408
 msgid "Uncompress PDF document"
-msgstr ""
+msgstr "Rozbalit dokument PDF"
 
 #: Gtk/FileContextMenu.vala:1371
 msgid "Unhide"
-msgstr ""
+msgstr "Zobrazit"
 
 #: Gtk/FileContextMenu.vala:1372
 msgid "Unhide selected items"
-msgstr ""
+msgstr "Zobrazit vybrané položky"
 
 #: Gtk/FilePropertiesWindow.vala:171 Gtk/FilePropertiesWindow.vala:184
 msgid "Unknown"
-msgstr ""
+msgstr "Neznámý"
 
 #: Gtk/ChecksumBox.vala:1221
 msgid "Unknown File Format"
-msgstr ""
+msgstr "Neznámý formát souboru"
 
 #: Gtk/ProgressPanelArchiveTask.vala:626 Gtk/ProgressPanelArchiveTask.vala:630
 msgid "Unknown Format"
-msgstr ""
+msgstr "Neznámý formát"
 
 #: Gtk/DevicePopover.vala:550
 msgid "Unlock"
-msgstr ""
+msgstr "Odemknout"
 
 #: Gtk/FileViewTab.vala:312
 msgid "Unlock Path"
-msgstr ""
+msgstr "Odemknout cestu"
 
 #: Utility/Device.vala:614 Utility/Device.vala:1925
 msgid "Unlocked"
-msgstr ""
+msgstr "Odemčeno"
 
 #: Utility/Device.vala:613 Utility/Device.vala:1924
 msgid "Unlocked successfully"
-msgstr ""
+msgstr "Úspěšně odemčeno"
 
 #: Gtk/DeviceContextMenu.vala:202 Gtk/DevicePopover.vala:523
 msgid "Unmount"
-msgstr ""
+msgstr "Odpojit"
 
 #: Gtk/DeviceContextMenu.vala:226
 msgid "Unmount and lock encrypted volume"
-msgstr ""
+msgstr "Odpojit a uzamknout šifrovaný svazek"
 
 #: Gtk/DeviceContextMenu.vala:203
 msgid "Unmount this volume"
-msgstr ""
+msgstr "Odpojit tento svazek"
 
 #: Utility/Device.vala:2119
 msgid "Unmounting from"
-msgstr ""
+msgstr "Odpojení z"
 
 #: Gtk/FilePropertiesBox.vala:227
 msgid "Unpacked"
-msgstr ""
+msgstr "Rozbaleno"
 
 #: Gtk/FileContextMenu.vala:2374
 msgid "Unprotect the PDF document by removing password"
@@ -4644,11 +4657,12 @@ msgstr "Okno"
 
 #: Gtk/Settings.vala:628
 msgid "Window buttons on left"
-msgstr ""
+msgstr "Tlačítka okna vlevo"
 
 #: Gtk/CreateArchiveWindow.vala:1278
+#, fuzzy
 msgid "Word Size"
-msgstr ""
+msgstr "Velikost slova"
 
 #: Gtk/MainMenubar.vala:1449
 msgid "Workspace"
