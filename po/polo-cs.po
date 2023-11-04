@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
 "POT-Creation-Date: 2022-11-05 12:03+0530\n"
-"PO-Revision-Date: 2023-11-04 13:01+0100\n"
+"PO-Revision-Date: 2023-11-04 13:41+0100\n"
 "Last-Translator: Amerey.eu <info@amerey.eu>\n"
 "Language-Team: \n"
 "Language: cs\n"
@@ -19,19 +19,21 @@ msgstr ""
 
 #: Gtk/DevicePopover.vala:232
 msgid " (locked)"
-msgstr ""
+msgstr " (zamčeno)"
 
 #: Common/Main.vala:1345
 msgid ""
 "'pkexec' or 'gksu' is needed for executing admin operations. Install "
 "required packages and try again."
 msgstr ""
+"'pkexec' nebo 'gksu' je potřeba pro provádění administrátorských operací. "
+"Nainstalujte požadované balíčky a zkuste to znovu."
 
 #: Gtk/FilePropertiesWindow.vala:197 Gtk/FilePropertiesWindow.vala:199
 #: Gtk/Sidebar.vala:725 Gtk/Sidebar.vala:727 Utility/Device.vala:2515
 #: Utility/Device.vala:2517 Utility/Device.vala:2519
 msgid "(empty)"
-msgstr ""
+msgstr "(prázdné)"
 
 #: Gtk/FileContextMenu.vala:1886
 msgid ""
@@ -39,16 +41,21 @@ msgid ""
 "+ Scan all files (no size limit)\n"
 "+ Scan for potentially unwanted applications (PUAs)"
 msgstr ""
+"+ Skenování uvnitř archivů\n"
+"+ Skenovat všechny soubory (bez omezení velikosti)\n"
+"+ Vyhledávání potenciálně nechtěných aplikací (PUA)"
 
 #: Gtk/FileContextMenu.vala:1855
 msgid ""
 "+ Skip archives\n"
 "+ Skip large files (> 5 MB)"
 msgstr ""
+"+ Přeskočit archivy\n"
+"+ Přeskočit velké soubory (> 5 MB)"
 
 #: Gtk/FileContextMenu.vala:1156
 msgid "..."
-msgstr ""
+msgstr "..."
 
 #: Gtk/ViewPopover.vala:210
 msgid "1"
@@ -71,7 +78,7 @@ msgstr "4"
 #: Gtk/ProgressPanelArchiveTask.vala:213 Gtk/ProgressPanelArchiveTask.vala:225
 #: Gtk/ProgressPanelArchiveTask.vala:237 Gtk/ProgressPanelArchiveTask.vala:249
 msgid "???"
-msgstr ""
+msgstr "???"
 
 #: Gtk/KvmCreateDiskWindow.vala:344
 #, c-format
@@ -129,7 +136,7 @@ msgstr ""
 
 #: Gtk/Settings.vala:1073
 msgid "Action button"
-msgstr ""
+msgstr "Tlačítko Akce"
 
 #: Gtk/FilePropertiesBox.vala:760 Gtk/FilePropertiesBox.vala:806
 #: Gtk/Sidebar.vala:1204
@@ -195,35 +202,35 @@ msgstr "Je spuštěna další instance této aplikace"
 
 #: Common/Main.vala:1019 Common/Main.vala:1169 Common/Main.vala:1258
 msgid "App config loaded"
-msgstr ""
+msgstr "Načtena konfigurace aplikace"
 
 #: Common/Main.vala:796 Common/Main.vala:1136 Common/Main.vala:1214
 msgid "App config saved"
-msgstr ""
+msgstr "Konfigurace aplikace byla uložena"
 
 #: Gtk/FileViewToolbar.vala:519
 msgid "Application Info"
-msgstr ""
+msgstr "Informace o aplikaci"
 
 #: Gtk/WizardWindow.vala:129
 msgid "Apply"
-msgstr ""
+msgstr "Použít"
 
 #: Gtk/FilePropertiesBox.vala:509 Gtk/FilePropertiesBox.vala:546
 msgid "Apply recursively to directory contents"
-msgstr ""
+msgstr "Použít rekurzivně na obsah adresáře"
 
 #: Gtk/FileContextMenu.vala:1461 Gtk/Settings.vala:2637
 msgid "Archive"
-msgstr ""
+msgstr "Archiv"
 
 #: Utility/Gtk/AboutWindow.vala:442
 msgid "Artists"
-msgstr ""
+msgstr "Umělci"
 
 #: Gtk/FileContextMenu.vala:1828
 msgid "As Admin"
-msgstr ""
+msgstr "Jako správce"
 
 #: Utility/VideoDownloadTask.vala:62
 msgid "Audio"
@@ -232,48 +239,48 @@ msgstr "Zvuk"
 #: Utility/VideoDownloadTask.vala:327
 #, c-format
 msgid "Audio Bitrate"
-msgstr ""
+msgstr "Bitrate zvuku"
 
 #: Utility/VideoDownloadTask.vala:326
 #, c-format
 msgid "Audio Codec"
-msgstr ""
+msgstr "Audio kodek"
 
 #: Gtk/CloudLoginWindow.vala:190
 #, c-format
 msgid "Authorization was started"
-msgstr ""
+msgstr "Byla spuštěna autorizace"
 
 #: Utility/Gtk/AboutWindow.vala:426
 msgid "Authors"
-msgstr ""
+msgstr "Autoři"
 
 #: Gtk/FilePropertiesWindow.vala:232 Utility/Device.vala:2566
 #, c-format
 msgid "Available"
-msgstr ""
+msgstr "Dostupný"
 
 #: Gtk/DevicePopover.vala:1092
 msgid "BZip2 Compressed Disk Image"
-msgstr ""
+msgstr "BZip2 Compressed Disk Image"
 
 #: Gtk/FileViewToolbar.vala:159 Gtk/MainMenubar.vala:1257 Gtk/Pathbar.vala:820
 #: Gtk/Settings.vala:395 Gtk/Settings.vala:820 Utility/Gtk/AboutWindow.vala:343
 #: Utility/Gtk/AboutWindow.vala:375
 msgid "Back"
-msgstr ""
+msgstr "Zpět"
 
 #: Gtk/TermContextMenu.vala:317
 msgid "Background Color"
-msgstr ""
+msgstr "Barva pozadí"
 
 #: Gtk/DevicePopover.vala:567
 msgid "Backup"
-msgstr ""
+msgstr "Záloha"
 
 #: Gtk/ProgressPanelDeviceWriterTask.vala:254
 msgid "Backup Complete"
-msgstr ""
+msgstr "Záloha byla dokončena"
 
 #: Gtk/KvmCreateDiskWindow.vala:278
 msgid "Base"
@@ -281,74 +288,76 @@ msgstr ""
 
 #: Utility/Gtk/DonationWindow.vala:80
 msgid "Become a Patron"
-msgstr ""
+msgstr "Staňte se patronem"
 
 #: Gtk/ProgressPanelVideoDownloadTask.vala:162
 msgid "Best (audio + video)"
-msgstr ""
+msgstr "Nejlepší (audio + video)"
 
 #: Gtk/ProgressPanelVideoDownloadTask.vala:173
 msgid "Best (audio only)"
-msgstr ""
+msgstr "Nejlepší (pouze zvuk)"
 
 #: Gtk/ProgressPanelVideoDownloadTask.vala:184
 msgid "Best (video only)"
-msgstr ""
+msgstr "Nejlepší (pouze video)"
 
 #: Gtk/ProgressPanelVideoDownloadTask.vala:195
 msgid "Best Video + Best Audio (merge)"
-msgstr ""
+msgstr "Nejlepší video + nejlepší zvuk (sloučit)"
 
 #: Gtk/CreateArchiveWindow.vala:1444
 msgid "Block Size"
-msgstr ""
+msgstr "Velikost bloku"
 
 #: Gtk/FilePropertiesBox.vala:203
 msgid "Blocks"
-msgstr ""
+msgstr "Bloky"
 
 #: Gtk/PlacesPopover.vala:538
 msgid "Bookmark"
-msgstr ""
+msgstr "Záložka"
 
 #: Gtk/FileViewToolbar.vala:291 Gtk/Pathbar.vala:172 Gtk/Settings.vala:565
 #: Gtk/Settings.vala:780 Gtk/Settings.vala:1037 Gtk/Sidebar.vala:362
 msgid "Bookmarks"
-msgstr ""
+msgstr "Záložky"
 
 #: Gtk/FileContextMenu.vala:2681 Gtk/Settings.vala:2885
 msgid "Boost Color"
-msgstr ""
+msgstr "Zesílit barvu"
 
 #: Gtk/FileContextMenu.vala:2682
 msgid ""
 "Boost color (more saturation). This can be used for correcting photos that "
 "are too dull (less color)."
 msgstr ""
+"Zesílit barvu (více sytosti). To lze použít pro korekci příliš matných "
+"fotografií (méně barev)."
 
 #: Gtk/FileContextMenu.vala:2139
 msgid "Boot Disk"
-msgstr ""
+msgstr "Spouštěcí disk"
 
 #: Gtk/FileContextMenu.vala:1716
 msgid "Boot ISO file in QEMU-KVM virtual machine"
-msgstr ""
+msgstr "Spustit soubor ISO ve virtuálním počítači QEMU-KVM"
 
 #: Gtk/FileContextMenu.vala:2180
 msgid "Boot from an ISO file with the selected disk attached"
-msgstr ""
+msgstr "Spustit ze souboru ISO s připojeným vybraným diskem"
 
 #: Gtk/FileContextMenu.vala:1715
 msgid "Boot in VM"
-msgstr ""
+msgstr "Spustit ve VM"
 
 #: Gtk/FileContextMenu.vala:2140
 msgid "Boot the selected disk in a virtual machine"
-msgstr ""
+msgstr "Spustit vybraný disk ve virtuálním počítači"
 
 #: Utility/Shell.vala:40
 msgid "Bourne again shell (bash)"
-msgstr ""
+msgstr "Bourne again shell (bash)"
 
 #: Gtk/FileViewList.vala:389
 #, c-format
@@ -358,16 +367,16 @@ msgstr ""
 #: Utility/FileTask.vala:335 Utility/FileTask.vala:390
 #: Utility/FileTask.vala:454 Utility/FileTask.vala:1169
 msgid "Building file list..."
-msgstr ""
+msgstr "Vytváření seznamu souborů..."
 
 #: Utility/Shell.vala:52
 msgid "C shell (csh)"
-msgstr ""
+msgstr "C shell (csh)"
 
 #: Gtk/ChecksumBox.vala:354 Gtk/ChecksumBox.vala:1424 Gtk/ChecksumBox.vala:1479
 #, c-format
 msgid "CHANGED"
-msgstr ""
+msgstr "ZMĚNĚNO"
 
 #: Gtk/Settings.vala:2431
 msgid "CPU"
@@ -387,15 +396,15 @@ msgstr "Typ CPU k emulaci pro hostovaný počítač"
 
 #: Gtk/FileContextMenu.vala:1642
 msgid "Calculate Folder Size"
-msgstr ""
+msgstr "Vypočítat velikost složky"
 
 #: Gtk/MainMenubar.vala:1899
 msgid "Calculate directory sizes"
-msgstr ""
+msgstr "Vypočítat velikosti adresářů"
 
 #: Gtk/FileViewList.vala:2832
 msgid "Calculating dir size..."
-msgstr ""
+msgstr "Výpočet velikosti adresáře..."
 
 #: Gtk/ChecksumBox.vala:211 Gtk/ClamScanBox.vala:182
 #: Gtk/CloudLoginWindow.vala:212 Gtk/ConnectServerWindow.vala:537
@@ -415,11 +424,11 @@ msgstr "Zrušit"
 
 #: Gtk/FileViewTab.vala:462 Gtk/LayoutBox.vala:508 Gtk/MainWindow.vala:162
 msgid "Cancel File Operations?"
-msgstr ""
+msgstr "Zrušit operace se soubory?"
 
 #: Gtk/FileConflictDialog.vala:275
 msgid "Cancel this file operation"
-msgstr ""
+msgstr "Zrušit tuto operaci se souborem"
 
 #: Gtk/ProgressPanelArchiveTask.vala:596 Gtk/ProgressPanelArchiveTask.vala:599
 msgid "Cancelled"
@@ -427,58 +436,60 @@ msgstr "Zrušeno"
 
 #: Gtk/ProgressPanelArchiveTask.vala:680
 msgid "Cancelled by user"
-msgstr ""
+msgstr "Zrušeno uživatelem"
 
 #: Gtk/FileViewList.vala:6184
 msgid "Cannot create archive in this location"
-msgstr ""
+msgstr "V tomto umístění nelze vytvořit archiv"
 
 #: Gtk/FileViewList.vala:6024
 msgid "Cannot extract to this location"
-msgstr ""
+msgstr "Nelze extrahovat do tohoto umístění"
 
 #: Gtk/FileViewToolbar.vala:479 Gtk/MainHeaderBar.vala:265
 msgid "Change Application Settings"
-msgstr ""
+msgstr "Změnit nastavení aplikace"
 
 #: Gtk/TermContextMenu.vala:161
 msgid "Change Directory"
-msgstr ""
+msgstr "Změnit adresář"
 
 #: Gtk/Settings.vala:1967 Gtk/Settings.vala:2168
 msgid "Change column spacing"
-msgstr ""
+msgstr "Změnit mezery mezi sloupci"
 
 #: Gtk/TermContextMenu.vala:162
 msgid "Change directory to current path"
-msgstr ""
+msgstr "Změnit adresář na aktuální cestu"
 
 #: Gtk/Settings.vala:1705
 msgid "Change font size"
-msgstr ""
+msgstr "Změnit velikost písma"
 
 #: Gtk/Settings.vala:1739 Gtk/Settings.vala:1894 Gtk/Settings.vala:2095
 msgid "Change icon size"
-msgstr ""
+msgstr "Změnit velikosti ikony"
 
 #: Gtk/Settings.vala:1782 Gtk/Settings.vala:1932 Gtk/Settings.vala:2133
 msgid "Change row spacing"
-msgstr ""
+msgstr "Změnit mezery mezi řádky"
 
 #: Gtk/FilePropertiesBox.vala:297
 msgid "Changed"
-msgstr ""
+msgstr "Změněno"
 
 #: Utility/Gtk/AboutWindow.vala:391
 msgid "Changelog"
-msgstr ""
+msgstr "Seznam změn"
 
 #: Gtk/KvmCreateDiskWindow.vala:339
-#, c-format
+#, fuzzy, c-format
 msgid ""
 "Changes can be discarded by deleting the derived file, or finalized by "
 "merging it with base"
 msgstr ""
+"Změny lze zrušit smazáním odvozeného souboru nebo dokončit jeho sloučením se "
+"základním"
 
 #: Gtk/Settings.vala:667
 msgid ""
@@ -487,6 +498,10 @@ msgid ""
 "\n"
 "Restart now?"
 msgstr ""
+"Změny se projeví po restartu aplikace.\n"
+"Vaše relace bude zachována.\n"
+"\n"
+"Restartovat nyní?"
 
 #: Gtk/ToolsWindow.vala:108
 msgid "Check"
@@ -494,94 +509,96 @@ msgstr "Zkontrolovat"
 
 #: Gtk/MainMenubar.vala:1984
 msgid "Check external tools"
-msgstr ""
+msgstr "Zkontrolovat externí nástroje"
 
 #: Gtk/FileViewList.vala:2398
 msgid "Check if internet connection is active"
-msgstr ""
+msgstr "Zkontrolujte, zda je aktivní připojení k internetu"
 
 #: Gtk/ProgressPanelVideoDownloadTask.vala:578
 #, c-format
 msgid "Check if the link is from a supported website."
-msgstr ""
+msgstr "Zkontrolujte, zda odkaz pochází z podporovaného webu."
 
 #: Gtk/ProgressPanelVideoDownloadTask.vala:508
 #, c-format
 msgid "Check your internet connectivity."
-msgstr ""
+msgstr "Zkontrolujte připojení k internetu."
 
 #: Gtk/FilePropertiesBox.vala:687
 msgid "Checking"
-msgstr ""
+msgstr "Kontroluji"
 
 #: Gtk/FilePropertiesBox.vala:655
 msgid "Checking..."
-msgstr ""
+msgstr "Kontroluji..."
 
 #: Gtk/ChecksumBox.vala:625 Gtk/ChecksumBox.vala:1229
 #: Gtk/FileContextMenu.vala:1919 Gtk/Settings.vala:2649
 #, c-format
 msgid "Checksum"
-msgstr ""
+msgstr "Kontrolní součet"
 
 #: Gtk/ChecksumBox.vala:1573
 msgid "Checksum (Actual)"
-msgstr ""
+msgstr "Kontrolní součet (skutečný)"
 
 #: Gtk/ChecksumBox.vala:1574
 msgid "Checksum (Provided)"
-msgstr ""
+msgstr "Kontrolní součet (poskytnut)"
 
 #: Gtk/ChecksumBox.vala:1113
 msgid "Checksum File"
-msgstr ""
+msgstr "Soubor kontrolního součtu"
 
 #: Gtk/ChecksumBox.vala:1227
 #, c-format
 msgid "Checksum Type"
-msgstr ""
+msgstr "Typ kontrolního součtu"
 
 #: Gtk/TermContextMenu.vala:201
 msgid "Chroot"
-msgstr ""
+msgstr "Chroot"
 
 #: Gtk/CreateArchiveWindow.vala:1814
 msgid "Cipher"
-msgstr ""
+msgstr "Cipher"
 
 #: Gtk/WizardWindow.vala:164 Gtk/WizardWindow.vala:169
 msgid "Classic Icons (Single-Pane + SideBar + IconView)"
-msgstr ""
+msgstr "Klasické ikony (jeden panel + boční panel + zobrazení ikon)"
 
 #: Gtk/WizardWindow.vala:174
 msgid "Classic List (Single-Pane + SideBar + ListView)"
-msgstr ""
+msgstr "Klasický seznam (jeden panel + postranní panel + zobrazení seznamu)"
 
 #: Gtk/MainMenubar.vala:1853
 msgid "Clean thumbnail cache"
-msgstr ""
+msgstr "Vyčistit mezipaměť miniatur"
 
 #: Gtk/MainWindow.vala:1027
 msgid "Cleaning Thumbnail Cache..."
-msgstr ""
+msgstr "Čištění mezipaměti miniatur..."
 
 #: Gtk/TermContextMenu.vala:181
 msgid "Clear the terminal output"
-msgstr ""
+msgstr "Vymazat výstup terminálu"
 
 #: Gtk/MainMenubar.vala:1854
 msgid ""
 "Clear the thumbnails in system cache. New thumbnails will be generated when "
 "folders are browsed using any file manager."
 msgstr ""
+"Vymažte miniatury v systémové mezipaměti. Nové miniatury budou generovány "
+"při procházení složek pomocí libovolného správce souborů."
 
 #: Gtk/CloudLoginWindow.vala:190
 msgid "Click 'Cancel' to close this window"
-msgstr ""
+msgstr "Kliknutím na 'Zrušit' toto okno zavřete"
 
 #: Gtk/CloudLoginWindow.vala:190
 msgid "Click 'Finish' to add the account"
-msgstr ""
+msgstr "Kliknutím na 'Dokončit' přidejte účet"
 
 #: Gtk/PlacesPopover.vala:434
 msgid "Click to Remove"
@@ -593,11 +610,11 @@ msgstr ""
 
 #: Gtk/ChecksumBox.vala:405
 msgid "Click to copy checksum to clipboard"
-msgstr ""
+msgstr "Kliknutím zkopírujete kontrolní součet do schránky"
 
 #: Gtk/Pathbar.vala:319
 msgid "Click to edit path"
-msgstr ""
+msgstr "Kliknutím upravíte cestu"
 
 #: Gtk/ClamScanBox.vala:482 Gtk/DevicePopoverSettingsWindow.vala:292
 #: Gtk/FileViewTab.vala:329 Gtk/MessageBar.vala:152 Gtk/SelectionBar.vala:204
@@ -649,11 +666,11 @@ msgstr "Kód"
 
 #: Utility/Gtk/AboutWindow.vala:434
 msgid "Code Contributions"
-msgstr ""
+msgstr "Příspěvky do kódu"
 
 #: Gtk/Settings.vala:1960
 msgid "Col spacing"
-msgstr ""
+msgstr "Mezery mezi sloupci"
 
 #: Gtk/Settings.vala:2299
 msgid "Columns"
@@ -665,11 +682,11 @@ msgstr "CSV"
 
 #: Gtk/WizardWindow.vala:179
 msgid "Commander Icons (Dual-Pane + IconView)"
-msgstr ""
+msgstr "Ikony (dva panely + zobrazení ikon)"
 
 #: Gtk/WizardWindow.vala:184
 msgid "Commander List (Dual-Pane + ListView)"
-msgstr ""
+msgstr "Seznamy (dva panely + zobrazení seznamů)"
 
 #: Common/Main.vala:522
 msgid "Commands listed below are not available on this system"
@@ -714,19 +731,19 @@ msgstr "Komprese:"
 
 #: Gtk/PasswordDialog.vala:129
 msgid "Confirm Passphrase"
-msgstr ""
+msgstr "Potvrdit heslo"
 
 #: Gtk/Settings.vala:1577
 msgid "Confirm before deleting files"
-msgstr ""
+msgstr "Potvrdit před trvalým smazáním souborů"
 
 #: Gtk/Settings.vala:1589
 msgid "Confirm before trashing files"
-msgstr ""
+msgstr "Potvrdit před přesunutím souborů do koše"
 
 #: Gtk/Settings.vala:1247
 msgid "Confirmation"
-msgstr ""
+msgstr "Potvrzení"
 
 #: Gtk/ConnectServerWindow.vala:587
 msgid "Connect"
@@ -750,31 +767,31 @@ msgstr "Připojování k serveru..."
 
 #: Gtk/FileViewList.vala:1092
 msgid "Content Type"
-msgstr ""
+msgstr "Typ obsahu"
 
 #: Gtk/FilePropertiesBox.vala:164
 msgid "Contents"
-msgstr ""
+msgstr "Obsah"
 
 #: Gtk/Settings.vala:2857
 msgid "Convert"
-msgstr ""
+msgstr "Převést "
 
 #: Gtk/KvmCreateDiskWindow.vala:87
 msgid "Convert Virtual Disk"
-msgstr ""
+msgstr "Převést virtuální disk"
 
 #: Gtk/FileContextMenu.vala:2798
 msgid "Convert to"
-msgstr ""
+msgstr "Převést na"
 
 #: Gtk/FileContextMenu.vala:2626
 msgid "Convert to black and white"
-msgstr ""
+msgstr "Převést do černobílé"
 
 #: Gtk/FileContextMenu.vala:2199
 msgid "Convert to..."
-msgstr ""
+msgstr "Převést na..."
 
 #: Gtk/ProgressPanelKvmTask.vala:75
 msgid "Converting disk format..."
@@ -4606,7 +4623,7 @@ msgstr "[Ignorovat]"
 
 #: Utility/AppLock.vala:64
 msgid "[Warning] Deleted invalid lock"
-msgstr ""
+msgstr "[Varování] Smazán neplatný zámek"
 
 #: Utility/FileTask.vala:1379
 msgid "deleted"
