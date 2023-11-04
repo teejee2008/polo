@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
 "POT-Creation-Date: 2022-11-05 12:03+0530\n"
-"PO-Revision-Date: 2023-11-04 13:41+0100\n"
+"PO-Revision-Date: 2023-11-04 14:27+0100\n"
 "Last-Translator: Amerey.eu <info@amerey.eu>\n"
 "Language-Team: \n"
 "Language: cs\n"
@@ -795,13 +795,13 @@ msgstr "Převést na..."
 
 #: Gtk/ProgressPanelKvmTask.vala:75
 msgid "Converting disk format..."
-msgstr ""
+msgstr "Převod formátu disku..."
 
 #: Gtk/CreateArchiveWindow.vala:654 Gtk/CreateArchiveWindow.vala:705
 #: Gtk/CreateArchiveWindow.vala:720 Gtk/FileContextMenu.vala:849
 #: Gtk/MainMenubar.vala:560 Gtk/TermContextMenu.vala:119
 msgid "Copy"
-msgstr ""
+msgstr "Kopírovat"
 
 #: Gtk/MiddleToolbar.vala:173
 msgid ""
@@ -809,10 +809,13 @@ msgid ""
 "\n"
 "Copy selected items in active pane"
 msgstr ""
+"Kopírovat\n"
+"\n"
+"Zkopírovat vybrané položky v aktivním podokně"
 
 #: Gtk/FileContextMenu.vala:1246
 msgid "Copy Across"
-msgstr ""
+msgstr "Kopírovat napříč"
 
 #: Gtk/MiddleToolbar.vala:290
 msgid ""
@@ -820,87 +823,90 @@ msgid ""
 "\n"
 "Copy selected items in active pane to opposite pane"
 msgstr ""
+"Kopírovat napříč\n"
+"\n"
+"Zkopírujte vybrané položky v aktivním podokně do protějšího podokna"
 
 #: Gtk/FileContextMenu.vala:1412
 msgid "Copy Path(s)"
-msgstr ""
+msgstr "Kopírovat cestu(y)"
 
 #: Gtk/FileContextMenu.vala:1206
 msgid "Copy To..."
-msgstr ""
+msgstr "Kopírovat do..."
 
 #: Gtk/FileContextMenu.vala:1413
 msgid "Copy file path to clipboard"
-msgstr ""
+msgstr "Kopírovat cestu k souboru do schránky"
 
 #: Gtk/FileContextMenu.vala:850
 msgid "Copy selected items"
-msgstr ""
+msgstr "Kopírovat vybrané položky"
 
 #: Gtk/TermContextMenu.vala:120
 msgid "Copy selected text to clipboard"
-msgstr ""
+msgstr "Kopírovat vybraný text do schránky"
 
 #: Gtk/FileContextMenu.vala:1207
 msgid "Copy to another location"
-msgstr ""
+msgstr "Kopírovat na jiné místo"
 
 #: Gtk/FileContextMenu.vala:1247
 msgid "Copy to other pane"
-msgstr ""
+msgstr "Kopírovat do jiného panelu"
 
 #: Utility/FileTask.vala:793
 #, c-format
 msgid "Copying file"
-msgstr ""
+msgstr "Kopírování souboru"
 
 #: Gtk/ProgressPanelFileTask.vala:153
 msgid "Copying files:"
-msgstr ""
+msgstr "Kopírování souborů:"
 
 #: Utility/FileTask.vala:342 Utility/FileTask.vala:470
 msgid "Copying items..."
-msgstr ""
+msgstr "Kopírování položek..."
 
 #: Utility/FileTask.vala:397
 msgid "Copying..."
-msgstr ""
+msgstr "Kopírování..."
 
 #: Gtk/ProgressPanelVideoDownloadTask.vala:506
 #: Gtk/ProgressPanelVideoDownloadTask.vala:575
 msgid "Could not fetch video info"
-msgstr ""
+msgstr "Informace o videu se nepodařilo načíst"
 
 #: Gtk/PlacesPopover.vala:491
 #, c-format
 msgid "Could not find bookmarked path"
-msgstr ""
+msgstr "Nepodařilo se najít cestu označenou záložkou"
 
 #: Utility/Device.vala:1734
 #, c-format
 msgid "Could not find file"
-msgstr ""
+msgstr "Soubor nelze najít"
 
 #: Gtk/FileViewList.vala:5038
 #, c-format
 msgid "Could not find file in opposite pane"
-msgstr ""
+msgstr "Nelze najít soubor v protějším panelu"
 
 #: Gtk/FileViewList.vala:3383
 msgid "Could not find path"
-msgstr ""
+msgstr "Nepodařilo se najít cestu"
 
 #: Gtk/FileViewList.vala:4327
 msgid "Could not find the opposite pane!"
-msgstr ""
+msgstr "Nepodařilo se najít protější panel!"
 
 #: Gtk/FileViewList.vala:5977
 msgid "Could not open file as archive"
-msgstr ""
+msgstr "Soubor nelze otevřít jako archiv"
 
 #: Gtk/FileViewList.vala:2756
 msgid "Counting items..."
-msgstr ""
+msgstr "Počítání položek..."
 
 #: Gtk/KvmCreateDiskWindow.vala:366
 msgid "Create"
@@ -981,11 +987,11 @@ msgstr "Vytvořit novou složku v tomto umístění"
 #: Gtk/ProgressPanelKvmTask.vala:258
 #, c-format
 msgid "Created"
-msgstr ""
+msgstr "Vytvořeno"
 
 #: Utility/TeeJee.FileSystem.vala:760
 msgid "Created directory"
-msgstr ""
+msgstr "Vytvořený adresář"
 
 #: Gtk/DevicePopoverSettingsWindow.vala:240
 msgid ""
@@ -995,18 +1001,24 @@ msgid ""
 "manager. This is good for security as partitions will remain unmounted till "
 "they are actually needed."
 msgstr ""
+"Vytvoří pravidlo pro udisks2, které zabrání automatickému připojování "
+"vyměnitelných zařízení.\n"
+"\n"
+"Zařízení budou připojena pouze tehdy, když je otevřete pomocí Polo nebo "
+"jiného správce souborů. To je dobré pro zabezpečení, protože oddíly zůstanou "
+"nepřipojené, dokud nebudou skutečně potřeba."
 
 #: Gtk/ProgressPanelFileTask.vala:181
 msgid "Creating hard links:"
-msgstr ""
+msgstr "Vytváření pevných odkazů:"
 
 #: Gtk/ProgressPanelKvmTask.vala:72
 msgid "Creating merged disk..."
-msgstr ""
+msgstr "Vytváření sloučeného disku..."
 
 #: Gtk/ProgressPanelFileTask.vala:178
 msgid "Creating symbolic links:"
-msgstr ""
+msgstr "Vytváření symbolických odkazů:"
 
 #: Utility/Gtk/AboutWindow.vala:320 Utility/Gtk/AboutWindow.vala:381
 msgid "Credits"
@@ -1040,7 +1052,7 @@ msgstr "Tmavý motiv"
 
 #: Gtk/ProgressPanelArchiveTask.vala:207
 msgid "Data:"
-msgstr ""
+msgstr "Data:"
 
 #: Utility/Shell.vala:64
 msgid "Debian Almquist shell (dash)"
@@ -1048,19 +1060,19 @@ msgstr "Debian Almquist shell (dash)"
 
 #: Gtk/MainMenubar.vala:2009
 msgid "Debug: List Devices"
-msgstr ""
+msgstr "Ladění: Seznam zařízení"
 
 #: Gtk/MainMenubar.vala:1996
 msgid "Debug: List FileItem Objects"
-msgstr ""
+msgstr "Ladění: Zobrazit seznam objektů FileItem"
 
 #: Gtk/MainMenubar.vala:2022
 msgid "Debug: Monitors"
-msgstr ""
+msgstr "Ladění: Monitory"
 
 #: Gtk/FileContextMenu.vala:1885
 msgid "Deep Scan"
-msgstr ""
+msgstr "Hluboké skenování"
 
 #: Utility/Shell.vala:58
 msgid "Default shell (sh)"
@@ -1068,11 +1080,11 @@ msgstr "Výchozí shell (sh)"
 
 #: Gtk/Settings.vala:1308
 msgid "Default view mode to use for new panes"
-msgstr ""
+msgstr "Výchozí režim zobrazení pro nové panely"
 
 #: Gtk/Settings.vala:1232
 msgid "Defaults"
-msgstr ""
+msgstr "Výchozí"
 
 #: Gtk/ClamScanBox.vala:394 Gtk/FileContextMenu.vala:987
 #: Gtk/MainMenubar.vala:692 Gtk/TrashBar.vala:98
@@ -1085,31 +1097,34 @@ msgid ""
 "\n"
 "Delete selected items permanently (without sending to recycle bin)"
 msgstr ""
+"Vymazat\n"
+"\n"
+"Trvale smazat vybrané položky (bez odeslání do koše)"
 
 #: Gtk/FileContextMenu.vala:988 Gtk/TrashBar.vala:102
 msgid "Delete selected items permanently"
-msgstr ""
+msgstr "Trvale odstranit vybrané položky"
 
 #: Gtk/FileViewList.vala:4531
 msgid "Delete selected items?"
-msgstr ""
+msgstr "Smazat vybrané položky?"
 
 #: Gtk/ClamScanBox.vala:457
 #, c-format
 msgid "Deleted"
-msgstr ""
+msgstr "Smazáno"
 
 #: Utility/TeeJee.FileSystem.vala:798
 msgid "Deleted directory"
-msgstr ""
+msgstr "Smazaný adresář"
 
 #: Gtk/ProgressPanelFileTask.vala:170
 msgid "Deleting files:"
-msgstr ""
+msgstr "Mazání souborů:"
 
 #: Gtk/KvmCreateDiskWindow.vala:231
 msgid "Derived File"
-msgstr ""
+msgstr "Odvozený soubor"
 
 #: Gtk/KvmCreateDiskWindow.vala:334
 #, c-format
@@ -1117,22 +1132,24 @@ msgid ""
 "Derived and base files will remain unchanged and can be deleted if not "
 "required"
 msgstr ""
+"Odvozené a základní soubory zůstanou nezměněny a v případě potřeby je lze "
+"smazat"
 
 #: Gtk/PlacesPopover.vala:653 Gtk/Sidebar.vala:346
 msgid "Desktop"
-msgstr ""
+msgstr "Desktop"
 
 #: Gtk/FileViewList.vala:6024 Gtk/FileViewList.vala:6046
 msgid "Destination directory does not exist"
-msgstr ""
+msgstr "Cílový adresář neexistuje"
 
 #: Gtk/FileViewList.vala:6184
 msgid "Destination path is inside an archive (!)"
-msgstr ""
+msgstr "Cílová cesta je uvnitř archivu (!)"
 
 #: Gtk/FileConflictDialog.vala:234
 msgid "Details"
-msgstr ""
+msgstr "Podrobnosti"
 
 #: Gtk/DevicePopover.vala:156 Gtk/FilePropertiesWindow.vala:171
 #: Gtk/FilePropertiesWindow.vala:184 Gtk/FilePropertiesWindow.vala:189
@@ -1142,93 +1159,94 @@ msgstr ""
 #: Utility/Device.vala:2507 Utility/KvmTask.vala:314
 #, c-format
 msgid "Device"
-msgstr ""
+msgstr "Zařízení"
 
 #: Gtk/Pathbar.vala:1048
 msgid "Device Ejected"
-msgstr ""
+msgstr "Zařízení vysunuto"
 
 #: Gtk/DeviceContextMenu.vala:548
 msgid "Device Locked"
-msgstr ""
+msgstr "Zařízení uzamčeno"
 
 #: Gtk/DevicePopoverSettingsWindow.vala:62
 msgid "Device Manager Settings"
-msgstr ""
+msgstr "Nastavení Správce zařízení"
 
 #: Gtk/DeviceContextMenu.vala:381 Gtk/DeviceContextMenu.vala:412
 msgid "Device Unmounted"
-msgstr ""
+msgstr "Zařízení odpojeno"
 
 #: Gtk/DevicePopover.vala:1025 Gtk/DevicePopover.vala:1058
 #, c-format
 msgid "Device is in use by the system"
-msgstr ""
+msgstr "Zařízení je používáno systémem"
 
 #: Gtk/Pathbar.vala:1021
 msgid "Device is not removable"
-msgstr ""
+msgstr "Zařízení není vyjímatelné"
 
 #: Gtk/Pathbar.vala:1054
 msgid "Device may be non-removable, or in-use by another process"
 msgstr ""
+"Zařízení může být neodstranitelné nebo může být používáno jiným procesem"
 
 #: Utility/Device.vala:462 Utility/Device.vala:1714
 msgid "Device mounted successfully"
-msgstr ""
+msgstr "Zařízení bylo úspěšně připojeno"
 
 #: Utility/Device.vala:1774
 msgid "Device name is empty!"
-msgstr ""
+msgstr "Název zařízení je prázdný!"
 
 #: Gtk/ProgressPanelDeviceWriterTask.vala:249
 msgid "Device safely ejected and ready for use"
-msgstr ""
+msgstr "Zařízení je bezpečně vysunuto a připraveno k použití"
 
 #: Gtk/ProgressPanelDeviceWriterTask.vala:261
 msgid "Device was restored successfully from disk image"
-msgstr ""
+msgstr "Zařízení bylo úspěšně obnoveno z obrazu disku"
 
 #: Gtk/FileViewList.vala:3375
 msgid "Device was unmounted"
-msgstr ""
+msgstr "Zařízení bylo odpojeno"
 
 #: Gtk/FileViewToolbar.vala:315 Gtk/Pathbar.vala:204 Gtk/Settings.vala:582
 #: Gtk/Settings.vala:800 Gtk/Settings.vala:1055 Gtk/Sidebar.vala:381
 msgid "Devices"
-msgstr ""
+msgstr "Zařízení"
 
 #: Gtk/CreateArchiveWindow.vala:1107
 msgid "Dictionary"
-msgstr ""
+msgstr "Slovník"
 
 #: Utility/TeeJee.FileSystem.vala:936
 msgid "Dir not found"
-msgstr ""
+msgstr "Adresář nenalezen"
 
 #: Gtk/FileViewList.vala:4654
 msgid "Directory exists"
-msgstr ""
+msgstr "Adresář existuje"
 
 #: Gtk/DevicePopoverSettingsWindow.vala:237
 msgid "Disable auto-mount for removable devices (recommended)"
-msgstr ""
+msgstr "Zakázat automatické připojení pro vyměnitelná zařízení (doporučeno)"
 
 #: Gtk/FileContextMenu.vala:1664
 msgid "Disk Image"
-msgstr ""
+msgstr "Obraz disku"
 
 #: Gtk/FileContextMenu.vala:1619 Gtk/Settings.vala:2613
 msgid "Disk Usage"
-msgstr ""
+msgstr "Využití disku"
 
 #: Gtk/ProgressPanelDeviceWriterTask.vala:255
 msgid "Disk image was created successfully from device"
-msgstr ""
+msgstr "Obraz disku byl úspěšně vytvořen ze zařízení"
 
 #: Gtk/FileViewList.vala:5238
 msgid "Disk is Read-Only"
-msgstr ""
+msgstr "Disk je pouze pro čtení"
 
 #: Gtk/KvmCreateDiskWindow.vala:340
 #, c-format
@@ -1236,6 +1254,9 @@ msgid ""
 "Do not rename or modify the base file as it will corrupt the derived disk. "
 "Base file will be made read-only to prevent accidental modification."
 msgstr ""
+"Nepřejmenovávejte ani neupravujte základní soubor, protože by došlo k "
+"poškození odvozeného disku. Základní soubor bude určen pouze pro čtení, aby "
+"se zabránilo náhodným úpravám."
 
 #: Utility/Gtk/AboutWindow.vala:458
 msgid "Documentation"
@@ -2978,11 +2999,11 @@ msgstr ""
 
 #: Gtk/FileContextMenu.vala:2278
 msgid "PDF"
-msgstr ""
+msgstr "PDF"
 
 #: Gtk/Settings.vala:2384
 msgid "PDF Actions"
-msgstr ""
+msgstr "Akce PDF"
 
 #: Gtk/FilePropertiesBox.vala:215 Gtk/FileViewList.vala:877
 msgid "Packed"
@@ -2994,21 +3015,21 @@ msgstr ""
 
 #: Gtk/ViewPopover.vala:200
 msgid "Panes"
-msgstr ""
+msgstr "Panely"
 
 #: Gtk/FilePropertiesWindow.vala:199 Gtk/Sidebar.vala:727
 #: Utility/Device.vala:2519
 #, c-format
 msgid "PartLabel"
-msgstr ""
+msgstr "Štítek"
 
 #: Gtk/FileViewList.vala:6073
 msgid "Partial extraction not supported for solid archives"
-msgstr ""
+msgstr "Částečná extrakce není podporována"
 
 #: Gtk/DevicePopover.vala:590
 msgid "Partition"
-msgstr ""
+msgstr "Oddíl"
 
 #: Gtk/CreateArchiveWindow.vala:1566
 msgid "Passes"
@@ -3020,19 +3041,19 @@ msgstr "Heslo"
 
 #: Gtk/PasswordDialog.vala:226
 msgid "Password Mismatch"
-msgstr ""
+msgstr "Neshoda hesla"
 
 #: Utility/ArchiveTask.vala:1066 Utility/ArchiveTask.vala:1223
 msgid "Password not set for encrypted archive"
-msgstr ""
+msgstr "Pro šifrovaný archiv není nastaveno heslo"
 
 #: Gtk/PasswordDialog.vala:226
 msgid "Passwords do not match"
-msgstr ""
+msgstr "Hesla se neshodují"
 
 #: Gtk/MainMenubar.vala:604 Gtk/TermContextMenu.vala:140
 msgid "Paste"
-msgstr ""
+msgstr "Vložit"
 
 #: Gtk/MiddleToolbar.vala:192
 msgid ""
@@ -3040,30 +3061,33 @@ msgid ""
 "\n"
 "Paste items in active pane"
 msgstr ""
+"Vložit\n"
+"\n"
+"Vložit položky do aktivního okna"
 
 #: Gtk/FileContextMenu.vala:1323
 msgid "Paste Hardlinks"
-msgstr ""
+msgstr "Vložit pevné odkazy"
 
 #: Gtk/FileContextMenu.vala:908
 msgid "Paste Here"
-msgstr ""
+msgstr "Vložit zde"
 
 #: Gtk/FileContextMenu.vala:878
 msgid "Paste Into Folder"
-msgstr ""
+msgstr "Vložte do složky"
 
 #: Gtk/FileContextMenu.vala:1286
 msgid "Paste Symlinks"
-msgstr ""
+msgstr "Vložit symbolické odkazy"
 
 #: Gtk/FileContextMenu.vala:1305
 msgid "Paste Symlinks (relative)"
-msgstr ""
+msgstr "Vložit symbolické odkazy (relativní)"
 
 #: Gtk/TermContextMenu.vala:141
 msgid "Paste clipboard contents"
-msgstr ""
+msgstr "Vložit obsah schránky"
 
 #: Gtk/FileContextMenu.vala:1324
 msgid ""
@@ -3072,20 +3096,26 @@ msgid ""
 "Hard links to a file point to the same data on disk. So the files can appear "
 "in multiple directories without taking up additional space."
 msgstr ""
+"Vložte pevné odkazy na vybrané položky v tomto adresáři.\n"
+"\n"
+"Pevné odkazy na soubor ukazují na stejná data na disku. Soubory se tak mohou "
+"objevit ve více adresářích, aniž by zabíraly další místo."
 
 #: Gtk/FileContextMenu.vala:909
 msgid "Paste items in current directory"
-msgstr ""
+msgstr "Vložit položky do aktuálního adresáře"
 
 #: Gtk/FileContextMenu.vala:879
 msgid "Paste items into selected directory"
-msgstr ""
+msgstr "Vložit položky do zvoleného adresáře"
 
 #: Gtk/FileContextMenu.vala:1287
 msgid ""
 "Paste symbolic links to selected items in this directory. Absolute path will "
 "be used for symlink target."
 msgstr ""
+"Vložte symbolické odkazy na vybrané položky v tomto adresáři. Pro cíl "
+"symbolického odkazu bude použita absolutní cesta."
 
 #: Gtk/FileContextMenu.vala:1306
 msgid ""
@@ -3095,23 +3125,28 @@ msgid ""
 "This is useful if the files are on a removable disk, since absolute paths "
 "will change if disk is mounted at another path."
 msgstr ""
+"Vložte symbolické odkazy na vybrané položky v tomto adresáři. Pro cíl "
+"symbolického odkazu budou použity relativní cesty.\n"
+"\n"
+"To je užitečné, pokud jsou soubory na vyměnitelném disku, protože absolutní "
+"cesty se změní, pokud je disk připojen k jiné cestě."
 
 #: Gtk/FileConflictDialog.vala:405 Utility/Device.vala:463
 #: Utility/Device.vala:1715
 msgid "Path"
-msgstr ""
+msgstr "Cesta"
 
 #: Gtk/PlacesPopover.vala:488
 msgid "Path Not Found"
-msgstr ""
+msgstr "Cesta nenalezena"
 
 #: Gtk/BookmarksMenu.vala:132
 msgid "Path not found"
-msgstr ""
+msgstr "Cesta nenalezena"
 
 #: Gtk/Settings.vala:243
 msgid "Pathbar"
-msgstr ""
+msgstr "Lišta cesty"
 
 #: Gtk/ProgressPanelArchiveTask.vala:312 Gtk/ProgressPanelArchiveTask.vala:315
 #: Gtk/ProgressPanelArchiveTask.vala:336 Gtk/ProgressPanelArchiveTask.vala:337
@@ -3121,41 +3156,41 @@ msgstr "Pozastavit"
 
 #: Gtk/Settings.vala:1270
 msgid "Performance"
-msgstr ""
+msgstr "Výkon"
 
 #: Gtk/FilePermissionsBox.vala:88 Gtk/FilePropertiesWindow.vala:329
 #: Gtk/FileViewList.vala:423 Gtk/FileViewList.vala:1006
 #, c-format
 msgid "Permissions"
-msgstr ""
+msgstr "Oprávnění"
 
 #: Gtk/PlacesPopover.vala:650 Gtk/Sidebar.vala:343
 msgid "Pictures"
-msgstr ""
+msgstr "Obrázky"
 
 #: Gtk/Settings.vala:1019 Gtk/Sidebar.vala:334
 msgid "Places"
-msgstr ""
+msgstr "Místa"
 
 #: Common/Main.vala:523
 msgid "Please install required packages and try running again"
-msgstr ""
+msgstr "Nainstalujte prosím požadované balíčky a zkuste spustit znovu"
 
 #: Gtk/MainMenubar.vala:1957
 msgid "Polo will be restarted with a fresh session"
-msgstr ""
+msgstr "Polo bude restartováno s novou relací"
 
 #: Gtk/ConnectServerWindow.vala:184
 msgid "Port"
-msgstr ""
+msgstr "Port"
 
 #: Gtk/ColumnSelectionBox.vala:306 Gtk/ColumnSelectionBox.vala:341
 msgid "Position of fixed columns cannot be changed"
-msgstr ""
+msgstr "Pozici pevných sloupců nelze změnit"
 
 #: Gtk/MainMenubar.vala:874
 msgid "Preferences"
-msgstr ""
+msgstr "Předvolby"
 
 #: Gtk/ProgressPanelDeviceWriterTask.vala:90 Gtk/ProgressPanelFileTask.vala:95
 #: Gtk/ProgressPanelImageTask.vala:80 Gtk/ProgressPanelKvmTask.vala:106
@@ -3163,7 +3198,7 @@ msgstr ""
 #: Utility/FileTask.vala:242 Utility/FileTask.vala:906
 #: Utility/FileTask.vala:1032
 msgid "Preparing..."
-msgstr ""
+msgstr "Připravuje se..."
 
 #: Gtk/WizardWindow.vala:99
 msgid "Previous"
@@ -4627,7 +4662,7 @@ msgstr "[Varování] Smazán neplatný zámek"
 
 #: Utility/FileTask.vala:1379
 msgid "deleted"
-msgstr ""
+msgstr "Smazáno"
 
 #: Utility/FileItem.vala:506 Utility/FileItem.vala:518
 msgid "empty"
