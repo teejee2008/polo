@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
 "POT-Creation-Date: 2022-11-05 12:03+0530\n"
-"PO-Revision-Date: 2023-11-04 11:51+0100\n"
+"PO-Revision-Date: 2023-11-04 12:18+0100\n"
 "Last-Translator: Amerey.eu <info@amerey.eu>\n"
 "Language-Team: \n"
 "Language: cs\n"
@@ -371,19 +371,19 @@ msgstr ""
 
 #: Gtk/Settings.vala:2431
 msgid "CPU"
-msgstr ""
+msgstr "CPU"
 
 #: Gtk/Settings.vala:2532
 msgid "CPU Cores"
-msgstr ""
+msgstr "CPU jádra"
 
 #: Gtk/Settings.vala:2560
 msgid "CPU Limit (%)"
-msgstr ""
+msgstr "Limit CPU (%)"
 
 #: Gtk/Settings.vala:2469
 msgid "CPU type to emulate for guest machine"
-msgstr ""
+msgstr "Typ CPU k emulaci pro hostovaný počítač"
 
 #: Gtk/FileContextMenu.vala:1642
 msgid "Calculate Folder Size"
@@ -604,42 +604,48 @@ msgstr ""
 #: Gtk/WizardWindow.vala:143 Utility/Gtk/AboutWindow.vala:400
 #: Utility/Gtk/DonationWindow.vala:137
 msgid "Close"
-msgstr ""
+msgstr "Zavřít"
 
 #: Gtk/Settings.vala:1131
 msgid "Close button (R)"
-msgstr ""
+msgstr "Tlačítko Zavřít (R)"
 
 #: Gtk/MainHeaderBar.vala:313 Gtk/ProgressPanelArchiveTask.vala:367
 msgid "Close this window"
-msgstr ""
+msgstr "Zavřít toto okno"
 
 #: Gtk/MainWindow.vala:163
 msgid ""
 "Closing the application will cancel running file operations.\n"
 "Do you want to cancel?"
 msgstr ""
+"Zavřením aplikace zrušíte spuštěné operace se soubory.\n"
+"Opravdu chcete zrušit?"
 
 #: Gtk/FileViewTab.vala:463
 msgid ""
 "Closing this pane will cancel file operations running in this pane.\n"
 "Do you want to cancel?"
 msgstr ""
+"Zavřením tohoto okna zrušíte operace se soubory spuštěné v tomto okně.\n"
+"Opravdu chcete zrušit?"
 
 #: Gtk/LayoutBox.vala:509
 msgid ""
 "Closing this tab will cancel file operations running in this tab.\n"
 "Do you want to cancel?"
 msgstr ""
+"Zavřením této záložky zrušíte operace se soubory spuštěné na této záložce.\n"
+"Opravdu chcete zrušit?"
 
 #: Gtk/MainMenubar.vala:1571
 msgid "Cloud"
-msgstr ""
+msgstr "Cloud"
 
 #: Utility/VideoDownloadTask.vala:315
 #, c-format
 msgid "Code"
-msgstr ""
+msgstr "Kód"
 
 #: Utility/Gtk/AboutWindow.vala:434
 msgid "Code Contributions"
@@ -651,11 +657,11 @@ msgstr ""
 
 #: Gtk/Settings.vala:2299
 msgid "Columns"
-msgstr ""
+msgstr "Sloupce"
 
 #: Gtk/ChecksumBox.vala:1517
 msgid "Comma-Separated File (CSV)"
-msgstr ""
+msgstr "CSV"
 
 #: Gtk/WizardWindow.vala:179
 msgid "Commander Icons (Dual-Pane + IconView)"
@@ -667,44 +673,44 @@ msgstr ""
 
 #: Common/Main.vala:522
 msgid "Commands listed below are not available on this system"
-msgstr ""
+msgstr "Níže uvedené příkazy nejsou v tomto systému dostupné"
 
 #: Gtk/FileContextMenu.vala:1088
 msgid "Compare"
-msgstr ""
+msgstr "Porovnat"
 
 #: Gtk/FileContextMenu.vala:1119
 msgid "Compare text file with file in opposite pane"
-msgstr ""
+msgstr "Porovnat textový soubor se souborem v protějším panelu"
 
 #: Gtk/FileContextMenu.vala:1089
 msgid "Compare text files side-by-side"
-msgstr ""
+msgstr "Porovnat textové soubory vedle sebe"
 
 #: Utility/FileTask.vala:286
 msgid "Comparing items..."
-msgstr ""
+msgstr "Porovnání položek..."
 
 #: Gtk/CreateArchiveWindow.vala:115 Gtk/CreateArchiveWindow.vala:2036
 #: Gtk/FileContextMenu.vala:1493
 msgid "Compress"
-msgstr ""
+msgstr "Komprimovat"
 
 #: Gtk/FileContextMenu.vala:1494
 msgid "Compress selected items and create new archive"
-msgstr ""
+msgstr "Komprimovat vybrané položky a vytvořit nový archiv"
 
 #: Gtk/ProgressPanelArchiveTask.vala:231
 msgid "Compressed:"
-msgstr ""
+msgstr "Komprimováno:"
 
 #: Gtk/ProgressPanelArchiveTask.vala:102
 msgid "Compressing"
-msgstr ""
+msgstr "Komprimování"
 
 #: Gtk/ProgressPanelArchiveTask.vala:283
 msgid "Compression:"
-msgstr ""
+msgstr "Komprese:"
 
 #: Gtk/PasswordDialog.vala:129
 msgid "Confirm Passphrase"
@@ -728,19 +734,19 @@ msgstr "Připojit"
 
 #: Gtk/FileContextMenu.vala:1783
 msgid "Connect a USB device and come back to this menu"
-msgstr ""
+msgstr "Připojte zařízení USB a vraťte se do této nabídky"
 
 #: Gtk/ConnectServerWindow.vala:113
 msgid "Connect to Server"
-msgstr ""
+msgstr "Připojit k serveru"
 
 #: Gtk/MainMenubar.vala:381
 msgid "Connect to Server..."
-msgstr ""
+msgstr "Připojit k serveru..."
 
 #: Gtk/ConnectServerWindow.vala:505
 msgid "Connecting to Server..."
-msgstr ""
+msgstr "Připojování k serveru..."
 
 #: Gtk/FileViewList.vala:1092
 msgid "Content Type"
@@ -881,73 +887,77 @@ msgstr ""
 
 #: Gtk/KvmCreateDiskWindow.vala:366
 msgid "Create"
-msgstr ""
+msgstr "Vytvořit"
 
 #: Gtk/KvmCreateDiskWindow.vala:81
 msgid "Create Derived Disk"
-msgstr ""
+msgstr "Vytvořit odvozený disk"
 
 #: Gtk/FileContextMenu.vala:2099
 msgid "Create Derived Disk..."
-msgstr ""
+msgstr "Vytvořit odvozený disk..."
 
 #: Gtk/FileViewList.vala:4646
 msgid "Create Directory"
-msgstr ""
+msgstr "Vytvořit adresář"
 
 #: Gtk/FileContextMenu.vala:2082
 msgid "Create Disk..."
-msgstr ""
+msgstr "Vytvořit disk..."
 
 #: Gtk/FileViewList.vala:4680 Gtk/FileViewList.vala:4716
 msgid "Create File"
-msgstr ""
+msgstr "Vytvořit soubor"
 
 #: Gtk/FileContextMenu.vala:2119
 msgid "Create Merged Disk..."
-msgstr ""
+msgstr "Vytvořit sloučený disk..."
 
 #: Gtk/MainMenubar.vala:339 Gtk/MiddleToolbar.vala:328
 msgid "Create New File"
-msgstr ""
+msgstr "Vytvořit nový soubor"
 
 #: Gtk/MainMenubar.vala:297 Gtk/MiddleToolbar.vala:347
 msgid "Create New Folder"
-msgstr ""
+msgstr "Vytvořit novou složku"
 
 #: Gtk/KvmCreateDiskWindow.vala:78
 msgid "Create Virtual Disk"
-msgstr ""
+msgstr "Vytvořit virtuální disk"
 
 #: Gtk/FileContextMenu.vala:2083
 msgid "Create a virtual hard disk file"
-msgstr ""
+msgstr "Vytvořit soubor virtuálního pevného disku"
 
 #: Gtk/FileContextMenu.vala:2120
 msgid ""
 "Create a virtual hard disk file by merging selected derived disk with it's "
 "base"
 msgstr ""
+"Vytvořit soubor virtuálního pevného disku sloučením vybraného odvozeného "
+"disku s jeho základem"
 
 #: Gtk/FileContextMenu.vala:2100
 msgid "Create a virtual hard disk file that uses selected disk as the base"
 msgstr ""
+"Vytvořit soubor virtuálního pevného disku, který používá vybraný disk jako "
+"základ"
 
 #: Gtk/FileViewList.vala:4454
 msgid "Create copies of selected items?"
-msgstr ""
+msgstr "Vytvořit kopie vybraných položek?"
 
 #: Gtk/FileContextMenu.vala:783
 msgid "Create new file from template"
-msgstr ""
+msgstr "Vytvořit nový soubor ze šablony"
 
 #: Gtk/FileContextMenu.vala:657
 msgid "Create new file in this location"
-msgstr ""
+msgstr "Vytvořit nový soubor v tomto umístění"
 
 #: Gtk/FileContextMenu.vala:637
 msgid "Create new folder in this location"
-msgstr ""
+msgstr "Vytvořit novou složku v tomto umístění"
 
 #: Gtk/FilePropertiesBox.vala:265 Gtk/KvmCreateDiskWindow.vala:463
 #: Gtk/ProgressPanelArchiveTask.vala:611 Gtk/ProgressPanelImageTask.vala:207
@@ -987,11 +997,11 @@ msgstr "Amerey.eu"
 
 #: Gtk/DevicePopover.vala:671
 msgid "Customize"
-msgstr ""
+msgstr "Přizpůsobit"
 
 #: Gtk/FileContextMenu.vala:823 Gtk/MainMenubar.vala:518
 msgid "Cut"
-msgstr ""
+msgstr "Vyjmout"
 
 #: Gtk/MiddleToolbar.vala:154
 msgid ""
@@ -999,14 +1009,17 @@ msgid ""
 "\n"
 "Cut selected items in active pane"
 msgstr ""
+"Vyjmout\n"
+"\n"
+"Vyjmout vybrané položky v aktivním panelu"
 
 #: Gtk/FileContextMenu.vala:824
 msgid "Cut selected items"
-msgstr ""
+msgstr "Vyjmout vybrané položky"
 
 #: Gtk/Settings.vala:314 Gtk/Settings.vala:1000
 msgid "Dark theme"
-msgstr ""
+msgstr "Tmavý motiv"
 
 #: Gtk/ProgressPanelArchiveTask.vala:207
 msgid "Data:"
@@ -1014,7 +1027,7 @@ msgstr ""
 
 #: Utility/Shell.vala:64
 msgid "Debian Almquist shell (dash)"
-msgstr ""
+msgstr "Debian Almquist shell (dash)"
 
 #: Gtk/MainMenubar.vala:2009
 msgid "Debug: List Devices"
@@ -1034,7 +1047,7 @@ msgstr ""
 
 #: Utility/Shell.vala:58
 msgid "Default shell (sh)"
-msgstr ""
+msgstr "Výchozí shell (sh)"
 
 #: Gtk/Settings.vala:1308
 msgid "Default view mode to use for new panes"
@@ -1047,7 +1060,7 @@ msgstr ""
 #: Gtk/ClamScanBox.vala:394 Gtk/FileContextMenu.vala:987
 #: Gtk/MainMenubar.vala:692 Gtk/TrashBar.vala:98
 msgid "Delete"
-msgstr ""
+msgstr "Smazat"
 
 #: Gtk/MiddleToolbar.vala:251
 msgid ""
@@ -4388,59 +4401,61 @@ msgstr ""
 
 #: Gtk/FileContextMenu.vala:2374
 msgid "Unprotect the PDF document by removing password"
-msgstr ""
+msgstr "Zrušte ochranu dokumentu PDF odstraněním hesla"
 
 #: Gtk/FileViewToolbar.vala:201 Gtk/MainMenubar.vala:1347 Gtk/Settings.vala:429
 #: Gtk/Settings.vala:860
 msgid "Up"
-msgstr ""
+msgstr "Nahoru"
 
 #: Gtk/TouchFileDateContextMenu.vala:99 Gtk/TouchFileDateContextMenu.vala:121
 msgid "Update recursively for all items inside the folder"
-msgstr ""
+msgstr "Aktualizovat rekurzivně pro všechny položky ve složce"
 
 #: Gtk/FileViewList.vala:5815
 msgid "Update required packages and try again"
-msgstr ""
+msgstr "Aktualizovat požadované balíčky a zkusit to znovu"
 
 #: Gtk/TouchFileDateContextMenu.vala:77 Gtk/TouchFileDateContextMenu.vala:98
 #: Gtk/TouchFileDateContextMenu.vala:120
 #, c-format
 msgid "Update timestamp to current date and time"
-msgstr ""
+msgstr "Aktualizovat časové razítko na aktuální datum a čas"
 
 #: Gtk/ProgressPanelVideoDownloadTask.vala:579
 msgid "Update youtube-dl to a newer version."
-msgstr ""
+msgstr "Aktualizovat youtube-dl na novější verzi."
 
 #: Gtk/ProgressPanelFileTask.vala:150
 msgid "Uploading files to cloud storage:"
-msgstr ""
+msgstr "Nahrávání souborů do cloudového úložiště:"
 
 #: Utility/FileTask.vala:467
 msgid "Uploading items..."
-msgstr ""
+msgstr "Nahrávání položek..."
 
 #: Utility/Gtk/DonationWindow.vala:89
 msgid ""
 "Use the issue tracker for reporting issues, asking questions, and requesting "
 "features. Please avoid reporting issues by email."
 msgstr ""
+"Pomocí nástroje pro sledování problémů můžete hlásit problémy, klást otázky "
+"a požadovat funkce. Vyhněte se prosím nahlašování problémů e-mailem."
 
 #: Gtk/FilePropertiesWindow.vala:225 Gtk/Sidebar.vala:1292
 #: Gtk/Statusbar.vala:361 Utility/Device.vala:2562
 #, c-format
 msgid "Used"
-msgstr ""
+msgstr "Použito"
 
 #: Gtk/FilePermissionsBox.vala:114 Gtk/FileViewList.vala:417
 #, c-format
 msgid "User"
-msgstr ""
+msgstr "Uživatel"
 
 #: Utility/Device.vala:573 Utility/Device.vala:1883
 msgid "User cancelled the password prompt"
-msgstr ""
+msgstr "Uživatel zrušil výzvu k zadání hesla"
 
 #: Gtk/ConnectServerWindow.vala:375
 msgid "Username"
@@ -4448,16 +4463,16 @@ msgstr "Uživatelské jméno"
 
 #: Gtk/ToolsWindow.vala:76
 msgid "Utility"
-msgstr ""
+msgstr "Utility"
 
 #: Gtk/FilePropertiesWindow.vala:356
 msgid "Value"
-msgstr ""
+msgstr "Hodnota"
 
 #: Utility/Device.vala:2537
 #, c-format
 msgid "Vendor"
-msgstr ""
+msgstr "Dodavatel"
 
 #: Gtk/ChecksumBox.vala:984
 msgid "Verification Failed"
@@ -4566,9 +4581,8 @@ msgid "Z shell (zsh)"
 msgstr "Z shell (zsh)"
 
 #: Gtk/MediaBar.vala:233
-#, fuzzy
 msgid "[Exit]"
-msgstr "Opustit režim úprav"
+msgstr "[Odejít]"
 
 #: Gtk/MediaBar.vala:183
 msgid "[Ignore]"
