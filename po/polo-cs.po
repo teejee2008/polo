@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
 "POT-Creation-Date: 2022-11-05 12:03+0530\n"
-"PO-Revision-Date: 2023-11-04 18:27+0100\n"
+"PO-Revision-Date: 2023-11-04 19:54+0100\n"
 "Last-Translator: Amerey.eu <info@amerey.eu>\n"
 "Language-Team: \n"
 "Language: cs\n"
@@ -2250,61 +2250,61 @@ msgstr "Obrázek"
 
 #: Gtk/Settings.vala:2407
 msgid "Image Actions"
-msgstr ""
+msgstr "Akce s obrázky"
 
 #: Utility/FileItemArchive.vala:361
 #, c-format
 msgid "Incorrect Password. Try again or Cancel."
-msgstr ""
+msgstr "Nesprávné heslo. Zkuste to znovu nebo zrušte."
 
 #: Utility/ArchiveTask.vala:1069
 msgid "Incorrect password for encrypted archive"
-msgstr ""
+msgstr "Nesprávné heslo pro šifrovaný archiv"
 
 #: Gtk/ColumnSelectionBox.vala:131 Gtk/SortMenu.vala:90
 #: Gtk/ViewPopover.vala:375
 msgid "Indicator"
-msgstr ""
+msgstr "Indikátor"
 
 #: Gtk/ClamScanBox.vala:890
 msgid "Initializing..."
-msgstr ""
+msgstr "Inicializace..."
 
 #: Gtk/CreateArchiveWindow.vala:880
 msgid "Insane"
-msgstr ""
+msgstr "Šílený"
 
 #: Gtk/FileContextMenu.vala:2179
 msgid "Install from ISO..."
-msgstr ""
+msgstr "Instalace z ISO..."
 
 #: Gtk/MainMenubar.vala:1875
 msgid "Install p7zip 16.02 (Archive Support)"
-msgstr ""
+msgstr "Nainstalujte p7zip 16.02 (podpora archivu)"
 
 #: Gtk/FileViewList.vala:5786 Gtk/FileViewList.vala:5807
 msgid "Install required packages and try again"
-msgstr ""
+msgstr "Nainstalujte požadované balíčky a zkuste to znovu"
 
 #: Gtk/MainMenubar.vala:1864
 msgid "Install/Update Rclone (Cloud Storage Support)"
-msgstr ""
+msgstr "Instalace/aktualizace Rclone (podpora cloudového úložiště)"
 
 #: Gtk/FileViewList.vala:4327
 msgid "Internal Error"
-msgstr ""
+msgstr "Interní chyba"
 
 #: Utility/Device.vala:592
 msgid "Invalid Passphrase"
-msgstr ""
+msgstr "Neplatná přístupová fráze"
 
 #: Gtk/FileViewList.vala:6046
 msgid "Invalid Path"
-msgstr ""
+msgstr "Neplatná cesta"
 
 #: Gtk/ConnectServerWindow.vala:951 Gtk/ConnectServerWindow.vala:961
 msgid "Invalid Server Name"
-msgstr ""
+msgstr "Neplatný název serveru"
 
 #: Gtk/MainMenubar.vala:2067 Utility/Gtk/DonationWindow.vala:95
 msgid "Issue Tracker"
@@ -2447,12 +2447,12 @@ msgstr "Odhlásit se z účtu cloudového úložiště"
 
 #: Gtk/FileViewList.vala:1178
 msgid "MD5"
-msgstr ""
+msgstr "MD5"
 
 #: Gtk/ChecksumBox.vala:359 Gtk/ChecksumBox.vala:1439 Gtk/ChecksumBox.vala:1482
 #, c-format
 msgid "MISSING"
-msgstr ""
+msgstr "CHYBĚJÍCÍ"
 
 #: Utility/Device.vala:2552
 #, c-format
@@ -2487,19 +2487,19 @@ msgstr ""
 
 #: Gtk/SelectionBar.vala:170
 msgid "Match beginning of file name"
-msgstr ""
+msgstr "Porovnejte začátek názvu souboru"
 
 #: Gtk/TermContextMenu.vala:412
 msgid "Maximize"
-msgstr ""
+msgstr "Maximalizovat"
 
 #: Gtk/Settings.vala:1280
 msgid "Maximize on startup"
-msgstr ""
+msgstr "Maximalizovat při spuštění"
 
 #: Gtk/TermContextMenu.vala:413
 msgid "Maximize the terminal to fill tab"
-msgstr ""
+msgstr "Maximalizovat terminál tak, aby vyplnil záložku"
 
 #: Gtk/CreateArchiveWindow.vala:855 Gtk/CreateArchiveWindow.vala:874
 msgid "Maximum"
@@ -2507,23 +2507,23 @@ msgstr "Maximum"
 
 #: Gtk/FileViewToolbar.vala:412 Gtk/Settings.vala:1334 Gtk/ViewPopover.vala:148
 msgid "Media"
-msgstr ""
+msgstr "Média"
 
 #: Gtk/FilePropertiesWindow.vala:348
 msgid "MediaInfo"
-msgstr ""
+msgstr "Informace o médiích"
 
 #: Gtk/FileViewList.vala:3402
 msgid "Menubar: File > New Admin Window"
-msgstr ""
+msgstr "Panel nabídek: Soubor > Nové okno správce"
 
 #: Gtk/FileContextMenu.vala:2339 Gtk/Settings.vala:2688
 msgid "Merge"
-msgstr ""
+msgstr "Sloučit"
 
 #: Gtk/KvmCreateDiskWindow.vala:84
 msgid "Merge Derived Disk"
-msgstr ""
+msgstr "Sloučit odvozený disk"
 
 #: Gtk/FileContextMenu.vala:2340
 msgid "Merge selected PDF files into one document"
@@ -2531,7 +2531,7 @@ msgstr "Sloučit vybrané soubory PDF do jednoho dokumentu"
 
 #: Gtk/CreateArchiveWindow.vala:614 Gtk/FilePropertiesBox.vala:186
 msgid "Method"
-msgstr ""
+msgstr "Metoda"
 
 #: Gtk/FilePropertiesBox.vala:251 Utility/FileItem.vala:733
 #, c-format
@@ -2550,86 +2550,86 @@ msgstr "Minimalizovat"
 #: Utility/Device.vala:2554
 #, c-format
 msgid "Minor"
-msgstr ""
+msgstr "Méně důležitý"
 
 #: Gtk/ToolsWindow.vala:155
 msgid "Missing"
-msgstr ""
+msgstr "Chybějící"
 
 #: Common/Main.vala:1345 Gtk/MainWindow.vala:606
 msgid "Missing Dependencies"
-msgstr ""
+msgstr "Chybějící závislosti"
 
 #: Gtk/DeviceContextMenu.vala:579 Gtk/FileViewList.vala:5785
 msgid "Missing Dependency"
-msgstr ""
+msgstr "Chybějící závislost"
 
 #: Utility/Gtk/GtkHelper.vala:382
 msgid "Missing Icon"
-msgstr ""
+msgstr "Chybějící ikona"
 
 #: Gtk/FileViewList.vala:5806
 msgid "Missing Plugin"
-msgstr ""
+msgstr "Chybí plugin"
 
 #: Utility/Device.vala:2541
 #, c-format
 msgid "Model"
-msgstr ""
+msgstr "Model"
 
 #: Gtk/ClamScanBox.vala:731 Gtk/FileConflictDialog.vala:543
 #: Gtk/FileConflictDialog.vala:555 Gtk/FilePropertiesBox.vala:269
 #: Gtk/FileViewList.vala:834 Utility/FileItem.vala:730
 #, c-format
 msgid "Modified"
-msgstr ""
+msgstr "Upraveno"
 
 #: Gtk/FileContextMenu.vala:1157
 msgid "More options"
-msgstr ""
+msgstr "Více možností"
 
 #: Gtk/DeviceContextMenu.vala:179 Gtk/DevicePopover.vala:513
 #: Gtk/FileContextMenu.vala:1694 Gtk/Sidebar.vala:732 Utility/Device.vala:2529
 #, c-format
 msgid "Mount"
-msgstr ""
+msgstr "Připojit"
 
 #: Gtk/FileContextMenu.vala:2159
 msgid "Mount Disk"
-msgstr ""
+msgstr "Připojit disk"
 
 #: Gtk/DevicePopover.vala:359
 msgid "Mount Path"
-msgstr ""
+msgstr "Připojit cestu"
 
 #: Gtk/FileContextMenu.vala:1695
 msgid "Mount the disk image as read-only device"
-msgstr ""
+msgstr "Připojit obraz disku jako zařízení pouze pro čtení"
 
 #: Gtk/FileContextMenu.vala:2160
 msgid "Mount the selected disk"
-msgstr ""
+msgstr "Připojit vybraný disk"
 
 #: Gtk/DeviceContextMenu.vala:180
 msgid "Mount this volume"
-msgstr ""
+msgstr "Připojit tento svazek"
 
 #: Gtk/FilePropertiesWindow.vala:204
 msgid "MountPath"
-msgstr ""
+msgstr "Cesta"
 
 #: Gtk/FileViewList.vala:5124
 #, c-format
 msgid "Mounted ISO"
-msgstr ""
+msgstr "Připojené ISO"
 
 #: Utility/KvmTask.vala:314
 msgid "Mounted successfully"
-msgstr ""
+msgstr "Úspěšně přípojeno"
 
 #: Gtk/FileContextMenu.vala:1264
 msgid "Move Across"
-msgstr ""
+msgstr "Přesunout napříč"
 
 #: Gtk/MiddleToolbar.vala:271
 msgid ""
@@ -2637,56 +2637,59 @@ msgid ""
 "\n"
 "Move selected items in active pane to opposite pane"
 msgstr ""
+"Přesunout napříč\n"
+"\n"
+"Přesunout vybrané položky v aktivním okně do protějšího okna"
 
 #: Gtk/ColumnSelectionBox.vala:227
 msgid "Move Down"
-msgstr ""
+msgstr "Přesunout dolů"
 
 #: Gtk/FileContextMenu.vala:1224
 msgid "Move To..."
-msgstr ""
+msgstr "Přesunout do..."
 
 #: Gtk/ColumnSelectionBox.vala:210
 msgid "Move Up"
-msgstr ""
+msgstr "Přesunout nahoru"
 
 #: Gtk/FileContextMenu.vala:966
 msgid "Move files to recycle bin"
-msgstr ""
+msgstr "Přesunout soubory do koše"
 
 #: Gtk/ColumnSelectionBox.vala:228
 msgid "Move selected item down"
-msgstr ""
+msgstr "Přesunout vybranou položku dolů"
 
 #: Gtk/ColumnSelectionBox.vala:211
 msgid "Move selected item up"
-msgstr ""
+msgstr "Přesunout vybranou položku nahoru"
 
 #: Gtk/ClamScanBox.vala:218
 msgid "Move to Quarantine"
-msgstr ""
+msgstr "Přesunout do karantény"
 
 #: Gtk/FileContextMenu.vala:1225
 msgid "Move to another location"
-msgstr ""
+msgstr "Přesunout na jiné místo"
 
 #: Gtk/FileContextMenu.vala:1265
 msgid "Move to other pane"
-msgstr ""
+msgstr "Přesunout do jiného panelu"
 
 #: Gtk/ClamScanBox.vala:281
 #, c-format
 msgid "Moved to quarantine"
-msgstr ""
+msgstr "Přesunuto do karantény"
 
 #: Utility/FileTask.vala:789
 #, c-format
 msgid "Moving file"
-msgstr ""
+msgstr "Přesouvání souboru"
 
 #: Gtk/ProgressPanelFileTask.vala:163
 msgid "Moving files to Trash:"
-msgstr ""
+msgstr "Přesouvání souborů do koše:"
 
 #: Gtk/ProgressPanelFileTask.vala:157
 msgid "Moving files:"
