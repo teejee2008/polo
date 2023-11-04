@@ -8,7 +8,7 @@ msgstr ""
 "Project-Id-Version: polo 1.6\n"
 "Report-Msgid-Bugs-To: teejeetech@gmail.com\n"
 "POT-Creation-Date: 2022-11-05 12:03+0530\n"
-"PO-Revision-Date: 2023-11-04 12:18+0100\n"
+"PO-Revision-Date: 2023-11-04 13:01+0100\n"
 "Last-Translator: Amerey.eu <info@amerey.eu>\n"
 "Language-Team: \n"
 "Language: cs\n"
@@ -3468,7 +3468,7 @@ msgstr ""
 #: Gtk/ColumnSelectionBox.vala:181 Gtk/Settings.vala:1813
 #: Gtk/Settings.vala:1997 Gtk/Settings.vala:2200 Gtk/TermContextMenu.vala:369
 msgid "Reset"
-msgstr ""
+msgstr "Resetovat"
 
 #: Gtk/FileViewTab.vala:279
 msgid "Reset Name"
@@ -3591,30 +3591,30 @@ msgstr ""
 #: Gtk/ChecksumBox.vala:364 Gtk/ChecksumBox.vala:1445 Gtk/ChecksumBox.vala:1486
 #, c-format
 msgid "SYMLINK"
-msgstr ""
+msgstr "SYMLINK"
 
 #: Gtk/ChecksumBox.vala:252 Gtk/ChecksumBox.vala:255 Gtk/ChecksumBox.vala:299
 #: Gtk/MainMenubar.vala:1480
 msgid "Save"
-msgstr ""
+msgstr "Uložit"
 
 #: Gtk/ChecksumBox.vala:1094 Gtk/ChecksumBox.vala:1501
 #: Gtk/DevicePopover.vala:1072
 msgid "Save As"
-msgstr ""
+msgstr "Uložit jako"
 
 #: Gtk/MainMenubar.vala:1491
 msgid "Save As..."
-msgstr ""
+msgstr "Uložit jako..."
 
 #: Gtk/MainWindow.vala:1474
 msgid "Save Workspace"
-msgstr ""
+msgstr "Uložit pracovní prostor"
 
 #: Gtk/ChecksumBox.vala:1199 Gtk/ChecksumBox.vala:1615
 #, c-format
 msgid "Saved"
-msgstr ""
+msgstr "Uloženo"
 
 #: Gtk/ChecksumBox.vala:1142
 msgid "Saving checksums..."
@@ -3630,23 +3630,23 @@ msgstr ""
 
 #: Gtk/ClamScanBox.vala:937
 msgid "Scan Summary"
-msgstr ""
+msgstr "Výsledky skenování"
 
 #: Gtk/FileContextMenu.vala:1805 Gtk/Settings.vala:2625
 msgid "Scan for Malware"
-msgstr ""
+msgstr "Vyhledat malware"
 
 #: Gtk/ClamScanBox.vala:902
 msgid "Scanning files..."
-msgstr ""
+msgstr "Skenování souborů..."
 
 #: Gtk/SelectionBar.vala:179
 msgid "Select"
-msgstr ""
+msgstr "Vybrat"
 
 #: Gtk/FileConflictDialog.vala:257 Gtk/MainMenubar.vala:784
 msgid "Select All"
-msgstr ""
+msgstr "Vybrat vše"
 
 #: Gtk/CreateArchiveWindow.vala:428
 msgid "Select Archive Location"
@@ -3654,7 +3654,7 @@ msgstr ""
 
 #: Gtk/ViewPopover.vala:446
 msgid "Select Columns"
-msgstr ""
+msgstr "Vybrat Sloupce"
 
 #: Gtk/FileViewList.vala:4342
 msgid "Select Copy Destination"
@@ -3722,7 +3722,7 @@ msgstr ""
 
 #: Gtk/FileConflictDialog.vala:258
 msgid "Select all files in list"
-msgstr ""
+msgstr "Vybrat všechny soubory v seznamu"
 
 #: Gtk/FilePropertiesPanel.vala:84
 msgid "Select file to view properties"
@@ -3750,22 +3750,22 @@ msgstr ""
 
 #: Gtk/FileViewList.vala:5595
 msgid "Select the JPEG image files to convert"
-msgstr ""
+msgstr "Vyberte soubory obrázků JPEG, které chcete převést"
 
 #: Gtk/FileViewList.vala:5573
 msgid "Select the PNG image files to convert"
-msgstr ""
+msgstr "Vyberte soubory obrázků PNG, které chcete převést"
 
 #: Gtk/FileViewList.vala:5615 Gtk/FileViewList.vala:5635
 #: Gtk/FileViewList.vala:5655 Gtk/FileViewList.vala:5675
 #: Gtk/FileViewList.vala:5695 Gtk/FileViewList.vala:5715
 msgid "Select the image files to convert"
-msgstr ""
+msgstr "Vybrat soubory obrázků, které chcete převést"
 
 #: Gtk/FileViewList.vala:5072 Gtk/FileViewList.vala:5079
 #, c-format
 msgid "Selected item is not a text file"
-msgstr ""
+msgstr "Vybraná položka není textový soubor"
 
 #: Utility/Device.vala:2545
 #, c-format
@@ -3782,31 +3782,31 @@ msgstr ""
 
 #: Gtk/FileContextMenu.vala:449
 msgid "Set Default"
-msgstr ""
+msgstr "Nastavit výchozí"
 
 #: Gtk/FileContextMenu.vala:479
 msgid "Set as Default and Open With"
-msgstr ""
+msgstr "Nastavit jako výchozí a otevřít pomocí"
 
 #: Gtk/FileContextMenu.vala:2572
 msgid "Set as Wallpaper"
-msgstr ""
+msgstr "Nastavit jako tapetu"
 
 #: Gtk/FileContextMenu.vala:450 Gtk/FileContextMenu.vala:505
 msgid "Set default application for file type"
-msgstr ""
+msgstr "Nastavit výchozí aplikaci pro typ souboru"
 
 #: Gtk/Settings.vala:1814 Gtk/Settings.vala:1998 Gtk/Settings.vala:2201
 msgid "Set default values"
-msgstr ""
+msgstr "Nastavit výchozí hodnoty"
 
 #: Gtk/FileContextMenu.vala:2573
 msgid "Set the image as wallpaper"
-msgstr ""
+msgstr "Nastavit obrázek jako tapetu"
 
 #: Gtk/Settings.vala:1432
 msgid "Sets the default application for opening folders"
-msgstr ""
+msgstr "Nastaví výchozí aplikaci pro otevírání složek"
 
 #: Gtk/FileViewToolbar.vala:478 Gtk/SettingsWindow.vala:49
 #: Gtk/TermContextMenu.vala:222
@@ -3815,7 +3815,7 @@ msgstr "Nastavení"
 
 #: Gtk/ConnectServerWindow.vala:289
 msgid "Share"
-msgstr ""
+msgstr "Sdílet"
 
 #: Gtk/ConnectServerWindow.vala:966
 msgid "Share Name Not Specified"
@@ -3823,7 +3823,7 @@ msgstr ""
 
 #: Gtk/FileViewList.vala:3403
 msgid "Shortcut: [Super] + N"
-msgstr ""
+msgstr "Klávesová zkratka: [Super] + N"
 
 #: Gtk/CreateArchiveWindow.vala:1725 Gtk/CreateArchiveWindow.vala:1805
 #: Gtk/PasswordDialog.vala:110 Gtk/PasswordDialog.vala:202
@@ -3833,102 +3833,104 @@ msgstr "Zobrazit"
 
 #: Gtk/Settings.vala:1038
 msgid "Show 'Bookmarks' section in sidebar"
-msgstr ""
+msgstr "Zobrazit sekci „Záložky“ na postranním panelu"
 
 #: Gtk/Settings.vala:1056
 msgid "Show 'Devices' section in sidebar"
-msgstr ""
+msgstr "Zobrazit sekci „Zařízení“ na postranním panelu"
 
 #: Gtk/Settings.vala:1020
 msgid "Show 'Places' section in sidebar"
-msgstr ""
+msgstr "Zobrazit sekci „Místa“ na postranním panelu"
 
 #: Gtk/Settings.vala:1074
 msgid "Show Action button for sidebar items"
-msgstr ""
+msgstr "Zobrazit tlačítko Akce pro položky postranního panelu"
 
 #: Gtk/MediaBar.vala:280
 #, c-format
 msgid "Show Folders"
-msgstr ""
+msgstr "Zobrazit složky"
 
 #: Gtk/MainMenubar.vala:960 Gtk/ViewPopover.vala:279
 msgid "Show Hidden"
-msgstr ""
+msgstr "Zobrazit skryté"
 
 #: Gtk/MediaBar.vala:287
 #, c-format
 msgid "Show Other Files"
-msgstr ""
+msgstr "Zobrazit další soubory"
 
 #: Gtk/MainMenubar.vala:1969
 msgid "Show Quarantined Files"
-msgstr ""
+msgstr "Zobrazit soubory v karanténě"
 
 #: Gtk/ViewPopover.vala:322
 msgid "Show Sidebar"
-msgstr ""
+msgstr "Zobrazit postranní panel"
 
 #: Gtk/DevicePopoverSettingsWindow.vala:147
 msgid "Show column headers"
-msgstr ""
+msgstr "Zobrazit hlavičky sloupců"
 
 #: Gtk/DevicePopoverSettingsWindow.vala:117
 msgid "Show column: File System"
-msgstr ""
+msgstr "Zobrazit sloupec: Systém souborů"
 
 #: Gtk/DevicePopoverSettingsWindow.vala:132
 msgid "Show column: Mount Path"
-msgstr ""
+msgstr "Zobrazit sloupec: Cesta k připojení"
 
 #: Gtk/DevicePopoverSettingsWindow.vala:102
 msgid "Show column: Size"
-msgstr ""
+msgstr "Zobrazit sloupec: Velikost"
 
 #: Gtk/Settings.vala:601
 msgid ""
 "Show combined HeaderBar instead of Toolbar and Pathbars [Restart Required]"
 msgstr ""
+"Zobrazit kombinovaný panel záhlaví namísto panelu nástrojů a panelů cest "
+"[Vyžadován restart]"
 
 #: Gtk/DeviceContextMenu.vala:294
 msgid "Show device properties"
-msgstr ""
+msgstr "Zobrazit vlastnosti zařízení"
 
 #: Gtk/Statusbar.vala:197
 msgid "Show hidden items"
-msgstr ""
+msgstr "Zobrazit skryté položky"
 
 #: Gtk/Settings.vala:2359
 msgid "Show in Context Menu?"
-msgstr ""
+msgstr "Zobrazit v kontextové nabídce?"
 
 #: Gtk/Settings.vala:351
 msgid "Show labels"
-msgstr ""
+msgstr "Zobrazit popisky"
 
 #: Gtk/Settings.vala:372
 msgid "Show labels beside icons"
-msgstr ""
+msgstr "Zobrazit popisky vedle ikon"
 
 #: Gtk/Settings.vala:352
 msgid "Show labels for toolbar items"
-msgstr ""
+msgstr "Zobrazit popisky pro položky panelu nástrojů"
 
 #: Gtk/Settings.vala:645
 msgid "Show pathbar"
-msgstr ""
+msgstr "Zobrazit lištu cesty"
 
 #: Gtk/Settings.vala:644
 msgid "Show pathbars"
-msgstr ""
+msgstr "Zobrazit lišty cesty"
 
 #: Gtk/Settings.vala:681
 msgid "Show single pathbar for active pane"
-msgstr ""
+msgstr "Zobrazit jeden panel cesty pro aktivní panel"
 
 #: Gtk/Settings.vala:1093
 msgid "Show single statusbar for active pane"
-msgstr ""
+msgstr "Zobrazit jeden stavový řádek pro aktivní panel"
 
 #: Gtk/DevicePopoverSettingsWindow.vala:162
 msgid "Show snap volumes"
@@ -3936,23 +3938,23 @@ msgstr ""
 
 #: Gtk/Settings.vala:1132
 msgid "Show tab close button (requires application restart)"
-msgstr ""
+msgstr "Zobrazit tlačítko pro zavření karty (vyžaduje restart aplikace)"
 
 #: Gtk/Settings.vala:1112
 msgid "Show tabs at the bottom of the window"
-msgstr ""
+msgstr "Zobrazit záložky ve spodní části okna"
 
 #: Gtk/FileConflictDialog.vala:235
 msgid "Show the list of files"
-msgstr ""
+msgstr "Zobrazit seznam souborů"
 
 #: Gtk/Settings.vala:982
 msgid "Show the sidebar panel"
-msgstr ""
+msgstr "Zobrazit postranní panel"
 
 #: Gtk/Settings.vala:279
 msgid "Show the toolbar"
-msgstr ""
+msgstr "Zobrazit panel nástrojů"
 
 #: Gtk/Settings.vala:1856 Gtk/Settings.vala:2042 Gtk/Settings.vala:2243
 msgid ""
@@ -3960,34 +3962,38 @@ msgid ""
 "\n"
 "Disable this for faster loading of directories."
 msgstr ""
+"Zobrazovat náhledy miniatur namísto ikon.\n"
+"\n"
+"Pro rychlejší načítání adresářů tuto možnost deaktivujte."
 
 #: Gtk/Settings.vala:629
 msgid "Show window buttons on the left side [Restart Required]"
-msgstr ""
+msgstr "Zobrazit tlačítka okna na levé straně [Vyžadován restart]"
 
 #: Gtk/MediaBar.vala:75
+#, fuzzy
 msgid "Showing photos and videos in Media View"
-msgstr ""
+msgstr "Zobrazení fotografií a videí v zobrazení médií"
 
 #: Gtk/Settings.vala:178
 msgid "Sidebar"
-msgstr ""
+msgstr "Postranní panel"
 
 #: Gtk/ClamScanBox.vala:664
 msgid "Signature"
-msgstr ""
+msgstr "Podpis"
 
 #: Gtk/ViewPopover.vala:211
 msgid "Single"
-msgstr ""
+msgstr "Jeden"
 
 #: Gtk/FileViewToolbar.vala:340
 msgid "Single Pane"
-msgstr ""
+msgstr "Jedno okno"
 
 #: Gtk/Settings.vala:1520
 msgid "Single window mode"
-msgstr ""
+msgstr "Režim jednoho okna"
 
 #: Gtk/ClamScanBox.vala:700 Gtk/DevicePopover.vala:253
 #: Gtk/FileConflictDialog.vala:542 Gtk/FileConflictDialog.vala:554
@@ -4001,15 +4007,15 @@ msgstr "Velikost"
 
 #: Gtk/KvmCreateDiskWindow.vala:296
 msgid "Size (GB)"
-msgstr ""
+msgstr "Velikost (GB)"
 
 #: Gtk/FileConflictDialog.vala:202
 msgid "Skip All"
-msgstr ""
+msgstr "Přeskočit vše"
 
 #: Gtk/FileConflictDialog.vala:203
 msgid "Skip existing files"
-msgstr ""
+msgstr "Přeskočit existující soubory"
 
 #: Gtk/FilePropertiesBox.vala:197
 msgid "Solid"
@@ -4018,19 +4024,19 @@ msgstr ""
 #: Gtk/FileContextMenu.vala:2836 Gtk/MainMenubar.vala:1199
 #: Gtk/ViewPopover.vala:354
 msgid "Sort By"
-msgstr ""
+msgstr "Řadit podle"
 
 #: Gtk/SortMenu.vala:114 Gtk/ViewPopover.vala:401
 msgid "Sort Descending"
-msgstr ""
+msgstr "Řadit sestupně"
 
 #: Gtk/KvmCreateDiskWindow.vala:282
 msgid "Source"
-msgstr ""
+msgstr "Zdroj"
 
 #: Gtk/FileViewList.vala:4447 Gtk/FileViewList.vala:4453
 msgid "Source and destination are same"
-msgstr ""
+msgstr "Zdroj a cíl jsou stejné"
 
 #: Gtk/FilePermissionsBox.vala:159
 msgid "Special"
@@ -4038,23 +4044,23 @@ msgstr ""
 
 #: Gtk/ProgressPanelArchiveTask.vala:194
 msgid "Speed:"
-msgstr ""
+msgstr "Rychlost:"
 
 #: Gtk/FileContextMenu.vala:2322 Gtk/Settings.vala:2674
 msgid "Split"
-msgstr ""
+msgstr "Rozdělit"
 
 #: Gtk/FileContextMenu.vala:2323
 msgid "Split PDF document by page"
-msgstr ""
+msgstr "Rozdělit dokument PDF podle stránek"
 
 #: Gtk/CreateArchiveWindow.vala:1960
 msgid "Split Size (MB)"
-msgstr ""
+msgstr "Velikost rozdělení (MB)"
 
 #: Gtk/CreateArchiveWindow.vala:1976
 msgid "Split archive into volumes of specified size (in MB)"
-msgstr ""
+msgstr "Rozdělit archiv na části o zadané velikosti (v MB)"
 
 #: Gtk/TermContextMenu.vala:202
 msgid "Start chroot session in current directory"
@@ -4070,11 +4076,11 @@ msgstr "Stavový řádek"
 
 #: Gtk/ProgressPanelArchiveTask.vala:351 Gtk/ProgressPanelArchiveTask.vala:354
 msgid "Stop"
-msgstr ""
+msgstr "Zastavit"
 
 #: Utility/TeeJee.Process.vala:630
 msgid "Stopped"
-msgstr ""
+msgstr "Zastaveno"
 
 #: Gtk/CreateArchiveWindow.vala:833 Gtk/CreateArchiveWindow.vala:862
 msgid "Store"
@@ -4106,30 +4112,30 @@ msgstr "Prohodit cestu k adresáři s opačným panelem"
 
 #: Gtk/FileViewList.vala:1221
 msgid "Symlink Target"
-msgstr ""
+msgstr "Cíl se symbolickým odkazem"
 
 #: Gtk/PoloGtk.vala:142
 msgid "Syntax"
-msgstr ""
+msgstr "Syntaxe"
 
 #: Gtk/ClamScanBox.vala:529
 msgid "System"
-msgstr ""
+msgstr "Systém"
 
 #: Gtk/DeviceContextMenu.vala:370 Gtk/DeviceContextMenu.vala:401
 #: Gtk/DeviceContextMenu.vala:506 Gtk/DiskFormatContextMenu.vala:94
 #: Gtk/Pathbar.vala:1014
 msgid "System Device"
-msgstr ""
+msgstr "Systémové zařízení"
 
 #: Gtk/DeviceContextMenu.vala:371 Gtk/DeviceContextMenu.vala:402
 #: Gtk/DeviceContextMenu.vala:507 Gtk/DiskFormatContextMenu.vala:95
 msgid "System devices cannot be changed while system is running"
-msgstr ""
+msgstr "Systémová zařízení nelze změnit, pokud je systém spuštěn"
 
 #: Gtk/Pathbar.vala:1015
 msgid "System devices cannot be ejected while system is running"
-msgstr ""
+msgstr "Systémová zařízení nelze vysunout, pokud je systém spuštěn"
 
 #: Gtk/FileContextMenu.vala:697
 msgid "Tab"
@@ -4154,29 +4160,31 @@ msgstr "Terminál"
 
 #: Gtk/Settings.vala:1377
 msgid "Terminal emulator to use for terminal panes"
-msgstr ""
+msgstr "Emulátor terminálu použitý v panelech terminálů"
 
 #: Gtk/ProgressPanelArchiveTask.vala:111
 msgid "Testing"
-msgstr ""
+msgstr "Testování"
 
 #: Gtk/FileViewList.vala:6179
 msgid "There are no files selected for compression"
-msgstr ""
+msgstr "Nejsou vybrány žádné soubory pro kompresi"
 
 #: Gtk/ProgressPanelArchiveTask.vala:640
 msgid "There were errors while processing the archive."
-msgstr ""
+msgstr "Při zpracování archivu došlo k chybám."
 
 #: Gtk/ProgressPanelFileTask.vala:358
 msgid "There were some errors:"
-msgstr ""
+msgstr "Došlo k chybám:"
 
 #: Gtk/Settings.vala:1171
 msgid ""
 "This application is designed for the Arc GTK theme. It may not look right "
 "with other themes."
 msgstr ""
+"Tato aplikace je navržena pro téma Arc GTK. S jinými tématy nemusí vypadat "
+"dobře."
 
 #: Utility/Gtk/DonationWindow.vala:110
 msgid ""
@@ -4187,6 +4195,11 @@ msgid ""
 "project, by picking up items from the issue tracker and submitting code "
 "changes."
 msgstr ""
+"Tato aplikace byla vytvořena pro mé vlastní použití ve volném čase. Není pro "
+"mě praktické pracovat zdarma na každé požadované změně. Pokud potřebujete "
+"nové funkce nebo změny aplikace, zvažte poskytnutí daru na sponzorování "
+"díla. Pokud jste vývojář, zvažte přispění k projektu tím, že si vyberete "
+"položky z nástroje pro sledování problémů a odešlete změny kódu."
 
 #: Utility/Gtk/DonationWindow.vala:67
 msgid ""
@@ -4194,6 +4207,9 @@ msgid ""
 "the hope that it is useful but without any warranty. See the GNU General "
 "Public License v2 or later for more information"
 msgstr ""
+"Tento software je zdarma pro osobní i komerční použití. Je distribuován v "
+"naději, že je užitečný, ale bez jakékoli záruky. Další informace naleznete v "
+"GNU General Public License v2 nebo novější"
 
 #: Gtk/Settings.vala:1853 Gtk/Settings.vala:2039 Gtk/Settings.vala:2240
 msgid "Thumbnails"
@@ -4201,15 +4217,15 @@ msgstr "Miniatury"
 
 #: Gtk/Settings.vala:1664
 msgid "Tile View"
-msgstr ""
+msgstr "Dlaždicové zobrazení"
 
 #: Gtk/FileViewToolbar.vala:405 Gtk/Settings.vala:1332 Gtk/ViewPopover.vala:141
 msgid "Tiles"
-msgstr ""
+msgstr "Dlaždice"
 
 #: Gtk/ProgressPanelVideoDownloadTask.vala:290
 msgid "Title"
-msgstr ""
+msgstr "Název"
 
 #: Gtk/FileContextMenu.vala:1118
 #, c-format
@@ -4298,11 +4314,11 @@ msgstr ""
 #: Utility/FileItem.vala:732 Utility/VideoDownloadTask.vala:318
 #, c-format
 msgid "Type"
-msgstr ""
+msgstr "Typ"
 
 #: Gtk/Settings.vala:153
 msgid "UI"
-msgstr ""
+msgstr "UI"
 
 #: Gtk/ChecksumBox.vala:374
 #, c-format
