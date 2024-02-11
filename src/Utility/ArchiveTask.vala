@@ -152,15 +152,16 @@ public class ArchiveTask : AsyncTask {
 				exec_sync("7z", out std_out, out std_err);
 				
 				foreach(string line in std_out.split("\n")){
-					
 					if ((line == null) || (line.strip().length == 0)){ continue; }
 
+					// Regex matches the following likely patterns:
 					// 7-Zip [64] 9.20  Copyright (c) 1999-2010 Igor Pavlov  2010-11-18
-					string expression = """^[^ \t]+[ ]+[^ \t]+[ ]+([0-9.]*)[ ]+""";
+					// 7-Zip 23.01 (x64) : Copyright (c) 1999-2023 Igor Pavlov : 2023-06-20
+					string expression = """^[^ \t]+[ ]+(\[\d+\][ ]+)?([0-9.]*)[ ]+""";
 					
 					MatchInfo match = regex_match(expression, line);
 					if (match != null){
-						7zip_version_name = match.fetch(1);
+						7zip_version_name = match.fetch(2);
 					}
 					break;
 				}
